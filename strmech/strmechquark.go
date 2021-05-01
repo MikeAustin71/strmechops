@@ -46,6 +46,19 @@ type strMechQuark struct {
 //       'true', space characters will be converted to "[SPACE]".
 //
 //
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
 // ------------------------------------------------------------------------
 //
 // Return Values
@@ -54,6 +67,16 @@ type strMechQuark struct {
 //     - This returned string is identical to input parameter
 //       'nonPrintableChars' with the exception that non-printable
 //       characters are translated into printable characters.
+//
+//
+//  err                 error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
 //
 //
 // ------------------------------------------------------------------------
@@ -74,7 +97,7 @@ type strMechQuark struct {
 func (sMechQuark *strMechQuark) convertNonPrintableChars(
 	nonPrintableChars []rune,
 	convertSpace bool,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	printableChars string,
 	err error) {
 
@@ -86,19 +109,25 @@ func (sMechQuark *strMechQuark) convertNonPrintableChars(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.convertNonPrintableChars() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"convertNonPrintableChars()")
 
 	lenNonPrintableChars := len(nonPrintableChars)
 
 	if lenNonPrintableChars == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'nonPrintableChars' is invalid!\n"+
-			"'nonPrintableChars' is a zero length array of runes.",
-			ePrefix)
+			"Error: Input parameter 'nonPrintableChars' is "+
+			"invalid!\n"+
+			"'nonPrintableChars' is a zero length array of "+
+			"runes.\n",
+			ePrefix.String())
 
 		return "[EMPTY]", err
 	}
@@ -525,11 +554,17 @@ func (sMechQuark *strMechQuark) findLastSpace(
 //       in 'targetStr'.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -568,9 +603,9 @@ func (sMechQuark *strMechQuark) findLastSpace(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) findLastWord(
 	targetStr string,
@@ -599,7 +634,7 @@ func (sMechQuark *strMechQuark) findLastWord(
 
 	ePrefix.SetEPref(
 		"strMechQuark." +
-			"findLastNonSpaceChar()")
+			"findLastWord()")
 
 	beginWrdIdx = -1
 	endWrdIdx = -1
@@ -903,17 +938,19 @@ func (sMechQuark *strMechQuark) getRuneCountInStr(
 //
 // Input Parameters
 //
-//  targetBytes  [] byte  - An array of characters (bytes) which will be examined
-//                          for valid characters. The list of valid characters is
-//                          found in input parameter 'validBytes'. Valid characters
-//                          in targetBytes will be returned by this method as an
-//                          array of bytes. Invalid characters will be discarded.
+//  targetBytes         [] byte
+//     - An array of characters (bytes) which will be examined
+//       for valid characters. The list of valid characters is
+//       found in input parameter 'validBytes'. Valid characters
+//       in targetBytes will be returned by this method as an
+//       array of bytes. Invalid characters will be discarded.
 //
 //
-//  validBytes  [] byte   - An array of bytes containing valid characters. If a character
-//                          (byte) in 'targetBytes' is also present in 'validBytes' it will
-//                          be classified as 'valid' and included in the returned array of
-//                          bytes. Invalid characters will be discarded.
+//  validBytes          [] byte
+//     - An array of bytes containing valid characters. If a character
+//       (byte) in 'targetBytes' is also present in 'validBytes' it will
+//       be classified as 'valid' and included in the returned array of
+//       bytes. Invalid characters will be discarded.
 //
 //
 //  ePrefix             *ErrPrefixDto
@@ -1226,11 +1263,17 @@ func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 //       characters.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1249,14 +1292,14 @@ func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) makeSingleCharString(
 	charRune rune,
 	strLen int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -1268,22 +1311,33 @@ func (sMechQuark *strMechQuark) makeSingleCharString(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.makeSingleCharString() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"makeSingleCharString()")
 
 	if strLen < 1 {
 		return "",
-			fmt.Errorf(ePrefix+"Error: Input parameter 'strLen' MUST BE GREATER THAN '1'. "+
-				"strLen='%v' ", strLen)
+			fmt.Errorf("%s"+
+				"Error: Input parameter 'strLen' "+
+				"MUST BE GREATER THAN '1'.\n"+
+				"strLen='%v'\n",
+				ePrefix.String(),
+				strLen)
 	}
 
 	if charRune == 0 {
 		return "",
-			fmt.Errorf(ePrefix+"Error: Input parameter 'charRune' IS INVALID! "+
-				"charRune='%v' ", charRune)
+			fmt.Errorf("%s\n"+
+				"Error: Input parameter 'charRune' IS INVALID!\n"+
+				"charRune='%v'\n",
+				ePrefix.String(),
+				charRune)
 	}
 
 	var b strings.Builder
@@ -1295,11 +1349,13 @@ func (sMechQuark *strMechQuark) makeSingleCharString(
 
 		if err != nil {
 			return "",
-				fmt.Errorf(ePrefix+"\n"+
-					"Error returned by  b.WriteRune(charRune).\n"+
+				fmt.Errorf("%s\n"+
+					"Error returned by b.WriteRune(charRune).\n"+
 					"charRune='%v'\n"+
 					"Error='%v'\n",
-					charRune, err.Error())
+					ePrefix.String(),
+					charRune,
+					err.Error())
 		}
 	}
 
@@ -1357,11 +1413,17 @@ func (sMechQuark strMechQuark) ptr() *strMechQuark {
 //       returned.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -1386,15 +1448,15 @@ func (sMechQuark strMechQuark) ptr() *strMechQuark {
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) removeStringChar(
 	targetStr string,
 	charToRemove rune,
 	maxNumOfCharDeletions int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	newStr string,
 	numOfDeletions int,
 	err error) {
@@ -1407,31 +1469,41 @@ func (sMechQuark *strMechQuark) removeStringChar(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.replaceStringChar() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"replaceStringChar()")
 
 	if len(targetStr) == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetStr' is an empty string!\n",
-			ePrefix)
+			"Error: Input parameter 'targetStr' is an "+
+			"empty string!\n",
+			ePrefix.String())
+
 		return newStr, numOfDeletions, err
 	}
 
 	if charToRemove == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'charToRemove' is an empty character!\n"+
+			"Error: Input parameter 'charToRemove' is an "+
+			"empty character!\n"+
 			"charToReplace == 0\n",
-			ePrefix)
+			ePrefix.String())
+
 		return newStr, numOfDeletions, err
 	}
 
 	if maxNumOfCharDeletions == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'maxNumOfReplacements' is zero!\n",
-			ePrefix)
+			"Error: Input parameter 'maxNumOfReplacements' is "+
+			"zero!\n",
+			ePrefix.String())
+
 		return newStr, numOfDeletions, err
 	}
 
@@ -1491,11 +1563,17 @@ func (sMechQuark *strMechQuark) removeStringChar(
 //       exist in 'strToSearch' will be deleted and removed.
 //
 //
-//  ePrefix                    string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1520,15 +1598,15 @@ func (sMechQuark *strMechQuark) removeStringChar(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) removeSubString(
 	strToSearch string,
 	targetSubStr string,
 	maxRemovalCount int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	int,
 	error) {
@@ -1541,18 +1619,24 @@ func (sMechQuark *strMechQuark) removeSubString(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.removeSubString() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"removeSubString()")
+
 	var err error
 
 	if len(strToSearch) == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: input parameter 'strToSearch' is"+
 			" a zero length or empty string!\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
@@ -1560,7 +1644,8 @@ func (sMechQuark *strMechQuark) removeSubString(
 		err = fmt.Errorf("%v\n"+
 			"Error: input parameter 'targetSubStr' is"+
 			" a zero length or empty string!\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
@@ -1638,11 +1723,17 @@ func (sMechQuark *strMechQuark) removeSubString(
 //       ([]rune).
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1664,14 +1755,14 @@ func (sMechQuark *strMechQuark) removeSubString(
 //       dimension elements have a length less than two, an
 //       error will be returned.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) replaceRunes(
 	targetRunes []rune,
 	replacementRunes [][]rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	[]rune,
 	error) {
 
@@ -1683,11 +1774,15 @@ func (sMechQuark *strMechQuark) replaceRunes(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.replaceRunes() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"replaceRunes()")
 
 	output := make([]rune, 0, 100)
 
@@ -1696,8 +1791,9 @@ func (sMechQuark *strMechQuark) replaceRunes(
 	if targetLen == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetRunes' is a zero length array!\n",
-				ePrefix)
+				"Error: Input parameter 'targetRunes' is a "+
+				"zero length array!\n",
+				ePrefix.String())
 	}
 
 	baseReplaceLen := len(replacementRunes)
@@ -1705,18 +1801,19 @@ func (sMechQuark *strMechQuark) replaceRunes(
 	if baseReplaceLen == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'replacementRunes' is a zero length array!\n",
-				ePrefix)
+				"Error: Input parameter 'replacementRunes' is a "+
+				"zero length array!\n",
+				ePrefix.String())
 	}
 
 	for h := 0; h < baseReplaceLen; h++ {
 
 		if len(replacementRunes[h]) < 2 {
 			return output,
-				fmt.Errorf(ePrefix+
-					"\n"+
+				fmt.Errorf("%s\n"+
 					"Error: Invalid Replacement Array Element.\n"+
 					"replacementRunes[%v] has a length less than two.\n",
+					ePrefix.String(),
 					h)
 		}
 
@@ -1789,11 +1886,17 @@ func (sMechQuark *strMechQuark) replaceRunes(
 //       within the 'targetStr' beginning with index zero (0).
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1816,16 +1919,16 @@ func (sMechQuark *strMechQuark) replaceRunes(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) replaceStringChar(
 	targetStr string,
 	charToReplace rune,
 	replacementChar rune,
 	maxNumOfReplacements int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	int,
 	error) {
@@ -1838,40 +1941,53 @@ func (sMechQuark *strMechQuark) replaceStringChar(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.replaceStringChar() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"replaceStringChar()")
+
 	var err error
 
 	if len(targetStr) == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetStr' is an empty string!\n",
-			ePrefix)
+			"Error: Input parameter 'targetStr' is an empty "+
+			"string!\n",
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
 	if charToReplace == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'charToReplace' is an empty character!\n"+
+			"Error: Input parameter 'charToReplace' is an "+
+			"empty character!\n"+
 			"charToReplace == 0\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
 	if replacementChar == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'replacementChar' is an empty character!\n"+
+			"Error: Input parameter 'replacementChar' is an "+
+			"empty character!\n"+
 			"replacementChar == 0\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
 	if maxNumOfReplacements == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'maxNumOfReplacements' is zero!\n",
-			ePrefix)
+			"Error: Input parameter 'maxNumOfReplacements' is "+
+			"zero!\n",
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
@@ -1904,7 +2020,6 @@ func (sMechQuark *strMechQuark) replaceStringChar(
 // controlled by input parameter 'maxReplacementCount'.
 //
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
@@ -1935,11 +2050,17 @@ func (sMechQuark *strMechQuark) replaceStringChar(
 //       replacement string, 'replacementStr' .
 //
 //
-//  ePrefix                    string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1965,16 +2086,16 @@ func (sMechQuark *strMechQuark) replaceStringChar(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' will be inserted or prefixed at the beginning
-//       of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) replaceSubString(
 	strToSearch string,
 	targetSubStr string,
 	replacementStr string,
 	maxReplacementCount int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	int,
 	error) {
@@ -1987,11 +2108,15 @@ func (sMechQuark *strMechQuark) replaceSubString(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.replaceSubString() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"replaceSubString()")
 
 	var err error
 
@@ -2001,7 +2126,8 @@ func (sMechQuark *strMechQuark) replaceSubString(
 		err = fmt.Errorf("%v\n"+
 			"Error: input parameter 'strToSearch' is"+
 			" a zero length or empty string!\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
@@ -2009,7 +2135,8 @@ func (sMechQuark *strMechQuark) replaceSubString(
 		err = fmt.Errorf("%v\n"+
 			"Error: input parameter 'targetSubStr' is"+
 			" a zero length or empty string!\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
@@ -2017,7 +2144,8 @@ func (sMechQuark *strMechQuark) replaceSubString(
 		err = fmt.Errorf("%v\n"+
 			"Error: input parameter 'replacementStr' is"+
 			" a zero length or empty string!\n",
-			ePrefix)
+			ePrefix.String())
+
 		return "", 0, err
 	}
 
@@ -2547,11 +2675,17 @@ Done:
 //       will be replaced with 'newRune'.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2575,10 +2709,9 @@ Done:
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
@@ -2606,7 +2739,7 @@ func (sMechQuark *strMechQuark) swapRune(
 	oldRune rune,
 	newRune rune,
 	maxNumOfSwaps int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	int,
 	error) {
@@ -2619,11 +2752,15 @@ func (sMechQuark *strMechQuark) swapRune(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.swapRune() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"swapRune()")
 
 	if targetStr == "" {
 		return targetStr, 0, nil
@@ -2681,11 +2818,17 @@ func (sMechQuark *strMechQuark) swapRune(
 //       character.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2704,9 +2847,9 @@ func (sMechQuark *strMechQuark) swapRune(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -2730,7 +2873,7 @@ func (sMechQuark *strMechQuark) swapRune(
 func (sMechQuark *strMechQuark) trimMultipleChars(
 	targetStr string,
 	trimChar rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	rStr string,
 	err error) {
 
@@ -2742,19 +2885,24 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.trimMultipleChars() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"trimMultipleChars()")
 
 	rStr = ""
 	err = nil
 
 	if targetStr == "" {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetStr' is an EMPTY STRING!\n",
-			ePrefix)
+			"Error: Input parameter 'targetStr' is an "+
+			"EMPTY STRING!\n",
+			ePrefix.String())
 
 		return rStr, err
 	}
@@ -2762,7 +2910,7 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 	if trimChar == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'trimChar' is ZERO!\n",
-			ePrefix)
+			ePrefix.String())
 
 		return rStr, err
 	}
@@ -2829,11 +2977,17 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 //       'targetStr' it will be ignored and NOT deleted.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2852,9 +3006,9 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -2879,7 +3033,7 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 func (sMechQuark *strMechQuark) trimStringEnds(
 	targetStr string,
 	trimChar rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	rStr string,
 	err error) {
 
@@ -2891,11 +3045,15 @@ func (sMechQuark *strMechQuark) trimStringEnds(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.trimStringEnds() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"trimStringEnds()")
 
 	rStr = ""
 	err = nil
@@ -2904,8 +3062,9 @@ func (sMechQuark *strMechQuark) trimStringEnds(
 
 	if targetStrLen == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetStr' is an EMPTY STRING!\n",
-			ePrefix)
+			"Error: Input parameter 'targetStr' is an "+
+			"EMPTY STRING!\n",
+			ePrefix.String())
 
 		return rStr, err
 	}
@@ -2913,7 +3072,7 @@ func (sMechQuark *strMechQuark) trimStringEnds(
 	if trimChar == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'trimChar' is ZERO!\n",
-			ePrefix)
+			ePrefix.String())
 
 		return rStr, err
 	}
@@ -2995,9 +3154,9 @@ func (sMechQuark *strMechQuark) trimStringEnds(
 //
 //   str := "how now brown cow."
 //
-//   sops := StrMech{}
+//   sMech := StrMech{}
 //
-//   actualStr := sops.upperCaseFirstLetter(str)
+//   actualStr := sMech.upperCaseFirstLetter(str)
 //
 //  'actualStr' is now equal to "How now brown cow."
 //
