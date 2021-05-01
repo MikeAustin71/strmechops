@@ -194,16 +194,18 @@ func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 //
 // Return Values
 //
-//  string - This string will be returned containing valid characters extracted
-//           from 'targetStr'. A character is considered valid if it exists in
-//           both 'targetStr' and 'validRunes'. Invalid characters are discarded.
-//           This means that if no valid characters are identified, a zero length
-//           string will be returned.
+//  string
+//     - This string will be returned containing valid characters extracted
+//       from 'targetStr'. A character is considered valid if it exists in
+//       both 'targetStr' and 'validRunes'. Invalid characters are discarded.
+//       This means that if no valid characters are identified, a zero length
+//       string will be returned.
 //
-//  error  - If the method completes successfully this value is 'nil'. If an error is
-//           encountered this value will contain the error message. Examples of possible
-//           errors include a zero length 'targetStr' (string) or a zero length
-//           'validRunes' array.
+//  error
+//     - If the method completes successfully this value is 'nil'. If an error is
+//       encountered this value will contain the error message. Examples of possible
+//       errors include a zero length 'targetStr' (string) or a zero length
+//       'validRunes' array.
 //
 //       If an error message is returned, the text value for input
 //       parameter 'ePrefix' (error prefix) will be inserted or
@@ -231,7 +233,7 @@ func (sMechElectron *strMechElectron) getValidString(
 	}
 
 	ePrefix.SetEPref(
-		"strMechQuark." +
+		"strMechElectron." +
 			"getValidString()")
 
 	if len(targetStr) == 0 {
@@ -296,7 +298,7 @@ func (sMechElectron strMechElectron) ptr() *strMechElectron {
 func (sMechElectron *strMechElectron) readBytes(
 	strOpsInstance *StrMech,
 	p []byte,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	n int,
 	err error) {
 
@@ -308,11 +310,15 @@ func (sMechElectron *strMechElectron) readBytes(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.readBytes() "
+	ePrefix.SetEPref(
+		"strMechElectron." +
+			"readBytes()")
 
 	n = 0
 	err = nil
@@ -510,30 +516,42 @@ func (sMechElectron *strMechElectron) readStringFromBytes(
 //       it will be eliminated or removed from the returned byte array ([]byte).
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  []byte  - The returned byte array containing the characters and replaced characters
-//            from the original 'targetBytes' array.
+//  []byte
+//     - The returned byte array containing the characters and replaced characters
+//       from the original 'targetBytes' array.
 //
-//  error  - If the method completes successfully this value is 'nil'. If an error is
-//           encountered this value will contain the error message. Examples of possible
-//           errors include a zero length targetBytes[] array or replacementBytes[][] array.
-//           In addition, if any of the replacementBytes[][x] 2nd dimension elements have
-//           a length less than two, an error will be returned.
+//  error
+//     - If the method completes successfully this value is 'nil'. If an error is
+//       encountered this value will contain the error message. Examples of possible
+//       errors include a zero length targetBytes[] array or replacementBytes[][] array.
+//       In addition, if any of the replacementBytes[][x] 2nd dimension elements have
+//       a length less than two, an error will be returned.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechElectron *strMechElectron) replaceBytes(
 	targetBytes []byte,
 	replacementBytes [][]byte,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	[]byte,
 	error) {
 
@@ -545,11 +563,15 @@ func (sMechElectron *strMechElectron) replaceBytes(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.replaceBytes() "
+	ePrefix.SetEPref(
+		"strMechElectron." +
+			"replaceBytes()")
 
 	output := make([]byte, 0, 100)
 
@@ -558,8 +580,9 @@ func (sMechElectron *strMechElectron) replaceBytes(
 	if targetLen == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetBytes' is a zero length array!\n",
-				ePrefix)
+				"Error: Input parameter 'targetBytes' is a "+
+				"zero length array!\n",
+				ePrefix.String())
 	}
 
 	baseReplaceLen := len(replacementBytes)
@@ -567,18 +590,21 @@ func (sMechElectron *strMechElectron) replaceBytes(
 	if baseReplaceLen == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'replacementBytes' is a zero length array!\n",
-				ePrefix)
+				"Error: Input parameter 'replacementBytes' is "+
+				"a zero length array!\n",
+				ePrefix.String())
 	}
 
 	for h := 0; h < baseReplaceLen; h++ {
 
 		if len(replacementBytes[h]) < 2 {
 			return output,
-				fmt.Errorf(ePrefix+
-					"\n"+
-					"Error: Invalid Replacement Array Element. replacementBytes[%v] has "+
-					"a length less than two.\n", h)
+				fmt.Errorf("%s\n"+
+					"Error: Invalid Replacement Array Element.\n"+
+					"replacementBytes[%v] has "+
+					"a length less than two.\n",
+					ePrefix.String(),
+					h)
 		}
 
 	}
@@ -621,7 +647,7 @@ func (sMechElectron *strMechElectron) replaceBytes(
 func (sMechElectron *strMechElectron) replaceMultipleStrs(
 	targetStr string,
 	replaceArray [][]string,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -633,25 +659,31 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.replaceMultipleStrs() "
+	ePrefix.SetEPref(
+		"strMechElectron." +
+			"replaceMultipleStrs()")
 
 	if targetStr == "" {
 		return targetStr,
 			fmt.Errorf("%v\n"+
-				"Input parameter 'targetStr' is an EMPTY STRING.\n",
-				ePrefix)
+				"Input parameter 'targetStr' is an "+
+				"EMPTY STRING.\n",
+				ePrefix.String())
 	}
 
 	if len(replaceArray) == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Length of first dimension [X][] in two dimensional array\n"+
+				"Length of first dimension [X][] in two "+
+				"dimensional array\n"+
 				"'replaceArray' is ZERO!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	newString := targetStr
@@ -660,14 +692,19 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 
 		if len(aVal) < 2 {
 			return "",
-				fmt.Errorf(ePrefix+
-					"\n"+
+				fmt.Errorf("%s\n"+
 					"Length of second dimension [][X] in two dimensional array\n"+
 					"'replaceArray' is Less Than 2!\n"+
-					"replaceArray[%v][]\n", aIdx)
+					"replaceArray[%v][]\n",
+					ePrefix.String(),
+					aIdx)
 		}
 
-		newString = strings.Replace(newString, replaceArray[aIdx][0], replaceArray[aIdx][1], -1)
+		newString = strings.Replace(
+			newString,
+			replaceArray[aIdx][0],
+			replaceArray[aIdx][1],
+			-1)
 
 	}
 
@@ -697,30 +734,42 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 //       returned string.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string  - The returned string containing the characters and replaced characters
-//            from the original target string, ('targetStr').
+//  string
+//     - The returned string containing the characters and replaced characters
+//       from the original target string, ('targetStr').
 //
-//  error   - If the method completes successfully this value is 'nil'. If an error is
-//            encountered this value will contain the error message. Examples of possible
-//            errors include a zero length 'targetStr' or 'replacementRunes[][]' array.
-//            In addition, if any of the replacementRunes[][x] 2nd dimension elements have
-//            a length less than two, an error will be returned.
+//  error
+//     - If the method completes successfully this value is 'nil'. If an error is
+//       encountered this value will contain the error message. Examples of possible
+//       errors include a zero length 'targetStr' or 'replacementRunes[][]' array.
+//       In addition, if any of the replacementRunes[][x] 2nd dimension elements have
+//       a length less than two, an error will be returned.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechElectron *strMechElectron) replaceStringChars(
 	targetStr string,
 	replacementRunes [][]rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -732,17 +781,22 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.replaceStringChars() "
+	ePrefix.SetEPref(
+		"strMechElectron." +
+			"replaceStringChars()")
 
 	if len(targetStr) == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetStr' is an EMPTY STRING!\n",
-				ePrefix)
+				"Error: Input parameter 'targetStr' "+
+				"is an EMPTY STRING!\n",
+				ePrefix.String())
 	}
 
 	if len(replacementRunes) == 0 {
@@ -752,20 +806,23 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 				ePrefix)
 	}
 
-	sOpsQuark := strMechQuark{}
-
-	outputStr, err :=
-		sOpsQuark.replaceRunes(
-			[]rune(targetStr),
-			replacementRunes,
-			ePrefix)
+	outputStr,
+		err :=
+		strMechQuark{}.ptr().
+			replaceRunes(
+				[]rune(targetStr),
+				replacementRunes,
+				ePrefix)
 
 	if err != nil {
+
 		return "",
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%s\n"+
 				"Error returned by sOpsQuark.replaceRunes([]rune("+
 				"targetStr), replacementRunes).\n"+
-				"Error='%v' ", err.Error())
+				"Error='%v' ",
+				ePrefix.String(),
+				err.Error())
 	}
 
 	return string(outputStr), nil
@@ -786,7 +843,7 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 func (sMechElectron *strMechElectron) write(
 	strOpsInstance *StrMech,
 	p []byte,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	n int,
 	err error) {
 
@@ -798,11 +855,15 @@ func (sMechElectron *strMechElectron) write(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.write() "
+	ePrefix.SetEPref(
+		"strMechElectron." +
+			"write()")
 
 	n = 0
 	err = nil
@@ -819,7 +880,7 @@ func (sMechElectron *strMechElectron) write(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input byte array 'p' is ZERO LENGTH!\n",
-			ePrefix)
+			ePrefix.String())
 
 		return n, err
 	}

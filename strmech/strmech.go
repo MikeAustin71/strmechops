@@ -2668,11 +2668,50 @@ func (sMech *StrMech) RemoveStringChar(
 //       it will be eliminated or removed from the returned byte array ([]byte).
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the name of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2690,9 +2729,9 @@ func (sMech *StrMech) RemoveStringChar(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -2735,7 +2774,7 @@ func (sMech *StrMech) RemoveStringChar(
 func (sMech *StrMech) ReplaceBytes(
 	targetBytes []byte,
 	replacementBytes [][]byte,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	[]byte,
 	error) {
 
@@ -2747,11 +2786,20 @@ func (sMech *StrMech) ReplaceBytes(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.ReplaceBytes() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsElectron := strMechElectron{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ReplaceBytes()",
+		"")
 
-	return sOpsElectron.replaceBytes(
+	if err != nil {
+		return []byte{}, err
+	}
+
+	return strMechElectron{}.ptr().replaceBytes(
 		targetBytes,
 		replacementBytes,
 		ePrefix)
@@ -2781,11 +2829,50 @@ func (sMech *StrMech) ReplaceBytes(
 //       from replaceArray[i][1].
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the name of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2803,9 +2890,9 @@ func (sMech *StrMech) ReplaceBytes(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -2836,11 +2923,10 @@ func (sMech *StrMech) ReplaceBytes(
 //
 //  'actualStr' is now equal to "Hello World"
 //
-//
 func (sMech *StrMech) ReplaceMultipleStrs(
 	targetStr string,
 	replaceArray [][]string,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	string,
 	error) {
 
@@ -2852,14 +2938,24 @@ func (sMech *StrMech) ReplaceMultipleStrs(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.ReplaceMultipleStrs() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsElectron := strMechElectron{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ReplaceMultipleStrs()",
+		"")
 
-	return sOpsElectron.replaceMultipleStrs(
-		targetStr,
-		replaceArray,
-		ePrefix)
+	if err != nil {
+		return "", err
+	}
+
+	return strMechElectron{}.ptr().
+		replaceMultipleStrs(
+			targetStr,
+			replaceArray,
+			ePrefix)
 }
 
 // ReplaceNewLines - Replaces New Line characters from string. If the specified
@@ -3277,25 +3373,70 @@ func (sMech *StrMech) ReplaceStringChar(
 //       returned string.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the name of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string  - The returned string containing the characters and replaced characters
-//            from the original target string, ('targetStr').
+//  string
+//     - The returned string containing the characters and replaced characters
+//       from the original target string, ('targetStr').
 //
-//  error   - If the method completes successfully this value is 'nil'. If an error is
-//            encountered this value will contain the error message. Examples of possible
-//            errors include a zero length 'targetStr' or 'replacementRunes[][]' array.
-//            In addition, if any of the replacementRunes[][x] 2nd dimension elements have
-//            a length less than two, an error will be returned.
+//  error
+//     - If the method completes successfully this value is 'nil'. If an error is
+//       encountered this value will contain the error message. Examples of possible
+//       errors include a zero length 'targetStr' or 'replacementRunes[][]' array.
+//       In addition, if any of the replacementRunes[][x] 2nd dimension elements have
+//       a length less than two, an error will be returned.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -3340,7 +3481,7 @@ func (sMech *StrMech) ReplaceStringChar(
 func (sMech *StrMech) ReplaceStringChars(
 	targetStr string,
 	replacementRunes [][]rune,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	string,
 	error) {
 
@@ -3352,11 +3493,22 @@ func (sMech *StrMech) ReplaceStringChars(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.ReplaceStringChars() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsElectron := strMechElectron{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ReplaceStringChars()",
+		"")
 
-	return sOpsElectron.replaceStringChars(
+	if err != nil {
+		return "", err
+	}
+
+	sMechElectron := strMechElectron{}
+
+	return sMechElectron.replaceStringChars(
 		targetStr,
 		replacementRunes,
 		ePrefix)
