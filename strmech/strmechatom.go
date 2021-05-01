@@ -1093,11 +1093,17 @@ exitMainTargetLoop:
 //                                    Extracted Number String = "1.8%"
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1146,9 +1152,9 @@ exitMainTargetLoop:
 //       exceeds the last character index in 'targetStr', an error
 //       will be returned.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -1186,7 +1192,7 @@ func (sMechAtom *strMechAtom) extractNumericDigits(
 	keepLeadingChars string,
 	keepInteriorChars string,
 	keepTrailingChars string,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	NumStrProfileDto,
 	error) {
 
@@ -1198,11 +1204,15 @@ func (sMechAtom *strMechAtom) extractNumericDigits(
 
 	defer sMechAtom.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechAtom.extractNumericDigits() "
+	ePrefix.SetEPref(
+		"strMechAtom." +
+			"extractNumericDigits()")
 
 	nStrDto := NumStrProfileDto{}.New()
 	nStrDto.TargetStr = targetStr
@@ -1213,22 +1223,28 @@ func (sMechAtom *strMechAtom) extractNumericDigits(
 	if lenTargetStr == 0 {
 		return nStrDto,
 			fmt.Errorf("%v\n"+
-				"ERROR: Input parameter 'targetStr' is an empty string!\n",
-				ePrefix)
+				"ERROR: Input parameter 'targetStr' is "+
+				"an empty string!\n",
+				ePrefix.String())
 	}
 
 	if startIndex < 0 {
-		return nStrDto, fmt.Errorf(ePrefix+
+		return nStrDto, fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'startIndex' is less than zero!\n"+
-			"startIndex='%v'", startIndex)
+			"startIndex='%v'",
+			ePrefix.String(),
+			startIndex)
 	}
 
 	if startIndex >= lenTargetStr {
-		return nStrDto, fmt.Errorf(ePrefix+
+		return nStrDto, fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'startIndex' is INVALID!\n"+
-			"'startIndex' exceeds the last character index in 'targetStr'\n"+
+			"'startIndex' exceeds the last character index in "+
+			"'targetStr'\n"+
 			"startIndex='%v'\tlast character index='%v'\n"+
-			"targetStr='%v'", startIndex, lenTargetStr-1, targetStr)
+			"targetStr='%v'\n",
+			ePrefix.String(),
+			startIndex, lenTargetStr-1, targetStr)
 	}
 
 	targetRunes := []rune(targetStr)
