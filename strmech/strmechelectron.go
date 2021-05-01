@@ -177,11 +177,17 @@ func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 //       returned as a new string. Invalid characters are discarded.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -199,10 +205,14 @@ func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 //           errors include a zero length 'targetStr' (string) or a zero length
 //           'validRunes' array.
 //
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
 func (sMechElectron *strMechElectron) getValidString(
 	targetStr string,
 	validRunes []rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -214,33 +224,38 @@ func (sMechElectron *strMechElectron) getValidString(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.getValidString() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"getValidString()")
 
 	if len(targetStr) == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetStr' is a ZERO LENGTH STRING!\n",
-				ePrefix)
+				"Error: Input parameter 'targetStr' is a "+
+				"ZERO LENGTH STRING!\n",
+				ePrefix.String())
 	}
 
 	if len(validRunes) == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'validRunes' is a ZERO LENGTH ARRAY!\n",
-				ePrefix)
+				"Error: Input parameter 'validRunes' is a "+
+				"ZERO LENGTH ARRAY!\n",
+				ePrefix.String())
 	}
 
-	sOpsQuark := strMechQuark{}
-
 	actualValidRunes, err :=
-		sOpsQuark.getValidRunes(
-			[]rune(targetStr),
-			validRunes,
-			ePrefix)
+		strMechQuark{}.ptr().
+			getValidRunes(
+				[]rune(targetStr),
+				validRunes,
+				ePrefix)
 
 	if err != nil {
 		return "", err
