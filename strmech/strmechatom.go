@@ -308,7 +308,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 func (sMechAtom *strMechAtom) copyIn(
 	targetStrOps *StrMech,
 	incomingStrOps *StrMech,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	err error) {
 
 	if sMechAtom.lock == nil {
@@ -319,23 +319,27 @@ func (sMechAtom *strMechAtom) copyIn(
 
 	defer sMechAtom.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechAtom.copyIn() "
+	ePrefix.SetEPref(
+		"strMechAtom." +
+			"copyIn()")
 
 	if targetStrOps == nil {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'targetStrOps' is a 'nil' pointer!\n",
-			ePrefix)
+			ePrefix.String())
 		return err
 	}
 
 	if incomingStrOps == nil {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'incomingStrOps' is a 'nil' pointer!\n",
-			ePrefix)
+			ePrefix.String())
 		return err
 	}
 
@@ -362,7 +366,7 @@ func (sMechAtom *strMechAtom) copyIn(
 //
 func (sMechAtom *strMechAtom) copyOut(
 	strOps *StrMech,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	*StrMech,
 	error) {
 
@@ -374,11 +378,15 @@ func (sMechAtom *strMechAtom) copyOut(
 
 	defer sMechAtom.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechAtom.copyOut() "
+	ePrefix.SetEPref(
+		"strMechAtom." +
+			"copyOut()")
 
 	var err error
 
@@ -387,7 +395,8 @@ func (sMechAtom *strMechAtom) copyOut(
 	if strOps == nil {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'strOps' is a 'nil' pointer!\n",
-			ePrefix)
+			ePrefix.String())
+
 		return &newStrOps, err
 	}
 
@@ -1469,7 +1478,7 @@ func (sMechAtom *strMechAtom) extractNumericDigits(
 // ptr - Returns a pointer to a new instance of
 // strMechAtom.
 //
-func (sMechAtom *strMechAtom) ptr() *strMechAtom {
+func (sMechAtom strMechAtom) ptr() *strMechAtom {
 
 	if sMechAtom.lock == nil {
 		sMechAtom.lock = new(sync.Mutex)

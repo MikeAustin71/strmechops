@@ -160,9 +160,7 @@ func (sMech *StrMech) BreakTextAtLineLength(
 		return "", err
 	}
 
-	sOpsAtom := strMechAtom{}
-
-	return sOpsAtom.breakTextAtLineLength(
+	return strMechAtom{}.ptr().breakTextAtLineLength(
 		targetStr,
 		lineLength,
 		lineDelimiter,
@@ -268,12 +266,11 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 		return
 	}
 
-	sOpsAtom := strMechAtom{}
-
-	_ = sOpsAtom.copyIn(
-		sMech,
-		strops2,
-		"")
+	_ = strMechAtom{}.ptr().
+		copyIn(
+			sMech,
+			strops2,
+			nil)
 }
 
 // CopyOut - Creates a 'deep' copy of the current
@@ -294,7 +291,7 @@ func (sMech *StrMech) CopyOut() *StrMech {
 	newStrOps,
 		_ := sOpsAtom.copyOut(
 		sMech,
-		"")
+		nil)
 
 	return newStrOps
 }
