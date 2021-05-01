@@ -56,7 +56,7 @@ type strMechAtom struct {
 //       processing, the returned error Type will encapsulate an error
 //       message.
 //
-func (sOpsAtom *strMechAtom) breakTextAtLineLength(
+func (sMechAtom *strMechAtom) breakTextAtLineLength(
 	targetStr string,
 	lineLength int,
 	lineDelimiter rune,
@@ -64,13 +64,13 @@ func (sOpsAtom *strMechAtom) breakTextAtLineLength(
 	string,
 	error) {
 
-	if sOpsAtom.lock == nil {
-		sOpsAtom.lock = new(sync.Mutex)
+	if sMechAtom.lock == nil {
+		sMechAtom.lock = new(sync.Mutex)
 	}
 
-	sOpsAtom.lock.Lock()
+	sMechAtom.lock.Lock()
 
-	defer sOpsAtom.lock.Unlock()
+	defer sMechAtom.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
@@ -281,19 +281,19 @@ func (sOpsAtom *strMechAtom) breakTextAtLineLength(
 // Be advised that the data fields in 'targetStrOps' will be
 // overwritten.
 //
-func (sOpsAtom *strMechAtom) copyIn(
+func (sMechAtom *strMechAtom) copyIn(
 	targetStrOps *StrMech,
 	incomingStrOps *StrMech,
 	ePrefix string) (
 	err error) {
 
-	if sOpsAtom.lock == nil {
-		sOpsAtom.lock = new(sync.Mutex)
+	if sMechAtom.lock == nil {
+		sMechAtom.lock = new(sync.Mutex)
 	}
 
-	sOpsAtom.lock.Lock()
+	sMechAtom.lock.Lock()
 
-	defer sOpsAtom.lock.Unlock()
+	defer sMechAtom.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
@@ -336,19 +336,19 @@ func (sOpsAtom *strMechAtom) copyIn(
 // CopyOut - Creates a 'deep' copy of input parameter
 // 'strOps', an instance of StrMech.
 //
-func (sOpsAtom *strMechAtom) copyOut(
+func (sMechAtom *strMechAtom) copyOut(
 	strOps *StrMech,
 	ePrefix string) (
 	*StrMech,
 	error) {
 
-	if sOpsAtom.lock == nil {
-		sOpsAtom.lock = new(sync.Mutex)
+	if sMechAtom.lock == nil {
+		sMechAtom.lock = new(sync.Mutex)
 	}
 
-	sOpsAtom.lock.Lock()
+	sMechAtom.lock.Lock()
 
-	defer sOpsAtom.lock.Unlock()
+	defer sMechAtom.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
@@ -535,7 +535,7 @@ func (sOpsAtom *strMechAtom) copyOut(
 //          "America/Chicago"
 //
 //
-func (sOpsAtom *strMechAtom) extractDataField(
+func (sMechAtom *strMechAtom) extractDataField(
 	targetStr string,
 	leadingKeyWordDelimiters []string,
 	startIdx int,
@@ -547,13 +547,13 @@ func (sOpsAtom *strMechAtom) extractDataField(
 	DataFieldProfileDto,
 	error) {
 
-	if sOpsAtom.lock == nil {
-		sOpsAtom.lock = new(sync.Mutex)
+	if sMechAtom.lock == nil {
+		sMechAtom.lock = new(sync.Mutex)
 	}
 
-	sOpsAtom.lock.Lock()
+	sMechAtom.lock.Lock()
 
-	defer sOpsAtom.lock.Unlock()
+	defer sMechAtom.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
@@ -1128,7 +1128,7 @@ exitMainTargetLoop:
 //     "$(1,250,364.33)"
 //
 //
-func (sOpsAtom *strMechAtom) extractNumericDigits(
+func (sMechAtom *strMechAtom) extractNumericDigits(
 	targetStr string,
 	startIndex int,
 	keepLeadingChars string,
@@ -1138,13 +1138,13 @@ func (sOpsAtom *strMechAtom) extractNumericDigits(
 	NumStrProfileDto,
 	error) {
 
-	if sOpsAtom.lock == nil {
-		sOpsAtom.lock = new(sync.Mutex)
+	if sMechAtom.lock == nil {
+		sMechAtom.lock = new(sync.Mutex)
 	}
 
-	sOpsAtom.lock.Lock()
+	sMechAtom.lock.Lock()
 
-	defer sOpsAtom.lock.Unlock()
+	defer sMechAtom.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
