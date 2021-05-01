@@ -101,7 +101,7 @@ func (sMech *StrMech) BreakTextAtLineLength(
 
 	ePrefix := "StrMech.BreakTextAtLineLength() "
 
-	sOpsAtom := strOpsAtom{}
+	sOpsAtom := strMechAtom{}
 
 	return sOpsAtom.breakTextAtLineLength(
 		targetStr,
@@ -209,7 +209,7 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 		return
 	}
 
-	sOpsAtom := strOpsAtom{}
+	sOpsAtom := strMechAtom{}
 
 	_ = sOpsAtom.copyIn(
 		sMech,
@@ -230,7 +230,7 @@ func (sMech *StrMech) CopyOut() *StrMech {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsAtom := strOpsAtom{}
+	sOpsAtom := strMechAtom{}
 
 	newStrOps,
 		_ := sOpsAtom.copyOut(
@@ -449,7 +449,7 @@ func (sMech *StrMech) ExtractDataField(
 
 	ePrefix += "StrMech.ExtractDataField() "
 
-	sOpsAtom := strOpsAtom{}
+	sOpsAtom := strMechAtom{}
 
 	return sOpsAtom.extractDataField(
 		targetStr,
@@ -694,7 +694,7 @@ func (sMech *StrMech) ExtractNumericDigits(
 
 	ePrefix += "StrMech.ExtractNumericDigits() "
 
-	sOpsAtom := strOpsAtom{}
+	sOpsAtom := strMechAtom{}
 
 	return sOpsAtom.extractNumericDigits(
 		targetStr,

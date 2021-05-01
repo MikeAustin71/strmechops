@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type strOpsAtom struct {
+type strMechAtom struct {
 	lock *sync.Mutex
 }
 
@@ -56,7 +56,7 @@ type strOpsAtom struct {
 //       processing, the returned error Type will encapsulate an error
 //       message.
 //
-func (sOpsAtom *strOpsAtom) breakTextAtLineLength(
+func (sOpsAtom *strMechAtom) breakTextAtLineLength(
 	targetStr string,
 	lineLength int,
 	lineDelimiter rune,
@@ -76,7 +76,7 @@ func (sOpsAtom *strOpsAtom) breakTextAtLineLength(
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsAtom.breakTextAtLineLength() "
+	ePrefix += "strMechAtom.breakTextAtLineLength() "
 
 	targetLen := len(targetStr)
 
@@ -281,7 +281,7 @@ func (sOpsAtom *strOpsAtom) breakTextAtLineLength(
 // Be advised that the data fields in 'targetStrOps' will be
 // overwritten.
 //
-func (sOpsAtom *strOpsAtom) copyIn(
+func (sOpsAtom *strMechAtom) copyIn(
 	targetStrOps *StrMech,
 	incomingStrOps *StrMech,
 	ePrefix string) (
@@ -299,7 +299,7 @@ func (sOpsAtom *strOpsAtom) copyIn(
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsAtom.copyIn() "
+	ePrefix += "strMechAtom.copyIn() "
 
 	if targetStrOps == nil {
 		err = fmt.Errorf("%v\n"+
@@ -336,7 +336,7 @@ func (sOpsAtom *strOpsAtom) copyIn(
 // CopyOut - Creates a 'deep' copy of input parameter
 // 'strOps', an instance of StrMech.
 //
-func (sOpsAtom *strOpsAtom) copyOut(
+func (sOpsAtom *strMechAtom) copyOut(
 	strOps *StrMech,
 	ePrefix string) (
 	*StrMech,
@@ -354,7 +354,7 @@ func (sOpsAtom *strOpsAtom) copyOut(
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsAtom.copyOut() "
+	ePrefix += "strMechAtom.copyOut() "
 
 	var err error
 
@@ -535,7 +535,7 @@ func (sOpsAtom *strOpsAtom) copyOut(
 //          "America/Chicago"
 //
 //
-func (sOpsAtom *strOpsAtom) extractDataField(
+func (sOpsAtom *strMechAtom) extractDataField(
 	targetStr string,
 	leadingKeyWordDelimiters []string,
 	startIdx int,
@@ -559,7 +559,7 @@ func (sOpsAtom *strOpsAtom) extractDataField(
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsAtom.extractDataField() "
+	ePrefix += "strMechAtom.extractDataField() "
 
 	newDataDto := DataFieldProfileDto{}.New()
 	newDataDto.TargetStr = targetStr
@@ -1128,7 +1128,7 @@ exitMainTargetLoop:
 //     "$(1,250,364.33)"
 //
 //
-func (sOpsAtom *strOpsAtom) extractNumericDigits(
+func (sOpsAtom *strMechAtom) extractNumericDigits(
 	targetStr string,
 	startIndex int,
 	keepLeadingChars string,
@@ -1150,7 +1150,7 @@ func (sOpsAtom *strOpsAtom) extractNumericDigits(
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsAtom.extractNumericDigits() "
+	ePrefix += "strMechAtom.extractNumericDigits() "
 
 	nStrDto := NumStrProfileDto{}.New()
 	nStrDto.TargetStr = targetStr
