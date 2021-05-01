@@ -113,7 +113,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 
 	var begIdx, endWrdIdx, actualLastIdx, beginWrdIdx int
 	var isAllOneWord, isAllSpaces bool
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	for begIdx < targetLen && begIdx > -1 {
 

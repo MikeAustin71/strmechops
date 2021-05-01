@@ -780,7 +780,7 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 
 	ePrefix += "StrMech.FindFirstNonSpaceChar() "
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.findFirstNonSpaceChar(
 		targetStr,
@@ -1497,7 +1497,7 @@ func (sMech *StrMech) GetValidString(
 
 	ePrefix += "StrMech.GetValidString() "
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.getValidString(
 		targetStr,
@@ -1835,7 +1835,7 @@ func (sMech *StrMech) Read(p []byte) (n int, err error) {
 
 	ePrefix := "StrMech.Read() "
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.readBytes(
 		sMech,
@@ -1894,7 +1894,7 @@ func (sMech *StrMech) ReadStringFromBytes(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.readStringFromBytes(
 		bytes,
@@ -2098,7 +2098,7 @@ func (sMech *StrMech) ReplaceBytes(
 
 	ePrefix += "StrMech.ReplaceBytes() "
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.replaceBytes(
 		targetBytes,
@@ -2203,7 +2203,7 @@ func (sMech *StrMech) ReplaceMultipleStrs(
 
 	ePrefix += "StrMech.ReplaceMultipleStrs() "
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.replaceMultipleStrs(
 		targetStr,
@@ -2610,7 +2610,7 @@ func (sMech *StrMech) ReplaceStringChars(
 
 	ePrefix += "StrMech.ReplaceStringChars() "
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.replaceStringChars(
 		targetStr,
@@ -3852,7 +3852,7 @@ func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsElectron := strOpsElectron{}
+	sOpsElectron := strMechElectron{}
 
 	return sOpsElectron.write(
 		sMech,

@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-type strOpsElectron struct {
+type strMechElectron struct {
 	lock *sync.Mutex
 }
 
@@ -63,7 +63,7 @@ type strOpsElectron struct {
 //       'nil'. If an error is encountered this value will
 //       contain the error message.
 //
-func (sOpsElectron *strOpsElectron) findFirstNonSpaceChar(
+func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 	targetStr string,
 	startIndex,
 	endIndex int,
@@ -71,19 +71,19 @@ func (sOpsElectron *strOpsElectron) findFirstNonSpaceChar(
 	int,
 	error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.findFirstNonSpaceChar()\n"
+	ePrefix += "strMechElectron.findFirstNonSpaceChar()\n"
 
 	sOpsQuark := strOpsQuark{}
 
@@ -170,26 +170,26 @@ func (sOpsElectron *strOpsElectron) findFirstNonSpaceChar(
 //           errors include a zero length 'targetStr' (string) or a zero length
 //           'validRunes' array.
 //
-func (sOpsElectron *strOpsElectron) getValidString(
+func (sMechElectron *strMechElectron) getValidString(
 	targetStr string,
 	validRunes []rune,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.getValidString() "
+	ePrefix += "strMechElectron.getValidString() "
 
 	if len(targetStr) == 0 {
 		return "",
@@ -231,26 +231,26 @@ func (sOpsElectron *strOpsElectron) getValidString(
 // 'StrMech.stringData' can be accessed through Getter an Setter methods,
 // StrMech.GetStringData() and StrMech.SetStringData()
 //
-func (sOpsElectron *strOpsElectron) readBytes(
+func (sMechElectron *strMechElectron) readBytes(
 	strOpsInstance *StrMech,
 	p []byte,
 	ePrefix string) (
 	n int,
 	err error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.readBytes() "
+	ePrefix += "strMechElectron.readBytes() "
 
 	n = 0
 	err = nil
@@ -352,19 +352,19 @@ func (sOpsElectron *strOpsElectron) readBytes(
 //                          'bytes' after 'extractedString'. If no more strings exist in the
 //                          the byte array, 'nextStartIdx' will be set to -1.
 //
-func (sOpsElectron *strOpsElectron) readStringFromBytes(
+func (sMechElectron *strMechElectron) readStringFromBytes(
 	bytes []byte,
 	startIdx int) (
 	extractedStr string,
 	nextStartIdx int) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	extractedStr = ""
 	nextStartIdx = -1
@@ -468,26 +468,26 @@ func (sOpsElectron *strOpsElectron) readStringFromBytes(
 //           In addition, if any of the replacementBytes[][x] 2nd dimension elements have
 //           a length less than two, an error will be returned.
 //
-func (sOpsElectron *strOpsElectron) replaceBytes(
+func (sMechElectron *strMechElectron) replaceBytes(
 	targetBytes []byte,
 	replacementBytes [][]byte,
 	ePrefix string) (
 	[]byte,
 	error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.replaceBytes() "
+	ePrefix += "strMechElectron.replaceBytes() "
 
 	output := make([]byte, 0, 100)
 
@@ -556,26 +556,26 @@ func (sOpsElectron *strOpsElectron) replaceBytes(
 // If the length of the 'replaceArray' second dimension is less than '2', an
 // error will be returned.
 //
-func (sOpsElectron *strOpsElectron) replaceMultipleStrs(
+func (sMechElectron *strMechElectron) replaceMultipleStrs(
 	targetStr string,
 	replaceArray [][]string,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.replaceMultipleStrs() "
+	ePrefix += "strMechElectron.replaceMultipleStrs() "
 
 	if targetStr == "" {
 		return targetStr,
@@ -655,26 +655,26 @@ func (sOpsElectron *strOpsElectron) replaceMultipleStrs(
 //            In addition, if any of the replacementRunes[][x] 2nd dimension elements have
 //            a length less than two, an error will be returned.
 //
-func (sOpsElectron *strOpsElectron) replaceStringChars(
+func (sMechElectron *strMechElectron) replaceStringChars(
 	targetStr string,
 	replacementRunes [][]rune,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.replaceStringChars() "
+	ePrefix += "strMechElectron.replaceStringChars() "
 
 	if len(targetStr) == 0 {
 		return "",
@@ -721,26 +721,26 @@ func (sOpsElectron *strOpsElectron) replaceStringChars(
 // 'StrMech.stringData' can be accessed through 'Getter' and
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
 //
-func (sOpsElectron *strOpsElectron) write(
+func (sMechElectron *strMechElectron) write(
 	strOpsInstance *StrMech,
 	p []byte,
 	ePrefix string) (
 	n int,
 	err error) {
 
-	if sOpsElectron.lock == nil {
-		sOpsElectron.lock = new(sync.Mutex)
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
 	}
 
-	sOpsElectron.lock.Lock()
+	sMechElectron.lock.Lock()
 
-	defer sOpsElectron.lock.Unlock()
+	defer sMechElectron.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsElectron.write() "
+	ePrefix += "strMechElectron.write() "
 
 	n = 0
 	err = nil
