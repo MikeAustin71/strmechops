@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type strOpsMolecule struct {
+type strMechMolecule struct {
 	lock *sync.Mutex
 }
 
@@ -81,26 +81,26 @@ type strOpsMolecule struct {
 //  'Hello' is centered in a field of length 15
 //  with left and right pad of 5-spaces.
 //
-func (sOpsMolecule *strOpsMolecule) strCenterInStr(
+func (sMechMolecule *strMechMolecule) strCenterInStr(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsMolecule.lock == nil {
-		sOpsMolecule.lock = new(sync.Mutex)
+	if sMechMolecule.lock == nil {
+		sMechMolecule.lock = new(sync.Mutex)
 	}
 
-	sOpsMolecule.lock.Lock()
+	sMechMolecule.lock.Lock()
 
-	defer sOpsMolecule.lock.Unlock()
+	defer sMechMolecule.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsMolecule.strPadLeftToCenter()\n"
+	ePrefix += "strMechMolecule.strPadLeftToCenter()\n"
 
 	sOpsQuark := strOpsQuark{}
 	if sOpsQuark.isEmptyOrWhiteSpace(strToCenter) {
@@ -215,26 +215,26 @@ func (sOpsMolecule *strOpsMolecule) strCenterInStr(
 //  The string length of 'justifiedStr' is 15
 //
 //
-func (sOpsMolecule *strOpsMolecule) strLeftJustify(
+func (sMechMolecule *strMechMolecule) strLeftJustify(
 	strToJustify string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsMolecule.lock == nil {
-		sOpsMolecule.lock = new(sync.Mutex)
+	if sMechMolecule.lock == nil {
+		sMechMolecule.lock = new(sync.Mutex)
 	}
 
-	sOpsMolecule.lock.Lock()
+	sMechMolecule.lock.Lock()
 
-	defer sOpsMolecule.lock.Unlock()
+	defer sMechMolecule.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsMolecule.strLeftJustify() "
+	ePrefix += "strMechMolecule.strLeftJustify() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -354,26 +354,26 @@ func (sOpsMolecule *strOpsMolecule) strLeftJustify(
 //  padStr + strToCenter will yield a centered string.
 //
 //
-func (sOpsMolecule *strOpsMolecule) strPadLeftToCenter(
+func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsMolecule.lock == nil {
-		sOpsMolecule.lock = new(sync.Mutex)
+	if sMechMolecule.lock == nil {
+		sMechMolecule.lock = new(sync.Mutex)
 	}
 
-	sOpsMolecule.lock.Lock()
+	sMechMolecule.lock.Lock()
 
-	defer sOpsMolecule.lock.Unlock()
+	defer sMechMolecule.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsMolecule.strPadLeftToCenter()\n"
+	ePrefix += "strMechMolecule.strPadLeftToCenter()\n"
 
 	sOpsQuark := strOpsQuark{}
 
@@ -485,26 +485,26 @@ func (sOpsMolecule *strOpsMolecule) strPadLeftToCenter(
 //  The string length of 'strRightJustified' is 10
 //
 //
-func (sOpsMolecule *strOpsMolecule) strRightJustify(
+func (sMechMolecule *strMechMolecule) strRightJustify(
 	strToJustify string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsMolecule.lock == nil {
-		sOpsMolecule.lock = new(sync.Mutex)
+	if sMechMolecule.lock == nil {
+		sMechMolecule.lock = new(sync.Mutex)
 	}
 
-	sOpsMolecule.lock.Lock()
+	sMechMolecule.lock.Lock()
 
-	defer sOpsMolecule.lock.Unlock()
+	defer sMechMolecule.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "sOpsMolecule.strRightJustify() "
+	ePrefix += "sMechMolecule.strRightJustify() "
 
 	sOpsQuark := strOpsQuark{}
 

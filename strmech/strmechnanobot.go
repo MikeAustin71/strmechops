@@ -72,7 +72,7 @@ func (sOpsNanobot *strOpsNanobot) strCenterInStrLeft(
 				len(strToCenter), fieldLen)
 	}
 
-	sOpsMolecule := strOpsMolecule{}
+	sOpsMolecule := strMechMolecule{}
 
 	pad, err := sOpsMolecule.strPadLeftToCenter(
 		strToCenter,
@@ -269,7 +269,7 @@ func (sOpsNanobot *strOpsNanobot) justifyTextInStrField(
 		return justifiedStr, err
 	}
 
-	sOpsMolecule := strOpsMolecule{}
+	sOpsMolecule := strMechMolecule{}
 
 	switch textJustify {
 	case TextJustify(0).Left():

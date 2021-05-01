@@ -2821,7 +2821,7 @@ func (sMech *StrMech) StrCenterInStr(
 
 	ePrefix += "StrMech.StrCenterInStr() "
 
-	sOpsMolecule := strOpsMolecule{}
+	sOpsMolecule := strMechMolecule{}
 
 	return sOpsMolecule.strCenterInStr(
 		strToCenter,
@@ -3234,7 +3234,7 @@ func (sMech *StrMech) StrLeftJustify(
 
 	ePrefix += "StrMech.StrLeftJustify() "
 
-	sOpsMolecule := strOpsMolecule{}
+	sOpsMolecule := strMechMolecule{}
 
 	return sOpsMolecule.strLeftJustify(
 		strToJustify,
@@ -3343,7 +3343,7 @@ func (sMech *StrMech) StrPadLeftToCenter(
 
 	ePrefix += "StrMech.StrPadLeftToCenter() "
 
-	sOpsMolecule := strOpsMolecule{}
+	sOpsMolecule := strMechMolecule{}
 
 	return sOpsMolecule.strPadLeftToCenter(
 		strToCenter,
@@ -3450,7 +3450,7 @@ func (sMech *StrMech) StrRightJustify(
 
 	ePrefix += "StrMech.StrRightJustify() "
 
-	sOpsMolecule := strOpsMolecule{}
+	sOpsMolecule := strMechMolecule{}
 
 	return sOpsMolecule.strRightJustify(
 		strToJustify,
