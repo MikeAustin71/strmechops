@@ -10,7 +10,7 @@ func TestStrOps_FindRegExIndex_01(t *testing.T) {
 	regex := "\\d:\\d:\\d"
 	targetStr := "November 12, 2016 1:6:3pm +0000 UTC"
 	expected := "1:6:3"
-	su := StrOps{}
+	su := StrMech{}
 
 	idx := su.FindRegExIndex(targetStr, regex)
 
@@ -30,9 +30,9 @@ func TestStrOps_FindRegExIndex_01(t *testing.T) {
 
 func TestStrOps_GetReader_01(t *testing.T) {
 	originalStr := "Now is the time for all good men to come to the aid of their country."
-	s1 := StrOps{}.NewPtr()
+	s1 := StrMech{}.NewPtr()
 	s1.SetStringData(originalStr)
-	s2 := StrOps{}.NewPtr()
+	s2 := StrMech{}.NewPtr()
 	rdr := s1.GetReader()
 	n, err := io.Copy(s2, rdr)
 
@@ -58,9 +58,9 @@ func TestStrOps_GetReader_01(t *testing.T) {
 
 func TestStrOps_GetReader_02(t *testing.T) {
 	originalStr := "xx"
-	s1 := StrOps{}.NewPtr()
+	s1 := StrMech{}.NewPtr()
 	s1.SetStringData(originalStr)
-	s2 := StrOps{}.NewPtr()
+	s2 := StrMech{}.NewPtr()
 	rdr := s1.GetReader()
 	n, err := io.Copy(s2, rdr)
 
@@ -86,7 +86,7 @@ func TestStrOps_GetReader_02(t *testing.T) {
 
 func TestStrOps_GetSoftwareVersion_01(t *testing.T) {
 	expectedStr := "3.0.0"
-	actualStr := StrOps{}.GetSoftwareVersion()
+	actualStr := StrMech{}.GetSoftwareVersion()
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected Software Version string='%v'.\n"+
@@ -105,13 +105,13 @@ func TestStrOps_GetValidBytes_01(t *testing.T) {
 
 	expected := "valid"
 
-	actualBytes, err := StrOps{}.Ptr().GetValidBytes(
+	actualBytes, err := StrMech{}.Ptr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidBytes(testBytes, validBytes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidBytes(testBytes, validBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -134,13 +134,13 @@ func TestStrOps_GetValidBytes_02(t *testing.T) {
 
 	expected := "1355"
 
-	actualBytes, err := StrOps{}.NewPtr().GetValidBytes(
+	actualBytes, err := StrMech{}.NewPtr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidBytes(testBytes, validBytes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidBytes(testBytes, validBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -163,13 +163,13 @@ func TestStrOps_GetValidBytes_03(t *testing.T) {
 
 	expected := "355"
 
-	actualBytes, err := StrOps{}.NewPtr().GetValidBytes(
+	actualBytes, err := StrMech{}.NewPtr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidBytes(testBytes, validBytes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidBytes(testBytes, validBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -192,13 +192,13 @@ func TestStrOps_GetValidBytes_04(t *testing.T) {
 
 	expected := ""
 
-	actualBytes, err := StrOps{}.NewPtr().GetValidBytes(
+	actualBytes, err := StrMech{}.NewPtr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidBytes(testBytes, validBytes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidBytes(testBytes, validBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -221,13 +221,13 @@ func TestStrOps_GetValidBytes_05(t *testing.T) {
 
 	expected := ""
 
-	actualBytes, err := StrOps{}.NewPtr().GetValidBytes(
+	actualBytes, err := StrMech{}.NewPtr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidBytes(testBytes, validBytes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidBytes(testBytes, validBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -248,7 +248,7 @@ func TestStrOps_GetValidBytes_06(t *testing.T) {
 
 	testBytes := make([]byte, 0, 5)
 
-	_, err := StrOps{}.NewPtr().GetValidBytes(
+	_, err := StrMech{}.NewPtr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
@@ -268,7 +268,7 @@ func TestStrOps_GetValidBytes_07(t *testing.T) {
 
 	testBytes := []byte{'x', 'z', 'U', 'm', 'M', 'a', 'J', '9', 'Z', 'i', 'F', 'd', '&'}
 
-	_, err := StrOps{}.NewPtr().GetValidBytes(
+	_, err := StrMech{}.NewPtr().GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
@@ -290,13 +290,13 @@ func TestStrOps_GetValidRunes_01(t *testing.T) {
 
 	expected := "valid"
 
-	actualRunes, err := StrOps{}.NewPtr().GetValidRunes(
+	actualRunes, err := StrMech{}.NewPtr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidRunes(testRunes, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidRunes(testRunes, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -319,13 +319,13 @@ func TestStrOps_GetValidRunes_02(t *testing.T) {
 
 	expected := "1355"
 
-	actualRunes, err := StrOps{}.Ptr().GetValidRunes(
+	actualRunes, err := StrMech{}.Ptr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidRunes(testRunes, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidRunes(testRunes, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -348,13 +348,13 @@ func TestStrOps_GetValidRunes_03(t *testing.T) {
 
 	expected := "355"
 
-	actualRunes, err := StrOps{}.Ptr().GetValidRunes(
+	actualRunes, err := StrMech{}.Ptr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidRunes(testRunes, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidRunes(testRunes, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -377,13 +377,13 @@ func TestStrOps_GetValidRunes_04(t *testing.T) {
 
 	expected := ""
 
-	actualRunes, err := StrOps{}.Ptr().GetValidRunes(
+	actualRunes, err := StrMech{}.Ptr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidRunes(testRunes, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidRunes(testRunes, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -406,13 +406,13 @@ func TestStrOps_GetValidRunes_05(t *testing.T) {
 
 	expected := ""
 
-	actualRunes, err := StrOps{}.Ptr().GetValidRunes(
+	actualRunes, err := StrMech{}.Ptr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidRunes(testRunes, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidRunes(testRunes, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -433,7 +433,7 @@ func TestStrOps_GetValidRunes_06(t *testing.T) {
 
 	testRunes := make([]rune, 0, 5)
 
-	_, err := StrOps{}.Ptr().GetValidRunes(
+	_, err := StrMech{}.Ptr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
@@ -453,7 +453,7 @@ func TestStrOps_GetValidRunes_07(t *testing.T) {
 
 	testRunes := []rune{'x', 'z', 'U', 'm', 'M', 'a', 'J', '9', 'Z', 'i', 'F', 'd', '&'}
 
-	_, err := StrOps{}.Ptr().GetValidRunes(
+	_, err := StrMech{}.Ptr().GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
@@ -475,13 +475,13 @@ func TestStrOps_GetValidString_01(t *testing.T) {
 
 	expected := "valid"
 
-	actualStr, err := StrOps{}.NewPtr().GetValidString(
+	actualStr, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidString(testStr, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidString(testStr, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -501,13 +501,13 @@ func TestStrOps_GetValidString_02(t *testing.T) {
 
 	expected := "1355"
 
-	actualStr, err := StrOps{}.NewPtr().GetValidString(
+	actualStr, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidString(testStr, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidString(testStr, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -528,13 +528,13 @@ func TestStrOps_GetValidString_03(t *testing.T) {
 
 	expected := "355"
 
-	actualStr, err := StrOps{}.NewPtr().GetValidString(
+	actualStr, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidString(testStr, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidString(testStr, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -555,13 +555,13 @@ func TestStrOps_GetValidString_04(t *testing.T) {
 
 	expected := ""
 
-	actualStr, err := StrOps{}.NewPtr().GetValidString(
+	actualStr, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidString(testStr, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidString(testStr, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -581,13 +581,13 @@ func TestStrOps_GetValidString_05(t *testing.T) {
 
 	expected := ""
 
-	actualStr, err := StrOps{}.NewPtr().GetValidString(
+	actualStr, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.GetValidString(testStr, validRunes). "+
+		t.Errorf("Error returned by StrMech{}.GetValidString(testStr, validRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -606,7 +606,7 @@ func TestStrOps_GetValidString_06(t *testing.T) {
 
 	testStr := ""
 
-	_, err := StrOps{}.NewPtr().GetValidString(
+	_, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
@@ -626,7 +626,7 @@ func TestStrOps_GetValidString_07(t *testing.T) {
 
 	testStr := "xzUmMaJ9ZiFd&"
 
-	_, err := StrOps{}.NewPtr().GetValidString(
+	_, err := StrMech{}.NewPtr().GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
@@ -641,7 +641,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_01(t *testing.T) {
 
 	testStr := "       "
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != true {
 		t.Error("Error: Expected result='true'. Instead, result='false'")
@@ -653,7 +653,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_02(t *testing.T) {
 
 	testStr := ""
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != true {
 		t.Error("Error: Expected result='true'. Instead, result='false'")
@@ -665,7 +665,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_03(t *testing.T) {
 
 	testStr := " xyz "
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -677,7 +677,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_04(t *testing.T) {
 
 	testStr := "xyz"
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -689,7 +689,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_05(t *testing.T) {
 
 	testStr := "/t"
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -701,7 +701,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_06(t *testing.T) {
 
 	testStr := "/n           "
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -713,7 +713,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_07(t *testing.T) {
 
 	testStr := "  /n"
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -725,7 +725,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_08(t *testing.T) {
 
 	testStr := "  x"
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -737,7 +737,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_09(t *testing.T) {
 
 	testStr := "x   "
 
-	result := StrOps{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
 
 	if result != false {
 		t.Error("Error: Expected result='false'. Instead, result='true'")
@@ -751,7 +751,7 @@ func TestStrOps_LowerCaseFirstLetter_01(t *testing.T) {
 
 	expected := "now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.Ptr().LowerCaseFirstLetter(testStr)
+	actualStr := StrMech{}.Ptr().LowerCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -766,7 +766,7 @@ func TestStrOps_LowerCaseFirstLetter_02(t *testing.T) {
 
 	expected := "  now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.Ptr().LowerCaseFirstLetter(testStr)
+	actualStr := StrMech{}.Ptr().LowerCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -781,7 +781,7 @@ func TestStrOps_LowerCaseFirstLetter_03(t *testing.T) {
 
 	expected := "now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.Ptr().LowerCaseFirstLetter(testStr)
+	actualStr := StrMech{}.Ptr().LowerCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -796,7 +796,7 @@ func TestStrOps_LowerCaseFirstLetter_04(t *testing.T) {
 
 	expected := "  now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.Ptr().LowerCaseFirstLetter(testStr)
+	actualStr := StrMech{}.Ptr().LowerCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -811,7 +811,7 @@ func TestStrOps_LowerCaseFirstLetter_05(t *testing.T) {
 
 	expected := ""
 
-	actualStr := StrOps{}.Ptr().LowerCaseFirstLetter(testStr)
+	actualStr := StrMech{}.Ptr().LowerCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",

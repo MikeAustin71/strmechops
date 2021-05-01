@@ -194,7 +194,7 @@ func (sOpsNanobot *strOpsNanobot) strCenterInStrLeft(
 //  strToJustify := "12345"
 //  fieldLen := 10
 //
-//  su := StrOps{}
+//  su := StrMech{}
 //  strJustified, err :=
 //   su.justifyTextInStrField(
 //               strToJustify,

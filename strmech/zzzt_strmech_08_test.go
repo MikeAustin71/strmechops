@@ -99,7 +99,7 @@ func TestStrOps_StripBadChars_001(t *testing.T) {
 	testString := "..........      ./../.\\.\\..\\////   " + expectedStr +
 		"..........      ./../.\\.\\..\\////   "
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -128,7 +128,7 @@ func TestStrOps_StripBadChars_002(t *testing.T) {
 	expectedStr = testString
 	expectedStrLen := len(expectedStr)
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -168,7 +168,7 @@ func TestStrOps_StripBadChars_003(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -193,7 +193,7 @@ func TestStrOps_StripBadChars_004(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := "  Some         Stri  ng  "
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -218,7 +218,7 @@ func TestStrOps_StripBadChars_005(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := "@@Some@@@@@@@@@Stri@@ng@@"
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -259,7 +259,7 @@ func TestStrOps_StripLeadingChars_001(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := "..........      ./../.\\.\\..\\////   " + expectedStr
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripLeadingChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -285,7 +285,7 @@ func TestStrOps_StripLeadingChars_002(t *testing.T) {
 	expectedStr = testString
 	expectedStrLen := len(expectedStr)
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripLeadingChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -324,7 +324,7 @@ func TestStrOps_StripLeadingChars_003(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripLeadingChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -363,7 +363,7 @@ func TestStrOps_StripTrailingChars_001(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr + "..........      ./../.\\.\\..\\////   "
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripTrailingChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripTrailingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -389,7 +389,7 @@ func TestStrOps_StripTrailingChars_002(t *testing.T) {
 	expectedStr = testString
 	expectedStrLen := len(expectedStr)
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripTrailingChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripTrailingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -428,7 +428,7 @@ func TestStrOps_StripTrailingChars_003(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr
 
-	actualString, actualStrLen := StrOps{}.Ptr().StripTrailingChars(testString, badChars)
+	actualString, actualStrLen := StrMech{}.Ptr().StripTrailingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -455,7 +455,7 @@ func TestStrOps_StrCenterInStr_01(t *testing.T) {
 	rightPad := strings.Repeat(" ", exRightPadLen)
 	exStr := leftPad + strToCenter + rightPad
 
-	su := StrOps{}
+	su := StrMech{}
 	str, err := su.StrCenterInStr(
 		strToCenter,
 		fieldLen,
@@ -488,7 +488,7 @@ func TestStrOps_StrCenterInStr_02(t *testing.T) {
 	rightPad := strings.Repeat(" ", exRightPadLen)
 	exStr := leftPad + strToCenter + rightPad
 
-	su := StrOps{}
+	su := StrMech{}
 	str, err := su.StrCenterInStr(
 		strToCenter,
 		fieldLen,
@@ -518,7 +518,7 @@ func TestStrOps_StrCenterInStr_03(t *testing.T) {
 
 	exStr := strToCenter
 
-	su := StrOps{}
+	su := StrMech{}
 	str, err := su.StrCenterInStr(
 		strToCenter,
 		fieldLen,
@@ -544,13 +544,13 @@ func TestStrOps_StrCenterInStr_04(t *testing.T) {
 	strToCenter := "Hello World"
 	fieldLen := 5
 
-	_, err := StrOps{}.Ptr().StrCenterInStr(
+	_, err := StrMech{}.Ptr().StrCenterInStr(
 		strToCenter,
 		fieldLen,
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.StrCenterInStr(strToCenter, fieldLen)\n" +
+		t.Error("Expected an error return from StrMech{}.StrCenterInStr(strToCenter, fieldLen)\n" +
 			"because 'fieldLen' is less than the length of 'strToCenter'.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -561,13 +561,13 @@ func TestStrOps_StrCenterInStr_05(t *testing.T) {
 	strToCenter := "     "
 	fieldLen := 15
 
-	_, err := StrOps{}.Ptr().StrCenterInStr(
+	_, err := StrMech{}.Ptr().StrCenterInStr(
 		strToCenter,
 		fieldLen,
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.StrCenterInStr(strToCenter, fieldLen)\n" +
+		t.Error("Expected an error return from StrMech{}.StrCenterInStr(strToCenter, fieldLen)\n" +
 			"because 'strToCenter' consists entirely of white space.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -580,7 +580,7 @@ func TestStrOps_StrLeftJustify_01(t *testing.T) {
 	exTotalLen := fieldLen
 	exRightPad := strings.Repeat(" ", 38)
 	exStr := strToJustify + exRightPad
-	su := StrOps{}
+	su := StrMech{}
 	str, err := su.StrLeftJustify(
 		strToJustify,
 		fieldLen,
@@ -610,7 +610,7 @@ func TestStrOps_StrLeftJustify_02(t *testing.T) {
 	strToJustify := "      "
 	fieldLen := 45
 
-	_, err := StrOps{}.Ptr().StrLeftJustify(
+	_, err := StrMech{}.Ptr().StrLeftJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -629,7 +629,7 @@ func TestStrOps_StrLeftJustify_03(t *testing.T) {
 	strToJustify := "Hello"
 	fieldLen := len(strToJustify)
 
-	justifiedStr, err := StrOps{}.Ptr().StrLeftJustify(
+	justifiedStr, err := StrMech{}.Ptr().StrLeftJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -654,7 +654,7 @@ func TestStrOps_StrLeftJustify_04(t *testing.T) {
 	strToJustify := "Hello"
 	fieldLen := 2
 
-	_, err := StrOps{}.Ptr().StrLeftJustify(
+	_, err := StrMech{}.Ptr().StrLeftJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -676,7 +676,7 @@ func TestStrOps_StrRightJustify_01(t *testing.T) {
 	exLeftPad := strings.Repeat(" ", 38)
 	exStr := exLeftPad + strToJustify
 
-	su := StrOps{}
+	su := StrMech{}
 	str, err := su.StrRightJustify(
 		strToJustify,
 		fieldLen,
@@ -705,7 +705,7 @@ func TestStrOps_StrRightJustify_02(t *testing.T) {
 	strToJustify := "   "
 	fieldLen := 45
 
-	_, err := StrOps{}.Ptr().StrRightJustify(
+	_, err := StrMech{}.Ptr().StrRightJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -724,7 +724,7 @@ func TestStrOps_StrRightJustify_03(t *testing.T) {
 	strToJustify := "1234567"
 	fieldLen := len(strToJustify)
 
-	actualStr, err := StrOps{}.Ptr().StrRightJustify(
+	actualStr, err := StrMech{}.Ptr().StrRightJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -747,7 +747,7 @@ func TestStrOps_StrRightJustify_04(t *testing.T) {
 	strToJustify := "1234567"
 	fieldLen := 6
 
-	_, err := StrOps{}.Ptr().StrRightJustify(
+	_, err := StrMech{}.Ptr().StrRightJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -770,7 +770,7 @@ func TestStrOps_StrRightJustify_05(t *testing.T) {
 	exLeftPad := strings.Repeat(" ", 5)
 	exStr := exLeftPad + strToJustify
 
-	su := StrOps{}
+	su := StrMech{}
 	str, err := su.StrRightJustify(
 		strToJustify,
 		fieldLen,
@@ -801,7 +801,7 @@ func TestStrOps_StrCenterInStrLeft_01(t *testing.T) {
 
 	exStr := strings.Repeat(" ", exPadLen) + strToCenter
 
-	su := StrOps{}
+	su := StrMech{}
 
 	str, err := su.StrCenterInStrLeft(
 		strToCenter,
@@ -833,7 +833,7 @@ func TestStrOps_StrCenterInStrLeft_02(t *testing.T) {
 	expectedReturnedStr := "     Hello"
 	expectedReturnedPrintStr := strings.ReplaceAll(expectedReturnedStr, " ", "@")
 
-	su := StrOps{}
+	su := StrMech{}
 
 	actualStr, err := su.StrCenterInStrLeft(
 		strToCenter,
@@ -868,7 +868,7 @@ func TestStrOps_StrCenterInStrLeft_03(t *testing.T) {
 	strToCenter := "  "
 	fieldLen := 15
 
-	_, err := StrOps{}.Ptr().StrCenterInStrLeft(
+	_, err := StrMech{}.Ptr().StrCenterInStrLeft(
 		strToCenter,
 		fieldLen,
 		ePrefix)
@@ -886,7 +886,7 @@ func TestStrOps_StrCenterInStrLeft_04(t *testing.T) {
 	strToCenter := "Hello"
 	fieldLen := 2
 
-	_, err := StrOps{}.Ptr().StrCenterInStrLeft(
+	_, err := StrMech{}.Ptr().StrCenterInStrLeft(
 		strToCenter,
 		fieldLen,
 		ePrefix)
@@ -901,7 +901,7 @@ func TestStrOps_StrCenterInStrLeft_04(t *testing.T) {
 func TestStrOps_StrGetRuneCnt_01(t *testing.T) {
 	strToCnt := "1234567"
 	exCnt := 7
-	su := StrOps{}
+	su := StrMech{}
 	l1 := su.StrGetRuneCnt(strToCnt)
 
 	if l1 != exCnt {
@@ -914,7 +914,7 @@ func TestStrOps_StrGetCharCnt01(t *testing.T) {
 	strToCnt := "1234567"
 	exCnt := 7
 
-	su := StrOps{}
+	su := StrMech{}
 	l1 := su.StrGetCharCnt(strToCnt)
 
 	if l1 != exCnt {
@@ -929,7 +929,7 @@ func TestStrOps_StrPadLeftToCenter_01(t *testing.T) {
 	strToCenter := "1234567"
 	fieldLen := 79
 	exLen := 36
-	su := StrOps{}
+	su := StrMech{}
 	padStr, err := su.StrPadLeftToCenter(
 		strToCenter,
 		fieldLen,
@@ -953,7 +953,7 @@ func TestStrOps_StrPadLeftToCenter_02(t *testing.T) {
 	strToCenter := "Hello"
 	fieldLen := 15
 	exLen := 5
-	su := StrOps{}
+	su := StrMech{}
 	padStr, err := su.StrPadLeftToCenter(
 		strToCenter,
 		fieldLen,
@@ -974,7 +974,7 @@ func TestStrOps_StrPadLeftToCenter_03(t *testing.T) {
 	ePrefix := "TestStrOps_StrPadLeftToCenter_03() "
 	strToCenter := "   "
 	fieldLen := 15
-	su := StrOps{}
+	su := StrMech{}
 	_, err := su.StrPadLeftToCenter(
 		strToCenter,
 		fieldLen,
@@ -991,7 +991,7 @@ func TestStrOps_StrPadLeftToCenter_04(t *testing.T) {
 	ePrefix := "TestStrOps_StrPadLeftToCenter_04() "
 	strToCenter := "Hello World"
 	fieldLen := 5
-	su := StrOps{}
+	su := StrMech{}
 	_, err := su.StrPadLeftToCenter(
 		strToCenter,
 		fieldLen,
@@ -1011,7 +1011,7 @@ func TestStrOps_StrPadLeftToCenter_05(t *testing.T) {
 	strToCenter := "Hello"
 	fieldLen := 5
 	exLen := 0
-	su := StrOps{}
+	su := StrMech{}
 
 	padStr, err := su.StrPadLeftToCenter(
 		strToCenter,
@@ -1034,7 +1034,7 @@ func TestStrOps_StrPadLeftToCenter_05(t *testing.T) {
 func TestStrOps_SwapRune_01(t *testing.T) {
 	ePrefix := "TestStrOps_SwapRune_01() "
 
-	su := StrOps{}
+	su := StrMech{}
 
 	tStr := "  Hello   World  "
 	expected := "!!Hello!!!World!!"
@@ -1077,7 +1077,7 @@ func TestStrOps_SwapRune_02(t *testing.T) {
 
 	ePrefix := "TestStrOps_SwapRune_02() "
 
-	su := StrOps{}
+	su := StrMech{}
 
 	tStr := "HelloWorld"
 	expected := "HelloWorld"
@@ -1119,7 +1119,7 @@ func TestStrOps_SwapRune_02(t *testing.T) {
 func TestStrOps_SwapRune_03(t *testing.T) {
 
 	ePrefix := "TestStrOps_SwapRune_03() "
-	su := StrOps{}
+	su := StrMech{}
 
 	tStr := "Hello Worldx"
 	expected := "Hello WorldX"
@@ -1155,7 +1155,7 @@ func TestStrOps_SwapRune_04(t *testing.T) {
 
 	ePrefix := "TestStrOps_SwapRune_04() "
 
-	su := StrOps{}
+	su := StrMech{}
 
 	tStr := "xHello World"
 	expected := "XHello World"
@@ -1193,7 +1193,7 @@ func TestStrOps_SwapRune_05(t *testing.T) {
 
 	newStr,
 		_,
-		err := StrOps{}.Ptr().SwapRune(
+		err := StrMech{}.Ptr().SwapRune(
 		tStr,
 		'x',
 		'X',
@@ -1206,7 +1206,7 @@ func TestStrOps_SwapRune_05(t *testing.T) {
 	}
 
 	if newStr != tStr {
-		t.Errorf("Error: Expected StrOps{}.SwapRune(tStr, 'x', 'X') would return\n"+
+		t.Errorf("Error: Expected StrMech{}.SwapRune(tStr, 'x', 'X') would return\n"+
 			"an empty string, because 'tStr' is an empty string.\n"+
 			"Instead, newStr='%v'", newStr)
 	}
@@ -1219,7 +1219,7 @@ func TestStrOps_TrimMultipleChars_01(t *testing.T) {
 
 	tStr := " 16:26:32   CST "
 	expected := "16:26:32 CST"
-	su := StrOps{}
+	su := StrMech{}
 
 	result,
 		err := su.TrimMultipleChars(
@@ -1243,7 +1243,7 @@ func TestStrOps_TrimMultipleChars_02(t *testing.T) {
 
 	tStr := "       Hello          World        "
 	expected := "Hello World"
-	su := StrOps{}
+	su := StrMech{}
 
 	result, err := su.TrimMultipleChars(
 		tStr,
@@ -1266,7 +1266,7 @@ func TestStrOps_TrimMultipleChars_03(t *testing.T) {
 
 	tStr := "Hello          World        "
 	expected := "Hello World"
-	su := StrOps{}
+	su := StrMech{}
 
 	result, err := su.TrimMultipleChars(
 		tStr,
@@ -1289,7 +1289,7 @@ func TestStrOps_TrimMultipleChars_04(t *testing.T) {
 
 	tStr := " Hello          World"
 	expected := "Hello World"
-	su := StrOps{}
+	su := StrMech{}
 
 	result, err := su.TrimMultipleChars(
 		tStr,
@@ -1312,7 +1312,7 @@ func TestStrOps_TrimMultipleChars_05(t *testing.T) {
 
 	tStr := "Hello World"
 	expected := "Hello World"
-	su := StrOps{}
+	su := StrMech{}
 
 	result, err := su.TrimMultipleChars(
 		tStr,
@@ -1335,7 +1335,7 @@ func TestStrOps_TrimMultipleChars_06(t *testing.T) {
 
 	tStr := "Hello World "
 	expected := "Hello World"
-	su := StrOps{}
+	su := StrMech{}
 
 	result, err := su.TrimMultipleChars(
 		tStr,
@@ -1358,7 +1358,7 @@ func TestStrOps_TrimMultipleChars_07(t *testing.T) {
 
 	tStr := " Hello World "
 	expected := "Hello World"
-	su := StrOps{}
+	su := StrMech{}
 
 	result, err := su.TrimMultipleChars(
 		tStr,
@@ -1381,13 +1381,13 @@ func TestStrOps_TrimMultipleChars_08(t *testing.T) {
 
 	tStr := ""
 
-	_, err := StrOps{}.TrimMultipleChars(
+	_, err := StrMech{}.TrimMultipleChars(
 		tStr,
 		' ',
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.TrimMultipleChars(tStr, ' ')\n" +
+		t.Error("Expected an error return from StrMech{}.TrimMultipleChars(tStr, ' ')\n" +
 			"because 'tStr' is an empty string.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -1399,13 +1399,13 @@ func TestStrOps_TrimMultipleChars_09(t *testing.T) {
 
 	tStr := "Hello World"
 	replaceRune := rune(0)
-	_, err := StrOps{}.TrimMultipleChars(
+	_, err := StrMech{}.TrimMultipleChars(
 		tStr,
 		replaceRune,
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.TrimMultipleChars(tStr, replaceRune)\n" +
+		t.Error("Expected an error return from StrMech{}.TrimMultipleChars(tStr, replaceRune)\n" +
 			"because 'replaceRune' has a zero value.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -1419,13 +1419,13 @@ func TestStrOps_TrimStringEnds_01(t *testing.T) {
 	tStr := "  Hello    World  "
 	expected := "Hello    World"
 	trimChar := ' '
-	result, err := StrOps{}.Ptr().TrimStringEnds(
+	result, err := StrMech{}.Ptr().TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1442,13 +1442,13 @@ func TestStrOps_TrimStringEnds_02(t *testing.T) {
 	tStr := "Hello X World"
 	expected := "Hello X World"
 	trimChar := 'X'
-	result, err := StrOps{}.Ptr().TrimStringEnds(
+	result, err := StrMech{}.Ptr().TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1465,13 +1465,13 @@ func TestStrOps_TrimStringEnds_03(t *testing.T) {
 	tStr := "Hello WorlXd"
 	expected := "Hello WorlXd"
 	trimChar := 'X'
-	result, err := StrOps{}.TrimStringEnds(
+	result, err := StrMech{}.TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1488,13 +1488,13 @@ func TestStrOps_TrimStringEnds_04(t *testing.T) {
 	tStr := "XXXHello WorlXdXXX"
 	expected := "Hello WorlXd"
 	trimChar := 'X'
-	result, err := StrOps{}.Ptr().TrimStringEnds(
+	result, err := StrMech{}.Ptr().TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1511,13 +1511,13 @@ func TestStrOps_TrimStringEnds_05(t *testing.T) {
 	tStr := "XXXHello WorlXd"
 	expected := "Hello WorlXd"
 	trimChar := 'X'
-	result, err := StrOps{}.TrimStringEnds(
+	result, err := StrMech{}.TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1534,13 +1534,13 @@ func TestStrOps_TrimStringEnds_06(t *testing.T) {
 	tStr := "Hello WorlXdXXXX"
 	expected := "Hello WorlXd"
 	trimChar := 'X'
-	result, err := StrOps{}.TrimStringEnds(
+	result, err := StrMech{}.TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1557,13 +1557,13 @@ func TestStrOps_TrimStringEnds_07(t *testing.T) {
 	tStr := "X"
 	expected := ""
 	trimChar := 'X'
-	result, err := StrOps{}.Ptr().TrimStringEnds(
+	result, err := StrMech{}.Ptr().TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.TrimStringEnds(tStr, trimChar). "+
+		t.Errorf("Error returned by StrMech{}.TrimStringEnds(tStr, trimChar). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1578,7 +1578,7 @@ func TestStrOps_TrimStringEnds_08(t *testing.T) {
 	ePrefix := "TestStrOps_TrimStringEnds_08() "
 
 	tStr := ""
-	_, err := StrOps{}.TrimStringEnds(
+	_, err := StrMech{}.TrimStringEnds(
 		tStr,
 		'!',
 		ePrefix)
@@ -1594,7 +1594,7 @@ func TestStrOps_TrimStringEnds_09(t *testing.T) {
 
 	tStr := "Jay Ray"
 	trimChar := rune(0)
-	_, err := StrOps{}.TrimStringEnds(
+	_, err := StrMech{}.TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
@@ -1610,7 +1610,7 @@ func TestStrOps_UpperCaseFirstLetter_01(t *testing.T) {
 
 	expected := "Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1625,7 +1625,7 @@ func TestStrOps_UpperCaseFirstLetter_02(t *testing.T) {
 
 	expected := "  Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1640,7 +1640,7 @@ func TestStrOps_UpperCaseFirstLetter_03(t *testing.T) {
 
 	expected := "Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1655,7 +1655,7 @@ func TestStrOps_UpperCaseFirstLetter_04(t *testing.T) {
 
 	expected := "  Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrOps{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1670,7 +1670,7 @@ func TestStrOps_UpperCaseFirstLetter_05(t *testing.T) {
 
 	expected := ""
 
-	actualStr := StrOps{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1683,7 +1683,7 @@ func TestStrOps_Write_01(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 
-	sops1 := StrOps{}.NewPtr()
+	sops1 := StrMech{}.NewPtr()
 
 	lenOriginalStr := len(originalStr)
 
@@ -1714,7 +1714,7 @@ func TestStrOps_Write_02(t *testing.T) {
 
 	originalStr := "Hello World"
 
-	sops1 := StrOps{}.NewPtr()
+	sops1 := StrMech{}.NewPtr()
 
 	p := make([]byte, 3)
 
@@ -1768,11 +1768,11 @@ func TestStrOps_Write_03(t *testing.T) {
 
 	lenOriginalStr := len(originalStr)
 
-	sops1 := StrOps{}.NewPtr()
+	sops1 := StrMech{}.NewPtr()
 
 	sops1.SetStringData(originalStr)
 
-	sops2 := StrOps{}.NewPtr()
+	sops2 := StrMech{}.NewPtr()
 
 	n, err := io.Copy(sops2, sops1)
 
@@ -1798,7 +1798,7 @@ func TestStrOps_Write_04(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 
-	sops1 := StrOps{}.NewPtr()
+	sops1 := StrMech{}.NewPtr()
 	sops1.SetStringData(originalStr)
 
 	p := make([]byte, 0)

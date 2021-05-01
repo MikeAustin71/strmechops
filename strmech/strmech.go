@@ -1,7 +1,8 @@
-// String operations provides string management utilities designed to
-// perform a variety of string operations including string centering,
-// justification, multiple replacements numeric and date field extraction
-// as well as implementing the io.Reader and io.Writer interfaces.
+// Package strmech - String operations provides string management
+// utilities designed to perform a variety of string operations
+// including string centering, justification, multiple replacements
+// numeric and date field extraction as well as implementing the
+// io.Reader and io.Writer interfaces.
 //
 //
 package strmech
@@ -12,7 +13,7 @@ import (
 	"sync"
 )
 
-// StrOps - encapsulates a collection of methods used to manage string
+// StrMech - encapsulates a collection of methods used to manage string
 // operations.
 //
 // Most of the utility offered by this type is provided through its
@@ -22,19 +23,19 @@ import (
 //
 //    import "github.com/MikeAustin71/strmech"
 //
-// Be advised that this type, 'StrOps', implements the io.Reader and io.Writer
+// Be advised that this type, 'StrMech', implements the io.Reader and io.Writer
 // interfaces. All io.Reader and io.Writer operations utilize the private string
-// data element, 'StrOps.stringData'.
+// data element, 'StrMech.stringData'.
 //
-type StrOps struct {
+type StrMech struct {
 	StrIn      string // public string variable available at user's discretion
 	StrOut     string // public string variable available at user's discretion
-	stringData string // private string variable accessed by StrOps.Read and
-	//	StrOps.Write. Accessed through methods
-	//	StrOps.GetStringData() and StrOps.SetStringData()
+	stringData string // private string variable accessed by StrMech.Read and
+	//	StrMech.Write. Accessed through methods
+	//	StrMech.GetStringData() and StrMech.SetStringData()
 	stringDataMutex *sync.Mutex // Used internally to ensure thread safe operations
-	cntBytesRead    uint64      // Used internally to track Bytes Read by StrOps.Read()
-	cntBytesWritten uint64      // Used internally to track Bytes Written by StrOps.Write()
+	cntBytesRead    uint64      // Used internally to track Bytes Read by StrMech.Read()
+	cntBytesWritten uint64      // Used internally to track Bytes Written by StrMech.Write()
 }
 
 // BreakTextAtLineLength - Breaks string text into lines. Takes a
@@ -83,7 +84,7 @@ type StrOps struct {
 //       processing, the returned error Type will encapsulate an error
 //       message.
 //
-func (sops *StrOps) BreakTextAtLineLength(
+func (sops *StrMech) BreakTextAtLineLength(
 	targetStr string,
 	lineLength int,
 	lineDelimiter rune) (
@@ -98,7 +99,7 @@ func (sops *StrOps) BreakTextAtLineLength(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix := "StrOps.BreakTextAtLineLength() "
+	ePrefix := "StrMech.BreakTextAtLineLength() "
 
 	sOpsAtom := strOpsAtom{}
 
@@ -158,14 +159,14 @@ func (sops *StrOps) BreakTextAtLineLength(
 //  testRunes := []rune(testStr)
 //
 //  actualStr :=
-//    StrOps{}.NewPtr().
+//    StrMech{}.NewPtr().
 //      ConvertNonPrintableChars(testRunes, true)
 //
 //  ----------------------------------------------------
 //  'actualStr' is now equal to:
 //     "Hello[SPACE]world!\\n"
 //
-func (sops *StrOps) ConvertNonPrintableChars(
+func (sops *StrMech) ConvertNonPrintableChars(
 	nonPrintableChars []rune,
 	convertSpace bool) (
 	printableChars string) {
@@ -178,7 +179,7 @@ func (sops *StrOps) ConvertNonPrintableChars(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix := "StrOps.ConvertNonPrintableChars() "
+	ePrefix := "StrMech.ConvertNonPrintableChars() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -191,10 +192,10 @@ func (sops *StrOps) ConvertNonPrintableChars(
 	return printableChars
 }
 
-// CopyIn - Copies string information from another StrOps
+// CopyIn - Copies string information from another StrMech
 // instance passed as an input parameter to the current
-// StrOps instance.
-func (sops *StrOps) CopyIn(strops2 *StrOps) {
+// StrMech instance.
+func (sops *StrMech) CopyIn(strops2 *StrMech) {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -217,9 +218,9 @@ func (sops *StrOps) CopyIn(strops2 *StrOps) {
 }
 
 // CopyOut - Creates a 'deep' copy of the current
-// StrOps instance and returns a pointer to a
+// StrMech instance and returns a pointer to a
 // new instance containing that copied information.
-func (sops *StrOps) CopyOut() *StrOps {
+func (sops *StrMech) CopyOut() *StrMech {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -242,7 +243,7 @@ func (sops *StrOps) CopyOut() *StrOps {
 // DoesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
-func (sops StrOps) DoesLastCharExist(
+func (sops StrMech) DoesLastCharExist(
 	testStr string,
 	lastChar rune) bool {
 
@@ -410,7 +411,7 @@ func (sops StrOps) DoesLastCharExist(
 //
 //  datDto,
 //  err :=
-//    StrOps{}.Ptr().
+//    StrMech{}.Ptr().
 //        ExtractDataField(
 //           targetStr,
 //           leadingKeyWordDelimiters,
@@ -426,7 +427,7 @@ func (sops StrOps) DoesLastCharExist(
 //          "America/Chicago"
 //
 //
-func (sops *StrOps) ExtractDataField(
+func (sops *StrMech) ExtractDataField(
 	targetStr string,
 	leadingKeyWordDelimiters []string,
 	startIdx int,
@@ -446,7 +447,7 @@ func (sops *StrOps) ExtractDataField(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ExtractDataField() "
+	ePrefix += "StrMech.ExtractDataField() "
 
 	sOpsAtom := strOpsAtom{}
 
@@ -658,7 +659,7 @@ func (sops *StrOps) ExtractDataField(
 //
 //  nStrDto,
 //  err :=
-//    StrOps{}.Ptr().
+//    StrMech{}.Ptr().
 //         ExtractNumericDigits(
 //             targetStr,
 //             startIndex,
@@ -673,7 +674,7 @@ func (sops *StrOps) ExtractDataField(
 //     "$(1,250,364.33)"
 //
 //
-func (sops *StrOps) ExtractNumericDigits(
+func (sops *StrMech) ExtractNumericDigits(
 	targetStr string,
 	startIndex int,
 	keepLeadingChars string,
@@ -691,7 +692,7 @@ func (sops *StrOps) ExtractNumericDigits(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ExtractNumericDigits() "
+	ePrefix += "StrMech.ExtractNumericDigits() "
 
 	sOpsAtom := strOpsAtom{}
 
@@ -761,7 +762,7 @@ func (sops *StrOps) ExtractNumericDigits(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrOps) FindFirstNonSpaceChar(
+func (sops *StrMech) FindFirstNonSpaceChar(
 	targetStr string,
 	startIndex,
 	endIndex int,
@@ -777,7 +778,7 @@ func (sops *StrOps) FindFirstNonSpaceChar(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.FindFirstNonSpaceChar() "
+	ePrefix += "StrMech.FindFirstNonSpaceChar() "
 
 	sOpsElectron := strOpsElectron{}
 
@@ -853,7 +854,7 @@ func (sops *StrOps) FindFirstNonSpaceChar(
 //       the beginning of the error message.
 //
 //
-func (sops *StrOps) FindLastNonSpaceChar(
+func (sops *StrMech) FindLastNonSpaceChar(
 	targetStr string,
 	startIdx int,
 	endIdx int,
@@ -869,7 +870,7 @@ func (sops *StrOps) FindLastNonSpaceChar(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.FindLastNonSpaceChar() "
+	ePrefix += "StrMech.FindLastNonSpaceChar() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -961,7 +962,7 @@ func (sops *StrOps) FindLastNonSpaceChar(
 //       testStr := "xx       Hxgltx"
 //
 //       lastSpaceIdx, err :=
-//       StrOps{}.Ptr().FindLastSpace(
+//       StrMech{}.Ptr().FindLastSpace(
 //       testStr,
 //       0,
 //       14,
@@ -970,7 +971,7 @@ func (sops *StrOps) FindLastNonSpaceChar(
 //  lastSpaceIdx is now equal to '8'
 //
 //
-func (sops *StrOps) FindLastSpace(
+func (sops *StrMech) FindLastSpace(
 	targetStr string,
 	startIdx int,
 	endIdx int,
@@ -986,7 +987,7 @@ func (sops *StrOps) FindLastSpace(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.FindLastSpace() "
+	ePrefix += "StrMech.FindLastSpace() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1109,7 +1110,7 @@ func (sops *StrOps) FindLastSpace(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrOps) FindLastWord(
+func (sops *StrMech) FindLastWord(
 	targetStr string,
 	startIndex,
 	endIndex int,
@@ -1127,7 +1128,7 @@ func (sops *StrOps) FindLastWord(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.FindLastWord() "
+	ePrefix += "StrMech.FindLastWord() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1150,7 +1151,7 @@ func (sops *StrOps) FindLastWord(
 // will be located at targetStr[loc[0]:loc[1]]. Again, a return value of 'nil'
 // signals that no match was found.
 //
-func (sops *StrOps) FindRegExIndex(
+func (sops *StrMech) FindRegExIndex(
 	targetStr string,
 	regex string) []int {
 
@@ -1170,8 +1171,8 @@ func (sops *StrOps) FindRegExIndex(
 }
 
 // GetReader - Returns an io.Reader which will read the private
-// member data element StrOps.stringData.
-func (sops *StrOps) GetReader() io.Reader {
+// member data element StrMech.stringData.
+func (sops *StrMech) GetReader() io.Reader {
 	var stringData string
 
 	if sops.stringDataMutex == nil {
@@ -1188,7 +1189,7 @@ func (sops *StrOps) GetReader() io.Reader {
 }
 
 // GetSoftwareVersion - Returns the software version for package 'strops'.
-func (sops StrOps) GetSoftwareVersion() string {
+func (sops StrMech) GetSoftwareVersion() string {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1202,8 +1203,8 @@ func (sops StrOps) GetSoftwareVersion() string {
 }
 
 // GetStringData - Returns the current value of internal
-// member string, StrOps.stringData
-func (sops *StrOps) GetStringData() string {
+// member string, StrMech.stringData
+func (sops *StrMech) GetStringData() string {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1283,14 +1284,14 @@ func (sops *StrOps) GetStringData() string {
 //    validBytes := []byte{'v', 'a', 'l', 'i', 'd'}
 //    testBytes := []byte{'x', 'j', 'v', 'm', 'R', 'a', 'J', 'l', 'Z', 'i', 'F', 'd', 'S'}
 //
-//    actualBytes, err := StrOps{}.Ptr().GetValidBytes(
+//    actualBytes, err := StrMech{}.Ptr().GetValidBytes(
 //    testBytes,
 //    validBytes,
 //    ePrefix)
 //
 //    'actualBytes' is now equal to "valid"
 //
-func (sops *StrOps) GetValidBytes(
+func (sops *StrMech) GetValidBytes(
 	targetBytes,
 	validBytes []byte,
 	ePrefix string) ([]byte, error) {
@@ -1303,7 +1304,7 @@ func (sops *StrOps) GetValidBytes(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.GetValidBytes() "
+	ePrefix += "StrMech.GetValidBytes() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1378,7 +1379,7 @@ func (sops *StrOps) GetValidBytes(
 //
 //     expected := "valid"
 //
-//     actualRunes, err := StrOps{}.Ptr().GetValidRunes(
+//     actualRunes, err := StrMech{}.Ptr().GetValidRunes(
 //     testRunes,
 //     validRunes,
 //     ePrefix)
@@ -1386,7 +1387,7 @@ func (sops *StrOps) GetValidBytes(
 //     actualRunes is now equal to string(actualRunes) == "valid"
 //
 //
-func (sops *StrOps) GetValidRunes(
+func (sops *StrMech) GetValidRunes(
 	targetRunes []rune,
 	validRunes []rune,
 	ePrefix string) (
@@ -1401,7 +1402,7 @@ func (sops *StrOps) GetValidRunes(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.GetValidRunes() "
+	ePrefix += "StrMech.GetValidRunes() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1471,7 +1472,7 @@ func (sops *StrOps) GetValidRunes(
 //
 //    testStr := "xjvmRaJlZiFdS"
 //
-//    actualStr, err := StrOps{}.Ptr().GetValidString(
+//    actualStr, err := StrMech{}.Ptr().GetValidString(
 //                        testStr,
 //                        validRunes,
 //                        ePrefix)
@@ -1479,7 +1480,7 @@ func (sops *StrOps) GetValidRunes(
 //  'actualStr' is now equal to "valid"
 //
 //
-func (sops *StrOps) GetValidString(
+func (sops *StrMech) GetValidString(
 	targetStr string,
 	validRunes []rune,
 	ePrefix string) (
@@ -1494,7 +1495,7 @@ func (sops *StrOps) GetValidString(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.GetValidString() "
+	ePrefix += "StrMech.GetValidString() "
 
 	sOpsElectron := strOpsElectron{}
 
@@ -1508,7 +1509,7 @@ func (sops *StrOps) GetValidString(
 // white space (contiguous spaces), this method will return 'true'.
 //
 // Otherwise, a value of false is returned.
-func (sops *StrOps) IsEmptyOrWhiteSpace(targetStr string) bool {
+func (sops *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1523,7 +1524,7 @@ func (sops *StrOps) IsEmptyOrWhiteSpace(targetStr string) bool {
 	return sOpsQuark.isEmptyOrWhiteSpace(targetStr)
 }
 
-// justifyTextInStrField - Creates a and returns a new string text
+// JustifyTextInStrField - Creates a and returns a new string text
 // field with text 'strToJustify' positioned inside that new string
 // in accordance with the string justification formatting passed in
 // input parameter, 'textJustify'.
@@ -1626,7 +1627,7 @@ func (sops *StrOps) IsEmptyOrWhiteSpace(targetStr string) bool {
 //  strToJustify := "12345"
 //  fieldLen := 10
 //
-//  su := StrOps{}
+//  su := StrMech{}
 //  strJustified, err :=
 //   su.justifyTextInStrField(
 //               strToJustify,
@@ -1639,7 +1640,7 @@ func (sops *StrOps) IsEmptyOrWhiteSpace(targetStr string) bool {
 //  'strJustified' is now equal to "     12345"
 //  The string length of 'strJustified' is 10
 //
-func (sops *StrOps) JustifyTextInStrField(
+func (sops *StrMech) JustifyTextInStrField(
 	strToJustify string,
 	fieldLen int,
 	textJustify TextJustify,
@@ -1655,7 +1656,7 @@ func (sops *StrOps) JustifyTextInStrField(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.JustifyTextInStrField() "
+	ePrefix += "StrMech.JustifyTextInStrField() "
 
 	sOpsNanobot := strOpsNanobot{}
 
@@ -1669,7 +1670,7 @@ func (sops *StrOps) JustifyTextInStrField(
 // LowerCaseFirstLetter - Finds the first alphabetic character
 // in a string (a-z A-Z) and converts it to lower case.
 //
-func (sops *StrOps) LowerCaseFirstLetter(str string) string {
+func (sops *StrMech) LowerCaseFirstLetter(str string) string {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1690,7 +1691,7 @@ func (sops *StrOps) LowerCaseFirstLetter(str string) string {
 //
 // Example Usage:
 //
-//     sUtil := StrOps{}
+//     sUtil := StrMech{}
 //     requestedLen := 5
 //     charRune := '='
 //     outputStr, err := sUtil.MakeSingleCharString(charRune, requestedLen)
@@ -1739,7 +1740,7 @@ func (sops *StrOps) LowerCaseFirstLetter(str string) string {
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrOps) MakeSingleCharString(
+func (sops *StrMech) MakeSingleCharString(
 	charRune rune,
 	strLen int,
 	ePrefix string) (
@@ -1754,7 +1755,7 @@ func (sops *StrOps) MakeSingleCharString(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.MakeSingleCharString() "
+	ePrefix += "StrMech.MakeSingleCharString() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1765,9 +1766,9 @@ func (sops *StrOps) MakeSingleCharString(
 }
 
 // NewPtr - Returns a pointer to a new instance of
-// StrOps. Useful for cases requiring io.Reader
+// StrMech. Useful for cases requiring io.Reader
 // and io.Writer.
-func (sops StrOps) NewPtr() *StrOps {
+func (sops StrMech) NewPtr() *StrMech {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1777,7 +1778,7 @@ func (sops StrOps) NewPtr() *StrOps {
 
 	defer sops.stringDataMutex.Unlock()
 
-	sopsNew := StrOps{}
+	sopsNew := StrMech{}
 
 	sopsNew.stringDataMutex = new(sync.Mutex)
 
@@ -1785,17 +1786,17 @@ func (sops StrOps) NewPtr() *StrOps {
 }
 
 // Ptr - Returns a pointer to a new instance of
-// StrOps. Useful for cases requiring io.Reader
+// StrMech. Useful for cases requiring io.Reader
 // and io.Writer.
 //
-// This method is identical to method StrOps.NewPtr().
+// This method is identical to method StrMech.NewPtr().
 //
 // Example Usage:
 //
-// StrOps{}.Ptr().GetReader()
+// StrMech{}.Ptr().GetReader()
 //
 //
-func (sops StrOps) Ptr() *StrOps {
+func (sops StrMech) Ptr() *StrMech {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1805,7 +1806,7 @@ func (sops StrOps) Ptr() *StrOps {
 
 	defer sops.stringDataMutex.Unlock()
 
-	sopsNew := StrOps{}
+	sopsNew := StrMech{}
 
 	sopsNew.stringDataMutex = new(sync.Mutex)
 
@@ -1815,14 +1816,14 @@ func (sops StrOps) Ptr() *StrOps {
 // Read - Implements io.Reader interface. Read reads up to len(p)
 // bytes into 'p'. This method supports buffered 'read' operations.
 //
-// The internal member string variable, 'StrOps.stringData' is written
-// into 'p'. When the end of 'StrOps.stringData' is written to 'p',
+// The internal member string variable, 'StrMech.stringData' is written
+// into 'p'. When the end of 'StrMech.stringData' is written to 'p',
 // the method returns error = 'io.EOF'.
 //
-// 'StrOps.stringData' can be accessed through Getter an Setter methods,
+// 'StrMech.stringData' can be accessed through Getter an Setter methods,
 // GetStringData() and SetStringData()
 //
-func (sops *StrOps) Read(p []byte) (n int, err error) {
+func (sops *StrMech) Read(p []byte) (n int, err error) {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -1832,7 +1833,7 @@ func (sops *StrOps) Read(p []byte) (n int, err error) {
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix := "StrOps.Read() "
+	ePrefix := "StrMech.Read() "
 
 	sOpsElectron := strOpsElectron{}
 
@@ -1879,7 +1880,7 @@ func (sops *StrOps) Read(p []byte) (n int, err error) {
 //       'bytes' after 'extractedString'. If no more strings exist in the
 //       the byte array, 'nextStartIdx' will be set to -1.
 //
-func (sops *StrOps) ReadStringFromBytes(
+func (sops *StrMech) ReadStringFromBytes(
 	bytes []byte,
 	startIdx int) (
 	extractedStr string,
@@ -1966,7 +1967,7 @@ func (sops *StrOps) ReadStringFromBytes(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrOps) RemoveStringChar(
+func (sops *StrMech) RemoveStringChar(
 	targetStr string,
 	charToRemove rune,
 	maxNumOfCharDeletions int,
@@ -1983,7 +1984,7 @@ func (sops *StrOps) RemoveStringChar(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.RemoveStringChar() "
+	ePrefix += "StrMech.RemoveStringChar() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -2072,15 +2073,15 @@ func (sops *StrOps) RemoveStringChar(
 //  replaceBytes[4][1] = 'E'
 //
 //  ePrefix := "TestStrOps_ReplaceBytes_01() "
-
-//  actualRunes, err := StrOps{}.Ptr().ReplaceBytes(
+//
+//  actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
 //  testBytes,
 //  replaceBytes,
 //  ePrefix)
 //
 //  actualRunes = "1A2B3C4D5E6"
 //
-func (sops *StrOps) ReplaceBytes(
+func (sops *StrMech) ReplaceBytes(
 	targetBytes []byte,
 	replacementBytes [][]byte,
 	ePrefix string) (
@@ -2095,7 +2096,7 @@ func (sops *StrOps) ReplaceBytes(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ReplaceBytes() "
+	ePrefix += "StrMech.ReplaceBytes() "
 
 	sOpsElectron := strOpsElectron{}
 
@@ -2177,7 +2178,7 @@ func (sops *StrOps) ReplaceBytes(
 //  rStrs[2][1] = "l"
 //
 //
-//  actualStr, err := StrOps{}.Ptr().ReplaceMultipleStrs(
+//  actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
 //                      testStr,
 //                      rStrs,
 //                      ePrefix)
@@ -2185,7 +2186,7 @@ func (sops *StrOps) ReplaceBytes(
 //  'actualStr' is now equal to "Hello World"
 //
 //
-func (sops *StrOps) ReplaceMultipleStrs(
+func (sops *StrMech) ReplaceMultipleStrs(
 	targetStr string,
 	replaceArray [][]string,
 	ePrefix string) (
@@ -2200,7 +2201,7 @@ func (sops *StrOps) ReplaceMultipleStrs(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ReplaceMultipleStrs() "
+	ePrefix += "StrMech.ReplaceMultipleStrs() "
 
 	sOpsElectron := strOpsElectron{}
 
@@ -2239,7 +2240,7 @@ func (sops *StrOps) ReplaceMultipleStrs(
 //       'replacementStr' for the new line character in
 //       'targetStr'.
 //
-func (sops *StrOps) ReplaceNewLines(
+func (sops *StrMech) ReplaceNewLines(
 	targetStr string,
 	replacementStr string) string {
 
@@ -2371,7 +2372,7 @@ func (sops *StrOps) ReplaceNewLines(
 //  replaceRunes[4][0] = 'e'
 //  replaceRunes[4][1] = 0
 //
-//  actualRunes, err := StrOps{}.Ptr().ReplaceRunes(
+//  actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
 //  testRunes,
 //  replaceRunes,
 //  ePrefix)
@@ -2381,7 +2382,7 @@ func (sops *StrOps) ReplaceNewLines(
 //  Original testStr := "1a2b3c4d5e6"
 //  actualStr is now equal to "123456"
 //
-func (sops *StrOps) ReplaceRunes(
+func (sops *StrMech) ReplaceRunes(
 	targetRunes []rune,
 	replacementRunes [][]rune,
 	ePrefix string) (
@@ -2396,7 +2397,7 @@ func (sops *StrOps) ReplaceRunes(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ReplaceRunes() "
+	ePrefix += "StrMech.ReplaceRunes() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -2478,7 +2479,7 @@ func (sops *StrOps) ReplaceRunes(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrOps) ReplaceStringChar(
+func (sops *StrMech) ReplaceStringChar(
 	targetStr string,
 	charToReplace rune,
 	replacementChar rune,
@@ -2496,7 +2497,7 @@ func (sops *StrOps) ReplaceStringChar(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ReplaceStringChar() "
+	ePrefix += "StrMech.ReplaceStringChar() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -2582,7 +2583,7 @@ func (sops *StrOps) ReplaceStringChar(
 //  replaceRunes[4][0] = 'e'
 //  replaceRunes[4][1] = 0
 //
-//  actualStr, err := StrOps{}.Ptr().ReplaceStringChars(
+//  actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
 //  testStr,
 //  replaceRunes,
 //  ePrefix)
@@ -2592,7 +2593,7 @@ func (sops *StrOps) ReplaceStringChar(
 //
 //  actualStr is now equal to = "123456"
 //
-func (sops *StrOps) ReplaceStringChars(
+func (sops *StrMech) ReplaceStringChars(
 	targetStr string,
 	replacementRunes [][]rune,
 	ePrefix string) (
@@ -2607,7 +2608,7 @@ func (sops *StrOps) ReplaceStringChars(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.ReplaceStringChars() "
+	ePrefix += "StrMech.ReplaceStringChars() "
 
 	sOpsElectron := strOpsElectron{}
 
@@ -2618,10 +2619,10 @@ func (sops *StrOps) ReplaceStringChars(
 }
 
 // SetStringData - Sets the value of internal
-// string data element, StrOps.stringData. It
+// string data element, StrMech.stringData. It
 // also zeros internal fields sops.cntBytesWritten
 // and sops.cntBytesRead.
-func (sops *StrOps) SetStringData(str string) {
+func (sops *StrMech) SetStringData(str string) {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -2709,7 +2710,7 @@ func (sops *StrOps) SetStringData(str string) {
 //    Returned String = "@@@@@Hello" or "     Hello"
 //
 //
-func (sops *StrOps) StrCenterInStrLeft(
+func (sops *StrMech) StrCenterInStrLeft(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (
@@ -2724,7 +2725,7 @@ func (sops *StrOps) StrCenterInStrLeft(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.StrCenterInStrLeft() "
+	ePrefix += "StrMech.StrCenterInStrLeft() "
 
 	sOpsNanobot := strOpsNanobot{}
 
@@ -2793,7 +2794,7 @@ func (sops *StrOps) StrCenterInStrLeft(
 //  strToCenter := "Hello"
 //  fieldLen := 15
 //
-//  su := StrOps{}
+//  su := StrMech{}
 //  centeredStr, err := su.StrCenterInStr(
 //  strToCenter,
 //  fieldLen,
@@ -2805,7 +2806,7 @@ func (sops *StrOps) StrCenterInStrLeft(
 //  'Hello' is centered in a field of length 15
 //  with left and right pad of 5-spaces.
 //
-func (sops *StrOps) StrCenterInStr(
+func (sops *StrMech) StrCenterInStr(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (string, error) {
@@ -2818,7 +2819,7 @@ func (sops *StrOps) StrCenterInStr(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.StrCenterInStr() "
+	ePrefix += "StrMech.StrCenterInStr() "
 
 	sOpsMolecule := strOpsMolecule{}
 
@@ -2831,7 +2832,7 @@ func (sops *StrOps) StrCenterInStr(
 // StrGetRuneCnt - Uses utf8 Rune Count
 // function to return the number of characters
 // in a string.
-func (sops *StrOps) StrGetRuneCnt(
+func (sops *StrMech) StrGetRuneCnt(
 	targetStr string) int {
 
 	if sops.stringDataMutex == nil {
@@ -2850,7 +2851,7 @@ func (sops *StrOps) StrGetRuneCnt(
 // StrGetCharCnt - Uses the 'len' method to
 // return the number of rune characters in a
 // string.
-func (sops *StrOps) StrGetCharCnt(
+func (sops *StrMech) StrGetCharCnt(
 	targetStr string) int {
 
 	if sops.stringDataMutex == nil {
@@ -2918,7 +2919,7 @@ func (sops *StrOps) StrGetCharCnt(
 //   testString := "@@Some@@@@@@@@@Stri@@ng@@"
 //
 //   actualString, actualStrLen :=
-//         StrOps{}.Ptr().StripBadChars(
+//         StrMech{}.Ptr().StripBadChars(
 //                            testString,
 //                            badChars)
 //
@@ -2927,7 +2928,7 @@ func (sops *StrOps) StrGetCharCnt(
 //   actualString is now equal to "Some@String"
 //   actualStrLen is now equal to 11
 //
-func (sops *StrOps) StripBadChars(
+func (sops *StrMech) StripBadChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
@@ -3014,7 +3015,7 @@ func (sops *StrOps) StripBadChars(
 //   "..........      ./../.\\.\\..\\////   SomeString"
 //
 //  actualString, actualStrLen :=
-//      StrOps{}.Ptr().StripLeadingChars(
+//      StrMech{}.Ptr().StripLeadingChars(
 //                       testString,
 //                       badChars)
 //
@@ -3023,7 +3024,7 @@ func (sops *StrOps) StripBadChars(
 //  actualString is now equal to "SomeString"
 //  actualStrLen is now equal to 10
 //
-func (sops *StrOps) StripLeadingChars(
+func (sops *StrMech) StripLeadingChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
@@ -3113,7 +3114,7 @@ func (sops *StrOps) StripLeadingChars(
 //   "SomeString..........      ./../.\\.\\..\\////   "
 //
 //  actualString, actualStrLen :=
-//    StrOps{}.Ptr().StripTrailingChars(
+//    StrMech{}.Ptr().StripTrailingChars(
 //                      testString,
 //                      badChars)
 //
@@ -3123,7 +3124,7 @@ func (sops *StrOps) StripLeadingChars(
 //  actualString is now equal to "SomeString"
 //  actualStrLen is now equal to 10
 //
-func (sops *StrOps) StripTrailingChars(
+func (sops *StrMech) StripTrailingChars(
 	targetStr string,
 	badChars []string) (cleanStr string, strLen int) {
 
@@ -3204,7 +3205,7 @@ func (sops *StrOps) StripTrailingChars(
 //  ePrefix := "TestStrOps_StrLeftJustify_01() "
 //  fieldLen = 15
 //  strToJustify    = "Hello World"
-//  su := StrOps{}
+//  su := StrMech{}
 //  justifiedStr, err := su.StrLeftJustify(
 //                           strToJustify,
 //                           fieldLen,
@@ -3216,7 +3217,7 @@ func (sops *StrOps) StripTrailingChars(
 //  The string length of 'justifiedStr' is 15
 //
 //
-func (sops *StrOps) StrLeftJustify(
+func (sops *StrMech) StrLeftJustify(
 	strToJustify string,
 	fieldLen int,
 	ePrefix string) (
@@ -3231,7 +3232,7 @@ func (sops *StrOps) StrLeftJustify(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.StrLeftJustify() "
+	ePrefix += "StrMech.StrLeftJustify() "
 
 	sOpsMolecule := strOpsMolecule{}
 
@@ -3314,7 +3315,7 @@ func (sops *StrOps) StrLeftJustify(
 //  //              12345
 //  strToCenter := "Hello"
 //  fieldLen := 15
-//  su := StrOps{}
+//  su := StrMech{}
 //  padStr, err := su.StrPadLeftToCenter(
 //                   strToCenter,
 //                   fieldLen,
@@ -3327,7 +3328,7 @@ func (sops *StrOps) StrLeftJustify(
 //  padStr + strToCenter will yield a centered string.
 //
 //
-func (sops *StrOps) StrPadLeftToCenter(
+func (sops *StrMech) StrPadLeftToCenter(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (string, error) {
@@ -3340,7 +3341,7 @@ func (sops *StrOps) StrPadLeftToCenter(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.StrPadLeftToCenter() "
+	ePrefix += "StrMech.StrPadLeftToCenter() "
 
 	sOpsMolecule := strOpsMolecule{}
 
@@ -3419,7 +3420,7 @@ func (sops *StrOps) StrPadLeftToCenter(
 //  strToJustify := "12345"
 //  fieldLen := 10
 //
-//  su := StrOps{}
+//  su := StrMech{}
 //  strRightJustified, err :=
 //   su.StrRightJustify(
 //               strToJustify,
@@ -3432,7 +3433,7 @@ func (sops *StrOps) StrPadLeftToCenter(
 //  The string length of 'strRightJustified' is 10
 //
 //
-func (sops *StrOps) StrRightJustify(
+func (sops *StrMech) StrRightJustify(
 	strToJustify string,
 	fieldLen int,
 	ePrefix string) (
@@ -3447,7 +3448,7 @@ func (sops *StrOps) StrRightJustify(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.StrRightJustify() "
+	ePrefix += "StrMech.StrRightJustify() "
 
 	sOpsMolecule := strOpsMolecule{}
 
@@ -3541,7 +3542,7 @@ func (sops *StrOps) StrRightJustify(
 //     tStr := "  Hello   World  "
 //     ePrefix := "theCallingMethodName "
 //
-//     su := StrOps{}
+//     su := StrMech{}
 //        resultStr,
 //        numOfReplacements,
 //        err := su.SwapRune(
@@ -3555,7 +3556,7 @@ func (sops *StrOps) StrRightJustify(
 //    resultSt is now equal to "!!Hello!!!World!!"
 //    numOfReplacements is equal to '7'
 //
-func (sops *StrOps) SwapRune(
+func (sops *StrMech) SwapRune(
 	targetStr string,
 	oldRune rune,
 	newRune rune,
@@ -3573,7 +3574,7 @@ func (sops *StrOps) SwapRune(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.SwapRune() "
+	ePrefix += "StrMech.SwapRune() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3647,7 +3648,7 @@ func (sops *StrOps) SwapRune(
 //  ePrefix := "theCallingFunctionName() "
 //  targetStr = "       Hello          World        "
 //  trimChar  = ' ' (One Space Character)
-//  sops := StrOps{}
+//  sops := StrMech{}
 //
 //  rStr,
 //  err := sops.TrimMultipleChars(
@@ -3658,7 +3659,7 @@ func (sops *StrOps) SwapRune(
 //  returned string (rStr) now equal to "Hello World"
 //
 //
-func (sops StrOps) TrimMultipleChars(
+func (sops StrMech) TrimMultipleChars(
 	targetStr string,
 	trimChar rune,
 	ePrefix string) (
@@ -3673,7 +3674,7 @@ func (sops StrOps) TrimMultipleChars(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.TrimMultipleChars() "
+	ePrefix += "StrMech.TrimMultipleChars() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3741,7 +3742,7 @@ func (sops StrOps) TrimMultipleChars(
 //     tStr := "XXXHello WorlXdXXX"
 //     trimChar := 'X'
 //
-//     sops := StrOps{}
+//     sops := StrMech{}
 //
 //     result,
 //     err := sops.TrimStringEnds(
@@ -3752,7 +3753,7 @@ func (sops StrOps) TrimMultipleChars(
 //  result is now equal to "Hello WorlXd"
 //
 //
-func (sops StrOps) TrimStringEnds(
+func (sops StrMech) TrimStringEnds(
 	targetStr string,
 	trimChar rune,
 	ePrefix string) (
@@ -3767,7 +3768,7 @@ func (sops StrOps) TrimStringEnds(
 
 	defer sops.stringDataMutex.Unlock()
 
-	ePrefix += "StrOps.TrimStringEnds() "
+	ePrefix += "StrMech.TrimStringEnds() "
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3807,14 +3808,14 @@ func (sops StrOps) TrimStringEnds(
 //
 //   str := "how now brown cow."
 //
-//   sops := StrOps{}
+//   sops := StrMech{}
 //
 //   actualStr := sops.UpperCaseFirstLetter(str)
 //
 //  'actualStr' is now equal to "How now brown cow."
 //
 //
-func (sops *StrOps) UpperCaseFirstLetter(
+func (sops *StrMech) UpperCaseFirstLetter(
 	str string) string {
 
 	if sops.stringDataMutex == nil {
@@ -3833,15 +3834,15 @@ func (sops *StrOps) UpperCaseFirstLetter(
 // Write - Implements the io.Writer interface.
 // Write writes len(p) bytes from p to the underlying
 // data stream. In this case the underlying data stream
-// is private member variable string, 'StrOps.stringData'.
+// is private member variable string, 'StrMech.stringData'.
 //
 // Receives a byte array 'p' and writes the contents to
-// a string, private structure data element 'StrOps.stringData'.
+// a string, private structure data element 'StrMech.stringData'.
 //
-// 'StrOps.stringData' can be accessed through 'Getter' and
+// 'StrMech.stringData' can be accessed through 'Getter' and
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
 //
-func (sops *StrOps) Write(p []byte) (n int, err error) {
+func (sops *StrMech) Write(p []byte) (n int, err error) {
 
 	if sops.stringDataMutex == nil {
 		sops.stringDataMutex = new(sync.Mutex)
@@ -3856,5 +3857,5 @@ func (sops *StrOps) Write(p []byte) (n int, err error) {
 	return sOpsElectron.write(
 		sops,
 		p,
-		"StrOps.Write() ")
+		"StrMech.Write() ")
 }

@@ -47,14 +47,14 @@ func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
 	//         012345678901234567890123456789012345678901234567890
 	expected := "Lorem ipsum dolor sit amet, consectetur%adipiscing elit.%"
 
-	actualTxt, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 40, '\n')
+	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 40, '\n')
 
 	if err != nil {
-		t.Errorf("Error returned from StrOps{}.BreakTextAtLineLength("+
+		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrOps{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected string='%v'. Instead, string='%v'.",
@@ -74,14 +74,14 @@ func TestStrOps_BreakTextAtLineLength_02(t *testing.T) {
 	expected := "Did you know? The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
+	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
 
 	if err != nil {
-		t.Errorf("Error returned from StrOps{}.BreakTextAtLineLength("+
+		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrOps{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'. Instead, text='%v' ",
@@ -100,14 +100,14 @@ func TestStrOps_BreakTextAtLineLength_03(t *testing.T) {
 	expected := "Did you know? XX The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
+	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
 
 	if err != nil {
-		t.Errorf("Error returned from StrOps{}.BreakTextAtLineLength("+
+		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrOps{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'. Instead, text='%v' ",
@@ -126,14 +126,14 @@ func TestStrOps_BreakTextAtLineLength_04(t *testing.T) {
 	expected := "Did you know? The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
+	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
 
 	if err != nil {
-		t.Errorf("Error returned from StrOps{}.BreakTextAtLineLength("+
+		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrOps{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'. Instead, text='%v' ",
@@ -176,14 +176,14 @@ func TestStrOps_BreakTextAtLineLength_05(t *testing.T) {
 		"pellentesque.%Proin vestibulum accumsan erat vel%commodo. Maecenas sapien mauris,%faucibus nec " +
 		"consectetur eu, ultricies%sit amet elit. Suspendisse.%"
 
-	actualTxt, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 40, '\n')
+	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 40, '\n')
 
 	if err != nil {
-		t.Errorf("Error returned from StrOps{}.BreakTextAtLineLength("+
+		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrOps{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'\n\n. Instead, text='%v'\n",
@@ -197,10 +197,10 @@ func TestStrOps_BreakTextAtLineLength_06(t *testing.T) {
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
 
-	_, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 0, '\n')
+	_, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 0, '\n')
 
 	if err == nil {
-		t.Error("Error: Expected error return from StrOps{}.BreakTextAtLineLength(...). " +
+		t.Error("Error: Expected error return from StrMech{}.BreakTextAtLineLength(...). " +
 			"NO ERROR RETURNED!")
 	}
 }
@@ -211,10 +211,10 @@ func TestStrOps_BreakTextAtLineLength_07(t *testing.T) {
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
 
-	_, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 50, 0)
+	_, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 50, 0)
 
 	if err == nil {
-		t.Error("Error: Expected error return from StrOps{}.BreakTextAtLineLength(...). " +
+		t.Error("Error: Expected error return from StrMech{}.BreakTextAtLineLength(...). " +
 			"NO ERROR RETURNED!")
 	}
 }
@@ -223,10 +223,10 @@ func TestStrOps_BreakTextAtLineLength_08(t *testing.T) {
 
 	tstStr := "                           "
 
-	returnStr, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 10, '\n')
+	returnStr, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 10, '\n')
 
 	if err != nil {
-		t.Errorf("Error returned by StrOps{}.BreakTextAtLineLength(...).\n"+
+		t.Errorf("Error returned by StrMech{}.BreakTextAtLineLength(...).\n"+
 			"Error='%v'\n", err.Error())
 	}
 
@@ -240,10 +240,10 @@ func TestStrOps_BreakTextAtLineLength_09(t *testing.T) {
 
 	tstStr := ""
 
-	_, err := StrOps{}.NewPtr().BreakTextAtLineLength(tstStr, 10, '\n')
+	_, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 10, '\n')
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.BreakTextAtLineLength(tstStr, 10, '\\n')" +
+		t.Error("Expected an error return from StrMech{}.BreakTextAtLineLength(tstStr, 10, '\\n')" +
 			"because tstStr is an empty string.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -255,7 +255,7 @@ func TestStrOps_ConvertNonPrintableChars_01(t *testing.T) {
 	testRunes := []rune(testStr)
 	expectedStr := "Hello world! How are you doing today?\\n"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -271,7 +271,7 @@ func TestStrOps_ConvertNonPrintableChars_02(t *testing.T) {
 	testRunes := []rune(testStr)
 	expectedStr := "Hello[SPACE]world![SPACE]How[SPACE]are[SPACE]you[SPACE]doing[SPACE]today?\\n"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, true)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, true)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -287,7 +287,7 @@ func TestStrOps_ConvertNonPrintableChars_03(t *testing.T) {
 	testRunes := []rune(testStr)
 	expectedStr := "Hello world!\\tHow\\rare\\ayou\\bdoing\\ftoday?\\v\\n"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -303,7 +303,7 @@ func TestStrOps_ConvertNonPrintableChars_04(t *testing.T) {
 	testRunes := []rune(testStr)
 	expectedStr := "[EMPTY]"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -325,7 +325,7 @@ func TestStrOps_ConvertNonPrintableChars_05(t *testing.T) {
 
 	expectedStr := "Hello[NULL]"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -352,7 +352,7 @@ func TestStrOps_ConvertNonPrintableChars_06(t *testing.T) {
 
 	expectedStr := "Hello[SOH][STX][ETX][EOT][ENQ][ACK]"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -374,7 +374,7 @@ func TestStrOps_ConvertNonPrintableChars_07(t *testing.T) {
 
 	expectedStr := "Hello\\"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -397,7 +397,7 @@ func TestStrOps_ConvertNonPrintableChars_08(t *testing.T) {
 
 	expectedStr := "Hello[SO][SI]"
 
-	actualStr := StrOps{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -413,10 +413,10 @@ func TestStrOps_CopyIn_01(t *testing.T) {
 	string2 := "Now is the time for all good men to come to the aid of their country."
 	string3 := "From this valley they say you are going."
 
-	s2 := StrOps{StrOut: string2, StrIn: string1}
+	s2 := StrMech{StrOut: string2, StrIn: string1}
 	s2.SetStringData(string3)
 
-	s1 := StrOps{}
+	s1 := StrMech{}
 
 	s1.CopyIn(&s2)
 
@@ -445,7 +445,7 @@ func TestStrOps_CopyOut_01(t *testing.T) {
 	string2 := "Now is the time for all good men to come to the aid of their country."
 	string3 := "From this valley they say you are going."
 
-	s1 := StrOps{StrOut: string2, StrIn: string1}
+	s1 := StrMech{StrOut: string2, StrIn: string1}
 	s1.SetStringData(string3)
 
 	s2 := s1.CopyOut()
@@ -477,7 +477,7 @@ func TestStrOps_DoesLastCharExist_01(t *testing.T) {
 
 	testString := "What in the world is Garfield doing!"
 
-	actualReturn := StrOps{}.DoesLastCharExist(testString, lastChar)
+	actualReturn := StrMech{}.DoesLastCharExist(testString, lastChar)
 
 	if true != actualReturn {
 		t.Errorf("Expected return value='true'. Instead, return value='%v' ",
@@ -494,7 +494,7 @@ func TestStrOps_DoesLastCharExist_02(t *testing.T) {
 
 	testString := "What in the world is Garfield doing!"
 
-	actualReturn := StrOps{}.DoesLastCharExist(testString, lastChar)
+	actualReturn := StrMech{}.DoesLastCharExist(testString, lastChar)
 
 	if false != actualReturn {
 		t.Errorf("Expected return value='false'. Instead, return value='%v' ",
@@ -511,7 +511,7 @@ func TestStrOps_DoesLastCharExist_03(t *testing.T) {
 
 	testString := ""
 
-	actualReturn := StrOps{}.DoesLastCharExist(testString, lastChar)
+	actualReturn := StrMech{}.DoesLastCharExist(testString, lastChar)
 
 	if false != actualReturn {
 		t.Error("Expected return value='false' because 'testString' was an empty string\n" +

@@ -69,7 +69,7 @@ type strOpsMolecule struct {
 //  strToCenter := "Hello"
 //  fieldLen := 15
 //
-//  su := StrOps{}
+//  su := StrMech{}
 //  centeredStr, err := su.strCenterInStr(
 //  strToCenter,
 //  fieldLen,
@@ -203,7 +203,7 @@ func (sOpsMolecule *strOpsMolecule) strCenterInStr(
 //  ePrefix := "TestStrOps_StrLeftJustify_01() "
 //  fieldLen = 15
 //  strToJustify    = "Hello World"
-//  su := StrOps{}
+//  su := StrMech{}
 //  justifiedStr, err := su.strLeftJustify(
 //                           strToJustify,
 //                           fieldLen,
@@ -341,7 +341,7 @@ func (sOpsMolecule *strOpsMolecule) strLeftJustify(
 //  //              12345
 //  strToCenter := "Hello"
 //  fieldLen := 15
-//  su := StrOps{}
+//  su := StrMech{}
 //  padStr, err := su.StrPadLeftToCenter(
 //                   strToCenter,
 //                   fieldLen,
@@ -472,7 +472,7 @@ func (sOpsMolecule *strOpsMolecule) strPadLeftToCenter(
 //  strToJustify := "12345"
 //  fieldLen := 10
 //
-//  su := StrOps{}
+//  su := StrMech{}
 //  strRightJustified, err :=
 //   su.StrRightJustify(
 //               strToJustify,

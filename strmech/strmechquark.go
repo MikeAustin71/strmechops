@@ -63,7 +63,7 @@ type strOpsQuark struct {
 //  testRunes := []rune(testStr)
 //
 //  actualStr :=
-//    StrOps{}.NewPtr().
+//    StrMech{}.NewPtr().
 //      ConvertNonPrintableChars(testRunes, true)
 //
 //  ----------------------------------------------------
@@ -1136,7 +1136,7 @@ func (sOpsQuark *strOpsQuark) lowerCaseFirstLetter(
 //
 // Example Usage:
 //
-//     sUtil := StrOps{}
+//     sUtil := StrMech{}
 //     requestedLen := 5
 //     charRune := '='
 //     outputStr, err := sUtil.MakeSingleCharString(charRune, requestedLen)
@@ -2039,7 +2039,7 @@ func (sOpsQuark *strOpsQuark) replaceSubString(
 //   testString := "@@Some@@@@@@@@@Stri@@ng@@"
 //
 //   actualString, actualStrLen :=
-//         StrOps{}.Ptr().StripBadChars(
+//         StrMech{}.Ptr().StripBadChars(
 //                            testString,
 //                            badChars)
 //
@@ -2191,7 +2191,7 @@ Done:
 //   "..........      ./../.\\.\\..\\////   SomeString"
 //
 //  actualString, actualStrLen :=
-//      StrOps{}.Ptr().StripLeadingChars(
+//      StrMech{}.Ptr().StripLeadingChars(
 //                       testString,
 //                       badChars)
 //
@@ -2335,7 +2335,7 @@ Done:
 //   "SomeString..........      ./../.\\.\\..\\////   "
 //
 //  actualString, actualStrLen :=
-//    StrOps{}.Ptr().StripTrailingChars(
+//    StrMech{}.Ptr().StripTrailingChars(
 //                      testString,
 //                      badChars)
 //
@@ -2501,7 +2501,7 @@ Done:
 //     tStr := "  Hello   World  "
 //     ePrefix := "theCallingMethodName "
 //
-//     su := StrOps{}
+//     su := StrMech{}
 //        resultStr,
 //        numOfReplacements,
 //        err := su.SwapRune(
@@ -2630,7 +2630,7 @@ func (sOpsQuark *strOpsQuark) swapRune(
 //  ePrefix := "theCallingFunctionName() "
 //  targetStr = "       Hello          World        "
 //  trimChar  = ' ' (One Space Character)
-//  sops := StrOps{}
+//  sops := StrMech{}
 //
 //  rStr,
 //  err := sops.TrimMultipleChars(
@@ -2779,7 +2779,7 @@ func (sOpsQuark *strOpsQuark) trimMultipleChars(
 //     tStr := "XXXHello WorlXdXXX"
 //     trimChar := 'X'
 //
-//     sops := StrOps{}
+//     sops := StrMech{}
 //
 //     result,
 //     err := sops.TrimStringEnds(
@@ -2909,7 +2909,7 @@ func (sOpsQuark *strOpsQuark) trimStringEnds(
 //
 //   str := "how now brown cow."
 //
-//   sops := StrOps{}
+//   sops := StrMech{}
 //
 //   actualStr := sops.upperCaseFirstLetter(str)
 //

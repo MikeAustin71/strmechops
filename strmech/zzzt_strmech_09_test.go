@@ -13,7 +13,7 @@ func TestStrOps_JustifyTextInStrField_01(t *testing.T) {
 	exLeftPad := strings.Repeat(" ", 10)
 	expectedStr := exLeftPad + strToJustify
 
-	su := StrOps{}
+	su := StrMech{}
 
 	actualStr, err := su.JustifyTextInStrField(
 		strToJustify,
@@ -52,7 +52,7 @@ func TestStrOps_JustifyTextInStrField_02(t *testing.T) {
 	exRightPad := strings.Repeat(" ", 10)
 	expectedStr := strToJustify + exRightPad
 
-	su := StrOps{}
+	su := StrMech{}
 
 	actualStr, err := su.JustifyTextInStrField(
 		strToJustify,
@@ -92,7 +92,7 @@ func TestStrOps_JustifyTextInStrField_03(t *testing.T) {
 	exLeftPad := strings.Repeat(" ", 5)
 	expectedStr := exLeftPad + strToJustify + exRightPad
 
-	su := StrOps{}
+	su := StrMech{}
 
 	actualStr, err := su.JustifyTextInStrField(
 		strToJustify,
@@ -128,7 +128,7 @@ func TestStrOps_JustifyTextInStrField_04(t *testing.T) {
 	strToJustify := ""
 	fieldLen := -1
 
-	su := StrOps{}
+	su := StrMech{}
 
 	_, err := su.JustifyTextInStrField(
 		strToJustify,
@@ -138,7 +138,7 @@ func TestStrOps_JustifyTextInStrField_04(t *testing.T) {
 			"\nTesting invalid input parameters.\n")
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.JustifyTextInStrField()\n" +
+		t.Error("Expected an error return from StrMech{}.JustifyTextInStrField()\n" +
 			"because 'strToJustify' == \"\" and 'fieldLen' == -1.\n" +
 			"However, NO ERROR WAS RETURNED!\n")
 		return
@@ -150,7 +150,7 @@ func TestStrOps_JustifyTextInStrField_05(t *testing.T) {
 	strToJustify := "12345"
 	fieldLen := 15
 
-	su := StrOps{}
+	su := StrMech{}
 
 	_, err := su.JustifyTextInStrField(
 		strToJustify,
@@ -160,7 +160,7 @@ func TestStrOps_JustifyTextInStrField_05(t *testing.T) {
 			"\nTesting invalid TxtJustify value.\n")
 
 	if err == nil {
-		t.Error("Expected an error return from StrOps{}.JustifyTextInStrField()\n" +
+		t.Error("Expected an error return from StrMech{}.JustifyTextInStrField()\n" +
 			"because 'TxtJustify.None()' is an invalid setting for text justification.\n" +
 			"However, NO ERROR WAS RETURNED!\n")
 		return

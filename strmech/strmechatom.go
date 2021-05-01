@@ -282,8 +282,8 @@ func (sOpsAtom *strOpsAtom) breakTextAtLineLength(
 // overwritten.
 //
 func (sOpsAtom *strOpsAtom) copyIn(
-	targetStrOps *StrOps,
-	incomingStrOps *StrOps,
+	targetStrOps *StrMech,
+	incomingStrOps *StrMech,
 	ePrefix string) (
 	err error) {
 
@@ -334,12 +334,12 @@ func (sOpsAtom *strOpsAtom) copyIn(
 }
 
 // CopyOut - Creates a 'deep' copy of input parameter
-// 'strOps', an instance of StrOps.
+// 'strOps', an instance of StrMech.
 //
 func (sOpsAtom *strOpsAtom) copyOut(
-	strOps *StrOps,
+	strOps *StrMech,
 	ePrefix string) (
-	*StrOps,
+	*StrMech,
 	error) {
 
 	if sOpsAtom.lock == nil {
@@ -358,7 +358,7 @@ func (sOpsAtom *strOpsAtom) copyOut(
 
 	var err error
 
-	newStrOps := StrOps{}
+	newStrOps := StrMech{}
 
 	if strOps == nil {
 		err = fmt.Errorf("%v\n"+
@@ -519,7 +519,7 @@ func (sOpsAtom *strOpsAtom) copyOut(
 //
 //  datDto,
 //  err :=
-//    StrOps{}.Ptr().
+//    StrMech{}.Ptr().
 //        ExtractDataField(
 //           targetStr,
 //           leadingKeyWordDelimiters,
@@ -1113,7 +1113,7 @@ exitMainTargetLoop:
 //
 //  nStrDto,
 //  err :=
-//    StrOps{}.Ptr().
+//    StrMech{}.Ptr().
 //         ExtractNumericDigits(
 //             targetStr,
 //             startIndex,

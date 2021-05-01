@@ -220,19 +220,19 @@ func (sOpsElectron *strOpsElectron) getValidString(
 	return string(actualValidRunes), err
 }
 
-// readBytes - Implements io.Reader interface for type StrOps.
+// readBytes - Implements io.Reader interface for type StrMech.
 // 'readBytes' reads up to len(p) bytes into 'p'. This
 // method supports buffered 'read' operations.
 //
-// The internal member string variable, 'StrOps.stringData'
-// is written into 'p'. When the end of 'StrOps.stringData'
+// The internal member string variable, 'StrMech.stringData'
+// is written into 'p'. When the end of 'StrMech.stringData'
 // is written to 'p', the method returns error = 'io.EOF'.
 //
-// 'StrOps.stringData' can be accessed through Getter an Setter methods,
-// StrOps.GetStringData() and StrOps.SetStringData()
+// 'StrMech.stringData' can be accessed through Getter an Setter methods,
+// StrMech.GetStringData() and StrMech.SetStringData()
 //
 func (sOpsElectron *strOpsElectron) readBytes(
-	strOpsInstance *StrOps,
+	strOpsInstance *StrMech,
 	p []byte,
 	ePrefix string) (
 	n int,
@@ -713,16 +713,16 @@ func (sOpsElectron *strOpsElectron) replaceStringChars(
 // write - Implements the io.Writer interface.
 // Write writes len(p) bytes from p to the underlying
 // data stream. In this case the underlying data stream
-// is private member variable string, 'StrOps.stringData'.
+// is private member variable string, 'StrMech.stringData'.
 //
 // Receives a byte array 'p' and writes the contents to
-// a string, private structure data element 'StrOps.stringData'.
+// a string, private structure data element 'StrMech.stringData'.
 //
-// 'StrOps.stringData' can be accessed through 'Getter' and
+// 'StrMech.stringData' can be accessed through 'Getter' and
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
 //
 func (sOpsElectron *strOpsElectron) write(
-	strOpsInstance *StrOps,
+	strOpsInstance *StrMech,
 	p []byte,
 	ePrefix string) (
 	n int,
