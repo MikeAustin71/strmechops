@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type strOpsNanobot struct {
+type strMechNanobot struct {
 	lock *sync.Mutex
 }
 
@@ -32,26 +32,26 @@ type strOpsNanobot struct {
 //    fieldLen        = 15
 //    Returned String = "@@@@@Hello" or "     Hello"
 //
-func (sOpsNanobot *strOpsNanobot) strCenterInStrLeft(
+func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsNanobot.lock == nil {
-		sOpsNanobot.lock = new(sync.Mutex)
+	if sMechNanobot.lock == nil {
+		sMechNanobot.lock = new(sync.Mutex)
 	}
 
-	sOpsNanobot.lock.Lock()
+	sMechNanobot.lock.Lock()
 
-	defer sOpsNanobot.lock.Unlock()
+	defer sMechNanobot.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsNanobot.strCenterInStrLeft()\n"
+	ePrefix += "strMechNanobot.strCenterInStrLeft()\n"
 
 	sOpsQuark := strOpsQuark{}
 
@@ -207,7 +207,7 @@ func (sOpsNanobot *strOpsNanobot) strCenterInStrLeft(
 //  'strJustified' is now equal to "     12345"
 //  The string length of 'strJustified' is 10
 //
-func (sOpsNanobot *strOpsNanobot) justifyTextInStrField(
+func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	strToJustify string,
 	fieldLen int,
 	textJustify TextJustify,
@@ -215,19 +215,19 @@ func (sOpsNanobot *strOpsNanobot) justifyTextInStrField(
 	justifiedStr string,
 	err error) {
 
-	if sOpsNanobot.lock == nil {
-		sOpsNanobot.lock = new(sync.Mutex)
+	if sMechNanobot.lock == nil {
+		sMechNanobot.lock = new(sync.Mutex)
 	}
 
-	sOpsNanobot.lock.Lock()
+	sMechNanobot.lock.Lock()
 
-	defer sOpsNanobot.lock.Unlock()
+	defer sMechNanobot.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsNanobot.justifyTextInStrField()\n "
+	ePrefix += "strMechNanobot.justifyTextInStrField()\n "
 	justifiedStr = ""
 
 	if !textJustify.XIsValid() {

@@ -1658,7 +1658,7 @@ func (sMech *StrMech) JustifyTextInStrField(
 
 	ePrefix += "StrMech.JustifyTextInStrField() "
 
-	sOpsNanobot := strOpsNanobot{}
+	sOpsNanobot := strMechNanobot{}
 
 	return sOpsNanobot.justifyTextInStrField(
 		strToJustify,
@@ -2727,7 +2727,7 @@ func (sMech *StrMech) StrCenterInStrLeft(
 
 	ePrefix += "StrMech.StrCenterInStrLeft() "
 
-	sOpsNanobot := strOpsNanobot{}
+	sOpsNanobot := strMechNanobot{}
 
 	return sOpsNanobot.strCenterInStrLeft(
 		strToCenter,
