@@ -20,18 +20,12 @@ import (
 // and 'StrOut' are provided, the structure may be used as a data
 // transport object (dto) containing two strings.
 //
-// Version 2.0.0 and all later versions of this type support Go Modules.
-// For Version 2+ implementations, use the following import statement:
-//
-//		import "github.com/MikeAustin71/stringopsgo/strops/v2"
-//
-// Earlier Version 1.0.0 implementations require a different import statement:
-//
-//    import "github.com/MikeAustin71/stringopsgo/strops"
+//    import "github.com/MikeAustin71/strmech"
 //
 // Be advised that this type, 'StrOps', implements the io.Reader and io.Writer
 // interfaces. All io.Reader and io.Writer operations utilize the private string
 // data element, 'StrOps.stringData'.
+//
 type StrOps struct {
 	StrIn      string // public string variable available at user's discretion
 	StrOut     string // public string variable available at user's discretion

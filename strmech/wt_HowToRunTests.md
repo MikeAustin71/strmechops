@@ -1,6 +1,6 @@
 # Running Tests StrOps
 
-Open a command prompt in this directory (*stringopsgo/strops/v3*) and run the
+Open a command prompt in this directory (*strops*) and run the
 following commands.
 
 ## Test Execution WITHOUT Code Coverage
