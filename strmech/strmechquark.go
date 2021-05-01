@@ -340,7 +340,7 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 //  ePrefix             *ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
+//       contains the name of the calling method or methods listed
 //       as a function chain.
 //
 //       If no error prefix information is needed, set this parameter

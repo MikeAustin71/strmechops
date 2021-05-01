@@ -2,12 +2,31 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
 )
 
 type strMechMolecule struct {
 	lock *sync.Mutex
+}
+
+// ptr - Returns a pointer to a new instance of
+// strMechMolecule.
+//
+func (sMechMolecule strMechMolecule) ptr() *strMechMolecule {
+
+	if sMechMolecule.lock == nil {
+		sMechMolecule.lock = new(sync.Mutex)
+	}
+
+	sMechMolecule.lock.Lock()
+
+	defer sMechMolecule.lock.Unlock()
+
+	return &strMechMolecule{
+		lock: new(sync.Mutex),
+	}
 }
 
 // strCenterInStr - returns a string which includes a left pad blank string plus
@@ -32,11 +51,17 @@ type strMechMolecule struct {
 //       will be centered.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -56,9 +81,9 @@ type strMechMolecule struct {
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -84,7 +109,7 @@ type strMechMolecule struct {
 func (sMechMolecule *strMechMolecule) strCenterInStr(
 	strToCenter string,
 	fieldLen int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -96,30 +121,35 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 
 	defer sMechMolecule.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechMolecule.strPadLeftToCenter()\n"
+	ePrefix.SetEPref("strMechMolecule." +
+		"strCenterInStr()")
 
 	sOpsQuark := strMechQuark{}
+
 	if sOpsQuark.isEmptyOrWhiteSpace(strToCenter) {
 		return strToCenter,
 			fmt.Errorf("%v\n"+
 				"Error: Input parameter 'strToCenter' is All White "+
 				"Space or an EMPTY String!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	sLen := len(strToCenter)
 
 	if sLen > fieldLen {
 		return strToCenter,
-			fmt.Errorf(ePrefix+
-				"\n"+
+			fmt.Errorf("%v\n"+
 				"Error: 'fieldLen' = '%v' strToCenter Length= '%v'.\n"+
 				"'fieldLen' is shorter than 'strToCenter' Length!\n",
-				fieldLen, sLen)
+				ePrefix.String(),
+				fieldLen,
+				sLen)
 	}
 
 	if sLen == fieldLen {
@@ -165,11 +195,17 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 //       parameter 'strToJustify' will be left-justified.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -190,9 +226,9 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -218,7 +254,7 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 func (sMechMolecule *strMechMolecule) strLeftJustify(
 	strToJustify string,
 	fieldLen int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -230,19 +266,24 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 
 	defer sMechMolecule.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechMolecule.strLeftJustify() "
+	ePrefix.SetEPref(
+		"strMechMolecule." +
+			"strLeftJustify()")
 
 	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(strToJustify) {
 		return strToJustify,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'strToJustify' is All White Space or an EMPTY String!\n",
-				ePrefix)
+				"Error: Input parameter 'strToJustify' is "+
+				"All White Space or an EMPTY String!\n",
+				ePrefix.String())
 	}
 
 	strLen := len(strToJustify)
@@ -253,11 +294,11 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 
 	if fieldLen < strLen {
 		return strToJustify,
-			fmt.Errorf(ePrefix+
-				"\n"+
+			fmt.Errorf("%v\n"+
 				"Error: Length of string to left justify is '%v'.\n"+
 				"However, 'fieldLen' is less.\n"+
 				"'fieldLen'= '%v'\n",
+				ePrefix.String(),
 				strLen, fieldLen)
 	}
 
@@ -294,11 +335,17 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 //       will be centered.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -319,9 +366,9 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -357,7 +404,7 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 	strToCenter string,
 	fieldLen int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -369,19 +416,24 @@ func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 
 	defer sMechMolecule.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechMolecule.strPadLeftToCenter()\n"
+	ePrefix.SetEPref(
+		"strMechMolecule." +
+			"strPadLeftToCenter()")
 
 	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(strToCenter) {
 		return strToCenter,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'strToCenter' is All White Space or an EMPTY String!\n",
-				ePrefix)
+				"Error: Input parameter 'strToCenter' is "+
+				"All White Space or an EMPTY String!\n",
+				ePrefix.String())
 	}
 
 	sLen := sOpsQuark.getRuneCountInStr(strToCenter)
@@ -389,9 +441,10 @@ func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 	if sLen > fieldLen {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input Parameter String To Center ('strToCenter')\n"+
-				"is longer than Field Length\n",
-				ePrefix)
+				"Error: Input Parameter String To Center "+
+				"('strToCenter')\n"+
+				"is longer than Field Length.\n",
+				ePrefix.String())
 	}
 
 	if sLen == fieldLen {
@@ -427,11 +480,17 @@ func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 //       will be right-justified.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -452,9 +511,10 @@ func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
 //
 //
 // ------------------------------------------------------------------------
@@ -488,7 +548,7 @@ func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 func (sMechMolecule *strMechMolecule) strRightJustify(
 	strToJustify string,
 	fieldLen int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -500,11 +560,15 @@ func (sMechMolecule *strMechMolecule) strRightJustify(
 
 	defer sMechMolecule.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "sMechMolecule.strRightJustify() "
+	ePrefix.SetEPref(
+		"sMechMolecule." +
+			"strRightJustify()")
 
 	sOpsQuark := strMechQuark{}
 
@@ -513,7 +577,7 @@ func (sMechMolecule *strMechMolecule) strRightJustify(
 			fmt.Errorf("%v\n"+
 				"Error: Input parameter 'strToJustify' is "+
 				"All White Space or an EMPTY String!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	strLen := len(strToJustify)
@@ -524,11 +588,11 @@ func (sMechMolecule *strMechMolecule) strRightJustify(
 
 	if fieldLen < strLen {
 		return strToJustify,
-			fmt.Errorf(ePrefix+
-				"\n"+
+			fmt.Errorf("%s\n"+
 				"Error: Length of string to right justify is '%v'.\n"+
 				"However, 'fieldLen' is less.\n"+
 				"'fieldLen'= '%v'\n",
+				ePrefix.String(),
 				strLen, fieldLen)
 	}
 

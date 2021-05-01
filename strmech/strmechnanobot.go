@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
 )
@@ -35,7 +36,7 @@ type strMechNanobot struct {
 func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 	strToCenter string,
 	fieldLen int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -47,11 +48,9 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 
 	defer sMechNanobot.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
-	}
-
-	ePrefix += "strMechNanobot.strCenterInStrLeft()\n"
+	ePrefix.SetEPref(
+		"strMechNanobot." +
+			"strCenterInStrLeft()")
 
 	sOpsQuark := strMechQuark{}
 
@@ -64,27 +63,28 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 
 	if fieldLen < len(strToCenter) {
 		return "",
-			fmt.Errorf(ePrefix+
-				"\n"+
+			fmt.Errorf("%s\n"+
 				"Error: Input parameter 'fieldLen' is less than length of 'strToCenter'.\n"+
 				"strToCenter length='%v'\n"+
 				"fieldLen='%v'\n",
+				ePrefix.String(),
 				len(strToCenter), fieldLen)
 	}
 
-	sOpsMolecule := strMechMolecule{}
+	sMechMolecule := strMechMolecule{}
 
-	pad, err := sOpsMolecule.strPadLeftToCenter(
+	pad, err := sMechMolecule.strPadLeftToCenter(
 		strToCenter,
 		fieldLen,
 		ePrefix)
 
 	if err != nil {
 		return "",
-			fmt.Errorf(ePrefix+
-				"\n"+
+			fmt.Errorf("%s\n"+
 				"Error returned by sops.StrPadLeftToCenter(strToCenter, fieldLen).\n"+
-				"Error='%v'\n", err.Error())
+				"Error='%v'\n",
+				ePrefix.String(),
+				err.Error())
 	}
 
 	return pad + strToCenter, nil
@@ -154,11 +154,17 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 //                           Example: "   TextString   "
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -180,9 +186,9 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -211,7 +217,7 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	strToJustify string,
 	fieldLen int,
 	textJustify TextJustify,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	justifiedStr string,
 	err error) {
 
@@ -223,17 +229,23 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 
 	defer sMechNanobot.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechNanobot.justifyTextInStrField()\n "
+	ePrefix.SetEPref(
+		"strMechNanobot." +
+			"justifyTextInStrField()")
+
 	justifiedStr = ""
 
 	if !textJustify.XIsValid() {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textJustify' is invalid!\n"+
 			"textJustify integer value == '%v'\n",
+			ePrefix.String(),
 			textJustify.XValueInt())
 
 		return justifiedStr, err
@@ -244,8 +256,10 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	if fieldLen < 1 &&
 		lenStrToJustify == 0 {
 
-		err = fmt.Errorf(ePrefix +
-			"Error: Input parameters 'strToJustify' and 'fieldLen' are invalid!\n")
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'strToJustify' and "+
+			"'fieldLen' are invalid!\n",
+			ePrefix.String())
 
 		return justifiedStr, err
 
@@ -297,11 +311,30 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 			ePrefix)
 
 	default:
-		err = fmt.Errorf(ePrefix+""+
+		err = fmt.Errorf("%v\n"+
 			"Invalid 'textJustify' value!\n"+
 			"'textJustify' integer value == '%v'\n",
+			ePrefix.String(),
 			textJustify.XValueInt())
 	}
 
 	return justifiedStr, err
+}
+
+// ptr - Returns a pointer to a new instance of
+// strMechNanobot.
+//
+func (sMechNanobot strMechNanobot) ptr() *strMechNanobot {
+
+	if sMechNanobot.lock == nil {
+		sMechNanobot.lock = new(sync.Mutex)
+	}
+
+	sMechNanobot.lock.Lock()
+
+	defer sMechNanobot.lock.Unlock()
+
+	return &strMechNanobot{
+		lock: new(sync.Mutex),
+	}
 }
