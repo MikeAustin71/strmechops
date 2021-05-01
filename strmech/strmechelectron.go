@@ -85,7 +85,7 @@ func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 
 	ePrefix += "strMechElectron.findFirstNonSpaceChar()\n"
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(targetStr) {
 		return -1, nil
@@ -205,7 +205,7 @@ func (sMechElectron *strMechElectron) getValidString(
 				ePrefix)
 	}
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	actualValidRunes, err :=
 		sOpsQuark.getValidRunes(
@@ -690,7 +690,7 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 				ePrefix)
 	}
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	outputStr, err :=
 		sOpsQuark.replaceRunes(

@@ -10,7 +10,7 @@ import (
 	"unicode/utf8"
 )
 
-type strOpsQuark struct {
+type strMechQuark struct {
 	lock *sync.Mutex
 }
 
@@ -70,26 +70,26 @@ type strOpsQuark struct {
 //  'actualStr' is now equal to:
 //     "Hello[SPACE]world!\\n"
 //
-func (sOpsQuark *strOpsQuark) convertNonPrintableChars(
+func (sMechQuark *strMechQuark) convertNonPrintableChars(
 	nonPrintableChars []rune,
 	convertSpace bool,
 	ePrefix string) (
 	printableChars string,
 	err error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.convertNonPrintableChars() "
+	ePrefix += "strMechQuark.convertNonPrintableChars() "
 
 	lenNonPrintableChars := len(nonPrintableChars)
 
@@ -165,17 +165,17 @@ func (sOpsQuark *strOpsQuark) convertNonPrintableChars(
 // DoesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
-func (sOpsQuark *strOpsQuark) doesLastCharExist(
+func (sMechQuark *strMechQuark) doesLastCharExist(
 	testStr string,
 	lastChar rune) bool {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 	testStrLen := len(testStr)
 
 	if testStrLen == 0 {
@@ -209,7 +209,7 @@ func (sOpsQuark *strOpsQuark) doesLastCharExist(
 // if 'targetStr' is a zero length string, an error will be triggered. Likewise, if 'startIdx'
 // of 'endIdx' are invalid, an error will be returned.
 //
-func (sOpsQuark *strOpsQuark) findLastNonSpaceChar(
+func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 	targetStr string,
 	startIdx,
 	endIdx int,
@@ -217,19 +217,19 @@ func (sOpsQuark *strOpsQuark) findLastNonSpaceChar(
 	int,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.findLastNonSpaceChar() "
+	ePrefix += "strMechQuark.findLastNonSpaceChar() "
 
 	targetStrLen := len(targetStr)
 
@@ -356,7 +356,7 @@ func (sOpsQuark *strOpsQuark) findLastNonSpaceChar(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) findLastSpace(
+func (sMechQuark *strMechQuark) findLastSpace(
 	targetStr string,
 	startIdx int,
 	endIdx int,
@@ -364,19 +364,19 @@ func (sOpsQuark *strOpsQuark) findLastSpace(
 	int,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.findLastSpace() "
+	ePrefix += "strMechQuark.findLastSpace() "
 
 	targetStrLen := len(targetStr)
 
@@ -542,7 +542,7 @@ func (sOpsQuark *strOpsQuark) findLastSpace(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) findLastWord(
+func (sMechQuark *strMechQuark) findLastWord(
 	targetStr string,
 	startIndex int,
 	endIndex int,
@@ -553,19 +553,19 @@ func (sOpsQuark *strOpsQuark) findLastWord(
 	isAllSpaces bool,
 	err error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.findLastNonSpaceChar() "
+	ePrefix += "strMechQuark.findLastNonSpaceChar() "
 
 	beginWrdIdx = -1
 	endWrdIdx = -1
@@ -750,17 +750,17 @@ func (sOpsQuark *strOpsQuark) findLastWord(
 // will be located at targetStr[loc[0]:loc[1]]. Again, a return value of 'nil'
 // signals that no match was found.
 //
-func (sOpsQuark *strOpsQuark) findRegExIndex(
+func (sMechQuark *strMechQuark) findRegExIndex(
 	targetStr string,
 	regex string) []int {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	re := regexp.MustCompile(regex)
 
@@ -774,7 +774,7 @@ func (sOpsQuark *strOpsQuark) findRegExIndex(
 // and counting 'runes' in a string.
 //
 // For information on an alternative counting method, see
-// strOpsQuark.getRuneCountInStr() and research the 'utf8' Rune
+// strMechQuark.getRuneCountInStr() and research the 'utf8' Rune
 // Count In String function at:
 //
 //   https://golang.org/pkg/unicode/utf8/#RuneCountInString
@@ -797,16 +797,16 @@ func (sOpsQuark *strOpsQuark) findRegExIndex(
 //     - This returned integer value will be set to the number of
 //       of 'runes' counted in 'targetStr'.
 //
-func (sOpsQuark *strOpsQuark) getCharCountInStr(
+func (sMechQuark *strMechQuark) getCharCountInStr(
 	targetStr string) int {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	return len([]rune(targetStr))
 }
@@ -839,16 +839,16 @@ func (sOpsQuark *strOpsQuark) getCharCountInStr(
 //     - This returned integer value will be set to the number of
 //       of 'runes' counted in 'targetStr'.
 //
-func (sOpsQuark *strOpsQuark) getRuneCountInStr(
+func (sMechQuark *strMechQuark) getRuneCountInStr(
 	targetStr string) int {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	return utf8.RuneCountInString(targetStr)
 }
@@ -905,22 +905,22 @@ func (sOpsQuark *strOpsQuark) getRuneCountInStr(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) getValidBytes(
+func (sMechQuark *strMechQuark) getValidBytes(
 	targetBytes []byte,
 	validBytes []byte,
 	ePrefix string) (
 	[]byte,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
-	ePrefix += "strOpsQuark.getValidBytes() "
+	ePrefix += "strMechQuark.getValidBytes() "
 
 	lenTargetBytes := len(targetBytes)
 
@@ -1004,26 +1004,26 @@ func (sOpsQuark *strOpsQuark) getValidBytes(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) getValidRunes(
+func (sMechQuark *strMechQuark) getValidRunes(
 	targetRunes []rune,
 	validRunes []rune,
 	ePrefix string) (
 	[]rune,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.getValidRunes() "
+	ePrefix += "strMechQuark.getValidRunes() "
 
 	lenTargetRunes := len(targetRunes)
 
@@ -1061,16 +1061,16 @@ func (sOpsQuark *strOpsQuark) getValidRunes(
 // isEmptyOrWhiteSpace - Analyzes the incoming string and returns
 // 'true' if the strings is empty or consists of all white space.
 //
-func (sOpsQuark *strOpsQuark) isEmptyOrWhiteSpace(
+func (sMechQuark *strMechQuark) isEmptyOrWhiteSpace(
 	targetStr string) bool {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	targetLen := len(targetStr)
 
@@ -1086,16 +1086,16 @@ func (sOpsQuark *strOpsQuark) isEmptyOrWhiteSpace(
 // LowerCaseFirstLetter - Finds the first alphabetic character
 // in a string (a-z A-Z) and converts it to lower case.
 //
-func (sOpsQuark *strOpsQuark) lowerCaseFirstLetter(
+func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 	str string) string {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(str) == 0 {
 		return str
@@ -1185,26 +1185,26 @@ func (sOpsQuark *strOpsQuark) lowerCaseFirstLetter(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) makeSingleCharString(
+func (sMechQuark *strMechQuark) makeSingleCharString(
 	charRune rune,
 	strLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.makeSingleCharString() "
+	ePrefix += "strMechQuark.makeSingleCharString() "
 
 	if strLen < 1 {
 		return "",
@@ -1304,7 +1304,7 @@ func (sOpsQuark *strOpsQuark) makeSingleCharString(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) removeStringChar(
+func (sMechQuark *strMechQuark) removeStringChar(
 	targetStr string,
 	charToRemove rune,
 	maxNumOfCharDeletions int,
@@ -1313,19 +1313,19 @@ func (sOpsQuark *strOpsQuark) removeStringChar(
 	numOfDeletions int,
 	err error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.replaceStringChar() "
+	ePrefix += "strMechQuark.replaceStringChar() "
 
 	if len(targetStr) == 0 {
 		err = fmt.Errorf("%v\n"+
@@ -1438,7 +1438,7 @@ func (sOpsQuark *strOpsQuark) removeStringChar(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) removeSubString(
+func (sMechQuark *strMechQuark) removeSubString(
 	strToSearch string,
 	targetSubStr string,
 	maxRemovalCount int,
@@ -1447,19 +1447,19 @@ func (sOpsQuark *strOpsQuark) removeSubString(
 	int,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.removeSubString() "
+	ePrefix += "strMechQuark.removeSubString() "
 	var err error
 
 	if len(strToSearch) == 0 {
@@ -1582,26 +1582,26 @@ func (sOpsQuark *strOpsQuark) removeSubString(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) replaceRunes(
+func (sMechQuark *strMechQuark) replaceRunes(
 	targetRunes []rune,
 	replacementRunes [][]rune,
 	ePrefix string) (
 	[]rune,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.replaceRunes() "
+	ePrefix += "strMechQuark.replaceRunes() "
 
 	output := make([]rune, 0, 100)
 
@@ -1734,7 +1734,7 @@ func (sOpsQuark *strOpsQuark) replaceRunes(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sOpsQuark *strOpsQuark) replaceStringChar(
+func (sMechQuark *strMechQuark) replaceStringChar(
 	targetStr string,
 	charToReplace rune,
 	replacementChar rune,
@@ -1744,19 +1744,19 @@ func (sOpsQuark *strOpsQuark) replaceStringChar(
 	int,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.replaceStringChar() "
+	ePrefix += "strMechQuark.replaceStringChar() "
 	var err error
 
 	if len(targetStr) == 0 {
@@ -1883,7 +1883,7 @@ func (sOpsQuark *strOpsQuark) replaceStringChar(
 //       'ePrefix' will be inserted or prefixed at the beginning
 //       of the error message.
 //
-func (sOpsQuark *strOpsQuark) replaceSubString(
+func (sMechQuark *strMechQuark) replaceSubString(
 	strToSearch string,
 	targetSubStr string,
 	replacementStr string,
@@ -1893,19 +1893,19 @@ func (sOpsQuark *strOpsQuark) replaceSubString(
 	int,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.replaceSubString() "
+	ePrefix += "strMechQuark.replaceSubString() "
 
 	var err error
 
@@ -2047,19 +2047,19 @@ func (sOpsQuark *strOpsQuark) replaceSubString(
 //   actualString is now equal to "Some@String"
 //
 //
-func (sOpsQuark *strOpsQuark) stripBadChars(
+func (sMechQuark *strMechQuark) stripBadChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
 	strLen int) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	cleanStr = targetStr
 	strLen = len(cleanStr)
@@ -2200,19 +2200,19 @@ Done:
 //  actualStrLen is now equal to 10
 //
 //
-func (sOpsQuark *strOpsQuark) stripLeadingChars(
+func (sMechQuark *strMechQuark) stripLeadingChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
 	strLen int) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	cleanStr = targetStr
 	strLen = len(cleanStr)
@@ -2345,19 +2345,19 @@ Done:
 //  actualString is now equal to "SomeString"
 //  actualStrLen is now equal to 10
 //
-func (sOpsQuark *strOpsQuark) stripTrailingChars(
+func (sMechQuark *strMechQuark) stripTrailingChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
 	strLen int) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	cleanStr = targetStr
 	strLen = len(cleanStr)
@@ -2515,7 +2515,7 @@ Done:
 //    resultSt is now equal to "!!Hello!!!World!!"
 //    numOfReplacements is equal to '7'
 //
-func (sOpsQuark *strOpsQuark) swapRune(
+func (sMechQuark *strMechQuark) swapRune(
 	targetStr string,
 	oldRune rune,
 	newRune rune,
@@ -2525,19 +2525,19 @@ func (sOpsQuark *strOpsQuark) swapRune(
 	int,
 	error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.swapRune() "
+	ePrefix += "strMechQuark.swapRune() "
 
 	if targetStr == "" {
 		return targetStr, 0, nil
@@ -2641,26 +2641,26 @@ func (sOpsQuark *strOpsQuark) swapRune(
 //  returned string (rStr) now equal to "Hello World"
 //
 //
-func (sOpsQuark *strOpsQuark) trimMultipleChars(
+func (sMechQuark *strMechQuark) trimMultipleChars(
 	targetStr string,
 	trimChar rune,
 	ePrefix string) (
 	rStr string,
 	err error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.trimMultipleChars() "
+	ePrefix += "strMechQuark.trimMultipleChars() "
 
 	rStr = ""
 	err = nil
@@ -2790,26 +2790,26 @@ func (sOpsQuark *strOpsQuark) trimMultipleChars(
 //  result is now equal to "Hello WorlXd"
 //
 //
-func (sOpsQuark *strOpsQuark) trimStringEnds(
+func (sMechQuark *strMechQuark) trimStringEnds(
 	targetStr string,
 	trimChar rune,
 	ePrefix string) (
 	rStr string,
 	err error) {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(ePrefix) > 0 {
 		ePrefix += "\n"
 	}
 
-	ePrefix += "strOpsQuark.trimStringEnds() "
+	ePrefix += "strMechQuark.trimStringEnds() "
 
 	rStr = ""
 	err = nil
@@ -2916,16 +2916,16 @@ func (sOpsQuark *strOpsQuark) trimStringEnds(
 //  'actualStr' is now equal to "How now brown cow."
 //
 //
-func (sOpsQuark *strOpsQuark) upperCaseFirstLetter(
+func (sMechQuark *strMechQuark) upperCaseFirstLetter(
 	str string) string {
 
-	if sOpsQuark.lock == nil {
-		sOpsQuark.lock = new(sync.Mutex)
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
 	}
 
-	sOpsQuark.lock.Lock()
+	sMechQuark.lock.Lock()
 
-	defer sOpsQuark.lock.Unlock()
+	defer sMechQuark.lock.Unlock()
 
 	if len(str) == 0 {
 		return str

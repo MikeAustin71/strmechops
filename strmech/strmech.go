@@ -181,7 +181,7 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 
 	ePrefix := "StrMech.ConvertNonPrintableChars() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	printableChars,
 		_ = sOpsQuark.convertNonPrintableChars(
@@ -255,7 +255,7 @@ func (sMech StrMech) DoesLastCharExist(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.doesLastCharExist(
 		testStr,
@@ -872,7 +872,7 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 
 	ePrefix += "StrMech.FindLastNonSpaceChar() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.findLastNonSpaceChar(
 		targetStr,
@@ -989,7 +989,7 @@ func (sMech *StrMech) FindLastSpace(
 
 	ePrefix += "StrMech.FindLastSpace() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.findLastSpace(
 		targetStr,
@@ -1130,7 +1130,7 @@ func (sMech *StrMech) FindLastWord(
 
 	ePrefix += "StrMech.FindLastWord() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.findLastWord(
 		targetStr,
@@ -1163,7 +1163,7 @@ func (sMech *StrMech) FindRegExIndex(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.findRegExIndex(
 		targetStr,
@@ -1306,7 +1306,7 @@ func (sMech *StrMech) GetValidBytes(
 
 	ePrefix += "StrMech.GetValidBytes() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.getValidBytes(
 		targetBytes,
@@ -1404,7 +1404,7 @@ func (sMech *StrMech) GetValidRunes(
 
 	ePrefix += "StrMech.GetValidRunes() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.getValidRunes(
 		targetRunes,
@@ -1519,7 +1519,7 @@ func (sMech *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.isEmptyOrWhiteSpace(targetStr)
 }
@@ -1680,7 +1680,7 @@ func (sMech *StrMech) LowerCaseFirstLetter(str string) string {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.lowerCaseFirstLetter(str)
 }
@@ -1757,7 +1757,7 @@ func (sMech *StrMech) MakeSingleCharString(
 
 	ePrefix += "StrMech.MakeSingleCharString() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.makeSingleCharString(
 		charRune,
@@ -1986,7 +1986,7 @@ func (sMech *StrMech) RemoveStringChar(
 
 	ePrefix += "StrMech.RemoveStringChar() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.removeStringChar(
 		targetStr,
@@ -2256,7 +2256,7 @@ func (sMech *StrMech) ReplaceNewLines(
 		return targetStr
 	}
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 	var newStr string
 
 	if len(replacementStr) == 0 {
@@ -2399,7 +2399,7 @@ func (sMech *StrMech) ReplaceRunes(
 
 	ePrefix += "StrMech.ReplaceRunes() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.replaceRunes(
 		targetRunes,
@@ -2499,7 +2499,7 @@ func (sMech *StrMech) ReplaceStringChar(
 
 	ePrefix += "StrMech.ReplaceStringChar() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.replaceStringChar(
 		targetStr,
@@ -2843,7 +2843,7 @@ func (sMech *StrMech) StrGetRuneCnt(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.getRuneCountInStr(targetStr)
 }
@@ -2862,7 +2862,7 @@ func (sMech *StrMech) StrGetCharCnt(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.getCharCountInStr(targetStr)
 }
@@ -2942,7 +2942,7 @@ func (sMech *StrMech) StripBadChars(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.stripBadChars(
 		targetStr,
@@ -3038,7 +3038,7 @@ func (sMech *StrMech) StripLeadingChars(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.stripLeadingChars(
 		targetStr,
@@ -3136,7 +3136,7 @@ func (sMech *StrMech) StripTrailingChars(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.stripTrailingChars(
 		targetStr,
@@ -3576,7 +3576,7 @@ func (sMech *StrMech) SwapRune(
 
 	ePrefix += "StrMech.SwapRune() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.swapRune(
 		targetStr,
@@ -3676,7 +3676,7 @@ func (sMech StrMech) TrimMultipleChars(
 
 	ePrefix += "StrMech.TrimMultipleChars() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.trimMultipleChars(
 		targetStr,
@@ -3770,7 +3770,7 @@ func (sMech StrMech) TrimStringEnds(
 
 	ePrefix += "StrMech.TrimStringEnds() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.trimStringEnds(
 		targetStr,
@@ -3826,7 +3826,7 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.upperCaseFirstLetter(str)
 }

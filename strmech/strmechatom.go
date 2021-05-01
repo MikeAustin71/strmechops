@@ -100,7 +100,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 				ePrefix)
 	}
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(targetStr) {
 		return "\n", nil

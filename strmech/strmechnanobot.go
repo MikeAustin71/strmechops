@@ -53,7 +53,7 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 
 	ePrefix += "strMechNanobot.strCenterInStrLeft()\n"
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(strToCenter) {
 		return "",

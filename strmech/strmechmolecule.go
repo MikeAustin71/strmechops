@@ -102,7 +102,7 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 
 	ePrefix += "strMechMolecule.strPadLeftToCenter()\n"
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 	if sOpsQuark.isEmptyOrWhiteSpace(strToCenter) {
 		return strToCenter,
 			fmt.Errorf("%v\n"+
@@ -236,7 +236,7 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 
 	ePrefix += "strMechMolecule.strLeftJustify() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(strToJustify) {
 		return strToJustify,
@@ -375,7 +375,7 @@ func (sMechMolecule *strMechMolecule) strPadLeftToCenter(
 
 	ePrefix += "strMechMolecule.strPadLeftToCenter()\n"
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(strToCenter) {
 		return strToCenter,
@@ -506,7 +506,7 @@ func (sMechMolecule *strMechMolecule) strRightJustify(
 
 	ePrefix += "sMechMolecule.strRightJustify() "
 
-	sOpsQuark := strOpsQuark{}
+	sOpsQuark := strMechQuark{}
 
 	if sOpsQuark.isEmptyOrWhiteSpace(strToJustify) {
 		return strToJustify,
