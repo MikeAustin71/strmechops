@@ -84,20 +84,20 @@ type StrMech struct {
 //       processing, the returned error Type will encapsulate an error
 //       message.
 //
-func (sops *StrMech) BreakTextAtLineLength(
+func (sMech *StrMech) BreakTextAtLineLength(
 	targetStr string,
 	lineLength int,
 	lineDelimiter rune) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix := "StrMech.BreakTextAtLineLength() "
 
@@ -166,18 +166,18 @@ func (sops *StrMech) BreakTextAtLineLength(
 //  'actualStr' is now equal to:
 //     "Hello[SPACE]world!\\n"
 //
-func (sops *StrMech) ConvertNonPrintableChars(
+func (sMech *StrMech) ConvertNonPrintableChars(
 	nonPrintableChars []rune,
 	convertSpace bool) (
 	printableChars string) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix := "StrMech.ConvertNonPrintableChars() "
 
@@ -195,15 +195,15 @@ func (sops *StrMech) ConvertNonPrintableChars(
 // CopyIn - Copies string information from another StrMech
 // instance passed as an input parameter to the current
 // StrMech instance.
-func (sops *StrMech) CopyIn(strops2 *StrMech) {
+func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	if strops2 == nil {
 		return
@@ -212,7 +212,7 @@ func (sops *StrMech) CopyIn(strops2 *StrMech) {
 	sOpsAtom := strOpsAtom{}
 
 	_ = sOpsAtom.copyIn(
-		sops,
+		sMech,
 		strops2,
 		"")
 }
@@ -220,21 +220,21 @@ func (sops *StrMech) CopyIn(strops2 *StrMech) {
 // CopyOut - Creates a 'deep' copy of the current
 // StrMech instance and returns a pointer to a
 // new instance containing that copied information.
-func (sops *StrMech) CopyOut() *StrMech {
+func (sMech *StrMech) CopyOut() *StrMech {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsAtom := strOpsAtom{}
 
 	newStrOps,
 		_ := sOpsAtom.copyOut(
-		sops,
+		sMech,
 		"")
 
 	return newStrOps
@@ -243,17 +243,17 @@ func (sops *StrMech) CopyOut() *StrMech {
 // DoesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
-func (sops StrMech) DoesLastCharExist(
+func (sMech StrMech) DoesLastCharExist(
 	testStr string,
 	lastChar rune) bool {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -427,7 +427,7 @@ func (sops StrMech) DoesLastCharExist(
 //          "America/Chicago"
 //
 //
-func (sops *StrMech) ExtractDataField(
+func (sMech *StrMech) ExtractDataField(
 	targetStr string,
 	leadingKeyWordDelimiters []string,
 	startIdx int,
@@ -439,13 +439,13 @@ func (sops *StrMech) ExtractDataField(
 	DataFieldProfileDto,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ExtractDataField() "
 
@@ -674,7 +674,7 @@ func (sops *StrMech) ExtractDataField(
 //     "$(1,250,364.33)"
 //
 //
-func (sops *StrMech) ExtractNumericDigits(
+func (sMech *StrMech) ExtractNumericDigits(
 	targetStr string,
 	startIndex int,
 	keepLeadingChars string,
@@ -684,13 +684,13 @@ func (sops *StrMech) ExtractNumericDigits(
 	NumStrProfileDto,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ExtractNumericDigits() "
 
@@ -762,7 +762,7 @@ func (sops *StrMech) ExtractNumericDigits(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrMech) FindFirstNonSpaceChar(
+func (sMech *StrMech) FindFirstNonSpaceChar(
 	targetStr string,
 	startIndex,
 	endIndex int,
@@ -770,13 +770,13 @@ func (sops *StrMech) FindFirstNonSpaceChar(
 	int,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.FindFirstNonSpaceChar() "
 
@@ -854,7 +854,7 @@ func (sops *StrMech) FindFirstNonSpaceChar(
 //       the beginning of the error message.
 //
 //
-func (sops *StrMech) FindLastNonSpaceChar(
+func (sMech *StrMech) FindLastNonSpaceChar(
 	targetStr string,
 	startIdx int,
 	endIdx int,
@@ -862,13 +862,13 @@ func (sops *StrMech) FindLastNonSpaceChar(
 	int,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.FindLastNonSpaceChar() "
 
@@ -971,7 +971,7 @@ func (sops *StrMech) FindLastNonSpaceChar(
 //  lastSpaceIdx is now equal to '8'
 //
 //
-func (sops *StrMech) FindLastSpace(
+func (sMech *StrMech) FindLastSpace(
 	targetStr string,
 	startIdx int,
 	endIdx int,
@@ -979,13 +979,13 @@ func (sops *StrMech) FindLastSpace(
 	int,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.FindLastSpace() "
 
@@ -1110,7 +1110,7 @@ func (sops *StrMech) FindLastSpace(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrMech) FindLastWord(
+func (sMech *StrMech) FindLastWord(
 	targetStr string,
 	startIndex,
 	endIndex int,
@@ -1120,13 +1120,13 @@ func (sops *StrMech) FindLastWord(
 	isAllSpaces bool,
 	err error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.FindLastWord() "
 
@@ -1151,17 +1151,17 @@ func (sops *StrMech) FindLastWord(
 // will be located at targetStr[loc[0]:loc[1]]. Again, a return value of 'nil'
 // signals that no match was found.
 //
-func (sops *StrMech) FindRegExIndex(
+func (sMech *StrMech) FindRegExIndex(
 	targetStr string,
 	regex string) []int {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1172,53 +1172,53 @@ func (sops *StrMech) FindRegExIndex(
 
 // GetReader - Returns an io.Reader which will read the private
 // member data element StrMech.stringData.
-func (sops *StrMech) GetReader() io.Reader {
+func (sMech *StrMech) GetReader() io.Reader {
 	var stringData string
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
-	stringData = sops.stringData
+	stringData = sMech.stringData
 
 	return strings.NewReader(stringData)
 }
 
 // GetSoftwareVersion - Returns the software version for package 'strops'.
-func (sops StrMech) GetSoftwareVersion() string {
+func (sMech StrMech) GetSoftwareVersion() string {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	return "3.0.0"
 }
 
 // GetStringData - Returns the current value of internal
 // member string, StrMech.stringData
-func (sops *StrMech) GetStringData() string {
+func (sMech *StrMech) GetStringData() string {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	var output string
 
-	output = sops.stringData
-	sops.cntBytesWritten = 0
-	sops.cntBytesRead = 0
+	output = sMech.stringData
+	sMech.cntBytesWritten = 0
+	sMech.cntBytesRead = 0
 
 	return output
 }
@@ -1291,18 +1291,18 @@ func (sops *StrMech) GetStringData() string {
 //
 //    'actualBytes' is now equal to "valid"
 //
-func (sops *StrMech) GetValidBytes(
+func (sMech *StrMech) GetValidBytes(
 	targetBytes,
 	validBytes []byte,
 	ePrefix string) ([]byte, error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.GetValidBytes() "
 
@@ -1387,20 +1387,20 @@ func (sops *StrMech) GetValidBytes(
 //     actualRunes is now equal to string(actualRunes) == "valid"
 //
 //
-func (sops *StrMech) GetValidRunes(
+func (sMech *StrMech) GetValidRunes(
 	targetRunes []rune,
 	validRunes []rune,
 	ePrefix string) (
 	[]rune,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.GetValidRunes() "
 
@@ -1480,20 +1480,20 @@ func (sops *StrMech) GetValidRunes(
 //  'actualStr' is now equal to "valid"
 //
 //
-func (sops *StrMech) GetValidString(
+func (sMech *StrMech) GetValidString(
 	targetStr string,
 	validRunes []rune,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.GetValidString() "
 
@@ -1509,15 +1509,15 @@ func (sops *StrMech) GetValidString(
 // white space (contiguous spaces), this method will return 'true'.
 //
 // Otherwise, a value of false is returned.
-func (sops *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
+func (sMech *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1640,7 +1640,7 @@ func (sops *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 //  'strJustified' is now equal to "     12345"
 //  The string length of 'strJustified' is 10
 //
-func (sops *StrMech) JustifyTextInStrField(
+func (sMech *StrMech) JustifyTextInStrField(
 	strToJustify string,
 	fieldLen int,
 	textJustify TextJustify,
@@ -1648,13 +1648,13 @@ func (sops *StrMech) JustifyTextInStrField(
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.JustifyTextInStrField() "
 
@@ -1670,15 +1670,15 @@ func (sops *StrMech) JustifyTextInStrField(
 // LowerCaseFirstLetter - Finds the first alphabetic character
 // in a string (a-z A-Z) and converts it to lower case.
 //
-func (sops *StrMech) LowerCaseFirstLetter(str string) string {
+func (sMech *StrMech) LowerCaseFirstLetter(str string) string {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -1740,20 +1740,20 @@ func (sops *StrMech) LowerCaseFirstLetter(str string) string {
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrMech) MakeSingleCharString(
+func (sMech *StrMech) MakeSingleCharString(
 	charRune rune,
 	strLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.MakeSingleCharString() "
 
@@ -1768,15 +1768,15 @@ func (sops *StrMech) MakeSingleCharString(
 // NewPtr - Returns a pointer to a new instance of
 // StrMech. Useful for cases requiring io.Reader
 // and io.Writer.
-func (sops StrMech) NewPtr() *StrMech {
+func (sMech StrMech) NewPtr() *StrMech {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sopsNew := StrMech{}
 
@@ -1796,15 +1796,15 @@ func (sops StrMech) NewPtr() *StrMech {
 // StrMech{}.Ptr().GetReader()
 //
 //
-func (sops StrMech) Ptr() *StrMech {
+func (sMech StrMech) Ptr() *StrMech {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sopsNew := StrMech{}
 
@@ -1823,22 +1823,22 @@ func (sops StrMech) Ptr() *StrMech {
 // 'StrMech.stringData' can be accessed through Getter an Setter methods,
 // GetStringData() and SetStringData()
 //
-func (sops *StrMech) Read(p []byte) (n int, err error) {
+func (sMech *StrMech) Read(p []byte) (n int, err error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix := "StrMech.Read() "
 
 	sOpsElectron := strOpsElectron{}
 
 	return sOpsElectron.readBytes(
-		sops,
+		sMech,
 		p,
 		ePrefix)
 
@@ -1880,19 +1880,19 @@ func (sops *StrMech) Read(p []byte) (n int, err error) {
 //       'bytes' after 'extractedString'. If no more strings exist in the
 //       the byte array, 'nextStartIdx' will be set to -1.
 //
-func (sops *StrMech) ReadStringFromBytes(
+func (sMech *StrMech) ReadStringFromBytes(
 	bytes []byte,
 	startIdx int) (
 	extractedStr string,
 	nextStartIdx int) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsElectron := strOpsElectron{}
 
@@ -1967,7 +1967,7 @@ func (sops *StrMech) ReadStringFromBytes(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrMech) RemoveStringChar(
+func (sMech *StrMech) RemoveStringChar(
 	targetStr string,
 	charToRemove rune,
 	maxNumOfCharDeletions int,
@@ -1976,13 +1976,13 @@ func (sops *StrMech) RemoveStringChar(
 	numOfDeletions int,
 	err error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.RemoveStringChar() "
 
@@ -2081,20 +2081,20 @@ func (sops *StrMech) RemoveStringChar(
 //
 //  actualRunes = "1A2B3C4D5E6"
 //
-func (sops *StrMech) ReplaceBytes(
+func (sMech *StrMech) ReplaceBytes(
 	targetBytes []byte,
 	replacementBytes [][]byte,
 	ePrefix string) (
 	[]byte,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ReplaceBytes() "
 
@@ -2186,20 +2186,20 @@ func (sops *StrMech) ReplaceBytes(
 //  'actualStr' is now equal to "Hello World"
 //
 //
-func (sops *StrMech) ReplaceMultipleStrs(
+func (sMech *StrMech) ReplaceMultipleStrs(
 	targetStr string,
 	replaceArray [][]string,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ReplaceMultipleStrs() "
 
@@ -2240,17 +2240,17 @@ func (sops *StrMech) ReplaceMultipleStrs(
 //       'replacementStr' for the new line character in
 //       'targetStr'.
 //
-func (sops *StrMech) ReplaceNewLines(
+func (sMech *StrMech) ReplaceNewLines(
 	targetStr string,
 	replacementStr string) string {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	if len(targetStr) == 0 {
 		return targetStr
@@ -2382,20 +2382,20 @@ func (sops *StrMech) ReplaceNewLines(
 //  Original testStr := "1a2b3c4d5e6"
 //  actualStr is now equal to "123456"
 //
-func (sops *StrMech) ReplaceRunes(
+func (sMech *StrMech) ReplaceRunes(
 	targetRunes []rune,
 	replacementRunes [][]rune,
 	ePrefix string) (
 	[]rune,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ReplaceRunes() "
 
@@ -2479,7 +2479,7 @@ func (sops *StrMech) ReplaceRunes(
 //       'ePrefix' (error prefix) will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (sops *StrMech) ReplaceStringChar(
+func (sMech *StrMech) ReplaceStringChar(
 	targetStr string,
 	charToReplace rune,
 	replacementChar rune,
@@ -2489,13 +2489,13 @@ func (sops *StrMech) ReplaceStringChar(
 	int,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ReplaceStringChar() "
 
@@ -2593,20 +2593,20 @@ func (sops *StrMech) ReplaceStringChar(
 //
 //  actualStr is now equal to = "123456"
 //
-func (sops *StrMech) ReplaceStringChars(
+func (sMech *StrMech) ReplaceStringChars(
 	targetStr string,
 	replacementRunes [][]rune,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.ReplaceStringChars() "
 
@@ -2622,21 +2622,21 @@ func (sops *StrMech) ReplaceStringChars(
 // string data element, StrMech.stringData. It
 // also zeros internal fields sops.cntBytesWritten
 // and sops.cntBytesRead.
-func (sops *StrMech) SetStringData(str string) {
+func (sMech *StrMech) SetStringData(str string) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
-	sops.stringData = str
+	sMech.stringData = str
 
-	sops.cntBytesWritten = 0
+	sMech.cntBytesWritten = 0
 
-	sops.cntBytesRead = 0
+	sMech.cntBytesRead = 0
 }
 
 // StrCenterInStrLeft - returns a string which includes a left pad blank string
@@ -2710,20 +2710,20 @@ func (sops *StrMech) SetStringData(str string) {
 //    Returned String = "@@@@@Hello" or "     Hello"
 //
 //
-func (sops *StrMech) StrCenterInStrLeft(
+func (sMech *StrMech) StrCenterInStrLeft(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.StrCenterInStrLeft() "
 
@@ -2806,18 +2806,18 @@ func (sops *StrMech) StrCenterInStrLeft(
 //  'Hello' is centered in a field of length 15
 //  with left and right pad of 5-spaces.
 //
-func (sops *StrMech) StrCenterInStr(
+func (sMech *StrMech) StrCenterInStr(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (string, error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.StrCenterInStr() "
 
@@ -2832,16 +2832,16 @@ func (sops *StrMech) StrCenterInStr(
 // StrGetRuneCnt - Uses utf8 Rune Count
 // function to return the number of characters
 // in a string.
-func (sops *StrMech) StrGetRuneCnt(
+func (sMech *StrMech) StrGetRuneCnt(
 	targetStr string) int {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -2851,16 +2851,16 @@ func (sops *StrMech) StrGetRuneCnt(
 // StrGetCharCnt - Uses the 'len' method to
 // return the number of rune characters in a
 // string.
-func (sops *StrMech) StrGetCharCnt(
+func (sMech *StrMech) StrGetCharCnt(
 	targetStr string) int {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -2928,19 +2928,19 @@ func (sops *StrMech) StrGetCharCnt(
 //   actualString is now equal to "Some@String"
 //   actualStrLen is now equal to 11
 //
-func (sops *StrMech) StripBadChars(
+func (sMech *StrMech) StripBadChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
 	strLen int) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3024,19 +3024,19 @@ func (sops *StrMech) StripBadChars(
 //  actualString is now equal to "SomeString"
 //  actualStrLen is now equal to 10
 //
-func (sops *StrMech) StripLeadingChars(
+func (sMech *StrMech) StripLeadingChars(
 	targetStr string,
 	badChars []string) (
 	cleanStr string,
 	strLen int) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3124,17 +3124,17 @@ func (sops *StrMech) StripLeadingChars(
 //  actualString is now equal to "SomeString"
 //  actualStrLen is now equal to 10
 //
-func (sops *StrMech) StripTrailingChars(
+func (sMech *StrMech) StripTrailingChars(
 	targetStr string,
 	badChars []string) (cleanStr string, strLen int) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3217,20 +3217,20 @@ func (sops *StrMech) StripTrailingChars(
 //  The string length of 'justifiedStr' is 15
 //
 //
-func (sops *StrMech) StrLeftJustify(
+func (sMech *StrMech) StrLeftJustify(
 	strToJustify string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.StrLeftJustify() "
 
@@ -3328,18 +3328,18 @@ func (sops *StrMech) StrLeftJustify(
 //  padStr + strToCenter will yield a centered string.
 //
 //
-func (sops *StrMech) StrPadLeftToCenter(
+func (sMech *StrMech) StrPadLeftToCenter(
 	strToCenter string,
 	fieldLen int,
 	ePrefix string) (string, error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.StrPadLeftToCenter() "
 
@@ -3433,20 +3433,20 @@ func (sops *StrMech) StrPadLeftToCenter(
 //  The string length of 'strRightJustified' is 10
 //
 //
-func (sops *StrMech) StrRightJustify(
+func (sMech *StrMech) StrRightJustify(
 	strToJustify string,
 	fieldLen int,
 	ePrefix string) (
 	string,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.StrRightJustify() "
 
@@ -3556,7 +3556,7 @@ func (sops *StrMech) StrRightJustify(
 //    resultSt is now equal to "!!Hello!!!World!!"
 //    numOfReplacements is equal to '7'
 //
-func (sops *StrMech) SwapRune(
+func (sMech *StrMech) SwapRune(
 	targetStr string,
 	oldRune rune,
 	newRune rune,
@@ -3566,13 +3566,13 @@ func (sops *StrMech) SwapRune(
 	int,
 	error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.SwapRune() "
 
@@ -3659,20 +3659,20 @@ func (sops *StrMech) SwapRune(
 //  returned string (rStr) now equal to "Hello World"
 //
 //
-func (sops StrMech) TrimMultipleChars(
+func (sMech StrMech) TrimMultipleChars(
 	targetStr string,
 	trimChar rune,
 	ePrefix string) (
 	rStr string,
 	err error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.TrimMultipleChars() "
 
@@ -3753,20 +3753,20 @@ func (sops StrMech) TrimMultipleChars(
 //  result is now equal to "Hello WorlXd"
 //
 //
-func (sops StrMech) TrimStringEnds(
+func (sMech StrMech) TrimStringEnds(
 	targetStr string,
 	trimChar rune,
 	ePrefix string) (
 	rStr string,
 	err error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	ePrefix += "StrMech.TrimStringEnds() "
 
@@ -3815,16 +3815,16 @@ func (sops StrMech) TrimStringEnds(
 //  'actualStr' is now equal to "How now brown cow."
 //
 //
-func (sops *StrMech) UpperCaseFirstLetter(
+func (sMech *StrMech) UpperCaseFirstLetter(
 	str string) string {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsQuark := strOpsQuark{}
 
@@ -3842,20 +3842,20 @@ func (sops *StrMech) UpperCaseFirstLetter(
 // 'StrMech.stringData' can be accessed through 'Getter' and
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
 //
-func (sops *StrMech) Write(p []byte) (n int, err error) {
+func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
-	if sops.stringDataMutex == nil {
-		sops.stringDataMutex = new(sync.Mutex)
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	sops.stringDataMutex.Lock()
+	sMech.stringDataMutex.Lock()
 
-	defer sops.stringDataMutex.Unlock()
+	defer sMech.stringDataMutex.Unlock()
 
 	sOpsElectron := strOpsElectron{}
 
 	return sOpsElectron.write(
-		sops,
+		sMech,
 		p,
 		"StrMech.Write() ")
 }
