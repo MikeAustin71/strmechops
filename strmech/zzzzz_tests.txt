@@ -677,5 +677,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 93.6% of statements
-ok  	MikeAustin71/strmechops/strmech	2.062s
+coverage: 92.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.934s

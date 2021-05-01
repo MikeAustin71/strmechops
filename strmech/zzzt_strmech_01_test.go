@@ -39,6 +39,8 @@ func TestDataFieldProfileDto_ConvertToErrorState_01(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_01"
+
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -47,7 +49,11 @@ func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
 	//         012345678901234567890123456789012345678901234567890
 	expected := "Lorem ipsum dolor sit amet, consectetur%adipiscing elit.%"
 
-	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 40, '\n')
+	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(
+		tstStr,
+		40,
+		'\n',
+		thisFuncName)
 
 	if err != nil {
 		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
@@ -65,6 +71,8 @@ func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_02(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_02"
+
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
 	tstStr := "Did you know? The Cow Jumped Over The Moon!"
@@ -74,7 +82,11 @@ func TestStrOps_BreakTextAtLineLength_02(t *testing.T) {
 	expected := "Did you know? The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
+	actualTxt, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(tstStr,
+			20,
+			'\n',
+			thisFuncName)
 
 	if err != nil {
 		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
@@ -91,6 +103,8 @@ func TestStrOps_BreakTextAtLineLength_02(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_03(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_03()"
+
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
 	tstStr := "Did you know? XX The Cow Jumped Over The Moon!"
@@ -100,7 +114,12 @@ func TestStrOps_BreakTextAtLineLength_03(t *testing.T) {
 	expected := "Did you know? XX The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
+	actualTxt, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			20,
+			'\n',
+			thisFuncName)
 
 	if err != nil {
 		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
@@ -117,6 +136,8 @@ func TestStrOps_BreakTextAtLineLength_03(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_04(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_04()"
+
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
 	tstStr := "       Did you know? The Cow Jumped Over The Moon!"
@@ -126,7 +147,12 @@ func TestStrOps_BreakTextAtLineLength_04(t *testing.T) {
 	expected := "Did you know? The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 20, '\n')
+	actualTxt, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			20,
+			'\n',
+			thisFuncName)
 
 	if err != nil {
 		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
@@ -142,6 +168,8 @@ func TestStrOps_BreakTextAtLineLength_04(t *testing.T) {
 }
 
 func TestStrOps_BreakTextAtLineLength_05(t *testing.T) {
+
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_05()"
 
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
@@ -176,7 +204,12 @@ func TestStrOps_BreakTextAtLineLength_05(t *testing.T) {
 		"pellentesque.%Proin vestibulum accumsan erat vel%commodo. Maecenas sapien mauris,%faucibus nec " +
 		"consectetur eu, ultricies%sit amet elit. Suspendisse.%"
 
-	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 40, '\n')
+	actualTxt, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			40,
+			'\n',
+			thisFuncName)
 
 	if err != nil {
 		t.Errorf("Error returned from StrMech{}.BreakTextAtLineLength("+
@@ -193,11 +226,18 @@ func TestStrOps_BreakTextAtLineLength_05(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_06(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_06()"
+
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
 
-	_, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 0, '\n')
+	_, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			0,
+			'\n',
+			thisFuncName)
 
 	if err == nil {
 		t.Error("Error: Expected error return from StrMech{}.BreakTextAtLineLength(...). " +
@@ -207,11 +247,18 @@ func TestStrOps_BreakTextAtLineLength_06(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_07(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_07()"
+
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
 
-	_, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 50, 0)
+	_, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			50,
+			0,
+			thisFuncName)
 
 	if err == nil {
 		t.Error("Error: Expected error return from StrMech{}.BreakTextAtLineLength(...). " +
@@ -221,9 +268,16 @@ func TestStrOps_BreakTextAtLineLength_07(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_08(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_08()"
+
 	tstStr := "                           "
 
-	returnStr, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 10, '\n')
+	returnStr, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			10,
+			'\n',
+			thisFuncName)
 
 	if err != nil {
 		t.Errorf("Error returned by StrMech{}.BreakTextAtLineLength(...).\n"+
@@ -238,9 +292,16 @@ func TestStrOps_BreakTextAtLineLength_08(t *testing.T) {
 
 func TestStrOps_BreakTextAtLineLength_09(t *testing.T) {
 
+	thisFuncName := "TestStrOps_BreakTextAtLineLength_09()"
+
 	tstStr := ""
 
-	_, err := StrMech{}.NewPtr().BreakTextAtLineLength(tstStr, 10, '\n')
+	_, err := StrMech{}.NewPtr().
+		BreakTextAtLineLength(
+			tstStr,
+			10,
+			'\n',
+			thisFuncName)
 
 	if err == nil {
 		t.Error("Expected an error return from StrMech{}.BreakTextAtLineLength(tstStr, 10, '\\n')" +

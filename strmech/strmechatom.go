@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
 )
@@ -60,7 +61,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 	targetStr string,
 	lineLength int,
 	lineDelimiter rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -72,11 +73,15 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 
 	defer sMechAtom.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechAtom.breakTextAtLineLength() "
+	ePrefix.SetEPref(
+		"strMechAtom." +
+			"breakTextAtLineLength()")
 
 	targetLen := len(targetStr)
 
@@ -84,20 +89,23 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 		return "",
 			fmt.Errorf("%v\n"+
 				"Error: Input parameter 'targetStr' is a ZERO LENGTH STRING!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	if lineLength < 5 {
 		return "",
-			fmt.Errorf(ePrefix+"Error: Input parameter 'lineLength' is LESS THAN 5-CHARACTERS! "+
-				"lineLength='%v' ", lineLength)
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'lineLength' is LESS THAN 5-CHARACTERS! "+
+				"lineLength='%v' ",
+				ePrefix.String(),
+				lineLength)
 	}
 
 	if lineDelimiter == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
 				"Error: Input parameter 'lineDelimiter' is ZERO VALUE!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	sOpsQuark := strMechQuark{}
@@ -126,10 +134,17 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 
 		if err != nil {
 			return "",
-				fmt.Errorf(ePrefix+
-					"Error returned by sops.FindFirstNonSpaceChar(targetStr, begIdx, actualLastIdx). "+
-					"targetStr='%v' begIdx='%v' actualLastIdx='%v'   Error='%v' ",
-					targetStr, begIdx, actualLastIdx, err.Error())
+				fmt.Errorf("%v\n"+
+					"Error returned by sops.FindFirstNonSpaceChar(targetStr, begIdx, actualLastIdx)\n"+
+					"targetStr='%v'\n"+
+					"begIdx='%v'\n"+
+					"actualLastIdx='%v'\n"+
+					"Error='%v'\n",
+					ePrefix.String(),
+					targetStr,
+					begIdx,
+					actualLastIdx,
+					err.Error())
 		}
 
 		if begIdx == -1 {
@@ -163,10 +178,17 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 
 		if err != nil {
 			return "",
-				fmt.Errorf(ePrefix+
-					"Error returned by sops.FindLastWord(targetStr,begIdx, actualLastIdx). "+
-					"targetStr='%v' begIdx='%v' actualLastIdx='%v'   Error='%v' ",
-					targetStr, begIdx, actualLastIdx, err.Error())
+				fmt.Errorf("%v\n"+
+					"Error returned by sops.FindLastWord(targetStr,begIdx, actualLastIdx).\n"+
+					"targetStr='%v'\n"+
+					"begIdx='%v'\n"+
+					"actualLastIdx='%v'\n"+
+					"Error='%v'\n",
+					ePrefix.String(),
+					targetStr,
+					begIdx,
+					actualLastIdx,
+					err.Error())
 		}
 
 		if isAllSpaces {
@@ -237,12 +259,14 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 
 				if err != nil {
 					return "",
-						fmt.Errorf(ePrefix+
+						fmt.Errorf("%v\n"+
 							"Error returned by sOpsQuark.findLastNonSpaceChar(targetStr,begIdx, beginWrdIdx-1).\n"+
 							"targetStr='%v'\n"+
-							"begIdx='%v'\nactualLastIdx='%v'\n"+
-							"Error='%v' ",
-							targetStr, begIdx, actualLastIdx, err.Error())
+							"begIdx='%v'\n"+
+							"actualLastIdx='%v'\n"+
+							"Error='%v'\n",
+							ePrefix.String(), targetStr, begIdx,
+							actualLastIdx, err.Error())
 				}
 
 				if idx == -1 {
@@ -1440,4 +1464,22 @@ func (sMechAtom *strMechAtom) extractNumericDigits(
 	}
 
 	return nStrDto, nil
+}
+
+// ptr - Returns a pointer to a new instance of
+// strMechAtom.
+//
+func (sMechAtom *strMechAtom) ptr() *strMechAtom {
+
+	if sMechAtom.lock == nil {
+		sMechAtom.lock = new(sync.Mutex)
+	}
+
+	sMechAtom.lock.Lock()
+
+	defer sMechAtom.lock.Unlock()
+
+	return &strMechAtom{
+		lock: new(sync.Mutex),
+	}
 }

@@ -331,7 +331,7 @@ func (dfTrailDelimiter DataFieldTrailingDelimiterType) XParseString(
 	return dfTrailType, nil
 }
 
-// Value - Returns the value of the DataFieldTrailingDelimiterType instance
+// XValueInt Value - Returns the value of the DataFieldTrailingDelimiterType instance
 // as type int.
 //
 func (dfTrailDelimiter DataFieldTrailingDelimiterType) XValueInt() int {

@@ -90,15 +90,15 @@ of 93%.
 
 Test coverage and outcomes are documented in:
 
-[github.com/MikeAustin71/stringopsgo/strops/v3/xx_tests.txt](./strops/v3/xx_tests.txt)
+[github.com/MikeAustin71/strmechops/strmech/zzzzz_tests.txt](./zzzzz_tests.txt)
 
-[How To Run Tests Documentation](./strops/v3/wt_HowToRunTests.md)
+[How To Run Tests Documentation](./wt_HowToRunTests.md)
 
 ## Version
 The latest version is Version 3.0.0. Like Version 2+, Version 3+ also
 supports *Go* modules. 
 
-[Version 3.0.0 Release Notes](./strops/v3/releasenotes.md)
+[Version 3.0.0 Release Notes](./releasenotes.md)
 
 ## License
 

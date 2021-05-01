@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"math"
 	"regexp"
 	"sort"
@@ -213,7 +214,7 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 	targetStr string,
 	startIdx,
 	endIdx int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	int,
 	error) {
 
@@ -225,11 +226,15 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.findLastNonSpaceChar() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"findLastNonSpaceChar()")
 
 	targetStrLen := len(targetStr)
 
@@ -237,37 +242,44 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 		return -1,
 			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'targetStr' is a ZERO LENGTH STRING!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	if startIdx < 0 {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'startIdx' is LESS THAN ZERO!\n"+
-				"startIdx='%v'\n", startIdx)
+				"startIdx='%v'\n",
+				ePrefix.String(),
+				startIdx)
 	}
 
 	if endIdx < 0 {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'endIdx' is LESS THAN ZERO!\n"+
-				"startIdx='%v' ", startIdx)
+				"startIdx='%v'\n",
+				ePrefix.String(),
+				startIdx)
 	}
 
 	if endIdx >= targetStrLen {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'endIdx' is greater than target string length.\n"+
 				"INDEX OUT OF RANGE!\n"+
 				"endIdx='%v' target string length='%v'\n",
-				endIdx, targetStrLen)
+				ePrefix.String(),
+				endIdx,
+				targetStrLen)
 	}
 
 	if startIdx > endIdx {
-		return -1, fmt.Errorf(ePrefix+"\n"+
+		return -1, fmt.Errorf("%v\n"+
 			"ERROR: Invalid input parameter.\n"+
 			"'startIdx' is GREATER THAN 'endIdx'\n"+
 			"startIdx='%v' endIdx='%v'\n",
+			ePrefix.String(),
 			startIdx, endIdx)
 	}
 
@@ -325,11 +337,17 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 //       marked by the input parameter, 'startIdx'.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -352,15 +370,15 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) findLastSpace(
 	targetStr string,
 	startIdx int,
 	endIdx int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	int,
 	error) {
 
@@ -372,11 +390,15 @@ func (sMechQuark *strMechQuark) findLastSpace(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.findLastSpace() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"findLastSpace()")
 
 	targetStrLen := len(targetStr)
 
@@ -384,39 +406,47 @@ func (sMechQuark *strMechQuark) findLastSpace(
 		return -1,
 			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'targetStr' is a ZERO LENGTH STRING!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	if startIdx < 0 {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'startIdx' is LESS THAN ZERO!\n"+
-				"startIdx='%v'\n", startIdx)
+				"startIdx='%v'\n",
+				ePrefix.String(),
+				startIdx)
 	}
 
 	if endIdx < 0 {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'endIdx' is LESS THAN ZERO!\n"+
-				"startIdx='%v'\n", startIdx)
+				"startIdx='%v'\n",
+				ePrefix.String(),
+				startIdx)
 	}
 
 	if endIdx >= targetStrLen {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter. 'endIdx' is greater than target string length.\n"+
 				"INDEX OUT OF RANGE!\n"+
 				"endIdx='%v'\n"+
 				"target string length='%v'\n",
-				endIdx, targetStrLen)
+				ePrefix.String(),
+				endIdx,
+				targetStrLen)
 	}
 
 	if startIdx > endIdx {
 		return -1,
-			fmt.Errorf(ePrefix+"\n"+
+			fmt.Errorf("%v\n"+
 				"ERROR: Invalid input parameter.\n"+
 				"'startIdx' is GREATER THAN 'endIdx'\n"+
-				"startIdx='%v' endIdx='%v'\n", startIdx, endIdx)
+				"startIdx='%v' endIdx='%v'\n",
+				ePrefix.String(),
+				startIdx, endIdx)
 	}
 
 	for endIdx >= startIdx {
@@ -546,7 +576,7 @@ func (sMechQuark *strMechQuark) findLastWord(
 	targetStr string,
 	startIndex int,
 	endIndex int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	beginWrdIdx int,
 	endWrdIdx int,
 	isAllOneWord bool,
@@ -561,11 +591,15 @@ func (sMechQuark *strMechQuark) findLastWord(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.findLastNonSpaceChar() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"findLastNonSpaceChar()")
 
 	beginWrdIdx = -1
 	endWrdIdx = -1
@@ -578,7 +612,7 @@ func (sMechQuark *strMechQuark) findLastWord(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'targetStr' is an EMPTY STRING!\n",
-			ePrefix)
+			ePrefix.String())
 
 		return beginWrdIdx,
 			endWrdIdx,
@@ -589,10 +623,12 @@ func (sMechQuark *strMechQuark) findLastWord(
 
 	if startIndex < 0 {
 
-		err = fmt.Errorf(ePrefix+"\n"+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: Invalid input parameter.\n"+
 			"'startIndex' is LESS THAN ZERO!\n"+
-			"startIndex='%v'\n", startIndex)
+			"startIndex='%v'\n",
+			ePrefix.String(),
+			startIndex)
 
 		return beginWrdIdx,
 			endWrdIdx,
@@ -602,10 +638,11 @@ func (sMechQuark *strMechQuark) findLastWord(
 	}
 
 	if endIndex < 0 {
-		err = fmt.Errorf(ePrefix+"\n"+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: Invalid input parameter.\n"+
 			"'endIndex' is LESS THAN ZERO!\n"+
 			"startIndex='%v'\n",
+			ePrefix.String(),
 			startIndex)
 
 		return beginWrdIdx,
@@ -617,11 +654,12 @@ func (sMechQuark *strMechQuark) findLastWord(
 
 	if endIndex >= targetStrLen {
 
-		err = fmt.Errorf(ePrefix+"\n"+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: Invalid input parameter. 'endIndex' is greater than\n"+
 			"target string length. INDEX OUT OF RANGE!\n"+
 			"endIndex='%v'\n"+
 			"target string length='%v'\n",
+			ePrefix.String(),
 			endIndex,
 			targetStrLen)
 
@@ -633,11 +671,13 @@ func (sMechQuark *strMechQuark) findLastWord(
 	}
 
 	if startIndex > endIndex {
-		err = fmt.Errorf(ePrefix+"\n"+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: Invalid input parameter.\n"+
 			"'startIndex' is GREATER THAN 'endIndex'.\n"+
 			"startIndex='%v' endIndex='%v'\n",
-			startIndex, endIndex)
+			ePrefix.String(),
+			startIndex,
+			endIndex)
 
 		return beginWrdIdx,
 			endWrdIdx,
@@ -1236,6 +1276,24 @@ func (sMechQuark *strMechQuark) makeSingleCharString(
 	}
 
 	return b.String(), nil
+}
+
+// ptr - Returns a pointer to a new instance of
+// strMechQuark.
+//
+func (sMechQuark strMechQuark) ptr() *strMechQuark {
+
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
+	}
+
+	sMechQuark.lock.Lock()
+
+	defer sMechQuark.lock.Unlock()
+
+	return &strMechQuark{
+		lock: new(sync.Mutex),
+	}
 }
 
 // removeStringChar - Removes or deletes a specified character

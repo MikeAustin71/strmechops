@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"strings"
 	"sync"
@@ -39,11 +40,17 @@ type strMechElectron struct {
 //       the ending index for the search.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -63,11 +70,15 @@ type strMechElectron struct {
 //       'nil'. If an error is encountered this value will
 //       contain the error message.
 //
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
 func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 	targetStr string,
 	startIndex,
 	endIndex int,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	int,
 	error) {
 
@@ -79,38 +90,56 @@ func (sMechElectron *strMechElectron) findFirstNonSpaceChar(
 
 	defer sMechElectron.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechElectron.findFirstNonSpaceChar()\n"
+	ePrefix.SetEPref(
+		"strMechElectron." +
+			"findFirstNonSpaceChar()")
 
-	sOpsQuark := strMechQuark{}
+	sMechQuark := strMechQuark{}
 
-	if sOpsQuark.isEmptyOrWhiteSpace(targetStr) {
+	if sMechQuark.isEmptyOrWhiteSpace(targetStr) {
 		return -1, nil
 	}
+
 	targetStrLen := len(targetStr)
 
 	if startIndex < 0 {
-		return -1, fmt.Errorf(ePrefix+"ERROR: Invalid input parameter. 'startIndex' is LESS THAN ZERO! "+
-			"startIndex='%v' ", startIndex)
+		return -1, fmt.Errorf("%v\n"+
+			"ERROR: Invalid input parameter. 'startIndex' is LESS THAN ZERO! "+
+			"startIndex='%v' ",
+			ePrefix.String(),
+			startIndex)
 	}
 
 	if endIndex < 0 {
-		return -1, fmt.Errorf(ePrefix+"ERROR: Invalid input parameter. 'endIndex' is LESS THAN ZERO! "+
-			"startIndex='%v' ", startIndex)
+		return -1, fmt.Errorf("%v\n"+
+			"ERROR: Invalid input parameter. 'endIndex' is LESS THAN ZERO! "+
+			"startIndex='%v' ",
+			ePrefix.String(),
+			startIndex)
 	}
 
 	if endIndex >= targetStrLen {
-		return -1, fmt.Errorf(ePrefix+"ERROR: Invalid input parameter. 'endIndex' is greater than "+
+		return -1, fmt.Errorf("%v\n"+
+			"ERROR: Invalid input parameter. 'endIndex' is greater than "+
 			"target string length. INDEX OUT OF RANGE! endIndex='%v' target string length='%v' ",
-			endIndex, targetStrLen)
+			ePrefix.String(),
+			endIndex,
+			targetStrLen)
 	}
 
 	if startIndex > endIndex {
-		return -1, fmt.Errorf(ePrefix+"ERROR: Invalid input parameter. 'startIndex' is GREATER THAN 'endIndex' "+
-			"startIndex='%v' endIndex='%v' ", startIndex, endIndex)
+		return -1, fmt.Errorf("%v\n"+
+			"ERROR: Invalid input parameter. 'startIndex' is GREATER THAN 'endIndex' "+
+			"startIndex='%v' endIndex='%v' ",
+			ePrefix.String(),
+			startIndex,
+			endIndex)
 	}
 
 	idx := startIndex
@@ -218,6 +247,24 @@ func (sMechElectron *strMechElectron) getValidString(
 	}
 
 	return string(actualValidRunes), err
+}
+
+// ptr - Returns a pointer to a new instance of
+// strMechElectron.
+//
+func (sMechElectron strMechElectron) ptr() *strMechElectron {
+
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
+	}
+
+	sMechElectron.lock.Lock()
+
+	defer sMechElectron.lock.Unlock()
+
+	return &strMechElectron{
+		lock: new(sync.Mutex),
+	}
 }
 
 // readBytes - Implements io.Reader interface for type StrMech.

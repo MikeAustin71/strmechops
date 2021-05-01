@@ -8,6 +8,7 @@
 package strmech
 
 import (
+	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"strings"
 	"sync"
@@ -62,11 +63,52 @@ type StrMech struct {
 //     - The line delimiter character which will be inserted at the
 //       end of a line break.
 //
+//       Note: If the caller specifies a line length of 50, the
+//       line delimiter character may be placed in the 51st
+//       character position depending upon the word breaks.
 //
-//  Note: If the caller specifies a line length of 50, the line delimiter
-//  character may be placed in the 51st character position depending upon
-//  the word breaks.
 //
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
 //
 //
 // ------------------------------------------------------------------------
@@ -78,16 +120,22 @@ type StrMech struct {
 //       parameter will contain the text with line breaks delimited
 //       by the input parameter 'lineDelimiter'.
 //
+//
 //  error
 //     - If this method completes successfully, the returned error
 //       Type is set equal to 'nil'. If errors are encountered during
 //       processing, the returned error Type will encapsulate an error
 //       message.
 //
+//       If an error message is returned, the input parameter
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
+//
 func (sMech *StrMech) BreakTextAtLineLength(
 	targetStr string,
 	lineLength int,
-	lineDelimiter rune) (
+	lineDelimiter rune,
+	errorPrefix interface{}) (
 	string,
 	error) {
 
@@ -99,7 +147,18 @@ func (sMech *StrMech) BreakTextAtLineLength(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix := "StrMech.BreakTextAtLineLength() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.BreakTextAtLineLength()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
 
 	sOpsAtom := strMechAtom{}
 
@@ -733,11 +792,47 @@ func (sMech *StrMech) ExtractNumericDigits(
 //       the ending index for the search.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
 //
 //
 // ------------------------------------------------------------------------
@@ -759,14 +854,14 @@ func (sMech *StrMech) ExtractNumericDigits(
 //       an appropriate error message.
 //
 //       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
 //
 func (sMech *StrMech) FindFirstNonSpaceChar(
 	targetStr string,
 	startIndex,
 	endIndex int,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	int,
 	error) {
 
@@ -778,7 +873,18 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.FindFirstNonSpaceChar() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.FindFirstNonSpaceChar()",
+		"")
+
+	if err != nil {
+		return -99, err
+	}
 
 	sOpsElectron := strMechElectron{}
 
@@ -822,11 +928,47 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 //       is actually the starting index for the search.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
 //
 //
 // ------------------------------------------------------------------------
@@ -850,15 +992,14 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 //       an appropriate error message.
 //
 //       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
 //
 func (sMech *StrMech) FindLastNonSpaceChar(
 	targetStr string,
 	startIdx int,
 	endIdx int,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	int,
 	error) {
 
@@ -870,15 +1011,25 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.FindLastNonSpaceChar() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsQuark := strMechQuark{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.FindLastNonSpaceChar()",
+		"")
 
-	return sOpsQuark.findLastNonSpaceChar(
-		targetStr,
-		startIdx,
-		endIdx,
-		ePrefix)
+	if err != nil {
+		return -99, err
+	}
+
+	return strMechQuark{}.ptr().
+		findLastNonSpaceChar(
+			targetStr,
+			startIdx,
+			endIdx,
+			ePrefix)
 }
 
 // FindLastSpace - Returns a string index indicating the last space character (' ') in
@@ -921,11 +1072,47 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 //       marked by the input parameter, 'startIdx'.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
 //
 //
 // ------------------------------------------------------------------------
@@ -949,8 +1136,8 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 //       an appropriate error message.
 //
 //       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -975,7 +1162,7 @@ func (sMech *StrMech) FindLastSpace(
 	targetStr string,
 	startIdx int,
 	endIdx int,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	int,
 	error) {
 
@@ -987,15 +1174,25 @@ func (sMech *StrMech) FindLastSpace(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.FindLastSpace() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsQuark := strMechQuark{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.FindLastSpace()",
+		"")
 
-	return sOpsQuark.findLastSpace(
-		targetStr,
-		startIdx,
-		endIdx,
-		ePrefix)
+	if err != nil {
+		return -99, err
+	}
+
+	return strMechQuark{}.ptr().
+		findLastSpace(
+			targetStr,
+			startIdx,
+			endIdx,
+			ePrefix)
 }
 
 // FindLastWord - Returns the beginning and ending indexes of
@@ -1061,11 +1258,48 @@ func (sMech *StrMech) FindLastSpace(
 //       in 'targetStr'.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
 //
 //
 // ------------------------------------------------------------------------
@@ -1107,14 +1341,15 @@ func (sMech *StrMech) FindLastSpace(
 //       an appropriate error message.
 //
 //       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
 //
 func (sMech *StrMech) FindLastWord(
 	targetStr string,
 	startIndex,
 	endIndex int,
-	ePrefix string) (beginWrdIdx,
+	errorPrefix interface{}) (
+	beginWrdIdx,
 	endWrdIdx int,
 	isAllOneWord,
 	isAllSpaces bool,
@@ -1128,15 +1363,28 @@ func (sMech *StrMech) FindLastWord(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.FindLastWord() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsQuark := strMechQuark{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.FindLastWord()",
+		"")
 
-	return sOpsQuark.findLastWord(
-		targetStr,
-		startIndex,
-		endIndex,
-		ePrefix)
+	if err != nil {
+		return beginWrdIdx,
+			endWrdIdx,
+			isAllOneWord,
+			isAllSpaces,
+			err
+	}
+
+	return strMechQuark{}.ptr().
+		findLastWord(
+			targetStr,
+			startIndex,
+			endIndex,
+			ePrefix)
 }
 
 // FindRegExIndex - returns a two-element slice of integers defining the location
