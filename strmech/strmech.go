@@ -392,11 +392,47 @@ func (sMech StrMech) DoesLastCharExist(
 //       End of line characters will terminate the search for a data field.
 //
 //
-//  ePrefix                    string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
 //
 //
 // ------------------------------------------------------------------------
@@ -436,15 +472,15 @@ func (sMech StrMech) DoesLastCharExist(
 //       parameters and must be populated with valid data.
 //
 //       If an error message is returned, the input parameter
-//       'ePrefix' will be inserted or prefixed at the beginning
-//       of the error message.
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  ePrefix := "TestStrOps_ExtractDataField_01() "
+//  ePrefix := "TestStrOps_ExtractDataField_01()"
 //  endOfLineDelimiters := []string{"\n"}
 //  commentDelimiters := []string{"#"}
 //  leadingFieldDelimiters := []string{
@@ -491,7 +527,7 @@ func (sMech *StrMech) ExtractDataField(
 	trailingFieldSeparators []string,
 	commentDelimiters []string,
 	endOfLineDelimiters []string,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	DataFieldProfileDto,
 	error) {
 
@@ -503,19 +539,29 @@ func (sMech *StrMech) ExtractDataField(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.ExtractDataField() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsAtom := strMechAtom{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ExtractDataField()",
+		"")
 
-	return sOpsAtom.extractDataField(
-		targetStr,
-		leadingKeyWordDelimiters,
-		startIdx,
-		leadingFieldSeparators,
-		trailingFieldSeparators,
-		commentDelimiters,
-		endOfLineDelimiters,
-		ePrefix)
+	if err != nil {
+		return DataFieldProfileDto{}, err
+	}
+
+	return strMechAtom{}.ptr().
+		extractDataField(
+			targetStr,
+			leadingKeyWordDelimiters,
+			startIdx,
+			leadingFieldSeparators,
+			trailingFieldSeparators,
+			commentDelimiters,
+			endOfLineDelimiters,
+			ePrefix)
 }
 
 // ExtractNumericDigits - Examines an input parameter 'targetStr' to identify and extract the

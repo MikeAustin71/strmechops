@@ -476,11 +476,17 @@ func (sMechAtom *strMechAtom) copyOut(
 //                                       End of line characters will terminate the search for a data field.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -520,9 +526,9 @@ func (sMechAtom *strMechAtom) copyOut(
 //       'trailingFieldSeparators' and 'endOfStringDelimiters' are required input
 //       parameters and must be populated with valid data.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' will be inserted or prefixed at the beginning
-//       of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -576,7 +582,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 	trailingFieldSeparators []string,
 	commentDelimiters []string,
 	endOfLineDelimiters []string,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	DataFieldProfileDto,
 	error) {
 
@@ -588,11 +594,15 @@ func (sMechAtom *strMechAtom) extractDataField(
 
 	defer sMechAtom.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechAtom.extractDataField() "
+	ePrefix.SetEPref(
+		"strMechAtom." +
+			"extractDataField()")
 
 	newDataDto := DataFieldProfileDto{}.New()
 	newDataDto.TargetStr = targetStr
@@ -606,21 +616,26 @@ func (sMechAtom *strMechAtom) extractDataField(
 		return newDataDto,
 			fmt.Errorf("%v\n"+
 				"ERROR: Input Parameter 'targetStr' is an EMPTY string!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	if startIdx < 0 {
 		return newDataDto,
-			fmt.Errorf(ePrefix+"ERROR: Input parameter 'startIdx' is less than zero!\n"+
-				"startIdx='%v'\n", startIdx)
+			fmt.Errorf("%v\n"+
+				"ERROR: Input parameter 'startIdx' is less than zero!\n"+
+				"startIdx='%v'\n",
+				ePrefix.String(),
+				startIdx)
 	}
 
 	if startIdx >= lenTargetStr {
 
 		return newDataDto,
-			fmt.Errorf(ePrefix+"ERROR: Input Parameter 'startIdx' is out-of-bounds!\n"+
+			fmt.Errorf("%v\n"+
+				"ERROR: Input Parameter 'startIdx' is out-of-bounds!\n"+
 				"startIdx='%v'\t\tLast TargetStr Index='%v'\n"+
 				"Length Of TargetStr='%v'\n",
+				ePrefix.String(),
 				startIdx, lenTargetStr-1, lenTargetStr)
 	}
 
@@ -632,7 +647,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 			fmt.Errorf("%v\n"+
 				"ERROR: Input Parameter 'leadingFieldSeparators' is a zero length array!\n"+
 				"'leadingFieldSeparators' are required!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	validTestDelimiterExists := false
@@ -651,8 +666,9 @@ func (sMechAtom *strMechAtom) extractDataField(
 		newDataDto.ConvertToErrorState()
 		return newDataDto,
 			fmt.Errorf("%v\n"+
-				"Error: Parameter 'leadingFieldSeparators' Delimiters Array consists entirely of empty strings!\n",
-				ePrefix)
+				"Error: Parameter 'leadingFieldSeparators' Delimiters Array "+
+				"consists entirely of empty strings!\n",
+				ePrefix.String())
 	}
 
 	lenTrailingFieldSeparators := len(trailingFieldSeparators)
@@ -663,7 +679,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 			fmt.Errorf("%v\n"+
 				"ERROR: Input Parameter 'trailingFieldSeparators' is a zero length array!\n"+
 				"'trailingFieldSeparators' are required!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	validTestDelimiterExists = false
@@ -682,7 +698,7 @@ func (sMechAtom *strMechAtom) extractDataField(
 		return newDataDto,
 			fmt.Errorf("%v\n"+
 				"Error: Parameter 'trailingFieldSeparators' Delimiters Array consists entirely of empty strings!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	targetStrRunes := []rune(targetStr)
@@ -722,8 +738,9 @@ func (sMechAtom *strMechAtom) extractDataField(
 			newDataDto.ConvertToErrorState()
 			return newDataDto,
 				fmt.Errorf("%v\n"+
-					"Error: End-Of-Line Delimiters Array consists entirely of empty strings!\n",
-					ePrefix)
+					"Error: End-Of-Line Delimiters Array consists "+
+					"entirely of empty strings!\n",
+					ePrefix.String())
 		}
 
 		if delimiterIdx > -1 {
@@ -785,8 +802,9 @@ func (sMechAtom *strMechAtom) extractDataField(
 			newDataDto.ConvertToErrorState()
 			return newDataDto,
 				fmt.Errorf("%v\n"+
-					"Error: Comment Delimiters Array consists entirely of empty strings!\n",
-					ePrefix)
+					"Error: Comment Delimiters Array consists "+
+					"entirely of empty strings!\n",
+					ePrefix.String())
 		}
 
 		if delimiterIdx > -1 {
@@ -851,8 +869,9 @@ func (sMechAtom *strMechAtom) extractDataField(
 			newDataDto.ConvertToErrorState()
 			return newDataDto,
 				fmt.Errorf("%v\n"+
-					"Error: Leading Key Word Delimiters Array consists entirely of empty strings!\n",
-					ePrefix)
+					"Error: Leading Key Word Delimiters Array "+
+					"consists entirely of empty strings!\n",
+					ePrefix.String())
 		}
 
 		if delimiterIdx == -1 {
