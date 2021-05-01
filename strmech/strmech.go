@@ -792,7 +792,6 @@ func (sMech *StrMech) ExtractDataField(
 //       prefixed at the beginning of the error message.
 //
 //
-//
 // ------------------------------------------------------------------------
 //
 // Example Usage
@@ -1557,7 +1556,7 @@ func (sMech StrMech) GetSoftwareVersion() string {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	return "3.0.0"
+	return "0.0.1"
 }
 
 // GetStringData - Returns the current value of internal
@@ -1606,11 +1605,50 @@ func (sMech *StrMech) GetStringData() string {
 //       bytes. Invalid characters will be discarded.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1629,9 +1667,9 @@ func (sMech *StrMech) GetStringData() string {
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -1652,7 +1690,7 @@ func (sMech *StrMech) GetStringData() string {
 func (sMech *StrMech) GetValidBytes(
 	targetBytes,
 	validBytes []byte,
-	ePrefix string) ([]byte, error) {
+	errorPrefix interface{}) ([]byte, error) {
 
 	if sMech.stringDataMutex == nil {
 		sMech.stringDataMutex = new(sync.Mutex)
@@ -1662,14 +1700,24 @@ func (sMech *StrMech) GetValidBytes(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.GetValidBytes() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
 
-	sOpsQuark := strMechQuark{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.GetValidBytes()",
+		"")
 
-	return sOpsQuark.getValidBytes(
-		targetBytes,
-		validBytes,
-		ePrefix)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	return strMechQuark{}.ptr().
+		getValidBytes(
+			targetBytes,
+			validBytes,
+			ePrefix)
 }
 
 // GetValidRunes - Receives an array of 'targetRunes' which will be examined to determine
@@ -1697,11 +1745,50 @@ func (sMech *StrMech) GetValidBytes(
 //       runes. Invalid characters will be discarded.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Be sure to leave a space at the end of
-//       'ePrefix'.
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1720,9 +1807,9 @@ func (sMech *StrMech) GetValidBytes(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 //
 // ------------------------------------------------------------------------
@@ -1748,7 +1835,7 @@ func (sMech *StrMech) GetValidBytes(
 func (sMech *StrMech) GetValidRunes(
 	targetRunes []rune,
 	validRunes []rune,
-	ePrefix string) (
+	errorPrefix interface{}) (
 	[]rune,
 	error) {
 
@@ -1760,7 +1847,18 @@ func (sMech *StrMech) GetValidRunes(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix += "StrMech.GetValidRunes() "
+	var err error
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.GetValidRunes()",
+		"")
+
+	if err != nil {
+		return []rune{}, err
+	}
 
 	sOpsQuark := strMechQuark{}
 

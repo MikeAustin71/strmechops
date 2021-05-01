@@ -916,11 +916,17 @@ func (sMechQuark *strMechQuark) getRuneCountInStr(
 //                          bytes. Invalid characters will be discarded.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -941,14 +947,14 @@ func (sMechQuark *strMechQuark) getRuneCountInStr(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) getValidBytes(
 	targetBytes []byte,
 	validBytes []byte,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	[]byte,
 	error) {
 
@@ -960,7 +966,15 @@ func (sMechQuark *strMechQuark) getValidBytes(
 
 	defer sMechQuark.lock.Unlock()
 
-	ePrefix += "strMechQuark.getValidBytes() "
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
+	}
+
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"getValidBytes()")
 
 	lenTargetBytes := len(targetBytes)
 
@@ -969,8 +983,9 @@ func (sMechQuark *strMechQuark) getValidBytes(
 	if lenTargetBytes == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetBytes' is a ZERO LENGTH ARRAY!\n",
-				ePrefix)
+				"Error: Input parameter 'targetBytes' is a "+
+				"ZERO LENGTH ARRAY!\n",
+				ePrefix.String())
 	}
 
 	lenValidBytes := len(validBytes)
@@ -978,8 +993,9 @@ func (sMechQuark *strMechQuark) getValidBytes(
 	if lenValidBytes == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'validBytes' is a ZERO LENGTH ARRAY!\n",
-				ePrefix)
+				"Error: Input parameter 'validBytes' is a "+
+				"ZERO LENGTH ARRAY!\n",
+				ePrefix.String())
 	}
 
 	for i := 0; i < lenTargetBytes; i++ {
@@ -1018,11 +1034,17 @@ func (sMechQuark *strMechQuark) getValidBytes(
 //                           runes. Invalid characters will be discarded.
 //
 //
-//  ePrefix             string
-//     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'.
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1040,14 +1062,14 @@ func (sMechQuark *strMechQuark) getValidBytes(
 //       if errors are encountered this return value will contain
 //       an appropriate error message.
 //
-//       If an error message is returned, the input parameter
-//       'ePrefix' (error prefix) will be inserted or prefixed at
-//       the beginning of the error message.
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (sMechQuark *strMechQuark) getValidRunes(
 	targetRunes []rune,
 	validRunes []rune,
-	ePrefix string) (
+	ePrefix *ePref.ErrPrefixDto) (
 	[]rune,
 	error) {
 
@@ -1059,11 +1081,15 @@ func (sMechQuark *strMechQuark) getValidRunes(
 
 	defer sMechQuark.lock.Unlock()
 
-	if len(ePrefix) > 0 {
-		ePrefix += "\n"
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
 	}
 
-	ePrefix += "strMechQuark.getValidRunes() "
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"getValidRunes()")
 
 	lenTargetRunes := len(targetRunes)
 
@@ -1072,8 +1098,9 @@ func (sMechQuark *strMechQuark) getValidRunes(
 	if lenTargetRunes == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetRunes' is a ZERO LENGTH ARRAY!\n",
-				ePrefix)
+				"Error: Input parameter 'targetRunes' is a "+
+				"ZERO LENGTH ARRAY!\n",
+				ePrefix.String())
 	}
 
 	lenValidRunes := len(validRunes)
@@ -1081,8 +1108,9 @@ func (sMechQuark *strMechQuark) getValidRunes(
 	if lenValidRunes == 0 {
 		return output,
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'validRunes' is a ZERO LENGTH ARRAY!\n",
-				ePrefix)
+				"Error: Input parameter 'validRunes' is a "+
+				"ZERO LENGTH ARRAY!\n",
+				ePrefix.String())
 	}
 
 	for i := 0; i < lenTargetRunes; i++ {
