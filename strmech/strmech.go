@@ -1547,20 +1547,6 @@ func (sMech *StrMech) GetReader() io.Reader {
 	return strings.NewReader(stringData)
 }
 
-// GetSoftwareVersion - Returns the software version for package 'strops'.
-func (sMech StrMech) GetSoftwareVersion() string {
-
-	if sMech.stringDataMutex == nil {
-		sMech.stringDataMutex = new(sync.Mutex)
-	}
-
-	sMech.stringDataMutex.Lock()
-
-	defer sMech.stringDataMutex.Unlock()
-
-	return "0.0.1"
-}
-
 // GetStringData - Returns the current value of internal
 // member string, StrMech.stringData
 func (sMech *StrMech) GetStringData() string {
