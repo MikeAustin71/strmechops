@@ -76,7 +76,7 @@ func TestSortStrLengthLowestToHighest01(t *testing.T) {
 
 }
 
-func TestStrOps_StripBadChars_001(t *testing.T) {
+func TestStrMech_StripBadChars_001(t *testing.T) {
 	badChars := []string{
 		" ",
 		"/",
@@ -116,7 +116,7 @@ func TestStrOps_StripBadChars_001(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripBadChars_002(t *testing.T) {
+func TestStrMech_StripBadChars_002(t *testing.T) {
 
 	badChars := make([]string, 0)
 
@@ -145,7 +145,7 @@ func TestStrOps_StripBadChars_002(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripBadChars_003(t *testing.T) {
+func TestStrMech_StripBadChars_003(t *testing.T) {
 	badChars := []string{
 		" ",
 		"/",
@@ -185,7 +185,7 @@ func TestStrOps_StripBadChars_003(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripBadChars_004(t *testing.T) {
+func TestStrMech_StripBadChars_004(t *testing.T) {
 	badChars := []string{
 		"  "}
 
@@ -210,7 +210,7 @@ func TestStrOps_StripBadChars_004(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripBadChars_005(t *testing.T) {
+func TestStrMech_StripBadChars_005(t *testing.T) {
 
 	badChars := []string{"@@"}
 
@@ -235,7 +235,7 @@ func TestStrOps_StripBadChars_005(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripLeadingChars_001(t *testing.T) {
+func TestStrMech_StripLeadingChars_001(t *testing.T) {
 
 	badChars := []string{
 		" ",
@@ -274,7 +274,7 @@ func TestStrOps_StripLeadingChars_001(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripLeadingChars_002(t *testing.T) {
+func TestStrMech_StripLeadingChars_002(t *testing.T) {
 
 	badChars := make([]string, 0)
 
@@ -300,7 +300,7 @@ func TestStrOps_StripLeadingChars_002(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripLeadingChars_003(t *testing.T) {
+func TestStrMech_StripLeadingChars_003(t *testing.T) {
 
 	badChars := []string{
 		" ",
@@ -339,7 +339,7 @@ func TestStrOps_StripLeadingChars_003(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripTrailingChars_001(t *testing.T) {
+func TestStrMech_StripTrailingChars_001(t *testing.T) {
 
 	badChars := []string{
 		" ",
@@ -378,7 +378,7 @@ func TestStrOps_StripTrailingChars_001(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripTrailingChars_002(t *testing.T) {
+func TestStrMech_StripTrailingChars_002(t *testing.T) {
 
 	badChars := make([]string, 0)
 
@@ -404,7 +404,7 @@ func TestStrOps_StripTrailingChars_002(t *testing.T) {
 	}
 }
 
-func TestStrOps_StripTrailingChars_003(t *testing.T) {
+func TestStrMech_StripTrailingChars_003(t *testing.T) {
 
 	badChars := []string{
 		" ",
@@ -443,8 +443,8 @@ func TestStrOps_StripTrailingChars_003(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrCenterInStr_01(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStr_01() "
+func TestStrMech_StrCenterInStr_01(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStr_01() "
 	strToCenter := "1234567"
 	fieldLen := 79
 	exLeftPadLen := 36
@@ -476,8 +476,8 @@ func TestStrOps_StrCenterInStr_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrCenterInStr_02(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStr_02() "
+func TestStrMech_StrCenterInStr_02(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStr_02() "
 	strToCenter := "Hello"
 	fieldLen := 15
 	exLeftPadLen := 5
@@ -509,8 +509,8 @@ func TestStrOps_StrCenterInStr_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrCenterInStr_03(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStr_03() "
+func TestStrMech_StrCenterInStr_03(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStr_03() "
 
 	strToCenter := "Hello"
 	fieldLen := 5
@@ -539,8 +539,8 @@ func TestStrOps_StrCenterInStr_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrCenterInStr_04(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStr_04() "
+func TestStrMech_StrCenterInStr_04(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStr_04() "
 	strToCenter := "Hello World"
 	fieldLen := 5
 
@@ -556,8 +556,8 @@ func TestStrOps_StrCenterInStr_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrCenterInStr_05(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStr_05() "
+func TestStrMech_StrCenterInStr_05(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStr_05() "
 	strToCenter := "     "
 	fieldLen := 15
 
@@ -573,8 +573,8 @@ func TestStrOps_StrCenterInStr_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrLeftJustify_01(t *testing.T) {
-	ePrefix := "TestStrOps_StrLeftJustify_01() "
+func TestStrMech_StrLeftJustify_01(t *testing.T) {
+	ePrefix := "TestStrMech_StrLeftJustify_01() "
 	strToJustify := "1234567"
 	fieldLen := 45
 	exTotalLen := fieldLen
@@ -603,9 +603,9 @@ func TestStrOps_StrLeftJustify_01(t *testing.T) {
 
 }
 
-func TestStrOps_StrLeftJustify_02(t *testing.T) {
+func TestStrMech_StrLeftJustify_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrLeftJustify_02"
+	ePrefix := "TestStrMech_StrLeftJustify_02"
 
 	strToJustify := "      "
 	fieldLen := 45
@@ -622,9 +622,9 @@ func TestStrOps_StrLeftJustify_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrLeftJustify_03(t *testing.T) {
+func TestStrMech_StrLeftJustify_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrLeftJustify_03"
+	ePrefix := "TestStrMech_StrLeftJustify_03"
 
 	strToJustify := "Hello"
 	fieldLen := len(strToJustify)
@@ -647,9 +647,9 @@ func TestStrOps_StrLeftJustify_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrLeftJustify_04(t *testing.T) {
+func TestStrMech_StrLeftJustify_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrLeftJustify_04"
+	ePrefix := "TestStrMech_StrLeftJustify_04"
 
 	strToJustify := "Hello"
 	fieldLen := 2
@@ -666,9 +666,9 @@ func TestStrOps_StrLeftJustify_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrRightJustify_01(t *testing.T) {
+func TestStrMech_StrRightJustify_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrRightJustify_01() "
+	ePrefix := "TestStrMech_StrRightJustify_01() "
 
 	strToJustify := "1234567"
 	fieldLen := 45
@@ -698,9 +698,9 @@ func TestStrOps_StrRightJustify_01(t *testing.T) {
 
 }
 
-func TestStrOps_StrRightJustify_02(t *testing.T) {
+func TestStrMech_StrRightJustify_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrRightJustify_02() "
+	ePrefix := "TestStrMech_StrRightJustify_02() "
 
 	strToJustify := "   "
 	fieldLen := 45
@@ -717,9 +717,9 @@ func TestStrOps_StrRightJustify_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrRightJustify_03(t *testing.T) {
+func TestStrMech_StrRightJustify_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrRightJustify_03() "
+	ePrefix := "TestStrMech_StrRightJustify_03() "
 
 	strToJustify := "1234567"
 	fieldLen := len(strToJustify)
@@ -740,9 +740,9 @@ func TestStrOps_StrRightJustify_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrRightJustify_04(t *testing.T) {
+func TestStrMech_StrRightJustify_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrRightJustify_04() "
+	ePrefix := "TestStrMech_StrRightJustify_04() "
 
 	strToJustify := "1234567"
 	fieldLen := 6
@@ -760,9 +760,9 @@ func TestStrOps_StrRightJustify_04(t *testing.T) {
 
 }
 
-func TestStrOps_StrRightJustify_05(t *testing.T) {
+func TestStrMech_StrRightJustify_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrRightJustify_05() "
+	ePrefix := "TestStrMech_StrRightJustify_05() "
 
 	strToJustify := "12345"
 	fieldLen := 10
@@ -792,8 +792,8 @@ func TestStrOps_StrRightJustify_05(t *testing.T) {
 
 }
 
-func TestStrOps_StrCenterInStrLeft_01(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStrLeft_01() "
+func TestStrMech_StrCenterInStrLeft_01(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStrLeft_01() "
 	strToCenter := "1234567"
 	fieldLen := 79
 	exPadLen := 36
@@ -824,8 +824,8 @@ func TestStrOps_StrCenterInStrLeft_01(t *testing.T) {
 
 }
 
-func TestStrOps_StrCenterInStrLeft_02(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStrLeft_02() "
+func TestStrMech_StrCenterInStrLeft_02(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStrLeft_02() "
 	strToCenter := "Hello"
 	fieldLen := 15
 	exTotalFinalStrLen := 10
@@ -863,8 +863,8 @@ func TestStrOps_StrCenterInStrLeft_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrCenterInStrLeft_03(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStrLeft_03() "
+func TestStrMech_StrCenterInStrLeft_03(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStrLeft_03() "
 	strToCenter := "  "
 	fieldLen := 15
 
@@ -881,8 +881,8 @@ func TestStrOps_StrCenterInStrLeft_03(t *testing.T) {
 
 }
 
-func TestStrOps_StrCenterInStrLeft_04(t *testing.T) {
-	ePrefix := "TestStrOps_StrCenterInStrLeft_04() "
+func TestStrMech_StrCenterInStrLeft_04(t *testing.T) {
+	ePrefix := "TestStrMech_StrCenterInStrLeft_04() "
 	strToCenter := "Hello"
 	fieldLen := 2
 
@@ -898,7 +898,7 @@ func TestStrOps_StrCenterInStrLeft_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrGetRuneCnt_01(t *testing.T) {
+func TestStrMech_StrGetRuneCnt_01(t *testing.T) {
 	strToCnt := "1234567"
 	exCnt := 7
 	su := StrMech{}
@@ -910,7 +910,7 @@ func TestStrOps_StrGetRuneCnt_01(t *testing.T) {
 
 }
 
-func TestStrOps_StrGetCharCnt01(t *testing.T) {
+func TestStrMech_StrGetCharCnt01(t *testing.T) {
 	strToCnt := "1234567"
 	exCnt := 7
 
@@ -922,9 +922,9 @@ func TestStrOps_StrGetCharCnt01(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrPadLeftToCenter_01(t *testing.T) {
+func TestStrMech_StrPadLeftToCenter_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrPadLeftToCenter_01() "
+	ePrefix := "TestStrMech_StrPadLeftToCenter_01() "
 
 	strToCenter := "1234567"
 	fieldLen := 79
@@ -947,9 +947,9 @@ func TestStrOps_StrPadLeftToCenter_01(t *testing.T) {
 
 }
 
-func TestStrOps_StrPadLeftToCenter_02(t *testing.T) {
+func TestStrMech_StrPadLeftToCenter_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrPadLeftToCenter_02() "
+	ePrefix := "TestStrMech_StrPadLeftToCenter_02() "
 	strToCenter := "Hello"
 	fieldLen := 15
 	exLen := 5
@@ -970,8 +970,8 @@ func TestStrOps_StrPadLeftToCenter_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrPadLeftToCenter_03(t *testing.T) {
-	ePrefix := "TestStrOps_StrPadLeftToCenter_03() "
+func TestStrMech_StrPadLeftToCenter_03(t *testing.T) {
+	ePrefix := "TestStrMech_StrPadLeftToCenter_03() "
 	strToCenter := "   "
 	fieldLen := 15
 	su := StrMech{}
@@ -987,8 +987,8 @@ func TestStrOps_StrPadLeftToCenter_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrPadLeftToCenter_04(t *testing.T) {
-	ePrefix := "TestStrOps_StrPadLeftToCenter_04() "
+func TestStrMech_StrPadLeftToCenter_04(t *testing.T) {
+	ePrefix := "TestStrMech_StrPadLeftToCenter_04() "
 	strToCenter := "Hello World"
 	fieldLen := 5
 	su := StrMech{}
@@ -1004,9 +1004,9 @@ func TestStrOps_StrPadLeftToCenter_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_StrPadLeftToCenter_05(t *testing.T) {
+func TestStrMech_StrPadLeftToCenter_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_StrPadLeftToCenter_04() "
+	ePrefix := "TestStrMech_StrPadLeftToCenter_04() "
 
 	strToCenter := "Hello"
 	fieldLen := 5
@@ -1031,8 +1031,8 @@ func TestStrOps_StrPadLeftToCenter_05(t *testing.T) {
 
 }
 
-func TestStrOps_SwapRune_01(t *testing.T) {
-	ePrefix := "TestStrOps_SwapRune_01() "
+func TestStrMech_SwapRune_01(t *testing.T) {
+	ePrefix := "TestStrMech_SwapRune_01() "
 
 	su := StrMech{}
 
@@ -1073,9 +1073,9 @@ func TestStrOps_SwapRune_01(t *testing.T) {
 
 }
 
-func TestStrOps_SwapRune_02(t *testing.T) {
+func TestStrMech_SwapRune_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_SwapRune_02() "
+	ePrefix := "TestStrMech_SwapRune_02() "
 
 	su := StrMech{}
 
@@ -1116,9 +1116,9 @@ func TestStrOps_SwapRune_02(t *testing.T) {
 
 }
 
-func TestStrOps_SwapRune_03(t *testing.T) {
+func TestStrMech_SwapRune_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_SwapRune_03() "
+	ePrefix := "TestStrMech_SwapRune_03() "
 	su := StrMech{}
 
 	tStr := "Hello Worldx"
@@ -1151,9 +1151,9 @@ func TestStrOps_SwapRune_03(t *testing.T) {
 
 }
 
-func TestStrOps_SwapRune_04(t *testing.T) {
+func TestStrMech_SwapRune_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_SwapRune_04() "
+	ePrefix := "TestStrMech_SwapRune_04() "
 
 	su := StrMech{}
 
@@ -1185,9 +1185,9 @@ func TestStrOps_SwapRune_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_SwapRune_05(t *testing.T) {
+func TestStrMech_SwapRune_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_SwapRune_03() "
+	ePrefix := "TestStrMech_SwapRune_03() "
 
 	tStr := ""
 
@@ -1213,9 +1213,9 @@ func TestStrOps_SwapRune_05(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_01(t *testing.T) {
+func TestStrMech_TrimMultipleChars_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_01() "
+	ePrefix := "TestStrMech_TrimMultipleChars_01() "
 
 	tStr := " 16:26:32   CST "
 	expected := "16:26:32 CST"
@@ -1237,9 +1237,9 @@ func TestStrOps_TrimMultipleChars_01(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_02(t *testing.T) {
+func TestStrMech_TrimMultipleChars_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_02() "
+	ePrefix := "TestStrMech_TrimMultipleChars_02() "
 
 	tStr := "       Hello          World        "
 	expected := "Hello World"
@@ -1260,9 +1260,9 @@ func TestStrOps_TrimMultipleChars_02(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_03(t *testing.T) {
+func TestStrMech_TrimMultipleChars_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_03() "
+	ePrefix := "TestStrMech_TrimMultipleChars_03() "
 
 	tStr := "Hello          World        "
 	expected := "Hello World"
@@ -1283,9 +1283,9 @@ func TestStrOps_TrimMultipleChars_03(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_04(t *testing.T) {
+func TestStrMech_TrimMultipleChars_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_04() "
+	ePrefix := "TestStrMech_TrimMultipleChars_04() "
 
 	tStr := " Hello          World"
 	expected := "Hello World"
@@ -1306,9 +1306,9 @@ func TestStrOps_TrimMultipleChars_04(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_05(t *testing.T) {
+func TestStrMech_TrimMultipleChars_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_05() "
+	ePrefix := "TestStrMech_TrimMultipleChars_05() "
 
 	tStr := "Hello World"
 	expected := "Hello World"
@@ -1329,9 +1329,9 @@ func TestStrOps_TrimMultipleChars_05(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_06(t *testing.T) {
+func TestStrMech_TrimMultipleChars_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_06() "
+	ePrefix := "TestStrMech_TrimMultipleChars_06() "
 
 	tStr := "Hello World "
 	expected := "Hello World"
@@ -1352,9 +1352,9 @@ func TestStrOps_TrimMultipleChars_06(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_07(t *testing.T) {
+func TestStrMech_TrimMultipleChars_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_07() "
+	ePrefix := "TestStrMech_TrimMultipleChars_07() "
 
 	tStr := " Hello World "
 	expected := "Hello World"
@@ -1375,9 +1375,9 @@ func TestStrOps_TrimMultipleChars_07(t *testing.T) {
 
 }
 
-func TestStrOps_TrimMultipleChars_08(t *testing.T) {
+func TestStrMech_TrimMultipleChars_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_08() "
+	ePrefix := "TestStrMech_TrimMultipleChars_08() "
 
 	tStr := ""
 
@@ -1393,9 +1393,9 @@ func TestStrOps_TrimMultipleChars_08(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimMultipleChars_09(t *testing.T) {
+func TestStrMech_TrimMultipleChars_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimMultipleChars_09() "
+	ePrefix := "TestStrMech_TrimMultipleChars_09() "
 
 	tStr := "Hello World"
 	replaceRune := rune(0)
@@ -1412,9 +1412,9 @@ func TestStrOps_TrimMultipleChars_09(t *testing.T) {
 
 }
 
-func TestStrOps_TrimStringEnds_01(t *testing.T) {
+func TestStrMech_TrimStringEnds_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_01() "
+	ePrefix := "TestStrMech_TrimStringEnds_01() "
 
 	tStr := "  Hello    World  "
 	expected := "Hello    World"
@@ -1435,9 +1435,9 @@ func TestStrOps_TrimStringEnds_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_02(t *testing.T) {
+func TestStrMech_TrimStringEnds_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_02() "
+	ePrefix := "TestStrMech_TrimStringEnds_02() "
 
 	tStr := "Hello X World"
 	expected := "Hello X World"
@@ -1458,9 +1458,9 @@ func TestStrOps_TrimStringEnds_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_03(t *testing.T) {
+func TestStrMech_TrimStringEnds_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_03() "
+	ePrefix := "TestStrMech_TrimStringEnds_03() "
 
 	tStr := "Hello WorlXd"
 	expected := "Hello WorlXd"
@@ -1481,9 +1481,9 @@ func TestStrOps_TrimStringEnds_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_04(t *testing.T) {
+func TestStrMech_TrimStringEnds_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_04() "
+	ePrefix := "TestStrMech_TrimStringEnds_04() "
 
 	tStr := "XXXHello WorlXdXXX"
 	expected := "Hello WorlXd"
@@ -1504,9 +1504,9 @@ func TestStrOps_TrimStringEnds_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_05(t *testing.T) {
+func TestStrMech_TrimStringEnds_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_05() "
+	ePrefix := "TestStrMech_TrimStringEnds_05() "
 
 	tStr := "XXXHello WorlXd"
 	expected := "Hello WorlXd"
@@ -1527,9 +1527,9 @@ func TestStrOps_TrimStringEnds_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_06(t *testing.T) {
+func TestStrMech_TrimStringEnds_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_06() "
+	ePrefix := "TestStrMech_TrimStringEnds_06() "
 
 	tStr := "Hello WorlXdXXXX"
 	expected := "Hello WorlXd"
@@ -1550,9 +1550,9 @@ func TestStrOps_TrimStringEnds_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_07(t *testing.T) {
+func TestStrMech_TrimStringEnds_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_07() "
+	ePrefix := "TestStrMech_TrimStringEnds_07() "
 
 	tStr := "X"
 	expected := ""
@@ -1573,9 +1573,9 @@ func TestStrOps_TrimStringEnds_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_08(t *testing.T) {
+func TestStrMech_TrimStringEnds_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_08() "
+	ePrefix := "TestStrMech_TrimStringEnds_08() "
 
 	tStr := ""
 	_, err := StrMech{}.TrimStringEnds(
@@ -1588,9 +1588,9 @@ func TestStrOps_TrimStringEnds_08(t *testing.T) {
 	}
 }
 
-func TestStrOps_TrimStringEnds_09(t *testing.T) {
+func TestStrMech_TrimStringEnds_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_TrimStringEnds_09() "
+	ePrefix := "TestStrMech_TrimStringEnds_09() "
 
 	tStr := "Jay Ray"
 	trimChar := rune(0)
@@ -1604,7 +1604,7 @@ func TestStrOps_TrimStringEnds_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_UpperCaseFirstLetter_01(t *testing.T) {
+func TestStrMech_UpperCaseFirstLetter_01(t *testing.T) {
 
 	testStr := "now is the time for all good men to come to the aid of their country."
 
@@ -1619,7 +1619,7 @@ func TestStrOps_UpperCaseFirstLetter_01(t *testing.T) {
 
 }
 
-func TestStrOps_UpperCaseFirstLetter_02(t *testing.T) {
+func TestStrMech_UpperCaseFirstLetter_02(t *testing.T) {
 
 	testStr := "  now is the time for all good men to come to the aid of their country."
 
@@ -1634,7 +1634,7 @@ func TestStrOps_UpperCaseFirstLetter_02(t *testing.T) {
 
 }
 
-func TestStrOps_UpperCaseFirstLetter_03(t *testing.T) {
+func TestStrMech_UpperCaseFirstLetter_03(t *testing.T) {
 
 	testStr := "Now is the time for all good men to come to the aid of their country."
 
@@ -1649,7 +1649,7 @@ func TestStrOps_UpperCaseFirstLetter_03(t *testing.T) {
 
 }
 
-func TestStrOps_UpperCaseFirstLetter_04(t *testing.T) {
+func TestStrMech_UpperCaseFirstLetter_04(t *testing.T) {
 
 	testStr := "  Now is the time for all good men to come to the aid of their country."
 
@@ -1664,7 +1664,7 @@ func TestStrOps_UpperCaseFirstLetter_04(t *testing.T) {
 
 }
 
-func TestStrOps_UpperCaseFirstLetter_05(t *testing.T) {
+func TestStrMech_UpperCaseFirstLetter_05(t *testing.T) {
 
 	testStr := ""
 
@@ -1679,7 +1679,7 @@ func TestStrOps_UpperCaseFirstLetter_05(t *testing.T) {
 
 }
 
-func TestStrOps_Write_01(t *testing.T) {
+func TestStrMech_Write_01(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 
@@ -1710,7 +1710,7 @@ func TestStrOps_Write_01(t *testing.T) {
 
 }
 
-func TestStrOps_Write_02(t *testing.T) {
+func TestStrMech_Write_02(t *testing.T) {
 
 	originalStr := "Hello World"
 
@@ -1762,7 +1762,7 @@ func TestStrOps_Write_02(t *testing.T) {
 
 }
 
-func TestStrOps_Write_03(t *testing.T) {
+func TestStrMech_Write_03(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 
@@ -1794,7 +1794,7 @@ func TestStrOps_Write_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_Write_04(t *testing.T) {
+func TestStrMech_Write_04(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 

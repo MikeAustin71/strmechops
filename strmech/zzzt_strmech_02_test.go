@@ -49,8 +49,10 @@ func TestStrOps_ExtractDataField_01(t *testing.T) {
 		expectedNextTargetIdx = -1
 	}
 
+	sMech := StrMech{}
+
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := sMech.ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,

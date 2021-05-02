@@ -37,9 +37,9 @@ func TestDataFieldProfileDto_ConvertToErrorState_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_01(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_01"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_01"
 
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
@@ -49,7 +49,9 @@ func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
 	//         012345678901234567890123456789012345678901234567890
 	expected := "Lorem ipsum dolor sit amet, consectetur%adipiscing elit.%"
 
-	actualTxt, err := StrMech{}.NewPtr().BreakTextAtLineLength(
+	sMech := StrMech{}
+
+	actualTxt, err := sMech.BreakTextAtLineLength(
 		tstStr,
 		40,
 		'\n',
@@ -69,9 +71,9 @@ func TestStrOps_BreakTextAtLineLength_01(t *testing.T) {
 
 }
 
-func TestStrOps_BreakTextAtLineLength_02(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_02(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_02"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_02"
 
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
@@ -101,9 +103,9 @@ func TestStrOps_BreakTextAtLineLength_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_03(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_03(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_03()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_03()"
 
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
@@ -134,9 +136,9 @@ func TestStrOps_BreakTextAtLineLength_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_04(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_04(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_04()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_04()"
 
 	//         0         1         2         3         4         5
 	//         012345678901234567890123456789012345678901234567890
@@ -167,9 +169,9 @@ func TestStrOps_BreakTextAtLineLength_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_05(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_05(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_05()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_05()"
 
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
@@ -224,9 +226,9 @@ func TestStrOps_BreakTextAtLineLength_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_06(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_06(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_06()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_06()"
 
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
@@ -245,9 +247,9 @@ func TestStrOps_BreakTextAtLineLength_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_07(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_07(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_07()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_07()"
 
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
@@ -266,9 +268,9 @@ func TestStrOps_BreakTextAtLineLength_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_08(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_08(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_08()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_08()"
 
 	tstStr := "                           "
 
@@ -290,9 +292,9 @@ func TestStrOps_BreakTextAtLineLength_08(t *testing.T) {
 	}
 }
 
-func TestStrOps_BreakTextAtLineLength_09(t *testing.T) {
+func TestStrMech_BreakTextAtLineLength_09(t *testing.T) {
 
-	thisFuncName := "TestStrOps_BreakTextAtLineLength_09()"
+	thisFuncName := "TestStrMech_BreakTextAtLineLength_09()"
 
 	tstStr := ""
 
@@ -310,13 +312,15 @@ func TestStrOps_BreakTextAtLineLength_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_ConvertNonPrintableChars_01(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_01(t *testing.T) {
 
 	testStr := "Hello world! How are you doing today?\n"
 	testRunes := []rune(testStr)
 	expectedStr := "Hello world! How are you doing today?\\n"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	sMech := StrMech{}
+
+	actualStr := sMech.ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -326,7 +330,7 @@ func TestStrOps_ConvertNonPrintableChars_01(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_02(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_02(t *testing.T) {
 
 	testStr := "Hello world! How are you doing today?\n"
 	testRunes := []rune(testStr)
@@ -342,7 +346,7 @@ func TestStrOps_ConvertNonPrintableChars_02(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_03(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_03(t *testing.T) {
 
 	testStr := "Hello world!\tHow\rare\ayou\bdoing\ftoday?\v\n"
 	testRunes := []rune(testStr)
@@ -358,7 +362,7 @@ func TestStrOps_ConvertNonPrintableChars_03(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_04(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_04(t *testing.T) {
 
 	testStr := ""
 	testRunes := []rune(testStr)
@@ -374,7 +378,7 @@ func TestStrOps_ConvertNonPrintableChars_04(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_05(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_05(t *testing.T) {
 
 	testRunes := []rune{
 		'H',
@@ -396,7 +400,7 @@ func TestStrOps_ConvertNonPrintableChars_05(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_06(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_06(t *testing.T) {
 
 	testRunes := []rune{
 		'H',
@@ -423,7 +427,7 @@ func TestStrOps_ConvertNonPrintableChars_06(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_07(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_07(t *testing.T) {
 
 	testRunes := []rune{
 		'H',
@@ -445,7 +449,7 @@ func TestStrOps_ConvertNonPrintableChars_07(t *testing.T) {
 
 }
 
-func TestStrOps_ConvertNonPrintableChars_08(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_08(t *testing.T) {
 
 	testRunes := []rune{
 		'H',
@@ -468,7 +472,158 @@ func TestStrOps_ConvertNonPrintableChars_08(t *testing.T) {
 
 }
 
-func TestStrOps_CopyIn_01(t *testing.T) {
+func TestStrMech_ConvertNonPrintableChars_09(t *testing.T) {
+
+	tRunes := []rune{
+		0,    // [NULL]
+		1,    // [SOH]
+		2,    // [STX]
+		3,    // [ETX]
+		4,    // "[EOT]"
+		5,    // [ENQ]
+		6,    // [ACK]
+		7,    // "\\a"
+		8,    // "\\b"
+		9,    // "\\t"
+		0x0a, // "\\n"
+		0x0b, // "\\v"
+		0x0c, // "\\f"
+		0x0d, // "\\r"
+		0x0e, // "[SO]"
+		0x0f, // "[SI]"
+		0x5c, // "\\"
+		0x20, // "[SPACE]"
+	}
+
+	expectedStr :=
+		"[NULL]" +
+			"[SOH]" +
+			"[STX]" +
+			"[ETX]" +
+			"[EOT]" +
+			"[ENQ]" +
+			"[ACK]" +
+			"\\a" +
+			"\\b" +
+			"\\t" +
+			"\\n" +
+			"\\v" +
+			"\\f" +
+			"\\r" +
+			"[SO]" +
+			"[SI]" +
+			"\\" +
+			"[SPACE]"
+
+	printableChars :=
+		StrMech{}.Ptr().ConvertNonPrintableChars(
+			tRunes,
+			true)
+
+	if printableChars != expectedStr {
+		t.Errorf("ERROR:\n"+
+			"Expected printableChars == expectedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"printableChars='%v'\n"+
+			"expectedStr='%v'\n",
+			printableChars,
+			expectedStr)
+	}
+
+}
+
+func TestStrMech_ConvertPrintableChars_01(t *testing.T) {
+
+	funcName := "TestStrMech_ConvertPrintableChars_01"
+
+	nonPrintableRuneArray := []rune{
+		0,    // [NULL]
+		1,    // [SOH]
+		2,    // [STX]
+		3,    // [ETX]
+		4,    // "[EOT]"
+		5,    // [ENQ]
+		6,    // [ACK]
+		7,    // "\\a"
+		8,    // "\\b"
+		9,    // "\\t"
+		0x0a, // "\\n"
+		0x0b, // "\\v"
+		0x0c, // "\\f"
+		0x0d, // "\\r"
+		0x0e, // "[SO]"
+		0x0f, // "[SI]"
+		0x5c, // "\\"
+		0x20, // "[SPACE]"
+	}
+
+	printableCharsStr :=
+		"[NULL]" +
+			"[SOH]" +
+			"[STX]" +
+			"[ETX]" +
+			"[EOT]" +
+			"[ENQ]" +
+			"[ACK]" +
+			"\\a" +
+			"\\b" +
+			"\\t" +
+			"\\n" +
+			"\\v" +
+			"\\f" +
+			"\\r" +
+			"[SO]" +
+			"[SI]" +
+			"\\" +
+			"[SPACE]"
+
+	sMech := StrMech{}
+
+	runeArray,
+		err :=
+		sMech.ConvertPrintableChars(
+			printableCharsStr,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error:\n"+
+			"Error returned from StrMech{}.ConvertPrintableChars()\n"+
+			"Error = '%v'\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedRuneArray := len(nonPrintableRuneArray)
+
+	if lenExpectedRuneArray != len(runeArray) {
+		t.Errorf("Error:\n"+
+			"Expected lenExpectedRuneArray == len(runeArray).\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"lenExpectedRuneArray='%v'\n"+
+			"      len(runeArray)='%v'\n",
+			lenExpectedRuneArray,
+			len(runeArray))
+		return
+	}
+
+	for i := 0; i < len(nonPrintableRuneArray); i++ {
+		if nonPrintableRuneArray[i] != runeArray[i] {
+			t.Errorf("ERROR:\n"+
+				"nonPrintableRuneArray[%v] != runeArray[%v]\n"+
+				"nonPrintableRuneArray[%v]='%v'\n"+
+				"runeArray[%v]='%v'\n",
+				i,
+				i,
+				i,
+				nonPrintableRuneArray[i],
+				i,
+				runeArray[i])
+		}
+	}
+
+}
+
+func TestStrMech_CopyIn_01(t *testing.T) {
 
 	string1 := "What in the world is Garfield doing!"
 	string2 := "Now is the time for all good men to come to the aid of their country."
@@ -500,7 +655,7 @@ func TestStrOps_CopyIn_01(t *testing.T) {
 
 }
 
-func TestStrOps_CopyOut_01(t *testing.T) {
+func TestStrMech_CopyOut_01(t *testing.T) {
 
 	string1 := "What in the world is Garfield doing!"
 	string2 := "Now is the time for all good men to come to the aid of their country."
@@ -530,7 +685,41 @@ func TestStrOps_CopyOut_01(t *testing.T) {
 
 }
 
-func TestStrOps_DoesLastCharExist_01(t *testing.T) {
+func TestStrMech_CopyOut_02(t *testing.T) {
+
+	string1 := "What in the world is Garfield doing!"
+	string2 := "Now is the time for all good men to come to the aid of their country."
+	string3 := "From this valley they say you are going."
+
+	s1 := StrMech{}
+
+	s1.StrOut = string2
+	s1.StrIn = string1
+
+	s1.SetStringData(string3)
+
+	s2 := s1.CopyOut()
+
+	if string1 != s2.StrIn {
+		t.Errorf("Error: expected s2.StrIn='%v'. Instead,  "+
+			"s2.StrIn='%v'", string1, s1.StrIn)
+	}
+
+	if string2 != s2.StrOut {
+		t.Errorf("Error: expected s2.StrOut='%v'. Instead,  "+
+			"s2.StrOut='%v'", string2, s2.StrOut)
+	}
+
+	actualStr := s2.GetStringData()
+
+	if string3 != actualStr {
+		t.Errorf("Error: expected s2 StringData='%v'. Instead,  "+
+			"s2 StringData='%v'", string3, actualStr)
+	}
+
+}
+
+func TestStrMech_DoesLastCharExist_01(t *testing.T) {
 
 	var lastChar rune
 
@@ -547,7 +736,7 @@ func TestStrOps_DoesLastCharExist_01(t *testing.T) {
 
 }
 
-func TestStrOps_DoesLastCharExist_02(t *testing.T) {
+func TestStrMech_DoesLastCharExist_02(t *testing.T) {
 
 	var lastChar rune
 
@@ -564,7 +753,7 @@ func TestStrOps_DoesLastCharExist_02(t *testing.T) {
 
 }
 
-func TestStrOps_DoesLastCharExist_03(t *testing.T) {
+func TestStrMech_DoesLastCharExist_03(t *testing.T) {
 
 	var lastChar rune
 

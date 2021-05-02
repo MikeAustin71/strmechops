@@ -4,9 +4,9 @@ import (
 	"testing"
 )
 
-func TestStrOps_ReplaceStringChar_01(t *testing.T) {
+func TestStrMech_ReplaceStringChar_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChar_01() "
+	ePrefix := "TestStrMech_ReplaceStringChar_01() "
 
 	testStr := "HowXnowXbrownXcow!"
 	expectedStr := "How now brown cow!"
@@ -45,9 +45,9 @@ func TestStrOps_ReplaceStringChar_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChar_02(t *testing.T) {
+func TestStrMech_ReplaceStringChar_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChar_02() "
+	ePrefix := "TestStrMech_ReplaceStringChar_02() "
 
 	testStr := "HowXnowXbrownXcow!X"
 	expectedStr := "How now brown cow!X"
@@ -86,9 +86,9 @@ func TestStrOps_ReplaceStringChar_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChar_03(t *testing.T) {
+func TestStrMech_ReplaceStringChar_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChar_03() "
+	ePrefix := "TestStrMech_ReplaceStringChar_03() "
 
 	testStr := "HowXnowXbrownXcow!X"
 	charToReplace := 'X'
@@ -113,9 +113,9 @@ func TestStrOps_ReplaceStringChar_03(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChar_04(t *testing.T) {
+func TestStrMech_ReplaceStringChar_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChar_04() "
+	ePrefix := "TestStrMech_ReplaceStringChar_04() "
 
 	testStr := "HowXnowXbrownXcow!X"
 	charToReplace := rune(0)
@@ -140,9 +140,9 @@ func TestStrOps_ReplaceStringChar_04(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChar_05(t *testing.T) {
+func TestStrMech_ReplaceStringChar_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChar_05() "
+	ePrefix := "TestStrMech_ReplaceStringChar_05() "
 
 	testStr := ""
 	charToReplace := 'X'
@@ -167,9 +167,9 @@ func TestStrOps_ReplaceStringChar_05(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChars_01(t *testing.T) {
+func TestStrMech_ReplaceStringChars_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_01() "
+	ePrefix := "TestStrMech_ReplaceStringChars_01() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -196,7 +196,9 @@ func TestStrOps_ReplaceStringChars_01(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 'E'
 
-	actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+	sMech := StrMech{}
+
+	actualStr, err := sMech.ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -213,9 +215,9 @@ func TestStrOps_ReplaceStringChars_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChars_02(t *testing.T) {
+func TestStrMech_ReplaceStringChars_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_02() "
+	ePrefix := "TestStrMech_ReplaceStringChars_02() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -259,8 +261,8 @@ func TestStrOps_ReplaceStringChars_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChars_03(t *testing.T) {
-	ePrefix := "TestStrOps_ReplaceStringChars_03() "
+func TestStrMech_ReplaceStringChars_03(t *testing.T) {
+	ePrefix := "TestStrMech_ReplaceStringChars_03() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -303,8 +305,8 @@ func TestStrOps_ReplaceStringChars_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceStringChars_04(t *testing.T) {
-	ePrefix := "TestStrOps_ReplaceStringChars_04() "
+func TestStrMech_ReplaceStringChars_04(t *testing.T) {
+	ePrefix := "TestStrMech_ReplaceStringChars_04() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -347,9 +349,9 @@ func TestStrOps_ReplaceStringChars_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceStringChars_05(t *testing.T) {
+func TestStrMech_ReplaceStringChars_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_05() "
+	ePrefix := "TestStrMech_ReplaceStringChars_05() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -392,9 +394,9 @@ func TestStrOps_ReplaceStringChars_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceStringChars_06(t *testing.T) {
+func TestStrMech_ReplaceStringChars_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_06() "
+	ePrefix := "TestStrMech_ReplaceStringChars_06() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -437,9 +439,9 @@ func TestStrOps_ReplaceStringChars_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceStringChars_07(t *testing.T) {
+func TestStrMech_ReplaceStringChars_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_07() "
+	ePrefix := "TestStrMech_ReplaceStringChars_07() "
 
 	testStr := ""
 
@@ -474,9 +476,9 @@ func TestStrOps_ReplaceStringChars_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceStringChars_08(t *testing.T) {
+func TestStrMech_ReplaceStringChars_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_08() "
+	ePrefix := "TestStrMech_ReplaceStringChars_08() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -493,9 +495,9 @@ func TestStrOps_ReplaceStringChars_08(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceStringChars_09(t *testing.T) {
+func TestStrMech_ReplaceStringChars_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceStringChars_09() "
+	ePrefix := "TestStrMech_ReplaceStringChars_09() "
 
 	testStr := "1a2b3c4d5e6"
 
@@ -511,9 +513,9 @@ func TestStrOps_ReplaceStringChars_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceRunes_01(t *testing.T) {
+func TestStrMech_ReplaceRunes_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_01() "
+	ePrefix := "TestStrMech_ReplaceRunes_01() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -541,7 +543,9 @@ func TestStrOps_ReplaceRunes_01(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 'E'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+	sMech := StrMech{}
+
+	actualRunes, err := sMech.ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
@@ -560,9 +564,9 @@ func TestStrOps_ReplaceRunes_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceRunes_02(t *testing.T) {
+func TestStrMech_ReplaceRunes_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_02() "
+	ePrefix := "TestStrMech_ReplaceRunes_02() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -609,9 +613,9 @@ func TestStrOps_ReplaceRunes_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceRunes_03(t *testing.T) {
+func TestStrMech_ReplaceRunes_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_03() "
+	ePrefix := "TestStrMech_ReplaceRunes_03() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -657,9 +661,9 @@ func TestStrOps_ReplaceRunes_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceRunes_04(t *testing.T) {
+func TestStrMech_ReplaceRunes_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_04() "
+	ePrefix := "TestStrMech_ReplaceRunes_04() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -705,9 +709,9 @@ func TestStrOps_ReplaceRunes_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceRunes_05(t *testing.T) {
+func TestStrMech_ReplaceRunes_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_05() "
+	ePrefix := "TestStrMech_ReplaceRunes_05() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -753,9 +757,9 @@ func TestStrOps_ReplaceRunes_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceRunes_06(t *testing.T) {
+func TestStrMech_ReplaceRunes_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_06() "
+	ePrefix := "TestStrMech_ReplaceRunes_06() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -801,9 +805,9 @@ func TestStrOps_ReplaceRunes_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceRunes_07(t *testing.T) {
+func TestStrMech_ReplaceRunes_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_07() "
+	ePrefix := "TestStrMech_ReplaceRunes_07() "
 
 	testRunes := make([]rune, 0, 0)
 
@@ -838,9 +842,9 @@ func TestStrOps_ReplaceRunes_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceRunes_08(t *testing.T) {
+func TestStrMech_ReplaceRunes_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_08() "
+	ePrefix := "TestStrMech_ReplaceRunes_08() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
@@ -858,9 +862,9 @@ func TestStrOps_ReplaceRunes_08(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceRunes_09(t *testing.T) {
+func TestStrMech_ReplaceRunes_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceRunes_09() "
+	ePrefix := "TestStrMech_ReplaceRunes_09() "
 
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)

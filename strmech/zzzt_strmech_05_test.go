@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestStrOps_FindRegExIndex_01(t *testing.T) {
+func TestStrMech_FindRegExIndex_01(t *testing.T) {
 
 	regex := "\\d:\\d:\\d"
 	targetStr := "November 12, 2016 1:6:3pm +0000 UTC"
@@ -28,9 +28,9 @@ func TestStrOps_FindRegExIndex_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_GetReader_01(t *testing.T) {
+func TestStrMech_GetReader_01(t *testing.T) {
 	originalStr := "Now is the time for all good men to come to the aid of their country."
-	s1 := StrMech{}.NewPtr()
+	s1 := StrMech{}
 	s1.SetStringData(originalStr)
 	s2 := StrMech{}.NewPtr()
 	rdr := s1.GetReader()
@@ -56,13 +56,13 @@ func TestStrOps_GetReader_01(t *testing.T) {
 
 }
 
-func TestStrOps_GetReader_02(t *testing.T) {
+func TestStrMech_GetReader_02(t *testing.T) {
 	originalStr := "xx"
-	s1 := StrMech{}.NewPtr()
+	s1 := StrMech{}
 	s1.SetStringData(originalStr)
-	s2 := StrMech{}.NewPtr()
+	s2 := StrMech{}
 	rdr := s1.GetReader()
-	n, err := io.Copy(s2, rdr)
+	n, err := io.Copy(&s2, rdr)
 
 	if err != nil {
 		t.Errorf("Error returned by io.Copy(s2, s1.GetReader()). "+
@@ -84,9 +84,9 @@ func TestStrOps_GetReader_02(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_01(t *testing.T) {
+func TestStrMech_GetValidBytes_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_01() "
+	ePrefix := "TestStrMech_GetValidBytes_01() "
 
 	validBytes := []byte{'v', 'a', 'l', 'i', 'd'}
 
@@ -94,7 +94,8 @@ func TestStrOps_GetValidBytes_01(t *testing.T) {
 
 	expected := "valid"
 
-	actualBytes, err := StrMech{}.Ptr().GetValidBytes(
+	sMech := StrMech{}
+	actualBytes, err := sMech.GetValidBytes(
 		testBytes,
 		validBytes,
 		ePrefix)
@@ -113,9 +114,9 @@ func TestStrOps_GetValidBytes_01(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_02(t *testing.T) {
+func TestStrMech_GetValidBytes_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_02() "
+	ePrefix := "TestStrMech_GetValidBytes_02() "
 
 	validBytes := []byte{'1', '2', '3', '4', '5'}
 
@@ -142,9 +143,9 @@ func TestStrOps_GetValidBytes_02(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_03(t *testing.T) {
+func TestStrMech_GetValidBytes_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_03() "
+	ePrefix := "TestStrMech_GetValidBytes_03() "
 
 	validBytes := []byte{'1', '2', '3', '4', '5'}
 
@@ -171,9 +172,9 @@ func TestStrOps_GetValidBytes_03(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_04(t *testing.T) {
+func TestStrMech_GetValidBytes_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_04() "
+	ePrefix := "TestStrMech_GetValidBytes_04() "
 
 	validBytes := []byte{'1', '2', '3', '4', '5'}
 
@@ -200,9 +201,9 @@ func TestStrOps_GetValidBytes_04(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_05(t *testing.T) {
+func TestStrMech_GetValidBytes_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_05() "
+	ePrefix := "TestStrMech_GetValidBytes_05() "
 
 	validBytes := []byte{'1', '2', '3', '4', '5'}
 
@@ -229,9 +230,9 @@ func TestStrOps_GetValidBytes_05(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_06(t *testing.T) {
+func TestStrMech_GetValidBytes_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_06() "
+	ePrefix := "TestStrMech_GetValidBytes_06() "
 
 	validBytes := []byte{'1', '2', '3', '4', '5'}
 
@@ -249,9 +250,9 @@ func TestStrOps_GetValidBytes_06(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidBytes_07(t *testing.T) {
+func TestStrMech_GetValidBytes_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidBytes_07() "
+	ePrefix := "TestStrMech_GetValidBytes_07() "
 
 	validBytes := make([]byte, 0, 5)
 
@@ -269,9 +270,9 @@ func TestStrOps_GetValidBytes_07(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_01(t *testing.T) {
+func TestStrMech_GetValidRunes_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_01() "
+	ePrefix := "TestStrMech_GetValidRunes_01() "
 
 	validRunes := []rune{'v', 'a', 'l', 'i', 'd'}
 
@@ -279,7 +280,9 @@ func TestStrOps_GetValidRunes_01(t *testing.T) {
 
 	expected := "valid"
 
-	actualRunes, err := StrMech{}.NewPtr().GetValidRunes(
+	sMech := StrMech{}
+
+	actualRunes, err := sMech.GetValidRunes(
 		testRunes,
 		validRunes,
 		ePrefix)
@@ -298,9 +301,9 @@ func TestStrOps_GetValidRunes_01(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_02(t *testing.T) {
+func TestStrMech_GetValidRunes_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_02() "
+	ePrefix := "TestStrMech_GetValidRunes_02() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -327,9 +330,9 @@ func TestStrOps_GetValidRunes_02(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_03(t *testing.T) {
+func TestStrMech_GetValidRunes_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_03() "
+	ePrefix := "TestStrMech_GetValidRunes_03() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -356,9 +359,9 @@ func TestStrOps_GetValidRunes_03(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_04(t *testing.T) {
+func TestStrMech_GetValidRunes_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_04() "
+	ePrefix := "TestStrMech_GetValidRunes_04() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -385,9 +388,9 @@ func TestStrOps_GetValidRunes_04(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_05(t *testing.T) {
+func TestStrMech_GetValidRunes_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_05() "
+	ePrefix := "TestStrMech_GetValidRunes_05() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -414,9 +417,9 @@ func TestStrOps_GetValidRunes_05(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_06(t *testing.T) {
+func TestStrMech_GetValidRunes_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_06() "
+	ePrefix := "TestStrMech_GetValidRunes_06() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -434,9 +437,9 @@ func TestStrOps_GetValidRunes_06(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidRunes_07(t *testing.T) {
+func TestStrMech_GetValidRunes_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidRunes_01() "
+	ePrefix := "TestStrMech_GetValidRunes_01() "
 
 	validRunes := make([]rune, 0, 5)
 
@@ -454,9 +457,9 @@ func TestStrOps_GetValidRunes_07(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidString_01(t *testing.T) {
+func TestStrMech_GetValidString_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_01() "
+	ePrefix := "TestStrMech_GetValidString_01() "
 
 	validRunes := []rune{'v', 'a', 'l', 'i', 'd'}
 
@@ -464,7 +467,9 @@ func TestStrOps_GetValidString_01(t *testing.T) {
 
 	expected := "valid"
 
-	actualStr, err := StrMech{}.NewPtr().GetValidString(
+	sMech := StrMech{}
+
+	actualStr, err := sMech.GetValidString(
 		testStr,
 		validRunes,
 		ePrefix)
@@ -480,9 +485,9 @@ func TestStrOps_GetValidString_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_GetValidString_02(t *testing.T) {
+func TestStrMech_GetValidString_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_02() "
+	ePrefix := "TestStrMech_GetValidString_02() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -507,9 +512,9 @@ func TestStrOps_GetValidString_02(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidString_03(t *testing.T) {
+func TestStrMech_GetValidString_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_03() "
+	ePrefix := "TestStrMech_GetValidString_03() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -534,9 +539,9 @@ func TestStrOps_GetValidString_03(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidString_04(t *testing.T) {
+func TestStrMech_GetValidString_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_04() "
+	ePrefix := "TestStrMech_GetValidString_04() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -560,9 +565,9 @@ func TestStrOps_GetValidString_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_GetValidString_05(t *testing.T) {
+func TestStrMech_GetValidString_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_05() "
+	ePrefix := "TestStrMech_GetValidString_05() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -587,9 +592,9 @@ func TestStrOps_GetValidString_05(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidString_06(t *testing.T) {
+func TestStrMech_GetValidString_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_06() "
+	ePrefix := "TestStrMech_GetValidString_06() "
 
 	validRunes := []rune{'1', '2', '3', '4', '5'}
 
@@ -607,9 +612,9 @@ func TestStrOps_GetValidString_06(t *testing.T) {
 
 }
 
-func TestStrOps_GetValidString_07(t *testing.T) {
+func TestStrMech_GetValidString_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_GetValidString_07() "
+	ePrefix := "TestStrMech_GetValidString_07() "
 
 	validRunes := make([]rune, 0, 5)
 
@@ -626,11 +631,13 @@ func TestStrOps_GetValidString_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_01(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_01(t *testing.T) {
 
 	testStr := "       "
 
-	result := StrMech{}.NewPtr().IsEmptyOrWhiteSpace(testStr)
+	sMech := StrMech{}
+
+	result := sMech.IsEmptyOrWhiteSpace(testStr)
 
 	if result != true {
 		t.Error("Error: Expected result='true'. Instead, result='false'")
@@ -638,7 +645,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_01(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_02(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_02(t *testing.T) {
 
 	testStr := ""
 
@@ -650,7 +657,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_02(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_03(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_03(t *testing.T) {
 
 	testStr := " xyz "
 
@@ -662,7 +669,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_03(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_04(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_04(t *testing.T) {
 
 	testStr := "xyz"
 
@@ -674,7 +681,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_04(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_05(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_05(t *testing.T) {
 
 	testStr := "/t"
 
@@ -686,7 +693,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_05(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_06(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_06(t *testing.T) {
 
 	testStr := "/n           "
 
@@ -698,7 +705,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_06(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_07(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_07(t *testing.T) {
 
 	testStr := "  /n"
 
@@ -710,7 +717,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_07(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_08(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_08(t *testing.T) {
 
 	testStr := "  x"
 
@@ -722,7 +729,7 @@ func TestStrOps_IsEmptyOrWhiteSpace_08(t *testing.T) {
 
 }
 
-func TestStrOps_IsEmptyOrWhiteSpace_09(t *testing.T) {
+func TestStrMech_IsEmptyOrWhiteSpace_09(t *testing.T) {
 
 	testStr := "x   "
 
@@ -734,13 +741,15 @@ func TestStrOps_IsEmptyOrWhiteSpace_09(t *testing.T) {
 
 }
 
-func TestStrOps_LowerCaseFirstLetter_01(t *testing.T) {
+func TestStrMech_LowerCaseFirstLetter_01(t *testing.T) {
 
 	testStr := "Now is the time for all good men to come to the aid of their country."
 
 	expected := "now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrMech{}.Ptr().LowerCaseFirstLetter(testStr)
+	sMech := StrMech{}
+
+	actualStr := sMech.LowerCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -749,7 +758,7 @@ func TestStrOps_LowerCaseFirstLetter_01(t *testing.T) {
 
 }
 
-func TestStrOps_LowerCaseFirstLetter_02(t *testing.T) {
+func TestStrMech_LowerCaseFirstLetter_02(t *testing.T) {
 
 	testStr := "  Now is the time for all good men to come to the aid of their country."
 
@@ -764,7 +773,7 @@ func TestStrOps_LowerCaseFirstLetter_02(t *testing.T) {
 
 }
 
-func TestStrOps_LowerCaseFirstLetter_03(t *testing.T) {
+func TestStrMech_LowerCaseFirstLetter_03(t *testing.T) {
 
 	testStr := "now is the time for all good men to come to the aid of their country."
 
@@ -779,7 +788,7 @@ func TestStrOps_LowerCaseFirstLetter_03(t *testing.T) {
 
 }
 
-func TestStrOps_LowerCaseFirstLetter_04(t *testing.T) {
+func TestStrMech_LowerCaseFirstLetter_04(t *testing.T) {
 
 	testStr := "  now is the time for all good men to come to the aid of their country."
 
@@ -794,7 +803,7 @@ func TestStrOps_LowerCaseFirstLetter_04(t *testing.T) {
 
 }
 
-func TestStrOps_LowerCaseFirstLetter_05(t *testing.T) {
+func TestStrMech_LowerCaseFirstLetter_05(t *testing.T) {
 
 	testStr := ""
 

@@ -5,9 +5,9 @@ import (
 	"testing"
 )
 
-func TestStrOps_ExtractNumericDigits_01(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_01() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_01() "
 
 	targetStr := "November 12, 2016 1:6:3pm +0000 UTC"
 	startIndex := 0
@@ -26,8 +26,10 @@ func TestStrOps_ExtractNumericDigits_01(t *testing.T) {
 		expectedNextTargetStrIndex = -1
 	}
 
+	sMech := StrMech{}
+
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := sMech.ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -78,9 +80,9 @@ func TestStrOps_ExtractNumericDigits_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_02(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_02() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_02() "
 
 	targetStr := "Etc/GMT+11"
 	startIndex := 0
@@ -152,9 +154,9 @@ func TestStrOps_ExtractNumericDigits_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_03(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_03() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_03() "
 
 	targetStr := "November 12, 2016 1:6:3pm +0000 UTC"
 	startIndex := 23
@@ -225,9 +227,9 @@ func TestStrOps_ExtractNumericDigits_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_04(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_04() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_04() "
 
 	targetStr := "2016 1:6:3pm +0000 UTC"
 	startIndex := 0
@@ -298,9 +300,9 @@ func TestStrOps_ExtractNumericDigits_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_05(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_05() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_05() "
 
 	targetStr := "2016"
 	startIndex := 0
@@ -371,9 +373,9 @@ func TestStrOps_ExtractNumericDigits_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_06(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_06() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_06() "
 
 	targetStr := "Hello World! Your bank account =$(1,250,364.33).44 What do you think?"
 	startIndex := 0
@@ -444,9 +446,9 @@ func TestStrOps_ExtractNumericDigits_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_07(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_07() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_07() "
 
 	targetStr := "Hello World! The time zone here is 'Etc/GMT+11'. What do you think?"
 	startIndex := 0
@@ -517,9 +519,9 @@ func TestStrOps_ExtractNumericDigits_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_08(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_08() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_08() "
 
 	targetStr := "Etc/GMT-4"
 	startIndex := 0
@@ -590,9 +592,9 @@ func TestStrOps_ExtractNumericDigits_08(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_09(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_09() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_09() "
 
 	targetStr := "+$697,621,911.77"
 	startIndex := 0
@@ -663,9 +665,9 @@ func TestStrOps_ExtractNumericDigits_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_10(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_10(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_10() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_10() "
 
 	targetStr := "Hello World\t+-$697,621,911.77\n"
 	startIndex := 0
@@ -736,9 +738,9 @@ func TestStrOps_ExtractNumericDigits_10(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_11(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_11(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_11() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_11() "
 
 	targetStr := "Hello World\t\n"
 	startIndex := 0
@@ -805,9 +807,9 @@ func TestStrOps_ExtractNumericDigits_11(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_12(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_12(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_12() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_12() "
 
 	targetStr := ""
 	startIndex := 0
@@ -832,9 +834,9 @@ func TestStrOps_ExtractNumericDigits_12(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_13(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_13(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_13() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_13() "
 
 	targetStr := "Hello World7Have a great day!"
 	startIndex := 0
@@ -905,9 +907,9 @@ func TestStrOps_ExtractNumericDigits_13(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_14(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_14(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_14() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_14() "
 
 	targetStr := "7Hello World Have a great day!"
 	startIndex := 0
@@ -978,9 +980,9 @@ func TestStrOps_ExtractNumericDigits_14(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_15(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_15(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_15() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_15() "
 
 	targetStr := "Hello World Have a great day!7"
 	startIndex := 0
@@ -1051,9 +1053,9 @@ func TestStrOps_ExtractNumericDigits_15(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_16(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_16(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_16() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_16() "
 
 	targetStr := "Hello World -7\t6 Have a great day!"
 	startIndex := 0
@@ -1124,9 +1126,9 @@ func TestStrOps_ExtractNumericDigits_16(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_17(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_17(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_17() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_17() "
 
 	targetStr := "Hello World.\t+$-697,621,911.77.\nHow are you.\n"
 	startIndex := 0
@@ -1197,9 +1199,9 @@ func TestStrOps_ExtractNumericDigits_17(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_18(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_18(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_19() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_19() "
 
 	targetStr := ""
 	startIndex := 0
@@ -1223,9 +1225,9 @@ func TestStrOps_ExtractNumericDigits_18(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_19(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_19(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_19() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_19() "
 
 	targetStr := "November 12, 2016 1:6:3pm +0000 UTC"
 	startIndex := -1
@@ -1249,9 +1251,9 @@ func TestStrOps_ExtractNumericDigits_19(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_20(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_20(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_20() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_20() "
 
 	targetStr := "November 12, 2016 1:6:3pm +0000 UTC"
 	startIndex := 999
@@ -1275,9 +1277,9 @@ func TestStrOps_ExtractNumericDigits_20(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractNumericDigits_21(t *testing.T) {
+func TestStrMech_ExtractNumericDigits_21(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractNumericDigits_21() "
+	ePrefix := "TestStrMech_ExtractNumericDigits_21() "
 
 	targetStr := "Etc/GMT-4"
 	startIndex := 0

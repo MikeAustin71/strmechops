@@ -442,6 +442,7 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 // CopyOut - Creates a 'deep' copy of the current
 // StrMech instance and returns a pointer to a
 // new instance containing that copied information.
+//
 func (sMech *StrMech) CopyOut() *StrMech {
 
 	if sMech.stringDataMutex == nil {
@@ -2382,9 +2383,8 @@ func (sMech *StrMech) LowerCaseFirstLetter(str string) string {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsQuark := strMechQuark{}
-
-	return sOpsQuark.lowerCaseFirstLetter(str)
+	return strMechQuark{}.ptr().
+		lowerCaseFirstLetter(str)
 }
 
 // MakeSingleCharString - Creates a string of length 'strLen' consisting of

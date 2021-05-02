@@ -130,7 +130,7 @@ func TestStrOps_Read_01(t *testing.T) {
 
 	p := make([]byte, 100)
 
-	s1 := StrMech{}.NewPtr()
+	s1 := StrMech{}
 	s1.SetStringData(expected)
 
 	n, err := s1.Read(p)
@@ -254,7 +254,10 @@ func TestStrOps_ReadStringFromBytes_01(t *testing.T) {
 
 	expectedStr := "Hello World"
 	expectedNextIdx := 13
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+
+	sMech := StrMech{}
+
+	result, nextStartIdx := sMech.ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -794,7 +797,9 @@ func TestStrOps_ReplaceBytes_01(t *testing.T) {
 	replaceBytes[4][0] = 'e'
 	replaceBytes[4][1] = 'E'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+	sMech := StrMech{}
+
+	actualRunes, err := sMech.ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
@@ -1151,7 +1156,9 @@ func TestStrOps_ReplaceMultipleStrs_01(t *testing.T) {
 
 	expectedStr := "HeFFxJWxrFd"
 
-	actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	sMech := StrMech{}
+
+	actualStr, err := sMech.ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
@@ -1557,7 +1564,9 @@ func TestStrOps_ReplaceNewLines_08(t *testing.T) {
 	replaceStr := ""
 	expectedStr := "\tHello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	sMech := StrMech{}
+
+	actualStr := sMech.ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -1571,6 +1580,26 @@ func TestStrOps_ReplaceNewLines_08(t *testing.T) {
 	if lenExpectedStr != lenActualStr {
 		t.Errorf("Error: Expected actual length='%v'. Instead, actual length='%v'",
 			lenExpectedStr, lenActualStr)
+	}
+
+}
+
+func TestStrOps_ReplaceNewLines_09(t *testing.T) {
+
+	testStr := ""
+	replaceStr := "XX"
+
+	sMech := StrMech{}
+
+	actualStr := sMech.ReplaceNewLines(testStr, replaceStr)
+
+	lenActualStr := len(actualStr)
+
+	if lenActualStr != 0 {
+		t.Errorf("Error: Expected actual length='0' because\n"+
+			"'testStr' is an empty string.\n"+
+			"Instead, actual length='%v'\n",
+			lenActualStr)
 	}
 
 }

@@ -2,9 +2,9 @@ package strmech
 
 import "testing"
 
-func TestStrOps_FindFirstNonSpaceChar_01(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_01() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_01() "
 
 	//012345678901234
 	testStr := "   Hello World"
@@ -28,9 +28,9 @@ func TestStrOps_FindFirstNonSpaceChar_01(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_02(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_02() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_02() "
 
 	//012345678901234
 	testStr := "       Hello"
@@ -54,9 +54,9 @@ func TestStrOps_FindFirstNonSpaceChar_02(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_03(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_01() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_01() "
 
 	//012345678901234
 	testStr := "Hello  There"
@@ -80,9 +80,9 @@ func TestStrOps_FindFirstNonSpaceChar_03(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_04(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_04() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_04() "
 
 	//012345678901234
 	testStr := "xx       H"
@@ -106,9 +106,9 @@ func TestStrOps_FindFirstNonSpaceChar_04(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_05(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_05() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_05() "
 
 	//012345678901234
 	testStr := "      Hello World"
@@ -132,9 +132,9 @@ func TestStrOps_FindFirstNonSpaceChar_05(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_06(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_06() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_06() "
 
 	//012345678901234
 	testStr := "Hello World"
@@ -152,9 +152,9 @@ func TestStrOps_FindFirstNonSpaceChar_06(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_07(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_07() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_07() "
 
 	//          012345678901234
 	testStr := "        Hello "
@@ -172,9 +172,9 @@ func TestStrOps_FindFirstNonSpaceChar_07(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_08(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_08() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_08() "
 
 	//          012345678901234
 	testStr := "012345 78901234"
@@ -192,9 +192,9 @@ func TestStrOps_FindFirstNonSpaceChar_08(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_09(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_09() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_09() "
 
 	//          012345678901234
 	testStr := "012345 78901234"
@@ -212,9 +212,9 @@ func TestStrOps_FindFirstNonSpaceChar_09(t *testing.T) {
 
 }
 
-func TestStrOps_FindFirstNonSpaceChar_10(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_10(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_10() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_10() "
 
 	//012345678901234
 	testStr := "xx       Hxglt"
@@ -237,9 +237,9 @@ func TestStrOps_FindFirstNonSpaceChar_10(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindFirstNonSpaceChar_11(t *testing.T) {
+func TestStrMech_FindFirstNonSpaceChar_11(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindFirstNonSpaceChar_11() "
+	ePrefix := "TestStrMech_FindFirstNonSpaceChar_11() "
 
 	//012345678901234
 	testStr := "  "
@@ -263,15 +263,17 @@ func TestStrOps_FindFirstNonSpaceChar_11(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_01(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_01() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_01() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "xx       Hxgltx     "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	sMech := StrMech{}
+
+	lastNonSpaceChar, err := sMech.FindLastNonSpaceChar(
 		tStr,
 		0,
 		19,
@@ -289,9 +291,9 @@ func TestStrOps_FindLastNonSpaceChar_01(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_02(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_02() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_02() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -315,9 +317,9 @@ func TestStrOps_FindLastNonSpaceChar_02(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_03(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_01() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_01() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -341,9 +343,9 @@ func TestStrOps_FindLastNonSpaceChar_03(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_04(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_04() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_04() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -367,9 +369,9 @@ func TestStrOps_FindLastNonSpaceChar_04(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_05(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_05() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_05() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -393,9 +395,9 @@ func TestStrOps_FindLastNonSpaceChar_05(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_06(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_06() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_06() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -419,9 +421,9 @@ func TestStrOps_FindLastNonSpaceChar_06(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_07(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_07() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_07() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -445,9 +447,9 @@ func TestStrOps_FindLastNonSpaceChar_07(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_08(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_08() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_08() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -471,9 +473,9 @@ func TestStrOps_FindLastNonSpaceChar_08(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastNonSpaceChar_09(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_09() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_09() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -490,9 +492,9 @@ func TestStrOps_FindLastNonSpaceChar_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_10(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_10(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_10() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_10() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -509,9 +511,9 @@ func TestStrOps_FindLastNonSpaceChar_10(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_12(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_12(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_12() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_12() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -528,9 +530,9 @@ func TestStrOps_FindLastNonSpaceChar_12(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_13(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_13(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_13() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_13() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -547,9 +549,9 @@ func TestStrOps_FindLastNonSpaceChar_13(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_14(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_14(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_14() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_14() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -566,9 +568,9 @@ func TestStrOps_FindLastNonSpaceChar_14(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_15(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_15(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_15() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_15() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -585,9 +587,9 @@ func TestStrOps_FindLastNonSpaceChar_15(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastNonSpaceChar_16(t *testing.T) {
+func TestStrMech_FindLastNonSpaceChar_16(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastNonSpaceChar_16() "
+	ePrefix := "TestStrMech_FindLastNonSpaceChar_16() "
 
 	//                 1         2         3         4         5         6         7         8
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -611,15 +613,17 @@ func TestStrOps_FindLastNonSpaceChar_16(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastSpace_01(t *testing.T) {
+func TestStrMech_FindLastSpace_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_01() "
+	ePrefix := "TestStrMech_FindLastSpace_01() "
 
 	//          012345678901234
 	testStr := "xx       Hxgltx"
 
+	sMech := StrMech{}
+
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		sMech.FindLastSpace(
 			testStr,
 			0,
 			14,
@@ -636,9 +640,9 @@ func TestStrOps_FindLastSpace_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_02(t *testing.T) {
+func TestStrMech_FindLastSpace_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_02() "
+	ePrefix := "TestStrMech_FindLastSpace_02() "
 
 	//          012345678901234
 	testStr := "xx1111111Hxglt "
@@ -661,9 +665,9 @@ func TestStrOps_FindLastSpace_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_03(t *testing.T) {
+func TestStrMech_FindLastSpace_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_03() "
+	ePrefix := "TestStrMech_FindLastSpace_03() "
 
 	//          012345678901234
 	testStr := " x1111111Hxgltf"
@@ -686,9 +690,9 @@ func TestStrOps_FindLastSpace_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_04(t *testing.T) {
+func TestStrMech_FindLastSpace_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_04() "
+	ePrefix := "TestStrMech_FindLastSpace_04() "
 
 	//          012345678901234
 	testStr := " x1111111Hxglt "
@@ -711,9 +715,9 @@ func TestStrOps_FindLastSpace_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_05(t *testing.T) {
+func TestStrMech_FindLastSpace_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_05() "
+	ePrefix := "TestStrMech_FindLastSpace_05() "
 
 	//          012345678901234
 	testStr := " x1111   Hxgl  "
@@ -736,9 +740,9 @@ func TestStrOps_FindLastSpace_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_06(t *testing.T) {
+func TestStrMech_FindLastSpace_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_06() "
+	ePrefix := "TestStrMech_FindLastSpace_06() "
 
 	//          012345678901234
 	testStr := "fx1111rg3luHxgl"
@@ -761,9 +765,9 @@ func TestStrOps_FindLastSpace_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_07(t *testing.T) {
+func TestStrMech_FindLastSpace_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_07() "
+	ePrefix := "TestStrMech_FindLastSpace_07() "
 
 	//          012345678901234
 	testStr := "fx1111  3luHxgl"
@@ -786,9 +790,9 @@ func TestStrOps_FindLastSpace_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_08(t *testing.T) {
+func TestStrMech_FindLastSpace_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_08() "
+	ePrefix := "TestStrMech_FindLastSpace_08() "
 
 	//          012345678901234
 	testStr := "fx1111  3luHxgl"
@@ -806,9 +810,9 @@ func TestStrOps_FindLastSpace_08(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_09(t *testing.T) {
+func TestStrMech_FindLastSpace_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_09() "
+	ePrefix := "TestStrMech_FindLastSpace_09() "
 
 	//          012345678901234
 	testStr := "fx1111  3luHxgl"
@@ -826,9 +830,9 @@ func TestStrOps_FindLastSpace_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_10(t *testing.T) {
+func TestStrMech_FindLastSpace_10(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_10() "
+	ePrefix := "TestStrMech_FindLastSpace_10() "
 
 	//          012345678901234
 	testStr := "fx1111  3luHxgl"
@@ -846,9 +850,9 @@ func TestStrOps_FindLastSpace_10(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_11(t *testing.T) {
+func TestStrMech_FindLastSpace_11(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_11() "
+	ePrefix := "TestStrMech_FindLastSpace_11() "
 
 	//          012345678901234
 	testStr := "fx1111  3luHxgl"
@@ -866,9 +870,9 @@ func TestStrOps_FindLastSpace_11(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_12(t *testing.T) {
+func TestStrMech_FindLastSpace_12(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_12() "
+	ePrefix := "TestStrMech_FindLastSpace_12() "
 
 	//          012345678901234
 	testStr := "fx1111  3luHxgl"
@@ -886,9 +890,9 @@ func TestStrOps_FindLastSpace_12(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_13(t *testing.T) {
+func TestStrMech_FindLastSpace_13(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_13() "
+	ePrefix := "TestStrMech_FindLastSpace_13() "
 
 	//          012345678901234
 	testStr := ""
@@ -906,9 +910,9 @@ func TestStrOps_FindLastSpace_13(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastSpace_14(t *testing.T) {
+func TestStrMech_FindLastSpace_14(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastSpace_14() "
+	ePrefix := "TestStrMech_FindLastSpace_14() "
 
 	//          012345678901234
 	testStr := ""
@@ -925,16 +929,18 @@ func TestStrOps_FindLastSpace_14(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastWord_01(t *testing.T) {
+func TestStrMech_FindLastWord_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_01() "
+	ePrefix := "TestStrMech_FindLastWord_01() "
 
 	//          0         1         2         3         4         5         6         7
 	//          01234567890123456789012345678901234567890123456789012345678901234567890
 	testStr := "Now is the time for all good men to come to the aid of their country.  "
 
+	sMech := StrMech{}
+
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		sMech.FindLastWord(
 			testStr,
 			0,
 			70,
@@ -963,9 +969,9 @@ func TestStrOps_FindLastWord_01(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_02(t *testing.T) {
+func TestStrMech_FindLastWord_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_02() "
+	ePrefix := "TestStrMech_FindLastWord_02() "
 
 	//          0         1         2         3         4         5         6         7
 	//          01234567890123456789012345678901234567890123456789012345678901234567890
@@ -1002,9 +1008,9 @@ func TestStrOps_FindLastWord_02(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_03(t *testing.T) {
+func TestStrMech_FindLastWord_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_03() "
+	ePrefix := "TestStrMech_FindLastWord_03() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1041,9 +1047,9 @@ func TestStrOps_FindLastWord_03(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_04(t *testing.T) {
+func TestStrMech_FindLastWord_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_04() "
+	ePrefix := "TestStrMech_FindLastWord_04() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1080,9 +1086,9 @@ func TestStrOps_FindLastWord_04(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_05(t *testing.T) {
+func TestStrMech_FindLastWord_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_05() "
+	ePrefix := "TestStrMech_FindLastWord_05() "
 
 	//          0         1         2         4         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1119,9 +1125,9 @@ func TestStrOps_FindLastWord_05(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_06(t *testing.T) {
+func TestStrMech_FindLastWord_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_06() "
+	ePrefix := "TestStrMech_FindLastWord_06() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1158,9 +1164,9 @@ func TestStrOps_FindLastWord_06(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_07(t *testing.T) {
+func TestStrMech_FindLastWord_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_07() "
+	ePrefix := "TestStrMech_FindLastWord_07() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1197,9 +1203,9 @@ func TestStrOps_FindLastWord_07(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_08(t *testing.T) {
+func TestStrMech_FindLastWord_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_08() "
+	ePrefix := "TestStrMech_FindLastWord_08() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1236,9 +1242,9 @@ func TestStrOps_FindLastWord_08(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_09(t *testing.T) {
+func TestStrMech_FindLastWord_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_09() "
+	ePrefix := "TestStrMech_FindLastWord_09() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1258,9 +1264,9 @@ func TestStrOps_FindLastWord_09(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_10(t *testing.T) {
+func TestStrMech_FindLastWord_10(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_10() "
+	ePrefix := "TestStrMech_FindLastWord_10() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1280,9 +1286,9 @@ func TestStrOps_FindLastWord_10(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_11(t *testing.T) {
+func TestStrMech_FindLastWord_11(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_11() "
+	ePrefix := "TestStrMech_FindLastWord_11() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1302,9 +1308,9 @@ func TestStrOps_FindLastWord_11(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_12(t *testing.T) {
+func TestStrMech_FindLastWord_12(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_12() "
+	ePrefix := "TestStrMech_FindLastWord_12() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1324,9 +1330,9 @@ func TestStrOps_FindLastWord_12(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_13(t *testing.T) {
+func TestStrMech_FindLastWord_13(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_13() "
+	ePrefix := "TestStrMech_FindLastWord_13() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1345,9 +1351,9 @@ func TestStrOps_FindLastWord_13(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_14(t *testing.T) {
+func TestStrMech_FindLastWord_14(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_14() "
+	ePrefix := "TestStrMech_FindLastWord_14() "
 
 	//          0         1         2         3         4         5         6         7
 	//          0123456789012345678901234567890123456789012345678901234567890123456789012
@@ -1367,9 +1373,9 @@ func TestStrOps_FindLastWord_14(t *testing.T) {
 
 }
 
-func TestStrOps_FindLastWord_15(t *testing.T) {
+func TestStrMech_FindLastWord_15(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_15() "
+	ePrefix := "TestStrMech_FindLastWord_15() "
 
 	//          0         1         2         3         4         5         6         7
 	//          01234567890123456789012345678901234567890123456789012345678901234567890
@@ -1412,9 +1418,9 @@ func TestStrOps_FindLastWord_15(t *testing.T) {
 	}
 }
 
-func TestStrOps_FindLastWord_16(t *testing.T) {
+func TestStrMech_FindLastWord_16(t *testing.T) {
 
-	ePrefix := "TestStrOps_FindLastWord_16() "
+	ePrefix := "TestStrMech_FindLastWord_16() "
 
 	//          0         1         2         3         4         5         6         7
 	//          01234567890123456789012345678901234567890123456789012345678901234567890
