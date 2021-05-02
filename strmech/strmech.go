@@ -2436,14 +2436,15 @@ func (sMech *StrMech) Read(p []byte) (n int, err error) {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	ePrefix := "StrMech.Read() "
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"StrMech.Read()",
+		"")
 
-	sOpsElectron := strMechElectron{}
-
-	return sOpsElectron.readBytes(
-		sMech,
-		p,
-		ePrefix)
+	return strMechElectron{}.ptr().
+		readBytes(
+			sMech,
+			p,
+			&ePrefix)
 
 }
 
@@ -5138,10 +5139,13 @@ func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	sOpsElectron := strMechElectron{}
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"StrMech.Write()",
+		"")
 
-	return sOpsElectron.write(
-		sMech,
-		p,
-		"StrMech.Write() ")
+	return strMechElectron{}.ptr().
+		write(
+			sMech,
+			p,
+			&ePrefix)
 }
