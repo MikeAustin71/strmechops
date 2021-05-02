@@ -246,8 +246,6 @@
 --- PASS: TestStrOps_GetReader_01 (0.00s)
 === RUN   TestStrOps_GetReader_02
 --- PASS: TestStrOps_GetReader_02 (0.00s)
-=== RUN   TestStrOps_GetSoftwareVersion_01
---- PASS: TestStrOps_GetSoftwareVersion_01 (0.00s)
 === RUN   TestStrOps_GetValidBytes_01
 --- PASS: TestStrOps_GetValidBytes_01 (0.00s)
 === RUN   TestStrOps_GetValidBytes_02
@@ -677,5 +675,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 92.5% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.934s
+coverage: 89.9% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.458s

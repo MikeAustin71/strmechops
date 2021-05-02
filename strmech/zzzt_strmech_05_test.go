@@ -84,17 +84,6 @@ func TestStrOps_GetReader_02(t *testing.T) {
 
 }
 
-func TestStrOps_GetSoftwareVersion_01(t *testing.T) {
-	expectedStr := "3.0.0"
-	actualStr := StrMech{}.GetSoftwareVersion()
-
-	if expectedStr != actualStr {
-		t.Errorf("Error: Expected Software Version string='%v'.\n"+
-			"Instead, Software Version string='%v'.\n",
-			expectedStr, actualStr)
-	}
-}
-
 func TestStrOps_GetValidBytes_01(t *testing.T) {
 
 	ePrefix := "TestStrOps_GetValidBytes_01() "
