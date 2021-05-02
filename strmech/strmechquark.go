@@ -192,9 +192,199 @@ func (sMechQuark *strMechQuark) convertNonPrintableChars(
 
 }
 
-// DoesLastCharExist - returns true if the last character (rune) of
+// convertPrintableChars - Converts selected printable characters
+// to their non-printable or native equivalent. For example,
+// instances of '\\n' in a string will be converted to '\n'.
+//
+// Additional examples of converted printable string characters
+// are: "\\n", "\\t" and "[ACK]". These printable characters be
+// converted into their native, non-printable state: '\n', '\t' or
+// 0x06 (Acknowledge).
+//
+// This method, strMechQuark.convertPrintableChars(), performs the
+// mirror operation to that performed by method
+// strMechQuark.convertNonPrintableChars().
+//
+// strMechQuark.convertNonPrintableChars() converts non-printable
+// characters into printable characters.
+//
+// strMechQuark.convertPrintableChars() preforms in just the
+// opposite manner. It converts printable characters back into
+// non-printable characters.
+//
+// If strMechQuark.convertNonPrintableChars() is called on a string
+// containing non-printable characters, calling
+// strMechQuark.convertPrintableChars() on the resulting string will
+// reverse the operation and return the string to its original
+// content.
+//
+// Reference:
+//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  printableChars      string
+//     - A string which may contain non-printable characters converted
+//       to their printable equivalents. These printable characters will
+//       be converted back to their native, non-printable values.
+//
+//
+//  ePrefix             *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  nonPrintableChars   []rune
+//     - An array of runes containing non-printable characters.
+//       The non-printable characters were be converted from the
+//       printable characters contained in input parameter
+//       'printableChars'.
+//
+//
+//  err                 error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'ePrefix' (error prefix) will be inserted or
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  testStr := "Hello[SPACE]world!\\n"
+//  ePrefix := "theCallingFunction()"
+//
+//  ePrefQuark := errPrefQuark{}
+//
+//  actualRuneArray :=
+//    ePrefQuark.
+//      convertPrintableChars(
+//           testStr,
+//           ePrefix)
+//
+//  ----------------------------------------------------
+//  'actualRuneArray' is now equal to:
+//     "Hello world!\n"
+//
+func (sMechQuark *strMechQuark) convertPrintableChars(
+	printableChars string,
+	ePrefix *ePref.ErrPrefixDto) (
+	nonPrintableChars []rune,
+	err error) {
+
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
+	}
+
+	sMechQuark.lock.Lock()
+
+	defer sMechQuark.lock.Unlock()
+
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
+	}
+
+	ePrefix.SetEPref(
+		"strMechQuark." +
+			"convertPrintableChars()")
+
+	nonPrintableChars = make([]rune, 0)
+
+	lenPrintableChars := len(printableChars)
+
+	if lenPrintableChars == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'printableChars' is invalid!\n"+
+			"'printableChars' is an empty or zero lenght string.\n",
+			ePrefix)
+
+		return nonPrintableChars, err
+	}
+
+	printableChars = strings.Replace(
+		printableChars, "[SPACE]", " ", -1)
+
+	printableChars = strings.Replace(
+		printableChars, "[NULL]", string(rune(0x00)), -1) // 0x00 NULL
+
+	printableChars = strings.Replace(
+		printableChars, "[SOH]", string(rune(0x01)), -1) // 0x01 State of Heading
+
+	printableChars = strings.Replace(
+		printableChars, "[STX]", string(rune(0x02)), -1) // 0x02 State of Text
+
+	printableChars = strings.Replace(
+		printableChars, "[ETX]", string(rune(0x03)), -1) // 0x03 End of Text
+
+	printableChars = strings.Replace(
+		printableChars, "[EOT]", string(rune(0x04)), -1) // 0X04 End of Transmission
+
+	printableChars = strings.Replace(
+		printableChars, "[ENQ]", string(rune(0x05)), -1) // 0x05 Enquiry
+
+	printableChars = strings.Replace(
+		printableChars, "[ACK]", string(rune(0x06)), -1) // 0x06 Acknowledge
+
+	printableChars = strings.Replace(
+		printableChars, "\\a", string(rune(0x07)), -1) // U+0007 alert or bell
+
+	printableChars = strings.Replace(
+		printableChars, "\\b", string(rune(0x08)), -1) // U+0008 backspace
+
+	printableChars = strings.Replace(
+		printableChars, "\\t", string(rune(0x09)), -1) // U+0009 horizontal tab
+
+	printableChars = strings.Replace(
+		printableChars, "\\n", string(rune(0x0A)), -1) // U+000A line feed or newline
+
+	printableChars = strings.Replace(
+		printableChars, "\\v", string(rune(0x0B)), -1) // U+000B vertical tab
+
+	printableChars = strings.Replace(
+		printableChars, "\\f", string(rune(0x0C)), -1) // U+000C form feed
+
+	printableChars = strings.Replace(
+		printableChars, "\\r", string(rune(0x0D)), -1) // U+000D carriage return
+
+	printableChars = strings.Replace(
+		printableChars, "[SO]", string(rune(0x0E)), -1) // U+000E Shift Out
+
+	printableChars = strings.Replace(
+		printableChars, "[SI]", string(rune(0x0F)), -1) // U+000F Shift In
+
+	printableChars = strings.Replace(
+		printableChars, "\\", string(rune(0x5c)), -1) // U+005c backslash
+
+	nonPrintableChars = []rune(printableChars)
+
+	return nonPrintableChars, err
+}
+
+// doesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
+//
 func (sMechQuark *strMechQuark) doesLastCharExist(
 	testStr string,
 	lastChar rune) bool {

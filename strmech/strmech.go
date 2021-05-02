@@ -254,6 +254,167 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 	return printableChars
 }
 
+// ConvertPrintableChars - Converts printable characters to their
+// non-printable or native equivalent. For example, instances of
+// '\\n' in a string will be converted to '\n'.
+//
+// Additional examples of converted printable string characters
+// are: "\\n", "\\t" and "[ACK]". These printable characters be
+// converted into their native, non-printable state: '\n', '\t' or
+// 0x06 (Acknowledge).
+//
+// This method, StrMech.ConvertPrintableChars(), performs the
+// mirror operation to that performed by method
+// StrMech.ConvertNonPrintableChars().
+//
+// StrMech.ConvertNonPrintableChars() converts non-printable
+// characters into printable characters.
+//
+// StrMech.ConvertPrintableChars() preforms in just the opposite
+// manner. It converts printable characters back into non-printable
+// characters.
+//
+// If StrMech.ConvertNonPrintableChars() is called on a string
+// containing non-printable characters, calling StrMech.ConvertPrintableChars()
+// on the resulting string will reverse the operation and return
+// that string to its original content.
+//
+//
+// Reference:
+//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  printableChars      string
+//     - A string which may contain non-printable characters converted
+//       to their printable equivalents. These printable characters will
+//       be converted back to their native, non-printable values.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  nonPrintableChars   []rune
+//     - An array of runes containing non-printable characters.
+//       The non-printable characters were be converted from the
+//       printable characters contained in input parameter
+//       'printableChars'.
+//
+//
+//  err                 error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  testStr := "Hello[SPACE]world!\\n"
+//  ePrefix := "theCallingFunction()"
+//
+//  sMech := StrMech{}
+//
+//  actualRuneArray :=
+//    sMech.
+//      ConvertPrintableChars(
+//           testStr,
+//           ePrefix)
+//
+//  ----------------------------------------------------
+//  'actualRuneArray' is now equal to:
+//     "Hello world!\n"
+//
+func (sMech *StrMech) ConvertPrintableChars(
+	printableChars string,
+	errorPrefix interface{}) (
+	nonPrintableChars []rune,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	nonPrintableChars = []rune{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ConvertPrintableChars()",
+		"")
+
+	if err != nil {
+		return nonPrintableChars, err
+	}
+
+	nonPrintableChars,
+		err = strMechQuark{}.ptr().convertPrintableChars(
+		printableChars,
+		ePrefix)
+
+	return nonPrintableChars, err
+}
+
 // CopyIn - Copies string information from another StrMech
 // instance passed as an input parameter to the current
 // StrMech instance.
