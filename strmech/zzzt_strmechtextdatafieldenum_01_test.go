@@ -142,6 +142,27 @@ func TestDataFieldTrailingDelimiterType_StatusIsValid_02(t *testing.T) {
 	}
 }
 
+func TestDataFieldTrailingDelimiterType_XIsValid_01(t *testing.T) {
+	testDataFieldType := DfTrailDelimiter.EndOfField()
+
+	isOk := testDataFieldType.XIsValid()
+
+	if !isOk {
+		t.Error("Error returned on EndOfField Status Is Valid")
+	}
+}
+
+func TestDataFieldTrailingDelimiterType_XIsValid_02(t *testing.T) {
+	testDataFieldType := DataFieldTrailingDelimiterType(-99)
+
+	isOk := testDataFieldType.XIsValid()
+
+	if isOk {
+		t.Error("Expected an error return from StatusIsValid() because\n" +
+			"DataFieldTrailingDelimiterType(-99) is invalid!\n")
+	}
+}
+
 func TestDataFieldTrailingDelimiterType_String_01(t *testing.T) {
 
 	testDFType := DfTrailDelimiter.EndOfLine()

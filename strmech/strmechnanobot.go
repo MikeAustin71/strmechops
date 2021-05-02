@@ -58,37 +58,38 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 		return "",
 			fmt.Errorf("%v\n"+
 				"Error: Input parameter 'strToCenter' is All White Space or an EMPTY String!\n",
-				ePrefix)
+				ePrefix.String())
 	}
 
 	if fieldLen < len(strToCenter) {
 		return "",
 			fmt.Errorf("%s\n"+
 				"Error: Input parameter 'fieldLen' is less than length of 'strToCenter'.\n"+
+				"strToCenter='%v'\n"+
 				"strToCenter length='%v'\n"+
 				"fieldLen='%v'\n",
 				ePrefix.String(),
-				len(strToCenter), fieldLen)
+				strToCenter,
+				len(strToCenter),
+				fieldLen)
 	}
 
-	sMechMolecule := strMechMolecule{}
-
-	pad, err := sMechMolecule.strPadLeftToCenter(
-		strToCenter,
-		fieldLen,
-		ePrefix)
+	pad, err := strMechMolecule{}.ptr().
+		strPadLeftToCenter(
+			strToCenter,
+			fieldLen,
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"\nstrToCenter='%v'\n"+
+						"fieldLen='%v'\n",
+					strToCenter,
+					fieldLen)))
 
 	if err != nil {
-		return "",
-			fmt.Errorf("%s\n"+
-				"Error returned by sops.StrPadLeftToCenter(strToCenter, fieldLen).\n"+
-				"Error='%v'\n",
-				ePrefix.String(),
-				err.Error())
+		return "", err
 	}
 
-	return pad + strToCenter, nil
-
+	return pad + strToCenter, err
 }
 
 // justifyTextInStrField - Creates a and returns a new string text
@@ -241,16 +242,6 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 
 	justifiedStr = ""
 
-	if !textJustify.XIsValid() {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textJustify' is invalid!\n"+
-			"textJustify integer value == '%v'\n",
-			ePrefix.String(),
-			textJustify.XValueInt())
-
-		return justifiedStr, err
-	}
-
 	lenStrToJustify := len(strToJustify)
 
 	if fieldLen < 1 &&
@@ -283,13 +274,20 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 		return justifiedStr, err
 	}
 
-	sOpsMolecule := strMechMolecule{}
+	sMechMolecule := strMechMolecule{}
+
+	ePrefix.SetCtx(fmt.Sprintf(
+		"\n"+
+			"strToJustify='%v'\n"+
+			"fieldLen='%v'\n",
+		strToJustify,
+		fieldLen))
 
 	switch textJustify {
 	case TextJustify(0).Left():
 
 		justifiedStr,
-			err = sOpsMolecule.strLeftJustify(
+			err = sMechMolecule.strLeftJustify(
 			strToJustify,
 			fieldLen,
 			ePrefix)
@@ -297,7 +295,7 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	case TextJustify(0).Right():
 
 		justifiedStr,
-			err = sOpsMolecule.strRightJustify(
+			err = sMechMolecule.strRightJustify(
 			strToJustify,
 			fieldLen,
 			ePrefix)
@@ -305,7 +303,7 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	case TextJustify(0).Center():
 
 		justifiedStr,
-			err = sOpsMolecule.strCenterInStr(
+			err = sMechMolecule.strCenterInStr(
 			strToJustify,
 			fieldLen,
 			ePrefix)

@@ -5,9 +5,9 @@ import (
 	"testing"
 )
 
-func TestStrOps_ExtractDataField_01(t *testing.T) {
+func TestStrMech_ExtractDataField_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_01() "
+	ePrefix := "TestStrMech_ExtractDataField_01() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -170,9 +170,9 @@ func TestStrOps_ExtractDataField_01(t *testing.T) {
 
 }
 
-func TestStrOps_ExtractDataField_02(t *testing.T) {
+func TestStrMech_ExtractDataField_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_02() "
+	ePrefix := "TestStrMech_ExtractDataField_02() "
 
 	endOfLineDelimiters := []string{"\n"}
 
@@ -334,9 +334,9 @@ func TestStrOps_ExtractDataField_02(t *testing.T) {
 
 }
 
-func TestStrOps_ExtractDataField_03(t *testing.T) {
+func TestStrMech_ExtractDataField_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_03() "
+	ePrefix := "TestStrMech_ExtractDataField_03() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -490,9 +490,9 @@ func TestStrOps_ExtractDataField_03(t *testing.T) {
 
 }
 
-func TestStrOps_ExtractDataField_04(t *testing.T) {
+func TestStrMech_ExtractDataField_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_04() "
+	ePrefix := "TestStrMech_ExtractDataField_04() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -653,9 +653,9 @@ func TestStrOps_ExtractDataField_04(t *testing.T) {
 
 }
 
-func TestStrOps_ExtractDataField_05(t *testing.T) {
+func TestStrMech_ExtractDataField_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_05() "
+	ePrefix := "TestStrMech_ExtractDataField_05() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -810,9 +810,9 @@ func TestStrOps_ExtractDataField_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_06(t *testing.T) {
+func TestStrMech_ExtractDataField_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_06() "
+	ePrefix := "TestStrMech_ExtractDataField_06() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -966,9 +966,9 @@ func TestStrOps_ExtractDataField_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_07(t *testing.T) {
+func TestStrMech_ExtractDataField_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_07() "
+	ePrefix := "TestStrMech_ExtractDataField_07() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1136,9 +1136,9 @@ func TestStrOps_ExtractDataField_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_08(t *testing.T) {
+func TestStrMech_ExtractDataField_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_08() "
+	ePrefix := "TestStrMech_ExtractDataField_08() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1296,9 +1296,9 @@ func TestStrOps_ExtractDataField_08(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_09(t *testing.T) {
+func TestStrMech_ExtractDataField_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_09() "
+	ePrefix := "TestStrMech_ExtractDataField_09() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1334,9 +1334,9 @@ func TestStrOps_ExtractDataField_09(t *testing.T) {
 
 }
 
-func TestStrOps_ExtractDataField_10(t *testing.T) {
+func TestStrMech_ExtractDataField_10(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_10() "
+	ePrefix := "TestStrMech_ExtractDataField_10() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1371,9 +1371,9 @@ func TestStrOps_ExtractDataField_10(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_11(t *testing.T) {
+func TestStrMech_ExtractDataField_11(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_11() "
+	ePrefix := "TestStrMech_ExtractDataField_11() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1414,9 +1414,9 @@ func TestStrOps_ExtractDataField_11(t *testing.T) {
 
 }
 
-func TestStrOps_ExtractDataField_12(t *testing.T) {
+func TestStrMech_ExtractDataField_12(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_12() "
+	ePrefix := "TestStrMech_ExtractDataField_12() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1456,9 +1456,9 @@ func TestStrOps_ExtractDataField_12(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_13(t *testing.T) {
+func TestStrMech_ExtractDataField_13(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_13() "
+	ePrefix := "TestStrMech_ExtractDataField_13() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1498,9 +1498,9 @@ func TestStrOps_ExtractDataField_13(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_14(t *testing.T) {
+func TestStrMech_ExtractDataField_14(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_14() "
+	ePrefix := "TestStrMech_ExtractDataField_14() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1655,9 +1655,9 @@ func TestStrOps_ExtractDataField_14(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_15(t *testing.T) {
+func TestStrMech_ExtractDataField_15(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_15() "
+	ePrefix := "TestStrMech_ExtractDataField_15() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1698,9 +1698,9 @@ func TestStrOps_ExtractDataField_15(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_16(t *testing.T) {
+func TestStrMech_ExtractDataField_16(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_16() "
+	ePrefix := "TestStrMech_ExtractDataField_16() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1740,9 +1740,9 @@ func TestStrOps_ExtractDataField_16(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_17(t *testing.T) {
+func TestStrMech_ExtractDataField_17(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_17() "
+	ePrefix := "TestStrMech_ExtractDataField_17() "
 
 	endOfLineDelimiters := []string{"", "", ""}
 	commentDelimiters := []string{"#"}
@@ -1783,9 +1783,9 @@ func TestStrOps_ExtractDataField_17(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_18(t *testing.T) {
+func TestStrMech_ExtractDataField_18(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_18() "
+	ePrefix := "TestStrMech_ExtractDataField_18() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"", "", ""}
@@ -1826,9 +1826,9 @@ func TestStrOps_ExtractDataField_18(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_19(t *testing.T) {
+func TestStrMech_ExtractDataField_19(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_19() "
+	ePrefix := "TestStrMech_ExtractDataField_19() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1873,9 +1873,9 @@ func TestStrOps_ExtractDataField_19(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_20(t *testing.T) {
+func TestStrMech_ExtractDataField_20(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_20() "
+	ePrefix := "TestStrMech_ExtractDataField_20() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}
@@ -1920,9 +1920,9 @@ func TestStrOps_ExtractDataField_20(t *testing.T) {
 	}
 }
 
-func TestStrOps_ExtractDataField_21(t *testing.T) {
+func TestStrMech_ExtractDataField_21(t *testing.T) {
 
-	ePrefix := "TestStrOps_ExtractDataField_21() "
+	ePrefix := "TestStrMech_ExtractDataField_21() "
 
 	endOfLineDelimiters := []string{"\n"}
 	commentDelimiters := []string{"#"}

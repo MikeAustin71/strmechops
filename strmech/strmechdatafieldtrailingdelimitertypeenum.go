@@ -357,4 +357,4 @@ func (dfTrailDelimiter DataFieldTrailingDelimiterType) XValueInt() int {
 //  DfTrailDelimiter.EndOfLine()
 //  DfTrailDelimiter.EndOfString()
 //
-var DfTrailDelimiter DataFieldTrailingDelimiterType
+const DfTrailDelimiter = DataFieldTrailingDelimiterType(0)

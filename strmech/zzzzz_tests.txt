@@ -50,48 +50,48 @@
 --- PASS: TestStrMech_DoesLastCharExist_02 (0.00s)
 === RUN   TestStrMech_DoesLastCharExist_03
 --- PASS: TestStrMech_DoesLastCharExist_03 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_01
---- PASS: TestStrOps_ExtractDataField_01 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_02
---- PASS: TestStrOps_ExtractDataField_02 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_03
---- PASS: TestStrOps_ExtractDataField_03 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_04
---- PASS: TestStrOps_ExtractDataField_04 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_05
---- PASS: TestStrOps_ExtractDataField_05 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_06
---- PASS: TestStrOps_ExtractDataField_06 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_07
---- PASS: TestStrOps_ExtractDataField_07 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_08
---- PASS: TestStrOps_ExtractDataField_08 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_09
---- PASS: TestStrOps_ExtractDataField_09 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_10
---- PASS: TestStrOps_ExtractDataField_10 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_11
---- PASS: TestStrOps_ExtractDataField_11 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_12
---- PASS: TestStrOps_ExtractDataField_12 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_13
---- PASS: TestStrOps_ExtractDataField_13 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_14
---- PASS: TestStrOps_ExtractDataField_14 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_15
---- PASS: TestStrOps_ExtractDataField_15 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_16
---- PASS: TestStrOps_ExtractDataField_16 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_17
---- PASS: TestStrOps_ExtractDataField_17 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_18
---- PASS: TestStrOps_ExtractDataField_18 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_19
---- PASS: TestStrOps_ExtractDataField_19 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_20
---- PASS: TestStrOps_ExtractDataField_20 (0.00s)
-=== RUN   TestStrOps_ExtractDataField_21
---- PASS: TestStrOps_ExtractDataField_21 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_01
+--- PASS: TestStrMech_ExtractDataField_01 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_02
+--- PASS: TestStrMech_ExtractDataField_02 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_03
+--- PASS: TestStrMech_ExtractDataField_03 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_04
+--- PASS: TestStrMech_ExtractDataField_04 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_05
+--- PASS: TestStrMech_ExtractDataField_05 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_06
+--- PASS: TestStrMech_ExtractDataField_06 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_07
+--- PASS: TestStrMech_ExtractDataField_07 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_08
+--- PASS: TestStrMech_ExtractDataField_08 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_09
+--- PASS: TestStrMech_ExtractDataField_09 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_10
+--- PASS: TestStrMech_ExtractDataField_10 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_11
+--- PASS: TestStrMech_ExtractDataField_11 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_12
+--- PASS: TestStrMech_ExtractDataField_12 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_13
+--- PASS: TestStrMech_ExtractDataField_13 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_14
+--- PASS: TestStrMech_ExtractDataField_14 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_15
+--- PASS: TestStrMech_ExtractDataField_15 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_16
+--- PASS: TestStrMech_ExtractDataField_16 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_17
+--- PASS: TestStrMech_ExtractDataField_17 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_18
+--- PASS: TestStrMech_ExtractDataField_18 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_19
+--- PASS: TestStrMech_ExtractDataField_19 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_20
+--- PASS: TestStrMech_ExtractDataField_20 (0.00s)
+=== RUN   TestStrMech_ExtractDataField_21
+--- PASS: TestStrMech_ExtractDataField_21 (0.00s)
 === RUN   TestStrMech_ExtractNumericDigits_01
 --- PASS: TestStrMech_ExtractNumericDigits_01 (0.00s)
 === RUN   TestStrMech_ExtractNumericDigits_02
@@ -322,112 +322,112 @@
 --- PASS: TestStrMech_LowerCaseFirstLetter_04 (0.00s)
 === RUN   TestStrMech_LowerCaseFirstLetter_05
 --- PASS: TestStrMech_LowerCaseFirstLetter_05 (0.00s)
-=== RUN   TestStrOps_MakeSingleCharString_01
---- PASS: TestStrOps_MakeSingleCharString_01 (0.00s)
-=== RUN   TestStrOps_MakeSingleCharString_02
---- PASS: TestStrOps_MakeSingleCharString_02 (0.00s)
-=== RUN   TestStrOps_MakeSingleCharString_03
---- PASS: TestStrOps_MakeSingleCharString_03 (0.00s)
-=== RUN   TestStrOps_MakeSingleCharString_04
---- PASS: TestStrOps_MakeSingleCharString_04 (0.00s)
-=== RUN   TestStrOps_Read_01
---- PASS: TestStrOps_Read_01 (0.00s)
-=== RUN   TestStrOps_Read_02
---- PASS: TestStrOps_Read_02 (0.00s)
-=== RUN   TestStrOps_Read_03
---- PASS: TestStrOps_Read_03 (0.00s)
-=== RUN   TestStrOps_Read_04
---- PASS: TestStrOps_Read_04 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_01
---- PASS: TestStrOps_ReadStringFromBytes_01 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_02
---- PASS: TestStrOps_ReadStringFromBytes_02 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_03
---- PASS: TestStrOps_ReadStringFromBytes_03 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_04
---- PASS: TestStrOps_ReadStringFromBytes_04 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_05
---- PASS: TestStrOps_ReadStringFromBytes_05 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_06
---- PASS: TestStrOps_ReadStringFromBytes_06 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_07
---- PASS: TestStrOps_ReadStringFromBytes_07 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_08
---- PASS: TestStrOps_ReadStringFromBytes_08 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_09
---- PASS: TestStrOps_ReadStringFromBytes_09 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_10
---- PASS: TestStrOps_ReadStringFromBytes_10 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_11
---- PASS: TestStrOps_ReadStringFromBytes_11 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_12
---- PASS: TestStrOps_ReadStringFromBytes_12 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_13
---- PASS: TestStrOps_ReadStringFromBytes_13 (0.00s)
-=== RUN   TestStrOps_ReadStringFromBytes_14
---- PASS: TestStrOps_ReadStringFromBytes_14 (0.00s)
-=== RUN   TestStrOps_RemoveStringChar_01
---- PASS: TestStrOps_RemoveStringChar_01 (0.00s)
-=== RUN   TestStrOps_RemoveStringChar_02
---- PASS: TestStrOps_RemoveStringChar_02 (0.00s)
-=== RUN   TestStrOps_RemoveStringChar_03
---- PASS: TestStrOps_RemoveStringChar_03 (0.00s)
-=== RUN   TestStrOps_RemoveStringChar_04
---- PASS: TestStrOps_RemoveStringChar_04 (0.00s)
-=== RUN   TestStrOps_RemoveStringChar_05
---- PASS: TestStrOps_RemoveStringChar_05 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_01
---- PASS: TestStrOps_ReplaceBytes_01 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_02
---- PASS: TestStrOps_ReplaceBytes_02 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_03
---- PASS: TestStrOps_ReplaceBytes_03 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_04
---- PASS: TestStrOps_ReplaceBytes_04 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_05
---- PASS: TestStrOps_ReplaceBytes_05 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_06
---- PASS: TestStrOps_ReplaceBytes_06 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_07
---- PASS: TestStrOps_ReplaceBytes_07 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_08
---- PASS: TestStrOps_ReplaceBytes_08 (0.00s)
-=== RUN   TestStrOps_ReplaceBytes_09
---- PASS: TestStrOps_ReplaceBytes_09 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_01
---- PASS: TestStrOps_ReplaceMultipleStrs_01 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_02
---- PASS: TestStrOps_ReplaceMultipleStrs_02 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_03
---- PASS: TestStrOps_ReplaceMultipleStrs_03 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_04
---- PASS: TestStrOps_ReplaceMultipleStrs_04 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_05
---- PASS: TestStrOps_ReplaceMultipleStrs_05 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_06
---- PASS: TestStrOps_ReplaceMultipleStrs_06 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_07
---- PASS: TestStrOps_ReplaceMultipleStrs_07 (0.00s)
-=== RUN   TestStrOps_ReplaceMultipleStrs_08
---- PASS: TestStrOps_ReplaceMultipleStrs_08 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_01
---- PASS: TestStrOps_ReplaceNewLines_01 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_02
---- PASS: TestStrOps_ReplaceNewLines_02 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_03
---- PASS: TestStrOps_ReplaceNewLines_03 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_04
---- PASS: TestStrOps_ReplaceNewLines_04 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_05
---- PASS: TestStrOps_ReplaceNewLines_05 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_06
---- PASS: TestStrOps_ReplaceNewLines_06 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_07
---- PASS: TestStrOps_ReplaceNewLines_07 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_08
---- PASS: TestStrOps_ReplaceNewLines_08 (0.00s)
-=== RUN   TestStrOps_ReplaceNewLines_09
---- PASS: TestStrOps_ReplaceNewLines_09 (0.00s)
+=== RUN   TestStrMech_MakeSingleCharString_01
+--- PASS: TestStrMech_MakeSingleCharString_01 (0.00s)
+=== RUN   TestStrMech_MakeSingleCharString_02
+--- PASS: TestStrMech_MakeSingleCharString_02 (0.00s)
+=== RUN   TestStrMech_MakeSingleCharString_03
+--- PASS: TestStrMech_MakeSingleCharString_03 (0.00s)
+=== RUN   TestStrMech_MakeSingleCharString_04
+--- PASS: TestStrMech_MakeSingleCharString_04 (0.00s)
+=== RUN   TestStrMech_Read_01
+--- PASS: TestStrMech_Read_01 (0.00s)
+=== RUN   TestStrMech_Read_02
+--- PASS: TestStrMech_Read_02 (0.00s)
+=== RUN   TestStrMech_Read_03
+--- PASS: TestStrMech_Read_03 (0.00s)
+=== RUN   TestStrMech_Read_04
+--- PASS: TestStrMech_Read_04 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_01
+--- PASS: TestStrMech_ReadStringFromBytes_01 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_02
+--- PASS: TestStrMech_ReadStringFromBytes_02 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_03
+--- PASS: TestStrMech_ReadStringFromBytes_03 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_04
+--- PASS: TestStrMech_ReadStringFromBytes_04 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_05
+--- PASS: TestStrMech_ReadStringFromBytes_05 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_06
+--- PASS: TestStrMech_ReadStringFromBytes_06 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_07
+--- PASS: TestStrMech_ReadStringFromBytes_07 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_08
+--- PASS: TestStrMech_ReadStringFromBytes_08 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_09
+--- PASS: TestStrMech_ReadStringFromBytes_09 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_10
+--- PASS: TestStrMech_ReadStringFromBytes_10 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_11
+--- PASS: TestStrMech_ReadStringFromBytes_11 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_12
+--- PASS: TestStrMech_ReadStringFromBytes_12 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_13
+--- PASS: TestStrMech_ReadStringFromBytes_13 (0.00s)
+=== RUN   TestStrMech_ReadStringFromBytes_14
+--- PASS: TestStrMech_ReadStringFromBytes_14 (0.00s)
+=== RUN   TestStrMech_RemoveStringChar_01
+--- PASS: TestStrMech_RemoveStringChar_01 (0.00s)
+=== RUN   TestStrMech_RemoveStringChar_02
+--- PASS: TestStrMech_RemoveStringChar_02 (0.00s)
+=== RUN   TestStrMech_RemoveStringChar_03
+--- PASS: TestStrMech_RemoveStringChar_03 (0.00s)
+=== RUN   TestStrMech_RemoveStringChar_04
+--- PASS: TestStrMech_RemoveStringChar_04 (0.00s)
+=== RUN   TestStrMech_RemoveStringChar_05
+--- PASS: TestStrMech_RemoveStringChar_05 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_01
+--- PASS: TestStrMech_ReplaceBytes_01 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_02
+--- PASS: TestStrMech_ReplaceBytes_02 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_03
+--- PASS: TestStrMech_ReplaceBytes_03 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_04
+--- PASS: TestStrMech_ReplaceBytes_04 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_05
+--- PASS: TestStrMech_ReplaceBytes_05 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_06
+--- PASS: TestStrMech_ReplaceBytes_06 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_07
+--- PASS: TestStrMech_ReplaceBytes_07 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_08
+--- PASS: TestStrMech_ReplaceBytes_08 (0.00s)
+=== RUN   TestStrMech_ReplaceBytes_09
+--- PASS: TestStrMech_ReplaceBytes_09 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_01
+--- PASS: TestStrMech_ReplaceMultipleStrs_01 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_02
+--- PASS: TestStrMech_ReplaceMultipleStrs_02 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_03
+--- PASS: TestStrMech_ReplaceMultipleStrs_03 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_04
+--- PASS: TestStrMech_ReplaceMultipleStrs_04 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_05
+--- PASS: TestStrMech_ReplaceMultipleStrs_05 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_06
+--- PASS: TestStrMech_ReplaceMultipleStrs_06 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_07
+--- PASS: TestStrMech_ReplaceMultipleStrs_07 (0.00s)
+=== RUN   TestStrMech_ReplaceMultipleStrs_08
+--- PASS: TestStrMech_ReplaceMultipleStrs_08 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_01
+--- PASS: TestStrMech_ReplaceNewLines_01 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_02
+--- PASS: TestStrMech_ReplaceNewLines_02 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_03
+--- PASS: TestStrMech_ReplaceNewLines_03 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_04
+--- PASS: TestStrMech_ReplaceNewLines_04 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_05
+--- PASS: TestStrMech_ReplaceNewLines_05 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_06
+--- PASS: TestStrMech_ReplaceNewLines_06 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_07
+--- PASS: TestStrMech_ReplaceNewLines_07 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_08
+--- PASS: TestStrMech_ReplaceNewLines_08 (0.00s)
+=== RUN   TestStrMech_ReplaceNewLines_09
+--- PASS: TestStrMech_ReplaceNewLines_09 (0.00s)
 === RUN   TestStrMech_ReplaceStringChar_01
 --- PASS: TestStrMech_ReplaceStringChar_01 (0.00s)
 === RUN   TestStrMech_ReplaceStringChar_02
@@ -614,16 +614,16 @@
 --- PASS: TestStrMech_Write_03 (0.00s)
 === RUN   TestStrMech_Write_04
 --- PASS: TestStrMech_Write_04 (0.00s)
-=== RUN   TestStrOps_JustifyTextInStrField_01
---- PASS: TestStrOps_JustifyTextInStrField_01 (0.00s)
-=== RUN   TestStrOps_JustifyTextInStrField_02
---- PASS: TestStrOps_JustifyTextInStrField_02 (0.00s)
-=== RUN   TestStrOps_JustifyTextInStrField_03
---- PASS: TestStrOps_JustifyTextInStrField_03 (0.00s)
-=== RUN   TestStrOps_JustifyTextInStrField_04
---- PASS: TestStrOps_JustifyTextInStrField_04 (0.00s)
-=== RUN   TestStrOps_JustifyTextInStrField_05
---- PASS: TestStrOps_JustifyTextInStrField_05 (0.00s)
+=== RUN   TestStrMech_JustifyTextInStrField_01
+--- PASS: TestStrMech_JustifyTextInStrField_01 (0.00s)
+=== RUN   TestStrMech_JustifyTextInStrField_02
+--- PASS: TestStrMech_JustifyTextInStrField_02 (0.00s)
+=== RUN   TestStrMech_JustifyTextInStrField_03
+--- PASS: TestStrMech_JustifyTextInStrField_03 (0.00s)
+=== RUN   TestStrMech_JustifyTextInStrField_04
+--- PASS: TestStrMech_JustifyTextInStrField_04 (0.00s)
+=== RUN   TestStrMech_JustifyTextInStrField_05
+--- PASS: TestStrMech_JustifyTextInStrField_05 (0.00s)
 === RUN   TestDataFieldTrailingDelimiterType_ParseString_01
 --- PASS: TestDataFieldTrailingDelimiterType_ParseString_01 (0.00s)
 === RUN   TestDataFieldTrailingDelimiterType_ParseString_02
@@ -642,6 +642,10 @@
 --- PASS: TestDataFieldTrailingDelimiterType_StatusIsValid_01 (0.00s)
 === RUN   TestDataFieldTrailingDelimiterType_StatusIsValid_02
 --- PASS: TestDataFieldTrailingDelimiterType_StatusIsValid_02 (0.00s)
+=== RUN   TestDataFieldTrailingDelimiterType_XIsValid_01
+--- PASS: TestDataFieldTrailingDelimiterType_XIsValid_01 (0.00s)
+=== RUN   TestDataFieldTrailingDelimiterType_XIsValid_02
+--- PASS: TestDataFieldTrailingDelimiterType_XIsValid_02 (0.00s)
 === RUN   TestDataFieldTrailingDelimiterType_String_01
 --- PASS: TestDataFieldTrailingDelimiterType_String_01 (0.00s)
 === RUN   TestDataFieldTrailingDelimiterType_String_02
@@ -683,5 +687,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 90.8% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.609s
+coverage: 91.2% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.837s

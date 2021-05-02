@@ -3194,7 +3194,7 @@ func (sMech *StrMech) ReplaceNewLines(
 //       character specified in replacementRunes[i][1].
 //
 //
-//  replacementRunes    [][]rune
+//  replacementRunes    [][2]rune
 //     - A two dimensional slice of type 'rune'. Element [i][0]
 //       contains the target character to locate in 'targetRunes'.
 //       Element[i][1] contains the replacement character which will
@@ -3203,6 +3203,9 @@ func (sMech *StrMech) ReplaceNewLines(
 //       target character will not be replaced. Instead, it will be
 //       eliminated or removed from the returned rune array
 //       ([]rune).
+//
+//       If 'replacementRunes' is nil or a zero length array, this
+//       method will return an error.
 //
 //
 //  errorPrefix         interface{}
@@ -3313,7 +3316,7 @@ func (sMech *StrMech) ReplaceNewLines(
 //
 func (sMech *StrMech) ReplaceRunes(
 	targetRunes []rune,
-	replacementRunes [][]rune,
+	replacementRunes [][2]rune,
 	errorPrefix interface{}) (
 	[]rune,
 	error) {
@@ -3511,7 +3514,7 @@ func (sMech *StrMech) ReplaceStringChar(
 //       they will be replaced by the character specified in
 //       replacementRunes[i][1].
 //
-//  replacementRunes    [][]rune
+//  replacementRunes    [][2]rune
 //     - A two dimensional slice of type 'rune'. Element [i][0] contains
 //       the target character to locate in 'targetStr'. Element[i][1]
 //       contains the replacement character which will replace the target
@@ -3628,7 +3631,7 @@ func (sMech *StrMech) ReplaceStringChar(
 //
 func (sMech *StrMech) ReplaceStringChars(
 	targetStr string,
-	replacementRunes [][]rune,
+	replacementRunes [][2]rune,
 	errorPrefix interface{}) (
 	string,
 	error) {

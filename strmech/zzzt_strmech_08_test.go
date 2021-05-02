@@ -99,7 +99,9 @@ func TestStrMech_StripBadChars_001(t *testing.T) {
 	testString := "..........      ./../.\\.\\..\\////   " + expectedStr +
 		"..........      ./../.\\.\\..\\////   "
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
+	sMech := StrMech{}
+
+	actualString, actualStrLen := sMech.StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -259,7 +261,9 @@ func TestStrMech_StripLeadingChars_001(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := "..........      ./../.\\.\\..\\////   " + expectedStr
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripLeadingChars(testString, badChars)
+	sMech := StrMech{}
+
+	actualString, actualStrLen := sMech.StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -363,7 +367,9 @@ func TestStrMech_StripTrailingChars_001(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr + "..........      ./../.\\.\\..\\////   "
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripTrailingChars(testString, badChars)
+	sMech := StrMech{}
+
+	actualString, actualStrLen := sMech.StripTrailingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -1610,7 +1616,9 @@ func TestStrMech_UpperCaseFirstLetter_01(t *testing.T) {
 
 	expected := "Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
+	sMech := StrMech{}
+
+	actualStr := sMech.UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1683,7 +1691,7 @@ func TestStrMech_Write_01(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 
-	sops1 := StrMech{}.NewPtr()
+	sops1 := StrMech{}
 
 	lenOriginalStr := len(originalStr)
 

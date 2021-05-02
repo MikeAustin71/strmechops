@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestStrOps_JustifyTextInStrField_01(t *testing.T) {
-	ePrefix := "TestStrOps_JustifyTextInStrField_01() "
+func TestStrMech_JustifyTextInStrField_01(t *testing.T) {
+	ePrefix := "TestStrMech_JustifyTextInStrField_01() "
 	strToJustify := "12345"
 	fieldLen := 15
 	expectedTotalLen := fieldLen
@@ -44,8 +44,8 @@ func TestStrOps_JustifyTextInStrField_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_JustifyTextInStrField_02(t *testing.T) {
-	ePrefix := "TestStrOps_JustifyTextInStrField_02() "
+func TestStrMech_JustifyTextInStrField_02(t *testing.T) {
+	ePrefix := "TestStrMech_JustifyTextInStrField_02() "
 	strToJustify := "12345"
 	fieldLen := 15
 	expectedTotalLen := fieldLen
@@ -83,8 +83,8 @@ func TestStrOps_JustifyTextInStrField_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_JustifyTextInStrField_03(t *testing.T) {
-	ePrefix := "TestStrOps_JustifyTextInStrField_03() "
+func TestStrMech_JustifyTextInStrField_03(t *testing.T) {
+	ePrefix := "TestStrMech_JustifyTextInStrField_03() "
 	strToJustify := "12345"
 	fieldLen := 15
 	expectedTotalLen := fieldLen
@@ -123,8 +123,8 @@ func TestStrOps_JustifyTextInStrField_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_JustifyTextInStrField_04(t *testing.T) {
-	ePrefix := "TestStrOps_JustifyTextInStrField_04() "
+func TestStrMech_JustifyTextInStrField_04(t *testing.T) {
+	ePrefix := "TestStrMech_JustifyTextInStrField_04() "
 	strToJustify := ""
 	fieldLen := -1
 
@@ -145,8 +145,8 @@ func TestStrOps_JustifyTextInStrField_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_JustifyTextInStrField_05(t *testing.T) {
-	ePrefix := "TestStrOps_JustifyTextInStrField_05() "
+func TestStrMech_JustifyTextInStrField_05(t *testing.T) {
+	ePrefix := "TestStrMech_JustifyTextInStrField_05() "
 	strToJustify := "12345"
 	fieldLen := 15
 

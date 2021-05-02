@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func TestStrOps_MakeSingleCharString_01(t *testing.T) {
+func TestStrMech_MakeSingleCharString_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_MakeSingleCharString_01() "
+	ePrefix := "TestStrMech_MakeSingleCharString_01() "
 
 	sUtil := StrMech{}
 	requestedLen := 20
@@ -44,9 +44,9 @@ func TestStrOps_MakeSingleCharString_01(t *testing.T) {
 
 }
 
-func TestStrOps_MakeSingleCharString_02(t *testing.T) {
+func TestStrMech_MakeSingleCharString_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_MakeSingleCharString_02() "
+	ePrefix := "TestStrMech_MakeSingleCharString_02() "
 
 	sUtil := StrMech{}
 	requestedLen := 100
@@ -81,9 +81,9 @@ func TestStrOps_MakeSingleCharString_02(t *testing.T) {
 
 }
 
-func TestStrOps_MakeSingleCharString_03(t *testing.T) {
+func TestStrMech_MakeSingleCharString_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_MakeSingleCharString_03() "
+	ePrefix := "TestStrMech_MakeSingleCharString_03() "
 
 	sUtil := StrMech{}
 	requestedLen := 20
@@ -102,9 +102,9 @@ func TestStrOps_MakeSingleCharString_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_MakeSingleCharString_04(t *testing.T) {
+func TestStrMech_MakeSingleCharString_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_MakeSingleCharString_04() "
+	ePrefix := "TestStrMech_MakeSingleCharString_04() "
 
 	sUtil := StrMech{}
 	requestedLen := 0
@@ -123,7 +123,7 @@ func TestStrOps_MakeSingleCharString_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_Read_01(t *testing.T) {
+func TestStrMech_Read_01(t *testing.T) {
 
 	expected := "original base string"
 	lenExpected := len(expected)
@@ -152,7 +152,7 @@ func TestStrOps_Read_01(t *testing.T) {
 	}
 }
 
-func TestStrOps_Read_02(t *testing.T) {
+func TestStrMech_Read_02(t *testing.T) {
 
 	expected := "Original sops1 base string"
 	lenExpected := len(expected)
@@ -200,7 +200,7 @@ func TestStrOps_Read_02(t *testing.T) {
 	}
 }
 
-func TestStrOps_Read_03(t *testing.T) {
+func TestStrMech_Read_03(t *testing.T) {
 
 	expected := "Original sops1 base string"
 	lenExpected := int64(len(expected))
@@ -231,7 +231,7 @@ func TestStrOps_Read_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_Read_04(t *testing.T) {
+func TestStrMech_Read_04(t *testing.T) {
 	originalStr := "Hello World"
 
 	sops1 := StrMech{}.NewPtr()
@@ -246,7 +246,7 @@ func TestStrOps_Read_04(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_01(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_01(t *testing.T) {
 
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r', '\n',
 		'H', 'o', 'w', ' ', 'a', 'r', 'e', ' ', 'y', 'o', 'u', '?', '\n',
@@ -271,7 +271,7 @@ func TestStrOps_ReadStringFromBytes_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_02(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_02(t *testing.T) {
 
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r', '\n',
 		'H', 'o', 'w', ' ', 'a', 'r', 'e', ' ', 'y', 'o', 'u', '?', '\n',
@@ -300,7 +300,7 @@ func TestStrOps_ReadStringFromBytes_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_03(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_03(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10   11   12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r', '\n',
@@ -330,7 +330,7 @@ func TestStrOps_ReadStringFromBytes_03(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_04(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_04(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10   11
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r',
@@ -360,7 +360,7 @@ func TestStrOps_ReadStringFromBytes_04(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_05(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_05(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10  11  12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', ',', ' ',
@@ -385,7 +385,7 @@ func TestStrOps_ReadStringFromBytes_05(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_06(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_06(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10  11  12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', ',', ' ',
@@ -413,7 +413,7 @@ func TestStrOps_ReadStringFromBytes_06(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_07(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_07(t *testing.T) {
 
 	var bytes []byte
 
@@ -434,7 +434,7 @@ func TestStrOps_ReadStringFromBytes_07(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_08(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_08(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10   11   12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r', '\v',
@@ -466,7 +466,7 @@ func TestStrOps_ReadStringFromBytes_08(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_09(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_09(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10   11   12   13
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r', '\v', '\n',
@@ -498,7 +498,7 @@ func TestStrOps_ReadStringFromBytes_09(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_10(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_10(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10   11   12   13
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\r', '\v', '\n',
@@ -526,7 +526,7 @@ func TestStrOps_ReadStringFromBytes_10(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_11(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_11(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10  11
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'}
@@ -548,7 +548,7 @@ func TestStrOps_ReadStringFromBytes_11(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_12(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_12(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10  11  12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\n'}
@@ -570,7 +570,7 @@ func TestStrOps_ReadStringFromBytes_12(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_13(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_13(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10  11  12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\r'}
@@ -592,7 +592,7 @@ func TestStrOps_ReadStringFromBytes_13(t *testing.T) {
 
 }
 
-func TestStrOps_ReadStringFromBytes_14(t *testing.T) {
+func TestStrMech_ReadStringFromBytes_14(t *testing.T) {
 
 	//               0   1   2   3   4   5   6   7   8   9  10  11  12
 	bytes := []byte{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\v'}
@@ -614,9 +614,9 @@ func TestStrOps_ReadStringFromBytes_14(t *testing.T) {
 
 }
 
-func TestStrOps_RemoveStringChar_01(t *testing.T) {
+func TestStrMech_RemoveStringChar_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_RemoveStringChar_01() "
+	ePrefix := "TestStrMech_RemoveStringChar_01() "
 	helloWorld := "XHelloX World!XX HowXX the hellXX are you?X"
 	expectedDeletions := 9
 	expectedStr := "Hello World! How the hell are you?"
@@ -653,9 +653,9 @@ func TestStrOps_RemoveStringChar_01(t *testing.T) {
 
 }
 
-func TestStrOps_RemoveStringChar_02(t *testing.T) {
+func TestStrMech_RemoveStringChar_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_RemoveStringChar_02() "
+	ePrefix := "TestStrMech_RemoveStringChar_02() "
 	helloWorld := "XHelloX World!XX HowXX the hellXX are you?X"
 	expectedDeletions := 8
 	expectedStr := "Hello World! How the hell are you?X"
@@ -692,9 +692,9 @@ func TestStrOps_RemoveStringChar_02(t *testing.T) {
 
 }
 
-func TestStrOps_RemoveStringChar_03(t *testing.T) {
+func TestStrMech_RemoveStringChar_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_RemoveStringChar_03() "
+	ePrefix := "TestStrMech_RemoveStringChar_03() "
 	helloWorld := "XHelloX World!XX HowXX the hellXX are you?X"
 
 	sops := StrMech{}
@@ -717,9 +717,9 @@ func TestStrOps_RemoveStringChar_03(t *testing.T) {
 
 }
 
-func TestStrOps_RemoveStringChar_04(t *testing.T) {
+func TestStrMech_RemoveStringChar_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_RemoveStringChar_04() "
+	ePrefix := "TestStrMech_RemoveStringChar_04() "
 	helloWorld := "XHelloX World!XX HowXX the hellXX are you?X"
 
 	sops := StrMech{}
@@ -742,9 +742,9 @@ func TestStrOps_RemoveStringChar_04(t *testing.T) {
 
 }
 
-func TestStrOps_RemoveStringChar_05(t *testing.T) {
+func TestStrMech_RemoveStringChar_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_RemoveStringChar_05() "
+	ePrefix := "TestStrMech_RemoveStringChar_05() "
 	helloWorld := ""
 
 	sops := StrMech{}
@@ -767,9 +767,9 @@ func TestStrOps_RemoveStringChar_05(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceBytes_01(t *testing.T) {
+func TestStrMech_ReplaceBytes_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_01() "
+	ePrefix := "TestStrMech_ReplaceBytes_01() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -818,9 +818,9 @@ func TestStrOps_ReplaceBytes_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceBytes_02(t *testing.T) {
+func TestStrMech_ReplaceBytes_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_02() "
+	ePrefix := "TestStrMech_ReplaceBytes_02() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -867,9 +867,9 @@ func TestStrOps_ReplaceBytes_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceBytes_03(t *testing.T) {
+func TestStrMech_ReplaceBytes_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_03() "
+	ePrefix := "TestStrMech_ReplaceBytes_03() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -915,9 +915,9 @@ func TestStrOps_ReplaceBytes_03(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceBytes_04(t *testing.T) {
+func TestStrMech_ReplaceBytes_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_04() "
+	ePrefix := "TestStrMech_ReplaceBytes_04() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -963,9 +963,9 @@ func TestStrOps_ReplaceBytes_04(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceBytes_05(t *testing.T) {
+func TestStrMech_ReplaceBytes_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_05() "
+	ePrefix := "TestStrMech_ReplaceBytes_05() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -1011,9 +1011,9 @@ func TestStrOps_ReplaceBytes_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceBytes_06(t *testing.T) {
+func TestStrMech_ReplaceBytes_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_06() "
+	ePrefix := "TestStrMech_ReplaceBytes_06() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -1059,9 +1059,9 @@ func TestStrOps_ReplaceBytes_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceBytes_07(t *testing.T) {
+func TestStrMech_ReplaceBytes_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_07() "
+	ePrefix := "TestStrMech_ReplaceBytes_07() "
 
 	testBytes := make([]byte, 0, 0)
 
@@ -1096,9 +1096,9 @@ func TestStrOps_ReplaceBytes_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceBytes_08(t *testing.T) {
+func TestStrMech_ReplaceBytes_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_08() "
+	ePrefix := "TestStrMech_ReplaceBytes_08() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -1116,9 +1116,9 @@ func TestStrOps_ReplaceBytes_08(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceBytes_09(t *testing.T) {
+func TestStrMech_ReplaceBytes_09(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceBytes_09() "
+	ePrefix := "TestStrMech_ReplaceBytes_09() "
 
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
@@ -1135,9 +1135,9 @@ func TestStrOps_ReplaceBytes_09(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceMultipleStrs_01(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_01(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_01() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_01() "
 
 	rStrs := make([][]string, 3, 5)
 
@@ -1175,9 +1175,9 @@ func TestStrOps_ReplaceMultipleStrs_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceMultipleStrs_02(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_02(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_02() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_02() "
 
 	rStrs := make([][]string, 3, 5)
 
@@ -1213,9 +1213,9 @@ func TestStrOps_ReplaceMultipleStrs_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceMultipleStrs_03(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_03(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_03() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_03() "
 
 	rStrs := make([][]string, 3, 5)
 
@@ -1251,9 +1251,9 @@ func TestStrOps_ReplaceMultipleStrs_03(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceMultipleStrs_04(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_04(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_04() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_04() "
 
 	rStrs := make([][]string, 3, 5)
 
@@ -1289,9 +1289,9 @@ func TestStrOps_ReplaceMultipleStrs_04(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceMultipleStrs_05(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_05(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_05() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_05() "
 
 	rStrs := make([][]string, 3, 5)
 
@@ -1320,9 +1320,9 @@ func TestStrOps_ReplaceMultipleStrs_05(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceMultipleStrs_06(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_06(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_06() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_06() "
 
 	testStr := "Hello World"
 
@@ -1340,9 +1340,9 @@ func TestStrOps_ReplaceMultipleStrs_06(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceMultipleStrs_07(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_07(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_07() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_07() "
 
 	testStr := "Hello World"
 
@@ -1360,9 +1360,9 @@ func TestStrOps_ReplaceMultipleStrs_07(t *testing.T) {
 	}
 }
 
-func TestStrOps_ReplaceMultipleStrs_08(t *testing.T) {
+func TestStrMech_ReplaceMultipleStrs_08(t *testing.T) {
 
-	ePrefix := "TestStrOps_ReplaceMultipleStrs_08() "
+	ePrefix := "TestStrMech_ReplaceMultipleStrs_08() "
 
 	rStrs := make([][]string, 3, 5)
 
@@ -1398,7 +1398,7 @@ func TestStrOps_ReplaceMultipleStrs_08(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_01(t *testing.T) {
+func TestStrMech_ReplaceNewLines_01(t *testing.T) {
 
 	testStr := "Hello\nWorld"
 	replaceStr := " "
@@ -1424,7 +1424,7 @@ func TestStrOps_ReplaceNewLines_01(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_02(t *testing.T) {
+func TestStrMech_ReplaceNewLines_02(t *testing.T) {
 
 	testStr := "Hello World"
 	replaceStr := " "
@@ -1439,7 +1439,7 @@ func TestStrOps_ReplaceNewLines_02(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_03(t *testing.T) {
+func TestStrMech_ReplaceNewLines_03(t *testing.T) {
 
 	testStr := "\n\nHello\nWorld\n\n\n"
 	replaceStr := ""
@@ -1462,7 +1462,7 @@ func TestStrOps_ReplaceNewLines_03(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_04(t *testing.T) {
+func TestStrMech_ReplaceNewLines_04(t *testing.T) {
 
 	testStr := "\n\nHello World"
 	replaceStr := ""
@@ -1486,7 +1486,7 @@ func TestStrOps_ReplaceNewLines_04(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_05(t *testing.T) {
+func TestStrMech_ReplaceNewLines_05(t *testing.T) {
 
 	testStr := "Hello World\n\n"
 	replaceStr := ""
@@ -1510,7 +1510,7 @@ func TestStrOps_ReplaceNewLines_05(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_06(t *testing.T) {
+func TestStrMech_ReplaceNewLines_06(t *testing.T) {
 
 	testStr := "Hello World\n"
 	replaceStr := ""
@@ -1534,7 +1534,7 @@ func TestStrOps_ReplaceNewLines_06(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_07(t *testing.T) {
+func TestStrMech_ReplaceNewLines_07(t *testing.T) {
 
 	testStr := "\nHello World"
 	replaceStr := ""
@@ -1558,7 +1558,7 @@ func TestStrOps_ReplaceNewLines_07(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_08(t *testing.T) {
+func TestStrMech_ReplaceNewLines_08(t *testing.T) {
 
 	testStr := "\tHello World"
 	replaceStr := ""
@@ -1584,7 +1584,7 @@ func TestStrOps_ReplaceNewLines_08(t *testing.T) {
 
 }
 
-func TestStrOps_ReplaceNewLines_09(t *testing.T) {
+func TestStrMech_ReplaceNewLines_09(t *testing.T) {
 
 	testStr := ""
 	replaceStr := "XX"

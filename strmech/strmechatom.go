@@ -88,15 +88,17 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 	if targetLen == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'targetStr' is a ZERO LENGTH STRING!\n",
+				"Error: Input parameter 'targetStr' is a ZERO "+
+				"LENGTH STRING!\n",
 				ePrefix.String())
 	}
 
 	if lineLength < 5 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'lineLength' is LESS THAN 5-CHARACTERS! "+
-				"lineLength='%v' ",
+				"Error: Input parameter 'lineLength' is LESS THAN "+
+				"5-CHARACTERS!\n"+
+				"lineLength='%v'\n",
 				ePrefix.String(),
 				lineLength)
 	}
@@ -104,7 +106,8 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 	if lineDelimiter == 0 {
 		return "",
 			fmt.Errorf("%v\n"+
-				"Error: Input parameter 'lineDelimiter' is ZERO VALUE!\n",
+				"Error: Input parameter 'lineDelimiter' is "+
+				"ZERO VALUE!\n",
 				ePrefix.String())
 	}
 
@@ -121,31 +124,29 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 
 	var begIdx, endWrdIdx, actualLastIdx, beginWrdIdx int
 	var isAllOneWord, isAllSpaces bool
-	sOpsElectron := strMechElectron{}
+	sMechElectron := strMechElectron{}
 
 	for begIdx < targetLen && begIdx > -1 {
 
 		// skip spaces at the beginning of the line
-		begIdx, err = sOpsElectron.findFirstNonSpaceChar(
+		begIdx, err = sMechElectron.findFirstNonSpaceChar(
 			targetStr,
 			begIdx,
 			targetLen-1,
-			ePrefix)
-
-		if err != nil {
-			return "",
-				fmt.Errorf("%v\n"+
-					"Error returned by sops.FindFirstNonSpaceChar(targetStr, begIdx, actualLastIdx)\n"+
-					"targetStr='%v'\n"+
-					"begIdx='%v'\n"+
-					"actualLastIdx='%v'\n"+
-					"Error='%v'\n",
-					ePrefix.String(),
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"\ntargetStr='%v'\n"+
+						"begIdx='%v'\n"+
+						"actualLastIdx='%v'\n",
 					targetStr,
 					begIdx,
-					actualLastIdx,
-					err.Error())
+					actualLastIdx)))
+
+		if err != nil {
+			return "", err
 		}
+
+		ePrefix.SetCtxEmpty()
 
 		if begIdx == -1 {
 
@@ -174,22 +175,20 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 				targetStr,
 				begIdx,
 				actualLastIdx,
-				ePrefix)
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"\ntargetStr='%v'\n"+
+							"begIdx='%v'\n"+
+							"actualLastIdx='%v'\n",
+						targetStr,
+						begIdx,
+						actualLastIdx)))
 
 		if err != nil {
-			return "",
-				fmt.Errorf("%v\n"+
-					"Error returned by sops.FindLastWord(targetStr,begIdx, actualLastIdx).\n"+
-					"targetStr='%v'\n"+
-					"begIdx='%v'\n"+
-					"actualLastIdx='%v'\n"+
-					"Error='%v'\n",
-					ePrefix.String(),
-					targetStr,
-					begIdx,
-					actualLastIdx,
-					err.Error())
+			return "", err
 		}
+
+		ePrefix.SetCtxEmpty()
 
 		if isAllSpaces {
 			// This string segment is all spaces
@@ -255,19 +254,20 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 						targetStr,
 						begIdx,
 						beginWrdIdx-1,
-						ePrefix)
+						ePrefix.XCtx(
+							fmt.Sprintf(
+								"\ntargetStr='%v'\n"+
+									"begIdx='%v'\n"+
+									"actualLastIdx='%v'\n",
+								targetStr,
+								begIdx,
+								actualLastIdx)))
 
 				if err != nil {
-					return "",
-						fmt.Errorf("%v\n"+
-							"Error returned by sOpsQuark.findLastNonSpaceChar(targetStr,begIdx, beginWrdIdx-1).\n"+
-							"targetStr='%v'\n"+
-							"begIdx='%v'\n"+
-							"actualLastIdx='%v'\n"+
-							"Error='%v'\n",
-							ePrefix.String(), targetStr, begIdx,
-							actualLastIdx, err.Error())
+					return "", err
 				}
+
+				ePrefix.SetCtxEmpty()
 
 				if idx == -1 {
 					begIdx = beginWrdIdx
@@ -306,8 +306,8 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 // overwritten.
 //
 func (sMechAtom *strMechAtom) copyIn(
-	targetStrOps *StrMech,
-	incomingStrOps *StrMech,
+	targetStrMech *StrMech,
+	incomingStrMech *StrMech,
 	ePrefix *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -329,34 +329,34 @@ func (sMechAtom *strMechAtom) copyIn(
 		"strMechAtom." +
 			"copyIn()")
 
-	if targetStrOps == nil {
+	if targetStrMech == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetStrOps' is a 'nil' pointer!\n",
+			"Error: Input parameter 'targetStrMech' is a 'nil' pointer!\n",
 			ePrefix.String())
 		return err
 	}
 
-	if incomingStrOps == nil {
+	if incomingStrMech == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'incomingStrOps' is a 'nil' pointer!\n",
+			"Error: Input parameter 'incomingStrMech' is a 'nil' pointer!\n",
 			ePrefix.String())
 		return err
 	}
 
-	if targetStrOps.stringDataMutex == nil {
-		targetStrOps.stringDataMutex = new(sync.Mutex)
+	if targetStrMech.stringDataMutex == nil {
+		targetStrMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	if incomingStrOps.stringDataMutex == nil {
-		incomingStrOps.stringDataMutex = new(sync.Mutex)
+	if incomingStrMech.stringDataMutex == nil {
+		incomingStrMech.stringDataMutex = new(sync.Mutex)
 	}
 
-	targetStrOps.StrIn = incomingStrOps.StrIn
-	targetStrOps.StrOut = incomingStrOps.StrOut
+	targetStrMech.StrIn = incomingStrMech.StrIn
+	targetStrMech.StrOut = incomingStrMech.StrOut
 
-	targetStrOps.cntBytesWritten = 0
-	targetStrOps.cntBytesRead = 0
-	targetStrOps.stringData = incomingStrOps.stringData
+	targetStrMech.cntBytesWritten = 0
+	targetStrMech.cntBytesRead = 0
+	targetStrMech.stringData = incomingStrMech.stringData
 
 	return err
 }
@@ -365,7 +365,7 @@ func (sMechAtom *strMechAtom) copyIn(
 // 'strOps', an instance of StrMech.
 //
 func (sMechAtom *strMechAtom) copyOut(
-	strOps *StrMech,
+	strMech *StrMech,
 	ePrefix *ePref.ErrPrefixDto) (
 	*StrMech,
 	error) {
@@ -392,17 +392,17 @@ func (sMechAtom *strMechAtom) copyOut(
 
 	newStrOps := StrMech{}
 
-	if strOps == nil {
+	if strMech == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strOps' is a 'nil' pointer!\n",
+			"Error: Input parameter 'strMech' is a 'nil' pointer!\n",
 			ePrefix.String())
 
 		return &newStrOps, err
 	}
 
-	newStrOps.StrIn = strOps.StrIn
-	newStrOps.StrOut = strOps.StrOut
-	newStrOps.stringData = strOps.stringData
+	newStrOps.StrIn = strMech.StrIn
+	newStrOps.StrOut = strMech.StrOut
+	newStrOps.stringData = strMech.stringData
 
 	newStrOps.stringDataMutex = new(sync.Mutex)
 

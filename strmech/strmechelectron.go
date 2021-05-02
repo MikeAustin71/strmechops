@@ -724,7 +724,7 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 //       they will be replaced by the character specified in
 //       replacementRunes[i][1].
 //
-//  replacementRunes    [][]rune
+//  replacementRunes    [][2]rune
 //     - A two dimensional slice of type 'rune'. Element [i][0] contains
 //       the target character to locate in 'targetStr'. Element[i][1]
 //       contains the replacement character which will replace the target
@@ -768,7 +768,7 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 //
 func (sMechElectron *strMechElectron) replaceStringChars(
 	targetStr string,
-	replacementRunes [][]rune,
+	replacementRunes [][2]rune,
 	ePrefix *ePref.ErrPrefixDto) (
 	string,
 	error) {

@@ -175,11 +175,7 @@ func TestStrMech_ReplaceStringChars_01(t *testing.T) {
 
 	expected := "1A2B3C4D5E6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 'A'
@@ -223,11 +219,7 @@ func TestStrMech_ReplaceStringChars_02(t *testing.T) {
 
 	expected := "1A23C45E6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 'A'
@@ -244,7 +236,9 @@ func TestStrMech_ReplaceStringChars_02(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 'E'
 
-	actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+	sMech := StrMech{}
+
+	actualStr, err := sMech.ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -268,11 +262,7 @@ func TestStrMech_ReplaceStringChars_03(t *testing.T) {
 
 	expected := "1a2b3c4d5e6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'z'
 	replaceRunes[0][1] = 'Z'
@@ -312,11 +302,7 @@ func TestStrMech_ReplaceStringChars_04(t *testing.T) {
 
 	expected := "3a4b5c6d7e6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = '1'
 	replaceRunes[0][1] = '3'
@@ -357,11 +343,7 @@ func TestStrMech_ReplaceStringChars_05(t *testing.T) {
 
 	expected := "1a23c4d5e6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'z'
 	replaceRunes[0][1] = 'Z'
@@ -402,11 +384,7 @@ func TestStrMech_ReplaceStringChars_06(t *testing.T) {
 
 	expected := "123456"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 0
@@ -445,11 +423,7 @@ func TestStrMech_ReplaceStringChars_07(t *testing.T) {
 
 	testStr := ""
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 0
@@ -482,7 +456,7 @@ func TestStrMech_ReplaceStringChars_08(t *testing.T) {
 
 	testStr := "1a2b3c4d5e6"
 
-	replaceRunes := make([][]rune, 0, 0)
+	replaceRunes := make([][2]rune, 0)
 
 	_, err := StrMech{}.Ptr().ReplaceStringChars(
 		testStr,
@@ -499,9 +473,9 @@ func TestStrMech_ReplaceStringChars_09(t *testing.T) {
 
 	ePrefix := "TestStrMech_ReplaceStringChars_09() "
 
-	testStr := "1a2b3c4d5e6"
+	testStr := ""
 
-	replaceRunes := make([][]rune, 5, 10)
+	replaceRunes := make([][2]rune, 5)
 
 	_, err := StrMech{}.Ptr().ReplaceStringChars(
 		testStr,
@@ -509,7 +483,10 @@ func TestStrMech_ReplaceStringChars_09(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Errorf("Error: Expected error return. NO ERROR WAS RETURNED!")
+		t.Error("Error: Expected error return because " +
+			"'testStr'\n" +
+			"is an empty string.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!")
 	}
 }
 
@@ -522,11 +499,7 @@ func TestStrMech_ReplaceRunes_01(t *testing.T) {
 
 	expected := "1A2B3C4D5E6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5, 10)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 'A'
@@ -573,11 +546,7 @@ func TestStrMech_ReplaceRunes_02(t *testing.T) {
 
 	expected := "1A23C45E6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 'A'
@@ -622,11 +591,7 @@ func TestStrMech_ReplaceRunes_03(t *testing.T) {
 
 	expected := "1a2b3c4d5e6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'z'
 	replaceRunes[0][1] = 'Z'
@@ -670,11 +635,7 @@ func TestStrMech_ReplaceRunes_04(t *testing.T) {
 
 	expected := "3a4b5c6d7e6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = '1'
 	replaceRunes[0][1] = '3'
@@ -718,11 +679,7 @@ func TestStrMech_ReplaceRunes_05(t *testing.T) {
 
 	expected := "1a23c4d5e6"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5, 10)
 
 	replaceRunes[0][0] = 'z'
 	replaceRunes[0][1] = 'Z'
@@ -766,11 +723,7 @@ func TestStrMech_ReplaceRunes_06(t *testing.T) {
 
 	expected := "123456"
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 0
@@ -811,11 +764,7 @@ func TestStrMech_ReplaceRunes_07(t *testing.T) {
 
 	testRunes := make([]rune, 0, 0)
 
-	replaceRunes := make([][]rune, 5, 10)
-
-	for i := 0; i < 5; i++ {
-		replaceRunes[i] = make([]rune, 2, 5)
-	}
+	replaceRunes := make([][2]rune, 5)
 
 	replaceRunes[0][0] = 'a'
 	replaceRunes[0][1] = 0
@@ -849,7 +798,9 @@ func TestStrMech_ReplaceRunes_08(t *testing.T) {
 	testStr := "1a2b3c4d5e6"
 	testRunes := []rune(testStr)
 
-	replaceRunes := make([][]rune, 0, 0)
+	replaceRunes := make([][2]rune, 0)
+
+	replaceRunes = nil
 
 	_, err := StrMech{}.Ptr().ReplaceRunes(
 		testRunes,
@@ -857,7 +808,9 @@ func TestStrMech_ReplaceRunes_08(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Error: Expected an error return. NO ERROR WAS RETURNED! ")
+		t.Error("Error: Expected an error return because" +
+			"'replaceRunes' is nil.\n" +
+			"NO ERROR WAS RETURNED!\n")
 	}
 
 }
@@ -866,10 +819,10 @@ func TestStrMech_ReplaceRunes_09(t *testing.T) {
 
 	ePrefix := "TestStrMech_ReplaceRunes_09() "
 
-	testStr := "1a2b3c4d5e6"
+	testStr := "Xyz132"
 	testRunes := []rune(testStr)
 
-	replaceRunes := make([][]rune, 5, 10)
+	replaceRunes := make([][2]rune, 0)
 
 	_, err := StrMech{}.Ptr().ReplaceRunes(
 		testRunes,
@@ -877,6 +830,8 @@ func TestStrMech_ReplaceRunes_09(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Errorf("Error: Expected error return. NO ERROR WAS RETURNED!")
+		t.Error("Error: Expected error return because\n" +
+			"'replaceRunes' is an empty string.\n" +
+			"HOWEVER NO ERROR WAS RETURNED!\n")
 	}
 }

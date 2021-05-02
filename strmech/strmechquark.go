@@ -1902,7 +1902,7 @@ func (sMechQuark *strMechQuark) removeSubString(
 //       character specified in replacementRunes[i][1].
 //
 //
-//  replacementRunes    [][]rune
+//  replacementRunes    [][2]rune
 //     - A two dimensional slice of type 'rune'. Element [i][0]
 //       contains the target character to locate in 'targetRunes'.
 //       Element[i][1] contains the replacement character which will
@@ -1951,7 +1951,7 @@ func (sMechQuark *strMechQuark) removeSubString(
 //
 func (sMechQuark *strMechQuark) replaceRunes(
 	targetRunes []rune,
-	replacementRunes [][]rune,
+	replacementRunes [][2]rune,
 	ePrefix *ePref.ErrPrefixDto) (
 	[]rune,
 	error) {
@@ -1994,19 +1994,6 @@ func (sMechQuark *strMechQuark) replaceRunes(
 				"Error: Input parameter 'replacementRunes' is a "+
 				"zero length array!\n",
 				ePrefix.String())
-	}
-
-	for h := 0; h < baseReplaceLen; h++ {
-
-		if len(replacementRunes[h]) < 2 {
-			return output,
-				fmt.Errorf("%s\n"+
-					"Error: Invalid Replacement Array Element.\n"+
-					"replacementRunes[%v] has a length less than two.\n",
-					ePrefix.String(),
-					h)
-		}
-
 	}
 
 	for i := 0; i < targetLen; i++ {
