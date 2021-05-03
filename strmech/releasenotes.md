@@ -1,32 +1,19 @@
-# Release Notes Package *strops* Version 3.0.0
+# Release Notes For Package ***strmech*** - String Mechanics
 
-## New Methods
-Added methods:
-  + StrOps{}.Ptr().JustifyTextInStrField()
-  + StrOps{}.Ptr()
-  + StrOps{}.Ptr().ReplaceStringChar()
-  + StrOps{}.Ptr().RemoveStringChar()
+## Version 0.0.1
 
-## New Types
-Added type:
-  + TextJustify - Text Justification Enumeration
-  
-## More Tests
-  + Added tests for new methods.
-  + Test coverage is now 93%
+#### Changes
 
-## New Architecture
-  + The new thread safety protocols will support parallel processing.
-    
-  + Added 'ePrefix' error prefix string to signatures of all methods returning errors.
-    This allows for improved error management and tracking by supplying method chains
-    to all returned error messages.
+This is the first release of ***strmech***, a collection of string management tools designed for use in ***Go*** programs.
 
-  + Dispersed operational code to supporting library files for better low level access and thread safety.
+This is a staging release intended to coordinate documentation links and perform testing on virtual machines running different operating systems.
 
+This code was imported from [stringsopsgo](https://github.com/MikeAustin71/stringopsgo) Version 3.0.0. The ***stringsopsgo*** repository has been deprecated and all related development efforts have been folded into ***strmech***.
 
-## Module Requirements
-All Version 3+ releases support *Go* modules.
-With this release, *go.mod* now supports *Go*
-Programming Language Version 1.15.6. 
-  
+Feature changes added to the original ***stringopsgo*** code base include:
+
+- Developed with  [**Go**](https://golang.org/) Version 1.16.3.
+- Thread Safety protocols added for improved concurrency support.
+- Enhanced error management capabilities added including support for attaching error prefix text to error messages. 
+- Full support for [Go Modules](https://golang.org/ref/mod).
+
