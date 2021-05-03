@@ -31,6 +31,7 @@ Version 0.0.1 is a staging release designed to coordinated and verify documentat
 + [Source Code Documentation](#source-code-documentation)
 + [Tests](#tests)
 + [Version](#version)
++ [Project Organization](#project-organization)
 + [License](#license)
 + [Comments](#comments-and-questions) 
 
@@ -103,9 +104,17 @@ Test coverage and outcomes are documented in:
 
 
 
+## Project Organization
+
+This [***strmech***](https://github.com/MikeAustin71/strmech) repository is used to store and distribute the ***strmech*** software package. All of the latest releases and all prior versions are stored here. 
+
+The development environment and all development activities use the [***strmechops***](https://github.com/MikeAustin71/strmechops) repository.
+
+
+
 ## Version
 
-Version 0.0.1 is the first release of ***strmech*** and is based on an earlier project, Version 3.0 of [stringsopsgo](https://github.com/MikeAustin71/stringopsgo). The ***stringsopsgo*** repository has been deprecated and all future development of this string management toolbox will focus on ***strmech*** software package. 
+Version 0.0.1 is the first release of ***strmech*** and is based on an earlier project, Version 3.0 of [stringsopsgo](https://github.com/MikeAustin71/stringopsgo). The ***stringsopsgo*** repository has been deprecated and all future development of this string management toolbox will focus on the ***strmech*** software package. 
 
 [Release Notes](./releasenotes.md)
 
