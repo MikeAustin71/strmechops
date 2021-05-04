@@ -1448,6 +1448,148 @@ func (mt MainTest) ExampleIoCopy02() {
 	fmt.Println("New value of n: ", n)
 }
 
+func (mt MainTest) ExampleExtractNumRunes01() {
+	funcName := "ExampleExtractNumRunes01()"
+	rawNumStrRunes := []rune("1234.5678")
+	startingIndex := 0
+	endingIndex := -1
+	leadingPositiveSignChars := []rune{'+'}
+	trailingPositiveSignChars := []rune{0}
+	leadingNegativeSignChars := []rune{'-'}
+	trailingNegativeSignChars := []rune{0}
+	decimalSeparatorChars := []rune{'.'}
+
+	sMech := strmech.StrMech{}
+
+	var startTime, endTime time.Time
+	startTime = time.Now()
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		startingIndex,
+		endingIndex,
+		leadingPositiveSignChars,
+		trailingPositiveSignChars,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		funcName)
+
+	endTime = time.Now()
+
+	isError := false
+	errStr := ""
+	if err != nil {
+		isError = true
+		errStr = err.Error()
+	}
+
+	totalNanoSeconds,
+		elapsedTime := mt.Timer(startTime, endTime)
+
+	lineBrk := strings.Repeat("-", 70)
+
+	fmt.Println("  " + funcName)
+	fmt.Println(lineBrk)
+	if isError {
+		fmt.Println("     @@@@@  FAILURE @@@@@@           ")
+		fmt.Printf("%v\n\n",
+			errStr)
+		return
+	} else {
+		fmt.Println("          SUCCESS!!!")
+	}
+
+	fmt.Println(lineBrk)
+	fmt.Printf("   NumberStr: %v\n", string(rawNumStrRunes))
+	fmt.Printf("    intRunes: %v\n", intRunes)
+	fmt.Printf("   intString: %v\n", string(intRunes))
+	fmt.Printf("   fracRunes: %v\n", fracRunes)
+	fmt.Printf("  fracString: %v\n", string(fracRunes))
+	fmt.Printf(" Number Sign: %v\n", numberSign)
+	fmt.Printf("Digits Found: %v\n", digitsFound)
+	fmt.Println(lineBrk)
+	fmt.Println("       Elapsed Time: ", elapsedTime)
+	fmt.Println("  Total NanoSeconds: ", totalNanoSeconds)
+	fmt.Println(lineBrk)
+	fmt.Println()
+}
+
+func (mt MainTest) ExampleExtractNumRunes02() {
+	funcName := "ExampleExtractNumRunes02()"
+	rawNumStrRunes := []rune("-1234.5678")
+	startingIndex := 0
+	endingIndex := -1
+	leadingPositiveSignChars := []rune{'+'}
+	trailingPositiveSignChars := []rune{0}
+	leadingNegativeSignChars := []rune{'-'}
+	trailingNegativeSignChars := []rune{0}
+	decimalSeparatorChars := []rune{'.'}
+
+	sMech := strmech.StrMech{}
+
+	var startTime, endTime time.Time
+	startTime = time.Now()
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		startingIndex,
+		endingIndex,
+		leadingPositiveSignChars,
+		trailingPositiveSignChars,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		funcName)
+
+	endTime = time.Now()
+
+	isError := false
+	errStr := ""
+	if err != nil {
+		isError = true
+		errStr = err.Error()
+	}
+
+	totalNanoSeconds,
+		elapsedTime := mt.Timer(startTime, endTime)
+
+	lineBrk := strings.Repeat("-", 70)
+
+	fmt.Println("  " + funcName)
+	fmt.Println(lineBrk)
+	if isError {
+		fmt.Println("     @@@@@  FAILURE @@@@@@           ")
+		fmt.Printf("%v\n\n",
+			errStr)
+		return
+	} else {
+		fmt.Println("          SUCCESS!!!")
+	}
+
+	fmt.Println(lineBrk)
+	fmt.Printf("   NumberStr: %v\n", string(rawNumStrRunes))
+	fmt.Printf("    intRunes: %v\n", intRunes)
+	fmt.Printf("   intString: %v\n", string(intRunes))
+	fmt.Printf("   fracRunes: %v\n", fracRunes)
+	fmt.Printf("  fracString: %v\n", string(fracRunes))
+	fmt.Printf(" Number Sign: %v\n", numberSign)
+	fmt.Printf("Digits Found: %v\n", digitsFound)
+	fmt.Println(lineBrk)
+	fmt.Println("       Elapsed Time: ", elapsedTime)
+	fmt.Println("  Total NanoSeconds: ", totalNanoSeconds)
+	fmt.Println(lineBrk)
+	fmt.Println()
+}
+
 func (mt MainTest) Timer(
 	startTime, endTime time.Time) (totalNanoSecs int64, elapsedTime string) {
 

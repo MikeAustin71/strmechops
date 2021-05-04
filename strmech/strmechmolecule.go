@@ -29,6 +29,8 @@ func (sMechMolecule strMechMolecule) ptr() *strMechMolecule {
 	}
 }
 
+// extractNumRunes - Receives an array of runes and extracts the
+// numeric digits as text characters.
 func (sMechMolecule *strMechMolecule) extractNumRunes(
 	rawNumStrRunes []rune,
 	startingIndex int,
@@ -141,7 +143,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	relevantNumRunes := make(
 		[]rune, lenRelevantRunes)
 
-	copy(relevantNumRunes[0:], rawNumStrRunes[startingIndex:endingIndex])
+	copy(relevantNumRunes[0:], rawNumStrRunes[startingIndex:endingIndex+1])
 
 	haveFirstNumericDigit := false
 	haveDecimalSeparators := false

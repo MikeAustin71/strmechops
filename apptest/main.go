@@ -5,6 +5,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 func main() {
 	mt := examples.MainTest{}
 
-	mt.ExampleExtractDataField01()
+	mt.ExampleExtractNumRunes02()
 
 }

@@ -1026,6 +1026,72 @@ func (sMech *StrMech) ExtractNumericDigits(
 			ePrefix)
 }
 
+// ExtractNumberRunes - Receives an array of runes
+// (a.k.a. characters) and returns the numeric digits extracted
+// from this array as text characters.
+//
+func (sMech *StrMech) ExtractNumberRunes(
+	rawNumStrRunes []rune,
+	startingIndex int,
+	endingIndex int,
+	leadingPositiveSignChars []rune,
+	trailingPositiveSignChars []rune,
+	leadingNegativeSignChars []rune,
+	trailingNegativeSignChars []rune,
+	decimalSeparatorChars []rune,
+	errorPrefix interface{}) (
+	intRunes []rune,
+	fractionalRunes []rune,
+	numberSign int,
+	digitsFound int,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ExtractNumberRunes()",
+		"")
+
+	if err != nil {
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			err
+	}
+
+	intRunes,
+		fractionalRunes,
+		numberSign,
+		digitsFound,
+		err = strMechMolecule{}.ptr().extractNumRunes(
+		rawNumStrRunes,
+		startingIndex,
+		endingIndex,
+		leadingPositiveSignChars,
+		trailingPositiveSignChars,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	return intRunes,
+		fractionalRunes,
+		numberSign,
+		digitsFound,
+		err
+}
+
 // FindFirstNonSpaceChar - Returns the string index of the first non-space character in
 // a string segment. The string to be searched is input parameter 'targetStr'. The string
 // segment which will be searched from left to right in 'targetStr' is defined by the
