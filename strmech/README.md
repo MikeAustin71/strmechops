@@ -8,7 +8,7 @@
 
 Version 0.0.1 represents the first release of ***strmech*** which incorporates code imported from Version 3.0 of [stringsopsgo](https://github.com/MikeAustin71/stringopsgo). The [stringsopsgo](https://github.com/MikeAustin71/stringopsgo) project has been deprecated and all future development of this string management toolbox will focus on the ***strmech*** package.
 
-Version 0.0.1 is a staging release designed to coordinated and verify documentation links and provide an initial release for testing on virtual machines running various operating systems. The first public release is planned for Version 0.1.0 which should be completed in the near future.
+Version 0.0.1 is a staging release designed to coordinate and verify documentation links and provide an initial release for testing on virtual machines running various operating systems. The first public release is planned for Version 0.1.0 which should be completed in the near future.
 
 
 

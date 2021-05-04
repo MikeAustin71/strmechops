@@ -29,6 +29,393 @@ func (sMechMolecule strMechMolecule) ptr() *strMechMolecule {
 	}
 }
 
+func (sMechMolecule *strMechMolecule) extractNumRunes(
+	rawNumStrRunes []rune,
+	startingIndex int,
+	endingIndex int,
+	leadingPositiveSignChars []rune,
+	trailingPositiveSignChars []rune,
+	leadingNegativeSignChars []rune,
+	trailingNegativeSignChars []rune,
+	decimalSeparatorChars []rune,
+	ePrefix *ePref.ErrPrefixDto) (
+	intRunes []rune,
+	fractionalRunes []rune,
+	numberSign int,
+	digitsFound int,
+	err error) {
+
+	if sMechMolecule.lock == nil {
+		sMechMolecule.lock = new(sync.Mutex)
+	}
+
+	sMechMolecule.lock.Lock()
+
+	defer sMechMolecule.lock.Unlock()
+
+	if ePrefix == nil {
+		ePrefix = ePref.ErrPrefixDto{}.Ptr()
+	} else {
+		ePrefix = ePrefix.CopyPtr()
+	}
+
+	ePrefix.SetEPref("strMechMolecule." +
+		"extractNumRunes()")
+
+	lenRawNumRunes := len(rawNumStrRunes)
+
+	// 'numberStr' is empty,
+	// nothing to do...
+	if lenRawNumRunes == 0 {
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			err
+	}
+
+	lenDecSepChars := len(decimalSeparatorChars)
+
+	if lenDecSepChars == 0 {
+		decimalSeparatorChars = make([]rune, 1)
+		lenDecSepChars = 1
+	}
+
+	lenLeadingPositiveSignChars := len(leadingPositiveSignChars)
+
+	if lenLeadingPositiveSignChars == 0 {
+
+		leadingPositiveSignChars = make([]rune, 1)
+		lenLeadingPositiveSignChars = 1
+	}
+
+	lenTrailingPositiveSignChars := len(trailingPositiveSignChars)
+
+	if lenTrailingPositiveSignChars == 0 {
+		trailingPositiveSignChars = make([]rune, 1)
+		lenTrailingPositiveSignChars = 1
+	}
+
+	lenLeadingNegativeSignChars := len(leadingNegativeSignChars)
+
+	if lenLeadingNegativeSignChars == 0 {
+
+		leadingNegativeSignChars = make([]rune, 1)
+		lenLeadingNegativeSignChars = 1
+	}
+
+	lenTrailingNegativeSignChars := len(trailingNegativeSignChars)
+
+	if lenTrailingNegativeSignChars == 0 {
+		trailingNegativeSignChars = make([]rune, 1)
+		lenTrailingNegativeSignChars = 1
+	}
+
+	if startingIndex < 1 {
+		startingIndex = 0
+	}
+
+	if endingIndex < 0 {
+		endingIndex = lenRawNumRunes - 1
+	} else if endingIndex >= lenRawNumRunes {
+		endingIndex = lenRawNumRunes - 1
+	}
+
+	if endingIndex <= startingIndex {
+		err = fmt.Errorf("%s\n"+
+			"Error: Input parameter 'endingIndex' is less than 'startingIndex'.\n"+
+			"startingIndex='%v'\n"+
+			"endingIndex='%v'\n",
+			ePrefix.String(),
+			startingIndex,
+			endingIndex)
+
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			err
+	}
+
+	lenRelevantRunes := endingIndex - startingIndex + 1
+	relevantNumRunes := make(
+		[]rune, lenRelevantRunes)
+
+	copy(relevantNumRunes[0:], rawNumStrRunes[startingIndex:endingIndex])
+
+	haveFirstNumericDigit := false
+	haveDecimalSeparators := false
+	haveNonZeroNumericDigits := false
+	haveLeadingPositiveSignChars := false
+	haveTrailingPositiveSignChars := false
+	haveLeadingNegativeSignChars := false
+	haveTrailingNegativeSignChars := false
+
+	for i := 0; i < lenRelevantRunes; i++ {
+
+		if relevantNumRunes[i] == 0 {
+			continue
+		}
+
+		if relevantNumRunes[i] == '0' {
+
+			haveFirstNumericDigit = true
+
+			digitsFound++
+
+			if !haveDecimalSeparators {
+				intRunes =
+					append(intRunes, '0')
+			} else {
+				fractionalRunes =
+					append(fractionalRunes, '0')
+			}
+
+			continue
+		}
+
+		if relevantNumRunes[i] > '0' &&
+			relevantNumRunes[i] <= '9' {
+
+			haveFirstNumericDigit = true
+
+			haveNonZeroNumericDigits = true
+
+			digitsFound++
+
+			if !haveDecimalSeparators {
+				intRunes =
+					append(intRunes, relevantNumRunes[i])
+			} else {
+				fractionalRunes =
+					append(fractionalRunes, relevantNumRunes[i])
+			}
+
+			continue
+		}
+
+		if relevantNumRunes[i] == leadingPositiveSignChars[0] &&
+			i+lenLeadingPositiveSignChars-1 < lenRelevantRunes &&
+			!haveLeadingPositiveSignChars &&
+			!haveLeadingNegativeSignChars &&
+			!haveFirstNumericDigit &&
+			!haveDecimalSeparators {
+
+			haveLeadingPositiveSignChars = true
+
+			for j := 0; j < lenLeadingPositiveSignChars; j++ {
+				if relevantNumRunes[i+j] != leadingPositiveSignChars[0] {
+					haveLeadingPositiveSignChars = false
+				}
+			}
+
+			if haveLeadingPositiveSignChars {
+				i += lenLeadingPositiveSignChars - 1
+			}
+
+			continue
+		} // End of leadingPositiveSignChars test
+
+		if relevantNumRunes[i] == leadingNegativeSignChars[0] &&
+			i+lenLeadingPositiveSignChars-1 < lenRelevantRunes &&
+			!haveLeadingNegativeSignChars &&
+			!haveLeadingPositiveSignChars &&
+			!haveFirstNumericDigit &&
+			!haveDecimalSeparators {
+
+			haveLeadingNegativeSignChars = true
+
+			for j := 0; j < lenLeadingNegativeSignChars; j++ {
+				if relevantNumRunes[i+j] != leadingNegativeSignChars[0] {
+					haveLeadingNegativeSignChars = false
+				}
+			}
+
+			if haveLeadingNegativeSignChars {
+				i += lenLeadingNegativeSignChars - 1
+			}
+
+			continue
+		} // End of leadingNegativeSignChars test
+
+		if relevantNumRunes[i] == trailingPositiveSignChars[0] &&
+			i+lenTrailingPositiveSignChars-1 < lenRelevantRunes &&
+			!haveTrailingPositiveSignChars &&
+			!haveTrailingNegativeSignChars &&
+			haveFirstNumericDigit {
+
+			haveTrailingPositiveSignChars = true
+
+			for j := 0; j < lenTrailingPositiveSignChars; j++ {
+				if relevantNumRunes[i+j] != trailingPositiveSignChars[0] {
+					haveTrailingPositiveSignChars = false
+				}
+			}
+
+			if haveTrailingPositiveSignChars {
+				i += lenTrailingPositiveSignChars - 1
+			}
+
+			continue
+		} // End of trailingPositiveSignChars test
+
+		if relevantNumRunes[i] == trailingNegativeSignChars[0] &&
+			i+lenTrailingPositiveSignChars-1 < lenRelevantRunes &&
+			!haveTrailingNegativeSignChars &&
+			!haveTrailingPositiveSignChars &&
+			haveFirstNumericDigit {
+
+			haveTrailingNegativeSignChars = true
+
+			for j := 0; j < lenTrailingNegativeSignChars; j++ {
+				if relevantNumRunes[i+j] != trailingNegativeSignChars[j] {
+					haveTrailingNegativeSignChars = false
+				}
+			}
+
+			if haveTrailingNegativeSignChars {
+				i += lenTrailingNegativeSignChars - 1
+			}
+
+			continue
+		} // End of trailingNegativeSignChars test
+
+		if relevantNumRunes[i] == decimalSeparatorChars[0] &&
+			i+lenDecSepChars-1 < lenRelevantRunes {
+
+			haveDecimalSeparators = true
+
+			for j := 0; j < lenDecSepChars; j++ {
+				if relevantNumRunes[i+j] != decimalSeparatorChars[j] {
+					haveTrailingNegativeSignChars = false
+				}
+			}
+
+			if haveTrailingNegativeSignChars {
+				i += lenDecSepChars - 1
+			}
+
+			continue
+		}
+
+	}
+
+	isPositiveNum := true
+	isNegativeNum := false
+
+	isZeroNum := false
+
+	if !haveNonZeroNumericDigits {
+
+		isZeroNum = true
+		isPositiveNum = true
+
+	} else {
+
+		if !haveLeadingPositiveSignChars &&
+			!haveTrailingPositiveSignChars {
+
+			isPositiveNum = false
+
+		} else if haveLeadingPositiveSignChars &&
+			haveTrailingPositiveSignChars {
+
+			isPositiveNum = true
+
+		} else if haveLeadingPositiveSignChars &&
+			!haveTrailingPositiveSignChars {
+
+			for i := 0; i < lenTrailingPositiveSignChars; i++ {
+				if trailingPositiveSignChars[i] != 0 {
+
+					isPositiveNum = false
+
+					break
+
+				} else {
+
+					isPositiveNum = true
+
+				}
+			}
+
+		} else if !haveLeadingPositiveSignChars &&
+			haveTrailingPositiveSignChars {
+
+			for i := 0; i < lenLeadingPositiveSignChars; i++ {
+				if leadingPositiveSignChars[i] != 0 {
+					isPositiveNum = false
+					break
+				} else {
+					isPositiveNum = true
+				}
+			}
+
+		}
+
+		if !isPositiveNum {
+
+			isNegativeNum = true
+
+			if !haveLeadingNegativeSignChars &&
+				!haveTrailingNegativeSignChars {
+
+				isNegativeNum = false
+
+			} else if haveLeadingNegativeSignChars &&
+				haveTrailingNegativeSignChars {
+
+				isNegativeNum = true
+
+			} else if haveLeadingNegativeSignChars &&
+				!haveTrailingNegativeSignChars {
+
+				for i := 0; i < lenTrailingNegativeSignChars; i++ {
+					if trailingNegativeSignChars[i] != 0 {
+						isNegativeNum = false
+						break
+					} else {
+						isNegativeNum = true
+					}
+				}
+
+			} else if !haveLeadingNegativeSignChars &&
+				haveTrailingNegativeSignChars {
+
+				for i := 0; i < lenLeadingNegativeSignChars; i++ {
+					if leadingNegativeSignChars[i] != 0 {
+						isNegativeNum = false
+						break
+					} else {
+						isNegativeNum = true
+					}
+				}
+			}
+
+		}
+	}
+
+	if isZeroNum {
+		numberSign = 0
+	} else if !isPositiveNum &&
+		!isNegativeNum {
+
+		numberSign = 1
+
+	} else if isPositiveNum {
+		numberSign = 1
+
+	} else {
+		numberSign = -1
+	}
+
+	return intRunes,
+		fractionalRunes,
+		numberSign,
+		digitsFound,
+		err
+}
+
 // strCenterInStr - returns a string which includes a left pad blank string plus
 // the original string ('strToCenter'), plus a right pad blank string.
 //
