@@ -33,10 +33,6 @@ func (sMechMolecule strMechMolecule) ptr() *strMechMolecule {
 // numeric digits as text characters.
 func (sMechMolecule *strMechMolecule) extractNumRunes(
 	rawNumStrRunes []rune,
-	startingIndex int,
-	endingIndex int,
-	leadingPositiveSignChars []rune,
-	trailingPositiveSignChars []rune,
 	leadingNegativeSignChars []rune,
 	trailingNegativeSignChars []rune,
 	decimalSeparatorChars []rune,
@@ -83,21 +79,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		lenDecSepChars = 1
 	}
 
-	lenLeadingPositiveSignChars := len(leadingPositiveSignChars)
-
-	if lenLeadingPositiveSignChars == 0 {
-
-		leadingPositiveSignChars = make([]rune, 1)
-		lenLeadingPositiveSignChars = 1
-	}
-
-	lenTrailingPositiveSignChars := len(trailingPositiveSignChars)
-
-	if lenTrailingPositiveSignChars == 0 {
-		trailingPositiveSignChars = make([]rune, 1)
-		lenTrailingPositiveSignChars = 1
-	}
-
 	lenLeadingNegativeSignChars := len(leadingNegativeSignChars)
 
 	if lenLeadingNegativeSignChars == 0 {
@@ -113,53 +94,19 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		lenTrailingNegativeSignChars = 1
 	}
 
-	if startingIndex < 1 {
-		startingIndex = 0
-	}
-
-	if endingIndex < 0 {
-		endingIndex = lenRawNumRunes - 1
-	} else if endingIndex >= lenRawNumRunes {
-		endingIndex = lenRawNumRunes - 1
-	}
-
-	if endingIndex <= startingIndex {
-		err = fmt.Errorf("%s\n"+
-			"Error: Input parameter 'endingIndex' is less than 'startingIndex'.\n"+
-			"startingIndex='%v'\n"+
-			"endingIndex='%v'\n",
-			ePrefix.String(),
-			startingIndex,
-			endingIndex)
-
-		return intRunes,
-			fractionalRunes,
-			numberSign,
-			digitsFound,
-			err
-	}
-
-	lenRelevantRunes := endingIndex - startingIndex + 1
-	relevantNumRunes := make(
-		[]rune, lenRelevantRunes)
-
-	copy(relevantNumRunes[0:], rawNumStrRunes[startingIndex:endingIndex+1])
-
 	haveFirstNumericDigit := false
 	haveDecimalSeparators := false
 	haveNonZeroNumericDigits := false
-	haveLeadingPositiveSignChars := false
-	haveTrailingPositiveSignChars := false
 	haveLeadingNegativeSignChars := false
 	haveTrailingNegativeSignChars := false
 
-	for i := 0; i < lenRelevantRunes; i++ {
+	for i := 0; i < lenRawNumRunes; i++ {
 
-		if relevantNumRunes[i] == 0 {
+		if rawNumStrRunes[i] == 0 {
 			continue
 		}
 
-		if relevantNumRunes[i] == '0' {
+		if rawNumStrRunes[i] == '0' {
 
 			haveFirstNumericDigit = true
 
@@ -176,8 +123,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			continue
 		}
 
-		if relevantNumRunes[i] > '0' &&
-			relevantNumRunes[i] <= '9' {
+		if rawNumStrRunes[i] > '0' &&
+			rawNumStrRunes[i] <= '9' {
 
 			haveFirstNumericDigit = true
 
@@ -187,48 +134,25 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			if !haveDecimalSeparators {
 				intRunes =
-					append(intRunes, relevantNumRunes[i])
+					append(intRunes, rawNumStrRunes[i])
 			} else {
 				fractionalRunes =
-					append(fractionalRunes, relevantNumRunes[i])
+					append(fractionalRunes, rawNumStrRunes[i])
 			}
 
 			continue
 		}
 
-		if relevantNumRunes[i] == leadingPositiveSignChars[0] &&
-			i+lenLeadingPositiveSignChars-1 < lenRelevantRunes &&
-			!haveLeadingPositiveSignChars &&
+		if rawNumStrRunes[i] == leadingNegativeSignChars[0] &&
+			i+lenLeadingNegativeSignChars-1 < lenRawNumRunes &&
 			!haveLeadingNegativeSignChars &&
-			!haveFirstNumericDigit &&
-			!haveDecimalSeparators {
-
-			haveLeadingPositiveSignChars = true
-
-			for j := 0; j < lenLeadingPositiveSignChars; j++ {
-				if relevantNumRunes[i+j] != leadingPositiveSignChars[0] {
-					haveLeadingPositiveSignChars = false
-				}
-			}
-
-			if haveLeadingPositiveSignChars {
-				i += lenLeadingPositiveSignChars - 1
-			}
-
-			continue
-		} // End of leadingPositiveSignChars test
-
-		if relevantNumRunes[i] == leadingNegativeSignChars[0] &&
-			i+lenLeadingPositiveSignChars-1 < lenRelevantRunes &&
-			!haveLeadingNegativeSignChars &&
-			!haveLeadingPositiveSignChars &&
 			!haveFirstNumericDigit &&
 			!haveDecimalSeparators {
 
 			haveLeadingNegativeSignChars = true
 
 			for j := 0; j < lenLeadingNegativeSignChars; j++ {
-				if relevantNumRunes[i+j] != leadingNegativeSignChars[0] {
+				if rawNumStrRunes[i+j] != leadingNegativeSignChars[j] {
 					haveLeadingNegativeSignChars = false
 				}
 			}
@@ -240,37 +164,15 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			continue
 		} // End of leadingNegativeSignChars test
 
-		if relevantNumRunes[i] == trailingPositiveSignChars[0] &&
-			i+lenTrailingPositiveSignChars-1 < lenRelevantRunes &&
-			!haveTrailingPositiveSignChars &&
+		if rawNumStrRunes[i] == trailingNegativeSignChars[0] &&
+			i+lenTrailingNegativeSignChars-1 < lenRawNumRunes &&
 			!haveTrailingNegativeSignChars &&
-			haveFirstNumericDigit {
-
-			haveTrailingPositiveSignChars = true
-
-			for j := 0; j < lenTrailingPositiveSignChars; j++ {
-				if relevantNumRunes[i+j] != trailingPositiveSignChars[0] {
-					haveTrailingPositiveSignChars = false
-				}
-			}
-
-			if haveTrailingPositiveSignChars {
-				i += lenTrailingPositiveSignChars - 1
-			}
-
-			continue
-		} // End of trailingPositiveSignChars test
-
-		if relevantNumRunes[i] == trailingNegativeSignChars[0] &&
-			i+lenTrailingPositiveSignChars-1 < lenRelevantRunes &&
-			!haveTrailingNegativeSignChars &&
-			!haveTrailingPositiveSignChars &&
 			haveFirstNumericDigit {
 
 			haveTrailingNegativeSignChars = true
 
 			for j := 0; j < lenTrailingNegativeSignChars; j++ {
-				if relevantNumRunes[i+j] != trailingNegativeSignChars[j] {
+				if rawNumStrRunes[i+j] != trailingNegativeSignChars[j] {
 					haveTrailingNegativeSignChars = false
 				}
 			}
@@ -282,13 +184,15 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			continue
 		} // End of trailingNegativeSignChars test
 
-		if relevantNumRunes[i] == decimalSeparatorChars[0] &&
-			i+lenDecSepChars-1 < lenRelevantRunes {
+		if rawNumStrRunes[i] == decimalSeparatorChars[0] &&
+			!haveDecimalSeparators &&
+			i+lenDecSepChars-1 < lenRawNumRunes {
 
 			haveDecimalSeparators = true
 
 			for j := 0; j < lenDecSepChars; j++ {
-				if relevantNumRunes[i+j] != decimalSeparatorChars[j] {
+
+				if rawNumStrRunes[i+j] != decimalSeparatorChars[j] {
 					haveTrailingNegativeSignChars = false
 				}
 			}
@@ -302,7 +206,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	}
 
-	isPositiveNum := true
 	isNegativeNum := false
 
 	isZeroNum := false
@@ -310,105 +213,64 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	if !haveNonZeroNumericDigits {
 
 		isZeroNum = true
-		isPositiveNum = true
 
 	} else {
 
-		if !haveLeadingPositiveSignChars &&
-			!haveTrailingPositiveSignChars {
+		isNegativeNum = true
 
-			isPositiveNum = false
+		if !haveLeadingNegativeSignChars &&
+			!haveTrailingNegativeSignChars {
 
-		} else if haveLeadingPositiveSignChars &&
-			haveTrailingPositiveSignChars {
+			isNegativeNum = false
 
-			isPositiveNum = true
-
-		} else if haveLeadingPositiveSignChars &&
-			!haveTrailingPositiveSignChars {
-
-			for i := 0; i < lenTrailingPositiveSignChars; i++ {
-				if trailingPositiveSignChars[i] != 0 {
-
-					isPositiveNum = false
-
-					break
-
-				} else {
-
-					isPositiveNum = true
-
-				}
-			}
-
-		} else if !haveLeadingPositiveSignChars &&
-			haveTrailingPositiveSignChars {
-
-			for i := 0; i < lenLeadingPositiveSignChars; i++ {
-				if leadingPositiveSignChars[i] != 0 {
-					isPositiveNum = false
-					break
-				} else {
-					isPositiveNum = true
-				}
-			}
-
-		}
-
-		if !isPositiveNum {
+		} else if haveLeadingNegativeSignChars &&
+			haveTrailingNegativeSignChars {
 
 			isNegativeNum = true
 
-			if !haveLeadingNegativeSignChars &&
-				!haveTrailingNegativeSignChars {
+		} else if haveLeadingNegativeSignChars &&
+			!haveTrailingNegativeSignChars {
 
-				isNegativeNum = false
-
-			} else if haveLeadingNegativeSignChars &&
-				haveTrailingNegativeSignChars {
-
-				isNegativeNum = true
-
-			} else if haveLeadingNegativeSignChars &&
-				!haveTrailingNegativeSignChars {
-
-				for i := 0; i < lenTrailingNegativeSignChars; i++ {
-					if trailingNegativeSignChars[i] != 0 {
-						isNegativeNum = false
-						break
-					} else {
-						isNegativeNum = true
-					}
-				}
-
-			} else if !haveLeadingNegativeSignChars &&
-				haveTrailingNegativeSignChars {
-
-				for i := 0; i < lenLeadingNegativeSignChars; i++ {
-					if leadingNegativeSignChars[i] != 0 {
-						isNegativeNum = false
-						break
-					} else {
-						isNegativeNum = true
-					}
+			for i := 0; i < lenTrailingNegativeSignChars; i++ {
+				if trailingNegativeSignChars[i] != 0 {
+					isNegativeNum = false
+					break
+				} else {
+					isNegativeNum = true
 				}
 			}
 
+		} else if !haveLeadingNegativeSignChars &&
+			haveTrailingNegativeSignChars {
+
+			for i := 0; i < lenLeadingNegativeSignChars; i++ {
+				if leadingNegativeSignChars[i] != 0 {
+					isNegativeNum = false
+					break
+				} else {
+					isNegativeNum = true
+				}
+			}
 		}
 	}
 
 	if isZeroNum {
 		numberSign = 0
-	} else if !isPositiveNum &&
-		!isNegativeNum {
 
-		numberSign = 1
+	} else if isNegativeNum {
 
-	} else if isPositiveNum {
-		numberSign = 1
+		numberSign = -1
 
 	} else {
-		numberSign = -1
+		// Must be a positive number
+		numberSign = 1
+
+	}
+
+	if intRunes == nil &&
+		digitsFound > 0 {
+		intRunes = make([]rune, 1)
+		intRunes[0] = '0'
 	}
 
 	return intRunes,

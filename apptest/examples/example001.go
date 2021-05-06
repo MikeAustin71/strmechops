@@ -2,6 +2,7 @@ package examples
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"github.com/MikeAustin71/strmechops/strmech"
 	"io"
 	"os"
@@ -1451,10 +1452,6 @@ func (mt MainTest) ExampleIoCopy02() {
 func (mt MainTest) ExampleExtractNumRunes01() {
 	funcName := "ExampleExtractNumRunes01()"
 	rawNumStrRunes := []rune("1234.5678")
-	startingIndex := 0
-	endingIndex := -1
-	leadingPositiveSignChars := []rune{'+'}
-	trailingPositiveSignChars := []rune{0}
 	leadingNegativeSignChars := []rune{'-'}
 	trailingNegativeSignChars := []rune{0}
 	decimalSeparatorChars := []rune{'.'}
@@ -1470,10 +1467,6 @@ func (mt MainTest) ExampleExtractNumRunes01() {
 		digitsFound,
 		err := sMech.ExtractNumberRunes(
 		rawNumStrRunes,
-		startingIndex,
-		endingIndex,
-		leadingPositiveSignChars,
-		trailingPositiveSignChars,
 		leadingNegativeSignChars,
 		trailingNegativeSignChars,
 		decimalSeparatorChars,
@@ -1522,10 +1515,6 @@ func (mt MainTest) ExampleExtractNumRunes01() {
 func (mt MainTest) ExampleExtractNumRunes02() {
 	funcName := "ExampleExtractNumRunes02()"
 	rawNumStrRunes := []rune("-1234.5678")
-	startingIndex := 0
-	endingIndex := -1
-	leadingPositiveSignChars := []rune{'+'}
-	trailingPositiveSignChars := []rune{0}
 	leadingNegativeSignChars := []rune{'-'}
 	trailingNegativeSignChars := []rune{0}
 	decimalSeparatorChars := []rune{'.'}
@@ -1541,10 +1530,6 @@ func (mt MainTest) ExampleExtractNumRunes02() {
 		digitsFound,
 		err := sMech.ExtractNumberRunes(
 		rawNumStrRunes,
-		startingIndex,
-		endingIndex,
-		leadingPositiveSignChars,
-		trailingPositiveSignChars,
 		leadingNegativeSignChars,
 		trailingNegativeSignChars,
 		decimalSeparatorChars,
@@ -1588,6 +1573,92 @@ func (mt MainTest) ExampleExtractNumRunes02() {
 	fmt.Println("  Total NanoSeconds: ", totalNanoSeconds)
 	fmt.Println(lineBrk)
 	fmt.Println()
+}
+
+func (mt MainTest) ExampleExtractNumRunes03(
+	numStrRunes []rune,
+	leadingNegativeSignChars []rune,
+	trailingNegativeSignChars []rune,
+	decimalSeparatorChars []rune,
+	errorPrefix interface{}) (err error) {
+
+	funcName := "MainTest.ExampleExtractNumRunes03()"
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		fmt.Sprintf(
+			"       numStrRunes='%s'\n"+
+				"  leadingNegSignChars='%v'\n"+
+				" trailingNegSignChars='%v'\n"+
+				"decimalSeparatorChars='%v'\n",
+			string(numStrRunes),
+			string(leadingNegativeSignChars),
+			trailingNegativeSignChars,
+			decimalSeparatorChars))
+
+	if err != nil {
+		return err
+	}
+
+	sMech := strmech.StrMech{}
+
+	var startTime, endTime time.Time
+	startTime = time.Now()
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		numStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	endTime = time.Now()
+
+	isError := false
+	errStr := ""
+	if err != nil {
+		isError = true
+		errStr = err.Error()
+	}
+
+	totalNanoSeconds,
+		elapsedTime := mt.Timer(startTime, endTime)
+
+	lineBrk := strings.Repeat("-", 70)
+
+	fmt.Println("  " + funcName)
+	fmt.Println(lineBrk)
+	if isError {
+		fmt.Println("     @@@@@  FAILURE @@@@@@           ")
+		fmt.Printf("%v\n\n",
+			errStr)
+		return
+	} else {
+		fmt.Println("          SUCCESS!!!")
+	}
+
+	fmt.Println(lineBrk)
+	fmt.Printf("   NumberStr: %v\n", string(numStrRunes))
+	fmt.Printf("    intRunes: %v\n", intRunes)
+	fmt.Printf("   intString: %v\n", string(intRunes))
+	fmt.Printf("   fracRunes: %v\n", fracRunes)
+	fmt.Printf("  fracString: %v\n", string(fracRunes))
+	fmt.Printf(" Number Sign: %v\n", numberSign)
+	fmt.Printf("Digits Found: %v\n", digitsFound)
+	fmt.Println(lineBrk)
+	fmt.Println("       Elapsed Time: ", elapsedTime)
+	fmt.Println("  Total NanoSeconds: ", totalNanoSeconds)
+	fmt.Println(lineBrk)
+	fmt.Println()
+
+	return nil
 }
 
 func (mt MainTest) Timer(

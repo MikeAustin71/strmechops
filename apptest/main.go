@@ -1,10 +1,26 @@
 package main
 
-import "github.com/MikeAustin71/strmechops/apptest/examples"
+import (
+	"fmt"
+	"github.com/MikeAustin71/strmechops/apptest/examples"
+)
 
 func main() {
 	mt := examples.MainTest{}
+	numStrRunes := "123.456-"
+	leadingNegativeSignChars := []rune{0}
+	trailingNegativeSignChars := []rune{'-'}
+	decimalSeparatorChars := []rune{'.'}
 
-	mt.ExampleExtractNumRunes02()
+	err := mt.ExampleExtractNumRunes03(
+		[]rune(numStrRunes),
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		"main()")
+
+	if err != nil {
+		fmt.Printf("%s\n\n", err.Error())
+	}
 
 }

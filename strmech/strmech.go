@@ -1032,10 +1032,6 @@ func (sMech *StrMech) ExtractNumericDigits(
 //
 func (sMech *StrMech) ExtractNumberRunes(
 	rawNumStrRunes []rune,
-	startingIndex int,
-	endingIndex int,
-	leadingPositiveSignChars []rune,
-	trailingPositiveSignChars []rune,
 	leadingNegativeSignChars []rune,
 	trailingNegativeSignChars []rune,
 	decimalSeparatorChars []rune,
@@ -1076,10 +1072,6 @@ func (sMech *StrMech) ExtractNumberRunes(
 		digitsFound,
 		err = strMechMolecule{}.ptr().extractNumRunes(
 		rawNumStrRunes,
-		startingIndex,
-		endingIndex,
-		leadingPositiveSignChars,
-		trailingPositiveSignChars,
 		leadingNegativeSignChars,
 		trailingNegativeSignChars,
 		decimalSeparatorChars,
