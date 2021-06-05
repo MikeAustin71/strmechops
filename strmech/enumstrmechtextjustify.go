@@ -245,7 +245,7 @@ func (sopsTxtJustify TextJustify) XIsValid() bool {
 //
 //                        If 'false' a case insensitive search is conducted
 //                        for the enumeration name. In this case, 'right'
-//                        will match match enumeration name 'Right'.
+//                        will match the enumeration name 'Right'.
 //
 // ------------------------------------------------------------------------
 //

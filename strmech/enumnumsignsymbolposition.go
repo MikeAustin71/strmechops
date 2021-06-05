@@ -52,8 +52,8 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 // position types. These methods are listed as follows:
 //
 //  None             (0) - Signals that 'NumSignSymbolPosition' has
-//                         not been initialized. This is an error
-//                         condition.
+//                         not been initialized and therefore has no
+//                         value. This is an error condition.
 //
 //  Before           (1) - Signals that the Numeric Symbol is
 //                         positioned 'Before' the numeric value.
@@ -77,14 +77,15 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 // completion) may not list the NumSignSymbolPosition methods in
 // alphabetical order. Be advised that all NumSignSymbolPosition
 // methods beginning with 'X', as well as the method 'String()',
-// are utility methods and NOT part of the enumeration values.
+// are utility methods, and NOT part of the enumeration values.
 //
 type NumSignSymbolPosition int
 
 var lockNumSignSymbolPosition sync.Mutex
 
 // None - Signals that 'NumSignSymbolPosition' has not been
-// initialized. This is an error condition.
+// initialized and therefore contains no value. This is an
+// error condition.
 //
 func (nSignSymPos NumSignSymbolPosition) None() NumSignSymbolPosition {
 
@@ -133,7 +134,7 @@ func (nSignSymPos NumSignSymbolPosition) BeforeAndAfter() NumSignSymbolPosition 
 }
 
 // String - Returns a string with the name of the enumeration associated
-// with this instance of 'NumSignSymbolPosition'.
+// with this instance of NumSignSymbolPosition.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
@@ -142,8 +143,8 @@ func (nSignSymPos NumSignSymbolPosition) BeforeAndAfter() NumSignSymbolPosition 
 //
 // Usage
 //
-// t:= NumSignSymbolPosition(0).After()
-// str := t.String()
+//  t:= NumSignSymbolPosition(0).After()
+//  str := t.String()
 //     str is now equal to 'After'
 //
 func (nSignSymPos NumSignSymbolPosition) String() string {
@@ -164,6 +165,9 @@ func (nSignSymPos NumSignSymbolPosition) String() string {
 
 // XIsValid - Returns a boolean value signaling whether the current
 // NumSignSymbolPosition value is valid.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
@@ -219,7 +223,7 @@ func (nSignSymPos NumSignSymbolPosition) XIsValid() bool {
 //
 //                        If 'false' a case insensitive search is conducted
 //                        for the enumeration name. In this case, 'before'
-//                        will match match enumeration name 'Before'.
+//                        will match the enumeration name 'Before'.
 //
 // ------------------------------------------------------------------------
 //
@@ -326,11 +330,11 @@ func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 	return int(nSignSymPos)
 }
 
-// NumSymPos - public global constant of
-// type NumSignSymbolPosition.
+// NumSymPos - public global constant of type
+// NumSignSymbolPosition.
 //
-// This variable serves as an easier, short hand
-// technique for accessing NumSignSymbolPosition values.
+// This variable serves as an easier, short hand technique for
+// accessing NumSignSymbolPosition values.
 //
 // Usage:
 // NumSymPos.None(),
