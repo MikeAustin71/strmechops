@@ -1,3 +1,43 @@
+=== RUN   TestNumSignSymbolPosition_XParseString000100
+--- PASS: TestNumSignSymbolPosition_XParseString000100 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000110
+--- PASS: TestNumSignSymbolPosition_XParseString000110 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000200
+--- PASS: TestNumSignSymbolPosition_XParseString000200 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000300
+--- PASS: TestNumSignSymbolPosition_XParseString000300 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000400
+--- PASS: TestNumSignSymbolPosition_XParseString000400 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000500
+--- PASS: TestNumSignSymbolPosition_XParseString000500 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000510
+--- PASS: TestNumSignSymbolPosition_XParseString000510 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000600
+--- PASS: TestNumSignSymbolPosition_XParseString000600 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000700
+--- PASS: TestNumSignSymbolPosition_XParseString000700 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000800
+--- PASS: TestNumSignSymbolPosition_XParseString000800 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString000900
+--- PASS: TestNumSignSymbolPosition_XParseString000900 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XParseString001000
+--- PASS: TestNumSignSymbolPosition_XParseString001000 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XValue_000100
+--- PASS: TestNumSignSymbolPosition_XValue_000100 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XValueInt_000100
+--- PASS: TestNumSignSymbolPosition_XValueInt_000100 (0.00s)
+=== RUN   TestNumSignSymbolPosition_String_000100
+--- PASS: TestNumSignSymbolPosition_String_000100 (0.00s)
+=== RUN   TestNumSignSymbolPosition_String_000200
+--- PASS: TestNumSignSymbolPosition_String_000200 (0.00s)
+=== RUN   TestNumSignSymbolPosition_String_000300
+--- PASS: TestNumSignSymbolPosition_String_000300 (0.00s)
+=== RUN   TestNumSignSymbolPosition_String_000400
+--- PASS: TestNumSignSymbolPosition_String_000400 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XIsValid_000100
+--- PASS: TestNumSignSymbolPosition_XIsValid_000100 (0.00s)
+=== RUN   TestNumSignSymbolPosition_XIsValid_000200
+--- PASS: TestNumSignSymbolPosition_XIsValid_000200 (0.00s)
 === RUN   TestDataFieldProfileDto_ConvertToErrorState_01
 --- PASS: TestDataFieldProfileDto_ConvertToErrorState_01 (0.00s)
 === RUN   TestStrMech_BreakTextAtLineLength_01
@@ -687,5 +727,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 91.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.837s
+coverage: 86.3% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.826s

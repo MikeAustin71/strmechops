@@ -11,7 +11,7 @@ func TestStrOpsTextJustify_ParseString_01(t *testing.T) {
 		testStr, true)
 
 	if err != nil {
-		t.Errorf("Error returned by  TextJustify(0).ParseString(testStr, true).\n"+
+		t.Errorf("Error returned by TextJustify(0).XParseString(testStr, true).\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -32,7 +32,7 @@ func TestStrOpsTextJustify_ParseString_02(t *testing.T) {
 		testStr, true)
 
 	if err != nil {
-		t.Errorf("Error returned by  TextJustify(0).ParseString(testStr, true).\n"+
+		t.Errorf("Error returned by TextJustify(0).XParseString(testStr, true).\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -53,7 +53,7 @@ func TestStrOpsTextJustify_ParseString_03(t *testing.T) {
 		testStr, true)
 
 	if err != nil {
-		t.Errorf("Error returned by  TextJustify(0).ParseString(testStr, true).\n"+
+		t.Errorf("Error returned by TextJustify(0).XParseString(testStr, true).\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -222,7 +222,7 @@ func TestStrOpsTextJustify_String_01(t *testing.T) {
 	if actualStr != testStr {
 		t.Errorf("Error: Expected return of object string value= \"Center\".\n"+
 			"Instead, object string value = '%v'\n",
-			testStr)
+			actualStr)
 	}
 
 }
@@ -238,7 +238,7 @@ func TestStrOpsTextJustify_String_02(t *testing.T) {
 	if actualStr != testStr {
 		t.Errorf("Error: Expected return of object string value= \"Left\".\n"+
 			"Instead, object string value = '%v'\n",
-			testStr)
+			actualStr)
 	}
 
 }
@@ -254,7 +254,7 @@ func TestStrOpsTextJustify_String_03(t *testing.T) {
 	if actualStr != testStr {
 		t.Errorf("Error: Expected return of object string value= \"Right\".\n"+
 			"Instead, object string value = '%v'\n",
-			testStr)
+			actualStr)
 	}
 
 }
@@ -270,7 +270,7 @@ func TestStrOpsTextJustify_String_04(t *testing.T) {
 	if actualStr != testStr {
 		t.Errorf("Error: Expected return of object string value= \"None\".\n"+
 			"Instead, object string value = '%v'\n",
-			testStr)
+			actualStr)
 	}
 
 }
