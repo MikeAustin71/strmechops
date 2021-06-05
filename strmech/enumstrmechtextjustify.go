@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// Lock lockStrOpsTextJustify before accessing these
+// 'maps'.
+
 var mStrOpsTextJustifyCodeToString = map[TextJustify]string{
 	TextJustify(0): "None",
 	TextJustify(1): "Left",
@@ -34,11 +37,12 @@ var mStrOpsTextJustifyLwrCaseStringToCode = map[string]TextJustify{
 // 'Left-Justified' and 'Centered' string positioning within text
 // fields.
 //
-// Since Go does not directly support enumerations, the 'TextJustify'
-// type has been adapted to function in a manner similar to classic
-// enumerations. 'TextJustify' is declared as a type 'int'. The
-// method names effectively represent an enumeration of text
-// justification formats. These methods are listed as follows:
+// Since the Go Programming Language does not directly support
+// enumerations, the 'TextJustify' type has been adapted to
+// function in a manner similar to classic enumerations.
+// 'TextJustify' is declared as a type 'int'. The method names
+// effectively represent an enumeration of text justification
+// formats. These methods are listed as follows:
 //
 // None            (0) - Signals that 'TextJustify' value has NOT
 //                       been initialized. This is an error condition.
@@ -236,12 +240,12 @@ func (sopsTxtJustify TextJustify) XIsValid() bool {
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
 //                        will be case sensitive and will require an
-//                        exact match. Therefore, 'gregorian' will NOT
-//                        match the enumeration name, 'Gregorian'.
+//                        exact match. Therefore, 'right' will NOT
+//                        match the enumeration name, 'Right'.
 //
 //                        If 'false' a case insensitive search is conducted
-//                        for the enumeration name. In this case, 'gregorian'
-//                        will match match enumeration name 'Gregorian'.
+//                        for the enumeration name. In this case, 'right'
+//                        will match match enumeration name 'Right'.
 //
 // ------------------------------------------------------------------------
 //
@@ -335,7 +339,6 @@ func (sopsTxtJustify TextJustify) XValue() TextJustify {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 //
 func (sopsTxtJustify TextJustify) XValueInt() int {
 

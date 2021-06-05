@@ -36,7 +36,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	leadingNegativeSignChars []rune,
 	trailingNegativeSignChars []rune,
 	decimalSeparatorChars []rune,
-	ePrefix *ePref.ErrPrefixDto) (
+	ePrefDto *ePref.ErrPrefixDto) (
 	intRunes []rune,
 	fractionalRunes []rune,
 	numberSign int,
@@ -51,14 +51,21 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	defer sMechMolecule.lock.Unlock()
 
-	if ePrefix == nil {
-		ePrefix = ePref.ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefix = ePrefix.CopyPtr()
-	}
+	// var ePrefix *ePref.ErrPrefixDto
 
-	ePrefix.SetEPref("strMechMolecule." +
-		"extractNumRunes()")
+	_,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"strMechMolecule.extractNumRunes()",
+		"")
+
+	if err != nil {
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			err
+	}
 
 	lenRawNumRunes := len(rawNumStrRunes)
 
@@ -360,7 +367,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 func (sMechMolecule *strMechMolecule) strCenterInStr(
 	strToCenter string,
 	fieldLen int,
-	ePrefix *ePref.ErrPrefixDto) (
+	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -372,14 +379,15 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 
 	defer sMechMolecule.lock.Unlock()
 
-	if ePrefix == nil {
-		ePrefix = ePref.ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefix = ePrefix.CopyPtr()
-	}
+	ePrefix,
+		err := ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechMolecule.strCenterInStr()",
+		"")
 
-	ePrefix.SetEPref("strMechMolecule." +
-		"strCenterInStr()")
+	if err != nil {
+		return "", err
+	}
 
 	sOpsQuark := strMechQuark{}
 
