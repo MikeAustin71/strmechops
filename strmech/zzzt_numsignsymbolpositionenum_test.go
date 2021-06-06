@@ -249,9 +249,9 @@ func TestNumSignSymbolPosition_XValue_000100(t *testing.T) {
 	currValue := nStrSymPos.XValue()
 
 	if currValue != NumSymPos.Before() {
-		t.Errorf("Error: Expected return of object=' NumSignSymbolPosition(0).Before()'.\n"+
+		t.Errorf("Error: Expected return of object='NumSignSymbolPosition(0).Before()'.\n"+
 			"Instead, object integer value = '%v'\n",
-			NumSignSymbolPosition(0).XValueInt())
+			currValue.XValueInt())
 
 	}
 
@@ -266,7 +266,7 @@ func TestNumSignSymbolPosition_XValueInt_000100(t *testing.T) {
 	if intValue != 2 {
 		t.Errorf("Error: Expected return of object integer = '2'.\n"+
 			"Instead, object integer value = '%v'\n",
-			nSgnSymPos.XValueInt())
+			intValue)
 	}
 }
 
@@ -338,7 +338,7 @@ func TestNumSignSymbolPosition_XIsValid_000100(t *testing.T) {
 
 	if isValid == true {
 		t.Error("Error: Expected NumSignSymbolPosition(0).None() to yield an INVALID enum.\n" +
-			"It did NOT! Return value from nSgnSymPos.XIsValid()='true'\n")
+			"It did NOT! Return value from nSgnSymPos.XIsValid()=='true'\n")
 	}
 
 }

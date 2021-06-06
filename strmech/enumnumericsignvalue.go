@@ -168,12 +168,23 @@ func (nSignValue NumericSignValueType) String() string {
 // conform to the conventional values assigned as numeric sign
 // values for purposes of arithmetic calculations.
 //
-// Typically, numeric sign values are represented as integer values
-// with Negative= -1, Zero= 0 and Positive = +1.
+// With arithmetic calculations, numeric sign values are typically
+// represented as integer values with Negative= -1, Zero= 0 and
+// Positive = +1.
 //
 // The purpose of this method is to convert enumeration values to
 // conventional numeric sign values for use in arithmetic
 // calculations.
+//
+// If the value of the current NumericSignValueType is invalid and
+// not equal to Negative, Zero or Positive, this method will return
+// an integer value of -99.
+//
+// If the value of the current NumericSignValueType is valid, the
+// following integer values will be returned:
+//     Negative == -1
+//     Zero     ==  0
+//     Positive ==  1
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
@@ -194,7 +205,42 @@ func (nSignValue NumericSignValueType) XArithmeticValue() int {
 
 	defer lockNumericSignValueType.Unlock()
 
+	if nSignValue > 3 ||
+		nSignValue < 1 {
+		return -99
+	}
+
 	return int(nSignValue) - 2
+}
+
+// XIsPositiveOrNegative - There are cases where it is valuable to
+// know whether the numeric sign value is positive or negative.
+//
+// This method answers that question by returning a boolean value.
+// If the returned value is 'true' it signals that the current
+// NumericSignValueType type is equal to one of the two following
+// values:
+//           NumericSignValueType(0).Positive()
+//                          Or
+//           NumericSignValueType(0).Negative()
+//
+// If the NumericSignValueType is equal to any value other than the
+// two shown above, a value of 'false' is returned.
+//
+// Specifically, this means that if the NumericSignValueType value is
+// 'Zero' or 'None', a boolean value of 'false' is returned.
+//
+func (nSignValue NumericSignValueType) XIsPositiveOrNegative() bool {
+	lockNumericSignValueType.Lock()
+
+	defer lockNumericSignValueType.Unlock()
+
+	if nSignValue == 1 ||
+		nSignValue == 3 {
+		return true
+	}
+
+	return false
 }
 
 // XIsValid - Returns a boolean value signaling whether the current
