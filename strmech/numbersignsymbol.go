@@ -69,6 +69,31 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 	return leadingNumSignChars
 }
 
+// GetNumSignSymPosition - Returns an enumeration value specifying
+// the position of the Number Sign Symbol within a number string.
+//
+// Number Sign Symbols may be positioned before the numeric value,
+// after the numeric value or before and after the numeric value.
+//
+// This method returns a type of NumSignSymbolPosition. Possible
+// return values are listed as follows:
+//    NumSignSymbolPosition(0).Before()
+//    NumSignSymbolPosition(0).After()
+//    NumSignSymbolPosition(0).BeforeAndAfter()
+//
+func (nSignSymbol *NumberSignSymbol) GetNumSignSymPosition() NumSignSymbolPosition {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.numSignPosition
+}
+
 // GetTrailingNumSignChars - Returns a deep copy of the trailing
 // number sign characters contained in this instance of
 // NumberSignSymbol.
