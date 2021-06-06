@@ -69,6 +69,37 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 	return leadingNumSignChars
 }
 
+// GetTrailingNumSignChars - Returns a deep copy of the trailing
+// number sign characters contained in this instance of
+// NumberSignSymbol.
+//
+func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignChars() []rune {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	var trailingNumSignChars []rune
+
+	lenNumSignChars := len(nSignSymbol.trailingNumSignChars)
+
+	if lenNumSignChars == 0 {
+		return trailingNumSignChars
+	}
+
+	trailingNumSignChars = make([]rune, lenNumSignChars)
+
+	copy(
+		trailingNumSignChars,
+		nSignSymbol.trailingNumSignChars)
+
+	return trailingNumSignChars
+}
+
 // New - Creates and returns a new instance of NumberSignSymbol.
 //
 //
