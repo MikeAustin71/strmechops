@@ -944,7 +944,7 @@ func (sMech *StrMech) ExtractDataField(
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
+//       if errors are encountered, this return value will contain
 //       an appropriate error message.
 //
 //       If 'startIndex' is less than zero or if 'startIndex'
