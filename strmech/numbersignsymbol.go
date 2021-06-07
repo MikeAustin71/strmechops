@@ -69,7 +69,7 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 	return leadingNumSignChars
 }
 
-// GetNumberSignArithmeticVal - Returns the arithmetic value of the
+// GetNumSignArithmeticVal - Returns the arithmetic value of the
 // number sign associated with this NumberSignSymbol instance.
 //
 // Valid return values are:
@@ -80,7 +80,7 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 // If the Number Sign value is invalid, this method will return a
 // value of -99
 //
-func (nSignSymbol *NumberSignSymbol) GetNumberSignArithmeticVal() int {
+func (nSignSymbol *NumberSignSymbol) GetNumSignArithmeticVal() int {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
