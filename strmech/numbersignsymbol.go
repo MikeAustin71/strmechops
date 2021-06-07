@@ -118,6 +118,27 @@ func (nSignSymbol *NumberSignSymbol) GetNumSignSymPosition() NumSignSymbolPositi
 	return nSignSymbol.numSignPosition
 }
 
+// GetNumSignVal - Returns the enumeration type NumericSignValueType
+// which identifies this number sign symbol as either positive or
+// negative.
+//
+// Valid return values:
+//    NumericSignValueType(0).Negative()
+//    NumericSignValueType(0).Positive()
+//
+func (nSignSymbol *NumberSignSymbol) GetNumSignVal() NumericSignValueType {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.numSignType
+}
+
 // GetTrailingNumSignChars - Returns a deep copy of the trailing
 // number sign characters contained in this instance of
 // NumberSignSymbol.
