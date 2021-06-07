@@ -6,28 +6,31 @@ import (
 	"sync"
 )
 
-// NumberSignSymbol - Defines the text or character value of a numeric
-// sign contained in a number string. The most common examples of
-// number sign text values are the plus sign ('+') and the minus
-// sign ('-').
+// NumberSignSymbol - Stores the specification for a single text or
+// character number sign symbol. This is usually a single plus
+// ('+') or minus ('-) for a numeric sign contained in a number
+// string.
 //
-// The number sign text is usually positioned before the numeric
+// The NumberSignSymbol type is designed to support number sign
+// symbols used by all nationalities and cultures. As such the
+// NumberSignSymbol type can process number signs comprised of
+// multiple characters. For example, in the USA, negative numeric
+// values are often identified by leading and trailing parentheses
+// "(55)".
+//
+// Number Sign Symbols are usually positioned before the numeric
 // value ('USA Example: +25') or after the numeric value ('EU
 // Example 25-). However, there are cases where the number sign
-// is positioned before and after the negative value. As an
-// example, in the USA opening and closing parentheses are used to
-// designate a negative number "(55)".
+// is positioned before and after the negative value. As as shown
+// above, the USA uses opening and closing parentheses to designate
+// a negative number "(55)".
 //
 // Generally, number signs consist of a single text character,
 // however there may be cases where multiple characters are used
 // to designate positive or negative values.
 //
-// Since Go does not directly support enumerations, the 'TextJustify'
-// type has been adapted to function in a manner similar to classic
-// enumerations. 'TextJustify' is declared as a type 'int'. The
-// method names effectively represent an enumeration of text
-// justification formats. These methods are listed as follows:
-//
+// All of these national or cultural number sign styles are
+// supported by the type, NumberSignSymbol.
 //
 type NumberSignSymbol struct {
 	leadingNumSignChars  []rune
@@ -36,6 +39,122 @@ type NumberSignSymbol struct {
 	numSignPosition      NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
 	numSignType          NumericSignValueType  // Must be positive or negative
 	lock                 *sync.Mutex
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// NumberSignSymbol ('incomingNumSignSymbol') to the data fields of
+// the current NumberSignSymbol instance ('nSignSymbol').
+//
+// IMPORTANT
+// All of the data fields in current NumberSignSymbol instance
+// ('nSignSymbol') will be modified and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNumSignSymbol      *NumberSignSymbol
+//     - A pointer to an instance of NumberSignSymbol. This method
+//       will NOT change the values of internal member variables
+//       contained in this instance.
+//
+//       All data values in this NumberSignSymbol instance will be
+//       copied to current NumberSignSymbol instance
+//       ('nSignSymbol').
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (nSignSymbol *NumberSignSymbol) CopyIn(
+	incomingNumSignSymbol *NumberSignSymbol,
+	errorPrefix interface{}) (
+	err error) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberSignSymbol.CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = numberSignSymbolMolecule{}.ptr().
+		copyIn(nSignSymbol,
+			incomingNumSignSymbol,
+			ePrefix)
+
+	return err
 }
 
 // GetLeadingNumSignChars - Returns a deep copy of the leading
