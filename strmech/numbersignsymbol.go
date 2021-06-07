@@ -69,6 +69,30 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 	return leadingNumSignChars
 }
 
+// GetNumberSignArithmeticVal - Returns the arithmetic value of the
+// number sign associated with this NumberSignSymbol instance.
+//
+// Valid return values are:
+//  Negative == -1
+//  Zero     ==  0
+//  Positive ==  1
+//
+// If the Number Sign value is invalid, this method will return a
+// value of -99
+//
+func (nSignSymbol *NumberSignSymbol) GetNumberSignArithmeticVal() int {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.numSignType.XArithmeticValue()
+}
+
 // GetNumSignSymPosition - Returns an enumeration value specifying
 // the position of the Number Sign Symbol within a number string.
 //
