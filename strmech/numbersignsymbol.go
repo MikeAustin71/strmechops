@@ -398,6 +398,24 @@ func (nSignSymbol *NumberSignSymbol) GetNumSignVal() NumericSignValueType {
 	return nSignSymbol.numSignType
 }
 
+// GetSymbolFoundInNumber - Returns a boolean flag which signals
+// whether this Number Sign Symbol has been located in a target
+// number string.
+//
+func (nSignSymbol *NumberSignSymbol) GetSymbolFoundInNumber() (
+	symbolFoundInNumber bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.symFoundInNumber
+}
+
 // GetTrailingNumSignChars - Returns a deep copy of the trailing
 // number sign characters contained in this instance of
 // NumberSignSymbol.
