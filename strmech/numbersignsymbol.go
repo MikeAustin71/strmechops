@@ -60,8 +60,12 @@ type NumberSignSymbol struct {
 //       contained in this instance.
 //
 //       All data values in this NumberSignSymbol instance will be
-//       copied to current NumberSignSymbol instance
-//       ('nSignSymbol').
+//       copied to current NumberSignSymbol instance ('nSignSymbol').
+//
+//       If 'incomingNumSignSymbol' contains invalid data elements,
+//       this method will return an error and the current
+//       NumberSignSymbol instance ('nSignSymbol') will remain
+//       unaltered in its original state.
 //
 //
 //  errorPrefix                interface{}
