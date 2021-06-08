@@ -125,8 +125,8 @@ type NumberSignSymbol struct {
 //       an appropriate error message.
 //
 //       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (nSignSymbol *NumberSignSymbol) CopyIn(
 	incomingNumSignSymbol *NumberSignSymbol,
@@ -159,6 +159,118 @@ func (nSignSymbol *NumberSignSymbol) CopyIn(
 			ePrefix)
 
 	return err
+}
+
+// CopyOut - Creates and returns a deep copy of the current
+// NumberSignSymbol instance.
+//
+// If the current NumberSignSymbol instance is judged to be
+// invalid, this method will return an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  newNumSignSymbol    NumberSignSymbol
+//     - If this method completes successfully, a new instance of
+//       NumberSignSymbol will be created and returned
+//       containing all of the data values copied from the current
+//       instance of NumberSignSymbol.
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (nSignSymbol *NumberSignSymbol) CopyOut(
+	errorPrefix interface{}) (
+	newNumSignSymbol NumberSignSymbol,
+	err error) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberSignSymbol.CopyOut()",
+		"")
+
+	if err != nil {
+		return newNumSignSymbol, err
+	}
+
+	newNumSignSymbol,
+		err = numberSignSymbolMolecule{}.ptr().
+		copyOut(
+			nSignSymbol,
+			ePrefix)
+
+	return newNumSignSymbol, err
 }
 
 // GetLeadingNumSignChars - Returns a deep copy of the leading
