@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -675,8 +674,8 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 //       an appropriate error message.
 //
 //       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (nSignSymbol NumberSignSymbol) New(
 	leadingNumberSign string,
@@ -706,54 +705,13 @@ func (nSignSymbol NumberSignSymbol) New(
 		return newNumSignSym, err
 	}
 
-	lenLeadingNumSign := len(leadingNumberSign)
-	lenTrailingNumSign := len(trailingNumberSign)
-
-	if lenLeadingNumSign == 0 &&
-		lenTrailingNumSign == 0 {
-		err = fmt.Errorf("%v\n" +
-			"Error: Input parameters 'leadingNumberSign' and " +
-			"'trailingNumberSign' are zero length strings!\n" +
-			ePrefix.String())
-		return newNumSignSym, err
-
-	} else if lenLeadingNumSign > 0 &&
-		lenTrailingNumSign < 0 {
-
-		newNumSignSym.numSignPosition =
-			NumSymPos.Before()
-
-		newNumSignSym.leadingNumSignChars =
-			[]rune(leadingNumberSign)
-
-	} else if lenLeadingNumSign == 0 &&
-		lenTrailingNumSign > 0 {
-
-		newNumSignSym.numSignPosition =
-			NumSymPos.After()
-
-		newNumSignSym.trailingNumSignChars =
-			[]rune(trailingNumberSign)
-
-	} else {
-		// Must be lenLeadingNumSign > 0 &&
-		// lenTrailingNumSign > 0
-		newNumSignSym.numSignPosition =
-			NumSymPos.BeforeAndAfter()
-
-		newNumSignSym.leadingNumSignChars =
-			[]rune(leadingNumberSign)
-
-		newNumSignSym.trailingNumSignChars =
-			[]rune(trailingNumberSign)
-
-	}
-
-	if isNegativeValue {
-		newNumSignSym.numSignType = NumSignVal.Negative()
-	} else {
-		newNumSignSym.numSignType = NumSignVal.Positive()
-	}
+	err = numberSignSymbolMechanics{}.ptr().
+		setNumberSignSymbol(
+			&newNumSignSym,
+			leadingNumberSign,
+			trailingNumberSign,
+			isNegativeValue,
+			ePrefix)
 
 	return newNumSignSym, err
 }
