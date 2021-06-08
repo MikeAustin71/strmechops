@@ -14,6 +14,10 @@ type numberSignSymbolMolecule struct {
 // 'incomingNumSignSymbol' to input parameter
 // 'targetNumSignSymbol'.
 //
+// If the input parameter 'incomingNumSignSymbol' contains invalid
+// data elements, this method will return an error and leave
+// 'targetNumSignSymbol' unaltered in its original state.
+//
 // Be advised that the data fields in 'targetNumSignSymbol' will be
 // overwritten.
 //
@@ -54,6 +58,16 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'targetNumSignSymbol' is a 'nil' pointer!\n",
 			ePrefix.String())
+		return err
+	}
+
+	_,
+		err = numberSignSymbolElectron{}.ptr().
+		testValidityOfNumSignSymbol(
+			incomingNumSignSymbol,
+			ePrefix.XCtx("incomingNumSignSymbol"))
+
+	if err != nil {
 		return err
 	}
 
