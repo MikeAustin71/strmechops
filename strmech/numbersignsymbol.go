@@ -430,6 +430,159 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignChars() []rune {
 	return trailingNumSignChars
 }
 
+// IsValidInstance - Performs a diagnostic review of the current
+// NumberSignSymbol instance to determine whether the current
+// instance is valid in all respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - This returned boolean value will signal whether the
+//       current NumberSignSymbol instance is valid, or not. If the
+//       current NumberSignSymbol contains valid data, this method
+//       returns 'true'. If the data is invalid, this method will
+//       return 'false'.
+//
+func (nSignSymbol *NumberSignSymbol) IsValidInstance() (
+	isValid bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	isValid,
+		_ = numberSignSymbolElectron{}.ptr().
+		testValidityOfNumSignSymbol(
+			nSignSymbol,
+			nil)
+
+	return isValid
+}
+
+// IsValidInstanceError - Performs a diagnostic review of the
+// current NumberSignSymbol instance to determine whether the
+// current instance is valid in all respects.
+//
+// If the current NumberSignSymbol instance is judged to be
+// invalid, this method will return an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                 error
+//     - If the current instance of NumberSignSymbol contains
+//       invalid data, a detailed error message will be returned
+//       identifying the invalid data item.
+//
+//       If errors are encountered during processing, the returned
+//       error Type (err) will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errorPrefix'. The
+//       'errorPrefix' text will be attached to the beginning of
+//       the error message.
+//
+//       If the current instance is valid, this error parameter
+//       will be set to nil.
+//
+func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
+	errorPrefix interface{}) (
+	err error) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberSignSymbol.IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = numberSignSymbolElectron{}.ptr().
+		testValidityOfNumSignSymbol(
+			nSignSymbol,
+			ePrefix)
+
+	return err
+}
+
 // New - Creates and returns a new instance of NumberSignSymbol.
 //
 //
