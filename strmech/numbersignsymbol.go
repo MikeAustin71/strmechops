@@ -584,6 +584,31 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 
 // New - Creates and returns a new instance of NumberSignSymbol.
 //
+// The NumberSignSymbol type stores the specification for a single
+// text or character number sign symbol. This is usually a single
+// plus ('+') or minus ('-) for a numeric sign contained in a
+// number string.
+//
+// The NumberSignSymbol type is designed to support number sign
+// symbols used by all nationalities and cultures. As such the
+// NumberSignSymbol type can process number signs comprised of
+// multiple characters. For example, in the USA, negative numeric
+// values are often identified by leading and trailing parentheses
+// "(55)".
+//
+// Number Sign Symbols are usually positioned before the numeric
+// value ('USA Example: +25') or after the numeric value ('EU
+// Example 25-). However, there are cases where the number sign
+// is positioned before and after the negative value. As as shown
+// above, the USA uses opening and closing parentheses to designate
+// a negative number "(55)".
+//
+// Generally, number signs consist of a single text character (like
+// '+' or '-'), however there may be cases where multiple
+// characters are used to designate positive or negative values.
+//
+// All of these national or cultural number sign styles are
+// supported by the type, NumberSignSymbol.
 //
 // ------------------------------------------------------------------------
 //
@@ -714,4 +739,171 @@ func (nSignSymbol NumberSignSymbol) New(
 			ePrefix)
 
 	return newNumSignSym, err
+}
+
+// SetNumberSignSymbol - Resets the internal data values for the
+// current instance of NumberSignSymbol. The new data values will
+// be generated from the input parameters listed below.
+//
+// The NumberSignSymbol type stores the specification for a single
+// text or character number sign symbol. This is usually a single
+// plus ('+') or minus ('-) for a numeric sign contained in a
+// number string.
+//
+// The NumberSignSymbol type is designed to support number sign
+// symbols used by all nationalities and cultures. As such the
+// NumberSignSymbol type can process number signs comprised of
+// multiple characters. For example, in the USA, negative numeric
+// values are often identified by leading and trailing parentheses
+// "(55)".
+//
+// Number Sign Symbols are usually positioned before the numeric
+// value ('USA Example: +25') or after the numeric value ('EU
+// Example 25-). However, there are cases where the number sign
+// is positioned before and after the negative value. As as shown
+// above, the USA uses opening and closing parentheses to designate
+// a negative number "(55)".
+//
+// Generally, number signs consist of a single text character (like
+// '+' or '-'), however there may be cases where multiple
+// characters are used to designate positive or negative values.
+//
+// All of these national or cultural number sign styles are
+// supported by the type, NumberSignSymbol.
+//
+// IMPORTANT
+//
+// If this method completes successfully, all data values in the
+// current NumberSignSymbol instance will be deleted and
+// overwritten.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leadingNumberSign   string
+//     - A string comprised of the characters which constitute this
+//       leading number sign.
+//
+//       Examples: "-", "+", "("
+//
+//
+//  trailingNumberSign  string
+//     - A string comprised of the characters which constitute this
+//       trailing number sign.
+//
+//       Examples: "-", "+", ")"
+//
+//
+//  isNegativeValue     bool
+//     - Number sign symbols will specify either a positive or
+//       negative numeric value. If this parameter is set to
+//       'true', the number sign will be treated as identifying a
+//       negative numeric value. If this parameter is set to
+//       'false', the number sign will be interpreted as
+//       identifying a positive numeric value.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  newNumSignSym       NumberSignSymbol
+//     - If this method completes successfully, a new, populated
+//       instance of NumberSignSymbol will be returned.
+//
+//
+//  err                 error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
+	leadingNumberSign string,
+	trailingNumberSign string,
+	isNegativeValue bool,
+	errorPrefix *ePref.ErrPrefixDto) (
+	err error) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberSignSymbol.SetNumberSignSymbol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = numberSignSymbolMechanics{}.ptr().
+		setNumberSignSymbol(
+			nSignSymbol,
+			leadingNumberSign,
+			trailingNumberSign,
+			isNegativeValue,
+			ePrefix)
+
+	return err
 }
