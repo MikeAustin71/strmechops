@@ -219,11 +219,17 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		return isValid, err
 	}
 
-	if len(numSignSymbol.leadingNumSignChars) == 0 &&
-		len(numSignSymbol.trailingNumSignChars) == 0 {
+	lenLeadingChars :=
+		len(numSignSymbol.leadingNumSignChars)
+
+	lenTrailingChars :=
+		len(numSignSymbol.trailingNumSignChars)
+
+	if lenLeadingChars == 0 &&
+		lenTrailingChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Leading and Trailing Number Sign Characters are empty!\n"+
+			"Both Leading and Trailing Number Sign Characters are empty!\n"+
 			"This NumberSignSymbol object is invalid!\n",
 			ePrefix.String())
 
@@ -254,6 +260,84 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 			ePrefix.String(),
 			numSignSymbol.numSignPosition.String(),
 			numSignSymbol.numSignPosition.XValueInt())
+
+		return isValid, err
+	}
+
+	if numSignSymbol.numSignPosition ==
+		NumSignSymbolPosition(0).Before() &&
+		lenTrailingChars > 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"This NumberSignSymbol object is invalid!\n"+
+			"The Number Sign Symbol Position == 'Before' but\n"+
+			"the Trailing Characters Array is populated!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if numSignSymbol.numSignPosition ==
+		NumSignSymbolPosition(0).Before() &&
+		lenLeadingChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"This NumberSignSymbol object is invalid!\n"+
+			"The Number Sign Symbol Position == 'Before' but\n"+
+			"the Leading Characters Array is empty!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if numSignSymbol.numSignPosition ==
+		NumSignSymbolPosition(0).After() &&
+		lenTrailingChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"This NumberSignSymbol object is invalid!\n"+
+			"The Number Sign Symbol Position == 'After' but\n"+
+			"the Trailing Characters Array is empty!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if numSignSymbol.numSignPosition ==
+		NumSignSymbolPosition(0).After() &&
+		lenLeadingChars > 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"This NumberSignSymbol object is invalid!\n"+
+			"The Number Sign Symbol Position == 'After' but\n"+
+			"the Leading Characters Array is populated!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if numSignSymbol.numSignPosition ==
+		NumSignSymbolPosition(0).BeforeAndAfter() &&
+		lenTrailingChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"This NumberSignSymbol object is invalid!\n"+
+			"The Number Sign Symbol Position == 'BeforeAndAfter' but\n"+
+			"the Trailing Characters Array is empty!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if numSignSymbol.numSignPosition ==
+		NumSignSymbolPosition(0).BeforeAndAfter() &&
+		lenLeadingChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"This NumberSignSymbol object is invalid!\n"+
+			"The Number Sign Symbol Position == 'BeforeAndAfter' but\n"+
+			"the Leading Characters Array is empty!\n",
+			ePrefix.String())
 
 		return isValid, err
 	}
