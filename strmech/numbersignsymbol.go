@@ -907,3 +907,22 @@ func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
 
 	return err
 }
+
+// SetSymbolFoundInNumber - Sets the boolean flag which signals
+// whether this Number Sign Symbol has been located in a target
+// number string.
+//
+func (nSignSymbol *NumberSignSymbol) SetSymbolFoundInNumber(
+	symbolFoundInNumber bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.symFoundInNumber =
+		symbolFoundInNumber
+}
