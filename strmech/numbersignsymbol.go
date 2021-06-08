@@ -273,6 +273,31 @@ func (nSignSymbol *NumberSignSymbol) CopyOut(
 	return newNumSignSymbol, err
 }
 
+// Empty - Reinitializes all internal member variables for the
+// current NumberSignSymbol instance to their zero values.
+//
+// IMPORTANT
+// This method will effectively delete all data contained in the
+// current NumberSignSymbol instance.
+//
+func (nSignSymbol *NumberSignSymbol) Empty() {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	_ = numberSignSymbolElectron{}.ptr().
+		emptyNumSignSymbol(
+			nSignSymbol,
+			nil)
+
+	nSignSymbol.lock.Unlock()
+
+	nSignSymbol.lock = nil
+}
+
 // GetLeadingNumSignChars - Returns a deep copy of the leading
 // number sign characters contained in this instance of
 // NumberSignSymbol.
