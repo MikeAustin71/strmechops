@@ -51,8 +51,8 @@ func (nSignSymElectron *numberSignSymbolElectron) emptyNumSignSymbol(
 	numSignSymbol.trailingNumSignChars = nil
 	numSignSymbol.leadingNumSignFoundInNumber = false
 	numSignSymbol.trailingNumSignFoundInNumber = false
-	numSignSymbol.leadingNumSignIndex = -1
-	numSignSymbol.trailingNumSignIndex = -1
+	numSignSymbol.leadingNumSignIndex = 0
+	numSignSymbol.trailingNumSignIndex = 0
 	numSignSymbol.numSignPosition = NumSignSymbolPosition(0).None()
 	numSignSymbol.numSignType = NumericSignValueType(0).None()
 
