@@ -1016,6 +1016,28 @@ func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundInNumber(
 		leadingNumSignFoundInNumber
 }
 
+// SetTrailingNumSignFoundIndex - Receives an integer value
+// identifying the index in a number rune array or number string
+// where the Trailing Number Sign Symbol is located.
+//
+// This index is stored as an internal member variable in the
+// current instance of NumberSignSymbol.
+//
+func (nSignSymbol *NumberSignSymbol) SetTrailingNumSignFoundIndex(
+	trailingNumSignFoundIndex int) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.trailingNumSignFoundIndex =
+		trailingNumSignFoundIndex
+}
+
 // SetTrailingNumSignFoundInNumber - Sets the boolean flag which signals
 // whether the Trailing Number Sign Symbol has been located in a number
 // or number string.
