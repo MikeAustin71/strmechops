@@ -485,6 +485,31 @@ func (sMech StrMech) DoesLastCharExist(
 		lastChar)
 }
 
+// EqualRuneArrays - Returns a boolean flag signaling whether two
+// rune arrays, submitted as input parameters, are equal in all
+// respects.
+//
+// If the two run arrays are equivalent, this method will return
+// 'true'.
+//
+func (sMech *StrMech) EqualRuneArrays(
+	runeAryOne []rune,
+	runeAryTwo []rune) bool {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	return strMechPreon{}.ptr().
+		equalRuneArrays(
+			runeAryOne,
+			runeAryTwo)
+}
+
 // ExtractDataField - Extracts a data field string from a larger target string ('targetStr').
 // The target string is searched for a data field. If the 'leadingKeyWordDelimiter' parameter
 // is populated, the data field MUST contain this leading key word, otherwise an empty data field
