@@ -331,6 +331,26 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 	return leadingNumSignChars
 }
 
+// GetLeadingNumSignFoundIndex - Returns an integer value
+// identifying the index in a number rune array or number string
+// where the Leading Number Sign Symbol is located.
+//
+// This index is stored as an internal member variable in the
+// current instance of NumberSignSymbol.
+//
+func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundIndex() int {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.leadingNumSignFoundIndex
+}
+
 // GetLeadingNumSignFoundInNumber - Returns a boolean flag which
 // signals whether the Leading Number Sign Symbol has been located
 // in a number or number string.
