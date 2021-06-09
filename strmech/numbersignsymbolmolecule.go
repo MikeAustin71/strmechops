@@ -81,11 +81,11 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
 	targetNumSignSymbol.trailingNumSignFoundInNumber =
 		incomingNumSignSymbol.trailingNumSignFoundInNumber
 
-	targetNumSignSymbol.leadingNumSignIndex =
-		incomingNumSignSymbol.leadingNumSignIndex
+	targetNumSignSymbol.leadingNumSignFoundIndex =
+		incomingNumSignSymbol.leadingNumSignFoundIndex
 
-	targetNumSignSymbol.trailingNumSignIndex =
-		incomingNumSignSymbol.trailingNumSignIndex
+	targetNumSignSymbol.trailingNumSignFoundIndex =
+		incomingNumSignSymbol.trailingNumSignFoundIndex
 
 	targetNumSignSymbol.numSignPosition =
 		incomingNumSignSymbol.numSignPosition
@@ -199,11 +199,11 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyOut(
 	newNumSignSymbol.trailingNumSignFoundInNumber =
 		incomingNumSignSymbol.trailingNumSignFoundInNumber
 
-	newNumSignSymbol.leadingNumSignIndex =
-		incomingNumSignSymbol.leadingNumSignIndex
+	newNumSignSymbol.leadingNumSignFoundIndex =
+		incomingNumSignSymbol.leadingNumSignFoundIndex
 
-	newNumSignSymbol.trailingNumSignIndex =
-		incomingNumSignSymbol.trailingNumSignIndex
+	newNumSignSymbol.trailingNumSignFoundIndex =
+		incomingNumSignSymbol.trailingNumSignFoundIndex
 
 	newNumSignSymbol.numSignType =
 		incomingNumSignSymbol.numSignType

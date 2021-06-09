@@ -36,8 +36,8 @@ type NumberSignSymbol struct {
 	trailingNumSignChars         []rune
 	leadingNumSignFoundInNumber  bool                  // Leading Number Sign Symbol found in target number
 	trailingNumSignFoundInNumber bool                  // Trailing Number Sign Symbol found in target number
-	leadingNumSignIndex          int                   // Index of Leading Number Sign Symbol in target number.
-	trailingNumSignIndex         int                   // Index of Trailing Number Sign Symbol in target number.
+	leadingNumSignFoundIndex     int                   // Index of Leading Number Sign Symbol in target number.
+	trailingNumSignFoundIndex    int                   // Index of Trailing Number Sign Symbol in target number.
 	numSignPosition              NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
 	numSignType                  NumericSignValueType  // Must be positive or negative
 	lock                         *sync.Mutex
@@ -973,6 +973,28 @@ func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
 			ePrefix)
 
 	return err
+}
+
+// SetLeadingNumSignFoundIndex - Receives an integer value
+// identifying the index in a number rune array or number string
+// where the Leading Number Sign Symbol is located.
+//
+// This index is stored as an internal member variable in the
+// current instance of NumberSignSymbol.
+//
+func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundIndex(
+	leadingNumSignFoundIndex int) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.leadingNumSignFoundIndex =
+		leadingNumSignFoundIndex
 }
 
 // SetLeadingNumSignFoundInNumber - Sets the boolean flag which signals

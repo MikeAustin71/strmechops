@@ -51,8 +51,8 @@ func (nSignSymElectron *numberSignSymbolElectron) emptyNumSignSymbol(
 	numSignSymbol.trailingNumSignChars = nil
 	numSignSymbol.leadingNumSignFoundInNumber = false
 	numSignSymbol.trailingNumSignFoundInNumber = false
-	numSignSymbol.leadingNumSignIndex = 0
-	numSignSymbol.trailingNumSignIndex = 0
+	numSignSymbol.leadingNumSignFoundIndex = 0
+	numSignSymbol.trailingNumSignFoundIndex = 0
 	numSignSymbol.numSignPosition = NumSignSymbolPosition(0).None()
 	numSignSymbol.numSignType = NumericSignValueType(0).None()
 
@@ -104,13 +104,13 @@ func (nSignSymElectron *numberSignSymbolElectron) equalNumSignSymbolObjects(
 		return false
 	}
 
-	if numSignSymbolOne.leadingNumSignIndex !=
-		numSignSymbolTwo.leadingNumSignIndex {
+	if numSignSymbolOne.leadingNumSignFoundIndex !=
+		numSignSymbolTwo.leadingNumSignFoundIndex {
 		return false
 	}
 
-	if numSignSymbolOne.trailingNumSignIndex !=
-		numSignSymbolTwo.trailingNumSignIndex {
+	if numSignSymbolOne.trailingNumSignFoundIndex !=
+		numSignSymbolTwo.trailingNumSignFoundIndex {
 		return false
 	}
 
