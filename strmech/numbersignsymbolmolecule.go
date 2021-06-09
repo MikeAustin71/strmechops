@@ -75,8 +75,17 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
 		targetNumSignSymbol.lock = new(sync.Mutex)
 	}
 
-	targetNumSignSymbol.symFoundInNumber =
-		incomingNumSignSymbol.symFoundInNumber
+	targetNumSignSymbol.leadingNumSignFoundInNumber =
+		incomingNumSignSymbol.leadingNumSignFoundInNumber
+
+	targetNumSignSymbol.trailingNumSignFoundInNumber =
+		incomingNumSignSymbol.trailingNumSignFoundInNumber
+
+	targetNumSignSymbol.leadingNumSignIndex =
+		incomingNumSignSymbol.leadingNumSignIndex
+
+	targetNumSignSymbol.trailingNumSignIndex =
+		incomingNumSignSymbol.trailingNumSignIndex
 
 	targetNumSignSymbol.numSignPosition =
 		incomingNumSignSymbol.numSignPosition
@@ -184,8 +193,17 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyOut(
 			incomingNumSignSymbol.trailingNumSignChars)
 	}
 
-	newNumSignSymbol.symFoundInNumber =
-		incomingNumSignSymbol.symFoundInNumber
+	newNumSignSymbol.leadingNumSignFoundInNumber =
+		incomingNumSignSymbol.leadingNumSignFoundInNumber
+
+	newNumSignSymbol.trailingNumSignFoundInNumber =
+		incomingNumSignSymbol.trailingNumSignFoundInNumber
+
+	newNumSignSymbol.leadingNumSignIndex =
+		incomingNumSignSymbol.leadingNumSignIndex
+
+	newNumSignSymbol.trailingNumSignIndex =
+		incomingNumSignSymbol.trailingNumSignIndex
 
 	newNumSignSymbol.numSignType =
 		incomingNumSignSymbol.numSignType

@@ -32,12 +32,15 @@ import (
 // supported by the type, NumberSignSymbol.
 //
 type NumberSignSymbol struct {
-	leadingNumSignChars  []rune
-	trailingNumSignChars []rune
-	symFoundInNumber     bool                  // Number Sign Symbol found in target number
-	numSignPosition      NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
-	numSignType          NumericSignValueType  // Must be positive or negative
-	lock                 *sync.Mutex
+	leadingNumSignChars          []rune
+	trailingNumSignChars         []rune
+	leadingNumSignFoundInNumber  bool                  // Leading Number Sign Symbol found in target number
+	trailingNumSignFoundInNumber bool                  // Trailing Number Sign Symbol found in target number
+	leadingNumSignIndex          int                   // Index of Leading Number Sign Symbol in target number.
+	trailingNumSignIndex         int                   // Index of Trailing Number Sign Symbol in target number.
+	numSignPosition              NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
+	numSignType                  NumericSignValueType  // Must be positive or negative
+	lock                         *sync.Mutex
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
@@ -328,6 +331,24 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 	return leadingNumSignChars
 }
 
+// GetLeadingNumSignFoundInNumber - Returns a boolean flag which
+// signals whether the Leading Number Sign Symbol has been located
+// in a number or number string.
+//
+func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundInNumber() (
+	leadingNumSignFoundInNumber bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.leadingNumSignFoundInNumber
+}
+
 // GetNumSignArithmeticVal - Returns the arithmetic value of the
 // number sign associated with this NumberSignSymbol instance.
 //
@@ -398,24 +419,6 @@ func (nSignSymbol *NumberSignSymbol) GetNumSignVal() NumericSignValueType {
 	return nSignSymbol.numSignType
 }
 
-// GetSymbolFoundInNumber - Returns a boolean flag which signals
-// whether this Number Sign Symbol has been located in a target
-// number string.
-//
-func (nSignSymbol *NumberSignSymbol) GetSymbolFoundInNumber() (
-	symbolFoundInNumber bool) {
-
-	if nSignSymbol.lock == nil {
-		nSignSymbol.lock = new(sync.Mutex)
-	}
-
-	nSignSymbol.lock.Lock()
-
-	defer nSignSymbol.lock.Unlock()
-
-	return nSignSymbol.symFoundInNumber
-}
-
 // GetTrailingNumSignChars - Returns a deep copy of the trailing
 // number sign characters contained in this instance of
 // NumberSignSymbol.
@@ -445,6 +448,52 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignChars() []rune {
 		nSignSymbol.trailingNumSignChars)
 
 	return trailingNumSignChars
+}
+
+// GetTrailingNumSignFoundInNumber - Returns a boolean flag which
+// signals whether the Trailing Number Sign Symbol has been located
+// in a number or number string.
+//
+func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundInNumber() (
+	leadingNumSignFoundInNumber bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.trailingNumSignFoundInNumber
+}
+
+// IsNumSignSymbolFoundInNumber - Returns a boolean flag signaling
+// whether the entire number sign symbol, both lead and trailing
+// symbols, have been located in a number of number string.
+//
+// A return value of 'true' signals that the entire number sign
+// symbol has been located in the target number or number string.
+//
+func (nSignSymbol *NumberSignSymbol) IsNumSignSymbolFoundInNumber() bool {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	var isNumSignFoundInNumber bool
+
+	isNumSignFoundInNumber,
+		_ = numberSignSymbolQuark{}.ptr().
+		isNumberSignSymbolFoundInNumber(
+			nSignSymbol,
+			nil)
+
+	return isNumSignFoundInNumber
 }
 
 // IsValidInstance - Performs a diagnostic review of the current
@@ -926,12 +975,12 @@ func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
 	return err
 }
 
-// SetSymbolFoundInNumber - Sets the boolean flag which signals
-// whether this Number Sign Symbol has been located in a target
-// number string.
+// SetLeadingNumSignFoundInNumber - Sets the boolean flag which signals
+// whether the Leading Number Sign Symbol has been located in a  number
+// or number string.
 //
-func (nSignSymbol *NumberSignSymbol) SetSymbolFoundInNumber(
-	symbolFoundInNumber bool) {
+func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundInNumber(
+	leadingNumSignFoundInNumber bool) {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -941,6 +990,25 @@ func (nSignSymbol *NumberSignSymbol) SetSymbolFoundInNumber(
 
 	defer nSignSymbol.lock.Unlock()
 
-	nSignSymbol.symFoundInNumber =
-		symbolFoundInNumber
+	nSignSymbol.leadingNumSignFoundInNumber =
+		leadingNumSignFoundInNumber
+}
+
+// SetTrailingNumSignFoundInNumber - Sets the boolean flag which signals
+// whether the Trailing Number Sign Symbol has been located in a number
+// or number string.
+//
+func (nSignSymbol *NumberSignSymbol) SetTrailingNumSignFoundInNumber(
+	trailingNumSignFoundInNumber bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.leadingNumSignFoundInNumber =
+		trailingNumSignFoundInNumber
 }
