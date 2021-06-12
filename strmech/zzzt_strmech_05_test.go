@@ -1155,6 +1155,193 @@ func TestStrMech_IsEmptyOrWhiteSpace_09(t *testing.T) {
 
 }
 
+func TestStrMech_IsTargetRunesIndex_000100(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	sMech := StrMech{}
+
+	hostStartIndex := 4
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == false {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='true' at index %v .\n"+
+			"However, the search routine returned 'false'.\n",
+			hostStartIndex)
+	}
+
+}
+
+func TestStrMech_IsTargetRunesIndex_000200(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	sMech := StrMech{}
+
+	hostStartIndex := 3
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == true {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='false' at index %v .\n"+
+			"However, the search routine returned 'true'.\n",
+			hostStartIndex)
+	}
+
+}
+
+func TestStrMech_IsTargetRunesIndex_000300(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	sMech := StrMech{}
+
+	hostStartIndex := 99
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == true {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='false' at index %v .\n"+
+			"However, the search routine returned 'true'.\n",
+			hostStartIndex)
+	}
+}
+
+func TestStrMech_IsTargetRunesIndex_000400(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	sMech := StrMech{}
+
+	hostStartIndex := -99
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == true {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='false' at index %v .\n"+
+			"However, the search routine returned 'true'.\n",
+			hostStartIndex)
+	}
+}
+
+func TestStrMech_IsTargetRunesIndex_000500(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("How")
+
+	sMech := StrMech{}
+
+	hostStartIndex := -99
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == false {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='true' at index %v .\n"+
+			"However, the search routine returned 'false'.\n",
+			hostStartIndex)
+	}
+}
+
+func TestStrMech_IsTargetRunesIndex_000600(t *testing.T) {
+	// Len 17
+	var hostRunes []rune
+
+	targetRunes := []rune("How")
+
+	sMech := StrMech{}
+
+	hostStartIndex := 0
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == true {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='false' at index %v .\n"+
+			"However, the search routine returned 'true'.\n",
+			hostStartIndex)
+	}
+}
+
+func TestStrMech_IsTargetRunesIndex_000700(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	var targetRunes []rune
+
+	sMech := StrMech{}
+
+	hostStartIndex := 0
+
+	foundTargetRunes := sMech.IsTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == true {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='false' at index %v .\n"+
+			"However, the search routine returned 'true'.\n",
+			hostStartIndex)
+	}
+}
+
+func TestStrMech_IsTargetRunesIndex_000800(t *testing.T) {
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	sMechPreon := strMechPreon{}
+
+	hostStartIndex := 4
+
+	foundTargetRunes := sMechPreon.isTargetRunesIndex(
+		hostRunes,
+		hostStartIndex,
+		targetRunes)
+
+	if foundTargetRunes == false {
+		t.Errorf("Error:\n"+
+			"Expected foundTargetRunes=='true' at index %v .\n"+
+			"However, the search routine returned 'false'.\n",
+			hostStartIndex)
+	}
+
+}
+
 func TestStrMech_LowerCaseFirstLetter_01(t *testing.T) {
 
 	testStr := "Now is the time for all good men to come to the aid of their country."

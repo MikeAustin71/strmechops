@@ -70,17 +70,26 @@ func (sMechPreon *strMechPreon) equalRuneArrays(
 //  hostRunes           []rune
 //     - An array of runes. This rune array will searched to
 //       identify the the beginning index of input parameter
-//       'targetRunes'.
+//       'targetRunes'. If 'hostRunes' is a zero length array, an
+//       error will be returned.
+//
 //
 //  hostStartIndex      int
 //     - The starting index within the host runes array where
-//       the search operation will commence.
+//       the search operation will commence. If 'hostStartIndex' is
+//       less than zero, it will be automatically set to zero.
+//
+//       If the 'hostStartIndex' is greater than or equal to the
+//       length of 'hostRunes', the return value of 'foundIndex'
+//       will be set to -1 and no error will be returned.
+//
 //
 //  targetRunes         []rune
 //     - The object of the search. The 'hostRunes' will be searched
 //       beginning at the 'hostRunes' starting index to determine
 //       whether these 'targetRunes' exists in the 'hostRunes'
-//       array.
+//       array. If 'targetRunes' is a zero length array, an error
+//       will be returned.
 //
 //
 //  errPrefDto          *ePref.ErrPrefixDto
@@ -220,6 +229,125 @@ func (sMechPreon *strMechPreon) findRunesInRunes(
 	}
 
 	return foundIndex, err
+}
+
+// isTargetRunesIndex - Receives a host rune array and a starting
+// index to that array. Beginning with the starting index this
+// method determines whether the target rune array exists in the
+// the host rune array beginning at the starting index.
+//
+// If the target rune array is found in the host array at the host
+// array starting index, this method returns true.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  hostRunes           []rune
+//     - An array of runes. This rune array will searched to
+//       determine if the target runes array is present at the
+//       'hostStartIndex.
+//
+//       If 'hostRunes' is a zero length array, this method will
+//       return 'false'.
+//
+//
+//  hostStartIndex      int
+//     - The starting index within the host runes array where
+//       the search operation will commence. If 'hostStartIndex' is
+//       less than zero, it will be automatically set to zero.
+//
+//       If the 'hostStartIndex' is greater than or equal to the
+//       length of 'hostRunes', this method will return 'false'.
+//
+//
+//  targetRunes         []rune
+//     - The object of the search. The 'hostRunes' will be searched
+//       beginning at the 'hostRunes' starting index to determine
+//       whether these 'targetRunes' exists beginning that starting
+//       index. If the target rune array is NOT found beginning at
+//       the staring index in the host runes array, this method will
+//       return 'false'.
+//
+//       If the target runes array IS found in the host runes array
+//       beginning at the host runes starting index, this method
+//       will return 'true'.
+//
+//       If 'targetRunes' is an empty array, this method will
+//       return 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isTargetRunesIndex  bool
+//     - A boolean flag signaling whether the target runes array
+//       was found in the host runes array beginning at the host
+//       runes staring index.
+//
+//       If the target runes array is found at the staring index in
+//       the host runes array, this method will return 'true'.
+//
+func (sMechPreon *strMechPreon) isTargetRunesIndex(
+	hostRunes []rune,
+	hostStartIndex int,
+	targetRunes []rune) (
+	isTargetRunesIndex bool) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	isTargetRunesIndex = false
+
+	lenHostRunes := len(hostRunes)
+
+	if lenHostRunes == 0 {
+		return isTargetRunesIndex
+	}
+
+	lenTargetRunes := len(targetRunes)
+
+	if lenTargetRunes == 0 {
+		return isTargetRunesIndex
+	}
+
+	if hostStartIndex < 0 {
+		hostStartIndex = 0
+	}
+
+	if hostStartIndex >= lenHostRunes {
+		return isTargetRunesIndex
+	}
+
+	lastHostIndex := lenHostRunes - 1
+
+	lastTargetIndex := lenTargetRunes - 1
+
+	if lastTargetIndex+hostStartIndex > lastHostIndex {
+		return isTargetRunesIndex
+	}
+
+	for k := 0; k < lenTargetRunes; k++ {
+
+		if targetRunes[k] != hostRunes[hostStartIndex] {
+
+			return isTargetRunesIndex
+
+		}
+
+		hostStartIndex++
+	}
+
+	isTargetRunesIndex = true
+
+	return isTargetRunesIndex
 }
 
 // ptr - Returns a pointer to a new instance of
