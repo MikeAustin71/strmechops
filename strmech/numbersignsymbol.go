@@ -508,6 +508,53 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundInNumber() (
 	return nSignSymbol.trailingNumSignFoundInNumber
 }
 
+// IsLeadingNumSignAtHostIndex - This method will test a host rune
+// array to determine if the leading number sign symbol exists
+// at the 'hostStartIndex'.
+//
+// This test will be performed if, and only if, the leading number
+// sign symbol has been configured for the current instance of
+// NumberSignSymbol.
+//
+// If the leading number sign symbol is located at the
+// 'hostStartIndex', tracking information will be recorded.
+//
+// If multiple leading number sign symbols exist in the host rune
+// array, only the last leading number sign symbol encountered
+// before the first numeric digit will be tracked and recorded.
+//
+func (nSignSymbol *NumberSignSymbol) IsLeadingNumSignAtHostIndex(
+	hostRunes []rune,
+	hostStartIndex int) (
+	foundLeadingNumSign bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	if len(nSignSymbol.leadingNumSignChars) == 0 {
+		foundLeadingNumSign = false
+		return foundLeadingNumSign
+	}
+
+	foundLeadingNumSign = strMechPreon{}.ptr().
+		isTargetRunesIndex(
+			hostRunes,
+			hostStartIndex,
+			nSignSymbol.leadingNumSignChars)
+
+	if foundLeadingNumSign {
+		nSignSymbol.leadingNumSignFoundInNumber = true
+		nSignSymbol.leadingNumSignFoundIndex = hostStartIndex
+	}
+
+	return foundLeadingNumSign
+}
+
 // IsNumSignSymbolFoundInNumber - Returns a boolean flag signaling
 // whether the entire number sign symbol, both lead and trailing
 // symbols, have been located in a number of number string.
@@ -534,6 +581,58 @@ func (nSignSymbol *NumberSignSymbol) IsNumSignSymbolFoundInNumber() bool {
 			nil)
 
 	return isNumSignFoundInNumber
+}
+
+// IsTrailingNumSignAtHostIndex - This method will test a host rune
+// array to determine if the trailing number sign symbol exists
+// at the 'hostStartIndex'.
+//
+// This test will be performed if, and only if, the trailing number
+// sign symbol has been configured for the current instance of
+// NumberSignSymbol.
+//
+// If the trailing number sign symbol is located at the
+// 'hostStartIndex', tracking information will be recorded.
+//
+// If multiple leading number sign symbols exist in the host rune
+// array, only the first trailing number sign symbol encountered
+// after the last numeric digit will be tracked and recorded.
+//
+func (nSignSymbol *NumberSignSymbol) IsTrailingNumSignAtHostIndex(
+	hostRunes []rune,
+	hostStartIndex int) (
+	foundTrailingNumSign bool) {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	foundTrailingNumSign = false
+
+	if len(nSignSymbol.trailingNumSignChars) == 0 {
+		return foundTrailingNumSign
+	}
+
+	if nSignSymbol.trailingNumSignFoundInNumber {
+		return foundTrailingNumSign
+	}
+
+	foundTrailingNumSign = strMechPreon{}.ptr().
+		isTargetRunesIndex(
+			hostRunes,
+			hostStartIndex,
+			nSignSymbol.leadingNumSignChars)
+
+	if foundTrailingNumSign {
+		nSignSymbol.trailingNumSignFoundInNumber = true
+		nSignSymbol.trailingNumSignFoundIndex = hostStartIndex
+	}
+
+	return foundTrailingNumSign
 }
 
 // IsValidInstance - Performs a diagnostic review of the current
