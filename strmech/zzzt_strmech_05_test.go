@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"testing"
 )
@@ -26,6 +27,419 @@ func TestStrMech_FindRegExIndex_01(t *testing.T) {
 		t.Errorf("Error: Expected regular expression match on string='%v'. "+
 			"Instead, matched string='%v'. ", expected, sExtract)
 	}
+}
+
+func TestStrMech_FindRunesInRunes_000100(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000100()"
+
+	hostRunes := []rune("Now is the time for all good men" +
+		"to come to the aid of their country.")
+
+	targetRunes := []rune("is the time")
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		-1,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if foundIndex != 4 {
+		t.Errorf("ERROR: Expected foundIndex==4\n"+
+			"Instead foundIndex=='%v'\n",
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000200(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000200()"
+
+	hostRunes := []rune("Now is the time for all good men" +
+		"to come to the aid of their country. If the dare to do so.")
+
+	targetRunes := []rune("If the dare to do so.")
+
+	expectedFoundIndex := len(hostRunes) - len(targetRunes)
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		10,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000300(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000300()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("cow")
+
+	expectedFoundIndex := 14
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		10,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000400(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000400()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("How")
+
+	expectedFoundIndex := 0
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		-1,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000500(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000500()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("How now brown cow!")
+
+	expectedFoundIndex := -1
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		0,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000600(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000600()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	expectedFoundIndex := -1
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		5,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000700(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000700()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	expectedFoundIndex := 4
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		4,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000800(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000800()"
+
+	// Len 17
+	var hostRunes []rune
+
+	targetRunes := []rune("now")
+
+	su := StrMech{}
+
+	_,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		0,
+		targetRunes,
+		funcName)
+
+	if err == nil {
+		t.Error("Expected an error return from su.FindRunesInRunes()\n" +
+			"because 'hostRunes' is an empty array.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_000900(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_000900()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow!")
+
+	var targetRunes []rune
+
+	su := StrMech{}
+
+	_,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		0,
+		targetRunes,
+		funcName)
+
+	if err == nil {
+		t.Error("Expected an error return from su.FindRunesInRunes()\n" +
+			"because 'targetRunes' is an empty array.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_001000(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_001000()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	expectedFoundIndex := 4
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		-99,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_001100(t *testing.T) {
+
+	funcName := "TestStrMech_FindRunesInRunes_001100()"
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	expectedFoundIndex := -1
+
+	su := StrMech{}
+
+	foundIndex,
+		err := su.FindRunesInRunes(
+		hostRunes,
+		99,
+		targetRunes,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by su.FindRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
+}
+
+func TestStrMech_FindRunesInRunes_001200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_FindRunesInRunes_001200()",
+		"")
+
+	// Len 17
+	hostRunes := []rune("How now brown cow")
+
+	targetRunes := []rune("now")
+
+	expectedFoundIndex := 4
+
+	sMechPreon := strMechPreon{}
+
+	foundIndex,
+		err := sMechPreon.findRunesInRunes(
+		hostRunes,
+		0,
+		targetRunes,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("Error returned by sMechPreon.findRunesInRunes()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedFoundIndex != foundIndex {
+		t.Errorf("ERROR: Expected foundIndex=='%v'\n"+
+			"Instead foundIndex=='%v'\n",
+			expectedFoundIndex,
+			foundIndex)
+	}
+
 }
 
 func TestStrMech_GetReader_01(t *testing.T) {

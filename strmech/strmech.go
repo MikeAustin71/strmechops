@@ -1774,6 +1774,150 @@ func (sMech *StrMech) FindRegExIndex(
 		regex)
 }
 
+// FindRunesInRunes - Locates an array of target runes within an
+// array of host runes.
+//
+// If the target runes are located, this method returns the first
+// index within the host runes ('foundIndex') where the target
+// runes were located.
+//
+// If the target runes are NOT located within the hast runes array,
+// this method returns a 'foundIndex' value of -1.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  hostRunes           []rune
+//     - An array of runes. This rune array will searched to
+//       identify the the beginning index of input parameter
+//       'targetRunes'.
+//
+//  hostStartIndex      int
+//     - The starting index within the host runes array where
+//       the search operation will commence.
+//
+//  targetRunes         []rune
+//     - The object of the search. The 'hostRunes' will be searched
+//       beginning at the 'hostRunes' starting index to determine
+//       whether these 'targetRunes' exists in the 'hostRunes'
+//       array.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundIndex          int
+//     - If the 'targetRunes' array is located within the
+//       'hostRunes' array, this parameter will contain the index
+//       in the 'hostRunes' array where 'targetRunes' array begins.
+//       If 'targetRunes' are located within the 'hostRunes' array,
+//       this parameter will always be set to an integer value
+//       greater than or equal to zero.
+//
+//       If the 'targetRunes' array is NOT located within the
+//       'hostRunes' array, this parameter will be set to an
+//       integer value of negative one (-1).
+//
+//
+//  err                 error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered
+//       during processing, the returned error Type will
+//       encapsulate an error message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errorPrefix' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMech *StrMech) FindRunesInRunes(
+	hostRunes []rune,
+	hostStartIndex int,
+	targetRunes []rune,
+	errorPrefix interface{}) (
+	foundIndex int,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	foundIndex = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.FindRunesInRunes()",
+		"")
+
+	if err != nil {
+		return foundIndex, err
+	}
+
+	foundIndex,
+		err = strMechPreon{}.ptr().findRunesInRunes(
+		hostRunes,
+		hostStartIndex,
+		targetRunes,
+		ePrefix)
+
+	return foundIndex, err
+}
+
 // GetReader - Returns an io.Reader which will read the private
 // member data element StrMech.stringData.
 func (sMech *StrMech) GetReader() io.Reader {

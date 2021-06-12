@@ -232,7 +232,7 @@ func (sMechQuark *strMechQuark) convertNonPrintableChars(
 //       be converted back to their native, non-printable values.
 //
 //
-//  ePrefix             *ErrPrefixDto
+//  ePrefix             *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
@@ -263,7 +263,8 @@ func (sMechQuark *strMechQuark) convertNonPrintableChars(
 //       message.
 //
 //       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
+//       parameter 'ePrefix' (error prefix) will be prefixed or
+//       attached at the beginning of the error message
 //
 //
 // ------------------------------------------------------------------------

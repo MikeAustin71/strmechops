@@ -354,6 +354,30 @@
 --- PASS: TestStrMech_FindLastWord_16 (0.00s)
 === RUN   TestStrMech_FindRegExIndex_01
 --- PASS: TestStrMech_FindRegExIndex_01 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000100
+--- PASS: TestStrMech_FindRunesInRunes_000100 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000200
+--- PASS: TestStrMech_FindRunesInRunes_000200 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000300
+--- PASS: TestStrMech_FindRunesInRunes_000300 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000400
+--- PASS: TestStrMech_FindRunesInRunes_000400 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000500
+--- PASS: TestStrMech_FindRunesInRunes_000500 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000600
+--- PASS: TestStrMech_FindRunesInRunes_000600 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000700
+--- PASS: TestStrMech_FindRunesInRunes_000700 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000800
+--- PASS: TestStrMech_FindRunesInRunes_000800 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_000900
+--- PASS: TestStrMech_FindRunesInRunes_000900 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_001000
+--- PASS: TestStrMech_FindRunesInRunes_001000 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_001100
+--- PASS: TestStrMech_FindRunesInRunes_001100 (0.00s)
+=== RUN   TestStrMech_FindRunesInRunes_001200
+--- PASS: TestStrMech_FindRunesInRunes_001200 (0.00s)
 === RUN   TestStrMech_GetReader_01
 --- PASS: TestStrMech_GetReader_01 (0.00s)
 === RUN   TestStrMech_GetReader_02
@@ -385,7 +409,7 @@
 === RUN   TestStrMech_GetValidRunes_06
 --- PASS: TestStrMech_GetValidRunes_06 (0.00s)
 === RUN   TestStrMech_GetValidRunes_07
---- PASS: TestStrMech_GetValidRunes_07 (0.01s)
+--- PASS: TestStrMech_GetValidRunes_07 (0.00s)
 === RUN   TestStrMech_GetValidString_01
 --- PASS: TestStrMech_GetValidString_01 (0.00s)
 === RUN   TestStrMech_GetValidString_02
@@ -627,7 +651,7 @@
 === RUN   TestStrMech_StrRightJustify_01
 --- PASS: TestStrMech_StrRightJustify_01 (0.00s)
 === RUN   TestStrMech_StrRightJustify_02
---- PASS: TestStrMech_StrRightJustify_02 (0.01s)
+--- PASS: TestStrMech_StrRightJustify_02 (0.00s)
 === RUN   TestStrMech_StrRightJustify_03
 --- PASS: TestStrMech_StrRightJustify_03 (0.00s)
 === RUN   TestStrMech_StrRightJustify_04
@@ -793,5 +817,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 86.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.399s
+coverage: 74.2% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.694s
