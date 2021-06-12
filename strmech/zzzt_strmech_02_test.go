@@ -5,6 +5,227 @@ import (
 	"testing"
 )
 
+func TestStrMech_EqualRuneArrays_000100(t *testing.T) {
+
+	runeArrayOne := []rune("How now brown cow!")
+
+	runeArrayTwo := []rune("How now brown cow!")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != true {
+		t.Error("Error: Expected 'runeArrayOne'=='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE NOT EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000200(t *testing.T) {
+
+	runeArrayOne := []rune("How now brown cow!")
+
+	runeArrayTwo := []rune("How now brown cow")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000300(t *testing.T) {
+
+	var runeArrayOne []rune
+
+	var runeArrayTwo []rune
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != true {
+		t.Error("Error: Expected 'runeArrayOne'=='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE NOT EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000400(t *testing.T) {
+
+	var runeArrayOne = []rune{'x'}
+
+	var runeArrayTwo []rune
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000500(t *testing.T) {
+
+	var runeArrayOne []rune
+
+	var runeArrayTwo = []rune{'x'}
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000600(t *testing.T) {
+
+	var runeArrayOne = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	var runeArrayTwo = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != true {
+		t.Error("Error: Expected 'runeArrayOne'=='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE NOT EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000650(t *testing.T) {
+
+	var runeArrayOne = []rune("Xow is the time for all good men" +
+		"to come to the aid of their country!")
+
+	var runeArrayTwo = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000700(t *testing.T) {
+
+	var runeArrayOne = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	var runeArrayTwo = []rune("Xow is the time for all good men" +
+		"to come to the aid of their country!")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000800(t *testing.T) {
+
+	var runeArrayOne = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	var runeArrayTwo = []rune("Now is the time for all good men" +
+		"to come to the aid of their country.")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_000900(t *testing.T) {
+
+	var runeArrayOne = []rune("Now is the time for all good men" +
+		"to come to the aid of their country.")
+
+	var runeArrayTwo = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	sMech := StrMech{}
+
+	result := sMech.EqualRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != false {
+		t.Error("Error: Expected 'runeArrayOne'!='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE EQUAL!\n")
+	}
+
+}
+
+func TestStrMech_EqualRuneArrays_001000(t *testing.T) {
+
+	var runeArrayOne = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	var runeArrayTwo = []rune("Now is the time for all good men" +
+		"to come to the aid of their country!")
+
+	sMechPreon := strMechPreon{}
+
+	result := sMechPreon.equalRuneArrays(
+		runeArrayOne,
+		runeArrayTwo)
+
+	if result != true {
+		t.Error("Error: Expected 'runeArrayOne'=='runeArrayTwo'\n" +
+			"HOWEVER, THE COMPARISON SHOWS THEY ARE NOT EQUAL!\n")
+	}
+
+}
+
 func TestStrMech_ExtractDataField_01(t *testing.T) {
 
 	ePrefix := "TestStrMech_ExtractDataField_01() "
