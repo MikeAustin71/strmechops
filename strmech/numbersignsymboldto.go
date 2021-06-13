@@ -43,6 +43,31 @@ type NumberSignSymbolDto struct {
 	lock                         *sync.Mutex
 }
 
+// ClearLeadingNumSignTracking - This method will clear or delete
+// all of the tracking data collected for the Leading Number Sign
+// Symbol encapsulated by the current NumberSignSymbolDto.
+//
+// Specifically, this means that member variable
+// 'leadingNumSignFoundInNumber' will be set to 'false' and
+// 'leadingNumSignFoundIndex' will be set to zero.
+//
+func (nSignSymbol *NumberSignSymbolDto) ClearLeadingNumSignTracking() {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.leadingNumSignFoundInNumber = false
+
+	nSignSymbol.leadingNumSignFoundIndex = 0
+
+	return
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // NumberSignSymbolDto ('incomingNumSignSymbol') to the data fields of
 // the current NumberSignSymbolDto instance ('nSignSymbol').
