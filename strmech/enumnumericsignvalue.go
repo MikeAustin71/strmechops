@@ -260,7 +260,7 @@ func (nSignValue NumericSignValueType) XIsPositiveOrNegative() bool {
 //
 //  isValid := numSignVal.XIsValid() // isValid == true
 //
-//  numSignVal = NumericSignValueType(0).None)
+//  numSignVal = NumericSignValueType(0).None()
 //
 //  isValid = numSignVal.XIsValid() // isValid == false
 //
