@@ -142,9 +142,9 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 	}
 
 	if isNegativeValue {
-		numSignSymbol.numSignType = NumSignVal.Negative()
+		numSignSymbol.numSignValueType = NumSignVal.Negative()
 	} else {
-		numSignSymbol.numSignType = NumSignVal.Positive()
+		numSignSymbol.numSignValueType = NumSignVal.Positive()
 	}
 
 	return err

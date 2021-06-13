@@ -39,7 +39,7 @@ type NumberSignSymbolDto struct {
 	leadingNumSignFoundIndex     int                   // Index of Leading Number Sign Symbol in target number.
 	trailingNumSignFoundIndex    int                   // Index of Trailing Number Sign Symbol in target number.
 	numSignPosition              NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
-	numSignType                  NumericSignValueType  // Must be positive or negative
+	numSignValueType             NumericSignValueType  // Must be positive or negative
 	lock                         *sync.Mutex
 }
 
@@ -440,7 +440,7 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumSignArithmeticVal() int {
 
 	defer nSignSymbol.lock.Unlock()
 
-	return nSignSymbol.numSignType.XArithmeticValue()
+	return nSignSymbol.numSignValueType.XArithmeticValue()
 }
 
 // GetNumSignSymPosition - Returns an enumeration value specifying
@@ -486,7 +486,7 @@ func (nSignSymbol *NumberSignSymbolDto) GetNumSignVal() NumericSignValueType {
 
 	defer nSignSymbol.lock.Unlock()
 
-	return nSignSymbol.numSignType
+	return nSignSymbol.numSignValueType
 }
 
 // GetTrailingNumSignChars - Returns a deep copy of the trailing

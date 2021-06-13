@@ -54,7 +54,7 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) emptyNumSignSymbol(
 	numSignSymbol.leadingNumSignFoundIndex = 0
 	numSignSymbol.trailingNumSignFoundIndex = 0
 	numSignSymbol.numSignPosition = NumSignSymbolPosition(0).None()
-	numSignSymbol.numSignType = NumericSignValueType(0).None()
+	numSignSymbol.numSignValueType = NumericSignValueType(0).None()
 
 	return nil
 }
@@ -119,8 +119,8 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) equalNumSignSymbolObjects(
 		return false
 	}
 
-	if numSignSymbolOne.numSignType !=
-		numSignSymbolTwo.numSignType {
+	if numSignSymbolOne.numSignValueType !=
+		numSignSymbolTwo.numSignValueType {
 		return false
 	}
 
@@ -254,7 +254,7 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) testValidityOfNumSignSymbol
 		return isValid, err
 	}
 
-	if !numSignSymbol.numSignType.XIsValid() {
+	if !numSignSymbol.numSignValueType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
 			"The Number Sign Type for this NumberSignSymbolDto object\n"+
@@ -262,8 +262,8 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) testValidityOfNumSignSymbol
 			"Number Sign Type='%v'\n"+
 			"Number Sign Type Integer Value='%v'\n",
 			ePrefix.String(),
-			numSignSymbol.numSignType.String(),
-			numSignSymbol.numSignType.XValueInt())
+			numSignSymbol.numSignValueType.String(),
+			numSignSymbol.numSignValueType.XValueInt())
 
 		return isValid, err
 	}
