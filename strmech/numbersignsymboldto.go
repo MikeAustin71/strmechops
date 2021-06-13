@@ -45,9 +45,9 @@ type NumberSignSymbolDto struct {
 
 // ClearLeadingNumSignTracking - This method will clear or delete
 // all of the tracking data collected for the Leading Number Sign
-// Symbol encapsulated by the current NumberSignSymbolDto.
+// Symbol encapsulated by the current NumberSignSymbolDto instance.
 //
-// Specifically, this means that member variable
+// Specifically, this means that member variables
 // 'leadingNumSignFoundInNumber' will be set to 'false' and
 // 'leadingNumSignFoundIndex' will be set to zero.
 //
@@ -64,6 +64,31 @@ func (nSignSymbol *NumberSignSymbolDto) ClearLeadingNumSignTracking() {
 	nSignSymbol.leadingNumSignFoundInNumber = false
 
 	nSignSymbol.leadingNumSignFoundIndex = 0
+
+	return
+}
+
+// ClearTrailingNumSignTracking - This method will clear or delete
+// all of the tracking data collected for the Trailing Number Sign
+// Symbol encapsulated by the current NumberSignSymbolDto instance.
+//
+// Specifically, this means that member variables
+// 'trailingNumSignFoundInNumber' will be set to 'false' and
+// 'trailingNumSignFoundIndex' will be set to zero.
+//
+func (nSignSymbol *NumberSignSymbolDto) ClearTrailingNumSignTracking() {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.trailingNumSignFoundInNumber = false
+
+	nSignSymbol.trailingNumSignFoundIndex = 0
 
 	return
 }
