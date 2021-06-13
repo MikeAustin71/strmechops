@@ -55,6 +55,7 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) emptyNumSignSymbol(
 	numSignSymbol.trailingNumSignFoundIndex = 0
 	numSignSymbol.numSignPosition = NumSignSymbolPosition(0).None()
 	numSignSymbol.numSignValueType = NumericSignValueType(0).None()
+	numSignSymbol.numSymbolClass = NumericSymbolClass(0).None()
 
 	return nil
 }
@@ -121,6 +122,11 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) equalNumSignSymbolObjects(
 
 	if numSignSymbolOne.numSignValueType !=
 		numSignSymbolTwo.numSignValueType {
+		return false
+	}
+
+	if numSignSymbolOne.numSymbolClass !=
+		numSignSymbolTwo.numSymbolClass {
 		return false
 	}
 
@@ -267,6 +273,8 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) testValidityOfNumSignSymbol
 
 		return isValid, err
 	}
+
+	numSignSymbol.numSymbolClass = NumericSymbolClass(0).NumberSign()
 
 	if !numSignSymbol.numSignPosition.XIsValid() {
 

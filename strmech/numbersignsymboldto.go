@@ -31,6 +31,15 @@ import (
 // All of these national or cultural number sign styles are
 // supported by the type, NumberSignSymbolDto.
 //
+// ------------------------------------------------------------------------
+//
+// IMPORTANT
+// NumberSignSymbolDto objects should only be created using one of
+// the following two methods:
+//
+//   NumberSignSymbolDto.New()
+//   NumberSignSymbolDto.SetNumberSignSymbol()
+//
 type NumberSignSymbolDto struct {
 	leadingNumSignChars          []rune
 	trailingNumSignChars         []rune
@@ -40,6 +49,7 @@ type NumberSignSymbolDto struct {
 	trailingNumSignFoundIndex    int                   // Index of Trailing Number Sign Symbol in target number.
 	numSignPosition              NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
 	numSignValueType             NumericSignValueType  // Must be positive or negative
+	numSymbolClass               NumericSymbolClass    // Always NumericSymbolClass(0).NumberSign()
 	lock                         *sync.Mutex
 }
 
@@ -417,6 +427,28 @@ func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundInNumber() (
 	defer nSignSymbol.lock.Unlock()
 
 	return nSignSymbol.leadingNumSignFoundInNumber
+}
+
+// GetNumericSymbolClass - Returns the NumericSymbolClass
+// enumeration value associated with instances of
+// NumberSignSymbolDto.
+//
+// All NumberSignSymbolDto objects have NumericSymbolClass values
+// set equal to NumericSymbolClass(0).NumberSign().
+//
+func (nSignSymbol *NumberSignSymbolDto) GetNumericSymbolClass() NumericSymbolClass {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	nSignSymbol.numSymbolClass = NumericSymbolClass(0).NumberSign()
+
+	return nSignSymbol.numSymbolClass
 }
 
 // GetNumSignArithmeticVal - Returns the arithmetic value of the

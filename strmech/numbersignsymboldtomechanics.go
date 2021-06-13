@@ -147,5 +147,7 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 		numSignSymbol.numSignValueType = NumSignVal.Positive()
 	}
 
+	numSignSymbol.numSymbolClass = NumericSymbolClass(0).NumberSign()
+
 	return err
 }

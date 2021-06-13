@@ -4,7 +4,7 @@ import "sync"
 
 type NumericSymbolDto struct {
 	numericSymbol           []rune
-	numericSymbolClass      string
+	numericSymbolClass      NumericSymbolClass
 	numericSymbolFound      bool
 	numericSymbolFoundIndex int
 	lock                    *sync.Mutex

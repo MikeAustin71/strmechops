@@ -93,6 +93,9 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyIn(
 	targetNumSignSymbol.numSignValueType =
 		incomingNumSignSymbol.numSignValueType
 
+	targetNumSignSymbol.numSymbolClass =
+		NumericSymbolClass(0).NumberSign()
+
 	lenLeadingSignChars := len(incomingNumSignSymbol.leadingNumSignChars)
 
 	lenTrailingSignChars := len(incomingNumSignSymbol.trailingNumSignChars)
@@ -207,6 +210,9 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyOut(
 
 	newNumSignSymbol.numSignValueType =
 		incomingNumSignSymbol.numSignValueType
+
+	newNumSignSymbol.numSymbolClass =
+		NumericSymbolClass(0).NumberSign()
 
 	newNumSignSymbol.numSignPosition =
 		incomingNumSignSymbol.numSignPosition
