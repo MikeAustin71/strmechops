@@ -445,7 +445,7 @@
 === RUN   TestStrMech_GetValidString_06
 --- PASS: TestStrMech_GetValidString_06 (0.00s)
 === RUN   TestStrMech_GetValidString_07
---- PASS: TestStrMech_GetValidString_07 (0.00s)
+--- PASS: TestStrMech_GetValidString_07 (0.01s)
 === RUN   TestStrMech_IsEmptyOrWhiteSpace_01
 --- PASS: TestStrMech_IsEmptyOrWhiteSpace_01 (0.00s)
 === RUN   TestStrMech_IsEmptyOrWhiteSpace_02
@@ -855,5 +855,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 75.1% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.618s
+coverage: 74.4% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.569s

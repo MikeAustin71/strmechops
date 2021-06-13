@@ -6,16 +6,16 @@ import (
 	"sync"
 )
 
-type numberSignSymbolElectron struct {
+type numberSignSymbolDtoElectron struct {
 	lock *sync.Mutex
 }
 
-// emptyNumSignSymbol - Receives a pointer to an NumberSignSymbol
+// emptyNumSignSymbol - Receives a pointer to an NumberSignSymbolDto
 // object an proceeds to set all internal member variables to their
 // zero or uninitialized state.
 //
-func (nSignSymElectron *numberSignSymbolElectron) emptyNumSignSymbol(
-	numSignSymbol *NumberSignSymbol,
+func (nSignSymElectron *numberSignSymbolDtoElectron) emptyNumSignSymbol(
+	numSignSymbol *NumberSignSymbolDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -32,7 +32,7 @@ func (nSignSymElectron *numberSignSymbolElectron) emptyNumSignSymbol(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolElectron.emptyNumSignSymbol()",
+		"numberSignSymbolDtoElectron.emptyNumSignSymbol()",
 		"")
 
 	if err != nil {
@@ -60,16 +60,16 @@ func (nSignSymElectron *numberSignSymbolElectron) emptyNumSignSymbol(
 }
 
 // equalNumSignSymbolObjects - Receives pointers to two
-// NumberSignSymbol objects and proceeds to determine if their data
+// NumberSignSymbolDto objects and proceeds to determine if their data
 // values are equal in all respects.
 //
-// If the data values of the two NumberSignSymbol instances are
+// If the data values of the two NumberSignSymbolDto instances are
 // equivalent, this method returns 'true'. If they are not equal,
 // the method returns false.
 //
-func (nSignSymElectron *numberSignSymbolElectron) equalNumSignSymbolObjects(
-	numSignSymbolOne *NumberSignSymbol,
-	numSignSymbolTwo *NumberSignSymbol) (
+func (nSignSymElectron *numberSignSymbolDtoElectron) equalNumSignSymbolObjects(
+	numSignSymbolOne *NumberSignSymbolDto,
+	numSignSymbolTwo *NumberSignSymbolDto) (
 	areEqual bool) {
 
 	if nSignSymElectron.lock == nil {
@@ -128,9 +128,9 @@ func (nSignSymElectron *numberSignSymbolElectron) equalNumSignSymbolObjects(
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberSignSymbolElectron.
+// numberSignSymbolDtoElectron.
 //
-func (nSignSymElectron numberSignSymbolElectron) ptr() *numberSignSymbolElectron {
+func (nSignSymElectron numberSignSymbolDtoElectron) ptr() *numberSignSymbolDtoElectron {
 
 	if nSignSymElectron.lock == nil {
 		nSignSymElectron.lock = new(sync.Mutex)
@@ -140,15 +140,15 @@ func (nSignSymElectron numberSignSymbolElectron) ptr() *numberSignSymbolElectron
 
 	defer nSignSymElectron.lock.Unlock()
 
-	return &numberSignSymbolElectron{
+	return &numberSignSymbolDtoElectron{
 		lock: new(sync.Mutex),
 	}
 }
 
 // testValidityOfNumSignSymbol - Performs a diagnostic review of
 // the input parameter 'numSignSymbol', an instance of
-// NumberSignSymbol. The purpose of this diagnostic review is to
-// determine whether this NumberSignSymbol instance is valid in all
+// NumberSignSymbolDto. The purpose of this diagnostic review is to
+// determine whether this NumberSignSymbolDto instance is valid in all
 // respects.
 //
 //
@@ -156,8 +156,8 @@ func (nSignSymElectron numberSignSymbolElectron) ptr() *numberSignSymbolElectron
 //
 // Input Parameters
 //
-//  numSignSymbol       *NumberSignSymbol
-//     - A pointer to an instance of NumberSignSymbol. This object
+//  numSignSymbol       *NumberSignSymbolDto
+//     - A pointer to an instance of NumberSignSymbolDto. This object
 //       will be evaluated to determine whether or not it is a
 //       valid instance.
 //
@@ -182,7 +182,7 @@ func (nSignSymElectron numberSignSymbolElectron) ptr() *numberSignSymbolElectron
 //  isValid             bool
 //     - This returned boolean value will signal whether the input
 //       parameter, 'numSignSymbol', is valid, or not. If the
-//       NumberSignSymbol object contains valid data, this method
+//       NumberSignSymbolDto object contains valid data, this method
 //       returns 'true'. If the data is invalid, this method will
 //       return 'false'.
 //
@@ -201,8 +201,8 @@ func (nSignSymElectron numberSignSymbolElectron) ptr() *numberSignSymbolElectron
 //       'errPrefDto' text will be attached to the beginning of the
 //       error message.
 //
-func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
-	numSignSymbol *NumberSignSymbol,
+func (nSignSymElectron *numberSignSymbolDtoElectron) testValidityOfNumSignSymbol(
+	numSignSymbol *NumberSignSymbolDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -222,7 +222,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolElectron.testValidityOfNumSignSymbol()",
+		"numberSignSymbolDtoElectron.testValidityOfNumSignSymbol()",
 		"")
 
 	if err != nil {
@@ -248,7 +248,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 
 		err = fmt.Errorf("%v\n"+
 			"Both Leading and Trailing Number Sign Characters are empty!\n"+
-			"This NumberSignSymbol object is invalid!\n",
+			"This NumberSignSymbolDto object is invalid!\n",
 			ePrefix.String())
 
 		return isValid, err
@@ -257,7 +257,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 	if !numSignSymbol.numSignType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
-			"The Number Sign Type for this NumberSignSymbol object\n"+
+			"The Number Sign Type for this NumberSignSymbolDto object\n"+
 			"is invalid!\n"+
 			"Number Sign Type='%v'\n"+
 			"Number Sign Type Integer Value='%v'\n",
@@ -271,7 +271,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 	if !numSignSymbol.numSignPosition.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
-			"The Number Sign Position for this NumberSignSymbol object\n"+
+			"The Number Sign Position for this NumberSignSymbolDto object\n"+
 			"is invalid!\n"+
 			"Number Sign Position='%v'\n"+
 			"Number Sign Position Integer Value='%v'\n",
@@ -287,7 +287,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		lenTrailingChars > 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"This NumberSignSymbol object is invalid!\n"+
+			"This NumberSignSymbolDto object is invalid!\n"+
 			"The Number Sign Symbol Position == 'Before' but\n"+
 			"the Trailing Characters Array is populated!\n",
 			ePrefix.String())
@@ -300,7 +300,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		lenLeadingChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"This NumberSignSymbol object is invalid!\n"+
+			"This NumberSignSymbolDto object is invalid!\n"+
 			"The Number Sign Symbol Position == 'Before' but\n"+
 			"the Leading Characters Array is empty!\n",
 			ePrefix.String())
@@ -313,7 +313,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		lenTrailingChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"This NumberSignSymbol object is invalid!\n"+
+			"This NumberSignSymbolDto object is invalid!\n"+
 			"The Number Sign Symbol Position == 'After' but\n"+
 			"the Trailing Characters Array is empty!\n",
 			ePrefix.String())
@@ -326,7 +326,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		lenLeadingChars > 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"This NumberSignSymbol object is invalid!\n"+
+			"This NumberSignSymbolDto object is invalid!\n"+
 			"The Number Sign Symbol Position == 'After' but\n"+
 			"the Leading Characters Array is populated!\n",
 			ePrefix.String())
@@ -339,7 +339,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		lenTrailingChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"This NumberSignSymbol object is invalid!\n"+
+			"This NumberSignSymbolDto object is invalid!\n"+
 			"The Number Sign Symbol Position == 'BeforeAndAfter' but\n"+
 			"the Trailing Characters Array is empty!\n",
 			ePrefix.String())
@@ -352,7 +352,7 @@ func (nSignSymElectron *numberSignSymbolElectron) testValidityOfNumSignSymbol(
 		lenLeadingChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"This NumberSignSymbol object is invalid!\n"+
+			"This NumberSignSymbolDto object is invalid!\n"+
 			"The Number Sign Symbol Position == 'BeforeAndAfter' but\n"+
 			"the Leading Characters Array is empty!\n",
 			ePrefix.String())

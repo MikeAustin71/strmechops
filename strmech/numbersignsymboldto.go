@@ -5,14 +5,14 @@ import (
 	"sync"
 )
 
-// NumberSignSymbol - Stores the specification for a single text or
+// NumberSignSymbolDto - Stores the specification for a single text or
 // character number sign symbol. This is usually a single plus
 // ('+') or minus ('-) for a numeric sign contained in a number
 // string.
 //
-// The NumberSignSymbol type is designed to support number sign
+// The NumberSignSymbolDto type is designed to support number sign
 // symbols used by all nationalities and cultures. As such the
-// NumberSignSymbol type can process number signs comprised of
+// NumberSignSymbolDto type can process number signs comprised of
 // multiple characters. For example, in the USA, negative numeric
 // values are often identified by leading and trailing parentheses
 // "(55)".
@@ -29,9 +29,9 @@ import (
 // to designate positive or negative values.
 //
 // All of these national or cultural number sign styles are
-// supported by the type, NumberSignSymbol.
+// supported by the type, NumberSignSymbolDto.
 //
-type NumberSignSymbol struct {
+type NumberSignSymbolDto struct {
 	leadingNumSignChars          []rune
 	trailingNumSignChars         []rune
 	leadingNumSignFoundInNumber  bool                  // Leading Number Sign Symbol found in target number
@@ -44,11 +44,11 @@ type NumberSignSymbol struct {
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
-// NumberSignSymbol ('incomingNumSignSymbol') to the data fields of
-// the current NumberSignSymbol instance ('nSignSymbol').
+// NumberSignSymbolDto ('incomingNumSignSymbol') to the data fields of
+// the current NumberSignSymbolDto instance ('nSignSymbol').
 //
 // IMPORTANT
-// All of the data fields in current NumberSignSymbol instance
+// All of the data fields in current NumberSignSymbolDto instance
 // ('nSignSymbol') will be modified and overwritten.
 //
 //
@@ -56,17 +56,17 @@ type NumberSignSymbol struct {
 //
 // Input Parameters
 //
-//  incomingNumSignSymbol      *NumberSignSymbol
-//     - A pointer to an instance of NumberSignSymbol. This method
+//  incomingNumSignSymbol      *NumberSignSymbolDto
+//     - A pointer to an instance of NumberSignSymbolDto. This method
 //       will NOT change the values of internal member variables
 //       contained in this instance.
 //
-//       All data values in this NumberSignSymbol instance will be
-//       copied to current NumberSignSymbol instance ('nSignSymbol').
+//       All data values in this NumberSignSymbolDto instance will be
+//       copied to current NumberSignSymbolDto instance ('nSignSymbol').
 //
 //       If 'incomingNumSignSymbol' contains invalid data elements,
 //       this method will return an error and the current
-//       NumberSignSymbol instance ('nSignSymbol') will remain
+//       NumberSignSymbolDto instance ('nSignSymbol') will remain
 //       unaltered in its original state.
 //
 //
@@ -130,8 +130,8 @@ type NumberSignSymbol struct {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (nSignSymbol *NumberSignSymbol) CopyIn(
-	incomingNumSignSymbol *NumberSignSymbol,
+func (nSignSymbol *NumberSignSymbolDto) CopyIn(
+	incomingNumSignSymbol *NumberSignSymbolDto,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -148,14 +148,14 @@ func (nSignSymbol *NumberSignSymbol) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberSignSymbol.CopyIn()",
+		"NumberSignSymbolDto.CopyIn()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	err = numberSignSymbolMolecule{}.ptr().
+	err = numberSignSymbolDtoMolecule{}.ptr().
 		copyIn(nSignSymbol,
 			incomingNumSignSymbol,
 			ePrefix)
@@ -164,9 +164,9 @@ func (nSignSymbol *NumberSignSymbol) CopyIn(
 }
 
 // CopyOut - Creates and returns a deep copy of the current
-// NumberSignSymbol instance.
+// NumberSignSymbolDto instance.
 //
-// If the current NumberSignSymbol instance is judged to be
+// If the current NumberSignSymbolDto instance is judged to be
 // invalid, this method will return an error.
 //
 //
@@ -224,11 +224,11 @@ func (nSignSymbol *NumberSignSymbol) CopyIn(
 //
 // Return Values
 //
-//  newNumSignSymbol    NumberSignSymbol
+//  newNumSignSymbol    NumberSignSymbolDto
 //     - If this method completes successfully, a new instance of
-//       NumberSignSymbol will be created and returned
+//       NumberSignSymbolDto will be created and returned
 //       containing all of the data values copied from the current
-//       instance of NumberSignSymbol.
+//       instance of NumberSignSymbolDto.
 //
 //
 //  err                        error
@@ -241,9 +241,9 @@ func (nSignSymbol *NumberSignSymbol) CopyIn(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (nSignSymbol *NumberSignSymbol) CopyOut(
+func (nSignSymbol *NumberSignSymbolDto) CopyOut(
 	errorPrefix interface{}) (
-	newNumSignSymbol NumberSignSymbol,
+	newNumSignSymbol NumberSignSymbolDto,
 	err error) {
 
 	if nSignSymbol.lock == nil {
@@ -259,7 +259,7 @@ func (nSignSymbol *NumberSignSymbol) CopyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberSignSymbol.CopyOut()",
+		"NumberSignSymbolDto.CopyOut()",
 		"")
 
 	if err != nil {
@@ -267,7 +267,7 @@ func (nSignSymbol *NumberSignSymbol) CopyOut(
 	}
 
 	newNumSignSymbol,
-		err = numberSignSymbolMolecule{}.ptr().
+		err = numberSignSymbolDtoMolecule{}.ptr().
 		copyOut(
 			nSignSymbol,
 			ePrefix)
@@ -276,13 +276,13 @@ func (nSignSymbol *NumberSignSymbol) CopyOut(
 }
 
 // Empty - Reinitializes all internal member variables for the
-// current NumberSignSymbol instance to their zero values.
+// current NumberSignSymbolDto instance to their zero values.
 //
 // IMPORTANT
 // This method will effectively delete all data contained in the
-// current NumberSignSymbol instance.
+// current NumberSignSymbolDto instance.
 //
-func (nSignSymbol *NumberSignSymbol) Empty() {
+func (nSignSymbol *NumberSignSymbolDto) Empty() {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -290,7 +290,7 @@ func (nSignSymbol *NumberSignSymbol) Empty() {
 
 	nSignSymbol.lock.Lock()
 
-	_ = numberSignSymbolElectron{}.ptr().
+	_ = numberSignSymbolDtoElectron{}.ptr().
 		emptyNumSignSymbol(
 			nSignSymbol,
 			nil)
@@ -302,9 +302,9 @@ func (nSignSymbol *NumberSignSymbol) Empty() {
 
 // GetLeadingNumSignChars - Returns a deep copy of the leading
 // number sign characters contained in this instance of
-// NumberSignSymbol.
+// NumberSignSymbolDto.
 //
-func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
+func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignChars() []rune {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -336,9 +336,9 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignChars() []rune {
 // where the Leading Number Sign Symbol is located.
 //
 // This index is stored as an internal member variable in the
-// current instance of NumberSignSymbol.
+// current instance of NumberSignSymbolDto.
 //
-func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundIndex() int {
+func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundIndex() int {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -355,7 +355,7 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundIndex() int {
 // signals whether the Leading Number Sign Symbol has been located
 // in a number or number string.
 //
-func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundInNumber() (
+func (nSignSymbol *NumberSignSymbolDto) GetLeadingNumSignFoundInNumber() (
 	leadingNumSignFoundInNumber bool) {
 
 	if nSignSymbol.lock == nil {
@@ -370,7 +370,7 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundInNumber() (
 }
 
 // GetNumSignArithmeticVal - Returns the arithmetic value of the
-// number sign associated with this NumberSignSymbol instance.
+// number sign associated with this NumberSignSymbolDto instance.
 //
 // Valid return values are:
 //  Negative == -1
@@ -380,7 +380,7 @@ func (nSignSymbol *NumberSignSymbol) GetLeadingNumSignFoundInNumber() (
 // If the Number Sign value is invalid, this method will return a
 // value of -99
 //
-func (nSignSymbol *NumberSignSymbol) GetNumSignArithmeticVal() int {
+func (nSignSymbol *NumberSignSymbolDto) GetNumSignArithmeticVal() int {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -405,7 +405,7 @@ func (nSignSymbol *NumberSignSymbol) GetNumSignArithmeticVal() int {
 //    NumSignSymbolPosition(0).After()
 //    NumSignSymbolPosition(0).BeforeAndAfter()
 //
-func (nSignSymbol *NumberSignSymbol) GetNumSignSymPosition() NumSignSymbolPosition {
+func (nSignSymbol *NumberSignSymbolDto) GetNumSignSymPosition() NumSignSymbolPosition {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -426,7 +426,7 @@ func (nSignSymbol *NumberSignSymbol) GetNumSignSymPosition() NumSignSymbolPositi
 //    NumericSignValueType(0).Negative()
 //    NumericSignValueType(0).Positive()
 //
-func (nSignSymbol *NumberSignSymbol) GetNumSignVal() NumericSignValueType {
+func (nSignSymbol *NumberSignSymbolDto) GetNumSignVal() NumericSignValueType {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -441,9 +441,9 @@ func (nSignSymbol *NumberSignSymbol) GetNumSignVal() NumericSignValueType {
 
 // GetTrailingNumSignChars - Returns a deep copy of the trailing
 // number sign characters contained in this instance of
-// NumberSignSymbol.
+// NumberSignSymbolDto.
 //
-func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignChars() []rune {
+func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignChars() []rune {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -475,9 +475,9 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignChars() []rune {
 // where the Trailing Number Sign Symbol is located.
 //
 // This index is stored as an internal member variable in the
-// current instance of NumberSignSymbol.
+// current instance of NumberSignSymbolDto.
 //
-func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundIndex() int {
+func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundIndex() int {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -494,7 +494,7 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundIndex() int {
 // signals whether the Trailing Number Sign Symbol has been located
 // in a number or number string.
 //
-func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundInNumber() (
+func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundInNumber() (
 	leadingNumSignFoundInNumber bool) {
 
 	if nSignSymbol.lock == nil {
@@ -514,7 +514,7 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundInNumber() (
 //
 // This test will be performed if, and only if, the leading number
 // sign symbol has been configured for the current instance of
-// NumberSignSymbol.
+// NumberSignSymbolDto.
 //
 // If the leading number sign symbol is located at the
 // 'hostStartIndex', tracking information will be recorded.
@@ -523,7 +523,7 @@ func (nSignSymbol *NumberSignSymbol) GetTrailingNumSignFoundInNumber() (
 // array, only the last leading number sign symbol encountered
 // before the first numeric digit will be tracked and recorded.
 //
-func (nSignSymbol *NumberSignSymbol) IsLeadingNumSignAtHostIndex(
+func (nSignSymbol *NumberSignSymbolDto) IsLeadingNumSignAtHostIndex(
 	hostRunes []rune,
 	hostStartIndex int) (
 	foundLeadingNumSign bool) {
@@ -562,7 +562,7 @@ func (nSignSymbol *NumberSignSymbol) IsLeadingNumSignAtHostIndex(
 // A return value of 'true' signals that the entire number sign
 // symbol has been located in the target number or number string.
 //
-func (nSignSymbol *NumberSignSymbol) IsNumSignSymbolFoundInNumber() bool {
+func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)
@@ -575,7 +575,7 @@ func (nSignSymbol *NumberSignSymbol) IsNumSignSymbolFoundInNumber() bool {
 	var isNumSignFoundInNumber bool
 
 	isNumSignFoundInNumber,
-		_ = numberSignSymbolQuark{}.ptr().
+		_ = numberSignSymbolDtoQuark{}.ptr().
 		isNumberSignSymbolFoundInNumber(
 			nSignSymbol,
 			nil)
@@ -589,7 +589,7 @@ func (nSignSymbol *NumberSignSymbol) IsNumSignSymbolFoundInNumber() bool {
 //
 // This test will be performed if, and only if, the trailing number
 // sign symbol has been configured for the current instance of
-// NumberSignSymbol.
+// NumberSignSymbolDto.
 //
 // If the trailing number sign symbol is located at the
 // 'hostStartIndex', tracking information will be recorded.
@@ -598,7 +598,7 @@ func (nSignSymbol *NumberSignSymbol) IsNumSignSymbolFoundInNumber() bool {
 // array, only the first trailing number sign symbol encountered
 // after the last numeric digit will be tracked and recorded.
 //
-func (nSignSymbol *NumberSignSymbol) IsTrailingNumSignAtHostIndex(
+func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 	hostRunes []rune,
 	hostStartIndex int) (
 	foundTrailingNumSign bool) {
@@ -636,7 +636,7 @@ func (nSignSymbol *NumberSignSymbol) IsTrailingNumSignAtHostIndex(
 }
 
 // IsValidInstance - Performs a diagnostic review of the current
-// NumberSignSymbol instance to determine whether the current
+// NumberSignSymbolDto instance to determine whether the current
 // instance is valid in all respects.
 //
 //
@@ -653,12 +653,12 @@ func (nSignSymbol *NumberSignSymbol) IsTrailingNumSignAtHostIndex(
 //
 //  isValid             bool
 //     - This returned boolean value will signal whether the
-//       current NumberSignSymbol instance is valid, or not. If the
-//       current NumberSignSymbol contains valid data, this method
+//       current NumberSignSymbolDto instance is valid, or not. If the
+//       current NumberSignSymbolDto contains valid data, this method
 //       returns 'true'. If the data is invalid, this method will
 //       return 'false'.
 //
-func (nSignSymbol *NumberSignSymbol) IsValidInstance() (
+func (nSignSymbol *NumberSignSymbolDto) IsValidInstance() (
 	isValid bool) {
 
 	if nSignSymbol.lock == nil {
@@ -670,7 +670,7 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstance() (
 	defer nSignSymbol.lock.Unlock()
 
 	isValid,
-		_ = numberSignSymbolElectron{}.ptr().
+		_ = numberSignSymbolDtoElectron{}.ptr().
 		testValidityOfNumSignSymbol(
 			nSignSymbol,
 			nil)
@@ -679,10 +679,10 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstance() (
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the
-// current NumberSignSymbol instance to determine whether the
+// current NumberSignSymbolDto instance to determine whether the
 // current instance is valid in all respects.
 //
-// If the current NumberSignSymbol instance is judged to be
+// If the current NumberSignSymbolDto instance is judged to be
 // invalid, this method will return an error.
 //
 //
@@ -741,7 +741,7 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstance() (
 // Return Values
 //
 //  err                 error
-//     - If the current instance of NumberSignSymbol contains
+//     - If the current instance of NumberSignSymbolDto contains
 //       invalid data, a detailed error message will be returned
 //       identifying the invalid data item.
 //
@@ -755,7 +755,7 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstance() (
 //       If the current instance is valid, this error parameter
 //       will be set to nil.
 //
-func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
+func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
 
@@ -772,7 +772,7 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberSignSymbol.IsValidInstanceError()",
+		"NumberSignSymbolDto.IsValidInstanceError()",
 		"")
 
 	if err != nil {
@@ -780,7 +780,7 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 	}
 
 	_,
-		err = numberSignSymbolElectron{}.ptr().
+		err = numberSignSymbolDtoElectron{}.ptr().
 		testValidityOfNumSignSymbol(
 			nSignSymbol,
 			ePrefix)
@@ -788,16 +788,16 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 	return err
 }
 
-// New - Creates and returns a new instance of NumberSignSymbol.
+// New - Creates and returns a new instance of NumberSignSymbolDto.
 //
-// The NumberSignSymbol type stores the specification for a single
+// The NumberSignSymbolDto type stores the specification for a single
 // text or character number sign symbol. This is usually a single
 // plus ('+') or minus ('-) for a numeric sign contained in a
 // number string.
 //
-// The NumberSignSymbol type is designed to support number sign
+// The NumberSignSymbolDto type is designed to support number sign
 // symbols used by all nationalities and cultures. As such the
-// NumberSignSymbol type can process number signs comprised of
+// NumberSignSymbolDto type can process number signs comprised of
 // multiple characters. For example, in the USA, negative numeric
 // values are often identified by leading and trailing parentheses
 // "(55)".
@@ -814,7 +814,7 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 // characters are used to designate positive or negative values.
 //
 // All of these national or cultural number sign styles are
-// supported by the type, NumberSignSymbol.
+// supported by the type, NumberSignSymbolDto.
 //
 // ------------------------------------------------------------------------
 //
@@ -893,9 +893,9 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 //
 // Return Values
 //
-//  newNumSignSym       NumberSignSymbol
+//  newNumSignSym       NumberSignSymbolDto
 //     - If this method completes successfully, a new, populated
-//       instance of NumberSignSymbol will be returned.
+//       instance of NumberSignSymbolDto will be returned.
 //
 //
 //  err                 error
@@ -908,12 +908,12 @@ func (nSignSymbol *NumberSignSymbol) IsValidInstanceError(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (nSignSymbol NumberSignSymbol) New(
+func (nSignSymbol NumberSignSymbolDto) New(
 	leadingNumberSign string,
 	trailingNumberSign string,
 	isNegativeValue bool,
 	errorPrefix interface{}) (
-	newNumSignSym NumberSignSymbol,
+	newNumSignSym NumberSignSymbolDto,
 	err error) {
 
 	if nSignSymbol.lock == nil {
@@ -929,14 +929,14 @@ func (nSignSymbol NumberSignSymbol) New(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberSignSymbol.New()",
+		"NumberSignSymbolDto.New()",
 		"")
 
 	if err != nil {
 		return newNumSignSym, err
 	}
 
-	err = numberSignSymbolMechanics{}.ptr().
+	err = numberSignSymbolDtoMechanics{}.ptr().
 		setNumberSignSymbol(
 			&newNumSignSym,
 			leadingNumberSign,
@@ -948,17 +948,17 @@ func (nSignSymbol NumberSignSymbol) New(
 }
 
 // SetNumberSignSymbol - Resets the internal data values for the
-// current instance of NumberSignSymbol. The new data values will
+// current instance of NumberSignSymbolDto. The new data values will
 // be generated from the input parameters listed below.
 //
-// The NumberSignSymbol type stores the specification for a single
+// The NumberSignSymbolDto type stores the specification for a single
 // text or character number sign symbol. This is usually a single
 // plus ('+') or minus ('-) for a numeric sign contained in a
 // number string.
 //
-// The NumberSignSymbol type is designed to support number sign
+// The NumberSignSymbolDto type is designed to support number sign
 // symbols used by all nationalities and cultures. As such the
-// NumberSignSymbol type can process number signs comprised of
+// NumberSignSymbolDto type can process number signs comprised of
 // multiple characters. For example, in the USA, negative numeric
 // values are often identified by leading and trailing parentheses
 // "(55)".
@@ -975,12 +975,12 @@ func (nSignSymbol NumberSignSymbol) New(
 // characters are used to designate positive or negative values.
 //
 // All of these national or cultural number sign styles are
-// supported by the type, NumberSignSymbol.
+// supported by the type, NumberSignSymbolDto.
 //
 // IMPORTANT
 //
 // If this method completes successfully, all data values in the
-// current NumberSignSymbol instance will be deleted and
+// current NumberSignSymbolDto instance will be deleted and
 // overwritten.
 //
 //
@@ -1061,9 +1061,9 @@ func (nSignSymbol NumberSignSymbol) New(
 //
 // Return Values
 //
-//  newNumSignSym       NumberSignSymbol
+//  newNumSignSym       NumberSignSymbolDto
 //     - If this method completes successfully, a new, populated
-//       instance of NumberSignSymbol will be returned.
+//       instance of NumberSignSymbolDto will be returned.
 //
 //
 //  err                 error
@@ -1076,7 +1076,7 @@ func (nSignSymbol NumberSignSymbol) New(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
+func (nSignSymbol *NumberSignSymbolDto) SetNumberSignSymbol(
 	leadingNumberSign string,
 	trailingNumberSign string,
 	isNegativeValue bool,
@@ -1096,14 +1096,14 @@ func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberSignSymbol.SetNumberSignSymbol()",
+		"NumberSignSymbolDto.SetNumberSignSymbol()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	err = numberSignSymbolMechanics{}.ptr().
+	err = numberSignSymbolDtoMechanics{}.ptr().
 		setNumberSignSymbol(
 			nSignSymbol,
 			leadingNumberSign,
@@ -1119,9 +1119,9 @@ func (nSignSymbol *NumberSignSymbol) SetNumberSignSymbol(
 // where the Leading Number Sign Symbol is located.
 //
 // This index is stored as an internal member variable in the
-// current instance of NumberSignSymbol.
+// current instance of NumberSignSymbolDto.
 //
-func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundIndex(
+func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundIndex(
 	leadingNumSignFoundIndex int) {
 
 	if nSignSymbol.lock == nil {
@@ -1140,7 +1140,7 @@ func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundIndex(
 // whether the Leading Number Sign Symbol has been located in a  number
 // or number string.
 //
-func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundInNumber(
+func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundInNumber(
 	leadingNumSignFoundInNumber bool) {
 
 	if nSignSymbol.lock == nil {
@@ -1160,9 +1160,9 @@ func (nSignSymbol *NumberSignSymbol) SetLeadingNumSignFoundInNumber(
 // where the Trailing Number Sign Symbol is located.
 //
 // This index is stored as an internal member variable in the
-// current instance of NumberSignSymbol.
+// current instance of NumberSignSymbolDto.
 //
-func (nSignSymbol *NumberSignSymbol) SetTrailingNumSignFoundIndex(
+func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundIndex(
 	trailingNumSignFoundIndex int) {
 
 	if nSignSymbol.lock == nil {
@@ -1181,7 +1181,7 @@ func (nSignSymbol *NumberSignSymbol) SetTrailingNumSignFoundIndex(
 // whether the Trailing Number Sign Symbol has been located in a number
 // or number string.
 //
-func (nSignSymbol *NumberSignSymbol) SetTrailingNumSignFoundInNumber(
+func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundInNumber(
 	trailingNumSignFoundInNumber bool) {
 
 	if nSignSymbol.lock == nil {

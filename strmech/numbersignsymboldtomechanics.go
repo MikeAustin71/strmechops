@@ -6,14 +6,14 @@ import (
 	"sync"
 )
 
-type numberSignSymbolMechanics struct {
+type numberSignSymbolDtoMechanics struct {
 	lock *sync.Mutex
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberSignSymbolMechanics.
+// numberSignSymbolDtoMechanics.
 //
-func (nSignSymMechanics numberSignSymbolMechanics) ptr() *numberSignSymbolMechanics {
+func (nSignSymMechanics numberSignSymbolDtoMechanics) ptr() *numberSignSymbolDtoMechanics {
 
 	if nSignSymMechanics.lock == nil {
 		nSignSymMechanics.lock = new(sync.Mutex)
@@ -23,19 +23,19 @@ func (nSignSymMechanics numberSignSymbolMechanics) ptr() *numberSignSymbolMechan
 
 	defer nSignSymMechanics.lock.Unlock()
 
-	newNumSignSymbolMech := numberSignSymbolMechanics{}
+	newNumSignSymbolMech := numberSignSymbolDtoMechanics{}
 	newNumSignSymbolMech.lock = new(sync.Mutex)
 
 	return &newNumSignSymbolMech
 }
 
 // setNumberSignSymbol - Receives a pointer to an instance of
-// NumberSignSymbol and proceeds to populate the internal data
+// NumberSignSymbolDto and proceeds to populate the internal data
 // elements based on the input parameter values.
 //
 //
-func (nSignSymMechanics *numberSignSymbolMechanics) setNumberSignSymbol(
-	numSignSymbol *NumberSignSymbol,
+func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
+	numSignSymbol *NumberSignSymbolDto,
 	leadingNumberSign string,
 	trailingNumberSign string,
 	isNegativeValue bool,
@@ -55,7 +55,7 @@ func (nSignSymMechanics *numberSignSymbolMechanics) setNumberSignSymbol(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolMechanics.setNumberSignSymbol()",
+		"numberSignSymbolDtoMechanics.setNumberSignSymbol()",
 		"")
 
 	if err != nil {
@@ -88,7 +88,7 @@ func (nSignSymMechanics *numberSignSymbolMechanics) setNumberSignSymbol(
 
 	}
 
-	err = numberSignSymbolElectron{}.ptr().emptyNumSignSymbol(
+	err = numberSignSymbolDtoElectron{}.ptr().emptyNumSignSymbol(
 		numSignSymbol,
 		ePrefix)
 

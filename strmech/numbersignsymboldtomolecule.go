@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type numberSignSymbolMolecule struct {
+type numberSignSymbolDtoMolecule struct {
 	lock *sync.Mutex
 }
 
@@ -21,9 +21,9 @@ type numberSignSymbolMolecule struct {
 // Be advised that the data fields in 'targetNumSignSymbol' will be
 // overwritten.
 //
-func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
-	targetNumSignSymbol *NumberSignSymbol,
-	incomingNumSignSymbol *NumberSignSymbol,
+func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyIn(
+	targetNumSignSymbol *NumberSignSymbolDto,
+	incomingNumSignSymbol *NumberSignSymbolDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -40,7 +40,7 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolMolecule.copyIn()",
+		"numberSignSymbolDtoMolecule.copyIn()",
 		"")
 
 	if err != nil {
@@ -62,7 +62,7 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
 	}
 
 	_,
-		err = numberSignSymbolElectron{}.ptr().
+		err = numberSignSymbolDtoElectron{}.ptr().
 		testValidityOfNumSignSymbol(
 			incomingNumSignSymbol,
 			ePrefix.XCtx("incomingNumSignSymbol"))
@@ -126,15 +126,15 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyIn(
 
 // copyOut - Returns a deep copy of input parameter
 // 'incomingNumSignSymbol' styled as a new instance
-// of NumberSignSymbol.
+// of NumberSignSymbolDto.
 //
 // If input parameter 'incomingNumSignSymbol' is judged to be
 // invalid, this method will return an error.
 //
-func (nSignSymMolecule *numberSignSymbolMolecule) copyOut(
-	incomingNumSignSymbol *NumberSignSymbol,
+func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyOut(
+	incomingNumSignSymbol *NumberSignSymbolDto,
 	errPrefDto *ePref.ErrPrefixDto) (
-	newNumSignSymbol NumberSignSymbol,
+	newNumSignSymbol NumberSignSymbolDto,
 	err error) {
 
 	nSignSymMolecule.lock.Lock()
@@ -146,7 +146,7 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolMolecule.copyOut()",
+		"numberSignSymbolDtoMolecule.copyOut()",
 		"")
 
 	if err != nil {
@@ -161,7 +161,7 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyOut(
 	}
 
 	_,
-		err = numberSignSymbolElectron{}.ptr().
+		err = numberSignSymbolDtoElectron{}.ptr().
 		testValidityOfNumSignSymbol(
 			incomingNumSignSymbol,
 			ePrefix.XCtx("incomingNumSignSymbol"))
@@ -215,9 +215,9 @@ func (nSignSymMolecule *numberSignSymbolMolecule) copyOut(
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberSignSymbolMolecule.
+// numberSignSymbolDtoMolecule.
 //
-func (nSignSymMolecule numberSignSymbolMolecule) ptr() *numberSignSymbolMolecule {
+func (nSignSymMolecule numberSignSymbolDtoMolecule) ptr() *numberSignSymbolDtoMolecule {
 
 	if nSignSymMolecule.lock == nil {
 		nSignSymMolecule.lock = new(sync.Mutex)
@@ -227,7 +227,7 @@ func (nSignSymMolecule numberSignSymbolMolecule) ptr() *numberSignSymbolMolecule
 
 	defer nSignSymMolecule.lock.Unlock()
 
-	return &numberSignSymbolMolecule{
+	return &numberSignSymbolDtoMolecule{
 		lock: new(sync.Mutex),
 	}
 }

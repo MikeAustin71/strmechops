@@ -6,20 +6,20 @@ import (
 	"sync"
 )
 
-type numberSignSymbolQuark struct {
+type numberSignSymbolDtoQuark struct {
 	lock *sync.Mutex
 }
 
 // isNumberSignSymbolFoundInNumber - Receives a pointer to an
-// instance of NumberSignSymbol and performs an analysis of
+// instance of NumberSignSymbolDto and performs an analysis of
 // internal data elements to determine if the entire number sign
 // symbol has been located in a target number or number string.
 //
 // A return value of 'true' signals that the entire number sign
 // symbol has been located in the target number or number string.
 //
-func (nSignSymQuark *numberSignSymbolQuark) isNumberSignSymbolFoundInNumber(
-	numSignSymbol *NumberSignSymbol,
+func (nSignSymQuark *numberSignSymbolDtoQuark) isNumberSignSymbolFoundInNumber(
+	numSignSymbol *NumberSignSymbolDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isNumSignFoundInNumber bool,
 	err error) {
@@ -39,7 +39,7 @@ func (nSignSymQuark *numberSignSymbolQuark) isNumberSignSymbolFoundInNumber(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolElectron.testValidityOfNumSignSymbol()",
+		"numberSignSymbolDtoElectron.testValidityOfNumSignSymbol()",
 		"")
 
 	if err != nil {
@@ -82,9 +82,9 @@ func (nSignSymQuark *numberSignSymbolQuark) isNumberSignSymbolFoundInNumber(
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberSignSymbolQuark.
+// numberSignSymbolDtoQuark.
 //
-func (nSignSymQuark numberSignSymbolQuark) ptr() *numberSignSymbolQuark {
+func (nSignSymQuark numberSignSymbolDtoQuark) ptr() *numberSignSymbolDtoQuark {
 
 	if nSignSymQuark.lock == nil {
 		nSignSymQuark.lock = new(sync.Mutex)
@@ -94,7 +94,7 @@ func (nSignSymQuark numberSignSymbolQuark) ptr() *numberSignSymbolQuark {
 
 	defer nSignSymQuark.lock.Unlock()
 
-	return &numberSignSymbolQuark{
+	return &numberSignSymbolDtoQuark{
 		lock: new(sync.Mutex),
 	}
 }
