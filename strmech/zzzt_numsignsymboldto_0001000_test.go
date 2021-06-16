@@ -5,6 +5,49 @@ import (
 	"testing"
 )
 
+func TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	nSignSymOne.leadingNumSignFoundIndex = 5
+
+	nSignSymOne.ClearLeadingNumSignTracking()
+
+	if nSignSymOne.leadingNumSignFoundInNumber == true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'\n"+
+			"INSTEAD, nSignSymOne.leadingNumSignFoundInNumber == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundIndex != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '0'\n"+
+			"INSTEAD, nSignSymOne.leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_CopyIn_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_CopyIn_000100()"
