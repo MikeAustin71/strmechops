@@ -36,6 +36,16 @@
 --- PASS: TestNumberSignSymbolDto_Empty_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_Empty_000200
 --- PASS: TestNumberSignSymbolDto_Empty_000200 (0.00s)
+=== RUN   TestNumberSignSymbolDto_Empty_000300
+--- PASS: TestNumberSignSymbolDto_Empty_000300 (0.00s)
+=== RUN   TestNumberSignSymbolDto_Equal_000100
+--- PASS: TestNumberSignSymbolDto_Equal_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_Equal_000200
+--- PASS: TestNumberSignSymbolDto_Equal_000200 (0.00s)
+=== RUN   TestNumberSignSymbolDto_Equal_000300
+--- PASS: TestNumberSignSymbolDto_Equal_000300 (0.00s)
+=== RUN   TestNumberSignSymbolDto_Equal_000400
+--- PASS: TestNumberSignSymbolDto_Equal_000400 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000100
 --- PASS: TestNumberSignSymbolDto_New_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000200
@@ -379,7 +389,7 @@
 === RUN   TestStrMech_FindLastSpace_05
 --- PASS: TestStrMech_FindLastSpace_05 (0.00s)
 === RUN   TestStrMech_FindLastSpace_06
---- PASS: TestStrMech_FindLastSpace_06 (0.01s)
+--- PASS: TestStrMech_FindLastSpace_06 (0.00s)
 === RUN   TestStrMech_FindLastSpace_07
 --- PASS: TestStrMech_FindLastSpace_07 (0.00s)
 === RUN   TestStrMech_FindLastSpace_08
@@ -909,5 +919,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 81.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.768s
+coverage: 82.7% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.740s

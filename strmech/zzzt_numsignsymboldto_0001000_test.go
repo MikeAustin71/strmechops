@@ -679,8 +679,77 @@ func TestNumberSignSymbolDto_Empty_000100(t *testing.T) {
 
 func TestNumberSignSymbolDto_Empty_000200(t *testing.T) {
 
+	ePrefix := "TestNumberSignSymbolDto_Empty_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if nSignSymTwo.IsEmpty() {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo.IsEmpty() == 'false' .\n"+
+			"HOWEVER, THE RETURN VALUE WAS 'true'!\n",
+			ePrefix)
+
+		return
+	}
+
+	nSignSymOne.Empty()
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo != nSignSymOne .\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+
+		return
+	}
+
+	if !nSignSymOne.IsEmpty() {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.IsEmpty() == 'true' .\n"+
+			"HOWEVER, THE RETURN VALUE WAS 'false'!\n",
+			ePrefix)
+
+		return
+	}
+
+	err = nSignSymOne.IsValidInstanceError(ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - Error:\n"+
+			"Expected an error return from nSignSymOne.IsValidInstanceError().\n"+
+			"because nSignSymOne is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_Empty_000300(t *testing.T) {
+
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestNumberSignSymbolDto_Empty_000200",
+		"TestNumberSignSymbolDto_Empty_000300",
 		"")
 
 	nSignSymElectron := numberSignSymbolDtoElectron{}
@@ -697,6 +766,340 @@ func TestNumberSignSymbolDto_Empty_000200(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_Equal_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_Equal_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if !nSignSymOne.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne==nSignSymOne.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_Equal_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_Equal_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if !nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo==nSignSymOne.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo.numSignPosition = NumSymPos.After()
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.numSignPosition changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.leadingNumSignChars = []rune{'X', 'X'}
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.leadingNumSignChars changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.trailingNumSignChars = []rune{'X', 'X'}
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.trailingNumSignChars changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.numSignValueType = NumSignVal.Negative()
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.numSignValueType changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.numSignPosition = NumSymPos.BeforeAndAfter()
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.numSignPosition changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.numSymbolClass = NumSymClass.CurrencySign()
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.numSignPosition changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.leadingNumSignFoundIndex = 99
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.leadingNumSignFoundIndex changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.leadingNumSignFoundInNumber = true
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.leadingNumSignFoundInNumber changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.trailingNumSignFoundIndex = 99
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.trailingNumSignFoundIndex changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo.trailingNumSignFoundInNumber = true
+
+	if nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo!=nSignSymOne\n"+
+			"because nSignSymTwo.trailingNumSignFoundInNumber changed.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if !nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error: Final Run\n"+
+			"Expected nSignSymTwo==nSignSymOne\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_Equal_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_Equal_000300()"
+
+	var nSignSymOne NumberSignSymbolDto
+
+	var err error
+
+	nSignSymOne,
+		err = NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	areEqual := nSignSymElectron.equalNumSignSymbolObjects(
+		&nSignSymOne,
+		nil)
+
+	if areEqual != false {
+		t.Errorf("%v - Error:\n"+
+			"Expected areEqual=='false' because\n"+
+			"'numSignSymbolTwo' is a nil pointer.\n"+
+			"HOWEVER, areEqual=='true'!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_Equal_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_Equal_000400()"
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	var err error
+
+	nSignSymTwo,
+		err = NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	areEqual := nSignSymElectron.equalNumSignSymbolObjects(
+		nil,
+		&nSignSymTwo)
+
+	if areEqual != false {
+		t.Errorf("%v - Error:\n"+
+			"Expected areEqual=='false' because\n"+
+			"'numSignSymbolOne' is a nil pointer.\n"+
+			"HOWEVER, areEqual=='true'!\n",
+			ePrefix)
 		return
 	}
 
