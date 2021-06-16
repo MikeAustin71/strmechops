@@ -104,6 +104,12 @@
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsValidInstance_000100
+--- PASS: TestNumberSignSymbolDto_IsValidInstance_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsValidInstance_000200
+--- PASS: TestNumberSignSymbolDto_IsValidInstance_000200 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsValidInstance_000300
+--- PASS: TestNumberSignSymbolDto_IsValidInstance_000300 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000100
 --- PASS: TestNumberSignSymbolDto_New_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000200
@@ -977,5 +983,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 85.8% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.372s
+coverage: 86.1% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.758s

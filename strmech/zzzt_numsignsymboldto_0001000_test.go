@@ -2015,3 +2015,86 @@ func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400(t *testing.T) {
 		return
 	}
 }
+
+func TestNumberSignSymbolDto_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsValidInstance_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if !nSignSymOne.IsValidInstance() {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.IsValidInstance()=='true'.\n"+
+			"HOWEVER, nSignSymOne.IsValidInstance()=='false'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsValidInstance_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsValidInstance_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignChars = nil
+	nSignSymOne.trailingNumSignChars = nil
+
+	if nSignSymOne.IsValidInstance() {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.IsValidInstance()=='false'.\n"+
+			"HOWEVER, nSignSymOne.IsValidInstance()=='true'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsValidInstance_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsValidInstance_000300",
+		"")
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	_,
+		err := nSignSymElectron.testValidityOfNumSignSymbol(
+		nil,
+		&ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected error return from nSignSymElectron.testValidityOfNumSignSymbol()\n"+
+			"because 'numSignSymbol' is a nil pointer."+
+			"HOWEVER, NO ERROR WAS RETURND!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
