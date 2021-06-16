@@ -14,6 +14,20 @@
 --- PASS: TestNumberSignSymbolDto_CopyIn_000700 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyIn_000800
 --- PASS: TestNumberSignSymbolDto_CopyIn_000800 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000100
+--- PASS: TestNumberSignSymbolDto_CopyOut_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000200
+--- PASS: TestNumberSignSymbolDto_CopyOut_000200 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000300
+--- PASS: TestNumberSignSymbolDto_CopyOut_000300 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000400
+--- PASS: TestNumberSignSymbolDto_CopyOut_000400 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000500
+--- PASS: TestNumberSignSymbolDto_CopyOut_000500 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000600
+--- PASS: TestNumberSignSymbolDto_CopyOut_000600 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000700
+--- PASS: TestNumberSignSymbolDto_CopyOut_000700 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000100
 --- PASS: TestNumberSignSymbolDto_New_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000200
@@ -887,5 +901,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 79.8% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.741s
+coverage: 81.1% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.750s

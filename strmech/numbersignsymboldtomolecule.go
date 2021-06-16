@@ -140,6 +140,10 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyOut(
 	newNumSignSymbol NumberSignSymbolDto,
 	err error) {
 
+	if nSignSymMolecule.lock == nil {
+		nSignSymMolecule.lock = new(sync.Mutex)
+	}
+
 	nSignSymMolecule.lock.Lock()
 
 	defer nSignSymMolecule.lock.Unlock()
