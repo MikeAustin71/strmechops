@@ -1349,3 +1349,139 @@ func TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100(t *testing.T
 		return
 	}
 }
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" -123.456")
+
+	foundLeadingNumSign :=
+		nSignSymOne.IsLeadingNumSignAtHostIndex(hostRunes, 1)
+
+	if foundLeadingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundLeadingNumSign=='true'.\n"+
+			"HOWEVER, foundLeadingNumSign=='false'!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" -123.456")
+
+	foundLeadingNumSign :=
+		nSignSymOne.IsLeadingNumSignAtHostIndex(hostRunes, 0)
+
+	if foundLeadingNumSign != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundLeadingNumSign=='false'.\n"+
+			"HOWEVER, foundLeadingNumSign=='true'!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000300()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		" -",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" -123.456")
+
+	foundLeadingNumSign :=
+		nSignSymOne.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			0)
+
+	if foundLeadingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundLeadingNumSign=='true'.\n"+
+			"HOWEVER, foundLeadingNumSign=='false'!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"- ",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune("- 123.456")
+
+	foundLeadingNumSign :=
+		nSignSymOne.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			0)
+
+	if foundLeadingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundLeadingNumSign=='true'.\n"+
+			"HOWEVER, foundLeadingNumSign=='false'!\n",
+			ePrefix)
+
+		return
+	}
+
+}
