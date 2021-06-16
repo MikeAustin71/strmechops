@@ -1198,3 +1198,154 @@ func TestNumberSignSymbolDto_GetNumericSymbolClass_000100(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetNumSignArithmeticVal_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	arithmeticVal := nSignSymOne.GetNumSignArithmeticVal()
+
+	if arithmeticVal != 1 {
+		t.Errorf("%v - Error:\n"+
+			"Expected arithmeticVal=='1'.\n"+
+			"HOWEVER, leadingNumSignFoundInNum=='%v'!\n",
+			ePrefix,
+			arithmeticVal)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetNumSignArithmeticVal_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	arithmeticVal := nSignSymOne.GetNumSignArithmeticVal()
+
+	if arithmeticVal != -1 {
+		t.Errorf("%v - Error:\n"+
+			"Expected arithmeticVal=='-1'.\n"+
+			"HOWEVER, leadingNumSignFoundInNum=='%v'!\n",
+			ePrefix,
+			arithmeticVal)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetNumSignArithmeticVal_000300()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.numSignValueType = NumSignVal.Zero()
+
+	arithmeticVal := nSignSymOne.GetNumSignArithmeticVal()
+
+	if arithmeticVal != 0 {
+		t.Errorf("%v - Error:\n"+
+			"Expected arithmeticVal=='0'.\n"+
+			"HOWEVER, leadingNumSignFoundInNum=='%v'!\n",
+			ePrefix,
+			arithmeticVal)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundIndex = 99
+
+	trailingNumSignFoundIndex :=
+		nSignSymOne.GetTrailingNumSignFoundIndex()
+
+	if trailingNumSignFoundIndex != 99 {
+		t.Errorf("%v - Error:\n"+
+			"Expected trailingNumSignFoundIndex=='99'.\n"+
+			"HOWEVER, trailingNumSignFoundIndex=='%v'!\n",
+			ePrefix,
+			trailingNumSignFoundIndex)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	trailingNumSignFoundInNumber :=
+		nSignSymOne.GetTrailingNumSignFoundInNumber()
+
+	if trailingNumSignFoundInNumber != true {
+		t.Errorf("%v - Error:\n"+
+			"Expected trailingNumSignFoundInNumber=='true'.\n"+
+			"HOWEVER, trailingNumSignFoundInNumber=='false'!\n",
+			ePrefix)
+		return
+	}
+}
