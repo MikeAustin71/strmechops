@@ -1488,6 +1488,41 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000400(t *testing.T) {
 
 func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000500(t *testing.T) {
 
+	ePrefix := "TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000500()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune("-123.456")
+
+	foundLeadingNumSign :=
+		nSignSymOne.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			0)
+
+	if foundLeadingNumSign != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundLeadingNumSign=='false'.\n"+
+			"HOWEVER, foundLeadingNumSign=='true'!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000600(t *testing.T) {
+
 	sMechPreon := strMechPreon{}
 
 	targetRunes := []rune(" -")
@@ -1509,7 +1544,7 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000500(t *testing.T) {
 
 }
 
-func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000600(t *testing.T) {
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000700(t *testing.T) {
 
 	sMechPreon := strMechPreon{}
 
@@ -1525,6 +1560,31 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000600(t *testing.T) {
 		t.Error("Error:\n" +
 			"Expected isTargetRunesIndex=='false' because\n" +
 			"'targetRunes' is nil.\n" +
+			"HOWEVER, isTargetRunesIndex=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000800(t *testing.T) {
+
+	sMechPreon := strMechPreon{}
+
+	hostRunes := []rune(" -123489.2")
+
+	targetRunes := []rune("-")
+
+	isTargetRunesIndex :=
+		sMechPreon.isTargetRunesIndex(
+			hostRunes,
+			99,
+			targetRunes)
+
+	if isTargetRunesIndex == true {
+		t.Error("Error:\n" +
+			"Expected isTargetRunesIndex=='false' because\n" +
+			"'hostStartIndex' exceeds length of 'hostRunes'.\n" +
 			"HOWEVER, isTargetRunesIndex=='true'!\n")
 
 		return
@@ -1821,4 +1881,137 @@ func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900(t *testing.T) {
 		return
 	}
 
+}
+
+func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" 123.456-")
+
+	foundTrailingNumSign :=
+		nSignSymOne.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			8)
+
+	if foundTrailingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundTrailingNumSign=='true'.\n"+
+			"HOWEVER, foundTrailingNumSign=='false'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"- ",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" 123.456- ")
+
+	foundTrailingNumSign :=
+		nSignSymOne.IsTrailingNumSignAtHostIndex(
+			hostRunes, 8)
+
+	if foundTrailingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundTrailingNumSign=='true'.\n"+
+			"HOWEVER, foundTrailingNumSign=='false'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" 123.456- ")
+
+	foundTrailingNumSign :=
+		nSignSymOne.IsTrailingNumSignAtHostIndex(
+			hostRunes, 9)
+
+	if foundTrailingNumSign != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundTrailingNumSign=='false'.\n"+
+			"HOWEVER, foundTrailingNumSign=='true'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" 123.456- ")
+
+	foundTrailingNumSign :=
+		nSignSymOne.IsTrailingNumSignAtHostIndex(
+			hostRunes, 8)
+
+	if foundTrailingNumSign != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundTrailingNumSign=='false'.\n"+
+			"HOWEVER, foundTrailingNumSign=='true'!\n",
+			ePrefix)
+
+		return
+	}
 }

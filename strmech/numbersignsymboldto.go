@@ -754,7 +754,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 		isTargetRunesIndex(
 			hostRunes,
 			hostStartIndex,
-			nSignSymbol.leadingNumSignChars)
+			nSignSymbol.trailingNumSignChars)
 
 	if foundTrailingNumSign {
 		nSignSymbol.trailingNumSignFoundInNumber = true

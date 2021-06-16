@@ -74,6 +74,10 @@
 --- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000500 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000600
 --- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000600 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000700
+--- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000700 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000800
+--- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000800 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000100
 --- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000200
@@ -92,6 +96,14 @@
 --- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000800 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900
 --- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100
+--- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200
+--- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300
+--- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400
+--- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000100
 --- PASS: TestNumberSignSymbolDto_New_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000200
@@ -965,5 +977,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 85.3% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.749s
+coverage: 85.8% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.372s
