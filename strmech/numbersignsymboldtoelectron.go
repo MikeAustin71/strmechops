@@ -81,6 +81,14 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) equalNumSignSymbolObjects(
 
 	defer nSignSymElectron.lock.Unlock()
 
+	if numSignSymbolOne == nil {
+		return false
+	}
+
+	if numSignSymbolTwo == nil {
+		return false
+	}
+
 	sMechPreon := strMechPreon{}
 
 	if !sMechPreon.equalRuneArrays(

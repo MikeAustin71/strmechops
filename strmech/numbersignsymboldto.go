@@ -360,6 +360,32 @@ func (nSignSymbol *NumberSignSymbolDto) Empty() {
 	nSignSymbol.lock = nil
 }
 
+// Equal - Receives a pointer to an incoming instance of
+// NumberSignSymbolDto and proceeds to compare the data values with
+// those of the current NumberSignSymbolDto instance. If both sets
+// of data values are equivalent, this method returns 'true'.
+//
+// If the incoming NumberSignSymbolDto data values are NOT
+// equivalent to those of the current NumberSignSymbolDto instance,
+// this method returns 'false'.
+//
+func (nSignSymbol *NumberSignSymbolDto) Equal(
+	incomingNSignSymbol *NumberSignSymbolDto) bool {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return numberSignSymbolDtoElectron{}.ptr().
+		equalNumSignSymbolObjects(
+			nSignSymbol,
+			incomingNSignSymbol)
+}
+
 // GetLeadingNumSignChars - Returns a deep copy of the leading
 // number sign characters contained in this instance of
 // NumberSignSymbolDto.
