@@ -1,5 +1,7 @@
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100
+--- PASS: TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyIn_000100
 --- PASS: TestNumberSignSymbolDto_CopyIn_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyIn_000200
@@ -377,7 +379,7 @@
 === RUN   TestStrMech_FindLastSpace_05
 --- PASS: TestStrMech_FindLastSpace_05 (0.00s)
 === RUN   TestStrMech_FindLastSpace_06
---- PASS: TestStrMech_FindLastSpace_06 (0.00s)
+--- PASS: TestStrMech_FindLastSpace_06 (0.01s)
 === RUN   TestStrMech_FindLastSpace_07
 --- PASS: TestStrMech_FindLastSpace_07 (0.00s)
 === RUN   TestStrMech_FindLastSpace_08
@@ -907,5 +909,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 81.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.628s
+coverage: 81.9% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.768s

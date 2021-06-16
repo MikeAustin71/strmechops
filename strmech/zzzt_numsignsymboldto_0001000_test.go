@@ -48,6 +48,49 @@ func TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	nSignSymOne.trailingNumSignFoundIndex = 5
+
+	nSignSymOne.ClearTrailingNumSignTracking()
+
+	if nSignSymOne.trailingNumSignFoundInNumber == true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.trailingNumSignFoundInNumber == 'false'\n"+
+			"INSTEAD, nSignSymOne.trailingNumSignFoundInNumber == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignSymOne.trailingNumSignFoundIndex != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.trailingNumSignFoundIndex == '0'\n"+
+			"INSTEAD, nSignSymOne.trailingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignSymOne.trailingNumSignFoundIndex)
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_CopyIn_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_CopyIn_000100()"
