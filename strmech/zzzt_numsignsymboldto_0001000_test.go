@@ -559,3 +559,59 @@ func TestNumberSignSymbolDto_CopyOut_000700(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolDto_Empty_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_Empty_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymTwo := NumberSignSymbolDto{}
+
+	nSignSymOne.Empty()
+
+	if !nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo == nSignSymOne .\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_Empty_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_Empty_000200",
+		"")
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	err :=
+		nSignSymElectron.emptyNumSignSymbol(
+			nil,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - Error:\n"+
+			"Expected an error return from nSignSymElectron.emptyNumSignSymbol()\n"+
+			"because 'numSignSymbol' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
