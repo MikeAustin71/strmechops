@@ -1352,7 +1352,7 @@ func TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100(t *testing.T
 
 func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000100(t *testing.T) {
 
-	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100()"
+	ePrefix := "TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000100()"
 
 	nSignSymOne,
 		err := NumberSignSymbolDto{}.New(
@@ -1385,7 +1385,7 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000100(t *testing.T) {
 
 func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000200(t *testing.T) {
 
-	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000200()"
+	ePrefix := "TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000200()"
 
 	nSignSymOne,
 		err := NumberSignSymbolDto{}.New(
@@ -1418,7 +1418,7 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000200(t *testing.T) {
 
 func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000300(t *testing.T) {
 
-	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000300()"
+	ePrefix := "TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000300()"
 
 	nSignSymOne,
 		err := NumberSignSymbolDto{}.New(
@@ -1453,7 +1453,7 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000300(t *testing.T) {
 
 func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000400(t *testing.T) {
 
-	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000400()"
+	ePrefix := "TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000400()"
 
 	nSignSymOne,
 		err := NumberSignSymbolDto{}.New(
@@ -1481,6 +1481,343 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000400(t *testing.T) {
 			"HOWEVER, foundLeadingNumSign=='false'!\n",
 			ePrefix)
 
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000500(t *testing.T) {
+
+	sMechPreon := strMechPreon{}
+
+	targetRunes := []rune(" -")
+
+	isTargetRunesIndex :=
+		sMechPreon.isTargetRunesIndex(
+			nil,
+			0,
+			targetRunes)
+
+	if isTargetRunesIndex == true {
+		t.Error("Error:\n" +
+			"Expected isTargetRunesIndex=='false' because\n" +
+			"'hostRunes' is nil.\n" +
+			"HOWEVER, isTargetRunesIndex=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000600(t *testing.T) {
+
+	sMechPreon := strMechPreon{}
+
+	hostRunes := []rune(" -123489.2")
+
+	isTargetRunesIndex :=
+		sMechPreon.isTargetRunesIndex(
+			hostRunes,
+			0,
+			nil)
+
+	if isTargetRunesIndex == true {
+		t.Error("Error:\n" +
+			"Expected isTargetRunesIndex=='false' because\n" +
+			"'targetRunes' is nil.\n" +
+			"HOWEVER, isTargetRunesIndex=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000100",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == false {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='true'.\n" +
+			"HOWEVER, isNumSignSymFound=='false'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000200",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = false
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == true {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='false'.\n" +
+			"HOWEVER, isNumSignSymFound=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000300",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == false {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='true'.\n" +
+			"HOWEVER, isNumSignSymFound=='false'!\n")
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000400",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundInNumber = false
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == true {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='false'.\n" +
+			"HOWEVER, isNumSignSymFound=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000500",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"(",
+		")",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == false {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='true'.\n" +
+			"HOWEVER, isNumSignSymFound=='false'!\n")
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000600",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"(",
+		")",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = false
+	nSignSymOne.trailingNumSignFoundInNumber = false
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == true {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='false'.\n" +
+			"HOWEVER, isNumSignSymFound=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000700",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"(",
+		")",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+	nSignSymOne.trailingNumSignFoundInNumber = false
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == true {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='false'.\n" +
+			"HOWEVER, isNumSignSymFound=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000800(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000800",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"(",
+		")",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = false
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == true {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='false'.\n" +
+			"HOWEVER, isNumSignSymFound=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900",
+		"")
+
+	nSignSymQuark := numberSignSymbolDtoQuark{}
+
+	_,
+		err :=
+		nSignSymQuark.isNumberSignSymbolFoundInNumber(
+			nil,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - Error:\n"+
+			"Expected an error return from nSignSymQuark.isNumberSignSymbolFoundInNumber()\n"+
+			"because 'numSignSymbol' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
 		return
 	}
 

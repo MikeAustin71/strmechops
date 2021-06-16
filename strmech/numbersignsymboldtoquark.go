@@ -39,7 +39,7 @@ func (nSignSymQuark *numberSignSymbolDtoQuark) isNumberSignSymbolFoundInNumber(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberSignSymbolDtoElectron.testValidityOfNumSignSymbol()",
+		"numberSignSymbolDtoElectron.isNumberSignSymbolFoundInNumber()",
 		"")
 
 	if err != nil {
