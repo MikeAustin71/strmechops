@@ -46,6 +46,12 @@
 --- PASS: TestNumberSignSymbolDto_Equal_000300 (0.00s)
 === RUN   TestNumberSignSymbolDto_Equal_000400
 --- PASS: TestNumberSignSymbolDto_Equal_000400 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100
+--- PASS: TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100
+--- PASS: TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetNumericSymbolClass_000100
+--- PASS: TestNumberSignSymbolDto_GetNumericSymbolClass_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000100
 --- PASS: TestNumberSignSymbolDto_New_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000200
@@ -373,7 +379,7 @@
 === RUN   TestStrMech_FindLastNonSpaceChar_13
 --- PASS: TestStrMech_FindLastNonSpaceChar_13 (0.00s)
 === RUN   TestStrMech_FindLastNonSpaceChar_14
---- PASS: TestStrMech_FindLastNonSpaceChar_14 (0.00s)
+--- PASS: TestStrMech_FindLastNonSpaceChar_14 (0.01s)
 === RUN   TestStrMech_FindLastNonSpaceChar_15
 --- PASS: TestStrMech_FindLastNonSpaceChar_15 (0.00s)
 === RUN   TestStrMech_FindLastNonSpaceChar_16
@@ -919,5 +925,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 82.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.740s
+coverage: 83.3% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.334s

@@ -1104,3 +1104,97 @@ func TestNumberSignSymbolDto_Equal_000400(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundIndex = 99
+
+	leadingNumFoundIdx :=
+		nSignSymOne.GetLeadingNumSignFoundIndex()
+
+	if leadingNumFoundIdx != 99 {
+		t.Errorf("%v - Error:\n"+
+			"Expected leadingNumFoundIdx=='99'.\n"+
+			"HOWEVER, leadingNumFoundIdx=='%v'!\n",
+			ePrefix,
+			leadingNumFoundIdx)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	leadingNumSignFoundInNum :=
+		nSignSymOne.GetLeadingNumSignFoundInNumber()
+
+	if !leadingNumSignFoundInNum {
+		t.Errorf("%v - Error:\n"+
+			"Expected leadingNumSignFoundInNum=='true'.\n"+
+			"HOWEVER, leadingNumSignFoundInNum=='false'!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetNumericSymbolClass_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetNumericSymbolClass_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	numSymClass := nSignSymOne.GetNumericSymbolClass()
+
+	if numSymClass != NumSymClass.NumberSign() {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.GetNumericSymbolClass()=='NumberSign'.\n"+
+			"HOWEVER, numSymClass string =='%v'\n"+
+			"numSymClass integer == '%v'\n",
+			ePrefix,
+			numSymClass.String(),
+			numSymClass.XValueInt())
+		return
+	}
+
+}
