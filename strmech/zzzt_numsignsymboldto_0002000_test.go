@@ -696,3 +696,229 @@ func TestNumberSignSymbolDto_SetNumberSignSymbol_000100(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.SetLeadingNumSignFoundIndex(99)
+
+	if nSignSymOne.leadingNumSignFoundIndex != 99 {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '99'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundIndex == '%v' \n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundInNumber != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'true'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'false' \n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.SetLeadingNumSignFoundIndex(-1)
+
+	if nSignSymOne.leadingNumSignFoundIndex != -1 {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '-1'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundIndex == '%v' \n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundInNumber != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'true' \n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000300()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"+",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.SetLeadingNumSignFoundIndex(99)
+
+	if nSignSymOne.leadingNumSignFoundIndex != 0 {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '0'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundIndex == '%v' \n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundInNumber != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'true' \n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.SetLeadingNumSignFoundInNumber(true)
+
+	if nSignSymOne.leadingNumSignFoundInNumber != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'true'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'false' \n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundIndex = 99
+
+	nSignSymOne.SetLeadingNumSignFoundInNumber(false)
+
+	if nSignSymOne.leadingNumSignFoundInNumber != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'true' \n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundIndex != 0 {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '0'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == '%v' \n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000300()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"+",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.SetLeadingNumSignFoundInNumber(true)
+
+	if nSignSymOne.leadingNumSignFoundInNumber != false {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'true' \n",
+			ePrefix)
+
+		return
+	}
+
+}

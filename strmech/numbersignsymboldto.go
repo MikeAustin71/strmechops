@@ -1250,6 +1250,11 @@ func (nSignSymbol *NumberSignSymbolDto) SetNumberSignSymbol(
 // This index is stored as an internal member variable in the
 // current instance of NumberSignSymbolDto.
 //
+// The Leading Number Sign Chars rune array must be initialized
+// prior to setting the Leading Number Found Index. If the length
+// of Leading Number Sign Chars rune array is zero, this method
+// will take no action and exit.
+//
 func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundIndex(
 	leadingNumSignFoundIndex int) {
 
@@ -1261,13 +1266,28 @@ func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundIndex(
 
 	defer nSignSymbol.lock.Unlock()
 
+	if len(nSignSymbol.leadingNumSignChars) == 0 {
+		return
+	}
+
 	nSignSymbol.leadingNumSignFoundIndex =
 		leadingNumSignFoundIndex
+
+	if leadingNumSignFoundIndex < 0 {
+		nSignSymbol.leadingNumSignFoundInNumber = false
+	} else {
+		nSignSymbol.leadingNumSignFoundInNumber = true
+	}
 }
 
-// SetLeadingNumSignFoundInNumber - Sets the boolean flag which signals
-// whether the Leading Number Sign Symbol has been located in a  number
-// or number string.
+// SetLeadingNumSignFoundInNumber - Sets the boolean flag which
+// signals whether the Leading Number Sign Symbol has been located
+// in a  number or number string.
+//
+// The Leading Number Sign Chars rune array must be initialized
+// prior to setting the Leading Number Sign Found Flag. If the
+// length of the Leading Number Sign Chars rune array is zero, this
+// method will take no action and exit.
 //
 func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundInNumber(
 	leadingNumSignFoundInNumber bool) {
@@ -1280,8 +1300,17 @@ func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundInNumber(
 
 	defer nSignSymbol.lock.Unlock()
 
+	if len(nSignSymbol.leadingNumSignChars) == 0 {
+		return
+	}
+
 	nSignSymbol.leadingNumSignFoundInNumber =
 		leadingNumSignFoundInNumber
+
+	if leadingNumSignFoundInNumber == false {
+		nSignSymbol.leadingNumSignFoundIndex = 0
+	}
+
 }
 
 // SetTrailingNumSignFoundIndex - Receives an integer value
@@ -1290,6 +1319,11 @@ func (nSignSymbol *NumberSignSymbolDto) SetLeadingNumSignFoundInNumber(
 //
 // This index is stored as an internal member variable in the
 // current instance of NumberSignSymbolDto.
+//
+// The Trailing Number Sign Chars rune array must be initialized
+// prior to setting the Trailing Number Sign Found Index. If the
+// length of the Trailing Number Sign Chars rune array is zero,
+// this method will take no action and exit.
 //
 func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundIndex(
 	trailingNumSignFoundIndex int) {
@@ -1304,11 +1338,23 @@ func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundIndex(
 
 	nSignSymbol.trailingNumSignFoundIndex =
 		trailingNumSignFoundIndex
+
+	if trailingNumSignFoundIndex < 0 {
+		nSignSymbol.trailingNumSignFoundInNumber = false
+	} else {
+		nSignSymbol.trailingNumSignFoundInNumber = true
+	}
+
 }
 
-// SetTrailingNumSignFoundInNumber - Sets the boolean flag which signals
-// whether the Trailing Number Sign Symbol has been located in a number
-// or number string.
+// SetTrailingNumSignFoundInNumber - Sets the boolean flag which
+// signals whether the Trailing Number Sign Symbol has been located
+// in a number or number string.
+//
+// The Trailing Number Sign Chars rune array must be initialized
+// prior to setting the Trailing Number Sign Found Flag. If the
+// length of the Trailing Number Sign Chars rune array is zero,
+// this method will take no action and exit.
 //
 func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundInNumber(
 	trailingNumSignFoundInNumber bool) {
@@ -1321,6 +1367,11 @@ func (nSignSymbol *NumberSignSymbolDto) SetTrailingNumSignFoundInNumber(
 
 	defer nSignSymbol.lock.Unlock()
 
-	nSignSymbol.leadingNumSignFoundInNumber =
+	nSignSymbol.trailingNumSignFoundInNumber =
 		trailingNumSignFoundInNumber
+
+	if trailingNumSignFoundInNumber == false {
+		nSignSymbol.trailingNumSignFoundIndex = 0
+	}
+
 }
