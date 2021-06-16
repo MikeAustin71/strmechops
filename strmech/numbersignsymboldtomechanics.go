@@ -97,7 +97,7 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 	}
 
 	if lenLeadingNumSignRunes > 0 &&
-		lenTrailingNumSignRunes < 0 {
+		lenTrailingNumSignRunes == 0 {
 
 		numSignSymbol.numSignPosition =
 			NumSymPos.Before()

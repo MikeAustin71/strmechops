@@ -590,6 +590,27 @@ func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundInNumber() (
 	return nSignSymbol.trailingNumSignFoundInNumber
 }
 
+// IsEmpty - Returns 'true' if the current NumberSignSymbolDto
+// instance is empty or uninitialized.
+//
+func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	if len(nSignSymbol.leadingNumSignChars) == 0 &&
+		len(nSignSymbol.trailingNumSignChars) == 0 {
+		return true
+	}
+
+	return false
+}
+
 // IsLeadingNumSignAtHostIndex - This method will test a host rune
 // array to determine if the leading number sign symbol exists
 // at the 'hostStartIndex'.
