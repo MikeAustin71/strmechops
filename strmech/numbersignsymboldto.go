@@ -1183,7 +1183,7 @@ func (nSignSymbol *NumberSignSymbolDto) SetNumberSignSymbol(
 	leadingNumberSign string,
 	trailingNumberSign string,
 	isNegativeValue bool,
-	errorPrefix *ePref.ErrPrefixDto) (
+	errorPrefix interface{}) (
 	err error) {
 
 	if nSignSymbol.lock == nil {

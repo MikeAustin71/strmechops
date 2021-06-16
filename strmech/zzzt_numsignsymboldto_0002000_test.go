@@ -592,3 +592,107 @@ func TestNumberSignSymbolDto_New_000700(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolDto_SetNumberSignSymbol_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_New_000100()"
+
+	nSignSym,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err = nSignSym.SetNumberSignSymbol(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	leadingNumSign := nSignSym.GetLeadingNumSignChars()
+
+	if len(leadingNumSign) == 0 {
+
+		t.Errorf("%v - Error:\n"+
+			"'leadingNumSign' is a zero length array!\n",
+			ePrefix)
+
+		return
+	}
+
+	if len(leadingNumSign) > 1 {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected len(leadingNumSign) == '1' \n"+
+			"len(leadingNumSign) is NOT EQUAL to '1' !\n"+
+			"len(leadingNumSign) = '%v'\n"+
+			"leadingNumSign= '%v'\n",
+			ePrefix,
+			len(leadingNumSign),
+			string(leadingNumSign))
+
+		return
+	}
+
+	if leadingNumSign[0] != '+' {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected leadingNumSign[0] == '+' \n"+
+			"leadingNumSign[0] is NOT EQUAL to '+' !\n"+
+			"leadingNumSign[0] = '%v'\n",
+			ePrefix,
+			leadingNumSign[0])
+
+		return
+	}
+
+	err = nSignSym.IsValidInstanceError(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	symbolPos := nSignSym.GetNumSignSymPosition()
+
+	if symbolPos != NumSymPos.Before() {
+		t.Errorf("%v - Error:\n"+
+			"Expected Symbol Position == NumSymPos.Before()\n"+
+			"Symbol Position is NOT EQUAL to NumSymPos.Before()!\n"+
+			"Symbol Position string = '%v'\n"+
+			"Symbol Position integer = '%v'\n",
+			ePrefix,
+			symbolPos.String(),
+			symbolPos.XValueInt())
+
+		return
+	}
+
+	signValue := nSignSym.GetNumSignVal()
+
+	if signValue != NumSignVal.Positive() {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected Sign Value == NumSignVal.Positive()\n"+
+			"Sign Value is NOT EQUAL to NumSignVal.Positive()!\n"+
+			"Sign Value string = '%v'\n"+
+			"Sign Value integer = '%v'\n",
+			ePrefix,
+			signValue.String(),
+			signValue.XValueInt())
+
+		return
+	}
+
+}
