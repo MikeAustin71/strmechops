@@ -490,3 +490,58 @@ func (numSignSymCol *NumberSignSymbolCollection) GetCollectionLength() int {
 
 	return len(numSignSymCol.numSignSymbols)
 }
+
+// IsLeadingNumSignAtHostIndex - This method will test a host rune
+// array to determine if the leading number sign symbol exists
+// at the 'hostStartIndex'. The test will be performed on every
+// member NumberSignSymbolDto object in the collection maintained
+// by the current NumberSignSymbolCollection instance.
+//
+// If the leading number sign symbol is located at the
+// 'hostStartIndex', tracking information will be recorded.
+//
+// If multiple leading number sign symbols exist in the host rune
+// array, only the last leading number sign symbol encountered
+// before the first numeric digit will be tracked and recorded.
+//
+func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
+	hostRunes []rune,
+	hostStartIndex int) (
+	foundLeadingNumSign bool) {
+
+	if numSignSymCol.lock == nil {
+		numSignSymCol.lock = new(sync.Mutex)
+	}
+
+	numSignSymCol.lock.Lock()
+
+	defer numSignSymCol.lock.Unlock()
+
+	lenCol := len(numSignSymCol.numSignSymbols)
+
+	if lenCol == 0 {
+		return false
+	}
+
+	for i := 0; i < lenCol; i++ {
+
+		foundLeadingNumSign =
+			numSignSymCol.numSignSymbols[i].IsLeadingNumSignAtHostIndex(
+				hostRunes,
+				hostStartIndex)
+
+		if foundLeadingNumSign {
+			for j := 0; j < lenCol; j++ {
+
+				if i != j {
+					numSignSymCol.numSignSymbols[j].ClearLeadingNumSignTracking()
+				}
+			}
+
+			return foundLeadingNumSign
+		}
+
+	}
+
+	return foundLeadingNumSign
+}
