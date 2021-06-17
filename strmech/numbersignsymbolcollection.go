@@ -39,10 +39,11 @@ type NumberSignSymbolCollection struct {
 //       objects stored and maintained by the current
 //       NumberSignSymbolCollection instance.
 //
-//       If 'nSignSymbol' duplicates the leading and trailing
-//       number sign characters of an existing member of the
-//       NumberSignSymbolDto collection, this method will take no
-//       action and exit without returning an error.
+//       Duplicates are not allowed. If 'nSignSymbol' duplicates
+//       the leading and trailing number sign characters of an
+//       existing member of the NumberSignSymbolDto collection,
+//       this method will take no action and exit without returning
+//       an error.
 //
 //
 //  errorPrefix         interface{}
@@ -165,10 +166,11 @@ func (numSignSymCol *NumberSignSymbolCollection) AddSymbol(
 // collection of NumberSignSymbolDto objects stored and maintained
 // by the current instance of NumberSignSymbolCollection.
 //
-// If the new instance of NumberSignSymbolDto duplicates the
-// leading and trailing number sign characters of an existing
-// member of the NumberSignSymbolDto collection, this method will
-// take no action and exit without returning an error.
+// Duplicates are not allowed. If the new instance of
+// NumberSignSymbolDto duplicates the leading and trailing number
+// sign characters of an existing member of the NumberSignSymbolDto
+// collection, this method will take no action and exit without
+// returning an error.
 //
 //
 // ------------------------------------------------------------------------
