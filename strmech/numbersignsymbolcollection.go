@@ -39,6 +39,11 @@ type NumberSignSymbolCollection struct {
 //       objects stored and maintained by the current
 //       NumberSignSymbolCollection instance.
 //
+//       If 'nSignSymbol' duplicates the leading and trailing
+//       number sign characters of an existing member of the
+//       NumberSignSymbolDto collection, this method will take no
+//       action and exit without returning an error.
+//
 //
 //  errorPrefix         interface{}
 //     - This object encapsulates error prefix text which is
@@ -134,6 +139,20 @@ func (numSignSymCol *NumberSignSymbolCollection) AddSymbol(
 		return err
 	}
 
+	// If the new Number Sign Symbol is a duplicate of an
+	// existing member of the collection, no action will
+	// be taken, this method will exit and no error will
+	// be returned.
+	lenCol := len(numSignSymCol.numSignSymbols)
+
+	if lenCol > 0 {
+		for i := 0; i < lenCol; i++ {
+			if numSignSymCol.numSignSymbols[i].EqualNumberSignRunes(&newSymbol) {
+				return err
+			}
+		}
+	}
+
 	numSignSymCol.numSignSymbols = append(
 		numSignSymCol.numSignSymbols, newSymbol)
 
@@ -145,6 +164,12 @@ func (numSignSymCol *NumberSignSymbolCollection) AddSymbol(
 // create the new NumberSignSymbolDto instance and add it to the
 // collection of NumberSignSymbolDto objects stored and maintained
 // by the current instance of NumberSignSymbolCollection.
+//
+// If the new instance of NumberSignSymbolDto duplicates the
+// leading and trailing number sign characters of an existing
+// member of the NumberSignSymbolDto collection, this method will
+// take no action and exit without returning an error.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -271,6 +296,20 @@ func (numSignSymCol *NumberSignSymbolCollection) AddNewSymbol(
 
 	if err != nil {
 		return err
+	}
+
+	// If the new Number Sign Symbol is a duplicate of an
+	// existing member of the collection, no action will
+	// be taken, this method will exit and no error will
+	// be returned.
+	lenCol := len(numSignSymCol.numSignSymbols)
+
+	if lenCol > 0 {
+		for i := 0; i < lenCol; i++ {
+			if numSignSymCol.numSignSymbols[i].EqualNumberSignRunes(&newSymbol) {
+				return err
+			}
+		}
 	}
 
 	numSignSymCol.numSignSymbols = append(
