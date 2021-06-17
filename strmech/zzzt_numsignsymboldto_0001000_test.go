@@ -48,6 +48,51 @@ func TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	nSignSymOne.leadingNumSignFoundIndex = 5
+
+	nSignSymOne.lock = nil
+
+	nSignSymOne.ClearLeadingNumSignTracking()
+
+	if nSignSymOne.leadingNumSignFoundInNumber == true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'\n"+
+			"INSTEAD, nSignSymOne.leadingNumSignFoundInNumber == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundIndex != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '0'\n"+
+			"INSTEAD, nSignSymOne.leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100()"
@@ -67,6 +112,51 @@ func TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100(t *testing.T) {
 	nSignSymOne.trailingNumSignFoundInNumber = true
 
 	nSignSymOne.trailingNumSignFoundIndex = 5
+
+	nSignSymOne.ClearTrailingNumSignTracking()
+
+	if nSignSymOne.trailingNumSignFoundInNumber == true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.trailingNumSignFoundInNumber == 'false'\n"+
+			"INSTEAD, nSignSymOne.trailingNumSignFoundInNumber == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignSymOne.trailingNumSignFoundIndex != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymOne.trailingNumSignFoundIndex == '0'\n"+
+			"INSTEAD, nSignSymOne.trailingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignSymOne.trailingNumSignFoundIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	nSignSymOne.trailingNumSignFoundIndex = 5
+
+	nSignSymOne.lock = nil
 
 	nSignSymOne.ClearTrailingNumSignTracking()
 
@@ -646,6 +736,46 @@ func TestNumberSignSymbolDto_CopyOut_000700(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_CopyOut_000800(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_CopyOut_000800()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymOne.lock = nil
+
+	nSignSymTwo,
+		err = nSignSymOne.CopyOut(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if !nSignSymTwo.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymTwo == nSignSymOne .\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_Empty_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_Empty_000100()"
@@ -1137,6 +1267,40 @@ func TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundIndex = 99
+
+	nSignSymOne.lock = nil
+
+	leadingNumFoundIdx :=
+		nSignSymOne.GetLeadingNumSignFoundIndex()
+
+	if leadingNumFoundIdx != 99 {
+		t.Errorf("%v - Error:\n"+
+			"Expected leadingNumFoundIdx=='99'.\n"+
+			"HOWEVER, leadingNumFoundIdx=='%v'!\n",
+			ePrefix,
+			leadingNumFoundIdx)
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100()"
@@ -1154,6 +1318,39 @@ func TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100(t *testing.T)
 	}
 
 	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	leadingNumSignFoundInNum :=
+		nSignSymOne.GetLeadingNumSignFoundInNumber()
+
+	if !leadingNumSignFoundInNum {
+		t.Errorf("%v - Error:\n"+
+			"Expected leadingNumSignFoundInNum=='true'.\n"+
+			"HOWEVER, leadingNumSignFoundInNum=='false'!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	nSignSymOne.lock = nil
 
 	leadingNumSignFoundInNum :=
 		nSignSymOne.GetLeadingNumSignFoundInNumber()

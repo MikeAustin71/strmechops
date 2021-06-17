@@ -1,7 +1,11 @@
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200
+--- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000200
+--- PASS: TestNumberSignSymbolDto_ClearTrailingNumSignTracking_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyIn_000100
 --- PASS: TestNumberSignSymbolDto_CopyIn_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyIn_000200
@@ -32,6 +36,8 @@
 --- PASS: TestNumberSignSymbolDto_CopyOut_000600 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyOut_000700
 --- PASS: TestNumberSignSymbolDto_CopyOut_000700 (0.00s)
+=== RUN   TestNumberSignSymbolDto_CopyOut_000800
+--- PASS: TestNumberSignSymbolDto_CopyOut_000800 (0.00s)
 === RUN   TestNumberSignSymbolDto_Empty_000100
 --- PASS: TestNumberSignSymbolDto_Empty_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_Empty_000200
@@ -48,8 +54,12 @@
 --- PASS: TestNumberSignSymbolDto_Equal_000400 (0.00s)
 === RUN   TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100
 --- PASS: TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000200
+--- PASS: TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100
 --- PASS: TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000200
+--- PASS: TestNumberSignSymbolDto_GetLeadingNumSignFoundInNumber_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_GetNumericSymbolClass_000100
 --- PASS: TestNumberSignSymbolDto_GetNumericSymbolClass_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_GetNumSignArithmeticVal_000100
@@ -1000,4 +1010,4 @@
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
 coverage: 86.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.871s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.205s
