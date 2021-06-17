@@ -820,6 +820,49 @@ func TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000300(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundIndex_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	nSignSymOne.SetLeadingNumSignFoundIndex(99)
+
+	if nSignSymOne.leadingNumSignFoundIndex != 99 {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundIndex == '99'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundIndex == '%v' \n",
+			ePrefix,
+			nSignSymOne.leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignSymOne.leadingNumSignFoundInNumber != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'true'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'false' \n",
+			ePrefix)
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000100()"
@@ -916,6 +959,38 @@ func TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000300(t *testing.T)
 		t.Errorf("%v - Error:\n"+
 			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'false'.\n"+
 			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'true' \n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_SetLeadingNumSignFoundInNumber_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	nSignSymOne.SetLeadingNumSignFoundInNumber(true)
+
+	if nSignSymOne.leadingNumSignFoundInNumber != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.leadingNumSignFoundInNumber == 'true'.\n"+
+			"HOWEVER, nSignSymOne.leadingNumSignFoundInNumber == 'false' \n",
 			ePrefix)
 
 		return
