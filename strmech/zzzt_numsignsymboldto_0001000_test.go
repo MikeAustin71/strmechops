@@ -1577,9 +1577,9 @@ func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000400(t *testing.T) {
 
 }
 
-func TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex(t *testing.T) {
+func TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000100(t *testing.T) {
 
-	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex()"
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000100()"
 
 	nSignSymOne,
 		err := NumberSignSymbolDto{}.New(
@@ -1594,6 +1594,40 @@ func TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex(t *testing.T) {
 	}
 
 	nSignSymOne.trailingNumSignFoundIndex = 99
+
+	trailingNumSignFoundIndex :=
+		nSignSymOne.GetTrailingNumSignFoundIndex()
+
+	if trailingNumSignFoundIndex != 99 {
+		t.Errorf("%v - Error:\n"+
+			"Expected trailingNumSignFoundIndex=='99'.\n"+
+			"HOWEVER, trailingNumSignFoundIndex=='%v'!\n",
+			ePrefix,
+			trailingNumSignFoundIndex)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundIndex = 99
+
+	nSignSymOne.lock = nil
 
 	trailingNumSignFoundIndex :=
 		nSignSymOne.GetTrailingNumSignFoundIndex()
@@ -1626,6 +1660,38 @@ func TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100(t *testing.T
 	}
 
 	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	trailingNumSignFoundInNumber :=
+		nSignSymOne.GetTrailingNumSignFoundInNumber()
+
+	if trailingNumSignFoundInNumber != true {
+		t.Errorf("%v - Error:\n"+
+			"Expected trailingNumSignFoundInNumber=='true'.\n"+
+			"HOWEVER, trailingNumSignFoundInNumber=='false'!\n",
+			ePrefix)
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.trailingNumSignFoundInNumber = true
+
+	nSignSymOne.lock = nil
 
 	trailingNumSignFoundInNumber :=
 		nSignSymOne.GetTrailingNumSignFoundInNumber()
@@ -1875,6 +1941,41 @@ func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000800(t *testing.T) {
 			"Expected isTargetRunesIndex=='false' because\n" +
 			"'hostStartIndex' exceeds length of 'hostRunes'.\n" +
 			"HOWEVER, isTargetRunesIndex=='true'!\n")
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000900(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000900()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" -123.456")
+
+	nSignSymOne.lock = nil
+
+	foundLeadingNumSign :=
+		nSignSymOne.IsLeadingNumSignAtHostIndex(hostRunes, 1)
+
+	if foundLeadingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundLeadingNumSign=='true'.\n"+
+			"HOWEVER, foundLeadingNumSign=='false'!\n",
+			ePrefix)
 
 		return
 	}
@@ -2172,6 +2273,41 @@ func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_001000(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_001000",
+		"")
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.leadingNumSignFoundInNumber = true
+
+	nSignSymOne.lock = nil
+
+	isNumSignSymFound :=
+		nSignSymOne.IsNumSignSymbolFoundInNumber()
+
+	if isNumSignSymFound == false {
+		t.Error("Error:\n" +
+			"Expected isNumSignSymFound=='true'.\n" +
+			"HOWEVER, isNumSignSymFound=='false'!\n")
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100()"
@@ -2305,6 +2441,42 @@ func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400(t *testing.T) {
 	}
 }
 
+func TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000500(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000500()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	hostRunes := []rune(" 123.456-")
+
+	nSignSymOne.lock = nil
+
+	foundTrailingNumSign :=
+		nSignSymOne.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			8)
+
+	if foundTrailingNumSign != true {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected foundTrailingNumSign=='true'.\n"+
+			"HOWEVER, foundTrailingNumSign=='false'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
 func TestNumberSignSymbolDto_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_IsValidInstance_000100()"
@@ -2383,6 +2555,55 @@ func TestNumberSignSymbolDto_IsValidInstance_000300(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURND!\n",
 			ePrefix.String())
 
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_IsValidInstance_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsValidInstance_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	if !nSignSymOne.IsValidInstance() {
+
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.IsValidInstance()=='true'.\n"+
+			"HOWEVER, nSignSymOne.IsValidInstance()=='false'!\n",
+			ePrefix)
+
+		return
+	}
+}
+
+func TestNumberSignSymbolDto_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_IsValidInstanceError_000100()"
+
+	nSignSymOne := NumberSignSymbolDto{}
+
+	err := nSignSymOne.IsValidInstanceError(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - Error:\n"+
+			"Expected an error return from nSignSymOne.IsValidInstanceError()\n"+
+			"because 'nSignSymOne' is an empty object.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
 		return
 	}
 

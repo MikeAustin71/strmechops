@@ -74,10 +74,14 @@
 --- PASS: TestNumberSignSymbolDto_GetNumSignArithmeticVal_000300 (0.00s)
 === RUN   TestNumberSignSymbolDto_GetNumSignArithmeticVal_000400
 --- PASS: TestNumberSignSymbolDto_GetNumSignArithmeticVal_000400 (0.00s)
-=== RUN   TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex
---- PASS: TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000100
+--- PASS: TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000200
+--- PASS: TestNumberSignSymbolDto_GetTrailingNumSignFoundIndex_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100
 --- PASS: TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000100 (0.00s)
+=== RUN   TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000200
+--- PASS: TestNumberSignSymbolDto_GetTrailingNumSignFoundInNumber_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000100
 --- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000200
@@ -94,6 +98,8 @@
 --- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000700 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000800
 --- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000800 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000900
+--- PASS: TestNumberSignSymbolDto_IsLeadingNumSignAtHostIndex_000900 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000100
 --- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000200
@@ -112,6 +118,8 @@
 --- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000800 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900
 --- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_000900 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_001000
+--- PASS: TestNumberSignSymbolDto_IsNumSignSymbolFoundInNumber_001000 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200
@@ -120,12 +128,18 @@
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000500
+--- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000500 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsValidInstance_000100
 --- PASS: TestNumberSignSymbolDto_IsValidInstance_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsValidInstance_000200
 --- PASS: TestNumberSignSymbolDto_IsValidInstance_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsValidInstance_000300
 --- PASS: TestNumberSignSymbolDto_IsValidInstance_000300 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsValidInstance_000400
+--- PASS: TestNumberSignSymbolDto_IsValidInstance_000400 (0.00s)
+=== RUN   TestNumberSignSymbolDto_IsValidInstanceError_000100
+--- PASS: TestNumberSignSymbolDto_IsValidInstanceError_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000100
 --- PASS: TestNumberSignSymbolDto_New_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_New_000200
@@ -1016,4 +1030,4 @@
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
 coverage: 86.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.830s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.307s
