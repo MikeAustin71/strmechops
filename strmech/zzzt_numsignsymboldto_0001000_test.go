@@ -1235,6 +1235,34 @@ func TestNumberSignSymbolDto_Equal_000400(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_Equal_000500(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_Equal_000500()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	if !nSignSymOne.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne==nSignSymOne.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100()"
@@ -1396,6 +1424,39 @@ func TestNumberSignSymbolDto_GetNumericSymbolClass_000100(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_GetNumericSymbolClass_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetNumericSymbolClass_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	numSymClass := nSignSymOne.GetNumericSymbolClass()
+
+	if numSymClass != NumSymClass.NumberSign() {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne.GetNumericSymbolClass()=='NumberSign'.\n"+
+			"HOWEVER, numSymClass string =='%v'\n"+
+			"numSymClass integer == '%v'\n",
+			ePrefix,
+			numSymClass.String(),
+			numSymClass.XValueInt())
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_GetNumSignArithmeticVal_000100()"
@@ -1477,6 +1538,37 @@ func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000300(t *testing.T) {
 	if arithmeticVal != 0 {
 		t.Errorf("%v - Error:\n"+
 			"Expected arithmeticVal=='0'.\n"+
+			"HOWEVER, leadingNumSignFoundInNum=='%v'!\n",
+			ePrefix,
+			arithmeticVal)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_GetNumSignArithmeticVal_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_GetNumSignArithmeticVal_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	arithmeticVal := nSignSymOne.GetNumSignArithmeticVal()
+
+	if arithmeticVal != 1 {
+		t.Errorf("%v - Error:\n"+
+			"Expected arithmeticVal=='1'.\n"+
 			"HOWEVER, leadingNumSignFoundInNum=='%v'!\n",
 			ePrefix,
 			arithmeticVal)
