@@ -60,6 +60,52 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) emptyNumSignSymbol(
 	return nil
 }
 
+// equalNumSignRuneArrays - Receives a pointer to two
+// NumberSignSymbolDto objects and proceeds to compare their number
+// sign rune arrays. If the two number sign rune arrays are
+// equivalent, this method returns 'true'.
+//
+// If the two number sign rune arrays differ in any respect, this
+// method will return false.
+//
+func (nSignSymElectron *numberSignSymbolDtoElectron) equalNumSignRuneArrays(
+	numSignSymbolOne *NumberSignSymbolDto,
+	numSignSymbolTwo *NumberSignSymbolDto) (
+	areEqual bool) {
+
+	if nSignSymElectron.lock == nil {
+		nSignSymElectron.lock = new(sync.Mutex)
+	}
+
+	nSignSymElectron.lock.Lock()
+
+	defer nSignSymElectron.lock.Unlock()
+
+	if numSignSymbolOne == nil {
+		return false
+	}
+
+	if numSignSymbolTwo == nil {
+		return false
+	}
+
+	sMechPreon := strMechPreon{}
+
+	if !sMechPreon.equalRuneArrays(
+		numSignSymbolOne.leadingNumSignChars,
+		numSignSymbolTwo.leadingNumSignChars) {
+		return false
+	}
+
+	if !sMechPreon.equalRuneArrays(
+		numSignSymbolOne.trailingNumSignChars,
+		numSignSymbolTwo.trailingNumSignChars) {
+		return false
+	}
+
+	return true
+}
+
 // equalNumSignSymbolObjects - Receives pointers to two
 // NumberSignSymbolDto objects and proceeds to determine if their data
 // values are equal in all respects.

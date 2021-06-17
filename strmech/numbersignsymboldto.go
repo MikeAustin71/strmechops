@@ -386,6 +386,37 @@ func (nSignSymbol *NumberSignSymbolDto) Equal(
 			incomingNSignSymbol)
 }
 
+// EqualNumberSignRunes - Receives a pointer to an incoming
+// instance of NumberSignSymbolDto and proceeds to compare the
+// the leading and trailing number sign runes with those of the
+// current NumberSignSymbolDto instance. If both sets of number
+// sign runes are equivalent, this method returns 'true'.
+//
+// If the two number sign rune arrays differ in any respect, this
+// method will return false.
+//
+// This method differs from NumberSignSymbolDto.Equal() in that
+// only the number sign rune arrays are compared. No other internal
+// member variables are compared.
+//
+func (nSignSymbol *NumberSignSymbolDto) EqualNumberSignRunes(
+	incomingNSignSymbol *NumberSignSymbolDto) bool {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return numberSignSymbolDtoElectron{}.ptr().
+		equalNumSignRuneArrays(
+			nSignSymbol,
+			incomingNSignSymbol)
+
+}
+
 // GetLeadingNumSignChars - Returns a deep copy of the leading
 // number sign characters contained in this instance of
 // NumberSignSymbolDto.

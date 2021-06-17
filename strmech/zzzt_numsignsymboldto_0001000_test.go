@@ -1263,6 +1263,265 @@ func TestNumberSignSymbolDto_Equal_000500(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000100()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if !nSignSymOne.Equal(&nSignSymOne) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne==nSignSymOne.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000200()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymTwo,
+		err = NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("nSignSymTwo - %v", err.Error())
+		return
+	}
+
+	if !nSignSymOne.EqualNumberSignRunes(&nSignSymTwo) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne==nSignSymTwo.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000250(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000250()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymTwo,
+		err = NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("nSignSymTwo - %v", err.Error())
+		return
+	}
+
+	nSignSymOne.lock = nil
+
+	if !nSignSymOne.EqualNumberSignRunes(&nSignSymTwo) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne==nSignSymTwo.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000300()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"-",
+		"",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymTwo,
+		err = NumberSignSymbolDto{}.New(
+		"+",
+		"",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("nSignSymTwo - %v", err.Error())
+		return
+	}
+
+	if nSignSymOne.EqualNumberSignRunes(&nSignSymTwo) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne!=nSignSymTwo.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000400()"
+
+	nSignSymOne,
+		err := NumberSignSymbolDto{}.New(
+		"",
+		"+",
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	var nSignSymTwo NumberSignSymbolDto
+
+	nSignSymTwo,
+		err = NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("nSignSymTwo - %v", err.Error())
+		return
+	}
+
+	if nSignSymOne.EqualNumberSignRunes(&nSignSymTwo) {
+		t.Errorf("%v - Error:\n"+
+			"Expected nSignSymOne!=nSignSymTwo.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000500(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000500()"
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	numSignSymbolTwo := NumberSignSymbolDto{}
+
+	areEqual := nSignSymElectron.equalNumSignRuneArrays(
+		nil,
+		&numSignSymbolTwo)
+
+	if areEqual {
+		t.Errorf("%v - Error:\n"+
+			"Expected areEqual=='false' because\n"+
+			"'numSignSymbolOne' is a nil pointer.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000600(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000600()"
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	numSignSymbolOne := NumberSignSymbolDto{}
+
+	areEqual := nSignSymElectron.equalNumSignRuneArrays(
+		&numSignSymbolOne,
+		nil)
+
+	if areEqual {
+		t.Errorf("%v - Error:\n"+
+			"Expected areEqual=='false' because\n"+
+			"'numSignSymbolTwo' is a nil pointer.\n"+
+			"HOWEVER, THEY ARE EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_EqualNumberSignRunes_000700(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_EqualNumberSignRunes_000600()"
+
+	nSignSymElectron := numberSignSymbolDtoElectron{}
+
+	numSignSymbolOne := NumberSignSymbolDto{}
+
+	numSignSymbolTwo := NumberSignSymbolDto{}
+
+	areEqual := nSignSymElectron.equalNumSignRuneArrays(
+		&numSignSymbolOne,
+		&numSignSymbolTwo)
+
+	if !areEqual {
+		t.Errorf("%v - Error:\n"+
+			"Expected areEqual=='true' because\n"+
+			"'numSignSymbolOne' and 'numSignSymbolTwo' have empty rune arrays.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix)
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_GetLeadingNumSignFoundIndex_000100()"
