@@ -683,6 +683,41 @@ func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
 // array, only the last leading number sign symbol encountered
 // before the first numeric digit will be tracked and recorded.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  hostRunes                  []rune
+//     - An array of runes. This rune array will searched to
+//       determine if the leading number sign symbol is present in
+//       the array beginning at the 'hostStartIndex.
+//
+//       If 'hostRunes' is a zero length array, this method will
+//       return 'false'.
+//
+//
+//  hostStartIndex             int
+//     - The starting index within the host runes array where
+//       the search operation will commence. If 'hostStartIndex' is
+//       less than zero, it will be automatically set to zero.
+//
+//       If the 'hostStartIndex' is greater than or equal to the
+//       length of 'hostRunes', this method will return 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundLeadingNumSign        bool
+//     - A boolean flag signaling whether the leading number sign
+//       symbol was located in the host runes array beginning at
+//       the index specified by input parameter 'hostStartIndex'.
+//
+//       If the target runes array is found at the staring index in
+//       the host runes array, this method will return 'true'.
+//
 func (nSignSymbol *NumberSignSymbolDto) IsLeadingNumSignAtHostIndex(
 	hostRunes []rune,
 	hostStartIndex int) (
@@ -716,11 +751,17 @@ func (nSignSymbol *NumberSignSymbolDto) IsLeadingNumSignAtHostIndex(
 }
 
 // IsNumSignSymbolFoundInNumber - Returns a boolean flag signaling
-// whether the entire number sign symbol, both lead and trailing
-// symbols, have been located in a number of number string.
+// whether the entire number sign symbol has been located in a
+// number string.
 //
 // A return value of 'true' signals that the entire number sign
 // symbol has been located in the target number or number string.
+// Depending on the configuration of the NumberSignSymbolDto, this
+// could indicate one of the following outcomes:
+//   1. The leading number sign was found.
+//   2. The trailing number sign was found.
+//   3. This symbol has both a leading and trailing component
+//       and both components were found.
 //
 func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 
@@ -754,9 +795,44 @@ func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 // If the trailing number sign symbol is located at the
 // 'hostStartIndex', tracking information will be recorded.
 //
-// If multiple leading number sign symbols exist in the host rune
+// If multiple trailing number sign symbols exist in the host rune
 // array, only the first trailing number sign symbol encountered
 // after the last numeric digit will be tracked and recorded.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  hostRunes                  []rune
+//     - An array of runes. This rune array will searched to
+//       determine if the trailing number sign symbol is present in
+//       the array beginning at the 'hostStartIndex.
+//
+//       If 'hostRunes' is a zero length array, this method will
+//       return 'false'.
+//
+//
+//  hostStartIndex             int
+//     - The starting index within the host runes array where
+//       the search operation will commence. If 'hostStartIndex' is
+//       less than zero, it will be automatically set to zero.
+//
+//       If the 'hostStartIndex' is greater than or equal to the
+//       length of 'hostRunes', this method will return 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundTrailingNumSign       bool
+//     - A boolean flag signaling whether the trailing number sign
+//       symbol was located in the host runes array beginning at
+//       the index specified by input parameter 'hostStartIndex'.
+//
+//       If the target runes array is found at the staring index in
+//       the host runes array, this method will return 'true'.
 //
 func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 	hostRunes []rune,

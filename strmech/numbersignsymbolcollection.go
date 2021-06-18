@@ -498,11 +498,49 @@ func (numSignSymCol *NumberSignSymbolCollection) GetCollectionLength() int {
 // by the current NumberSignSymbolCollection instance.
 //
 // If the leading number sign symbol is located at the
-// 'hostStartIndex', tracking information will be recorded.
+// 'hostStartIndex', tracking information will be recorded. To be
+// clear, the leading number sign symbol must exist in the host
+// runes array at the host starting index before a value of 'true'
+// is returned.
 //
 // If multiple leading number sign symbols exist in the host rune
 // array, only the last leading number sign symbol encountered
 // before the first numeric digit will be tracked and recorded.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  hostRunes                  []rune
+//     - An array of runes. This rune array will searched to
+//       determine if the leading number sign symbol is present in
+//       the array beginning at the 'hostStartIndex.
+//
+//       If 'hostRunes' is a zero length array, this method will
+//       return 'false'.
+//
+//
+//  hostStartIndex             int
+//     - The starting index within the host runes array where
+//       the search operation will commence. If 'hostStartIndex' is
+//       less than zero, it will be automatically set to zero.
+//
+//       If the 'hostStartIndex' is greater than or equal to the
+//       length of 'hostRunes', this method will return 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundLeadingNumSign        bool
+//     - A boolean flag signaling whether the leading number sign
+//       symbol was located in the host runes array beginning at
+//       the index specified by input parameter 'hostStartIndex'.
+//
+//       If the target runes array is found at the staring index in
+//       the host runes array, this method will return 'true'.
 //
 func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 	hostRunes []rune,
@@ -517,20 +555,30 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 
 	defer numSignSymCol.lock.Unlock()
 
+	foundLeadingNumSign = false
+
+	if len(hostRunes) == 0 ||
+		hostStartIndex < 0 {
+
+		return foundLeadingNumSign
+	}
+
 	lenCol := len(numSignSymCol.numSignSymbols)
 
 	if lenCol == 0 {
-		return false
+		return foundLeadingNumSign
 	}
 
 	for i := 0; i < lenCol; i++ {
 
 		foundLeadingNumSign =
-			numSignSymCol.numSignSymbols[i].IsLeadingNumSignAtHostIndex(
-				hostRunes,
-				hostStartIndex)
+			numSignSymCol.numSignSymbols[i].
+				IsLeadingNumSignAtHostIndex(
+					hostRunes,
+					hostStartIndex)
 
 		if foundLeadingNumSign {
+
 			for j := 0; j < lenCol; j++ {
 
 				if i != j {
@@ -555,16 +603,97 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 // NumberSignSymbolDto.
 //
 // If the trailing number sign symbol is located at the
-// 'hostStartIndex', tracking information will be recorded.
+// 'hostStartIndex', tracking information will be recorded. To be
+// clear, the trailing number sign symbol must exist in the host
+// runes array beginning at the host starting index before this
+// method will return a value of 'true'.
 //
 // If multiple leading number sign symbols exist in the host rune
 // array, only the first trailing number sign symbol encountered
 // after the last numeric digit will be tracked and recorded.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  hostRunes                  []rune
+//     - An array of runes. This rune array will searched to
+//       determine if the trailing number sign symbol is present in
+//       the array beginning at the 'hostStartIndex.
+//
+//       If 'hostRunes' is a zero length array, this method will
+//       return 'false'.
+//
+//
+//  hostStartIndex             int
+//     - The starting index within the host runes array where
+//       the search operation will commence. If 'hostStartIndex' is
+//       less than zero, it will be automatically set to zero.
+//
+//       If the 'hostStartIndex' is greater than or equal to the
+//       length of 'hostRunes', this method will return 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundTrailingNumSign       bool
+//     - A boolean flag signaling whether the trailing number sign
+//       symbol was located in the host runes array beginning at
+//       the index specified by input parameter 'hostStartIndex'.
+//
+//       If the target runes array is found at the staring index in
+//       the host runes array, this method will return 'true'.
 //
 func (numSignSymCol *NumberSignSymbolCollection) IsTrailingNumSignAtHostIndex(
 	hostRunes []rune,
 	hostStartIndex int) (
 	foundTrailingNumSign bool) {
 
-	return false
+	if numSignSymCol.lock == nil {
+		numSignSymCol.lock = new(sync.Mutex)
+	}
+
+	numSignSymCol.lock.Lock()
+
+	defer numSignSymCol.lock.Unlock()
+
+	foundTrailingNumSign = false
+
+	if len(hostRunes) == 0 {
+
+		return foundTrailingNumSign
+	}
+
+	lenCol := len(numSignSymCol.numSignSymbols)
+
+	if lenCol == 0 {
+		return foundTrailingNumSign
+	}
+
+	isTrailingNumberSignFound,
+		_ :=
+		numberSignSymbolCollectionAtom{}.ptr().
+			isTrailingNSignSymbolFound(numSignSymCol.numSignSymbols)
+
+	if isTrailingNumberSignFound {
+		return foundTrailingNumSign
+	}
+
+	for i := 0; i < lenCol; i++ {
+
+		foundTrailingNumSign =
+			numSignSymCol.numSignSymbols[i].
+				IsTrailingNumSignAtHostIndex(
+					hostRunes,
+					hostStartIndex)
+
+		if foundTrailingNumSign {
+			return foundTrailingNumSign
+		}
+	}
+
+	return foundTrailingNumSign
 }
