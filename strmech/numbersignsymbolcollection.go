@@ -545,3 +545,26 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 
 	return foundLeadingNumSign
 }
+
+// IsTrailingNumSignAtHostIndex - This method will test a host rune
+// array to determine if the trailing number sign symbol exists
+// at the 'hostStartIndex'.
+//
+// This test will be performed if, and only if, the trailing number
+// sign symbol has been configured for the current instance of
+// NumberSignSymbolDto.
+//
+// If the trailing number sign symbol is located at the
+// 'hostStartIndex', tracking information will be recorded.
+//
+// If multiple leading number sign symbols exist in the host rune
+// array, only the first trailing number sign symbol encountered
+// after the last numeric digit will be tracked and recorded.
+//
+func (numSignSymCol *NumberSignSymbolCollection) IsTrailingNumSignAtHostIndex(
+	hostRunes []rune,
+	hostStartIndex int) (
+	foundTrailingNumSign bool) {
+
+	return false
+}

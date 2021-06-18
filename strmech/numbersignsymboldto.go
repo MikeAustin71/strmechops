@@ -781,6 +781,11 @@ func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 		return foundTrailingNumSign
 	}
 
+	if nSignSymbol.numSignPosition == NumSymPos.BeforeAndAfter() &&
+		!nSignSymbol.leadingNumSignFoundInNumber {
+		return foundTrailingNumSign
+	}
+
 	foundTrailingNumSign = strMechPreon{}.ptr().
 		isTargetRunesIndex(
 			hostRunes,
