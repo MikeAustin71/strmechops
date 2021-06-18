@@ -491,6 +491,81 @@ func (numSignSymCol *NumberSignSymbolCollection) GetCollectionLength() int {
 	return len(numSignSymCol.numSignSymbols)
 }
 
+// GetFoundNumberSignSymbol - If one of the number sign symbols in
+// this collection was located in a host runes array, this method
+// will return a deep copy of that NumberSignSymbolDto object.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ---- None ----
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundNumberSign     bool
+//     - If one of the number sign symbols currently residing in
+//       this collection of NumberSignSymbolDto objects was located
+//       in the host runes array, this return parameter will be set
+//       to 'true'.
+//
+//
+//  numSignSymbol       NumberSignSymbolDto
+//     - If one of the number sign symbols currently residing in
+//       this collection of NumberSignSymbolDto objects was located
+//       in the host runes array, this return parameter will be
+//       populated with a deep copy of that NumberSignSymbolDto
+//       object.
+//
+func (numSignSymCol *NumberSignSymbolCollection) GetFoundNumberSignSymbol() (
+	foundNumberSign bool,
+	numSignSymbol NumberSignSymbolDto) {
+
+	if numSignSymCol.lock == nil {
+		numSignSymCol.lock = new(sync.Mutex)
+	}
+
+	numSignSymCol.lock.Lock()
+
+	defer numSignSymCol.lock.Unlock()
+
+	var foundNumberSignIndex int
+
+	foundNumberSign,
+		foundNumberSignIndex =
+		numberSignSymbolCollectionAtom{}.ptr().
+			getLeadingNSignSymbolFound(
+				numSignSymCol.numSignSymbols)
+
+	if foundNumberSign {
+		_ =
+			numSignSymbol.CopyIn(
+				&numSignSymCol.numSignSymbols[foundNumberSignIndex],
+				nil)
+
+		return foundNumberSign, numSignSymbol
+	}
+
+	foundNumberSign,
+		foundNumberSignIndex =
+		numberSignSymbolCollectionAtom{}.ptr().
+			getTrailingNSignSymbolFound(
+				numSignSymCol.numSignSymbols)
+
+	if foundNumberSign {
+		_ =
+			numSignSymbol.CopyIn(
+				&numSignSymCol.numSignSymbols[foundNumberSignIndex],
+				nil)
+	}
+
+	return foundNumberSign, numSignSymbol
+}
+
 // IsLeadingNumSignAtHostIndex - This method will test a host rune
 // array to determine if the leading number sign symbol exists
 // at the 'hostStartIndex'. The test will be performed on every
@@ -567,28 +642,6 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 
 	if lenCol == 0 {
 		return foundLeadingNumSign
-	}
-
-	for i := 0; i < lenCol; i++ {
-
-		foundLeadingNumSign =
-			numSignSymCol.numSignSymbols[i].
-				IsLeadingNumSignAtHostIndex(
-					hostRunes,
-					hostStartIndex)
-
-		if foundLeadingNumSign {
-
-			for j := 0; j < lenCol; j++ {
-
-				if i != j {
-					numSignSymCol.numSignSymbols[j].ClearLeadingNumSignTracking()
-				}
-			}
-
-			return foundLeadingNumSign
-		}
-
 	}
 
 	return foundLeadingNumSign
@@ -679,6 +732,8 @@ func (numSignSymCol *NumberSignSymbolCollection) IsTrailingNumSignAtHostIndex(
 			isTrailingNSignSymbolFound(numSignSymCol.numSignSymbols)
 
 	if isTrailingNumberSignFound {
+		// Trailing Number Sign Already Found
+		// return false
 		return foundTrailingNumSign
 	}
 
