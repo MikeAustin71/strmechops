@@ -1,3 +1,11 @@
+=== RUN   TestNumberSignSymbolCollection_AddSymbol_000100
+--- PASS: TestNumberSignSymbolCollection_AddSymbol_000100 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_AddSymbol_000200
+--- PASS: TestNumberSignSymbolCollection_AddSymbol_000200 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_AddNewSymbol_000100
+--- PASS: TestNumberSignSymbolCollection_AddNewSymbol_000100 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_AddNewSymbol_000200
+--- PASS: TestNumberSignSymbolCollection_AddNewSymbol_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200
@@ -1045,5 +1053,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 84.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.482s
+coverage: 83.3% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.890s
