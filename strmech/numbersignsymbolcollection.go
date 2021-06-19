@@ -566,6 +566,26 @@ func (numSignSymCol *NumberSignSymbolCollection) GetFoundNumberSignSymbol() (
 	return foundNumberSign, numSignSymbol
 }
 
+// IsCollectionEmpty - Returns 'true' if the collection of
+// NumberSignSymbolDto objects is empty and contains zero members.
+//
+func (numSignSymCol *NumberSignSymbolCollection) IsCollectionEmpty() bool {
+
+	if numSignSymCol.lock == nil {
+		numSignSymCol.lock = new(sync.Mutex)
+	}
+
+	numSignSymCol.lock.Lock()
+
+	defer numSignSymCol.lock.Unlock()
+
+	if len(numSignSymCol.numSignSymbols) == 0 {
+		return true
+	}
+
+	return false
+}
+
 // IsLeadingNumSignAtHostIndex - This method will test a host rune
 // array to determine if the leading number sign symbol exists
 // at the 'hostStartIndex'. The test will be performed on every
