@@ -664,6 +664,19 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 		return foundLeadingNumSign
 	}
 
+	for i := 0; i < lenCol; i++ {
+
+		foundLeadingNumSign =
+			numSignSymCol.numSignSymbols[i].
+				IsLeadingNumSignAtHostIndex(
+					hostRunes,
+					hostStartIndex)
+
+		if foundLeadingNumSign {
+			return foundLeadingNumSign
+		}
+	}
+
 	return foundLeadingNumSign
 }
 

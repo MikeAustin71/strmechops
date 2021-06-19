@@ -827,3 +827,466 @@ func TestNumberSignSymbolCollection_EmptyCollection_000100(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000100"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                   012345678
+	hostRunes := []rune(" +1234.56")
+	startIndex := 1
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex != 1 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == 1\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber != true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'true'\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                   012345678
+	hostRunes := []rune(" +1234.56")
+	startIndex := 2
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if foundLeadingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundLeadingNumSign == 'false'\n"+
+			"Instead foundLeadingNumSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == 0\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber != false {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'false'\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                   0123456789
+	hostRunes := []rune(" -+1234.56")
+	startIndex := 1
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		t.Errorf("%v - Round # 1 Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	//                     0123456789
+	//hostRunes := []rune(" -+1234.56")
+	startIndex = 2
+
+	foundLeadingNumSign =
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		t.Errorf("%v - Round #2 Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex != 2 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == 2\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber != true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'true'\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                   0123456789
+	hostRunes := []rune(" -+1234.56")
+	startIndex := 1
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		t.Errorf("%v - Round # 1 Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	//                     0123456789
+	//hostRunes := []rune(" -+1234.56")
+	startIndex = 2
+
+	foundLeadingNumSign =
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		t.Errorf("%v - Round #2 Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex != 2 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == 2\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber != true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'true'\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[0].numSignPosition != NumSymPos.Before() {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].numSignPosition == NumSymPos.Before()\n"+
+			"Instead, nSignCollection.numSignSymbols[0].numSignPosition == '%v'\n",
+			ePrefix,
+			nSignCollection.numSignSymbols[0].numSignPosition.String())
+
+		return
+	}
+
+	foundNumberSign,
+		nSignSymDto :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign != true {
+		t.Errorf("%v - Error\n"+
+			"Result: nSignCollection.GetFoundNumberSignSymbol()\n"+
+			"Expected foundNumberSign == 'true'\n"+
+			"Instead, foundNumberSign == 'false'\n",
+			ePrefix)
+		return
+	}
+
+	actualNumSignPos := nSignSymDto.GetNumSignSymPosition()
+
+	if actualNumSignPos != NumSymPos.Before() {
+		t.Errorf("%v - Error\n"+
+			"Expected actualNumSignPos == NumSymPos.Before()\n"+
+			"Instead, actualNumSignPos == '%v'\n",
+			ePrefix,
+			actualNumSignPos.String())
+		return
+	}
+
+	if nSignSymDto.GetLeadingNumSignFoundInNumber() != true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymDto.GetLeadingNumSignFoundInNumber() == 'true'\n"+
+			"Instead, nSignSymDto.GetLeadingNumSignFoundInNumber() == 'false'\n",
+			ePrefix)
+		return
+	}
+
+	if nSignSymDto.GetLeadingNumSignFoundIndex() != 2 {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignSymDto.GetLeadingNumSignFoundIndex() == '2'\n"+
+			"Instead, nSignSymDto.GetLeadingNumSignFoundIndex() == '%v'\n",
+			ePrefix,
+			nSignSymDto.GetLeadingNumSignFoundIndex())
+		return
+	}
+
+}

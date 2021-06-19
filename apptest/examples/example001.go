@@ -17,6 +17,191 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) NumSignCollection01() {
+
+	ePrefix := "NumSignCollection01"
+
+	nSignCollection := strmech.NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		str := fmt.Sprintf("%v", err.Error())
+		fmt.Println(str)
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		str := fmt.Sprintf("%v", err.Error())
+		fmt.Println(str)
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		str := fmt.Sprintf("%v", err.Error())
+		fmt.Println(str)
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		str := fmt.Sprintf("%v", err.Error())
+		fmt.Println(str)
+		return
+	}
+
+	//                   0123456789
+	hostRunes := []rune(" -+1234.56")
+	startIndex := 1
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		str := fmt.Sprintf("%v - Round # 1 Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		fmt.Println(str)
+		return
+	}
+
+	//                     0123456789
+	//hostRunes := []rune(" -+1234.56")
+	startIndex = 2
+
+	foundLeadingNumSign =
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		str := fmt.Sprintf("%v - Round #2 Error\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+		fmt.Println(str)
+
+		return
+	}
+
+	var collection []strmech.NumberSignSymbolDto
+
+	collection,
+		err = nSignCollection.GetCollection(ePrefix)
+
+	if collection[0].GetLeadingNumSignFoundIndex() != 2 {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == 2\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			collection[0].GetLeadingNumSignFoundIndex())
+
+		fmt.Println(str)
+		return
+	}
+
+	if collection[0].GetLeadingNumSignFoundInNumber() != true {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'true'\n"+
+			"Instead, nSignCollection.numSignSymbols[0].leadingNumSignFoundInNumber == 'false'\n",
+			ePrefix)
+
+		fmt.Println(str)
+		return
+	}
+
+	if collection[0].GetNumSignSymPosition() != strmech.NumSymPos.Before() {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[0].numSignPosition == NumSymPos.Before()\n"+
+			"Instead, nSignCollection.numSignSymbols[0].numSignPosition == '%v'\n",
+			ePrefix,
+			collection[0].GetNumSignSymPosition().String())
+
+		fmt.Println(str)
+		return
+	}
+
+	foundNumberSign,
+		nSignSymDto :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign != true {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Result: nSignCollection.GetFoundNumberSignSymbol()\n"+
+			"Expected foundNumberSign == 'true'\n"+
+			"Instead, foundNumberSign == 'false'\n",
+			ePrefix)
+		fmt.Println(str)
+		return
+	}
+
+	actualNumSignPos := nSignSymDto.GetNumSignSymPosition()
+
+	if actualNumSignPos != strmech.NumSymPos.Before() {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Expected actualNumSignPos == NumSymPos.Before()\n"+
+			"Instead, actualNumSignPos == '%v'\n",
+			ePrefix,
+			actualNumSignPos.String())
+		fmt.Println(str)
+		return
+	}
+
+	if nSignSymDto.GetLeadingNumSignFoundInNumber() != true {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Expected nSignSymDto.GetLeadingNumSignFoundInNumber() == 'true'\n"+
+			"Instead, nSignSymDto.GetLeadingNumSignFoundInNumber() == 'false'\n",
+			ePrefix)
+		fmt.Println(str)
+		return
+	}
+
+	if nSignSymDto.GetLeadingNumSignFoundIndex() != 2 {
+		str := fmt.Sprintf("%v - Error\n"+
+			"Expected nSignSymDto.GetLeadingNumSignFoundIndex() == '2'\n"+
+			"Instead, nSignSymDto.GetLeadingNumSignFoundIndex() == '%v'\n",
+			ePrefix,
+			nSignSymDto.GetLeadingNumSignFoundIndex())
+
+		fmt.Println(str)
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"Successful Completion!\n",
+		ePrefix)
+}
+
 func (mt MainTest) ExampleExtractDataField01() {
 
 	funcName := "ExampleExtractDataField01()"

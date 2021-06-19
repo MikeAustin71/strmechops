@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"math"
 	"sync"
 )
 
@@ -16,8 +15,8 @@ type numberSignSymbolCollectionAtom struct {
 //
 // If a leading number sign symbol has been located, the return
 // parameter 'isLeadingNumberSignFound' is set to 'true' and the
-// array index of the located NumberSignSymbolDto is returned in
-// parameter 'leadingNumberSignFoundIndex'.
+// 'nSignSymbols' array index of the located NumberSignSymbolDto
+// is returned in parameter 'leadingNumberSignFoundIndex'.
 //
 // If multiple leading number symbols have been located, only the
 // leading number symbol with the highest index in the host runes
@@ -46,6 +45,7 @@ func (nSignSymColAtom *numberSignSymbolCollectionAtom) getLeadingNSignSymbolFoun
 	}
 
 	highestIndex := -1
+	collectionIndex := -1
 
 	for i := 0; i < lenSymCol; i++ {
 
@@ -61,13 +61,14 @@ func (nSignSymColAtom *numberSignSymbolCollectionAtom) getLeadingNSignSymbolFoun
 			}
 
 			highestIndex = nSignSymbols[i].leadingNumSignFoundIndex
+			collectionIndex = i
 			isLeadingNumberSignFound = true
 
 		}
 	}
 
 	if isLeadingNumberSignFound {
-		leadingNumberSignFoundIndex = highestIndex
+		leadingNumberSignFoundIndex = collectionIndex
 	}
 
 	return isLeadingNumberSignFound, leadingNumberSignFoundIndex
@@ -80,12 +81,13 @@ func (nSignSymColAtom *numberSignSymbolCollectionAtom) getLeadingNSignSymbolFoun
 //
 // If a trailing number sign symbol has been located, the return
 // parameter 'isTrailingNumberSignFound' is set to 'true' and the
-// array index of the located NumberSignSymbolDto is returned in
-// parameter 'trailingNumberSignFoundIndex'.
+// 'nSignSymbols' array index of the located NumberSignSymbolDto is
+// returned in parameter 'trailingNumberSignFoundIndex'.
 //
 // If multiple trailing number symbols have been located, only the
-// trailing number symbol with the highest index in the host runes
-// array will be selected and returned.
+// first trailing number symbol or the trailing number symbol with
+// the lowest index in the 'nSignSymbols' array will be selected
+// and returned.
 //
 func (nSignSymColAtom *numberSignSymbolCollectionAtom) getTrailingNSignSymbolFound(
 	nSignSymbols []NumberSignSymbolDto) (
@@ -109,29 +111,23 @@ func (nSignSymColAtom *numberSignSymbolCollectionAtom) getTrailingNSignSymbolFou
 		return isTrailingNumberSignFound, trailingNumberSignFoundIndex
 	}
 
-	lowestIndex := math.MaxInt32
-
 	for i := 0; i < lenSymCol; i++ {
 
 		if nSignSymbols[i].trailingNumSignFoundInNumber &&
-			nSignSymbols[i].trailingNumSignFoundIndex < lowestIndex &&
 			(nSignSymbols[i].numSignPosition == NumSymPos.After() ||
 				nSignSymbols[i].numSignPosition == NumSymPos.BeforeAndAfter()) {
 
 			if nSignSymbols[i].numSignPosition == NumSymPos.BeforeAndAfter() &&
-				!nSignSymbols[i].trailingNumSignFoundInNumber {
+				!nSignSymbols[i].leadingNumSignFoundInNumber {
 
 				continue
 			}
 
-			lowestIndex = nSignSymbols[i].trailingNumSignFoundIndex
 			isTrailingNumberSignFound = true
+			trailingNumberSignFoundIndex = i
 
+			return isTrailingNumberSignFound, trailingNumberSignFoundIndex
 		}
-	}
-
-	if isTrailingNumberSignFound {
-		trailingNumberSignFoundIndex = lowestIndex
 	}
 
 	return isTrailingNumberSignFound, trailingNumberSignFoundIndex

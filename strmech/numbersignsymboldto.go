@@ -634,7 +634,7 @@ func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundIndex() int {
 // in a number or number string.
 //
 func (nSignSymbol *NumberSignSymbolDto) GetTrailingNumSignFoundInNumber() (
-	leadingNumSignFoundInNumber bool) {
+	trailingNumSignFoundInNumber bool) {
 
 	if nSignSymbol.lock == nil {
 		nSignSymbol.lock = new(sync.Mutex)

@@ -8,6 +8,14 @@
 --- PASS: TestNumberSignSymbolCollection_AddNewSymbol_000200 (0.00s)
 === RUN   TestNumberSignSymbolCollection_EmptyCollection_000100
 --- PASS: TestNumberSignSymbolCollection_EmptyCollection_000100 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000100
+--- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000100 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200
+--- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300
+--- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400
+--- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200
@@ -1055,5 +1063,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 83.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.568s
+coverage: 84.9% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.093s
