@@ -729,3 +729,101 @@ func TestNumberSignSymbolCollection_AddNewSymbol_000200(t *testing.T) {
 	}
 
 }
+
+func TestNumberSignSymbolCollection_EmptyCollection_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_AddNewSymbol_000100()"
+
+	var err error
+
+	nSignCollection := NumberSignSymbolCollection{}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	if nSignCollection.IsCollectionEmpty() {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.IsCollectionEmpty()=='false'\n"+
+			"Instead, nSignCollection.IsCollectionEmpty()=='true'\n",
+			ePrefix)
+		return
+	}
+
+	colLen := nSignCollection.GetCollectionLength()
+
+	if colLen != 4 {
+		t.Errorf("%v - Error\n"+
+			"Expected collection length colLen == '4'\n"+
+			"Instead, actual collection length colLen == '%v'\n",
+			ePrefix,
+			colLen)
+		return
+	}
+
+	nSignCollection.EmptyCollection()
+
+	if !nSignCollection.IsCollectionEmpty() {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.IsCollectionEmpty()=='true'\n"+
+			"Instead, nSignCollection.IsCollectionEmpty()=='false'\n",
+			ePrefix)
+		return
+	}
+
+	colLen = nSignCollection.GetCollectionLength()
+
+	if colLen != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected collection length colLen == '0'\n"+
+			"Instead, actual collection length colLen == '%v'\n",
+			ePrefix,
+			colLen)
+		return
+	}
+
+}
