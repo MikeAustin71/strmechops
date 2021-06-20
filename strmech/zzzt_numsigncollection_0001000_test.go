@@ -1928,3 +1928,163 @@ func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000500(t *testi
 		return
 	}
 }
+
+func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000600(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000600"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	// Index = 0
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 1
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 2
+	err =
+		nSignCollection.AddNewSymbol(
+			"(",
+			")",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 3
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 5
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                             11
+	//                   012345678901
+	hostRunes := []rune(" (1234.56 ) ")
+
+	for i := 0; i < 2; i++ {
+		_ =
+			nSignCollection.IsLeadingNumSignAtHostIndex(
+				hostRunes,
+				i)
+	}
+
+	for j := 9; j < 12; j++ {
+
+		_ =
+			nSignCollection.IsTrailingNumSignAtHostIndex(
+				hostRunes,
+				j)
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == false {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'true'\n"+
+			"Instead foundNumberSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	numSignCharStr := string(numSignSymbol.GetLeadingNumSignChars())
+
+	if numSignCharStr != "(" {
+		t.Errorf("%v - Error\n"+
+			"Expected Leading numSignCharStr == '('\n"+
+			"Instead Leading numSignCharStr == '%v'\n",
+			ePrefix,
+			numSignCharStr)
+
+		return
+	}
+
+	if numSignSymbol.GetLeadingNumSignFoundIndex() != 1 {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignSymbol.GetLeadingNumSignFoundIndex() == '1'\n"+
+			"Instead numSignSymbol.GetLeadingNumSignFoundIndex() == '%v'\n",
+			ePrefix,
+			numSignSymbol.GetLeadingNumSignFoundIndex())
+
+		return
+	}
+
+	numSignCharStr = string(numSignSymbol.GetTrailingNumSignChars())
+
+	if numSignCharStr != ")" {
+		t.Errorf("%v - Error\n"+
+			"Expected Trailing numSignCharStr == ')'\n"+
+			"Instead Trailing numSignCharStr == '%v'\n",
+			ePrefix,
+			numSignCharStr)
+
+		return
+	}
+
+	if numSignSymbol.GetTrailingNumSignFoundIndex() != 10 {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignSymbol.GetTrailingNumSignFoundIndex() == '10'\n"+
+			"Instead numSignSymbol.GetTrailingNumSignFoundIndex() == '%v'\n",
+			ePrefix,
+			numSignSymbol.GetTrailingNumSignFoundIndex())
+
+		return
+	}
+
+	if collectionIndex != 2 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '2'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
+}
