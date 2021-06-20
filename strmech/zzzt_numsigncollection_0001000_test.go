@@ -1249,7 +1249,8 @@ func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400(t *testin
 	}
 
 	foundNumberSign,
-		nSignSymDto :=
+		nSignSymDto,
+		collectionIndex :=
 		nSignCollection.GetFoundNumberSignSymbol()
 
 	if foundNumberSign != true {
@@ -1258,6 +1259,16 @@ func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400(t *testin
 			"Expected foundNumberSign == 'true'\n"+
 			"Instead, foundNumberSign == 'false'\n",
 			ePrefix)
+		return
+	}
+
+	if collectionIndex != 0 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '0'\n"+
+			"Instead, collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
 		return
 	}
 
@@ -1289,4 +1300,631 @@ func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400(t *testin
 		return
 	}
 
+}
+
+func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000500(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000500"
+
+	nSignCollection := NumberSignSymbolCollection{}
+
+	//                   0123456789
+	hostRunes := []rune(" -+1234.56")
+	startIndex := 1
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if foundLeadingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundLeadingNumSign == 'false'\n"+
+			"Instead foundLeadingNumSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == true {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'false'\n"+
+			"Instead foundNumberSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if numSignSymbol.IsEmpty() == false {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignSymbol.IsEmpty() == 'true'\n"+
+			"Instead numSignSymbol.IsEmpty() == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if collectionIndex != -1 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '-1'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000100"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                             1
+	//                   01234567890
+	hostRunes := []rune(" 1234.56+  ")
+	startIndex := 8
+
+	foundTrailingNumSign :=
+		nSignCollection.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundTrailingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundTrailingNumSign == 'true'\n"+
+			"Instead foundTrailingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[2].trailingNumSignFoundIndex != startIndex {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[2].trailingNumSignFoundIndex == '%v'\n"+
+			"Instead, nSignCollection.numSignSymbols[2].trailingNumSignFoundIndex == '%v'\n",
+			ePrefix,
+			startIndex,
+			nSignCollection.numSignSymbols[2].trailingNumSignFoundIndex)
+
+		return
+	}
+
+	if nSignCollection.numSignSymbols[2].trailingNumSignFoundInNumber != true {
+		t.Errorf("%v - Error\n"+
+			"Expected nSignCollection.numSignSymbols[2].trailingNumSignFoundInNumber == 'true'\n"+
+			"Instead, nSignCollection.numSignSymbols[2].trailingNumSignFoundInNumber == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == false {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'true'\n"+
+			"Instead foundNumberSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	numSignCharStr := string(numSignSymbol.GetTrailingNumSignChars())
+
+	if numSignCharStr != "+" {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignCharStr == '+'\n"+
+			"Instead numSignCharStr == '%v'\n",
+			ePrefix,
+			numSignCharStr)
+
+		return
+	}
+
+	if collectionIndex != 2 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '2'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000200"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                             1
+	//                   01234567890
+	hostRunes := []rune(" 1234.56+  ")
+	startIndex := 7
+
+	foundTrailingNumSign :=
+		nSignCollection.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if foundTrailingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundTrailingNumSign == 'false'\n"+
+			"Instead foundTrailingNumSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == true {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'false'\n"+
+			"Instead foundNumberSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if numSignSymbol.IsEmpty() == false {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignSymbol.IsEmpty() == 'true'\n"+
+			"Instead numSignSymbol.IsEmpty() == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if collectionIndex != -1 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '-1'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000300(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000300"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                             1
+	//                   01234567890
+	hostRunes := []rune(" 1234.56+  ")
+	startIndex := 9
+
+	foundTrailingNumSign :=
+		nSignCollection.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if foundTrailingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundTrailingNumSign == 'false'\n"+
+			"Instead foundTrailingNumSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == true {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'false'\n"+
+			"Instead foundNumberSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if numSignSymbol.IsEmpty() == false {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignSymbol.IsEmpty() == 'true'\n"+
+			"Instead numSignSymbol.IsEmpty() == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if collectionIndex != -1 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '-1'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000400(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000400"
+
+	nSignCollection := NumberSignSymbolCollection{}
+
+	//                             1
+	//                   01234567890
+	hostRunes := []rune(" 1234.56+  ")
+	startIndex := 8
+
+	foundTrailingNumSign :=
+		nSignCollection.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if foundTrailingNumSign {
+		t.Errorf("%v - Error\n"+
+			"Expected foundTrailingNumSign == 'false'\n"+
+			"Instead foundTrailingNumSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == true {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'false'\n"+
+			"Instead foundNumberSign == 'true'\n",
+			ePrefix)
+
+		return
+	}
+
+	if numSignSymbol.IsEmpty() == false {
+		t.Errorf("%v - Error\n"+
+			"Expected numSignSymbol.IsEmpty() == 'true'\n"+
+			"Instead numSignSymbol.IsEmpty() == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	if collectionIndex != -1 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '-1'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000500(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000500"
+
+	nSignCollection := NumberSignSymbolCollection{}
+	var err error
+
+	// Index = 0
+	err =
+		nSignCollection.AddNewSymbol(
+			"+",
+			"",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 1
+	err =
+		nSignCollection.AddNewSymbol(
+			"-",
+			"",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 2
+	err =
+		nSignCollection.AddNewSymbol(
+			"(",
+			")",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 3
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"+",
+			false,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	// Index = 5
+	err =
+		nSignCollection.AddNewSymbol(
+			"",
+			"-",
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+		return
+	}
+
+	//                             11
+	//                   012345678901
+	hostRunes := []rune(" (1234.56)  ")
+	startIndex := 1
+
+	foundLeadingNumSign :=
+		nSignCollection.IsLeadingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundLeadingNumSign {
+		t.Errorf("%v - Error\n"+
+			"nSignCollection.IsLeadingNumSignAtHostIndex()\n"+
+			"Expected foundLeadingNumSign == 'true'\n"+
+			"Instead foundLeadingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	startIndex = 9
+
+	foundTrailingNumSign :=
+		nSignCollection.IsTrailingNumSignAtHostIndex(
+			hostRunes,
+			startIndex)
+
+	if !foundTrailingNumSign {
+		t.Errorf("%v - Error\n"+
+			"nSignCollection.IsTrailingNumSignAtHostIndex()\n"+
+			"Expected foundTrailingNumSign == 'true'\n"+
+			"Instead foundTrailingNumSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	foundNumberSign,
+		numSignSymbol,
+		collectionIndex :=
+		nSignCollection.GetFoundNumberSignSymbol()
+
+	if foundNumberSign == false {
+		t.Errorf("%v - Error\n"+
+			"Expected foundNumberSign == 'true'\n"+
+			"Instead foundNumberSign == 'false'\n",
+			ePrefix)
+
+		return
+	}
+
+	numSignCharStr := string(numSignSymbol.GetLeadingNumSignChars())
+
+	if numSignCharStr != "(" {
+		t.Errorf("%v - Error\n"+
+			"Expected Leading numSignCharStr == '('\n"+
+			"Instead Leading numSignCharStr == '%v'\n",
+			ePrefix,
+			numSignCharStr)
+
+		return
+	}
+
+	numSignCharStr = string(numSignSymbol.GetTrailingNumSignChars())
+
+	if numSignCharStr != ")" {
+		t.Errorf("%v - Error\n"+
+			"Expected Trailing numSignCharStr == ')'\n"+
+			"Instead Trailing numSignCharStr == '%v'\n",
+			ePrefix,
+			numSignCharStr)
+
+		return
+	}
+
+	if collectionIndex != 2 {
+		t.Errorf("%v - Error\n"+
+			"Expected collectionIndex == '2'\n"+
+			"Instead collectionIndex == '%v'\n",
+			ePrefix,
+			collectionIndex)
+
+		return
+	}
 }

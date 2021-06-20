@@ -521,9 +521,22 @@ func (numSignSymCol *NumberSignSymbolCollection) GetCollectionLength() int {
 //       populated with a deep copy of that NumberSignSymbolDto
 //       object.
 //
+//
+//  collectionIndex     int
+//     - If one of the number sign symbols currently residing in
+//       this collection of NumberSignSymbolDto objects was located
+//       in the host runes array, this return parameter will be set
+//       to the index of the collection array from which the returned
+//       number sign symbol (numSignSymbol) was copied.
+//
+//       If none of the number sign symbols in the NumberSignSymbolDto
+//       collection was located in the host rune array (foundNumberSign
+//       == false), this parameter is set to -1.
+//
 func (numSignSymCol *NumberSignSymbolCollection) GetFoundNumberSignSymbol() (
 	foundNumberSign bool,
-	numSignSymbol NumberSignSymbolDto) {
+	numSignSymbol NumberSignSymbolDto,
+	collectionIndex int) {
 
 	if numSignSymCol.lock == nil {
 		numSignSymCol.lock = new(sync.Mutex)
@@ -533,10 +546,10 @@ func (numSignSymCol *NumberSignSymbolCollection) GetFoundNumberSignSymbol() (
 
 	defer numSignSymCol.lock.Unlock()
 
-	var foundNumberSignIndex int
+	collectionIndex = -1
 
 	foundNumberSign,
-		foundNumberSignIndex =
+		collectionIndex =
 		numberSignSymbolCollectionAtom{}.ptr().
 			getLeadingNSignSymbolFound(
 				numSignSymCol.numSignSymbols)
@@ -544,14 +557,14 @@ func (numSignSymCol *NumberSignSymbolCollection) GetFoundNumberSignSymbol() (
 	if foundNumberSign {
 		_ =
 			numSignSymbol.CopyIn(
-				&numSignSymCol.numSignSymbols[foundNumberSignIndex],
+				&numSignSymCol.numSignSymbols[collectionIndex],
 				nil)
 
-		return foundNumberSign, numSignSymbol
+		return foundNumberSign, numSignSymbol, collectionIndex
 	}
 
 	foundNumberSign,
-		foundNumberSignIndex =
+		collectionIndex =
 		numberSignSymbolCollectionAtom{}.ptr().
 			getTrailingNSignSymbolFound(
 				numSignSymCol.numSignSymbols)
@@ -559,11 +572,13 @@ func (numSignSymCol *NumberSignSymbolCollection) GetFoundNumberSignSymbol() (
 	if foundNumberSign {
 		_ =
 			numSignSymbol.CopyIn(
-				&numSignSymCol.numSignSymbols[foundNumberSignIndex],
+				&numSignSymCol.numSignSymbols[collectionIndex],
 				nil)
+
+		return foundNumberSign, numSignSymbol, collectionIndex
 	}
 
-	return foundNumberSign, numSignSymbol
+	return foundNumberSign, numSignSymbol, collectionIndex
 }
 
 // IsCollectionEmpty - Returns 'true' if the collection of

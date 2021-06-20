@@ -16,6 +16,18 @@
 --- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300 (0.00s)
 === RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400
 --- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000500
+--- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000500 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000100
+--- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000100 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000200
+--- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000200 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000300
+--- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000300 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000400
+--- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000400 (0.00s)
+=== RUN   TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000500
+--- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000500 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200
@@ -759,7 +771,7 @@
 === RUN   TestStrMech_ReplaceBytes_03
 --- PASS: TestStrMech_ReplaceBytes_03 (0.00s)
 === RUN   TestStrMech_ReplaceBytes_04
---- PASS: TestStrMech_ReplaceBytes_04 (0.00s)
+--- PASS: TestStrMech_ReplaceBytes_04 (0.01s)
 === RUN   TestStrMech_ReplaceBytes_05
 --- PASS: TestStrMech_ReplaceBytes_05 (0.00s)
 === RUN   TestStrMech_ReplaceBytes_06
@@ -1063,5 +1075,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 84.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.093s
+coverage: 86.4% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.343s
