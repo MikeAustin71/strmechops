@@ -595,6 +595,103 @@ func TestNumberSignSymbolDto_New_000700(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_NewDefaultPositive_000100(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_NewDefaultPositive_000100()"
+
+	newNSignSymOne := NumberSignSymbolDto{}.NewDefaultPositive()
+
+	if newNSignSymOne.numSymbolDisplayMode !=
+		NSignSymDisplayMode.Implicit() {
+		t.Errorf("Error:\n"+
+			"Expected newNSignSymOne.numSymbolDisplayMode ==\n"+
+			"NSignSymDisplayMode.Implicit()\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"newNSignSymOne.numSymbolDisplayMode=='%v'\n"+
+			"newNSignSymOne.numSymbolDisplayMode integer value='%v'\n",
+			newNSignSymOne.numSymbolDisplayMode.String(),
+			newNSignSymOne.numSymbolDisplayMode.XValueInt())
+
+		return
+	}
+
+	strLeadingChars :=
+		string(newNSignSymOne.GetLeadingNumSignChars())
+
+	if strLeadingChars != "+" {
+		t.Errorf("Error:\n"+
+			"Expected Leading Number Sign Chars=='+'\n"+
+			"Instead, Leading Number Sign Chars=='%v'\n",
+			strLeadingChars)
+
+		return
+	}
+
+	err := newNSignSymOne.IsValidInstanceError(ePrefix)
+
+	if err != nil {
+		t.Errorf("Error returned by IsValidInstanceError(nil)\n"+
+			"Error='%v'\n", err.Error())
+
+		return
+	}
+
+}
+
+func TestNumberSignSymbolDto_NewDefaultPositive_000200(t *testing.T) {
+
+	ePrefix := "TestNumberSignSymbolDto_NewDefaultPositive_000200()"
+
+	newNSignSymOne := NumberSignSymbolDto{}.NewDefaultPositive()
+
+	if newNSignSymOne.numSymbolDisplayMode !=
+		NSignSymDisplayMode.Implicit() {
+		t.Errorf("Error:\n"+
+			"Expected newNSignSymOne.numSymbolDisplayMode ==\n"+
+			"NSignSymDisplayMode.Implicit()\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"newNSignSymOne.numSymbolDisplayMode=='%v'\n"+
+			"newNSignSymOne.numSymbolDisplayMode integer value='%v'\n",
+			newNSignSymOne.numSymbolDisplayMode.String(),
+			newNSignSymOne.numSymbolDisplayMode.XValueInt())
+
+		return
+	}
+
+	err := newNSignSymOne.IsValidInstanceError(ePrefix)
+
+	if err != nil {
+		t.Errorf("Error returned by IsValidInstanceError(nil)\n"+
+			"Error='%v'\n", err.Error())
+		return
+	}
+
+	var newNSignSymTwo NumberSignSymbolDto
+
+	newNSignSymTwo,
+		err = NumberSignSymbolDto{}.New(
+		"",
+		"-",
+		true,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("Error returned by NumberSignSymbolDto{}.New()\n"+
+			"Error='%v'\n", err.Error())
+		return
+	}
+
+	newNSignSymTwo.SetDefaultPositive()
+
+	if !newNSignSymOne.Equal(&newNSignSymTwo) {
+		t.Error("Error: \n" +
+			"Expected newNSignSymOne == newNSignSymTwo\n" +
+			"HOWEVER, THEY ARE NOT EQUAL!\n")
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_SetNumberSignSymbol_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_New_000100()"
