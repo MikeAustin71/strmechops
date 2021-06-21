@@ -1,6 +1,9 @@
 package strmech
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestNumSignSymbolPosition_XParseString000100(t *testing.T) {
 
@@ -328,6 +331,21 @@ func TestNumSignSymbolPosition_String_000400(t *testing.T) {
 			"Instead, object string value = '%v'\n",
 			actualStr)
 	}
+}
+
+func TestNumSignSymbolPosition_String_000500(t *testing.T) {
+
+	nSgnSymPos := NumSignSymbolPosition(999)
+
+	actualStr := nSgnSymPos.String()
+
+	if !strings.Contains(actualStr, "Error") {
+		t.Error("Error:\n" +
+			"Expected NumSignSymbolPosition(999) to generate\n" +
+			"a string value containing the word 'Error'.\n" +
+			"HOWEVER, NO ERROR WAS DETECTED!\n")
+	}
+
 }
 
 func TestNumSignSymbolPosition_XIsValid_000100(t *testing.T) {
