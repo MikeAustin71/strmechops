@@ -1238,9 +1238,9 @@ func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400(t *testin
 		return
 	}
 
-	if nSignCollection.numSignSymbols[0].numSignPosition != NumSymPos.Before() {
+	if nSignCollection.numSignSymbols[0].numSignPosition != NSignSymPos.Before() {
 		t.Errorf("%v - Error\n"+
-			"Expected nSignCollection.numSignSymbols[0].numSignPosition == NumSymPos.Before()\n"+
+			"Expected nSignCollection.numSignSymbols[0].numSignPosition == NSignSymPos.Before()\n"+
 			"Instead, nSignCollection.numSignSymbols[0].numSignPosition == '%v'\n",
 			ePrefix,
 			nSignCollection.numSignSymbols[0].numSignPosition.String())
@@ -1274,9 +1274,9 @@ func TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400(t *testin
 
 	actualNumSignPos := nSignSymDto.GetNumSignSymPosition()
 
-	if actualNumSignPos != NumSymPos.Before() {
+	if actualNumSignPos != NSignSymPos.Before() {
 		t.Errorf("%v - Error\n"+
-			"Expected actualNumSignPos == NumSymPos.Before()\n"+
+			"Expected actualNumSignPos == NSignSymPos.Before()\n"+
 			"Instead, actualNumSignPos == '%v'\n",
 			ePrefix,
 			actualNumSignPos.String())

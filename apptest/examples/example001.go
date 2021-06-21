@@ -140,9 +140,9 @@ func (mt MainTest) NumSignCollection01() {
 		return
 	}
 
-	if collection[0].GetNumSignSymPosition() != strmech.NumSymPos.Before() {
+	if collection[0].GetNumSignSymPosition() != strmech.NSignSymPos.Before() {
 		str := fmt.Sprintf("%v - Error\n"+
-			"Expected nSignCollection.numSignSymbols[0].numSignPosition == NumSymPos.Before()\n"+
+			"Expected nSignCollection.numSignSymbols[0].numSignPosition == NSignSymPos.Before()\n"+
 			"Instead, nSignCollection.numSignSymbols[0].numSignPosition == '%v'\n",
 			ePrefix,
 			collection[0].GetNumSignSymPosition().String())
@@ -152,7 +152,8 @@ func (mt MainTest) NumSignCollection01() {
 	}
 
 	foundNumberSign,
-		nSignSymDto :=
+		nSignSymDto,
+		_ :=
 		nSignCollection.GetFoundNumberSignSymbol()
 
 	if foundNumberSign != true {
@@ -167,9 +168,9 @@ func (mt MainTest) NumSignCollection01() {
 
 	actualNumSignPos := nSignSymDto.GetNumSignSymPosition()
 
-	if actualNumSignPos != strmech.NumSymPos.Before() {
+	if actualNumSignPos != strmech.NSignSymPos.Before() {
 		str := fmt.Sprintf("%v - Error\n"+
-			"Expected actualNumSignPos == NumSymPos.Before()\n"+
+			"Expected actualNumSignPos == NSignSymPos.Before()\n"+
 			"Instead, actualNumSignPos == '%v'\n",
 			ePrefix,
 			actualNumSignPos.String())

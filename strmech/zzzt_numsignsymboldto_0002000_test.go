@@ -67,10 +67,10 @@ func TestNumberSignSymbolDto_New_000100(t *testing.T) {
 
 	symbolPos := nSignSym.GetNumSignSymPosition()
 
-	if symbolPos != NumSymPos.Before() {
+	if symbolPos != NSignSymPos.Before() {
 		t.Errorf("%v - Error:\n"+
-			"Expected Symbol Position == NumSymPos.Before()\n"+
-			"Symbol Position is NOT EQUAL to NumSymPos.Before()!\n"+
+			"Expected Symbol Position == NSignSymPos.Before()\n"+
+			"Symbol Position is NOT EQUAL to NSignSymPos.Before()!\n"+
 			"Symbol Position string = '%v'\n"+
 			"Symbol Position integer = '%v'\n",
 			ePrefix,
@@ -160,10 +160,10 @@ func TestNumberSignSymbolDto_New_000200(t *testing.T) {
 
 	symbolPos := nSignSym.GetNumSignSymPosition()
 
-	if symbolPos != NumSymPos.Before() {
+	if symbolPos != NSignSymPos.Before() {
 		t.Errorf("%v - Error:\n"+
-			"Expected Symbol Position == NumSymPos.Before()\n"+
-			"Symbol Position is NOT EQUAL to NumSymPos.Before()!\n"+
+			"Expected Symbol Position == NSignSymPos.Before()\n"+
+			"Symbol Position is NOT EQUAL to NSignSymPos.Before()!\n"+
 			"Symbol Position string = '%v'\n"+
 			"Symbol Position integer = '%v'\n",
 			ePrefix,
@@ -290,10 +290,10 @@ func TestNumberSignSymbolDto_New_000300(t *testing.T) {
 
 	symbolPos := nSignSym.GetNumSignSymPosition()
 
-	if symbolPos != NumSymPos.BeforeAndAfter() {
+	if symbolPos != NSignSymPos.BeforeAndAfter() {
 		t.Errorf("%v - Error:\n"+
-			"Expected Symbol Position == NumSymPos.BeforeAndAfter()\n"+
-			"Symbol Position is NOT EQUAL to NumSymPos.BeforeAndAfter()!\n"+
+			"Expected Symbol Position == NSignSymPos.BeforeAndAfter()\n"+
+			"Symbol Position is NOT EQUAL to NSignSymPos.BeforeAndAfter()!\n"+
 			"Symbol Position string = '%v'\n"+
 			"Symbol Position integer = '%v'\n",
 			ePrefix,
@@ -399,10 +399,10 @@ func TestNumberSignSymbolDto_New_000400(t *testing.T) {
 
 	symbolPos := nSignSym.GetNumSignSymPosition()
 
-	if symbolPos != NumSymPos.After() {
+	if symbolPos != NSignSymPos.After() {
 		t.Errorf("%v - Error:\n"+
-			"Expected Symbol Position == NumSymPos.After()\n"+
-			"Symbol Position is NOT EQUAL to NumSymPos.After()!\n"+
+			"Expected Symbol Position == NSignSymPos.After()\n"+
+			"Symbol Position is NOT EQUAL to NSignSymPos.After()!\n"+
 			"Symbol Position string = '%v'\n"+
 			"Symbol Position integer = '%v'\n",
 			ePrefix,
@@ -508,10 +508,10 @@ func TestNumberSignSymbolDto_New_000500(t *testing.T) {
 
 	symbolPos := nSignSym.GetNumSignSymPosition()
 
-	if symbolPos != NumSymPos.After() {
+	if symbolPos != NSignSymPos.After() {
 		t.Errorf("%v - Error:\n"+
-			"Expected Symbol Position == NumSymPos.After()\n"+
-			"Symbol Position is NOT EQUAL to NumSymPos.After()!\n"+
+			"Expected Symbol Position == NSignSymPos.After()\n"+
+			"Symbol Position is NOT EQUAL to NSignSymPos.After()!\n"+
 			"Symbol Position string = '%v'\n"+
 			"Symbol Position integer = '%v'\n",
 			ePrefix,
@@ -666,10 +666,10 @@ func TestNumberSignSymbolDto_SetNumberSignSymbol_000100(t *testing.T) {
 
 	symbolPos := nSignSym.GetNumSignSymPosition()
 
-	if symbolPos != NumSymPos.Before() {
+	if symbolPos != NSignSymPos.Before() {
 		t.Errorf("%v - Error:\n"+
-			"Expected Symbol Position == NumSymPos.Before()\n"+
-			"Symbol Position is NOT EQUAL to NumSymPos.Before()!\n"+
+			"Expected Symbol Position == NSignSymPos.Before()\n"+
+			"Symbol Position is NOT EQUAL to NSignSymPos.Before()!\n"+
 			"Symbol Position string = '%v'\n"+
 			"Symbol Position integer = '%v'\n",
 			ePrefix,

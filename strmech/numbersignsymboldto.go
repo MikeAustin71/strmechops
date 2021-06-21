@@ -857,7 +857,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsTrailingNumSignAtHostIndex(
 		return foundTrailingNumSign
 	}
 
-	if nSignSymbol.numSignPosition == NumSymPos.BeforeAndAfter() &&
+	if nSignSymbol.numSignPosition == NSignSymPos.BeforeAndAfter() &&
 		!nSignSymbol.leadingNumSignFoundInNumber {
 		return foundTrailingNumSign
 	}

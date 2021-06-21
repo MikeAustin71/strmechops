@@ -2853,6 +2853,14 @@ func (sMech StrMech) NewPtr() *StrMech {
 	return &sopsNew
 }
 
+func (sMech *StrMech) NumberStringParser(
+	numStr string,
+	numSignSymbols NumberSignSymbolCollection,
+	decimalSeparator NumericSymbolDto,
+	errorPrefix interface{}) {
+
+}
+
 // Ptr - Returns a pointer to a new instance of
 // StrMech. Useful for cases requiring io.Reader
 // and io.Writer.

@@ -68,7 +68,7 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 //
 //
 // For easy access to these enumeration values, use the global constant
-// 'NumSymPos'. Example: NumSymPos.Before()
+// NSignSymPos. Example: NSignSymPos.Before()
 //
 // Otherwise you will need to use the formal syntax.
 // Example: NumSignSymbolPosition(0).Before()
@@ -180,7 +180,7 @@ func (nSignSymPos NumSignSymbolPosition) String() string {
 //
 //  isValid := numSignSymPos.XIsValid() // isValid == true
 //
-//  numSignSymPos = NumSignSymbolPosition(0).None)
+//  numSignSymPos = NumSignSymbolPosition(0).None()
 //
 //  isValid = numSignSymPos.XIsValid() // isValid == false
 //
@@ -246,6 +246,10 @@ func (nSignSymPos NumSignSymbolPosition) XIsValid() bool {
 // Usage
 //
 // t, err := NumSignSymbolPosition(0).XParseString("Before", true)
+//
+//     t is now equal to NumSignSymbolPosition(0).Before()
+//
+// t, err := NumSignSymbolPosition(0).XParseString("before", false)
 //
 //     t is now equal to NumSignSymbolPosition(0).Before()
 //
@@ -330,16 +334,16 @@ func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 	return int(nSignSymPos)
 }
 
-// NumSymPos - public global constant of type
+// NSignSymPos - public global constant of type
 // NumSignSymbolPosition.
 //
 // This variable serves as an easier, short hand technique for
 // accessing NumSignSymbolPosition values.
 //
 // Usage:
-// NumSymPos.None(),
-// NumSymPos.Before(),
-// NumSymPos.After(),
-// NumSymPos.BeforeAndAfter(),
+// NSignSymPos.None(),
+// NSignSymPos.Before(),
+// NSignSymPos.After(),
+// NSignSymPos.BeforeAndAfter(),
 //
-const NumSymPos = NumSignSymbolPosition(0)
+const NSignSymPos = NumSignSymbolPosition(0)

@@ -961,7 +961,7 @@ func TestNumberSignSymbolDto_Equal_000200(t *testing.T) {
 		return
 	}
 
-	nSignSymTwo.numSignPosition = NumSymPos.After()
+	nSignSymTwo.numSignPosition = NSignSymPos.After()
 
 	if nSignSymTwo.Equal(&nSignSymOne) {
 		t.Errorf("%v - Error:\n"+
@@ -1037,7 +1037,7 @@ func TestNumberSignSymbolDto_Equal_000200(t *testing.T) {
 		return
 	}
 
-	nSignSymTwo.numSignPosition = NumSymPos.BeforeAndAfter()
+	nSignSymTwo.numSignPosition = NSignSymPos.BeforeAndAfter()
 
 	if nSignSymTwo.Equal(&nSignSymOne) {
 		t.Errorf("%v - Error:\n"+

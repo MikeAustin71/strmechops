@@ -100,7 +100,7 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 		lenTrailingNumSignRunes == 0 {
 
 		numSignSymbol.numSignPosition =
-			NumSymPos.Before()
+			NSignSymPos.Before()
 
 		numSignSymbol.leadingNumSignChars =
 			make([]rune, lenLeadingNumSignRunes)
@@ -112,7 +112,7 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 		lenTrailingNumSignRunes > 0 {
 
 		numSignSymbol.numSignPosition =
-			NumSymPos.After()
+			NSignSymPos.After()
 
 		numSignSymbol.trailingNumSignChars =
 			make([]rune, lenTrailingNumSignRunes)
@@ -125,7 +125,7 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 		// lenTrailingNumSignRunes > 0
 
 		numSignSymbol.numSignPosition =
-			NumSymPos.BeforeAndAfter()
+			NSignSymPos.BeforeAndAfter()
 
 		numSignSymbol.leadingNumSignChars =
 			make([]rune, lenLeadingNumSignRunes)

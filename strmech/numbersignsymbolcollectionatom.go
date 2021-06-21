@@ -51,10 +51,10 @@ func (nSignSymColAtom *numberSignSymbolCollectionAtom) getLeadingNSignSymbolFoun
 
 		if nSignSymbols[i].leadingNumSignFoundInNumber &&
 			nSignSymbols[i].leadingNumSignFoundIndex > highestIndex &&
-			(nSignSymbols[i].numSignPosition == NumSymPos.Before() ||
-				nSignSymbols[i].numSignPosition == NumSymPos.BeforeAndAfter()) {
+			(nSignSymbols[i].numSignPosition == NSignSymPos.Before() ||
+				nSignSymbols[i].numSignPosition == NSignSymPos.BeforeAndAfter()) {
 
-			if nSignSymbols[i].numSignPosition == NumSymPos.BeforeAndAfter() &&
+			if nSignSymbols[i].numSignPosition == NSignSymPos.BeforeAndAfter() &&
 				!nSignSymbols[i].trailingNumSignFoundInNumber {
 
 				continue
@@ -114,10 +114,10 @@ func (nSignSymColAtom *numberSignSymbolCollectionAtom) getTrailingNSignSymbolFou
 	for i := 0; i < lenSymCol; i++ {
 
 		if nSignSymbols[i].trailingNumSignFoundInNumber &&
-			(nSignSymbols[i].numSignPosition == NumSymPos.After() ||
-				nSignSymbols[i].numSignPosition == NumSymPos.BeforeAndAfter()) {
+			(nSignSymbols[i].numSignPosition == NSignSymPos.After() ||
+				nSignSymbols[i].numSignPosition == NSignSymPos.BeforeAndAfter()) {
 
-			if nSignSymbols[i].numSignPosition == NumSymPos.BeforeAndAfter() &&
+			if nSignSymbols[i].numSignPosition == NSignSymPos.BeforeAndAfter() &&
 				!nSignSymbols[i].leadingNumSignFoundInNumber {
 
 				continue
