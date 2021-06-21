@@ -552,6 +552,7 @@ func TestNumberSignSymbolDto_New_000600(t *testing.T) {
 		"+",
 		"",
 		false,
+		NSignSymDisplayMode.Explicit(),
 		&ePrefix)
 
 	if err == nil {
@@ -580,6 +581,7 @@ func TestNumberSignSymbolDto_New_000700(t *testing.T) {
 		"",
 		"",
 		false,
+		NSignSymDisplayMode.Explicit(),
 		&ePrefix)
 
 	if err == nil {
