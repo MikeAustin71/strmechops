@@ -50,6 +50,7 @@ type NumberSignSymbolDto struct {
 	numSignPosition              NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
 	numSignValueType             NumericSignValueType  // Must be positive or negative
 	numSymbolClass               NumericSymbolClass    // Always NumericSymbolClass(0).NumberSign()
+	numSymbolDisplayMode         NumSignSymbolDisplayMode
 	lock                         *sync.Mutex
 }
 
@@ -417,6 +418,46 @@ func (nSignSymbol *NumberSignSymbolDto) EqualNumberSignRunes(
 
 }
 
+// GetNumSignSymDisplayMode - Returns the current value of the
+// Number Sign Symbol Display Mode for the current
+// NumberSignSymbolDto instance.
+//
+// Number Sign Symbols displayed in a number string can either be
+// 'Explicit' or 'Implicit'.
+//
+// Explicit Number Sign Symbols are created and explicitly
+// displayed within the number string using number sign
+// characters (plus or minus). Explicit Number Sign Symbols
+// are ALWAYS visible and displayed within number strings.
+//       Example: '+123', '-123'.
+//
+// Implicit Number Sign Symbols are NOT visible or displayed in a
+// number string. Instead, the Number Sign Symbol is assumed or
+// implied. Implicit Number Sign Symbols are NEVER visible or
+// or displayed within number strings.
+//      Example: '123' is assumed to be a positive value. The
+//               plus sign is implied or 'implicit'.
+//
+// This method will return an enumeration type which is set to one
+// of the following three values:
+//
+//   NumSignSymbolDisplayMode(0).None()
+//   NumSignSymbolDisplayMode(0).Explicit()
+//   NumSignSymbolDisplayMode(0).Implicit()
+//
+func (nSignSymbol *NumberSignSymbolDto) GetNumSignSymDisplayMode() NumSignSymbolDisplayMode {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	return nSignSymbol.numSymbolDisplayMode
+}
+
 // GetLeadingNumSignChars - Returns a deep copy of the leading
 // number sign characters contained in this instance of
 // NumberSignSymbolDto.
@@ -661,7 +702,9 @@ func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
 	defer nSignSymbol.lock.Unlock()
 
 	if len(nSignSymbol.leadingNumSignChars) == 0 &&
-		len(nSignSymbol.trailingNumSignChars) == 0 {
+		len(nSignSymbol.trailingNumSignChars) == 0 &&
+		nSignSymbol.numSymbolDisplayMode !=
+			NumSignSymbolDisplayMode(0).Implicit() {
 		return true
 	}
 
@@ -1050,12 +1093,37 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 // above, the USA uses opening and closing parentheses to designate
 // a negative number "(55)".
 //
-// Generally, number signs consist of a single text character (like
-// '+' or '-'), however there may be cases where multiple
-// characters are used to designate positive or negative values.
+// Number Sign Symbols displayed in a number string can either be
+// 'Explicit' or 'Implicit'.
 //
-// All of these national or cultural number sign styles are
-// supported by the type, NumberSignSymbolDto.
+// Explicit Number Sign Symbols are created and explicitly
+// displayed within the number string using number sign
+// characters (plus or minus). Explicit Number Sign Symbols
+// are ALWAYS visible and displayed within number strings.
+//       Example: '+123', '-123'.
+//
+// This method will generate an 'Explicit' Number Sign Symbol.
+//
+// Implicit Number Sign Symbols are NOT visible or displayed in a
+// number string. Instead, the Number Sign Symbol is assumed or
+// implied. Implicit Number Sign Symbols are NEVER visible or
+// or displayed within number strings.
+//      Example: '123' is assumed to be a positive value. The
+//               plus sign is implied or 'implicit'.
+//
+// To generate an 'Implicit' Number Sign Symbol, use one of the
+// following methods:
+//   NumberSignSymbolDto.NewDefaultPositive()
+//   NewDefaultPositive.SetDefaultPositive()
+//
+// Generally, number signs consist of a single text character or
+// symbol (like '+' or '-'). However, depending on national,
+// cultural or language factors, there may be cases where multiple
+// characters are used to designate positive or negative numeric
+// values.
+//
+// All national or cultural number sign styles are supported by the
+// NumberSignSymbolDto type.
 //
 // ------------------------------------------------------------------------
 //
@@ -1183,9 +1251,133 @@ func (nSignSymbol NumberSignSymbolDto) New(
 			leadingNumberSign,
 			trailingNumberSign,
 			isNegativeValue,
+			NumSignSymbolDisplayMode(0).Explicit(),
 			ePrefix)
 
 	return newNumSignSym, err
+}
+
+// NewDefaultPositive - Creates and returns a new instance of
+// NumberSignSymbolDto configured as an implicit, positive number
+// sign symbol.
+//
+// Number Sign Symbols displayed in a number string can either be
+// 'Explicit' or 'Implicit'.
+//
+// Explicit Number Sign Symbols are created and explicitly
+// displayed within the number string using number sign
+// characters (plus or minus). Explicit Number Sign Symbols
+// are ALWAYS visible and displayed within number strings.
+//       Example: '+123', '-123'.
+//
+// To generate an 'Explicit' Number Sign Symbol, use one of the
+// following methods:
+//   NumberSignSymbolDto.New()
+//   NumberSignSymbolDto.SetNumberSignSymbol()
+//
+// Implicit Number Sign Symbols are NOT visible or displayed in a
+// number string. Instead, the Number Sign Symbol is assumed or
+// implied. Implicit Number Sign Symbols are NEVER visible or
+// or displayed within number strings.
+//      Example: '123' is assumed to be a positive value. The
+//               plus sign is implied or 'implicit'.
+//
+// This method will return a default positive Number Sign Symbol
+// with an 'implicit' display mode.
+//
+func (nSignSymbol NumberSignSymbolDto) NewDefaultPositive() NumberSignSymbolDto {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	newNumSignSym := NumberSignSymbolDto{}
+
+	_ = numberSignSymbolDtoMechanics{}.ptr().
+		setNumberSignSymbol(
+			&newNumSignSym,
+			"+",
+			"",
+			false,
+			NumSignSymbolDisplayMode(0).Implicit(),
+			nil)
+
+	return newNumSignSym
+}
+
+// SetDefaultPositive - Resets the internal data values for the
+// current instance of NumberSignSymbolDto. The new data values
+// will be automatically generated to configure the current
+// NumberSignSymbolDto instance as a default, positive Number Sign
+// Symbol.
+//
+// Number Sign Symbols displayed in a number string can either be
+// 'Explicit' or 'Implicit'.
+//
+// Explicit Number Sign Symbols are created and explicitly
+// displayed within the number string using number sign
+// characters (plus or minus). Explicit Number Sign Symbols
+// are ALWAYS visible and displayed within number strings.
+//       Example: '+123', '-123'.
+//
+// To generate an 'Explicit' Number Sign Symbol, use one of the
+// following methods:
+//   NumberSignSymbolDto.New()
+//   NumberSignSymbolDto.SetNumberSignSymbol()
+//
+// Implicit Number Sign Symbols are NOT visible or displayed in a
+// number string. Instead, the Number Sign Symbol is assumed or
+// implied. Implicit Number Sign Symbols are NEVER visible or
+// or displayed within number strings.
+//      Example: '123' is assumed to be a positive value. The
+//               plus sign is implied or 'implicit'.
+//
+// This method will return a default positive Number Sign Symbol
+// with an 'Implicit' display mode.
+//
+// IMPORTANT
+//
+// If this method completes successfully, all data values in the
+// current NumberSignSymbolDto instance will be deleted and
+// overwritten.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
+
+	if nSignSymbol.lock == nil {
+		nSignSymbol.lock = new(sync.Mutex)
+	}
+
+	nSignSymbol.lock.Lock()
+
+	defer nSignSymbol.lock.Unlock()
+
+	_ = numberSignSymbolDtoMechanics{}.ptr().
+		setNumberSignSymbol(
+			nSignSymbol,
+			"+",
+			"",
+			false,
+			NumSignSymbolDisplayMode(0).Implicit(),
+			nil)
+
+	return
 }
 
 // SetNumberSignSymbol - Resets the internal data values for the
@@ -1211,12 +1403,37 @@ func (nSignSymbol NumberSignSymbolDto) New(
 // above, the USA uses opening and closing parentheses to designate
 // a negative number "(55)".
 //
-// Generally, number signs consist of a single text character (like
-// '+' or '-'), however there may be cases where multiple
-// characters are used to designate positive or negative values.
+// Number Sign Symbols displayed in a number string can either be
+// 'Explicit' or 'Implicit'.
 //
-// All of these national or cultural number sign styles are
-// supported by the type, NumberSignSymbolDto.
+// Explicit Number Sign Symbols are created and explicitly
+// displayed within the number string using number sign
+// characters (plus or minus). Explicit Number Sign Symbols
+// are ALWAYS visible and displayed within number strings.
+//       Example: '+123', '-123'.
+//
+// This method will generate an 'Explicit' Number Sign Symbol.
+//
+// Implicit Number Sign Symbols are NOT visible or displayed in a
+// number string. Instead, the Number Sign Symbol is assumed or
+// implied. Implicit Number Sign Symbols are NEVER visible or
+// or displayed within number strings.
+//      Example: '123' is assumed to be a positive value. The
+//               plus sign is implied or 'implicit'.
+//
+// To generate an 'Implicit' Number Sign Symbol, use one of the
+// following methods:
+//   NumberSignSymbolDto.NewDefaultPositive()
+//   NewDefaultPositive.SetDefaultPositive()
+//
+// Generally, number signs consist of a single text character or
+// symbol (like '+' or '-'). However, depending on national,
+// cultural or language factors, there may be cases where multiple
+// characters are used to designate positive or negative numeric
+// values.
+//
+// All national or cultural number sign styles are supported by the
+// NumberSignSymbolDto type.
 //
 // IMPORTANT
 //
@@ -1350,6 +1567,7 @@ func (nSignSymbol *NumberSignSymbolDto) SetNumberSignSymbol(
 			leadingNumberSign,
 			trailingNumberSign,
 			isNegativeValue,
+			NumSignSymbolDisplayMode(0).Explicit(),
 			ePrefix)
 
 	return err

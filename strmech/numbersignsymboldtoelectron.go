@@ -56,6 +56,7 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) emptyNumSignSymbol(
 	numSignSymbol.numSignPosition = NumSignSymbolPosition(0).None()
 	numSignSymbol.numSignValueType = NumericSignValueType(0).None()
 	numSignSymbol.numSymbolClass = NumericSymbolClass(0).None()
+	numSignSymbol.numSymbolDisplayMode = NumSignSymbolDisplayMode(0).None()
 
 	return nil
 }
@@ -137,54 +138,63 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) equalNumSignSymbolObjects(
 
 	sMechPreon := strMechPreon{}
 
+	areEqual = false
+
 	if !sMechPreon.equalRuneArrays(
 		numSignSymbolOne.leadingNumSignChars,
 		numSignSymbolTwo.leadingNumSignChars) {
-		return false
+		return areEqual
 	}
 
 	if !sMechPreon.equalRuneArrays(
 		numSignSymbolOne.trailingNumSignChars,
 		numSignSymbolTwo.trailingNumSignChars) {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.leadingNumSignFoundInNumber !=
 		numSignSymbolTwo.leadingNumSignFoundInNumber {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.trailingNumSignFoundInNumber !=
 		numSignSymbolTwo.trailingNumSignFoundInNumber {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.leadingNumSignFoundIndex !=
 		numSignSymbolTwo.leadingNumSignFoundIndex {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.trailingNumSignFoundIndex !=
 		numSignSymbolTwo.trailingNumSignFoundIndex {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.numSignPosition !=
 		numSignSymbolTwo.numSignPosition {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.numSignValueType !=
 		numSignSymbolTwo.numSignValueType {
-		return false
+		return areEqual
 	}
 
 	if numSignSymbolOne.numSymbolClass !=
 		numSignSymbolTwo.numSymbolClass {
-		return false
+		return areEqual
 	}
 
-	return true
+	if numSignSymbolOne.numSymbolDisplayMode !=
+		numSignSymbolTwo.numSymbolDisplayMode {
+		return areEqual
+	}
+
+	areEqual = true
+
+	return areEqual
 }
 
 // ptr - Returns a pointer to a new instance of
@@ -314,6 +324,20 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) testValidityOfNumSignSymbol
 		return isValid, err
 	}
 
+	if !numSignSymbol.numSignPosition.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"The Number Sign Position for this NumberSignSymbolDto object\n"+
+			"is invalid!\n"+
+			"Number Sign Position='%v'\n"+
+			"Number Sign Position Integer Value='%v'\n",
+			ePrefix.String(),
+			numSignSymbol.numSignPosition.String(),
+			numSignSymbol.numSignPosition.XValueInt())
+
+		return isValid, err
+	}
+
 	if !numSignSymbol.numSignValueType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
@@ -330,16 +354,16 @@ func (nSignSymElectron *numberSignSymbolDtoElectron) testValidityOfNumSignSymbol
 
 	numSignSymbol.numSymbolClass = NumericSymbolClass(0).NumberSign()
 
-	if !numSignSymbol.numSignPosition.XIsValid() {
+	if !numSignSymbol.numSymbolDisplayMode.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
-			"The Number Sign Position for this NumberSignSymbolDto object\n"+
-			"is invalid!\n"+
-			"Number Sign Position='%v'\n"+
-			"Number Sign Position Integer Value='%v'\n",
+			"The Number Sign Symbol Display Mode for this NumberSignSymbolDto\n"+
+			"object is invalid!\n"+
+			"Number Sign Symbol Display Mode='%v'\n"+
+			"Number Sign Symbol Display Mode Integer Value='%v'\n",
 			ePrefix.String(),
-			numSignSymbol.numSignPosition.String(),
-			numSignSymbol.numSignPosition.XValueInt())
+			numSignSymbol.numSymbolDisplayMode.String(),
+			numSignSymbol.numSymbolDisplayMode.XValueInt())
 
 		return isValid, err
 	}

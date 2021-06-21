@@ -39,6 +39,7 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 	leadingNumberSign string,
 	trailingNumberSign string,
 	isNegativeValue bool,
+	numSymbolDisplayMode NumSignSymbolDisplayMode,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -147,7 +148,11 @@ func (nSignSymMechanics *numberSignSymbolDtoMechanics) setNumberSignSymbol(
 		numSignSymbol.numSignValueType = NumSignVal.Positive()
 	}
 
-	numSignSymbol.numSymbolClass = NumericSymbolClass(0).NumberSign()
+	numSignSymbol.numSymbolClass =
+		NumericSymbolClass(0).NumberSign()
+
+	numSignSymbol.numSymbolDisplayMode =
+		numSymbolDisplayMode
 
 	return err
 }
