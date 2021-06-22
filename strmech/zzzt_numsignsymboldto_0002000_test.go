@@ -692,6 +692,48 @@ func TestNumberSignSymbolDto_NewDefaultPositive_000200(t *testing.T) {
 
 }
 
+func TestNumberSignSymbolDto_SetDefaultPositive_000100(t *testing.T) {
+
+	numSignSymOne := NumberSignSymbolDto{}
+
+	isEmpty := numSignSymOne.IsEmpty()
+
+	if isEmpty == false {
+		t.Error("Error Trial#1 :\n" +
+			"Expected isEmpty == 'true'\n" +
+			"Instead, isEmpty == 'false'\n")
+
+		return
+	}
+
+	numSignSymOne.SetDefaultPositive()
+
+	nSignSymDisplayMode := numSignSymOne.GetNumSignSymDisplayMode()
+
+	if nSignSymDisplayMode != nSignSymDisplayMode.Implicit() {
+		t.Errorf("Error:\n"+
+			"Expected nSignSymDisplayMode == nSignSymDisplayMode.Implicit()\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"nSignSymDisplayMode= '%v'\n"+
+			"nSignSymDisplayMode integer value = '%v'\n",
+			nSignSymDisplayMode.String(),
+			nSignSymDisplayMode.XValueInt())
+
+		return
+	}
+
+	isEmpty = numSignSymOne.IsEmpty()
+
+	if isEmpty == true {
+		t.Error("Error Trial#1 :\n" +
+			"Expected isEmpty == 'false'\n" +
+			"Instead, isEmpty == 'true'\n")
+
+		return
+	}
+
+}
+
 func TestNumberSignSymbolDto_SetNumberSignSymbol_000100(t *testing.T) {
 
 	ePrefix := "TestNumberSignSymbolDto_New_000100()"
