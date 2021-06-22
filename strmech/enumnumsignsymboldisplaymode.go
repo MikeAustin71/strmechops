@@ -52,9 +52,10 @@ var mapNumSignSymbolDisplayModeLwrCaseStringToCode = map[string]NumSignSymbolDis
 // Since the Go Programming Language does not directly support
 // enumerations, the NumSignSymbolDisplayMode type has been adapted
 // to function in a manner similar to classic enumerations.
+//
 // NumSignSymbolDisplayMode is declared as a type 'int'. The method
 // names effectively represent an enumeration of number sign symbol
-// position types. These methods are listed as follows:
+// display modes. These methods are listed as follows:
 //
 //  None           (0) - Signals that the NumSignSymbolDisplayMode
 //                       has not been initialized and therefore
@@ -86,7 +87,7 @@ var mapNumSignSymbolDisplayModeLwrCaseStringToCode = map[string]NumSignSymbolDis
 // completion) may not list the NumSignSymbolDisplayMode methods in
 // alphabetical order. Be advised that all NumSignSymbolDisplayMode
 // methods beginning with 'X', as well as the method 'String()',
-// are utility methods, and NOT part of the enumeration values.
+// are utility methods, and are NOT part of the enumeration values.
 //
 type NumSignSymbolDisplayMode int
 
