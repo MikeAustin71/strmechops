@@ -6,16 +6,16 @@ import (
 	"sync"
 )
 
-type numStrIntSeparatorQuark struct {
+type numberIntSeparatorQuark struct {
 	lock *sync.Mutex
 }
 
 // empty - Deletes and resets the data values for all member
-// variables within a NumStrIntSeparator instance to their
+// variables within a NumberIntSeparator instance to their
 // 'zero' values.
 //
-func (nStrIntSepQuark *numStrIntSeparatorQuark) empty(
-	nStrIntSep *NumStrIntSeparator,
+func (nStrIntSepQuark *numberIntSeparatorQuark) empty(
+	nStrIntSep *NumberIntSeparator,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -32,7 +32,7 @@ func (nStrIntSepQuark *numStrIntSeparatorQuark) empty(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrIntSeparatorQuark.empty()",
+		"numberIntSeparatorQuark.empty()",
 		"")
 
 	if err != nil {
@@ -60,13 +60,13 @@ func (nStrIntSepQuark *numStrIntSeparatorQuark) empty(
 }
 
 // testValidityOfNumStrIntSeparator - Tests the validity of a
-// NumStrIntSeparator instance.
+// NumberIntSeparator instance.
 //
-// If the NumStrIntSeparator instance is judged invalid, this
+// If the NumberIntSeparator instance is judged invalid, this
 // method will return an error and set 'isValid' to false.
 //
-func (nStrIntSepQuark *numStrIntSeparatorQuark) testValidityOfNumStrIntSeparator(
-	nStrIntSep *NumStrIntSeparator,
+func (nStrIntSepQuark *numberIntSeparatorQuark) testValidityOfNumStrIntSeparator(
+	nStrIntSep *NumberIntSeparator,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -84,7 +84,7 @@ func (nStrIntSepQuark *numStrIntSeparatorQuark) testValidityOfNumStrIntSeparator
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numStrIntSeparatorQuark."+
+		"numberIntSeparatorQuark."+
 			"testValidityOfNumStrIntSeparator()",
 		"")
 
@@ -140,8 +140,8 @@ func (nStrIntSepQuark *numStrIntSeparatorQuark) testValidityOfNumStrIntSeparator
 }
 
 // ptr - Returns a pointer to a new instance of
-// numStrIntSeparatorQuark
-func (nStrIntSepQuark numStrIntSeparatorQuark) ptr() *numStrIntSeparatorQuark {
+// numberIntSeparatorQuark
+func (nStrIntSepQuark numberIntSeparatorQuark) ptr() *numberIntSeparatorQuark {
 
 	if nStrIntSepQuark.lock == nil {
 		nStrIntSepQuark.lock = new(sync.Mutex)
@@ -151,7 +151,7 @@ func (nStrIntSepQuark numStrIntSeparatorQuark) ptr() *numStrIntSeparatorQuark {
 
 	defer nStrIntSepQuark.lock.Unlock()
 
-	newIntSepQuark := new(numStrIntSeparatorQuark)
+	newIntSepQuark := new(numberIntSeparatorQuark)
 
 	newIntSepQuark.lock = new(sync.Mutex)
 
