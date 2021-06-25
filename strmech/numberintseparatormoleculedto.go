@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type numberIntSeparatorMolecule struct {
+type numberIntSeparatorDtoMolecule struct {
 	lock *sync.Mutex
 }
 
@@ -20,9 +20,9 @@ type numberIntSeparatorMolecule struct {
 // If input parameter 'incomingNStrIntSeparator' is judged
 // to be invalid, this method will return an error.
 //
-func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyIn(
-	targetNStrIntSeparator *NumberIntSeparator,
-	incomingNStrIntSeparator *NumberIntSeparator,
+func (nStrIntSepMolecule *numberIntSeparatorDtoMolecule) copyIn(
+	targetNStrIntSeparator *NumberIntSeparatorDto,
+	incomingNStrIntSeparator *NumberIntSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -39,7 +39,7 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberIntSeparatorMolecule."+
+		"numberIntSeparatorDtoMolecule."+
 			"copyIn()",
 		"")
 
@@ -66,7 +66,7 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyIn(
 
 	_,
 		err =
-		numberIntSeparatorQuark{}.ptr().
+		numberIntSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				incomingNStrIntSeparator,
 				ePrefix.XCtx(
@@ -112,15 +112,15 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyIn(
 
 // copyOut - Returns a deep copy of input parameter
 // 'numStrIntSeparator' styled as a new instance
-// of NumberIntSeparator.
+// of NumberIntSeparatorDto.
 //
 // If input parameter 'numStrIntSeparator' is judged to be
 // invalid, this method will return an error.
 //
-func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyOut(
-	numStrIntSeparator *NumberIntSeparator,
+func (nStrIntSepMolecule *numberIntSeparatorDtoMolecule) copyOut(
+	numStrIntSeparator *NumberIntSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
-	newNumSrIntSeparator NumberIntSeparator,
+	newNumSrIntSeparator NumberIntSeparatorDto,
 	err error) {
 
 	if nStrIntSepMolecule.lock == nil {
@@ -136,7 +136,7 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberIntSeparatorMolecule."+
+		"numberIntSeparatorDtoMolecule."+
 			"copyOut()",
 		"")
 
@@ -155,7 +155,7 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyOut(
 
 	_,
 		err =
-		numberIntSeparatorQuark{}.ptr().
+		numberIntSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				numStrIntSeparator,
 				ePrefix.XCtx(
@@ -199,7 +199,7 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyOut(
 	return newNumSrIntSeparator, err
 }
 
-// equal - Receives two NumberIntSeparator objects and proceeds to
+// equal - Receives two NumberIntSeparatorDto objects and proceeds to
 // determine whether all data elements in the first object are
 // equal to corresponding data elements in the second object.
 //
@@ -208,18 +208,18 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyOut(
 //
 // Input Parameters
 //
-//  nStrIntSepOne       *NumberIntSeparator
-//     - A pointer to the first NumberIntSeparator object. This
+//  nStrIntSepOne       *NumberIntSeparatorDto
+//     - A pointer to the first NumberIntSeparatorDto object. This
 //       method will compare all data elements in this object to
 //       corresponding data elements in the second
-//       NumberIntSeparator object in order determine equivalency.
+//       NumberIntSeparatorDto object in order determine equivalency.
 //
 //
-//  nStrIntSepTwo       *NumberIntSeparator
-//     - A pointer to the second NumberIntSeparator object. This
+//  nStrIntSepTwo       *NumberIntSeparatorDto
+//     - A pointer to the second NumberIntSeparatorDto object. This
 //       method will compare all data elements in the first
-//       NumberIntSeparator object to corresponding data elements in
-//       this second NumberIntSeparator object in order determine
+//       NumberIntSeparatorDto object to corresponding data elements in
+//       this second NumberIntSeparatorDto object in order determine
 //       equivalency.
 //
 //
@@ -253,9 +253,9 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) copyOut(
 //       detailed error message identifying the unequal elements
 //       will be returned.
 //
-func (nStrIntSepMolecule *numberIntSeparatorMolecule) equal(
-	nStrIntSepOne *NumberIntSeparator,
-	nStrIntSepTwo *NumberIntSeparator,
+func (nStrIntSepMolecule *numberIntSeparatorDtoMolecule) equal(
+	nStrIntSepOne *NumberIntSeparatorDto,
+	nStrIntSepTwo *NumberIntSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isEqual bool,
 	err error) {
@@ -273,7 +273,7 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) equal(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberIntSeparatorMolecule."+
+		"numberIntSeparatorDtoMolecule."+
 			"equal()",
 		"")
 
@@ -413,8 +413,8 @@ func (nStrIntSepMolecule *numberIntSeparatorMolecule) equal(
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberIntSeparatorMolecule.
-func (nStrIntSepMolecule numberIntSeparatorMolecule) ptr() *numberIntSeparatorMolecule {
+// numberIntSeparatorDtoMolecule.
+func (nStrIntSepMolecule numberIntSeparatorDtoMolecule) ptr() *numberIntSeparatorDtoMolecule {
 
 	if nStrIntSepMolecule.lock == nil {
 		nStrIntSepMolecule.lock = new(sync.Mutex)
@@ -424,7 +424,7 @@ func (nStrIntSepMolecule numberIntSeparatorMolecule) ptr() *numberIntSeparatorMo
 
 	defer nStrIntSepMolecule.lock.Unlock()
 
-	newIntSepMolecule := new(numberIntSeparatorMolecule)
+	newIntSepMolecule := new(numberIntSeparatorDtoMolecule)
 
 	newIntSepMolecule.lock = new(sync.Mutex)
 

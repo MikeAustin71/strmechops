@@ -6,4 +6,5 @@ type NumberBuilder struct {
 	decimalSeparator  NumericSymbolDto
 	currencySymbol    NumericSymbolDto
 	numberSignSymbol  NumberSignSymbolDto
+	integerSeparator  NumberIntSeparatorDto
 }

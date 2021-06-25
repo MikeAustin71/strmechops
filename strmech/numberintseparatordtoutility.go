@@ -6,13 +6,13 @@ import (
 	"sync"
 )
 
-type numberIntSeparatorUtility struct {
+type numberIntSeparatorDtoUtility struct {
 	lock *sync.Mutex
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberIntSeparatorUtility.
-func (intSeparatorUtil numberIntSeparatorUtility) ptr() *numberIntSeparatorUtility {
+// numberIntSeparatorDtoUtility.
+func (intSeparatorUtil numberIntSeparatorDtoUtility) ptr() *numberIntSeparatorDtoUtility {
 
 	if intSeparatorUtil.lock == nil {
 		intSeparatorUtil.lock = new(sync.Mutex)
@@ -22,7 +22,7 @@ func (intSeparatorUtil numberIntSeparatorUtility) ptr() *numberIntSeparatorUtili
 
 	defer intSeparatorUtil.lock.Unlock()
 
-	newIntSepUtility := new(numberIntSeparatorUtility)
+	newIntSepUtility := new(numberIntSeparatorDtoUtility)
 
 	newIntSepUtility.lock = new(sync.Mutex)
 
@@ -31,7 +31,7 @@ func (intSeparatorUtil numberIntSeparatorUtility) ptr() *numberIntSeparatorUtili
 
 // setBasic - Overwrites all the member variable data values for
 // the input parameter 'intSep', an instance of type
-// NumberIntSeparator.
+// NumberIntSeparatorDto.
 //
 // This method is intended to configure a basic or simple integer
 // separator object using default values and a minimum number of
@@ -60,8 +60,8 @@ func (intSeparatorUtil numberIntSeparatorUtility) ptr() *numberIntSeparatorUtili
 //
 // Input Parameters
 //
-//  intSep                     *NumberIntSeparator
-//     - A pointer to an instance of NumberIntSeparator. All of
+//  intSep                     *NumberIntSeparatorDto
+//     - A pointer to an instance of NumberIntSeparatorDto. All of
 //       the member variable data values will be overwritten and
 //       reset using the input parameters listed below and default
 //       values.
@@ -102,8 +102,8 @@ func (intSeparatorUtil numberIntSeparatorUtility) ptr() *numberIntSeparatorUtili
 //       'errPrefDto' text will be attached to the beginning of the
 //       error message.
 //
-func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
-	intSep *NumberIntSeparator,
+func (intSeparatorUtil *numberIntSeparatorDtoUtility) setBasic(
+	intSep *NumberIntSeparatorDto,
 	integerDigitsSeparators string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -121,7 +121,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberIntSeparatorUtility."+
+		"numberIntSeparatorDtoUtility."+
 			"setBasic()",
 		"")
 
@@ -148,7 +148,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
 	}
 
 	err =
-		numberIntSeparatorMechanics{}.ptr().
+		numberIntSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				intSep,
 				[]rune(integerDigitsSeparators),
@@ -162,7 +162,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
 
 // setBasicRunes - Overwrites all the member variable data values
 // for the input parameter 'intSep', an instance of type
-// NumberIntSeparator.
+// NumberIntSeparatorDto.
 //
 // This method is intended to configure a basic or simple integer
 // separator object using default values and a minimum number of
@@ -181,7 +181,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
 // 'integerDigitsSeparators'.
 //
 // This method is an alternative to method
-// numberIntSeparatorUtility.setBasic() in that this method accepts
+// numberIntSeparatorDtoUtility.setBasic() in that this method accepts
 // integer separator characters as an array of runes instead
 // of a string.
 //
@@ -195,8 +195,8 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
 //
 // Input Parameters
 //
-//  intSep                     *NumberIntSeparator
-//     - A pointer to an instance of NumberIntSeparator. All of
+//  intSep                     *NumberIntSeparatorDto
+//     - A pointer to an instance of NumberIntSeparatorDto. All of
 //       the member variable data values will be overwritten and
 //       reset using the input parameters listed below and default
 //       values.
@@ -237,8 +237,8 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasic(
 //       'errPrefDto' text will be attached to the beginning of the
 //       error message.
 //
-func (intSeparatorUtil *numberIntSeparatorUtility) setBasicRunes(
-	intSep *NumberIntSeparator,
+func (intSeparatorUtil *numberIntSeparatorDtoUtility) setBasicRunes(
+	intSep *NumberIntSeparatorDto,
 	integerDigitsSeparators []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -256,7 +256,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasicRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberIntSeparatorUtility."+
+		"numberIntSeparatorDtoUtility."+
 			"setBasicRunes()",
 		"")
 
@@ -283,7 +283,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasicRunes(
 	}
 
 	err =
-		numberIntSeparatorMechanics{}.ptr().
+		numberIntSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				intSep,
 				integerDigitsSeparators,
@@ -295,11 +295,11 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasicRunes(
 	return err
 }
 
-// setToUSADefaultsIfEmpty - If any of the NumberIntSeparator data
+// setToUSADefaultsIfEmpty - If any of the NumberIntSeparatorDto data
 // values are zero or invalid, this method will reset ALL data
 // elements to United States default values.
 //
-// If the current NumberIntSeparator instance is valid and
+// If the current NumberIntSeparatorDto instance is valid and
 // populated with data, this method will take no action and exit.
 //
 // United States default numeric separators are listed as follows:
@@ -319,8 +319,8 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasicRunes(
 //
 // Input Parameters
 //
-//  intSep                     *NumberIntSeparator
-//     - A pointer to an instance of NumberIntSeparator. If this
+//  intSep                     *NumberIntSeparatorDto
+//     - A pointer to an instance of NumberIntSeparatorDto. If this
 //       object is invalid or contains zero data values, all
 //       member variable data values will be overwritten and reset
 //       to United States default integer separator values.
@@ -347,8 +347,8 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setBasicRunes(
 //       'errPrefDto' text will be attached to the beginning of the
 //       error message.
 //
-func (intSeparatorUtil *numberIntSeparatorUtility) setToUSADefaultsIfEmpty(
-	intSep *NumberIntSeparator,
+func (intSeparatorUtil *numberIntSeparatorDtoUtility) setToUSADefaultsIfEmpty(
+	intSep *NumberIntSeparatorDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -365,7 +365,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setToUSADefaultsIfEmpty(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"numberIntSeparatorUtility."+
+		"numberIntSeparatorDtoUtility."+
 			"setToUSADefaultsIfEmpty()",
 		"")
 
@@ -383,11 +383,11 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setToUSADefaultsIfEmpty(
 	}
 
 	ePrefix.SetEPrefCtx(
-		"NumberIntSeparator.IsValidInstanceError()",
+		"NumberIntSeparatorDto.IsValidInstanceError()",
 		"Testing Validity of 'intSep'")
 	_,
 		err =
-		numberIntSeparatorQuark{}.ptr().
+		numberIntSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				intSep,
 				ePrefix)
@@ -396,7 +396,7 @@ func (intSeparatorUtil *numberIntSeparatorUtility) setToUSADefaultsIfEmpty(
 		return err
 	}
 
-	err = numberIntSeparatorMechanics{}.ptr().
+	err = numberIntSeparatorDtoMechanics{}.ptr().
 		setToUSADefaults(
 			intSep,
 			ePrefix.XCtx(

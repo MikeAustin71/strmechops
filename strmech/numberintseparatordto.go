@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// NumberIntSeparator is designed to manage integer separators,
+// NumberIntSeparatorDto is designed to manage integer separators,
 // primarily thousands separators, for different countries and
 // cultures.
 //
@@ -26,10 +26,10 @@ import (
 //  https://en.wikipedia.org/wiki/Chinese_numerals
 //  https://en.wikipedia.org/wiki/Decimal_separator
 //
-// The NumberIntSeparator type provides the flexibility necessary
+// The NumberIntSeparatorDto type provides the flexibility necessary
 // to process these complex number separation formats.
 //
-type NumberIntSeparator struct {
+type NumberIntSeparatorDto struct {
 	intSeparatorChars       []rune // A series of runes used to separate integer digits.
 	intSeparatorGrouping    uint   // Number of integer digits in a group
 	intSeparatorRepetitions uint   // Number of times this character/group sequence is repeated
@@ -40,24 +40,24 @@ type NumberIntSeparator struct {
 }
 
 // CopyIn - Copies the data fields from an incoming
-// NumberIntSeparator instance to the data fields of the current
-// NumberIntSeparator instance.
+// NumberIntSeparatorDto instance to the data fields of the current
+// NumberIntSeparatorDto instance.
 //
 // If input parameter 'incomingNStrIntSeparator' is judged to be
 // invalid, this method will return an error.
 //
 // Be advised, all of the data fields in the current
-// NumberIntSeparator instance will be overwritten.
+// NumberIntSeparatorDto instance will be overwritten.
 //
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingNStrIntSeparator     *NumberIntSeparator
-//     - A pointer to an instance of NumberIntSeparator.
+//  incomingNStrIntSeparator     *NumberIntSeparatorDto
+//     - A pointer to an instance of NumberIntSeparatorDto.
 //       The data values in this object will be copied to the
-//       current NumberIntSeparator instance.
+//       current NumberIntSeparatorDto instance.
 //
 //       If input parameter 'incomingNStrIntSeparator' is judged
 //       to be invalid, this method will return an error.
@@ -124,8 +124,8 @@ type NumberIntSeparator struct {
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) CopyIn(
-	incomingNStrIntSeparator *NumberIntSeparator,
+func (nStrIntSep *NumberIntSeparatorDto) CopyIn(
+	incomingNStrIntSeparator *NumberIntSeparatorDto,
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -142,14 +142,14 @@ func (nStrIntSep *NumberIntSeparator) CopyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.CopyIn()",
+		"NumberIntSeparatorDto.CopyIn()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	return numberIntSeparatorMolecule{}.ptr().
+	return numberIntSeparatorDtoMolecule{}.ptr().
 		copyIn(
 			nStrIntSep,
 			incomingNStrIntSeparator,
@@ -157,9 +157,9 @@ func (nStrIntSep *NumberIntSeparator) CopyIn(
 }
 
 // CopyOut - Creates and returns a deep copy of the current
-// NumberIntSeparator instance.
+// NumberIntSeparatorDto instance.
 //
-// If the current NumberIntSeparator instance is judged to be
+// If the current NumberIntSeparatorDto instance is judged to be
 // invalid, this method will return an error.
 //
 //
@@ -217,11 +217,11 @@ func (nStrIntSep *NumberIntSeparator) CopyIn(
 //
 // Return Values
 //
-//  NumberIntSeparator
+//  NumberIntSeparatorDto
 //     - If this method completes successfully, a new instance of
-//       NumberIntSeparator will be created and returned containing
+//       NumberIntSeparatorDto will be created and returned containing
 //       all of the data values copied from the current instance of
-//       NumberIntSeparator.
+//       NumberIntSeparatorDto.
 //
 //
 //  err                 error
@@ -235,9 +235,9 @@ func (nStrIntSep *NumberIntSeparator) CopyIn(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) CopyOut(
+func (nStrIntSep *NumberIntSeparatorDto) CopyOut(
 	errorPrefix interface{}) (
-	NumberIntSeparator,
+	NumberIntSeparatorDto,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -254,31 +254,31 @@ func (nStrIntSep *NumberIntSeparator) CopyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.CopyOut()",
+		"NumberIntSeparatorDto.CopyOut()",
 		"")
 
 	if err != nil {
-		return NumberIntSeparator{}, err
+		return NumberIntSeparatorDto{}, err
 	}
 
-	return numberIntSeparatorMolecule{}.ptr().
+	return numberIntSeparatorDtoMolecule{}.ptr().
 		copyOut(
 			nStrIntSep,
 			ePrefix)
 }
 
 // Empty - Deletes and resets the data values for all member
-// variables within the current NumberIntSeparator instance to
+// variables within the current NumberIntSeparatorDto instance to
 // their 'zero' values.
 //
-func (nStrIntSep *NumberIntSeparator) Empty() {
+func (nStrIntSep *NumberIntSeparatorDto) Empty() {
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
 	}
 
 	nStrIntSep.lock.Lock()
 
-	_ = numberIntSeparatorQuark{}.ptr().empty(
+	_ = numberIntSeparatorDtoQuark{}.ptr().empty(
 		nStrIntSep,
 		nil)
 
@@ -289,20 +289,20 @@ func (nStrIntSep *NumberIntSeparator) Empty() {
 	return
 }
 
-// Equal - Receives an NumberIntSeparator object and proceeds to
+// Equal - Receives an NumberIntSeparatorDto object and proceeds to
 // determine whether all data elements in this object are equal to
 // all corresponding data elements in the current instance of
-// NumberIntSeparator.
+// NumberIntSeparatorDto.
 //
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  nStrIntSepTwo       NumberIntSeparator
+//  nStrIntSepTwo       NumberIntSeparatorDto
 //     - This method will compare all data elements in the current
-//       NumberIntSeparator object to corresponding data elements
-//       in this second NumberIntSeparator object in order
+//       NumberIntSeparatorDto object to corresponding data elements
+//       in this second NumberIntSeparatorDto object in order
 //       determine equivalency.
 //
 //
@@ -357,7 +357,7 @@ func (nStrIntSep *NumberIntSeparator) Empty() {
 // Return Values
 //
 //  bool
-//     - If all the data elements in the current NumberIntSeparator
+//     - If all the data elements in the current NumberIntSeparatorDto
 //       instance are equal to all the corresponding data elements
 //       in 'nStrIntSepTwo', this return parameter will be set to
 //       'true'. If all the data elements are NOT equal, this
@@ -365,7 +365,7 @@ func (nStrIntSep *NumberIntSeparator) Empty() {
 //
 //
 //  error
-//     - If all the data elements in the current NumberIntSeparator
+//     - If all the data elements in the current NumberIntSeparatorDto
 //       are equal to all the corresponding data elements in
 //       'nStrIntSepTwo', this return parameter will be set to
 //       'nil'.
@@ -380,8 +380,8 @@ func (nStrIntSep *NumberIntSeparator) Empty() {
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) Equal(
-	nStrIntSepTwo NumberIntSeparator,
+func (nStrIntSep *NumberIntSeparatorDto) Equal(
+	nStrIntSepTwo NumberIntSeparatorDto,
 	errorPrefix interface{}) (
 	bool,
 	error) {
@@ -400,14 +400,14 @@ func (nStrIntSep *NumberIntSeparator) Equal(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.Equal())",
+		"NumberIntSeparatorDto.Equal())",
 		"")
 
 	if err != nil {
 		return false, err
 	}
 
-	return numberIntSeparatorMolecule{}.ptr().
+	return numberIntSeparatorDtoMolecule{}.ptr().
 		equal(
 			nStrIntSep,
 			&nStrIntSepTwo,
@@ -416,7 +416,7 @@ func (nStrIntSep *NumberIntSeparator) Equal(
 }
 
 // GetIntSeparatorChars - Returns the integer digit separator
-// characters for the current NumberIntSeparator instance as an
+// characters for the current NumberIntSeparatorDto instance as an
 // array of runes.
 //
 // If the rune array is zero length, an error will be returned.
@@ -492,7 +492,7 @@ func (nStrIntSep *NumberIntSeparator) Equal(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) GetIntSeparatorChars(
+func (nStrIntSep *NumberIntSeparatorDto) GetIntSeparatorChars(
 	errorPrefix interface{}) ([]rune, error) {
 
 	if nStrIntSep.lock == nil {
@@ -509,7 +509,7 @@ func (nStrIntSep *NumberIntSeparator) GetIntSeparatorChars(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.GetIntSeparatorChars()",
+		"NumberIntSeparatorDto.GetIntSeparatorChars()",
 		"")
 
 	if err != nil {
@@ -544,7 +544,7 @@ func (nStrIntSep *NumberIntSeparator) GetIntSeparatorChars(
 
 // GetIntSeparatorGrouping - Returns an unsigned integer
 // representing the number of integer digits included in an integer
-// group for the current NumberIntSeparator instance.
+// group for the current NumberIntSeparatorDto instance.
 //
 // This unsigned integer value is used to group integers within a
 // number string.
@@ -560,7 +560,7 @@ func (nStrIntSep *NumberIntSeparator) GetIntSeparatorChars(
 // like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
 // would be formatted like this: 12,3456,7890,2345
 //
-func (nStrIntSep *NumberIntSeparator) GetIntSeparatorGrouping() uint {
+func (nStrIntSep *NumberIntSeparatorDto) GetIntSeparatorGrouping() uint {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -574,14 +574,14 @@ func (nStrIntSep *NumberIntSeparator) GetIntSeparatorGrouping() uint {
 }
 
 // GetIntSeparatorRepetitions - Returns the Integer Separator
-// repetitions specification for the current NumberIntSeparator
+// repetitions specification for the current NumberIntSeparatorDto
 // instance.
 //
 // The returned unsigned integer value specifies the number of
 // times this integer grouping is repeated. A value of zero signals
 // that this integer grouping will be repeated indefinitely.
 //
-func (nStrIntSep *NumberIntSeparator) GetIntSeparatorRepetitions() uint {
+func (nStrIntSep *NumberIntSeparatorDto) GetIntSeparatorRepetitions() uint {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -596,24 +596,24 @@ func (nStrIntSep *NumberIntSeparator) GetIntSeparatorRepetitions() uint {
 
 // GetRestartIntGroupingSequence - Returns the internal member
 // variable 'restartIntGroupingSequence' for the current
-// NumberIntSeparator instance.
+// NumberIntSeparatorDto instance.
 //
-// The NumberIntSeparator type is intended to be configured in an
-// array of NumberIntSeparator objects which, taken as a whole,
+// The NumberIntSeparatorDto type is intended to be configured in an
+// array of NumberIntSeparatorDto objects which, taken as a whole,
 // provides formatting specifications for complex integer group
 // separation operations.
 //
-// If the current NumberIntSeparator is the last element in an
-// array of NumberIntSeparator objects, the 'Restart Integer
+// If the current NumberIntSeparatorDto is the last element in an
+// array of NumberIntSeparatorDto objects, the 'Restart Integer
 // Grouping Sequence' flag signals whether the integer separation
-// operation will be restarted from the first NumberIntSeparator
+// operation will be restarted from the first NumberIntSeparatorDto
 // object in the array.
 //
-// Again, the NumberIntSeparator.restartIntGroupingSequence boolean
-// flag only has meaning if the current NumberIntSeparator object
-// is last element in an array of NumberIntSeparator objects.
+// Again, the NumberIntSeparatorDto.restartIntGroupingSequence boolean
+// flag only has meaning if the current NumberIntSeparatorDto object
+// is last element in an array of NumberIntSeparatorDto objects.
 //
-func (nStrIntSep *NumberIntSeparator) GetRestartIntGroupingSequence() bool {
+func (nStrIntSep *NumberIntSeparatorDto) GetRestartIntGroupingSequence() bool {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -627,7 +627,7 @@ func (nStrIntSep *NumberIntSeparator) GetRestartIntGroupingSequence() bool {
 }
 
 // IsValidInstance - Performs a diagnostic review of the current
-// NumberIntSeparator instance to determine whether the current
+// NumberIntSeparatorDto instance to determine whether the current
 // instance is valid in all respects.
 //
 //
@@ -644,12 +644,12 @@ func (nStrIntSep *NumberIntSeparator) GetRestartIntGroupingSequence() bool {
 //
 //  isValid             bool
 //     - This returned boolean value will signal whether the
-//       current NumberIntSeparator is valid, or not. If the
-//       current NumberIntSeparator contains valid data, this
+//       current NumberIntSeparatorDto is valid, or not. If the
+//       current NumberIntSeparatorDto contains valid data, this
 //       method returns 'true'. If the data is invalid, this method
 //       will return 'false'.
 //
-func (nStrIntSep *NumberIntSeparator) IsValidInstance() (
+func (nStrIntSep *NumberIntSeparatorDto) IsValidInstance() (
 	isValid bool) {
 
 	if nStrIntSep.lock == nil {
@@ -662,7 +662,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstance() (
 
 	isValid,
 		_ =
-		numberIntSeparatorQuark{}.ptr().
+		numberIntSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				nStrIntSep,
 				nil)
@@ -671,7 +671,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstance() (
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the
-// current NumberIntSeparator instance to determine whether the
+// current NumberIntSeparatorDto instance to determine whether the
 // current instance is valid in all respects.
 //
 //
@@ -730,7 +730,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstance() (
 // Return Values
 //
 //  err                 error
-//     - If the current instance of NumberIntSeparator contains
+//     - If the current instance of NumberIntSeparatorDto contains
 //       invalid data, a detailed error message will be returned
 //       identifying the invalid data item.
 //
@@ -744,7 +744,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstance() (
 //       If the current instance is valid, this error parameter
 //       will be set to nil.
 //
-func (nStrIntSep *NumberIntSeparator) IsValidInstanceError(
+func (nStrIntSep *NumberIntSeparatorDto) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
 
@@ -761,7 +761,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.IsValidInstanceError()",
+		"NumberIntSeparatorDto.IsValidInstanceError()",
 		"")
 
 	if err != nil {
@@ -770,7 +770,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstanceError(
 
 	_,
 		err =
-		numberIntSeparatorQuark{}.ptr().
+		numberIntSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				nStrIntSep,
 				ePrefix)
@@ -779,7 +779,7 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstanceError(
 }
 
 // NewBasic - Creates and returns a new instance of
-// NumberIntSeparator. The returned NumberIntSeparator instance
+// NumberIntSeparatorDto. The returned NumberIntSeparatorDto instance
 // represents a basic or simple integer separator object using
 // default values and a minimum number of input parameters.
 //
@@ -864,9 +864,9 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstanceError(
 //
 // Return Values
 //
-//  NumberIntSeparator
+//  NumberIntSeparatorDto
 //     - If this method completes successfully, a new instance of
-//       NumberIntSeparator will be created and returned. The
+//       NumberIntSeparatorDto will be created and returned. The
 //       'integer digits grouping sequence' will be automatically
 //       set to a default value of 3-digits.
 //
@@ -881,10 +881,10 @@ func (nStrIntSep *NumberIntSeparator) IsValidInstanceError(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep NumberIntSeparator) NewBasic(
+func (nStrIntSep NumberIntSeparatorDto) NewBasic(
 	integerDigitsSeparators string,
 	errorPrefix interface{}) (
-	NumberIntSeparator,
+	NumberIntSeparatorDto,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -901,20 +901,20 @@ func (nStrIntSep NumberIntSeparator) NewBasic(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.NewBasic()",
+		"NumberIntSeparatorDto.NewBasic()",
 		"")
 
 	if err != nil {
-		return NumberIntSeparator{}, err
+		return NumberIntSeparatorDto{}, err
 	}
 
 	ePrefix.SetEPref(
-		"NumberIntSeparator.NewBasic()")
+		"NumberIntSeparatorDto.NewBasic()")
 
-	newIntSep := NumberIntSeparator{}
+	newIntSep := NumberIntSeparatorDto{}
 
 	err =
-		numberIntSeparatorUtility{}.ptr().
+		numberIntSeparatorDtoUtility{}.ptr().
 			setBasic(
 				&newIntSep,
 				integerDigitsSeparators,
@@ -925,12 +925,12 @@ func (nStrIntSep NumberIntSeparator) NewBasic(
 }
 
 // NewBasicRunes - Creates and returns a new instance of
-// NumberIntSeparator. The returned NumberIntSeparator instance
+// NumberIntSeparatorDto. The returned NumberIntSeparatorDto instance
 // represents a basic or simple integer separator object using
 // default values and a minimum number of input parameters.
 //
 // This method is an alternative to method
-// NumberIntSeparator.NewBasic() in that this method accepts
+// NumberIntSeparatorDto.NewBasic() in that this method accepts
 // integer separator characters as an array of runes instead
 // of a string.
 //
@@ -1016,9 +1016,9 @@ func (nStrIntSep NumberIntSeparator) NewBasic(
 //
 // Return Values
 //
-//  NumberIntSeparator
+//  NumberIntSeparatorDto
 //     - If this method completes successfully, a new instance of
-//       NumberIntSeparator will be created and returned. The
+//       NumberIntSeparatorDto will be created and returned. The
 //       'integer digits grouping sequence' will be automatically
 //       set to a default value of 3-digits.
 //
@@ -1033,10 +1033,10 @@ func (nStrIntSep NumberIntSeparator) NewBasic(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep NumberIntSeparator) NewBasicRunes(
+func (nStrIntSep NumberIntSeparatorDto) NewBasicRunes(
 	integerDigitsSeparators []rune,
 	errorPrefix interface{}) (
-	NumberIntSeparator,
+	NumberIntSeparatorDto,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -1053,17 +1053,17 @@ func (nStrIntSep NumberIntSeparator) NewBasicRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.NewBasicRunes()",
+		"NumberIntSeparatorDto.NewBasicRunes()",
 		"")
 
 	if err != nil {
-		return NumberIntSeparator{}, err
+		return NumberIntSeparatorDto{}, err
 	}
 
-	newIntSep := NumberIntSeparator{}
+	newIntSep := NumberIntSeparatorDto{}
 
 	err =
-		numberIntSeparatorUtility{}.ptr().
+		numberIntSeparatorDtoUtility{}.ptr().
 			setBasicRunes(
 				&newIntSep,
 				integerDigitsSeparators,
@@ -1074,10 +1074,10 @@ func (nStrIntSep NumberIntSeparator) NewBasicRunes(
 }
 
 // NewDetail - Creates and returns a new instance of
-// NumberIntSeparator. The new instance is generated based on
+// NumberIntSeparatorDto. The new instance is generated based on
 // component elements passed as input parameters.
 //
-// This method differs from NumberIntSeparator.NewDetailRunes() in
+// This method differs from NumberIntSeparatorDto.NewDetailRunes() in
 // that this method accepts a string for input parameter
 // 'intSeparatorChars'.
 //
@@ -1124,19 +1124,19 @@ func (nStrIntSep NumberIntSeparator) NewBasicRunes(
 //
 //
 //  restartIntGroupingSequence bool
-//     - The NumberIntSeparator type is intended to be configured
-//       in an array of NumberIntSeparator objects which, taken as
+//     - The NumberIntSeparatorDto type is intended to be configured
+//       in an array of NumberIntSeparatorDto objects which, taken as
 //       a whole, provides formatting specifications for complex
 //       integer group separation operations.
 //
-//       If the current NumberIntSeparator is the last element in
-//       an array of NumberIntSeparator objects, the 'Restart
+//       If the current NumberIntSeparatorDto is the last element in
+//       an array of NumberIntSeparatorDto objects, the 'Restart
 //       Integer Grouping Sequence' flag signals whether the
 //       integer separation operation will be restarted from the
-//       first NumberIntSeparator object in the array.
+//       first NumberIntSeparatorDto object in the array.
 //
-//       In summary, if the NumberIntSeparator is the last element
-//       in an array of NumberIntSeparator objects, this boolean
+//       In summary, if the NumberIntSeparatorDto is the last element
+//       in an array of NumberIntSeparatorDto objects, this boolean
 //       flag signals whether the entire integer grouping sequence
 //       will be restarted from array element zero.
 //
@@ -1191,10 +1191,10 @@ func (nStrIntSep NumberIntSeparator) NewBasicRunes(
 //
 // Return Values
 //
-//  newIntSep                  NumberIntSeparator
+//  newIntSep                  NumberIntSeparatorDto
 //     - If this method completes successfully, the parameter will
 //       return a new and fully populated instance of
-//       NumberIntSeparator.
+//       NumberIntSeparatorDto.
 //
 //
 //  err                        error
@@ -1208,13 +1208,13 @@ func (nStrIntSep NumberIntSeparator) NewBasicRunes(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep NumberIntSeparator) NewDetail(
+func (nStrIntSep NumberIntSeparatorDto) NewDetail(
 	intSeparatorChars string,
 	intSeparatorGrouping uint,
 	intSeparatorRepetitions uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
-	newIntSep NumberIntSeparator,
+	newIntSep NumberIntSeparatorDto,
 	err error) {
 
 	if nStrIntSep.lock == nil {
@@ -1230,7 +1230,7 @@ func (nStrIntSep NumberIntSeparator) NewDetail(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.NewDetail()",
+		"NumberIntSeparatorDto.NewDetail()",
 		"")
 
 	if err != nil {
@@ -1247,7 +1247,7 @@ func (nStrIntSep NumberIntSeparator) NewDetail(
 	}
 
 	err =
-		numberIntSeparatorMechanics{}.ptr().
+		numberIntSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				&newIntSep,
 				[]rune(intSeparatorChars),
@@ -1260,10 +1260,10 @@ func (nStrIntSep NumberIntSeparator) NewDetail(
 }
 
 // NewDetailRunes - Creates and returns a new instance of
-// NumberIntSeparator. The new instance is generated based on
+// NumberIntSeparatorDto. The new instance is generated based on
 // component elements passed as input parameters.
 //
-// This method differs from NumberIntSeparator.NewDetail() in that
+// This method differs from NumberIntSeparatorDto.NewDetail() in that
 // this method accepts an array of runes for 'intSeparatorChars'.
 //
 //
@@ -1309,19 +1309,19 @@ func (nStrIntSep NumberIntSeparator) NewDetail(
 //
 //
 //  restartIntGroupingSequence bool
-//     - The NumberIntSeparator type is intended to be configured
-//       in an array of NumberIntSeparator objects which, taken as
+//     - The NumberIntSeparatorDto type is intended to be configured
+//       in an array of NumberIntSeparatorDto objects which, taken as
 //       a whole, provides formatting specifications for complex
 //       integer group separation operations.
 //
-//       If the current NumberIntSeparator is the last element in
-//       an array of NumberIntSeparator objects, the 'Restart
+//       If the current NumberIntSeparatorDto is the last element in
+//       an array of NumberIntSeparatorDto objects, the 'Restart
 //       Integer Grouping Sequence' flag signals whether the
 //       integer separation operation will be restarted from the
-//       first NumberIntSeparator object in the array.
+//       first NumberIntSeparatorDto object in the array.
 //
-//       In summary, if the NumberIntSeparator is the last element
-//       in an array of NumberIntSeparator objects, this boolean
+//       In summary, if the NumberIntSeparatorDto is the last element
+//       in an array of NumberIntSeparatorDto objects, this boolean
 //       flag signals whether the entire integer grouping sequence
 //       will be restarted from array element zero.
 //
@@ -1376,10 +1376,10 @@ func (nStrIntSep NumberIntSeparator) NewDetail(
 //
 // Return Values
 //
-//  newIntSep                  NumberIntSeparator
+//  newIntSep                  NumberIntSeparatorDto
 //     - If this method completes successfully, the parameter will
 //       return a new and fully populated instance of
-//       NumberIntSeparator.
+//       NumberIntSeparatorDto.
 //
 //
 //  err                        error
@@ -1393,13 +1393,13 @@ func (nStrIntSep NumberIntSeparator) NewDetail(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep NumberIntSeparator) NewDetailRunes(
+func (nStrIntSep NumberIntSeparatorDto) NewDetailRunes(
 	intSeparatorChars []rune,
 	intSeparatorGrouping uint,
 	intSeparatorRepetitions uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
-	newIntSep NumberIntSeparator,
+	newIntSep NumberIntSeparatorDto,
 	err error) {
 
 	if nStrIntSep.lock == nil {
@@ -1415,7 +1415,7 @@ func (nStrIntSep NumberIntSeparator) NewDetailRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.NewDetail()",
+		"NumberIntSeparatorDto.NewDetail()",
 		"")
 
 	if err != nil {
@@ -1432,7 +1432,7 @@ func (nStrIntSep NumberIntSeparator) NewDetailRunes(
 	}
 
 	err =
-		numberIntSeparatorMechanics{}.ptr().
+		numberIntSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				&newIntSep,
 				intSeparatorChars,
@@ -1445,7 +1445,7 @@ func (nStrIntSep NumberIntSeparator) NewDetailRunes(
 }
 
 // NewUnitedStatesDefaults - Creates and returns a new instance of
-// NumberIntSeparator set to United States default integer
+// NumberIntSeparatorDto set to United States default integer
 // separators. Integer separator values used in the United States
 // consist of the comma character (','), an integer grouping of
 // three ('3') and unlimited repetitions of this sequence.
@@ -1506,9 +1506,9 @@ func (nStrIntSep NumberIntSeparator) NewDetailRunes(
 //
 // -----------------------------------------------------------------
 //
-//  NumberIntSeparator
+//  NumberIntSeparatorDto
 //     - This will return a new and fully populated instance of
-//       NumberIntSeparator configured with United States default
+//       NumberIntSeparatorDto configured with United States default
 //       integer separator values.
 //
 //  error
@@ -1522,9 +1522,9 @@ func (nStrIntSep NumberIntSeparator) NewDetailRunes(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep NumberIntSeparator) NewUnitedStatesDefaults(
+func (nStrIntSep NumberIntSeparatorDto) NewUnitedStatesDefaults(
 	errorPrefix interface{}) (
-	NumberIntSeparator,
+	NumberIntSeparatorDto,
 	error) {
 
 	if nStrIntSep.lock == nil {
@@ -1541,17 +1541,17 @@ func (nStrIntSep NumberIntSeparator) NewUnitedStatesDefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator."+
+		"NumberIntSeparatorDto."+
 			"NewUnitedStatesDefaults()",
 		"")
 
 	if err != nil {
-		return NumberIntSeparator{}, err
+		return NumberIntSeparatorDto{}, err
 	}
 
-	newIntSep := NumberIntSeparator{}
+	newIntSep := NumberIntSeparatorDto{}
 
-	err = numberIntSeparatorMechanics{}.ptr().
+	err = numberIntSeparatorDtoMechanics{}.ptr().
 		setToUSADefaults(
 			&newIntSep,
 			ePrefix.XCtx(
@@ -1561,7 +1561,7 @@ func (nStrIntSep NumberIntSeparator) NewUnitedStatesDefaults(
 }
 
 // NewWithComponents - Creates and returns a new instance of
-// NumberIntSeparator. The new instance is generated based on
+// NumberIntSeparatorDto. The new instance is generated based on
 // component elements passed as input parameters.
 //
 //
@@ -1607,19 +1607,19 @@ func (nStrIntSep NumberIntSeparator) NewUnitedStatesDefaults(
 //
 //
 //  restartIntGroupingSequence bool
-//     - The NumberIntSeparator type is intended to be configured
-//       in an array of NumberIntSeparator objects which, taken as
+//     - The NumberIntSeparatorDto type is intended to be configured
+//       in an array of NumberIntSeparatorDto objects which, taken as
 //       a whole, provides formatting specifications for complex
 //       integer group separation operations.
 //
-//       If the current NumberIntSeparator is the last element in
-//       an array of NumberIntSeparator objects, the 'Restart
+//       If the current NumberIntSeparatorDto is the last element in
+//       an array of NumberIntSeparatorDto objects, the 'Restart
 //       Integer Grouping Sequence' flag signals whether the
 //       integer separation operation will be restarted from the
-//       first NumberIntSeparator object in the array.
+//       first NumberIntSeparatorDto object in the array.
 //
-//       In summary, if the NumberIntSeparator is the last element
-//       in an array of NumberIntSeparator objects, this boolean
+//       In summary, if the NumberIntSeparatorDto is the last element
+//       in an array of NumberIntSeparatorDto objects, this boolean
 //       flag signals whether the entire integer grouping sequence
 //       will be restarted from array element zero.
 //
@@ -1674,10 +1674,10 @@ func (nStrIntSep NumberIntSeparator) NewUnitedStatesDefaults(
 //
 // Return Values
 //
-//  newIntSep                  NumberIntSeparator
+//  newIntSep                  NumberIntSeparatorDto
 //     - If this method completes successfully, the parameter will
 //       return a new and fully populated instance of
-//       NumberIntSeparator.
+//       NumberIntSeparatorDto.
 //
 //
 //  err                        error
@@ -1691,13 +1691,13 @@ func (nStrIntSep NumberIntSeparator) NewUnitedStatesDefaults(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep NumberIntSeparator) NewWithComponents(
+func (nStrIntSep NumberIntSeparatorDto) NewWithComponents(
 	intSeparatorChars []rune,
 	intSeparatorGrouping uint,
 	intSeparatorRepetitions uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
-	newIntSep NumberIntSeparator,
+	newIntSep NumberIntSeparatorDto,
 	err error) {
 
 	if nStrIntSep.lock == nil {
@@ -1713,7 +1713,7 @@ func (nStrIntSep NumberIntSeparator) NewWithComponents(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.NewWithComponents()",
+		"NumberIntSeparatorDto.NewWithComponents()",
 		"")
 
 	if err != nil {
@@ -1721,7 +1721,7 @@ func (nStrIntSep NumberIntSeparator) NewWithComponents(
 	}
 
 	err =
-		numberIntSeparatorMechanics{}.ptr().
+		numberIntSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				&newIntSep,
 				intSeparatorChars,
@@ -1734,7 +1734,7 @@ func (nStrIntSep NumberIntSeparator) NewWithComponents(
 }
 
 // SetBasic - Overwrites all the member variable data values for
-// the current NumberIntSeparator. This method is intended to
+// the current NumberIntSeparatorDto. This method is intended to
 // configure a basic or simple integer separator object using
 // default values and a minimum number of input parameters
 //
@@ -1754,7 +1754,7 @@ func (nStrIntSep NumberIntSeparator) NewWithComponents(
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -1825,9 +1825,9 @@ func (nStrIntSep NumberIntSeparator) NewWithComponents(
 //
 // Return Values
 //
-//  NumberIntSeparator
+//  NumberIntSeparatorDto
 //     - If this method completes successfully, a new instance of
-//       NumberIntSeparator will be created and returned. The
+//       NumberIntSeparatorDto will be created and returned. The
 //       'integer digits grouping sequence' will be automatically
 //       set to a default value of 3-digits.
 //
@@ -1842,7 +1842,7 @@ func (nStrIntSep NumberIntSeparator) NewWithComponents(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetBasic(
+func (nStrIntSep *NumberIntSeparatorDto) SetBasic(
 	integerDigitsSeparators string,
 	errorPrefix interface{}) error {
 
@@ -1860,7 +1860,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasic(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator."+
+		"NumberIntSeparatorDto."+
 			"SetBasicRunes()",
 		"")
 
@@ -1868,7 +1868,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasic(
 		return err
 	}
 
-	return numberIntSeparatorUtility{}.ptr().
+	return numberIntSeparatorDtoUtility{}.ptr().
 		setBasic(
 			nStrIntSep,
 			integerDigitsSeparators,
@@ -1877,7 +1877,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasic(
 }
 
 // SetBasicRunes - Overwrites all the member variable data values for
-// the current NumberIntSeparator. This method is intended to
+// the current NumberIntSeparatorDto. This method is intended to
 // configure a basic or simple integer separator object using
 // default values and a minimum number of input parameters.
 //
@@ -1894,14 +1894,14 @@ func (nStrIntSep *NumberIntSeparator) SetBasic(
 // 'integerDigitsSeparators'.
 //
 // This method is an alternative to method
-// NumberIntSeparator.SetBasic() in that this method accepts
+// NumberIntSeparatorDto.SetBasic() in that this method accepts
 // integer separator characters as an array of runes instead
 // of a string.
 //
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -1972,9 +1972,9 @@ func (nStrIntSep *NumberIntSeparator) SetBasic(
 //
 // Return Values
 //
-//  NumberIntSeparator
+//  NumberIntSeparatorDto
 //     - If this method completes successfully, a new instance of
-//       NumberIntSeparator will be created and returned. The
+//       NumberIntSeparatorDto will be created and returned. The
 //       'integer digits grouping sequence' will be automatically
 //       set to a default value of 3-digits.
 //
@@ -1989,7 +1989,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasic(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetBasicRunes(
+func (nStrIntSep *NumberIntSeparatorDto) SetBasicRunes(
 	integerDigitsSeparators []rune,
 	errorPrefix interface{}) error {
 
@@ -2007,7 +2007,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasicRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator."+
+		"NumberIntSeparatorDto."+
 			"SetBasicRunes()",
 		"")
 
@@ -2015,7 +2015,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasicRunes(
 		return err
 	}
 
-	return numberIntSeparatorUtility{}.ptr().
+	return numberIntSeparatorDtoUtility{}.ptr().
 		setBasicRunes(
 			nStrIntSep,
 			integerDigitsSeparators,
@@ -2025,13 +2025,13 @@ func (nStrIntSep *NumberIntSeparator) SetBasicRunes(
 
 // SetDetail - This method will overwrite and reset the
 // internal member variable data values for the current
-// NumberIntSeparator instance based on the component elements
+// NumberIntSeparatorDto instance based on the component elements
 // passed as input parameters.
 //
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -2075,8 +2075,8 @@ func (nStrIntSep *NumberIntSeparator) SetBasicRunes(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the NumberIntSeparator is the last element in an array
-//       of NumberIntSeparator objects, this boolean flag signals
+//     - If the NumberIntSeparatorDto is the last element in an array
+//       of NumberIntSeparatorDto objects, this boolean flag signals
 //       whether the entire integer grouping sequence will be
 //       restarted from array element zero.
 //
@@ -2142,7 +2142,7 @@ func (nStrIntSep *NumberIntSeparator) SetBasicRunes(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetDetail(
+func (nStrIntSep *NumberIntSeparatorDto) SetDetail(
 	intSeparatorChars string,
 	intSeparatorGrouping uint,
 	intSeparatorRepetitions uint,
@@ -2163,7 +2163,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetail(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator."+
+		"NumberIntSeparatorDto."+
 			"SetDetail()",
 		"")
 
@@ -2178,7 +2178,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetail(
 			ePrefix.String())
 	}
 
-	return numberIntSeparatorMechanics{}.ptr().
+	return numberIntSeparatorDtoMechanics{}.ptr().
 		setWithComponents(
 			nStrIntSep,
 			[]rune(intSeparatorChars),
@@ -2190,16 +2190,16 @@ func (nStrIntSep *NumberIntSeparator) SetDetail(
 
 // SetDetailRunes - This method will overwrite and reset the
 // internal member variable data values for the current
-// NumberIntSeparator instance based on the component elements
+// NumberIntSeparatorDto instance based on the component elements
 // passed as input parameters.
 //
-// This method differs from NumberIntSeparator.SetDetail() in that
+// This method differs from NumberIntSeparatorDto.SetDetail() in that
 // this method accepts an array of runes for 'intSeparatorChars'.
 //
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -2243,8 +2243,8 @@ func (nStrIntSep *NumberIntSeparator) SetDetail(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the NumberIntSeparator is the last element in an array
-//       of NumberIntSeparator objects, this boolean flag signals
+//     - If the NumberIntSeparatorDto is the last element in an array
+//       of NumberIntSeparatorDto objects, this boolean flag signals
 //       whether the entire integer grouping sequence will be
 //       restarted from array element zero.
 //
@@ -2310,7 +2310,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetail(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetDetailRunes(
+func (nStrIntSep *NumberIntSeparatorDto) SetDetailRunes(
 	intSeparatorChars []rune,
 	intSeparatorGrouping uint,
 	intSeparatorRepetitions uint,
@@ -2331,7 +2331,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetailRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.SetDetailRunes()",
+		"NumberIntSeparatorDto.SetDetailRunes()",
 		"")
 
 	if err != nil {
@@ -2345,7 +2345,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetailRunes(
 			ePrefix.String())
 	}
 
-	return numberIntSeparatorMechanics{}.ptr().
+	return numberIntSeparatorDtoMechanics{}.ptr().
 		setWithComponents(
 			nStrIntSep,
 			intSeparatorChars,
@@ -2356,7 +2356,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetailRunes(
 }
 
 // SetIntSeparatorChars - Sets the 'intSeparatorChars' member
-// variable for the current NumberIntSeparator instance.
+// variable for the current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -2440,7 +2440,7 @@ func (nStrIntSep *NumberIntSeparator) SetDetailRunes(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetIntSeparatorChars(
+func (nStrIntSep *NumberIntSeparatorDto) SetIntSeparatorChars(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
@@ -2458,7 +2458,7 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorChars(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.SetIntSeparatorChars()",
+		"NumberIntSeparatorDto.SetIntSeparatorChars()",
 		"")
 
 	if err != nil {
@@ -2486,7 +2486,7 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorChars(
 }
 
 // SetIntSeparatorGrouping - Sets the 'Integer Separator Grouping'
-// specification for the current NumberIntSeparator instance.
+// specification for the current NumberIntSeparatorDto instance.
 //
 // This unsigned integer values specifies the number of integer
 // digits within a group. This value is used to group integers
@@ -2512,7 +2512,7 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorChars(
 //  intSeparatorGrouping       uint
 //     - The 'Integer Separator Grouping' value used to set
 //       the integer grouping specification for the current
-//       NumberIntSeparator instance.
+//       NumberIntSeparatorDto instance.
 //
 //
 // -----------------------------------------------------------------
@@ -2521,7 +2521,7 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorChars(
 //
 //  -- NONE --
 //
-func (nStrIntSep *NumberIntSeparator) SetIntSeparatorGrouping(
+func (nStrIntSep *NumberIntSeparatorDto) SetIntSeparatorGrouping(
 	intSeparatorGrouping uint) {
 
 	if nStrIntSep.lock == nil {
@@ -2538,18 +2538,18 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorGrouping(
 }
 
 // SetIntSeparatorRepetitions - Sets the 'Integer Separator
-// Repetitions' specification for the current NumberIntSeparator
+// Repetitions' specification for the current NumberIntSeparatorDto
 // instance.
 //
 // The 'Integer Separator Repetitions' value is an unsigned integer
 // which specifies the number of cycles for which the integer
 // separation operation defined by separator characters and integer
-// digit grouping value in this NumberIntSeparator instance will be
+// digit grouping value in this NumberIntSeparatorDto instance will be
 // repeated.
 //
 // A value of zero for 'Integer Separator Repetitions' specifies
 // that the integer separation operation configured by the current
-// NumberIntSeparator instance will be repeated indefinitely for
+// NumberIntSeparatorDto instance will be repeated indefinitely for
 // all integer numeric digits within the number string.
 //
 //
@@ -2569,7 +2569,7 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorGrouping(
 //
 //  -- NONE --
 //
-func (nStrIntSep *NumberIntSeparator) SetIntSeparatorRepetitions(
+func (nStrIntSep *NumberIntSeparatorDto) SetIntSeparatorRepetitions(
 	intSeparatorRepetitions uint) {
 
 	if nStrIntSep.lock == nil {
@@ -2588,22 +2588,22 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorRepetitions(
 
 // SetRestartIntGroupingSequence - Sets the internal member
 // variable 'restartIntGroupingSequence' for the current
-// NumberIntSeparator instance.
+// NumberIntSeparatorDto instance.
 //
-// The NumberIntSeparator type is intended to be configured in an
-// array of NumberIntSeparator objects which, taken as a whole,
+// The NumberIntSeparatorDto type is intended to be configured in an
+// array of NumberIntSeparatorDto objects which, taken as a whole,
 // provides formatting specifications for complex integer group
 // separation operations.
 //
-// If the current NumberIntSeparator is the last element in an
-// array of NumberIntSeparator objects, the 'Restart Integer
+// If the current NumberIntSeparatorDto is the last element in an
+// array of NumberIntSeparatorDto objects, the 'Restart Integer
 // Grouping Sequence' flag signals whether the integer separation
-// operation will be restarted from the first NumberIntSeparator
+// operation will be restarted from the first NumberIntSeparatorDto
 // object in the array.
 //
-// Again, the NumberIntSeparator.restartIntGroupingSequence boolean
-// flag only has meaning if the current NumberIntSeparator object
-// is last element in an array of NumberIntSeparator objects.
+// Again, the NumberIntSeparatorDto.restartIntGroupingSequence boolean
+// flag only has meaning if the current NumberIntSeparatorDto object
+// is last element in an array of NumberIntSeparatorDto objects.
 //
 //
 // ----------------------------------------------------------------
@@ -2611,19 +2611,19 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorRepetitions(
 // Input Parameters
 //
 //  restartIntGroupingSequence bool
-//     - The NumberIntSeparator type is intended to be configured
-//       in an array of NumberIntSeparator objects which, taken as
+//     - The NumberIntSeparatorDto type is intended to be configured
+//       in an array of NumberIntSeparatorDto objects which, taken as
 //       a whole, provides formatting specifications for complex
 //       integer group separation operations.
 //
-//       If the current NumberIntSeparator is the last element in
-//       an array of NumberIntSeparator objects, the 'Restart
+//       If the current NumberIntSeparatorDto is the last element in
+//       an array of NumberIntSeparatorDto objects, the 'Restart
 //       Integer Grouping Sequence' flag signals whether the
 //       integer separation operation will be restarted from the
-//       first NumberIntSeparator object in the array.
+//       first NumberIntSeparatorDto object in the array.
 //
-//       In summary, if the NumberIntSeparator is the last element
-//       in an array of NumberIntSeparator objects, this boolean
+//       In summary, if the NumberIntSeparatorDto is the last element
+//       in an array of NumberIntSeparatorDto objects, this boolean
 //       flag signals whether the entire integer grouping sequence
 //       will be restarted from array element zero.
 //
@@ -2634,7 +2634,7 @@ func (nStrIntSep *NumberIntSeparator) SetIntSeparatorRepetitions(
 //
 //  -- NONE --
 //
-func (nStrIntSep *NumberIntSeparator) SetRestartIntGroupingSequence(
+func (nStrIntSep *NumberIntSeparatorDto) SetRestartIntGroupingSequence(
 	restartIntGroupingSequence bool) {
 
 	if nStrIntSep.lock == nil {
@@ -2664,7 +2664,7 @@ func (nStrIntSep *NumberIntSeparator) SetRestartIntGroupingSequence(
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -2732,7 +2732,7 @@ func (nStrIntSep *NumberIntSeparator) SetRestartIntGroupingSequence(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetToUSADefaults(
+func (nStrIntSep *NumberIntSeparatorDto) SetToUSADefaults(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -2749,25 +2749,25 @@ func (nStrIntSep *NumberIntSeparator) SetToUSADefaults(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.SetToUSADefaults()",
+		"NumberIntSeparatorDto.SetToUSADefaults()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	return numberIntSeparatorMechanics{}.ptr().
+	return numberIntSeparatorDtoMechanics{}.ptr().
 		setToUSADefaults(
 			nStrIntSep,
 			ePrefix)
 }
 
 // SetToUSADefaultsIfEmpty - If any of the current
-// NumberIntSeparator instance data values are zero or invalid,
+// NumberIntSeparatorDto instance data values are zero or invalid,
 // this method will reset ALL data elements to United States
 // default values.
 //
-// If the current NumberIntSeparator instance is valid and
+// If the current NumberIntSeparatorDto instance is valid and
 // populated with data, this method will take no action and exit.
 //
 // United States default numeric separators are listed as follows:
@@ -2780,7 +2780,7 @@ func (nStrIntSep *NumberIntSeparator) SetToUSADefaults(
 // IMPORTANT
 //
 // This method MAY overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -2848,7 +2848,7 @@ func (nStrIntSep *NumberIntSeparator) SetToUSADefaults(
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetToUSADefaultsIfEmpty(
+func (nStrIntSep *NumberIntSeparatorDto) SetToUSADefaultsIfEmpty(
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -2865,7 +2865,7 @@ func (nStrIntSep *NumberIntSeparator) SetToUSADefaultsIfEmpty(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator."+
+		"NumberIntSeparatorDto."+
 			"SetToUSADefaultsIfEmpty()",
 		"")
 
@@ -2873,7 +2873,7 @@ func (nStrIntSep *NumberIntSeparator) SetToUSADefaultsIfEmpty(
 		return err
 	}
 
-	return numberIntSeparatorUtility{}.ptr().
+	return numberIntSeparatorDtoUtility{}.ptr().
 		setToUSADefaultsIfEmpty(
 			nStrIntSep,
 			ePrefix.XCtx(
@@ -2881,12 +2881,12 @@ func (nStrIntSep *NumberIntSeparator) SetToUSADefaultsIfEmpty(
 }
 
 // String - Returns a string detailing the components of this
-// NumberIntSeparator instance. Output includes:
+// NumberIntSeparatorDto instance. Output includes:
 //   Integer Separator Characters
 //   Integer Separator Grouping
 //   Restart Grouping Sequence
 //
-func (nStrIntSep *NumberIntSeparator) String() string {
+func (nStrIntSep *NumberIntSeparatorDto) String() string {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -2915,13 +2915,13 @@ func (nStrIntSep *NumberIntSeparator) String() string {
 
 // SetWithComponents - This method will overwrite and reset the
 // internal member variable data values for the current
-// NumberIntSeparator instance based on the component elements
+// NumberIntSeparatorDto instance based on the component elements
 // passed as input parameters.
 //
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
-// current NumberIntSeparator instance.
+// current NumberIntSeparatorDto instance.
 //
 //
 // ----------------------------------------------------------------
@@ -2965,8 +2965,8 @@ func (nStrIntSep *NumberIntSeparator) String() string {
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the NumberIntSeparator is the last element in an array
-//       of NumberIntSeparator objects, this boolean flag signals
+//     - If the NumberIntSeparatorDto is the last element in an array
+//       of NumberIntSeparatorDto objects, this boolean flag signals
 //       whether the entire integer grouping sequence will be
 //       restarted from array element zero.
 //
@@ -3032,7 +3032,7 @@ func (nStrIntSep *NumberIntSeparator) String() string {
 //       'errorPrefix' text will be attached to the beginning of
 //       the error message.
 //
-func (nStrIntSep *NumberIntSeparator) SetWithComponents(
+func (nStrIntSep *NumberIntSeparatorDto) SetWithComponents(
 	intSeparatorChars []rune,
 	intSeparatorGrouping uint,
 	intSeparatorRepetitions uint,
@@ -3053,14 +3053,14 @@ func (nStrIntSep *NumberIntSeparator) SetWithComponents(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NumberIntSeparator.SetWithComponents()",
+		"NumberIntSeparatorDto.SetWithComponents()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	return numberIntSeparatorMechanics{}.ptr().
+	return numberIntSeparatorDtoMechanics{}.ptr().
 		setWithComponents(
 			nStrIntSep,
 			intSeparatorChars,
