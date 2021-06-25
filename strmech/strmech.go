@@ -2856,9 +2856,35 @@ func (sMech StrMech) NewPtr() *StrMech {
 func (sMech *StrMech) NumberStringParser(
 	numStr string,
 	numSignSymbols NumberSignSymbolCollection,
-	decimalSeparator NumericSymbolDto,
-	errorPrefix interface{}) {
+	decimalSeparator DecimalSeparatorDto,
+	errorPrefix interface{}) (NumberBuilder, error) {
 
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	numStr = ""
+	numSignSymbols.EmptyCollection()
+	decimalSeparator.numericSymbol = nil
+
+	//var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	_,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ConvertPrintableChars()",
+		"")
+
+	if err != nil {
+		return NumberBuilder{}, err
+	}
+
+	return NumberBuilder{}, err
 }
 
 // Ptr - Returns a pointer to a new instance of

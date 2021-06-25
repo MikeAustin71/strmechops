@@ -3,8 +3,8 @@ package strmech
 type NumberBuilder struct {
 	integerElement    []rune
 	fractionalElement []rune
-	decimalSeparator  NumericSymbolDto
-	currencySymbol    NumericSymbolDto
+	decimalSeparator  DecimalSeparatorDto
+	currencySymbol    DecimalSeparatorDto
 	numberSignSymbol  NumberSignSymbolDto
-	integerSeparator  NumberIntSeparatorDto
+	integerSeparator  IntegerSeparatorDto
 }

@@ -2,7 +2,7 @@ package strmech
 
 import "sync"
 
-type NumericSymbolDto struct {
+type DecimalSeparatorDto struct {
 	numericSymbol           []rune
 	numericSymbolClass      NumericSymbolClass
 	numericSymbolLocation   NumericSymbolLocation
