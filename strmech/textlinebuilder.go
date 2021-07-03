@@ -47,13 +47,13 @@ func (txtBuilder TextLineBuilder) Build(
 			err = txtBuilder.CreateStringSpec(t, b, ePrefix)
 		case TextLineBreakField:
 			err = txtBuilder.CreateLineBreakField(t, b, ePrefix)
-		case TextNumericIntField:
+		case TextFieldNumericInt:
 			err = txtBuilder.CreateNumericIntField(t, b, ePrefix)
-		case TextOneLabelOneIntField:
+		case TextFieldOneLabelOneInt:
 			err = txtBuilder.CreateOneLabelOneIntField(t, b, ePrefix)
-		case TextStringField:
+		case TextFieldString:
 			err = txtBuilder.CreateStringField(t, b, ePrefix)
-		case TextTwoLabelStrField:
+		case TextFieldTwoLabelStr:
 			err = txtBuilder.CreateTwoLabelStrField(t, b, ePrefix)
 		default:
 			err = fmt.Errorf(ePrefix+
@@ -559,7 +559,7 @@ func (txtBuilder TextLineBuilder) CreateNewLineSpec(
 }
 
 func (txtBuilder TextLineBuilder) CreateNumericIntField(
-	numSpec TextNumericIntField,
+	numSpec TextFieldNumericInt,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -611,7 +611,7 @@ func (txtBuilder TextLineBuilder) CreateNumericIntField(
 }
 
 func (txtBuilder TextLineBuilder) CreateOneLabelOneIntField(
-	oneLabelOneInt TextOneLabelOneIntField,
+	oneLabelOneInt TextFieldOneLabelOneInt,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -664,7 +664,7 @@ func (txtBuilder TextLineBuilder) CreateOneLabelOneIntField(
 }
 
 func (txtBuilder TextLineBuilder) CreateTwoLabelStrField(
-	twoLabelStrLine TextTwoLabelStrField,
+	twoLabelStrLine TextFieldTwoLabelStr,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -716,9 +716,9 @@ func (txtBuilder TextLineBuilder) CreateTwoLabelStrField(
 	return nil
 }
 
-// CreateStringField - Designed to handle TextStringField specifications.
+// CreateStringField - Designed to handle TextFieldString specifications.
 func (txtBuilder TextLineBuilder) CreateStringField(
-	strField TextStringField,
+	strField TextFieldString,
 	b *strings.Builder,
 	ePrefix string) error {
 

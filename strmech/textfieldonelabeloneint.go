@@ -2,19 +2,19 @@ package strmech
 
 import "sync"
 
-type TextOneLabelOneIntField struct {
+type TextFieldOneLabelOneInt struct {
 	LeadingBlankLines  TextLineSpecBlankLines
 	TopLineBreak       TextLineBreakField
-	Label1             TextStringField
-	Number1            TextNumericIntField
+	Label1             TextFieldString
+	Number1            TextFieldNumericInt
 	BottomLineBreak    TextLineBreakField
 	TrailingBlankLines TextLineSpecBlankLines
 	lock               *sync.Mutex
 }
 
-// CopyOut - Returns a deep copy of the current TextOneLabelOneIntField
+// CopyOut - Returns a deep copy of the current TextFieldOneLabelOneInt
 // instance.
-func (txtLabelIntLine *TextOneLabelOneIntField) CopyOut() TextOneLabelOneIntField {
+func (txtLabelIntLine *TextFieldOneLabelOneInt) CopyOut() TextFieldOneLabelOneInt {
 
 	if txtLabelIntLine.lock == nil {
 		txtLabelIntLine.lock = new(sync.Mutex)
@@ -24,7 +24,7 @@ func (txtLabelIntLine *TextOneLabelOneIntField) CopyOut() TextOneLabelOneIntFiel
 
 	defer txtLabelIntLine.lock.Unlock()
 
-	newLabelInt := TextOneLabelOneIntField{}
+	newLabelInt := TextFieldOneLabelOneInt{}
 
 	newLabelInt.LeadingBlankLines = txtLabelIntLine.LeadingBlankLines
 	newLabelInt.TopLineBreak = txtLabelIntLine.TopLineBreak.CopyOut()
@@ -35,8 +35,8 @@ func (txtLabelIntLine *TextOneLabelOneIntField) CopyOut() TextOneLabelOneIntFiel
 	return newLabelInt
 }
 
-// NewPtr - Returns a pointer to a new TextOneLabelOneIntField instance.
-func (txtLabelIntLine TextOneLabelOneIntField) NewPtr() *TextOneLabelOneIntField {
+// NewPtr - Returns a pointer to a new TextFieldOneLabelOneInt instance.
+func (txtLabelIntLine TextFieldOneLabelOneInt) NewPtr() *TextFieldOneLabelOneInt {
 
 	if txtLabelIntLine.lock == nil {
 		txtLabelIntLine.lock = new(sync.Mutex)
@@ -46,7 +46,7 @@ func (txtLabelIntLine TextOneLabelOneIntField) NewPtr() *TextOneLabelOneIntField
 
 	defer txtLabelIntLine.lock.Unlock()
 
-	newOneLabelOneIntLine := TextOneLabelOneIntField{}
+	newOneLabelOneIntLine := TextFieldOneLabelOneInt{}
 
 	return &newOneLabelOneIntLine
 }
@@ -54,7 +54,7 @@ func (txtLabelIntLine TextOneLabelOneIntField) NewPtr() *TextOneLabelOneIntField
 // TextTypeName - returns a string specifying the type
 // of Text Field specification. This method fulfills
 // requirements of TextSpec interface
-func (txtLabelIntLine TextOneLabelOneIntField) TextTypeName() string {
+func (txtLabelIntLine TextFieldOneLabelOneInt) TextTypeName() string {
 
 	if txtLabelIntLine.lock == nil {
 		txtLabelIntLine.lock = new(sync.Mutex)
@@ -64,5 +64,5 @@ func (txtLabelIntLine TextOneLabelOneIntField) TextTypeName() string {
 
 	defer txtLabelIntLine.lock.Unlock()
 
-	return "TextOneLabelOneIntField"
+	return "TextFieldOneLabelOneInt"
 }
