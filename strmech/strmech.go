@@ -2856,7 +2856,7 @@ func (sMech StrMech) NewPtr() *StrMech {
 func (sMech *StrMech) NumberStringParser(
 	numStr string,
 	numSignSymbols NumberSignSymbolCollection,
-	decimalSeparator DecimalSeparatorDto,
+	decimalSeparator FractionalSeparatorDto,
 	errorPrefix interface{}) (NumberBuilder, error) {
 
 	if sMech.stringDataMutex == nil {

@@ -106,7 +106,7 @@ Test coverage and outcomes are documented in:
 
 ## Project Organization
 
-This [***strmech***](https://github.com/MikeAustin71/strmech) repository is used to store and distribute the ***strmech*** software package. All of the latest releases and all prior versions are stored here. 
+This [***strmech***](https://github.com/MikeAustin71/strmech) repository is used to store and distribute the ***strmech*** software package. All the latest releases and source code are stored here. 
 
 The development environment and all development activities use the [***strmechops***](https://github.com/MikeAustin71/strmechops) repository.
 
