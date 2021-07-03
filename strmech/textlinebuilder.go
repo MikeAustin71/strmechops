@@ -45,15 +45,15 @@ func (txtBuilder TextLineBuilder) Build(
 			err = txtBuilder.CreateNewLineSpec(t, b, ePrefix)
 		case StringSpec:
 			err = txtBuilder.CreateStringSpec(t, b, ePrefix)
-		case LineBreakField:
+		case TextLineBreakField:
 			err = txtBuilder.CreateLineBreakField(t, b, ePrefix)
-		case NumericIntField:
+		case TextNumericIntField:
 			err = txtBuilder.CreateNumericIntField(t, b, ePrefix)
-		case OneLabelOneIntField:
+		case TextOneLabelOneIntField:
 			err = txtBuilder.CreateOneLabelOneIntField(t, b, ePrefix)
-		case StringField:
+		case TextStringField:
 			err = txtBuilder.CreateStringField(t, b, ePrefix)
-		case TwoLabelStrField:
+		case TextTwoLabelStrField:
 			err = txtBuilder.CreateTwoLabelStrField(t, b, ePrefix)
 		default:
 			err = fmt.Errorf(ePrefix+
@@ -279,7 +279,7 @@ func (txtBuilder TextLineBuilder) CreateIntegerSpec(
 }
 
 func (txtBuilder TextLineBuilder) CreateLineBreakField(
-	lineBreak LineBreakField,
+	lineBreak TextLineBreakField,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -559,7 +559,7 @@ func (txtBuilder TextLineBuilder) CreateNewLineSpec(
 }
 
 func (txtBuilder TextLineBuilder) CreateNumericIntField(
-	numSpec NumericIntField,
+	numSpec TextNumericIntField,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -611,7 +611,7 @@ func (txtBuilder TextLineBuilder) CreateNumericIntField(
 }
 
 func (txtBuilder TextLineBuilder) CreateOneLabelOneIntField(
-	oneLabelOneInt OneLabelOneIntField,
+	oneLabelOneInt TextOneLabelOneIntField,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -664,7 +664,7 @@ func (txtBuilder TextLineBuilder) CreateOneLabelOneIntField(
 }
 
 func (txtBuilder TextLineBuilder) CreateTwoLabelStrField(
-	twoLabelStrLine TwoLabelStrField,
+	twoLabelStrLine TextTwoLabelStrField,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -716,9 +716,9 @@ func (txtBuilder TextLineBuilder) CreateTwoLabelStrField(
 	return nil
 }
 
-// CreateStringField - Designed to handle StringField specifications.
+// CreateStringField - Designed to handle TextStringField specifications.
 func (txtBuilder TextLineBuilder) CreateStringField(
-	strField StringField,
+	strField TextStringField,
 	b *strings.Builder,
 	ePrefix string) error {
 
