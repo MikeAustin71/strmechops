@@ -4,13 +4,13 @@ import "sync"
 
 type TextLineBreakField struct {
 	CreateLineBreak      bool
-	LeadingBlankLines    BlankLinesSpec
-	LeftMargin           MarginSpec
-	LeftSpacer           MarginSpec
-	LineSpec             LineSpec
-	RightSpacer          MarginSpec
-	TerminateWithNewLine NewLineSpec
-	TrailingBlankLines   BlankLinesSpec
+	LeadingBlankLines    TextLineSpecBlankLines
+	LeftMargin           TextLineSpecMargin
+	LeftSpacer           TextLineSpecMargin
+	LineSpec             TextLineSpecRepeatChar
+	RightSpacer          TextLineSpecMargin
+	TerminateWithNewLine TextLineSpecNewLine
+	TrailingBlankLines   TextLineSpecBlankLines
 	lock                 *sync.Mutex
 }
 

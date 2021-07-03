@@ -3,12 +3,12 @@ package strmech
 import "sync"
 
 type TextTwoLabelStrField struct {
-	LeadingBlankLines  BlankLinesSpec
+	LeadingBlankLines  TextLineSpecBlankLines
 	TopLineBreak       TextLineBreakField
 	Label1             TextStringField
 	Label2             TextStringField
 	BottomLineBreak    TextLineBreakField
-	TrailingBlankLines BlankLinesSpec
+	TrailingBlankLines TextLineSpecBlankLines
 	lock               *sync.Mutex
 }
 

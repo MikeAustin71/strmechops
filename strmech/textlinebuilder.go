@@ -33,17 +33,17 @@ func (txtBuilder TextLineBuilder) Build(
 
 		switch t := txtSpec.(type) {
 
-		case BlankLinesSpec:
+		case TextLineSpecBlankLines:
 			err = txtBuilder.CreateBlankLinesSpec(t, b, ePrefix)
-		case IntegerSpec:
+		case TextLineSpecInteger:
 			err = txtBuilder.CreateIntegerSpec(t, b, ePrefix)
-		case LineSpec:
+		case TextLineSpecRepeatChar:
 			err = txtBuilder.CreateLineSpec(t, b, ePrefix)
-		case MarginSpec:
+		case TextLineSpecMargin:
 			err = txtBuilder.CreateMarginSpec(t, b, ePrefix)
-		case NewLineSpec:
+		case TextLineSpecNewLine:
 			err = txtBuilder.CreateNewLineSpec(t, b, ePrefix)
-		case StringSpec:
+		case TextLineSpecString:
 			err = txtBuilder.CreateStringSpec(t, b, ePrefix)
 		case TextLineBreakField:
 			err = txtBuilder.CreateLineBreakField(t, b, ePrefix)
@@ -156,7 +156,7 @@ func (txtBuilder TextLineBuilder) CenterInField(
 }
 
 func (txtBuilder TextLineBuilder) CreateBlankLinesSpec(
-	blankLines BlankLinesSpec,
+	blankLines TextLineSpecBlankLines,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -189,7 +189,7 @@ func (txtBuilder TextLineBuilder) CreateBlankLinesSpec(
 }
 
 func (txtBuilder TextLineBuilder) CreateIntegerSpec(
-	intTxtSpec IntegerSpec,
+	intTxtSpec TextLineSpecInteger,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -363,7 +363,7 @@ func (txtBuilder TextLineBuilder) CreateLineBreakField(
 // CreateLineSpec - Creates a string from the Create Line
 // Specification and writes it to a strings.Builder.
 func (txtBuilder TextLineBuilder) CreateLineSpec(
-	lineSpec LineSpec,
+	lineSpec TextLineSpecRepeatChar,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -468,7 +468,7 @@ func (txtBuilder TextLineBuilder) CreateLineSpec(
 }
 
 func (txtBuilder TextLineBuilder) CreateMarginSpec(
-	margin MarginSpec,
+	margin TextLineSpecMargin,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -529,7 +529,7 @@ func (txtBuilder TextLineBuilder) CreateMarginSpec(
 }
 
 func (txtBuilder TextLineBuilder) CreateNewLineSpec(
-	newLineSpec NewLineSpec,
+	newLineSpec TextLineSpecNewLine,
 	b *strings.Builder,
 	ePrefix string) error {
 
@@ -773,10 +773,10 @@ func (txtBuilder TextLineBuilder) CreateStringField(
 	return nil
 }
 
-// CreateStringSpec - Receives 'StringSpec' type and then proceeds
+// CreateStringSpec - Receives 'TextLineSpecString' type and then proceeds
 // to create the string and write it to the string builder.
 func (txtBuilder TextLineBuilder) CreateStringSpec(
-	strSpec StringSpec,
+	strSpec TextLineSpecString,
 	b *strings.Builder,
 	ePrefix string) error {
 

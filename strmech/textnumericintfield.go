@@ -3,11 +3,11 @@ package strmech
 import "sync"
 
 type TextNumericIntField struct {
-	LeftMargin           MarginSpec
-	LeftSpacer           MarginSpec
-	NumberSpec           IntegerSpec
-	RightSpacer          MarginSpec
-	TerminateWithNewLine NewLineSpec
+	LeftMargin           TextLineSpecMargin
+	LeftSpacer           TextLineSpecMargin
+	NumberSpec           TextLineSpecInteger
+	RightSpacer          TextLineSpecMargin
+	TerminateWithNewLine TextLineSpecNewLine
 	lock                 *sync.Mutex
 }
 
