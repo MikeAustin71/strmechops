@@ -62,6 +62,50 @@ func (stdLine *TextLineSpecStandardLine) CopyOut() TextLineSpecStandardLine {
 	return newStdLine
 }
 
+// GetNumOfStdLines - Returns the number of repetitions for this
+// instance of TextLineSpecStandardLine. The number of standard
+// lines is the number of times this standard line will be output
+// printed.
+//
+func (stdLine *TextLineSpecStandardLine) GetNumOfStdLines() int {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	return stdLine.numOfStdLines
+}
+
+// GetTextFields - Returns a deep copy of the text fields contained
+// in the current TextLineSpecStandardLine instance.
+//
+func (stdLine *TextLineSpecStandardLine) GetTextFields() []ITextFieldSpecification {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	lenTxtFields := len(stdLine.textFields)
+
+	if lenTxtFields == 0 {
+		return nil
+	}
+
+	textFields := make([]ITextFieldSpecification, lenTxtFields)
+
+	copy(textFields, stdLine.textFields)
+
+	return textFields
+}
+
 // NewPtr - This method returns a pointer to an empty or
 // unpopulated instance of TextLineSpecStandardLine.
 //
@@ -140,6 +184,73 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 	return &newStdLine
 }
 
+// SetNumOfStdLines - Sets the number of repetitions for this
+// instance of TextLineSpecStandardLine. The number of standard
+// lines is the number of times this standard line will be output
+// printed.
+//
+// If the input parameter 'numOfStdLines' is less than zero, this
+// method will automatically reset the 'numOfStdLines' value to
+// one ('1').
+//
+// If input parameter 'numOfStdLines' is set to a zero value, it
+// means that no text will be output or printed for this instance
+// of TextLineSpecStandardLine.
+//
+func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
+	numOfStdLines int) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	if numOfStdLines < 0 {
+		numOfStdLines = 1
+	}
+
+	stdLine.numOfStdLines = numOfStdLines
+}
+
+// SetTextFields - Replaces the existing array of text fields for
+// the current TextLineSpecStandardLine instance.
+//
+// If input parameter 'textFields' is nil or zero length, the internal
+// array of text fields will be emptied an set to nil.
+//
+func (stdLine *TextLineSpecStandardLine) SetTextFields(
+	textFields []ITextFieldSpecification) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	lenTextFields := len(textFields)
+
+	if lenTextFields == 0 {
+		stdLine.textFields = nil
+		return
+	}
+
+	stdLine.textFields = make([]ITextFieldSpecification,
+		lenTextFields)
+
+	copy(stdLine.textFields, textFields)
+
+	return
+}
+
+// TextTypeName - returns a string specifying the type
+// of Text Field specification. This method fulfills
+// requirements of ITextSpecification interface.
+//
 func (stdLine TextLineSpecStandardLine) TextTypeName() string {
 
 	if stdLine.lock == nil {

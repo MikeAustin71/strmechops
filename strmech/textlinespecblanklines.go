@@ -193,7 +193,7 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 
 // TextTypeName - returns a string specifying the type
 // of Text Field specification. This method fulfills
-// requirements of TextSpec interface
+// requirements of ITextSpecification interface.
 func (blkLines TextLineSpecBlankLines) TextTypeName() string {
 
 	if blkLines.lock == nil {
