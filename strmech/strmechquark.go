@@ -87,7 +87,7 @@ type strMechQuark struct {
 //  testRunes := []rune(testStr)
 //
 //  actualStr :=
-//    StrMech{}.NewPtr().
+//    StrMech{}.NewConstructor().
 //      ConvertNonPrintableChars(testRunes, true)
 //
 //  ----------------------------------------------------

@@ -219,7 +219,7 @@ func (sMech *StrMech) BreakTextAtLineLength(
 //  testRunes := []rune(testStr)
 //
 //  actualStr :=
-//    StrMech{}.NewPtr().
+//    StrMech{}.NewConstructor().
 //      ConvertNonPrintableChars(testRunes, true)
 //
 //  ----------------------------------------------------
