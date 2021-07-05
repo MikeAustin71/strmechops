@@ -34,7 +34,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 // CopyOut - Returns a deep copy of the current
 // TextLineSpecStandardLine instance.
 //
-func (stdLine *TextLineSpecStandardLine) CopyOut() TextLineSpecStandardLine {
+func (stdLine *TextLineSpecStandardLine) CopyOut() *TextLineSpecStandardLine {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -44,7 +44,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOut() TextLineSpecStandardLine {
 
 	defer stdLine.lock.Unlock()
 
-	newStdLine := TextLineSpecStandardLine{}
+	newStdLine := new(TextLineSpecStandardLine)
 
 	lenTxtFields := len(stdLine.textFields)
 
