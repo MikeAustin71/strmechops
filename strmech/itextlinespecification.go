@@ -1,8 +1,8 @@
 package strmech
 
-type ITextFieldSpecification interface {
+type ITextLineSpecification interface {
 	IsValidInstanceError(interface{}) error
 	GetFormattedText() string
 	TextTypeName() string
-	TextFieldName() string
+	TextLineName() string
 }
