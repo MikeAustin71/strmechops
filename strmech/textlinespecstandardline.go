@@ -44,24 +44,13 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr() *TextLineSpecStandardLine 
 
 	defer stdLine.lock.Unlock()
 
-	newStdLine := new(TextLineSpecStandardLine)
+	newStdLine,
+		_ := textLineSpecStandardLineMolecule{}.ptr().
+		copyOut(
+			stdLine,
+			nil)
 
-	lenTxtFields := len(stdLine.textFields)
-
-	if lenTxtFields > 0 {
-
-		newStdLine.textFields = make([]ITextFieldSpecification,
-			lenTxtFields)
-
-		for i := 0; i < lenTxtFields; i++ {
-			newStdLine.textFields[i] =
-				stdLine.textFields[i].CopyOutITextField()
-		}
-	}
-
-	newStdLine.numOfStdLines = stdLine.numOfStdLines
-
-	return newStdLine
+	return &newStdLine
 }
 
 // Empty - Deletes all of the text fields stored as an array of

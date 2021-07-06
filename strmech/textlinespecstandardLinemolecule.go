@@ -1,23 +1,27 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 type textLineSpecStandardLineMolecule struct {
 	lock *sync.Mutex
 }
 
 // copyOut - Returns a deep copy of the input parameter
-// 'txtFieldLabel'
+// 'txtStdLine'.
 //
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtFieldLabel       *TextFieldSpecLabel
-//     - A pointer to an instance of TextFieldSpecLabel. A deep
-//       copy of the internal member variables will be created
-//       and returned in a new instance of TextFieldSpecLabel.
+//  txtStdLine          *TextLineSpecStandardLine
+//     - A pointer to an instance of TextLineSpecStandardLine. A
+//       deep copy of the internal member variables will be created
+//       and returned in a new instance of TextLineSpecStandardLine.
 //
 //
 //  errPrefDto          *ePref.ErrPrefixDto
@@ -37,10 +41,10 @@ type textLineSpecStandardLineMolecule struct {
 //
 // Return Values
 //
-//  TextFieldSpecLabel
+//  TextLineSpecStandardLine
 //     - If this method completes successfully, a deep copy of
-//       input parameter 'txtFieldLabel' will be created and
-//       returned in a new instance of TextFieldSpecLabel.
+//       input parameter 'txtStdLine' will be created and returned
+//       in a new instance of TextLineSpecStandardLine.
 //
 //
 //  error
@@ -54,7 +58,8 @@ type textLineSpecStandardLineMolecule struct {
 //       attached at the beginning of the error message.
 //
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
-	txtStdLine *TextLineSpecStandardLine) (
+	txtStdLine *TextLineSpecStandardLine,
+	errPrefDto *ePref.ErrPrefixDto) (
 	TextLineSpecStandardLine, error) {
 
 	if txtStdLineMolecule.lock == nil {
@@ -65,7 +70,45 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 
 	defer txtStdLineMolecule.lock.Unlock()
 
-	return *txtStdLine, nil
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineMolecule.copyOut()",
+		"")
+
+	if err != nil {
+		return TextLineSpecStandardLine{}, err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return TextLineSpecStandardLine{}, err
+	}
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	lenTxtFields := len(txtStdLine.textFields)
+
+	if lenTxtFields > 0 {
+
+		newStdLine.textFields = make([]ITextFieldSpecification,
+			lenTxtFields)
+
+		for i := 0; i < lenTxtFields; i++ {
+			newStdLine.textFields[i] =
+				txtStdLine.textFields[i].CopyOutITextField()
+		}
+	}
+
+	newStdLine.numOfStdLines = txtStdLine.numOfStdLines
+
+	return newStdLine, nil
 }
 
 // ptr - Returns a pointer to a new instance of
