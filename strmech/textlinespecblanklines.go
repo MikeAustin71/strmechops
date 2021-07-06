@@ -2,7 +2,6 @@ package strmech
 
 import (
 	"fmt"
-	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
 
@@ -39,17 +38,58 @@ func (blkLines *TextLineSpecBlankLines) CopyOut() TextLineSpecBlankLines {
 
 	defer blkLines.lock.Unlock()
 
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TextLineSpecBlankLines.CopyOut()",
-		"")
+	newBlankLinesSpec,
+		_ := textLineSpecBlankLinesMolecule{}.ptr().
+		copyOut(
+			blkLines,
+			nil)
+
+	return newBlankLinesSpec
+}
+
+// CopyOutITextLine - Returns a deep copy of the current
+// TextLineSpecBlankLines instance cast as a type
+// ITextLineSpecification.
+//
+func (blkLines *TextLineSpecBlankLines) CopyOutITextLine() ITextLineSpecification {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
 
 	newBlankLinesSpec,
 		_ := textLineSpecBlankLinesMolecule{}.ptr().
 		copyOut(
 			blkLines,
-			&ePrefix)
+			nil)
 
-	return newBlankLinesSpec
+	return ITextLineSpecification(&newBlankLinesSpec)
+}
+
+// CopyOutPtr - Returns a pointer to a deep copy of the current
+// TextLineSpecBlankLines instance.
+//
+func (blkLines *TextLineSpecBlankLines) CopyOutPtr() *TextLineSpecBlankLines {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	newBlankLinesSpec,
+		_ := textLineSpecBlankLinesMolecule{}.ptr().
+		copyOut(
+			blkLines,
+			nil)
+
+	return &newBlankLinesSpec
 }
 
 // Empty - Resets all internal member variables to their initial
@@ -184,6 +224,9 @@ func (blkLines *TextLineSpecBlankLines) GetNumOfBlankLines() int {
 // method:
 //  TextLineSpecBlankLines.SetLineTermination()
 //
+// If input parameter 'numOfBlankLines' is less than zero, this
+// method will automatically reset the value to zero.
+//
 func (blkLines TextLineSpecBlankLines) NewPtr(
 	numOfBlankLines int) *TextLineSpecBlankLines {
 
@@ -194,6 +237,10 @@ func (blkLines TextLineSpecBlankLines) NewPtr(
 	blkLines.lock.Lock()
 
 	defer blkLines.lock.Unlock()
+
+	if numOfBlankLines < 0 {
+		numOfBlankLines = 0
+	}
 
 	newBlankLinesSpec := TextLineSpecBlankLines{}
 

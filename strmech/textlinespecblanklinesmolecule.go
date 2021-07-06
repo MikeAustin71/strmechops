@@ -51,6 +51,10 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
 		blkLines.newLineChars = []rune{'\n'}
 	}
 
+	if blkLines.numBlankLines < 0 {
+		blkLines.numBlankLines = 0
+	}
+
 	newBlankLinesSpec := TextLineSpecBlankLines{}
 
 	newBlankLinesSpec.numBlankLines = blkLines.numBlankLines
@@ -59,21 +63,8 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
 
 	newBlankLinesSpec.newLineChars = make([]rune, lenBlkLineChars)
 
-	copyLen := copy(newBlankLinesSpec.newLineChars,
+	copy(newBlankLinesSpec.newLineChars,
 		blkLines.newLineChars)
-
-	if copyLen != lenBlkLineChars {
-		err = fmt.Errorf("%v\n"+
-			"Error: Copy blkLines.newLineChars ->!\n"+
-			"  newBlankLinesSpec.newLineChars FAILED!\n"+
-			"Expected %v-elements to be copied. However,\n"+
-			"only %v-elements were copied!\n",
-			ePrefix.String(),
-			lenBlkLineChars,
-			copyLen)
-
-		return TextLineSpecBlankLines{}, err
-	}
 
 	return newBlankLinesSpec, nil
 }
