@@ -5,7 +5,7 @@ type ITextLineSpecification interface {
 
 	GetFormattedText() string
 
-	CopyOUtITextLine() ITextLineSpecification
+	CopyOutITextLine() ITextLineSpecification
 
 	Empty()
 }

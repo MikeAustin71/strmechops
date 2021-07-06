@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
 
@@ -38,20 +39,15 @@ func (blkLines *TextLineSpecBlankLines) CopyOut() TextLineSpecBlankLines {
 
 	defer blkLines.lock.Unlock()
 
-	if len(blkLines.newLineChars) == 0 {
-		blkLines.newLineChars = []rune{'\n'}
-	}
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecBlankLines.CopyOut()",
+		"")
 
-	newBlankLinesSpec := TextLineSpecBlankLines{}
-
-	newBlankLinesSpec.numBlankLines = blkLines.numBlankLines
-
-	lenBlkLineChars := len(blkLines.newLineChars)
-
-	newBlankLinesSpec.newLineChars = make([]rune, lenBlkLineChars)
-
-	copy(newBlankLinesSpec.newLineChars,
-		blkLines.newLineChars)
+	newBlankLinesSpec,
+		_ := textLineSpecBlankLinesMolecule{}.ptr().
+		copyOut(
+			blkLines,
+			&ePrefix)
 
 	return newBlankLinesSpec
 }

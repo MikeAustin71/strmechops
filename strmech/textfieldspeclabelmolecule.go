@@ -85,7 +85,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 
 	if txtFieldLabel == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter txtFieldLabel is a nil pointer!\n",
+			"Error: Input parameter 'txtFieldLabel' is a nil pointer!\n",
 			ePrefix.String())
 
 		return TextFieldSpecLabel{}, err
