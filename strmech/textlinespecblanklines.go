@@ -112,6 +112,52 @@ func (blkLines *TextLineSpecBlankLines) Empty() {
 	blkLines.lock = nil
 }
 
+// Equal - Receives a pointer to another instance of
+// TextLineSpecBlankLines and proceeds to compare the member
+// variables to those of the current TextLineSpecBlankLines
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables are equal in all respects,
+// this flag is set to 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (blkLines *TextLineSpecBlankLines) Equal(
+	incomingBlkLines *TextLineSpecBlankLines) bool {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	lenCurrBlkLineChars := len(blkLines.newLineChars)
+
+	lenIncomingBlkLineChars := len(incomingBlkLines.newLineChars)
+
+	if lenCurrBlkLineChars != lenIncomingBlkLineChars {
+		return false
+	}
+
+	if lenCurrBlkLineChars > 0 {
+		for i := 0; i < lenCurrBlkLineChars; i++ {
+			if blkLines.newLineChars[i] !=
+				incomingBlkLines.newLineChars[i] {
+				return false
+			}
+		}
+	}
+
+	if blkLines.numBlankLines !=
+		incomingBlkLines.numBlankLines {
+		return false
+	}
+
+	return true
+}
+
 // GetFormattedText - Returns the formatted text for output and
 // printing.
 //

@@ -58,6 +58,27 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField() ITextFieldSpecifica
 	return iTxtFieldSpec
 }
 
+// CopyOutPtr - Returns a pointer to a deep copy of the current
+// TextFieldSpecLabel instance.
+//
+func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr() *TextFieldSpecLabel {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	newTxtFieldLabel,
+		_ := textFieldSpecLabelMolecule{}.ptr().
+		copyOut(txtFieldLabel,
+			nil)
+
+	return &newTxtFieldLabel
+}
+
 // Empty - Resets all internal member variables to their initial
 // or zero states.
 //
@@ -81,16 +102,18 @@ func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 
 }
 
-// Equal - Receives another instance of TextFieldSpecLabel and
-// proceeds to compare the member variables to those of the current
-// TextFieldSpecLabel to determine if they are equivalent.
+// Equal - Receives a pointer to another instance of
+// TextFieldSpecLabel and proceeds to compare the member variables
+// to those of the current TextFieldSpecLabel instance in order to
+// determine if they are equivalent.
 //
-// A boolean flag is returned. If the member variables are equal,
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables are equal in all respects,
 // this flag is set to 'true'. Otherwise, this method returns
 // 'false'.
 //
 func (txtFieldLabel *TextFieldSpecLabel) Equal(
-	incomingTextFieldLabel TextFieldSpecLabel) bool {
+	incomingTextFieldLabel *TextFieldSpecLabel) bool {
 
 	if txtFieldLabel.lock == nil {
 		txtFieldLabel.lock = new(sync.Mutex)
