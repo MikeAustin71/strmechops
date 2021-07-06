@@ -1,6 +1,9 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 // TextLineSpecBlankLines - This type is a specialized form of
 // text line specification which is used to create one or more
@@ -10,6 +13,11 @@ import "sync"
 // new line character '\n'. However, users have the option to
 // substitute an array of runes and apply any character or group
 // of characters to terminate the line.
+//
+// To override the default line termination character
+// (newline '\n'), see method:
+//
+//      TextLineSpecBlankLines.SetLineTermination()
 //
 type TextLineSpecBlankLines struct {
 	numBlankLines int
@@ -46,6 +54,81 @@ func (blkLines *TextLineSpecBlankLines) CopyOut() TextLineSpecBlankLines {
 		blkLines.newLineChars)
 
 	return newBlankLinesSpec
+}
+
+// Empty - Resets all internal member variables to their initial
+// or zero states.
+//
+func (blkLines *TextLineSpecBlankLines) Empty() {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	blkLines.numBlankLines = 0
+
+	blkLines.newLineChars = nil
+
+	blkLines.lock.Unlock()
+
+	blkLines.lock = nil
+}
+
+// GetFormattedText - Returns the formatted text for output and
+// printing.
+//
+// The value of 'blkLines.newLineChars' will be replicated
+// multiple times as specified by 'blkLines.numBlankLines'.
+//
+func (blkLines *TextLineSpecBlankLines) GetFormattedText() string {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	if len(blkLines.newLineChars) == 0 {
+		blkLines.newLineChars = []rune{'\n'}
+	}
+
+	var result string
+
+	funcName := "TextLineSpecBlankLines.GetFormattedText()"
+
+	if blkLines.numBlankLines == 0 {
+		return result
+	}
+
+	if blkLines.numBlankLines > 1000000 {
+
+		result = fmt.Sprintf("%v\n"+
+			"Error:  blkLines.numBlankLines > 1,000,000!\n",
+			funcName)
+
+		return result
+	}
+
+	if blkLines.numBlankLines < 0 {
+
+		result = fmt.Sprintf("%v\n"+
+			"Error:  blkLines.numBlankLines < 0\n",
+			funcName)
+
+		return result
+	}
+
+	outStr := string(blkLines.newLineChars)
+
+	for i := 0; i < blkLines.numBlankLines; i++ {
+		result += outStr
+	}
+
+	return result
 }
 
 // GetLineTerminationChars - Returns the Line Termination character
@@ -189,6 +272,14 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 
 	blkLines.numBlankLines = numOfBlankLines
 
+}
+
+// TextLineSpecName - returns Text Line Specification Name. This
+// method fulfills requirements of ITextSpecification interface.
+//
+func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
+
+	return "TextLineSpecBlankLines"
 }
 
 // TextTypeName - returns a string specifying the type
