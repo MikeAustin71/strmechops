@@ -6,4 +6,8 @@ type ITextFieldSpecification interface {
 	TextFieldName() string
 
 	GetFormattedText() string
+
+	CopyOutITextField() ITextFieldSpecification
+
+	Empty()
 }

@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"strings"
 	"sync"
 )
 
@@ -14,8 +13,8 @@ type TextFieldSpecLabel struct {
 	lock              *sync.Mutex
 }
 
-// CopyOut - Returns a deep copy of the current
-// TextFieldSpecLabel instance.
+// CopyOut - Returns a deep copy of the current TextFieldSpecLabel
+// instance.
 //
 func (txtFieldLabel *TextFieldSpecLabel) CopyOut() TextFieldSpecLabel {
 
@@ -27,20 +26,59 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut() TextFieldSpecLabel {
 
 	defer txtFieldLabel.lock.Unlock()
 
-	newTxtFieldLabel := TextFieldSpecLabel{}
-
-	newTxtFieldLabel.textLabel =
-		txtFieldLabel.textLabel
-
-	newTxtFieldLabel.fieldLen =
-		txtFieldLabel.fieldLen
-
-	newTxtFieldLabel.textJustification =
-		txtFieldLabel.textJustification
-
-	newTxtFieldLabel.lock = new(sync.Mutex)
+	newTxtFieldLabel,
+		_ := textFieldSpecLabelMolecule{}.ptr().
+		copyOut(txtFieldLabel,
+			nil)
 
 	return newTxtFieldLabel
+}
+
+// CopyOutITextField - Returns a deep copy of the current
+// TextFieldSpecLabel instance cast as an ITextFieldSpecification
+// object.
+//
+func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField() ITextFieldSpecification {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	newTxtFieldLabel,
+		_ := textFieldSpecLabelMolecule{}.ptr().
+		copyOut(txtFieldLabel,
+			nil)
+
+	iTxtFieldSpec := ITextFieldSpecification(&newTxtFieldLabel)
+
+	return iTxtFieldSpec
+}
+
+// Empty - Resets all internal member variables to their initial
+// or zero states.
+//
+func (txtFieldLabel *TextFieldSpecLabel) Empty() {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	txtFieldLabel.textLabel = ""
+
+	txtFieldLabel.fieldLen = 0
+
+	txtFieldLabel.textJustification = TextJustify(0).None()
+
+	txtFieldLabel.lock.Unlock()
+
+	txtFieldLabel.lock = nil
+
 }
 
 // Equal - Receives another instance of TextFieldSpecLabel and
@@ -102,7 +140,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFieldLength() int {
 // If the length of the text label string is zero and the field
 // length is zero this method returns an empty string.
 //
-// If If the length of the text label string is zero and the field
+// If the length of the text label string is zero and the field
 // length is greater than zero, this method returns a string with
 // a length equal to field length and content equal to white space
 // (the space character " " x field length).
@@ -117,33 +155,16 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText() string {
 
 	defer txtFieldLabel.lock.Unlock()
 
-	lenTxtLabel := len(txtFieldLabel.textLabel)
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextFieldSpecLabel.GetFormattedText()",
+		"")
 
-	if lenTxtLabel == 0 &&
-		txtFieldLabel.fieldLen == 0 {
-		return ""
-	}
-
-	if lenTxtLabel == 0 &&
-		txtFieldLabel.fieldLen > 0 {
-		return strings.Repeat(" ", txtFieldLabel.fieldLen)
-	}
-
-	if txtFieldLabel.fieldLen <= lenTxtLabel {
-		return txtFieldLabel.textLabel
-	}
-
-	sMech := StrMech{}
-
-	result, err := sMech.JustifyTextInStrField(
-		txtFieldLabel.textLabel,
-		txtFieldLabel.fieldLen,
-		txtFieldLabel.textJustification,
-		"TextFieldSpecLabel.GetFormattedText()")
-
-	if err != nil {
-		return fmt.Sprintf("%v", err.Error())
-	}
+	result := textSpecificationMolecule{}.ptr().
+		getFormattedText(
+			txtFieldLabel.textLabel,
+			txtFieldLabel.fieldLen,
+			txtFieldLabel.textJustification,
+			&ePrefix)
 
 	return result
 }

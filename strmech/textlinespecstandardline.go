@@ -31,10 +31,10 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		textField)
 }
 
-// CopyOut - Returns a deep copy of the current
+// CopyOutPtr - Returns a pointer to a deep copy of the current
 // TextLineSpecStandardLine instance.
 //
-func (stdLine *TextLineSpecStandardLine) CopyOut() *TextLineSpecStandardLine {
+func (stdLine *TextLineSpecStandardLine) CopyOutPtr() *TextLineSpecStandardLine {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -53,13 +53,39 @@ func (stdLine *TextLineSpecStandardLine) CopyOut() *TextLineSpecStandardLine {
 		newStdLine.textFields = make([]ITextFieldSpecification,
 			lenTxtFields)
 
-		copy(newStdLine.textFields,
-			stdLine.textFields)
+		for i := 0; i < lenTxtFields; i++ {
+			newStdLine.textFields[i] =
+				stdLine.textFields[i].CopyOutITextField()
+		}
 	}
 
 	newStdLine.numOfStdLines = stdLine.numOfStdLines
 
 	return newStdLine
+}
+
+// Empty - Deletes all of the text fields stored as an array of
+// ITextFieldSpecification pointers within the current
+// TextLineSpecStandardLine instance.
+//
+func (stdLine *TextLineSpecStandardLine) Empty() {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	for i := 0; i < len(stdLine.textFields); i++ {
+		stdLine.textFields[i].Empty()
+		stdLine.textFields[i] = nil
+	}
+
+	stdLine.textFields = nil
+
+	return
 }
 
 // GetNumOfStdLines - Returns the number of repetitions for this
