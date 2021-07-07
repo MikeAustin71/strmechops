@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -377,6 +378,146 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields() []ITextFieldSpecificati
 	copy(textFields, stdLine.textFields)
 
 	return textFields
+}
+
+// IsValidInstanceError - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecStandardLine
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return an error.
+//
+// If the number of standard lines for the current
+// TextLineSpecStandardLine is set to a value less than one, this
+// method will consider the current TextLineSpecStandardLine
+// instance invalid and return an error.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If any of the internal member data variables contained in
+//       the current instance of TextFieldSpecLabel are found to be
+//       invalid, this method will return an error.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if stdLine.numOfStdLines < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of standard lines is less than one ('1')!\n"+
+			"This means that no lines will be generate by this specification.\n",
+			ePrefix.String())
+		return err
+	}
+
+	lenTextFields := len(stdLine.textFields)
+
+	if lenTextFields == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: No Text Fields have been configured for\n"+
+			"this standard line specification!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	for i := 0; i < lenTextFields; i++ {
+
+		err2 = stdLine.textFields[i].IsValidInstanceError(ePrefix)
+
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: Text Field Element [%v] is invalid!\n"+
+				"Text Field Element Error = \n%v\n",
+				ePrefix.String(),
+				i,
+				err2.Error())
+
+			return err
+		}
+
+	}
+
+	return nil
 }
 
 // New - Returns a new and empty, or unpopulated, concrete instance
