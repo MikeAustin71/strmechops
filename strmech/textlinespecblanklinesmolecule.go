@@ -35,7 +35,7 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecBlankLinesMolecule.copyOut()",
+		"textLineSpecBlankLinesMolecule.copyIn()",
 		"")
 
 	if err != nil {
