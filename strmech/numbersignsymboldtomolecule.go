@@ -10,7 +10,7 @@ type numberSignSymbolDtoMolecule struct {
 	lock *sync.Mutex
 }
 
-// CopyIn - Copies string information from input parameter
+// copyIn - Copies string information from input parameter
 // 'incomingNumSignSymbol' to input parameter
 // 'targetNumSignSymbol'.
 //

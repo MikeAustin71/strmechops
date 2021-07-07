@@ -1,6 +1,9 @@
 package strmech
 
-import "sync"
+import (
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // TextLineSpecStandardLine - This type is a text specification for
 // a standard line of text. It encapsulates an array of
@@ -29,6 +32,168 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	stdLine.textFields = append(stdLine.textFields,
 		textField)
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// TextLineSpecStandardLine ('incomingStdLine') to the data fields
+// of the current TextLineSpecStandardLine instance ('stdLine').
+//
+// IMPORTANT
+// All of the data fields in current TextLineSpecStandardLine
+// instance ('stdLine') will be modified and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingStdLine     *TextLineSpecStandardLine
+//     - A pointer to an instance of TextLineSpecStandardLine. This
+//       method will NOT change the values of internal member
+//       variables contained in this instance.
+//
+//       All data values in this TextLineSpecStandardLine instance
+//       will be copied to current TextLineSpecStandardLine
+//       instance ('stdLine').
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) CopyIn(
+	incomingStdLine *TextLineSpecStandardLine,
+	errorPrefix interface{}) error {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecStandardLineMolecule{}.ptr().
+		copyIn(
+			stdLine,
+			incomingStdLine,
+			ePrefix)
+
+	return err
+}
+
+// CopyOut - Returns a deep copy of the current
+// TextLineSpecStandardLine instance.
+//
+func (stdLine *TextLineSpecStandardLine) CopyOut() TextLineSpecStandardLine {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	newStdLine,
+		_ := textLineSpecStandardLineMolecule{}.ptr().
+		copyOut(
+			stdLine,
+			nil)
+
+	return newStdLine
+}
+
+// CopyOutITextLine - Returns a deep copy of the current
+// TextLineSpecStandardLine instance cast as an
+// ITextLineSpecification object.
+//
+func (stdLine *TextLineSpecStandardLine) CopyOutITextLine() ITextLineSpecification {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	newStdLine,
+		_ := textLineSpecStandardLineMolecule{}.ptr().
+		copyOut(
+			stdLine,
+			nil)
+
+	return ITextLineSpecification(&newStdLine)
 }
 
 // CopyOutPtr - Returns a pointer to a deep copy of the current
@@ -77,6 +242,47 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 	return
 }
 
+// GetFormattedText - Returns the formatted text generated by this
+// Text Line Specification for output and printing.
+//
+// The standard line may be replicated multiple times if the
+// value of internal member variable' stdLine.numOfStdLines' is
+// greater than one ('1').
+//
+func (stdLine *TextLineSpecStandardLine) GetFormattedText() string {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	if stdLine.numOfStdLines < 0 {
+		stdLine.numOfStdLines = 0
+	}
+
+	lenTextFields := len(stdLine.textFields)
+
+	if stdLine.numOfStdLines == 0 ||
+		lenTextFields == 0 {
+		return ""
+	}
+
+	var result, lineStr string
+
+	for i := 0; i < lenTextFields; i++ {
+		lineStr += stdLine.textFields[i].GetFormattedText()
+	}
+
+	for j := 0; j < stdLine.numOfStdLines; j++ {
+		result += lineStr
+	}
+
+	return result
+}
+
 // GetNumOfStdLines - Returns the number of repetitions for this
 // instance of TextLineSpecStandardLine. The number of standard
 // lines is the number of times this standard line will be output
@@ -121,6 +327,32 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields() []ITextFieldSpecificati
 	return textFields
 }
 
+// New - Returns a new and empty, or unpopulated, concrete instance
+// of TextLineSpecStandardLine.
+//
+// The default number of lines repetitions is set to one ('1').
+// This means that the returned standard line instance will only
+// be output or printed once.
+//
+func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	newStdLine.lock = new(sync.Mutex)
+
+	newStdLine.numOfStdLines = 1
+
+	return newStdLine
+}
+
 // NewPtr - This method returns a pointer to an empty or
 // unpopulated instance of TextLineSpecStandardLine.
 //
@@ -139,6 +371,8 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 	defer stdLine.lock.Unlock()
 
 	newStdLine := TextLineSpecStandardLine{}
+
+	newStdLine.lock = new(sync.Mutex)
 
 	newStdLine.numOfStdLines = 1
 
@@ -263,10 +497,27 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 }
 
 // TextTypeName - returns a string specifying the type
-// of Text Field specification. This method fulfills
+// of Text Line Specification. This method fulfills
 // requirements of ITextSpecification interface.
 //
 func (stdLine TextLineSpecStandardLine) TextTypeName() string {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	return "TextLineSpecStandardLine"
+}
+
+// TextLineSpecName - returns a string specifying the name
+// of this Text Line Specification. This method fulfills
+// requirements of ITextLineSpecification interface.
+//
+func (stdLine TextLineSpecStandardLine) TextLineSpecName() string {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)

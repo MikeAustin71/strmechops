@@ -10,6 +10,81 @@ type textLineSpecStandardLineMolecule struct {
 	lock *sync.Mutex
 }
 
+// copyIn - Copies all data from input parameter 'incomingStdLine'
+// to input parameter 'targetStdLine'.
+//
+// Be advised that the data fields in 'targetStdLine' will be
+// overwritten.
+//
+func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
+	targetStdLine *TextLineSpecStandardLine,
+	incomingStdLine *TextLineSpecStandardLine,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtStdLineMolecule.lock == nil {
+		txtStdLineMolecule.lock = new(sync.Mutex)
+	}
+
+	txtStdLineMolecule.lock.Lock()
+
+	defer txtStdLineMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineMolecule.copyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if targetStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetStdLine' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if incomingStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'incomingStdLine' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if incomingStdLine.numOfStdLines < 0 {
+		incomingStdLine.numOfStdLines = 0
+	}
+
+	targetStdLine.numOfStdLines =
+		incomingStdLine.numOfStdLines
+
+	lenIncomingTxtFields := len(incomingStdLine.textFields)
+
+	if lenIncomingTxtFields == 0 {
+		targetStdLine.textFields = nil
+		return nil
+	}
+
+	targetStdLine.textFields =
+		make([]ITextFieldSpecification, lenIncomingTxtFields)
+
+	for i := 0; i < lenIncomingTxtFields; i++ {
+		targetStdLine.textFields[i] =
+			incomingStdLine.textFields[i].CopyOutITextField()
+	}
+
+	return nil
+}
+
 // copyOut - Returns a deep copy of the input parameter
 // 'txtStdLine'.
 //
