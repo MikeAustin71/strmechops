@@ -123,22 +123,47 @@ func (txtFieldLabel *TextFieldSpecLabel) Equal(
 
 	defer txtFieldLabel.lock.Unlock()
 
-	if txtFieldLabel.textLabel !=
-		incomingTextFieldLabel.textLabel {
+	return textFieldSpecLabelMolecule{}.ptr().
+		equal(
+			txtFieldLabel,
+			incomingTextFieldLabel)
+}
+
+// EqualITextField - Receives an object implementing the
+// ITextFieldSpecification interface and proceeds to compare
+// the member variables to those of the current TextFieldSpecLabel
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables from both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
+	iTextField ITextFieldSpecification) bool {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	if iTextField == nil {
 		return false
 	}
 
-	if txtFieldLabel.fieldLen !=
-		incomingTextFieldLabel.fieldLen {
+	txtLabel, ok := iTextField.(*TextFieldSpecLabel)
+
+	if !ok {
 		return false
 	}
 
-	if txtFieldLabel.textJustification !=
-		incomingTextFieldLabel.textJustification {
-		return false
-	}
-
-	return true
+	return textFieldSpecLabelMolecule{}.ptr().
+		equal(
+			txtFieldLabel,
+			txtLabel)
 }
 
 // GetFieldLength - Returns the length of the text field in which

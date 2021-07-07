@@ -118,9 +118,9 @@ func (blkLines *TextLineSpecBlankLines) Empty() {
 // instance in order to determine if they are equivalent.
 //
 // A boolean flag showing the result of this comparison is
-// returned. If the member variables are equal in all respects,
-// this flag is set to 'true'. Otherwise, this method returns
-// 'false'.
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
 //
 func (blkLines *TextLineSpecBlankLines) Equal(
 	incomingBlkLines *TextLineSpecBlankLines) bool {
@@ -133,11 +133,20 @@ func (blkLines *TextLineSpecBlankLines) Equal(
 
 	defer blkLines.lock.Unlock()
 
+	if incomingBlkLines == nil {
+		return false
+	}
+
+	if blkLines.numBlankLines !=
+		incomingBlkLines.numBlankLines {
+		return false
+	}
+
 	lenCurrBlkLineChars := len(blkLines.newLineChars)
 
-	lenIncomingBlkLineChars := len(incomingBlkLines.newLineChars)
+	if lenCurrBlkLineChars !=
+		len(incomingBlkLines.newLineChars) {
 
-	if lenCurrBlkLineChars != lenIncomingBlkLineChars {
 		return false
 	}
 
@@ -148,11 +157,6 @@ func (blkLines *TextLineSpecBlankLines) Equal(
 				return false
 			}
 		}
-	}
-
-	if blkLines.numBlankLines !=
-		incomingBlkLines.numBlankLines {
-		return false
 	}
 
 	return true

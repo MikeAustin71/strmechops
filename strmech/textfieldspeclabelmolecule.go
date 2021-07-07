@@ -107,6 +107,53 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 	return newTxtFieldLabel, nil
 }
 
+// equal - Receives a pointer to two instances of
+// TextFieldSpecLabel and proceeds to compare their member
+// variables in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
+	txtLabel *TextFieldSpecLabel,
+	incomingTxtLabel *TextFieldSpecLabel) bool {
+
+	if txtFieldLabelMolecule.lock == nil {
+		txtFieldLabelMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabelMolecule.lock.Lock()
+
+	defer txtFieldLabelMolecule.lock.Unlock()
+
+	if txtLabel == nil {
+		return false
+	}
+
+	if incomingTxtLabel == nil {
+		return false
+	}
+
+	if txtLabel.textLabel !=
+		incomingTxtLabel.textLabel {
+		return false
+	}
+
+	if txtLabel.fieldLen !=
+		incomingTxtLabel.fieldLen {
+		return false
+	}
+
+	if txtLabel.textJustification !=
+		incomingTxtLabel.textJustification {
+		return false
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // textFieldSpecLabelMolecule.
 //

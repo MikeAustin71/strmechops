@@ -10,4 +10,6 @@ type ITextFieldSpecification interface {
 	CopyOutITextField() ITextFieldSpecification
 
 	Empty()
+
+	EqualITextField(iTextField ITextFieldSpecification) bool
 }
