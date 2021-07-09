@@ -141,6 +141,62 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
 	return newBlankLinesSpec, nil
 }
 
+// equal - Receives pointers to two TextLineSpecBlankLines
+// instances and proceeds to compare the member data elements to
+// determine whether they are equal.
+//
+// If the data elements of both input parameters 'blkLines' and
+// 'incomingBlkLines' are equal in all respects, this method
+// returns a boolean value of 'true'. Otherwise this method returns
+// 'false'.
+//
+func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) equal(
+	blkLines *TextLineSpecBlankLines,
+	incomingBlkLines *TextLineSpecBlankLines) bool {
+
+	if txtBlankLinesMolecule.lock == nil {
+		txtBlankLinesMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBlankLinesMolecule.lock.Lock()
+
+	defer txtBlankLinesMolecule.lock.Unlock()
+
+	if blkLines == nil {
+		return false
+	}
+
+	if incomingBlkLines == nil {
+		return false
+	}
+
+	if blkLines.numBlankLines !=
+		incomingBlkLines.numBlankLines {
+
+		return false
+	}
+
+	lenCurrBlkLineChars := len(blkLines.newLineChars)
+
+	if lenCurrBlkLineChars !=
+		len(incomingBlkLines.newLineChars) {
+		return false
+	}
+
+	if lenCurrBlkLineChars > 0 {
+
+		for i := 0; i < lenCurrBlkLineChars; i++ {
+
+			if blkLines.newLineChars[i] !=
+				incomingBlkLines.newLineChars[i] {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecBlankLinesMolecule.
 //

@@ -10,4 +10,7 @@ type ITextLineSpecification interface {
 	CopyOutITextLine() ITextLineSpecification
 
 	Empty()
+
+	EqualITextLine(
+		iTextLine ITextLineSpecification) bool
 }

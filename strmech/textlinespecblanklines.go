@@ -249,33 +249,42 @@ func (blkLines *TextLineSpecBlankLines) Equal(
 
 	defer blkLines.lock.Unlock()
 
-	if incomingBlkLines == nil {
+	return textLineSpecBlankLinesMolecule{}.ptr().equal(
+		blkLines,
+		incomingBlkLines)
+}
+
+// EqualITextLine - Receives an object implementing the
+// ITextLineSpecification interface and proceeds to compare
+// the member variables to those of the current
+// TextLineSpecBlankLines instance in order to determine if
+// they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables from both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (blkLines *TextLineSpecBlankLines) EqualITextLine(
+	iTextLine ITextLineSpecification) bool {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	txtBlkLine, ok := iTextLine.(*TextLineSpecBlankLines)
+
+	if !ok {
 		return false
 	}
 
-	if blkLines.numBlankLines !=
-		incomingBlkLines.numBlankLines {
-		return false
-	}
-
-	lenCurrBlkLineChars := len(blkLines.newLineChars)
-
-	if lenCurrBlkLineChars !=
-		len(incomingBlkLines.newLineChars) {
-
-		return false
-	}
-
-	if lenCurrBlkLineChars > 0 {
-		for i := 0; i < lenCurrBlkLineChars; i++ {
-			if blkLines.newLineChars[i] !=
-				incomingBlkLines.newLineChars[i] {
-				return false
-			}
-		}
-	}
-
-	return true
+	return textLineSpecBlankLinesMolecule{}.ptr().equal(
+		blkLines,
+		txtBlkLine)
 }
 
 // GetFormattedText - Returns the formatted text for output and
