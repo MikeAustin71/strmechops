@@ -9,7 +9,10 @@ import (
 // TextLineSpecStandardLine - This type is a text specification for
 // a standard line of text. It encapsulates an array of
 // ITextFieldSpecification objects which are used to format text
-// fields within a single line of text.
+// fields within a single line of text. Essentially, a standard
+// text line is a collection of text fields which implement the
+// ITextFieldSpecification interface.
+//
 //
 // IMPORTANT
 // ----------------------------------------------------------------
