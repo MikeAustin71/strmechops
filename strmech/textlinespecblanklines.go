@@ -262,8 +262,10 @@ func (blkLines *TextLineSpecBlankLines) Equal(
 //
 // A boolean flag showing the result of this comparison is
 // returned. If the member variables from both instances are equal
-// in all respects, this flag is set to 'true'. Otherwise, this method returns
-// 'false'.
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+// This method is required by interface ITextLineSpecification.
 //
 func (blkLines *TextLineSpecBlankLines) EqualITextLine(
 	iTextLine ITextLineSpecification) bool {

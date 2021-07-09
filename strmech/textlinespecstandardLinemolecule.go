@@ -186,6 +186,58 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 	return newStdLine, nil
 }
 
+// equal - Receives pointers to two TextLineSpecStandardLine
+// instances and proceeds to compare the member data elements to
+// determine whether they are equal.
+//
+// If the data elements of both input parameters 'blkLines' and
+// 'incomingBlkLines' are equal in all respects, this method
+// returns a boolean value of 'true'. Otherwise this method returns
+// 'false'.
+//
+func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
+	stdLineOne *TextLineSpecStandardLine,
+	stdLineTwo *TextLineSpecStandardLine) bool {
+
+	if txtStdLineMolecule.lock == nil {
+		txtStdLineMolecule.lock = new(sync.Mutex)
+	}
+
+	txtStdLineMolecule.lock.Lock()
+
+	defer txtStdLineMolecule.lock.Unlock()
+
+	if stdLineOne == nil ||
+		stdLineTwo == nil {
+
+		return false
+	}
+
+	if stdLineOne.numOfStdLines !=
+		stdLineTwo.numOfStdLines {
+
+		return false
+	}
+
+	lenOneTextFields := len(stdLineOne.textFields)
+
+	if lenOneTextFields !=
+		len(stdLineTwo.textFields) {
+		return false
+	}
+
+	for i := 0; i < lenOneTextFields; i++ {
+
+		if !stdLineOne.textFields[i].EqualITextField(
+			stdLineTwo.textFields[i]) {
+			return false
+		}
+
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecStandardLineMolecule.
 //

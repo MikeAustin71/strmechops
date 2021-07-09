@@ -151,8 +151,8 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
 // 'false'.
 //
 func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) equal(
-	blkLines *TextLineSpecBlankLines,
-	incomingBlkLines *TextLineSpecBlankLines) bool {
+	blkLinesOne *TextLineSpecBlankLines,
+	blkLinesTwo *TextLineSpecBlankLines) bool {
 
 	if txtBlankLinesMolecule.lock == nil {
 		txtBlankLinesMolecule.lock = new(sync.Mutex)
@@ -162,24 +162,24 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) equal(
 
 	defer txtBlankLinesMolecule.lock.Unlock()
 
-	if blkLines == nil {
+	if blkLinesOne == nil {
 		return false
 	}
 
-	if incomingBlkLines == nil {
+	if blkLinesTwo == nil {
 		return false
 	}
 
-	if blkLines.numBlankLines !=
-		incomingBlkLines.numBlankLines {
+	if blkLinesOne.numBlankLines !=
+		blkLinesTwo.numBlankLines {
 
 		return false
 	}
 
-	lenCurrBlkLineChars := len(blkLines.newLineChars)
+	lenCurrBlkLineChars := len(blkLinesOne.newLineChars)
 
 	if lenCurrBlkLineChars !=
-		len(incomingBlkLines.newLineChars) {
+		len(blkLinesTwo.newLineChars) {
 		return false
 	}
 
@@ -187,8 +187,8 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) equal(
 
 		for i := 0; i < lenCurrBlkLineChars; i++ {
 
-			if blkLines.newLineChars[i] !=
-				incomingBlkLines.newLineChars[i] {
+			if blkLinesOne.newLineChars[i] !=
+				blkLinesTwo.newLineChars[i] {
 				return false
 			}
 		}
