@@ -11,10 +11,31 @@ import (
 // ITextFieldSpecification objects which are used to format text
 // fields within a single line of text.
 //
+// IMPORTANT
+// ----------------------------------------------------------------
+// By default, the TextLineSpecStandardLine type will generate a
+// line of text with a "new line" ('\n') line termination
+// character. The application of this "new line" ('\n') character
+// is automatic and by default.
+//
+// However, users may control and override the application of line
+// termination characters through the following methods:
+//
+//  TextLineSpecStandardLine.SetLineTerminationChars()
+//  TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//  TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//
+// ----------------------------------------------------------------
+//
+// The TextLineSpecStandardLine type implements the
+// ITextLineSpecification interface.
+//
 type TextLineSpecStandardLine struct {
-	textFields    []ITextFieldSpecification
-	numOfStdLines int
-	lock          *sync.Mutex
+	textFields            []ITextFieldSpecification
+	numOfStdLines         int
+	turnLineTerminatorOff bool
+	newLineChars          []rune
+	lock                  *sync.Mutex
 }
 
 // AddTextField - This method will append a text field object to
@@ -231,7 +252,11 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 
 	stdLine.lock.Lock()
 
-	defer stdLine.lock.Unlock()
+	stdLine.numOfStdLines = 0
+
+	stdLine.turnLineTerminatorOff = false
+
+	stdLine.newLineChars = nil
 
 	for i := 0; i < len(stdLine.textFields); i++ {
 		stdLine.textFields[i].Empty()
@@ -239,6 +264,10 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 	}
 
 	stdLine.textFields = nil
+
+	stdLine.lock.Unlock()
+
+	stdLine.lock = nil
 
 	return
 }
@@ -347,6 +376,16 @@ func (stdLine *TextLineSpecStandardLine) GetFormattedText() string {
 	for j := 0; j < stdLine.numOfStdLines; j++ {
 		result += lineStr
 	}
+
+	if stdLine.turnLineTerminatorOff == true {
+		return result
+	}
+
+	if len(stdLine.newLineChars) == 0 {
+		stdLine.newLineChars = []rune{'\n'}
+	}
+
+	result += string(stdLine.newLineChars)
 
 	return result
 }
@@ -558,6 +597,10 @@ func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 
 	newStdLine.numOfStdLines = 1
 
+	newStdLine.newLineChars = []rune{'\n'}
+
+	newStdLine.turnLineTerminatorOff = false
+
 	return newStdLine
 }
 
@@ -583,6 +626,10 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 	newStdLine.lock = new(sync.Mutex)
 
 	newStdLine.numOfStdLines = 1
+
+	newStdLine.newLineChars = []rune{'\n'}
+
+	newStdLine.turnLineTerminatorOff = false
 
 	return &newStdLine
 }
@@ -621,6 +668,8 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 
 	newStdLine := TextLineSpecStandardLine{}
 
+	newStdLine.lock = new(sync.Mutex)
+
 	lenTxtFields := len(textFields)
 
 	if lenTxtFields > 0 {
@@ -637,6 +686,10 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 	}
 
 	newStdLine.numOfStdLines = numOfStdLines
+
+	newStdLine.newLineChars = []rune{'\n'}
+
+	newStdLine.turnLineTerminatorOff = false
 
 	return &newStdLine
 }
@@ -670,6 +723,45 @@ func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 	}
 
 	stdLine.numOfStdLines = numOfStdLines
+}
+
+// SetLineTerminationChars - By default, the line termination
+// character for blank line produced and applied by this text line
+// specification is the the new line character, '\n'. However,
+// users have the option of substituting a character or series
+// of characters for the the line termination sequence using this
+// method.
+//
+// This method will receive a string as input and apply the
+// characters in that string as the line termination sequence for
+// this instance of TextLineSpecStandardLine.
+//
+// If input parameter 'lineTerminationChars' is submitted as an
+// empty string, this method will take no action and exit.
+//
+// By default, the TextLineSpecStandardLine type applies the line
+// termination characters to each standard line of text generated.
+// However, users have the option of turning off the automatic
+// generation of text line terminators by calling method:
+//
+//   TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//
+func (stdLine *TextLineSpecStandardLine) SetLineTerminationChars(
+	lineTerminationChars string) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	if len(lineTerminationChars) == 0 {
+		return
+	}
+
+	stdLine.newLineChars = []rune(lineTerminationChars)
 }
 
 // SetTextFields - Replaces the existing array of text fields for
@@ -736,4 +828,60 @@ func (stdLine TextLineSpecStandardLine) TextLineSpecName() string {
 	defer stdLine.lock.Unlock()
 
 	return "TextLineSpecStandardLine"
+}
+
+// TurnAutoLineTerminationOff - Turns off or cancels the automatic
+// generation of new line terminators for each line of text
+// produced by this instance of TextLineSpecStandardLine.
+//
+// By default, the TextLineSpecStandardLine type will generate a
+// line of text with a "new line" ('\n') line termination
+// character. The application of this "new line" ('\n') character
+// is automatic and by default.
+//
+// However, users may turn off the automatic application of line
+// termination characters by calling this method.
+//
+func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOff() {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	stdLine.turnLineTerminatorOff = true
+}
+
+// TurnAutoLineTerminationOn - Turns on or engages the automatic
+// generation of new line terminators for each line of text
+// produced by this instance of TextLineSpecStandardLine.
+//
+// By default, the TextLineSpecStandardLine type will generate a
+// line of text with a "new line" ('\n') line termination
+// character. The application of this "new line" ('\n') character
+// is automatic and by default.
+//
+// However, users may control and override this default behavior
+// by calling the method:
+//     TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//
+// This method will turn on or re-engage the default behavior which
+// will automatically apply line termination characters at the end
+// of each line of text generated by this instance of
+// TextLineSpecStandardLine.
+//
+func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOn() {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	stdLine.turnLineTerminatorOff = false
 }

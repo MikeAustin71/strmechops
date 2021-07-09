@@ -64,6 +64,22 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 		incomingStdLine.numOfStdLines = 0
 	}
 
+	lenInNewLineChars := len(incomingStdLine.newLineChars)
+
+	if lenInNewLineChars == 0 {
+		incomingStdLine.newLineChars = []rune{'\n'}
+		lenInNewLineChars = 1
+	}
+
+	targetStdLine.newLineChars =
+		make([]rune, lenInNewLineChars)
+
+	copy(targetStdLine.newLineChars,
+		incomingStdLine.newLineChars)
+
+	targetStdLine.turnLineTerminatorOff =
+		incomingStdLine.turnLineTerminatorOff
+
 	targetStdLine.numOfStdLines =
 		incomingStdLine.numOfStdLines
 
@@ -168,6 +184,24 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 
 	newStdLine := TextLineSpecStandardLine{}
 
+	newStdLine.lock = new(sync.Mutex)
+
+	lenInNewLineChars := len(txtStdLine.newLineChars)
+
+	if lenInNewLineChars == 0 {
+		txtStdLine.newLineChars = []rune{'\n'}
+		lenInNewLineChars = 1
+	}
+
+	newStdLine.newLineChars =
+		make([]rune, lenInNewLineChars)
+
+	copy(newStdLine.newLineChars,
+		txtStdLine.newLineChars)
+
+	newStdLine.turnLineTerminatorOff =
+		txtStdLine.turnLineTerminatorOff
+
 	lenTxtFields := len(txtStdLine.textFields)
 
 	if lenTxtFields > 0 {
@@ -216,6 +250,26 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 	if stdLineOne.numOfStdLines !=
 		stdLineTwo.numOfStdLines {
 
+		return false
+	}
+
+	lenOneTextTermChars := len(stdLineOne.newLineChars)
+
+	if lenOneTextTermChars != len(stdLineTwo.newLineChars) {
+		return false
+	}
+
+	if lenOneTextTermChars > 0 {
+		for i := 0; i < lenOneTextTermChars; i++ {
+			if stdLineOne.newLineChars[i] !=
+				stdLineTwo.newLineChars[i] {
+				return false
+			}
+		}
+	}
+
+	if stdLineOne.turnLineTerminatorOff !=
+		stdLineTwo.turnLineTerminatorOff {
 		return false
 	}
 

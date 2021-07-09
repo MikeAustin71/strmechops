@@ -18,7 +18,7 @@ import (
 // To override the default line termination character
 // (newline '\n'), see method:
 //
-//      TextLineSpecBlankLines.SetLineTermination()
+//      TextLineSpecBlankLines.SetLineTerminationChars()
 //
 type TextLineSpecBlankLines struct {
 	numBlankLines int
@@ -399,7 +399,7 @@ func (blkLines *TextLineSpecBlankLines) GetNumOfBlankLines() int {
 // This method will apply the default line termination character,
 // '\n'. To apply a different line termination sequence, use the
 // method:
-//  TextLineSpecBlankLines.SetLineTermination()
+//  TextLineSpecBlankLines.SetLineTerminationChars()
 //
 // If input parameter 'numOfBlankLines' is less than zero, this
 // method will automatically reset the value to zero.
@@ -428,11 +428,12 @@ func (blkLines TextLineSpecBlankLines) NewPtr(
 	return &newBlankLinesSpec
 }
 
-// SetLineTermination - By default, the line termination character
-// for blank line produced by this text line specification is the
-// the new line character, '\n'. However, users have the option
-// of substituting and character or series of characters for the
-// the line termination sequence.
+// SetLineTerminationChars - By default, the line termination
+// character for blank line produced and applied by this text line
+// specification is the the new line character, '\n'. However,
+// users have the option of substituting a character or series
+// of characters for the the line termination sequence using this
+// method.
 //
 // This method will receive a string as input and apply the
 // characters in that string as the line termination sequence for
@@ -441,7 +442,7 @@ func (blkLines TextLineSpecBlankLines) NewPtr(
 // If input parameter 'lineTerminationChars' is submitted as an
 // empty string, this method will take no action and exit.
 //
-func (blkLines *TextLineSpecBlankLines) SetLineTermination(
+func (blkLines *TextLineSpecBlankLines) SetLineTerminationChars(
 	lineTerminationChars string) {
 
 	if blkLines.lock == nil {
