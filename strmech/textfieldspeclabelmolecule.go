@@ -10,6 +10,80 @@ type textFieldSpecLabelMolecule struct {
 	lock *sync.Mutex
 }
 
+// copyIn - Copies all data from input parameter
+// 'incomingTxtFieldLabel' to input parameter
+// 'targetTxtFieldLabel'.
+//
+// IMPORTANT
+// ----------------------------------------------------------------
+// Be advised that the data fields in 'targetTxtFieldLabel' will be
+// overwritten.
+//
+func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
+	targetTxtFieldLabel *TextFieldSpecLabel,
+	incomingTxtFieldLabel *TextFieldSpecLabel,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtFieldLabelMolecule.lock == nil {
+		txtFieldLabelMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabelMolecule.lock.Lock()
+
+	defer txtFieldLabelMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldSpecLabelMolecule.copyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if targetTxtFieldLabel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetTxtFieldLabel' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if incomingTxtFieldLabel == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'incomingTxtFieldLabel' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if incomingTxtFieldLabel.fieldLen < 0 {
+		incomingTxtFieldLabel.fieldLen = 0
+	}
+
+	if !incomingTxtFieldLabel.textJustification.XIsValid() {
+		incomingTxtFieldLabel.textJustification =
+			TextJustify(0).None()
+	}
+
+	targetTxtFieldLabel.textLabel =
+		incomingTxtFieldLabel.textLabel
+
+	targetTxtFieldLabel.fieldLen =
+		incomingTxtFieldLabel.fieldLen
+
+	targetTxtFieldLabel.textJustification =
+		incomingTxtFieldLabel.textJustification
+
+	return nil
+}
+
 // copyOut - Returns a deep copy of the input parameter
 // 'txtFieldLabel'
 //
@@ -89,6 +163,15 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 			ePrefix.String())
 
 		return TextFieldSpecLabel{}, err
+	}
+
+	if txtFieldLabel.fieldLen < 0 {
+		txtFieldLabel.fieldLen = 0
+	}
+
+	if !txtFieldLabel.textJustification.XIsValid() {
+		txtFieldLabel.textJustification =
+			TextJustify(0).None()
 	}
 
 	newTxtFieldLabel := TextFieldSpecLabel{}
