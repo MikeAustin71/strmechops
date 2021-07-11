@@ -16,7 +16,7 @@ type textLineSpecBlankLinesMolecule struct {
 // Be advised that the data fields in 'targetBlkLines' will be
 // overwritten.
 //
-func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyIn(
+func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 	targetBlkLines *TextLineSpecBlankLines,
 	incomingBlkLines *TextLineSpecBlankLines,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -85,7 +85,7 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyIn(
 // copyOut - Returns a deep copy of the TextLineSpecBlankLines
 // input parameter 'blkLines'.
 //
-func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
+func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 	blkLines *TextLineSpecBlankLines,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextLineSpecBlankLines, error) {
@@ -141,6 +141,37 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
 	return newBlankLinesSpec, nil
 }
 
+// empty - Receives a pointer to an instance of
+// TextLineSpecBlankLines and proceeds to set all of the internal
+// member variables to their uninitialized or zero states.
+//
+// IMPORTANT
+// ----------------------------------------------------------------
+// The values of all member variables contained in input parameter
+// 'textSpecBlkLines' will be overwritten and deleted.
+//
+func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) empty(
+	textSpecBlkLines *TextLineSpecBlankLines) {
+
+	if txtBlankLinesMolecule.lock == nil {
+		txtBlankLinesMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBlankLinesMolecule.lock.Lock()
+
+	defer txtBlankLinesMolecule.lock.Unlock()
+
+	if textSpecBlkLines == nil {
+		return
+	}
+
+	textSpecBlkLines.numBlankLines = 0
+
+	textSpecBlkLines.newLineChars = nil
+
+	return
+}
+
 // equal - Receives pointers to two TextLineSpecBlankLines
 // instances and proceeds to compare the member data elements to
 // determine whether they are equal.
@@ -150,7 +181,7 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) copyOut(
 // returns a boolean value of 'true'. Otherwise this method returns
 // 'false'.
 //
-func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) equal(
+func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 	blkLinesOne *TextLineSpecBlankLines,
 	blkLinesTwo *TextLineSpecBlankLines) bool {
 

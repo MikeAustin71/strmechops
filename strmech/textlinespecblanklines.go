@@ -218,10 +218,8 @@ func (blkLines *TextLineSpecBlankLines) Empty() {
 	}
 
 	blkLines.lock.Lock()
-
-	blkLines.numBlankLines = 0
-
-	blkLines.newLineChars = nil
+	textLineSpecBlankLinesMolecule{}.ptr().
+		empty(blkLines)
 
 	blkLines.lock.Unlock()
 
