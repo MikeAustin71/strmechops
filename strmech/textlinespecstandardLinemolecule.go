@@ -220,6 +220,44 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 	return newStdLine, nil
 }
 
+// empty - Receives a pointer to an instance of
+// TextLineSpecStandardLine and proceeds to set all of the internal
+// member variables to their uninitialized or zero states.
+//
+// IMPORTANT
+// ----------------------------------------------------------------
+// The values of all member variables contained in input parameter
+// 'txtStdLine' will be overwritten and deleted.
+//
+func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
+	txtStdLine *TextLineSpecStandardLine) {
+
+	if txtStdLineMolecule.lock == nil {
+		txtStdLineMolecule.lock = new(sync.Mutex)
+	}
+
+	txtStdLineMolecule.lock.Lock()
+
+	defer txtStdLineMolecule.lock.Unlock()
+
+	if txtStdLine == nil {
+		return
+	}
+
+	txtStdLine.numOfStdLines = 0
+
+	txtStdLine.turnLineTerminatorOff = false
+
+	txtStdLine.newLineChars = nil
+
+	for i := 0; i < len(txtStdLine.textFields); i++ {
+		txtStdLine.textFields[i].Empty()
+		txtStdLine.textFields[i] = nil
+	}
+
+	txtStdLine.textFields = nil
+}
+
 // equal - Receives pointers to two TextLineSpecStandardLine
 // instances and proceeds to compare the member data elements to
 // determine whether they are equal.

@@ -255,18 +255,8 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 
 	stdLine.lock.Lock()
 
-	stdLine.numOfStdLines = 0
-
-	stdLine.turnLineTerminatorOff = false
-
-	stdLine.newLineChars = nil
-
-	for i := 0; i < len(stdLine.textFields); i++ {
-		stdLine.textFields[i].Empty()
-		stdLine.textFields[i] = nil
-	}
-
-	stdLine.textFields = nil
+	textLineSpecStandardLineMolecule{}.ptr().empty(
+		stdLine)
 
 	stdLine.lock.Unlock()
 
