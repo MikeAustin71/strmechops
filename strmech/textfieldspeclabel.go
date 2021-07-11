@@ -90,11 +90,8 @@ func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 
 	txtFieldLabel.lock.Lock()
 
-	txtFieldLabel.textLabel = ""
-
-	txtFieldLabel.fieldLen = 0
-
-	txtFieldLabel.textJustification = TextJustify(0).None()
+	textFieldSpecLabelMolecule{}.ptr().
+		empty(txtFieldLabel)
 
 	txtFieldLabel.lock.Unlock()
 

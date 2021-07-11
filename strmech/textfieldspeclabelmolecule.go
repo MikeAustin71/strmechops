@@ -107,6 +107,39 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 	return newTxtFieldLabel, nil
 }
 
+// empty - Receives a pointer to an instance of TextFieldSpecLabel
+// and proceeds to set all of the internal member variables to
+// their uninitialized or zero states.
+//
+// IMPORTANT
+// ----------------------------------------------------------------
+// The values of all member variables contained in input parameter
+// 'txtFieldLabel' will be overwritten and deleted.
+//
+func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
+	txtFieldLabel *TextFieldSpecLabel) {
+
+	if txtFieldLabelMolecule.lock == nil {
+		txtFieldLabelMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabelMolecule.lock.Lock()
+
+	defer txtFieldLabelMolecule.lock.Unlock()
+
+	if txtFieldLabel == nil {
+		return
+	}
+
+	txtFieldLabel.textLabel = ""
+
+	txtFieldLabel.fieldLen = 0
+
+	txtFieldLabel.textJustification = TextJustify(0).None()
+
+	return
+}
+
 // equal - Receives a pointer to two instances of
 // TextFieldSpecLabel and proceeds to compare their member
 // variables in order to determine if they are equivalent.
