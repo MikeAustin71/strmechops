@@ -221,6 +221,9 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //       repeated one or more times as specified by the
 //       'fillerCharsCount' parameter.
 //
+//       If this parameter is submitted as a zero length string,
+//       an error will be returned.
+//
 //
 //  fillerCharsCount    int
 //     - Controls the number of times 'fillerCharacters' is
@@ -229,6 +232,10 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //       which will populated the completed Text Filler Field is
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsCount'.
+//
+//       If 'fillerCharsCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
 //
 //
 //  errorPrefix                interface{}
@@ -318,7 +325,7 @@ func (txtFillerField TextFieldSpecFiller) NewPtr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewConstructor()",
+		"TextFieldSpecFiller.NewPtr()",
 		"")
 
 	if err != nil {
@@ -335,6 +342,15 @@ func (txtFillerField TextFieldSpecFiller) NewPtr(
 	if fillerCharsCount < 1 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'fillerCharsCount' is less than one (1)!\n"+
+			"'fillerCharsCount' controls the number of repetitions of 'fillerCharacters'\n"+
+			"in the Filler Text Field.\n",
+			ePrefix.String())
+		return &TextFieldSpecFiller{}, err
+	}
+
+	if fillerCharsCount > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsCount' is greater than one million (1,000,000)!\n"+
 			"'fillerCharsCount' controls the number of repetitions of 'fillerCharacters'\n"+
 			"in the Filler Text Field.\n",
 			ePrefix.String())
