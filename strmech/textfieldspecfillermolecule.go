@@ -25,9 +25,9 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) newEmpty() TextFieldS
 
 	newFillerField := TextFieldSpecFiller{}
 
-	newFillerField.fillerCharacter = 0
+	newFillerField.fillerCharacters = nil
 
-	newFillerField.fieldLen = 0
+	newFillerField.fillerCharsCount = 0
 
 	newFillerField.lock = new(sync.Mutex)
 
