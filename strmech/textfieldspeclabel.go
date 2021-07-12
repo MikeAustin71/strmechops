@@ -946,14 +946,86 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 // specification will be used to position the text label string
 // within a text field.
 //
-// The text justification enumeration specification should be set
-// to one of these three valid values:
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       'textLabel' within the field specified by 'fieldLen'.
+//       Options for 'textJustification' are:
 //           TextJustify(0).Left()
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
 //
+//       If input parameter 'textJustification' is not equal to one
+//       of the three values listed above, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
-	textJustification TextJustify) {
+	textJustification TextJustify,
+	errorPrefix interface{}) error {
 
 	if txtFieldLabel.lock == nil {
 		txtFieldLabel.lock = new(sync.Mutex)
@@ -963,7 +1035,35 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 
 	defer txtFieldLabel.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecFiller.SetTextJustification()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if !textJustification.XIsValid() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textJustification' is INVALID!\n"+
+			"'textJustification' must be equal to 'Left', 'Center' or 'Right'.\n"+
+			"'textJustification'='%v'\n"+
+			"'textJustification' integer value ='%v'\n",
+			ePrefix.String(),
+			textJustification.String(),
+			textJustification.XValueInt())
+
+		return err
+	}
+
 	txtFieldLabel.textJustification = textJustification
+
+	return nil
 }
 
 // SetTextLabel - Returns the un-formatted text label string
