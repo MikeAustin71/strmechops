@@ -225,6 +225,55 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) empty(
 	return
 }
 
+// equal - Receives a pointer to two instances of
+// TextFieldSpecFiller and proceeds to compare their member
+// variables in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) equal(
+	txtFieldFiller *TextFieldSpecFiller,
+	incomingTxtFieldFiller *TextFieldSpecFiller) bool {
+
+	if txtFieldFillerMolecule.lock == nil {
+		txtFieldFillerMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldFillerMolecule.lock.Lock()
+
+	defer txtFieldFillerMolecule.lock.Unlock()
+
+	if txtFieldFiller == nil ||
+		incomingTxtFieldFiller == nil {
+		return false
+	}
+
+	lenInTxtFiller := len(incomingTxtFieldFiller.fillerCharacters)
+
+	if lenInTxtFiller != len(txtFieldFiller.fillerCharacters) {
+		return false
+	}
+
+	if lenInTxtFiller > 0 {
+		for i := 0; i < lenInTxtFiller; i++ {
+			if incomingTxtFieldFiller.fillerCharacters[i] !=
+				txtFieldFiller.fillerCharacters[i] {
+				return false
+			}
+		}
+	}
+
+	if txtFieldFiller.fillerCharsRepeatCount !=
+		incomingTxtFieldFiller.fillerCharsRepeatCount {
+		return false
+	}
+
+	return true
+}
+
 // newEmpty - Returns a new unpopulated instance of
 // TextFieldSpecFiller. All of the member variables contained in
 // this new instance are set to their uninitialized or zero values.
