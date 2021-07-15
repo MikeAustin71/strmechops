@@ -237,7 +237,10 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 // TextFieldSpecLabel instance cast as an ITextFieldSpecification
 // object.
 //
-func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField() ITextFieldSpecification {
+func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
+	errorPrefix interface{}) (
+	ITextFieldSpecification,
+	error) {
 
 	if txtFieldLabel.lock == nil {
 		txtFieldLabel.lock = new(sync.Mutex)
@@ -247,14 +250,35 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField() ITextFieldSpecifica
 
 	defer txtFieldLabel.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var iTxtFieldSpec ITextFieldSpecification
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecLabel.CopyOutITextField()",
+		"")
+
+	if err != nil {
+		return iTxtFieldSpec, err
+	}
+
+	var newTxtFieldLabel TextFieldSpecLabel
+
 	newTxtFieldLabel,
-		_ := textFieldSpecLabelMolecule{}.ptr().
+		err = textFieldSpecLabelMolecule{}.ptr().
 		copyOut(txtFieldLabel,
-			nil)
+			ePrefix)
 
-	iTxtFieldSpec := ITextFieldSpecification(&newTxtFieldLabel)
+	if err != nil {
+		return iTxtFieldSpec, err
+	}
 
-	return iTxtFieldSpec
+	iTxtFieldSpec = ITextFieldSpecification(&newTxtFieldLabel)
+
+	return iTxtFieldSpec, nil
 }
 
 // CopyOutPtr - Returns a pointer to a deep copy of the current

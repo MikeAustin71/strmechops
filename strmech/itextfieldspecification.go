@@ -7,7 +7,10 @@ type ITextFieldSpecification interface {
 
 	GetFormattedText() string
 
-	CopyOutITextField() ITextFieldSpecification
+	CopyOutITextField(
+		errorPrefix interface{}) (
+		ITextFieldSpecification,
+		error)
 
 	Empty()
 
