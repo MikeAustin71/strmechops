@@ -207,6 +207,12 @@ func (txtFillerField *TextFieldSpecFiller) CopyIn(
 //
 // Return Values
 //
+//  TextFieldSpecFiller
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current TextFieldSpecFiller instance.
+//
+//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
