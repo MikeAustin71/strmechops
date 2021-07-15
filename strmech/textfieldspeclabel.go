@@ -1185,8 +1185,8 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 	return nil
 }
 
-// SetTextLabel - Returns the un-formatted text label string
-// associated with the current instance of TextFieldSpecLabel.
+// SetTextLabel - Sets the text label string associated with the
+// current instance of TextFieldSpecLabel.
 //
 //
 // ------------------------------------------------------------------------
@@ -1299,6 +1299,125 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 	txtFieldLabel.textLabel = make([]rune, lenTxtRunes)
 
 	copy(txtFieldLabel.textLabel, textRunes)
+
+	return nil
+}
+
+// SetTextLabelRunes - Sets the text label string associated with
+// the current instance of TextFieldSpecLabel. The input parameter
+// required to set this text label is submitted as an array of
+// runes.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLabelRunes             []rune
+//     - The string content to be displayed within the label will
+//       be created from this rune array.
+//
+//       If this parameter is submitted as a zero length array of,
+//       runes, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
+	textLabelRunes []rune,
+	errorPrefix interface{}) error {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecFiller.SetTextLabelRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenTxtRunes := len(textLabelRunes)
+
+	if lenTxtRunes == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLabelRunes' is a zero length array!\n",
+			ePrefix.String())
+		return err
+	}
+
+	txtFieldLabel.textLabel = make([]rune, lenTxtRunes)
+
+	copy(txtFieldLabel.textLabel, textLabelRunes)
 
 	return nil
 }
