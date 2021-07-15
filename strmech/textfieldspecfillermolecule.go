@@ -194,6 +194,37 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
 	return newTxtFieldFiller, nil
 }
 
+// empty - Receives a pointer to an instance of TextFieldSpecLabel
+// and proceeds to set all of the internal member variables to
+// their uninitialized or zero states.
+//
+// IMPORTANT
+// ----------------------------------------------------------------
+// The values of all member variables contained in input parameter
+// 'txtFieldLabel' will be overwritten and deleted.
+//
+func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) empty(
+	txtFieldFiller *TextFieldSpecFiller) {
+
+	if txtFieldFillerMolecule.lock == nil {
+		txtFieldFillerMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldFillerMolecule.lock.Lock()
+
+	defer txtFieldFillerMolecule.lock.Unlock()
+
+	if txtFieldFiller == nil {
+		return
+	}
+
+	txtFieldFiller.fillerCharacters = nil
+
+	txtFieldFiller.fillerCharsRepeatCount = 0
+
+	return
+}
+
 // newEmpty - Returns a new unpopulated instance of
 // TextFieldSpecFiller. All of the member variables contained in
 // this new instance are set to their uninitialized or zero values.
