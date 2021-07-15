@@ -18,8 +18,8 @@ type TextFieldSpecLabel struct {
 // of the current TextFieldSpecLabel instance ('txtFieldLabel').
 //
 // IMPORTANT
-// All of the data fields in current TextLineSpecStandardLine
-// instance ('txtFieldLabel') will be modified and overwritten.
+// All of the data fields in current TextFieldSpecLabel instance
+// ('txtFieldLabel') will be modified and overwritten.
 //
 //
 // ----------------------------------------------------------------
