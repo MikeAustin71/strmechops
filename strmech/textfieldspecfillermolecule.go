@@ -62,30 +62,19 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 		return err
 	}
 
-	if incomingTxtFiller.fillerCharsRepeatCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'incomingTxtFiller.fillerCharsRepeatCount' is "+
-			"less than one (+1)!\n"+
-			"incomingTxtFiller.fillerCharsRepeatCount='%v'\n",
-			ePrefix.String(),
-			incomingTxtFiller.fillerCharsRepeatCount)
+	_,
+		err =
+		textFieldSpecFillerAtom{}.ptr().
+			isValidTextFieldSpecFiller(
+				incomingTxtFiller,
+				ePrefix.XCtx("incomingTxtFiller validation - "))
 
-		return err
-	}
-
-	lenInTxtRunes := len(incomingTxtFiller.fillerCharacters)
-
-	if lenInTxtRunes == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'incomingTxtFiller.fillerCharacters' is a zero "+
-			"length array!\n",
-			ePrefix.String())
-
+	if err != nil {
 		return err
 	}
 
 	targetTxtFiller.fillerCharacters =
-		make([]rune, lenInTxtRunes)
+		make([]rune, len(incomingTxtFiller.fillerCharacters))
 
 	copy(targetTxtFiller.fillerCharacters,
 		incomingTxtFiller.fillerCharacters)
@@ -94,6 +83,115 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 		incomingTxtFiller.fillerCharsRepeatCount
 
 	return nil
+}
+
+// copyOut - Returns a deep copy of the input parameter
+// 'txtFieldFiller'
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtFieldFiller      *TextFieldSpecFiller
+//     - A pointer to an instance of TextFieldSpecFiller. A deep
+//       copy of the internal member variables will be created
+//       and returned in a new instance of TextFieldSpecFiller.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextFieldSpecFiller
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'txtFieldFiller' will be created and
+//       returned in a new instance of TextFieldSpecFiller.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
+	txtFieldFiller *TextFieldSpecFiller,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextFieldSpecFiller, error) {
+
+	if txtFieldFillerMolecule.lock == nil {
+		txtFieldFillerMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldFillerMolecule.lock.Lock()
+
+	defer txtFieldFillerMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"txtFieldFillerMolecule.copyOut()",
+		"")
+
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
+
+	if txtFieldFiller == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtFieldFiller' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return TextFieldSpecFiller{}, err
+	}
+
+	_,
+		err =
+		textFieldSpecFillerAtom{}.ptr().
+			isValidTextFieldSpecFiller(
+				txtFieldFiller,
+				ePrefix.XCtx("txtFieldFiller validation - "))
+
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
+
+	newTxtFieldFiller := TextFieldSpecFiller{}
+
+	newTxtFieldFiller.fillerCharacters =
+		make([]rune, len(txtFieldFiller.fillerCharacters))
+
+	copy(newTxtFieldFiller.fillerCharacters,
+		txtFieldFiller.fillerCharacters)
+
+	newTxtFieldFiller.fillerCharsRepeatCount =
+		txtFieldFiller.fillerCharsRepeatCount
+
+	newTxtFieldFiller.lock = new(sync.Mutex)
+
+	return newTxtFieldFiller, nil
 }
 
 // newEmpty - Returns a new unpopulated instance of
