@@ -72,8 +72,18 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 			TextJustify(0).None()
 	}
 
-	targetTxtFieldLabel.textLabel =
-		incomingTxtFieldLabel.textLabel
+	targetTxtFieldLabel.textLabel = nil
+
+	lenTxtRunes := len(incomingTxtFieldLabel.textLabel)
+
+	if lenTxtRunes > 0 {
+
+		targetTxtFieldLabel.textLabel =
+			make([]rune, lenTxtRunes)
+
+		copy(targetTxtFieldLabel.textLabel,
+			incomingTxtFieldLabel.textLabel)
+	}
 
 	targetTxtFieldLabel.fieldLen =
 		incomingTxtFieldLabel.fieldLen
@@ -176,8 +186,16 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 
 	newTxtFieldLabel := TextFieldSpecLabel{}
 
-	newTxtFieldLabel.textLabel =
-		txtFieldLabel.textLabel
+	lenTxtRunes := len(txtFieldLabel.textLabel)
+
+	if lenTxtRunes > 0 {
+
+		newTxtFieldLabel.textLabel =
+			make([]rune, lenTxtRunes)
+
+		copy(newTxtFieldLabel.textLabel,
+			txtFieldLabel.textLabel)
+	}
 
 	newTxtFieldLabel.fieldLen =
 		txtFieldLabel.fieldLen
@@ -214,7 +232,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 		return
 	}
 
-	txtFieldLabel.textLabel = ""
+	txtFieldLabel.textLabel = nil
 
 	txtFieldLabel.fieldLen = 0
 
@@ -252,9 +270,20 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
 		return false
 	}
 
-	if txtLabel.textLabel !=
-		incomingTxtLabel.textLabel {
+	lenInTxtRunes := len(incomingTxtLabel.textLabel)
+
+	if lenInTxtRunes !=
+		len(txtLabel.textLabel) {
 		return false
+	}
+
+	if lenInTxtRunes > 0 {
+		for i := 0; i < lenInTxtRunes; i++ {
+			if incomingTxtLabel.textLabel[i] !=
+				txtLabel.textLabel[i] {
+				return false
+			}
+		}
 	}
 
 	if txtLabel.fieldLen !=

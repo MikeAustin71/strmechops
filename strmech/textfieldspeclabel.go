@@ -7,7 +7,7 @@ import (
 )
 
 type TextFieldSpecLabel struct {
-	textLabel         string
+	textLabel         []rune
 	fieldLen          int
 	textJustification TextJustify
 	lock              *sync.Mutex
@@ -365,7 +365,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextLabel() string {
 
 	defer txtFieldLabel.lock.Unlock()
 
-	return txtFieldLabel.textLabel
+	return string(txtFieldLabel.textLabel)
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the data
@@ -636,7 +636,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 		return TextFieldSpecLabel{}, err
 	}
 
-	if len(textLabel) == 0 {
+	textRunes := []rune(textLabel)
+
+	lenTxtRunes := len(textRunes)
+
+	if lenTxtRunes == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textLabel' is a zero length string!\n",
 			ePrefix.String())
@@ -675,7 +679,10 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 
 	newTextLabel := TextFieldSpecLabel{}
 
-	newTextLabel.textLabel = textLabel
+	newTextLabel.textLabel = make([]rune, lenTxtRunes)
+
+	copy(newTextLabel.textLabel,
+		textRunes)
 
 	if fieldLen < len(textLabel) {
 		fieldLen = len(textLabel)
@@ -855,7 +862,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr(
 		return &TextFieldSpecLabel{}, err
 	}
 
-	if len(textLabel) == 0 {
+	textRunes := []rune(textLabel)
+
+	lenTxtRunes := len(textRunes)
+
+	if lenTxtRunes == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textLabel' is a zero length string!\n",
 			ePrefix.String())
@@ -894,7 +905,9 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr(
 
 	newTextLabel := TextFieldSpecLabel{}
 
-	newTextLabel.textLabel = textLabel
+	newTextLabel.textLabel = make([]rune, lenTxtRunes)
+
+	copy(newTextLabel.textLabel, textRunes)
 
 	if fieldLen < len(textLabel) {
 		fieldLen = len(textLabel)
@@ -1272,14 +1285,20 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 		return err
 	}
 
-	if len(textLabel) == 0 {
+	textRunes := []rune(textLabel)
+
+	lenTxtRunes := len(textRunes)
+
+	if lenTxtRunes == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textLabel' is a zero length string!\n",
 			ePrefix.String())
 		return err
 	}
 
-	txtFieldLabel.textLabel = textLabel
+	txtFieldLabel.textLabel = make([]rune, lenTxtRunes)
+
+	copy(txtFieldLabel.textLabel, textRunes)
 
 	return nil
 }

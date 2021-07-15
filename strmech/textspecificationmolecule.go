@@ -68,7 +68,7 @@ type textSpecificationMolecule struct {
 //       occurs, the error message is included in this string.
 //
 func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
-	textStr string,
+	textRunes []rune,
 	fieldLen int,
 	textJustify TextJustify,
 	errPrefDto *ePref.ErrPrefixDto) string {
@@ -94,7 +94,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		return fmt.Sprintf("%v\n", err.Error())
 	}
 
-	lenTxtLabel := len(textStr)
+	lenTxtLabel := len(textRunes)
 
 	if lenTxtLabel == 0 &&
 		fieldLen <= 0 {
@@ -118,7 +118,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 
 	result, err = strMechNanobot{}.ptr().
 		justifyTextInStrField(
-			textStr,
+			string(textRunes),
 			fieldLen,
 			textJustify,
 			ePrefix)
