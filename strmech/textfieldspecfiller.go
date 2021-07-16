@@ -632,6 +632,52 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedText() string {
 	return result
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextFieldSpecFiller instance
+// to determine if they are valid.
+//
+// If all data element evaluate as valid, this method returns
+// 'true'. If any data element is invalid, this method returns
+// 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If all data elements encapsulated by the current instance
+//       of TextFieldSpecFiller are valid, this returned boolean
+//       value is set to 'true'. If any data values are invalid,
+//       this return parameter is set to 'false'.
+//
+func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
+	isValid bool) {
+
+	if txtFillerField.lock == nil {
+		txtFillerField.lock = new(sync.Mutex)
+	}
+
+	txtFillerField.lock.Lock()
+
+	defer txtFillerField.lock.Unlock()
+
+	isValid,
+		_ = textFieldSpecFillerAtom{}.ptr().
+		isValidTextFieldSpecFiller(
+			txtFillerField,
+			nil)
+
+	return isValid
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextFieldSpecFiller instance
 // to determine if they are valid.
