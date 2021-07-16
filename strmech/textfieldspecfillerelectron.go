@@ -306,6 +306,142 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 	return lenFillerChars, err
 }
 
+// isFillerCharsValid - Receives a single rune specifying the text
+// character to be used as the 'fillerCharacters' member variable
+// for a TextFieldSpecFiller object and subjects it to a
+// diagnostic review in order to determine if this filler character
+// is valid.
+//
+// If input parameter 'fillerChar' is judged invalid, this method
+// will return an error along with an appropriate error message.
+//
+// If input parameter 'fillerChar' is valid this method
+// will return a 'nil' value.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fillerChar                 rune
+//     - A rune specifying the text character which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from this filler character
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//       The Text Field Filler final formatted text is equal to:
+//          fillerCharacter (1) X fillerCharsRepeatCount
+//          Example: fillerCharacters = '-'
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "---"
+//
+//       If 'fillerCharacter' is submitted with a zero value, this
+//       method will return an error.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If 'fillerChars' is found to be invalid, this method will
+//       return an error along with an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharacterValid(
+	fillerChar rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtFieldFillerElectron.lock == nil {
+		txtFieldFillerElectron.lock = new(sync.Mutex)
+	}
+
+	txtFieldFillerElectron.lock.Lock()
+
+	defer txtFieldFillerElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"txtFieldFillerElectron.isFillerCharacterValid()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fillerChar == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerChar' has is\n"+
+			"a single text character with a zero value!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fillerChar < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerChar' has is a single\n"+
+			"text character with a value less than zero!\n",
+			ePrefix.String())
+	}
+
+	return err
+}
+
 // ptr - Returns a pointer to a new instance of
 // textFieldSpecFillerElectron.
 //

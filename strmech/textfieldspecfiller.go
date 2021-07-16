@@ -1152,29 +1152,21 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 		return &TextFieldSpecFiller{}, err
 	}
 
-	if fillerCharacter == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacter' is a rune with a zero value!\n",
-			ePrefix.String())
+	txtFieldFillerElectron := textFieldSpecFillerElectron{}
 
+	err = txtFieldFillerElectron.isFillerCharacterValid(
+		fillerCharacter,
+		ePrefix.XCtx("fillerCharacter"))
+
+	if err != nil {
 		return &TextFieldSpecFiller{}, err
 	}
 
-	if fillerCharsCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return &TextFieldSpecFiller{}, err
-	}
+	err = txtFieldFillerElectron.isFillerCharsRepeatCountValid(
+		fillerCharsCount,
+		ePrefix.XCtx("fillerCharsCount"))
 
-	if fillerCharsCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
+	if err != nil {
 		return &TextFieldSpecFiller{}, err
 	}
 
