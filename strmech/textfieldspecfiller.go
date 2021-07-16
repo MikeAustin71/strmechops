@@ -589,6 +589,9 @@ func (txtFillerField *TextFieldSpecFiller) EqualITextField(
 // The filler characters are used to populate the Text Filler
 // Field formatted text. The final formatted text is equal
 // to:  Filler Characters  X  Filler Characters Repeat Count
+//          Example: fillerCharacters = "-*"
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
 //
 // This method returns a string containing the Filler Characters.
 //
@@ -613,6 +616,9 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerChars() string {
 // the Filler Characters are repeated when constructing the Text
 // Filler Field formatted text. The final formatted text is equal
 // to:  Filler Characters  X  Filler Characters Repeat Count
+//          Example: fillerCharacters = "-*"
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
 //
 // This method returns the Filler Characters Repeat Count.
 //
@@ -843,6 +849,15 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 //       repeated one or more times as specified by the
 //       'fillerCharsRepeatCount' parameter.
 //
+//       The Text Field Filler final formatted text is equal to:
+//          fillerCharacter X fillerCharsRepeatCount
+//          Example: fillerCharacters = "-*"
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
+//
+//       If 'fillerCharacters' is submitted as an empty or zero
+//       length string, this method will return an error.
+//
 //
 //  fillerCharsRepeatCount    int
 //     - Controls the number of times 'fillerCharacters' is
@@ -851,6 +866,16 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 //       which will populated the completed Text Filler Field is
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsRepeatCount'.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//          Example: fillerCharacters = "-*"
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
 //
 //
 //  errorPrefix                interface{}
@@ -962,6 +987,15 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 		return TextFieldSpecFiller{}, err
 	}
 
+	if fillerCharsCount > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
+			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
+			"in the Filler Text Field.\n",
+			ePrefix.String())
+		return TextFieldSpecFiller{}, err
+	}
+
 	fillerCharsRunes := []rune(fillerCharacters)
 
 	lenFillerChars := len(fillerCharsRunes)
@@ -978,6 +1012,372 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 		fillerCharsCount
 
 	return newTxtFillerField, nil
+}
+
+// NewConstructorRune - Creates and returns a pointer to a new,
+// fully populated instance of TextFieldSpecFiller. This method is
+// similar to method TextFieldSpecFiller.NewConstructor() with the
+// distinction being that this method returns a pointer to a new
+// instance of TextFieldSpecFiller and it accepts a single rune
+// rune as a filler character.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fillerCharacter            rune
+//     - A rune containing the text character which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from ths filler character
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//       The Text Field Filler final formatted text is equal to:
+//            fillerCharacter X fillerCharsRepeatCount
+//
+//       If 'fillerCharacter' is submitted with a zero value,
+//       this method will return an error.
+//
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacter' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacter' (1) times the
+//       value of 'fillerCharsRepeatCount'.
+//
+//         Text Field Filler Length =
+//           Length of fillerCharacter (1) X fillerCharsRepeatCount
+//           Example: fillerCharacter = '-'
+//                    fillerRepeatCount = 3
+//                    Final Text Filler Field = "---"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecFiller
+//     - If this method completes successfully, this parameter will
+//       return a pointer to a new, valid and fully populated Text
+//       Filler Field.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
+	fillerCharacter rune,
+	fillerCharsCount int,
+	errorPrefix interface{}) (
+	*TextFieldSpecFiller,
+	error) {
+
+	if txtFillerField.lock == nil {
+		txtFillerField.lock = new(sync.Mutex)
+	}
+
+	txtFillerField.lock.Lock()
+
+	defer txtFillerField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecFiller.NewConstructorRune()",
+		"")
+
+	if err != nil {
+		return &TextFieldSpecFiller{}, err
+	}
+
+	if fillerCharacter == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharacter' is a rune with a zero value!\n",
+			ePrefix.String())
+
+		return &TextFieldSpecFiller{}, err
+	}
+
+	if fillerCharsCount < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
+			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
+			"in the Filler Text Field.\n",
+			ePrefix.String())
+		return &TextFieldSpecFiller{}, err
+	}
+
+	if fillerCharsCount > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
+			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
+			"in the Filler Text Field.\n",
+			ePrefix.String())
+		return &TextFieldSpecFiller{}, err
+	}
+
+	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().
+		newEmpty()
+
+	newTxtFillerField.fillerCharacters =
+		make([]rune, 1)
+
+	newTxtFillerField.fillerCharacters[0] =
+		fillerCharacter
+
+	newTxtFillerField.fillerCharsRepeatCount =
+		fillerCharsCount
+
+	return &newTxtFillerField, nil
+}
+
+// NewConstructorRuneArray - Creates and returns a pointer to a
+// new, fully populated instance of TextFieldSpecFiller. This
+// method is similar to method TextFieldSpecFiller.NewConstructor()
+// with the distinction being that this method returns a pointer
+// to a new instance of TextFieldSpecFiller and it accepts an array
+// runes filler characters.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fillerCharacters           []rune
+//     - A rune array containing the text characters which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from ths filler characters
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//       The Text Field Filler final formatted text is equal to:
+//          fillerCharacters X fillerCharsRepeatCount
+//          Example: fillerCharacters = []rune{'-','*'}
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
+//
+//       If 'fillerCharacters' is submitted with a zero length rune
+//       array, this method will return an error.
+//
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//         Text Field Filler Length =
+//           Length of fillerCharacters X fillerCharsRepeatCount
+//           Example: fillerCharacters = []rune{'-','*'}
+//                    fillerRepeatCount = 3
+//                    Final Text Filler Field = "-*-*-*"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecFiller
+//     - If this method completes successfully, this parameter will
+//       return a pointer to a new, valid and fully populated Text
+//       Filler Field.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFillerField TextFieldSpecFiller) NewConstructorRuneArray(
+	fillerCharacters []rune,
+	fillerCharsCount int,
+	errorPrefix interface{}) (
+	*TextFieldSpecFiller,
+	error) {
+
+	if txtFillerField.lock == nil {
+		txtFillerField.lock = new(sync.Mutex)
+	}
+
+	txtFillerField.lock.Lock()
+
+	defer txtFillerField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecFiller.NewConstructorRune()",
+		"")
+
+	if err != nil {
+		return &TextFieldSpecFiller{}, err
+	}
+
+	lenRuneArray := len(fillerCharacters)
+
+	if lenRuneArray == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharacters' is a zero length rune array!\n",
+			ePrefix.String())
+
+		return &TextFieldSpecFiller{}, err
+	}
+
+	if fillerCharsCount < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
+			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
+			"in the Filler Text Field.\n",
+			ePrefix.String())
+		return &TextFieldSpecFiller{}, err
+	}
+
+	if fillerCharsCount > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
+			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
+			"in the Filler Text Field.\n",
+			ePrefix.String())
+		return &TextFieldSpecFiller{}, err
+	}
+
+	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().
+		newEmpty()
+
+	newTxtFillerField.fillerCharacters =
+		make([]rune, lenRuneArray)
+
+	copy(
+		newTxtFillerField.fillerCharacters,
+		fillerCharacters)
+
+	newTxtFillerField.fillerCharsRepeatCount =
+		fillerCharsCount
+
+	return &newTxtFillerField, nil
 }
 
 // NewEmpty - Returns a new unpopulated instance of
@@ -1019,8 +1419,14 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //       repeated one or more times as specified by the
 //       'fillerCharsRepeatCount' parameter.
 //
-//       If this parameter is submitted as a zero length string,
-//       an error will be returned.
+//       The Text Field Filler final formatted text is equal to:
+//          fillerCharacter X fillerCharsRepeatCount
+//          Example: fillerCharacters = "-*"
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
+//
+//       If 'fillerCharacters' is submitted as an empty or zero
+//       length string, this method will return an error.
 //
 //
 //  fillerCharsRepeatCount    int
@@ -1030,6 +1436,12 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //       which will populated the completed Text Filler Field is
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsRepeatCount'.
+//
+//       Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//          Example: fillerCharacters = "-*"
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
 //
 //       If 'fillerCharsRepeatCount' has a value less than one (1) or
 //       greater than one-million (1,000,000), an error will be
