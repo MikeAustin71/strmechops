@@ -251,6 +251,11 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) equal(
 		return false
 	}
 
+	if txtFieldFiller.fillerCharsRepeatCount !=
+		incomingTxtFieldFiller.fillerCharsRepeatCount {
+		return false
+	}
+
 	lenInTxtFiller := len(incomingTxtFieldFiller.fillerCharacters)
 
 	if lenInTxtFiller != len(txtFieldFiller.fillerCharacters) {
@@ -264,11 +269,6 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) equal(
 				return false
 			}
 		}
-	}
-
-	if txtFieldFiller.fillerCharsRepeatCount !=
-		incomingTxtFieldFiller.fillerCharsRepeatCount {
-		return false
 	}
 
 	return true
