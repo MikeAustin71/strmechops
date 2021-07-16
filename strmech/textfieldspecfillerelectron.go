@@ -235,7 +235,11 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsRepeatCo
 //
 // Return Values
 //
-//  error
+//  lenFillerChars             int
+//     - The length of input parameter 'fillerChars'.
+//
+//
+//  err                        error
 //     - If 'fillerChars' is found to be invalid, this method will
 //       return an error along with an appropriate error message.
 //
@@ -246,6 +250,7 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsRepeatCo
 func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 	fillerChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
+	lenFillerChars int,
 	err error) {
 
 	if txtFieldFillerElectron.lock == nil {
@@ -258,6 +263,8 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	lenFillerChars = 0
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -265,7 +272,7 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 		"")
 
 	if err != nil {
-		return err
+		return lenFillerChars, err
 	}
 
 	if fillerChars == nil {
@@ -274,29 +281,29 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 			"has a zero length!\n",
 			ePrefix.String())
 
-		return err
+		return lenFillerChars, err
 	}
 
-	if len(fillerChars) == 0 {
+	lenFillerChars = len(fillerChars)
+
+	if lenFillerChars == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'fillerChars' is has a "+
 			"zero length!\n",
 			ePrefix.String())
 
-		return err
+		return lenFillerChars, err
 	}
 
-	if len(fillerChars) == 1 &&
+	if lenFillerChars == 1 &&
 		fillerChars[0] == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'fillerChars' has a\n"+
 			"single character with a zero value!\n",
 			ePrefix.String())
-
-		return err
 	}
 
-	return nil
+	return lenFillerChars, err
 }
 
 // ptr - Returns a pointer to a new instance of

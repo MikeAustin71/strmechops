@@ -972,34 +972,29 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 		return TextFieldSpecFiller{}, err
 	}
 
-	if len(fillerCharacters) == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is a zero length string!\n",
-			ePrefix.String())
-		return TextFieldSpecFiller{}, err
-	}
-
-	if fillerCharsCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return TextFieldSpecFiller{}, err
-	}
-
-	if fillerCharsCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return TextFieldSpecFiller{}, err
-	}
+	txtFillerElectron := textFieldSpecFillerElectron{}
 
 	fillerCharsRunes := []rune(fillerCharacters)
 
-	lenFillerChars := len(fillerCharsRunes)
+	var lenFillerChars int
+
+	lenFillerChars,
+		err = txtFillerElectron.isFillerCharsValid(
+		fillerCharsRunes,
+		ePrefix.XCtx(
+			"fillerCharacters"))
+
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
+
+	err = txtFillerElectron.isFillerCharsRepeatCountValid(
+		fillerCharsCount,
+		ePrefix.XCtx("fillerCharsCount"))
+
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
 
 	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
 
