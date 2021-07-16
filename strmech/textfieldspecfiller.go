@@ -795,7 +795,8 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
 //  error
 //     - If any of the internal member data variables contained in
 //       the current instance of TextFieldSpecFiller are found to be
-//       invalid, this method will return an error.
+//       invalid, this method will return an error  along with an
+//       appropriate error message.
 //
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' (error prefix) will be inserted or
