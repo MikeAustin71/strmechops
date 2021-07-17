@@ -807,7 +807,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 // Input Parameters
 //
 //  textLabel                  string
-//     - The string content to be displayed within the label.
+//     - String content to be displayed within the text label.
 //
 //       If this parameter is submitted as a zero length string,
 //       an error will be returned.
@@ -981,6 +981,203 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 
 	copy(newTextLabel.textLabel,
 		textRunes)
+
+	newTextLabel.fieldLen = fieldLen
+
+	newTextLabel.textJustification = textJustification
+
+	newTextLabel.lock = new(sync.Mutex)
+
+	return &newTextLabel, nil
+}
+
+// NewConstructorRunes - Creates and returns a pointer to a new,
+// fully populated instance of TextFieldSpecLabel. This type
+// encapsulates a string which is formatted as a text label.
+//
+// The new returned instance of TextFieldSpecLabel is constructed
+// from input parameters, 'textLabelChars', 'fieldLen' and
+// 'textJustification'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLabelChars             []rune
+//     - An array of runes or text characters which is used to
+//       generate string content for display as a text label.
+//
+//       If this parameter is submitted as a zero length array,
+//       an error will be returned.
+//
+//
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabelChars'
+//       will be displayed. If 'fieldLen' is less than the length
+//       of the 'textLabelChars' array, it will be automatically
+//       set equal to the 'textLabelChars' array length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabelChars', set this parameter to a value of
+//       minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
+//
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       'textLabelChars' within the field specified by 'fieldLen'.
+//
+//       Text justification can only be evaluated in the context of
+//       a text label, field length and 'textJustification' object
+//       of type TextJustify. This is because text labels with a
+//       field length equal to or less than the length of the text
+//       label never use text justification. In these cases, text
+//       justification is completely ignored.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecLabel
+//     - This method will return a pointer to a new instance of
+//       TextFieldSpecLabel constructed from information provided
+//       by the input parameters.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
+	textLabelChars []rune,
+	fieldLen int,
+	textJustification TextJustify,
+	errorPrefix interface{}) (
+	*TextFieldSpecLabel,
+	error) {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecFiller.NewConstructor()",
+		"")
+
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
+	}
+
+	var lenTxtRunes int
+
+	txtLabelElectron := textFieldSpecLabelElectron{}
+
+	lenTxtRunes,
+		err = txtLabelElectron.isTextLabelValid(
+		textLabelChars,
+		ePrefix.XCtx("textLabelChars"))
+
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
+	}
+
+	err = txtLabelElectron.isFieldLengthValid(
+		fieldLen,
+		ePrefix.XCtx("fieldLen"))
+
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
+	}
+
+	err = txtLabelElectron.isTextJustificationValid(
+		textLabelChars,
+		fieldLen,
+		textJustification,
+		ePrefix.XCtx("textJustification"))
+
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
+	}
+
+	newTextLabel := TextFieldSpecLabel{}
+
+	newTextLabel.textLabel = make([]rune, lenTxtRunes)
+
+	copy(newTextLabel.textLabel,
+		textLabelChars)
 
 	newTextLabel.fieldLen = fieldLen
 
