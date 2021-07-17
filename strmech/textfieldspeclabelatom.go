@@ -60,50 +60,32 @@ func (txtFieldLabelAtom *textFieldSpecLabelAtom) isValidTextFieldLabel(
 		return isValid, err
 	}
 
-	lenTextLabel := len(txtFieldLabel.textLabel)
+	txtLabelElectron := textFieldSpecLabelElectron{}
 
-	if lenTextLabel == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Text Label is a zero length string!\n",
-			ePrefix.String())
+	_,
+		err = txtLabelElectron.isTextLabelValid(
+		txtFieldLabel.textLabel,
+		ePrefix.XCtx("txtFieldLabel.textLabel"))
 
+	if err != nil {
 		return isValid, err
 	}
 
-	if txtFieldLabel.fieldLen < -1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Text Label Field Length is less than minus one (-1)!\n"+
-			"txtFieldLabel.fieldLen='%v'\n",
-			ePrefix.String(),
-			txtFieldLabel.fieldLen)
+	err = txtLabelElectron.isFieldLengthValid(
+		txtFieldLabel.fieldLen,
+		ePrefix.XCtx("txtFieldLabel.fieldLen"))
 
+	if err != nil {
 		return isValid, err
 	}
 
-	if txtFieldLabel.fieldLen > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Text Label Field Length is greater than one-million (1,000,000)!\n"+
-			"txtFieldLabel.fieldLen='%v'\n",
-			ePrefix.String(),
-			txtFieldLabel.fieldLen)
+	err = txtLabelElectron.isTextJustificationValid(
+		txtFieldLabel.textLabel,
+		txtFieldLabel.fieldLen,
+		txtFieldLabel.textJustification,
+		ePrefix.XCtx("txtFieldLabel.textJustification"))
 
-		return isValid, err
-	}
-
-	txtJustificationIsValid := txtFieldLabel.textJustification.XIsValid()
-
-	if txtFieldLabel.fieldLen > lenTextLabel &&
-		!txtJustificationIsValid {
-		err = fmt.Errorf("%v\n"+
-			"Error: Text Justification is INVALID!\n"+
-			"Text Lable Length = '%v'\n"+
-			"Field Length = '%v'\n"+
-			"Text Justification Integer Value = '%v'\n",
-			ePrefix.String(),
-			lenTextLabel,
-			txtFieldLabel.fieldLen,
-			txtFieldLabel.textJustification.XValueInt())
-
+	if err != nil {
 		return isValid, err
 	}
 

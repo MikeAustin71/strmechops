@@ -793,17 +793,13 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	return err
 }
 
-// NewConstructor - Creates and returns a new, fully populated
-// instance of TextFieldSpecLabel. This type encapsulates a string
-// which is formatted as a text label.
+// NewConstructor - Creates and returns a pointer to a new, fully
+// populated instance of TextFieldSpecLabel. This type encapsulates
+// a string which is formatted as a text label.
 //
 // The new returned instance of TextFieldSpecLabel is constructed
 // from input parameters, 'textLabel', 'fieldLen' and
 // 'textJustification'.
-//
-// This method is identical to TextFieldSpecLabel.NewPtr()
-// with the sole distinction being that this method returns a
-// new concrete instance of TextFieldSpecLabel.
 //
 //
 // ------------------------------------------------------------------------
@@ -835,13 +831,20 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //  textJustification          TextJustify
 //     - An enumeration which specifies the justification of the
 //       'textLabel' within the field specified by 'fieldLen'.
-//       Options for 'textJustification' are:
+//
+//       Text justification can only be evaluated in the context of
+//       a text label, field length and 'textJustification' object
+//       of type TextJustify. This is because text labels with a
+//       field length equal to or less than the length of the text
+//       label never use text justification. In these cases, text
+//       justification is completely ignored.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
 //           TextJustify(0).Left()
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
-//
-//       If input parameter 'textJustification' is not equal to one
-//       of the three values listed above, an error will be returned.
 //
 //
 //  errorPrefix                interface{}
@@ -894,8 +897,8 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //
 // Return Values
 //
-//  TextFieldSpecLabel
-//     - This method will return a new instance of
+//  *TextFieldSpecLabel
+//     - This method will return a pointer to a new instance of
 //       TextFieldSpecLabel constructed from information provided
 //       by the input parameters.
 //
@@ -915,7 +918,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 	fieldLen int,
 	textJustification TextJustify,
 	errorPrefix interface{}) (
-	TextFieldSpecLabel,
+	*TextFieldSpecLabel,
 	error) {
 
 	if txtFieldLabel.lock == nil {
@@ -936,48 +939,40 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 		"")
 
 	if err != nil {
-		return TextFieldSpecLabel{}, err
+		return &TextFieldSpecLabel{}, err
 	}
 
 	textRunes := []rune(textLabel)
 
-	lenTxtRunes := len(textRunes)
+	var lenTxtRunes int
 
-	if lenTxtRunes == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLabel' is a zero length string!\n",
-			ePrefix.String())
-		return TextFieldSpecLabel{}, err
+	txtLabelElectron := textFieldSpecLabelElectron{}
+
+	lenTxtRunes,
+		err = txtLabelElectron.isTextLabelValid(
+		textRunes,
+		ePrefix.XCtx("textLabel"))
+
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
 	}
 
-	if fieldLen < -1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLen' is less than minus one (-1)!\n"+
-			"'fieldLen' controls the length of the Text Label Field.\n",
-			ePrefix.String())
+	err = txtLabelElectron.isFieldLengthValid(
+		fieldLen,
+		ePrefix.XCtx("fieldLen"))
 
-		return TextFieldSpecLabel{}, err
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
 	}
 
-	if fieldLen > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLen' is greater than one-million (1,000,000)!\n"+
-			"'fieldLen' controls the length of the Text Label Field.\n",
-			ePrefix.String())
-		return TextFieldSpecLabel{}, err
-	}
+	err = txtLabelElectron.isTextJustificationValid(
+		textRunes,
+		fieldLen,
+		textJustification,
+		ePrefix.XCtx("textJustification"))
 
-	if !textJustification.XIsValid() {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textJustification' is INVALID!\n"+
-			"'textJustification' must be equal to 'Left', 'Center' or 'Right'.\n"+
-			"'textJustification'='%v'\n"+
-			"'textJustification' integer value ='%v'\n",
-			ePrefix.String(),
-			textJustification.String(),
-			textJustification.XValueInt())
-
-		return TextFieldSpecLabel{}, err
+	if err != nil {
+		return &TextFieldSpecLabel{}, err
 	}
 
 	newTextLabel := TextFieldSpecLabel{}
@@ -987,17 +982,13 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 	copy(newTextLabel.textLabel,
 		textRunes)
 
-	if fieldLen < len(textLabel) {
-		fieldLen = len(textLabel)
-	}
-
 	newTextLabel.fieldLen = fieldLen
 
 	newTextLabel.textJustification = textJustification
 
 	newTextLabel.lock = new(sync.Mutex)
 
-	return newTextLabel, nil
+	return &newTextLabel, nil
 }
 
 // NewEmpty - Returns a pointer to a new, empty instance of
