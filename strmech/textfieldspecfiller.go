@@ -835,8 +835,8 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 	return err
 }
 
-// NewConstructor - Creates and returns a new, fully populated
-// instance of TextFieldSpecFiller.
+// NewConstructor - Creates and returns a pointer to a new, fully
+// populated instance of TextFieldSpecFiller.
 //
 //
 // ----------------------------------------------------------------
@@ -929,9 +929,10 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 //
 // Return Values
 //
-//  TextFieldSpecFiller
+//  &TextFieldSpecFiller
 //     - If this method completes successfully, this parameter will
-//       return a valid and fully populated Text Filler Field.
+//       return a pointer to a valid and fully populated Text Filler
+//       Field object.
 //
 //
 //  error
@@ -946,9 +947,9 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 //
 func (txtFillerField TextFieldSpecFiller) NewConstructor(
 	fillerCharacters string,
-	fillerCharsCount int,
+	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
-	TextFieldSpecFiller,
+	*TextFieldSpecFiller,
 	error) {
 
 	if txtFillerField.lock == nil {
@@ -969,7 +970,7 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 		"")
 
 	if err != nil {
-		return TextFieldSpecFiller{}, err
+		return &TextFieldSpecFiller{}, err
 	}
 
 	txtFillerElectron := textFieldSpecFillerElectron{}
@@ -985,15 +986,15 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 			"fillerCharacters"))
 
 	if err != nil {
-		return TextFieldSpecFiller{}, err
+		return &TextFieldSpecFiller{}, err
 	}
 
 	err = txtFillerElectron.isFillerCharsRepeatCountValid(
-		fillerCharsCount,
-		ePrefix.XCtx("fillerCharsCount"))
+		fillerCharsRepeatCount,
+		ePrefix.XCtx("fillerCharsRepeatCount"))
 
 	if err != nil {
-		return TextFieldSpecFiller{}, err
+		return &TextFieldSpecFiller{}, err
 	}
 
 	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
@@ -1005,17 +1006,16 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 		fillerCharsRunes)
 
 	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsCount
+		fillerCharsRepeatCount
 
-	return newTxtFillerField, nil
+	return &newTxtFillerField, nil
 }
 
 // NewConstructorRune - Creates and returns a pointer to a new,
 // fully populated instance of TextFieldSpecFiller. This method is
 // similar to method TextFieldSpecFiller.NewConstructor() with the
-// distinction being that this method returns a pointer to a new
-// instance of TextFieldSpecFiller and it accepts a single rune
-// rune as a filler character.
+// distinction being that this method accepts a single rune as a
+// filler character.
 //
 //
 // ----------------------------------------------------------------
@@ -1126,7 +1126,7 @@ func (txtFillerField TextFieldSpecFiller) NewConstructor(
 //
 func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 	fillerCharacter rune,
-	fillerCharsCount int,
+	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
 	*TextFieldSpecFiller,
 	error) {
@@ -1163,8 +1163,8 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 	}
 
 	err = txtFieldFillerElectron.isFillerCharsRepeatCountValid(
-		fillerCharsCount,
-		ePrefix.XCtx("fillerCharsCount"))
+		fillerCharsRepeatCount,
+		ePrefix.XCtx("fillerCharsRepeatCount"))
 
 	if err != nil {
 		return &TextFieldSpecFiller{}, err
@@ -1180,7 +1180,7 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 		fillerCharacter
 
 	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsCount
+		fillerCharsRepeatCount
 
 	return &newTxtFillerField, nil
 }
@@ -1188,9 +1188,8 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 // NewConstructorRuneArray - Creates and returns a pointer to a
 // new, fully populated instance of TextFieldSpecFiller. This
 // method is similar to method TextFieldSpecFiller.NewConstructor()
-// with the distinction being that this method returns a pointer
-// to a new instance of TextFieldSpecFiller and it accepts an array
-// runes filler characters.
+// with the distinction being that this method accepts an array
+// runes as filler characters.
 //
 //
 // ----------------------------------------------------------------
@@ -1301,7 +1300,7 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 //
 func (txtFillerField TextFieldSpecFiller) NewConstructorRuneArray(
 	fillerCharacters []rune,
-	fillerCharsCount int,
+	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
 	*TextFieldSpecFiller,
 	error) {
@@ -1320,38 +1319,32 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRuneArray(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewConstructorRune()",
+		"TextFieldSpecFiller.NewConstructorRuneArray()",
 		"")
 
 	if err != nil {
 		return &TextFieldSpecFiller{}, err
 	}
 
-	lenRuneArray := len(fillerCharacters)
+	txtFillerElectron := textFieldSpecFillerElectron{}
 
-	if lenRuneArray == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is a zero length rune array!\n",
-			ePrefix.String())
+	var lenFillerChars int
 
+	lenFillerChars,
+		err = txtFillerElectron.isFillerCharsValid(
+		fillerCharacters,
+		ePrefix.XCtx(
+			"fillerCharacters"))
+
+	if err != nil {
 		return &TextFieldSpecFiller{}, err
 	}
 
-	if fillerCharsCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return &TextFieldSpecFiller{}, err
-	}
+	err = txtFillerElectron.isFillerCharsRepeatCountValid(
+		fillerCharsRepeatCount,
+		ePrefix.XCtx("fillerCharsRepeatCount"))
 
-	if fillerCharsCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
+	if err != nil {
 		return &TextFieldSpecFiller{}, err
 	}
 
@@ -1359,14 +1352,14 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRuneArray(
 		newEmpty()
 
 	newTxtFillerField.fillerCharacters =
-		make([]rune, lenRuneArray)
+		make([]rune, lenFillerChars)
 
 	copy(
 		newTxtFillerField.fillerCharacters,
 		fillerCharacters)
 
 	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsCount
+		fillerCharsRepeatCount
 
 	return &newTxtFillerField, nil
 }
@@ -1392,11 +1385,12 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 		newEmpty()
 }
 
-// NewPtr - Creates and returns a pointer to a new, fully populated
+// NewTextFiller - Creates and returns a new, fully populated concrete
 // instance of TextFieldSpecFiller. This method is identical to
 // method TextFieldSpecFiller.NewConstructor() with the sole
-// distinction being that this method returns a pointer to a new
-// instance of TextFieldSpecFiller.
+// distinction being that this method returns a concrete instance
+// of TextFieldSpecFiller instead of a pointer to a new
+// TextFieldSpecFiller instance.
 //
 //
 // ----------------------------------------------------------------
@@ -1489,10 +1483,10 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
+//  TextFieldSpecFiller
 //     - If this method completes successfully, this parameter will
-//       return a pointer to a new, valid and fully populated Text
-//       Filler Field.
+//       return a new, valid and fully populated Text Filler Field
+//       object.
 //
 //
 //  error
@@ -1505,11 +1499,11 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (txtFillerField TextFieldSpecFiller) NewPtr(
+func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	fillerCharacters string,
-	fillerCharsCount int,
+	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
-	*TextFieldSpecFiller,
+	TextFieldSpecFiller,
 	error) {
 
 	if txtFillerField.lock == nil {
@@ -1526,41 +1520,36 @@ func (txtFillerField TextFieldSpecFiller) NewPtr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewPtr()",
+		"TextFieldSpecFiller.NewTextFiller()",
 		"")
 
 	if err != nil {
-		return &TextFieldSpecFiller{}, err
+		return TextFieldSpecFiller{}, err
 	}
 
-	if len(fillerCharacters) == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is a zero length string!\n",
-			ePrefix.String())
-		return &TextFieldSpecFiller{}, err
-	}
-
-	if fillerCharsCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return &TextFieldSpecFiller{}, err
-	}
-
-	if fillerCharsCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one million (1,000,000)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return &TextFieldSpecFiller{}, err
-	}
+	txtFillerElectron := textFieldSpecFillerElectron{}
 
 	fillerCharsRunes := []rune(fillerCharacters)
 
-	lenFillerChars := len(fillerCharsRunes)
+	var lenFillerChars int
+
+	lenFillerChars,
+		err = txtFillerElectron.isFillerCharsValid(
+		fillerCharsRunes,
+		ePrefix.XCtx(
+			"fillerCharacters"))
+
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
+
+	err = txtFillerElectron.isFillerCharsRepeatCountValid(
+		fillerCharsRepeatCount,
+		ePrefix.XCtx("fillerCharsCount"))
+
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
 
 	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
 
@@ -1571,9 +1560,9 @@ func (txtFillerField TextFieldSpecFiller) NewPtr(
 		fillerCharsRunes)
 
 	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsCount
+		fillerCharsRepeatCount
 
-	return &newTxtFillerField, nil
+	return newTxtFillerField, nil
 }
 
 // SetTextFiller - Overwrites the internal member variables for the
@@ -1688,7 +1677,7 @@ func (txtFillerField TextFieldSpecFiller) NewPtr(
 //
 func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 	fillerCharacters string,
-	fillerCharsCount int,
+	fillerCharsRepeatCount int,
 	errorPrefix interface{}) error {
 
 	if txtFillerField.lock == nil {
@@ -1712,32 +1701,27 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 		return err
 	}
 
+	txtFillerElectron := textFieldSpecFillerElectron{}
+
 	fillerCharsRunes := []rune(fillerCharacters)
 
-	lenFillerChars := len(fillerCharsRunes)
+	var lenFillerChars int
 
-	if lenFillerChars == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is a zero length string!\n",
-			ePrefix.String())
+	lenFillerChars,
+		err = txtFillerElectron.isFillerCharsValid(
+		fillerCharsRunes,
+		ePrefix.XCtx(
+			"fillerCharacters"))
+
+	if err != nil {
 		return err
 	}
 
-	if fillerCharsCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return err
-	}
+	err = txtFillerElectron.isFillerCharsRepeatCountValid(
+		fillerCharsRepeatCount,
+		ePrefix.XCtx("fillerCharsRepeatCount"))
 
-	if fillerCharsCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
+	if err != nil {
 		return err
 	}
 
@@ -1748,7 +1732,7 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 		fillerCharsRunes)
 
 	txtFillerField.fillerCharsRepeatCount =
-		fillerCharsCount
+		fillerCharsRepeatCount
 
 	return nil
 }
