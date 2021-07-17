@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -1408,7 +1407,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	return newTextLabel, nil
 }
 
-// SetTextLabel - Sets the text label string associated with the
+// SetTextLabel - Sets the text label component values for the
 // current instance of TextFieldSpecLabel.
 //
 // IMPORTANT
@@ -1593,22 +1592,61 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 	return nil
 }
 
-// SetTextLabelRunes - Sets the text label string associated with
+// SetTextLabelRunes - Sets the text label component values for
 // the current instance of TextFieldSpecLabel. The input parameter
-// required to set this text label is submitted as an array of
-// runes.
+// required to set the text label characters is submitted as an
+// array of runes.
+//
+// IMPORTANT
+//
+// This method will overwrite and delete the existing data values
+// for the current TextFieldSpecLabel instance (txtFieldLabel).
 //
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabelRunes             []rune
-//     - The string content to be displayed within the label will
-//       be created from this rune array.
+//  textLabelChars             []rune
+//     - An array of runes or text characters which is used to
+//       generate string content for display as a text label.
 //
-//       If this parameter is submitted as a zero length array of,
-//       runes, an error will be returned.
+//       If this parameter is submitted as a zero length array,
+//       an error will be returned.
+//
+//
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabelChars'
+//       will be displayed. If 'fieldLen' is less than the length
+//       of the 'textLabelChars' array, it will be automatically
+//       set equal to the 'textLabelChars' array length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabelChars', set this parameter to a value of
+//       minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
+//
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       'textLabelChars' within the field specified by 'fieldLen'.
+//
+//       Text justification can only be evaluated in the context of
+//       a text label, field length and 'textJustification' object
+//       of type TextJustify. This is because text labels with a
+//       field length equal to or less than the length of the text
+//       label never use text justification. In these cases, text
+//       justification is completely ignored.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
 //
 //
 //  errorPrefix                interface{}
@@ -1672,7 +1710,9 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //       the beginning of the error message.
 //
 func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
-	textLabelRunes []rune,
+	textLabelChars []rune,
+	fieldLen int,
+	textJustification TextJustify,
 	errorPrefix interface{}) error {
 
 	if txtFieldLabel.lock == nil {
@@ -1696,18 +1736,44 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 		return err
 	}
 
-	lenTxtRunes := len(textLabelRunes)
+	var lenTxtRunes int
 
-	if lenTxtRunes == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLabelRunes' is a zero length array!\n",
-			ePrefix.String())
+	txtLabelElectron := textFieldSpecLabelElectron{}
+
+	lenTxtRunes,
+		err = txtLabelElectron.isTextLabelValid(
+		textLabelChars,
+		ePrefix.XCtx("textLabelChars"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLabelElectron.isFieldLengthValid(
+		fieldLen,
+		ePrefix.XCtx("fieldLen"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtLabelElectron.isTextJustificationValid(
+		textLabelChars,
+		fieldLen,
+		textJustification,
+		ePrefix.XCtx("textJustification"))
+
+	if err != nil {
 		return err
 	}
 
 	txtFieldLabel.textLabel = make([]rune, lenTxtRunes)
 
-	copy(txtFieldLabel.textLabel, textLabelRunes)
+	copy(txtFieldLabel.textLabel, textLabelChars)
+
+	txtFieldLabel.fieldLen = fieldLen
+
+	txtFieldLabel.textJustification = textJustification
 
 	return nil
 }
