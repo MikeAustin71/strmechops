@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"strings"
 	"sync"
 )
 
@@ -27,26 +26,45 @@ type textSpecificationMolecule struct {
 //
 // Input Parameters
 //
-//  textStr             string
+//  textRunes                  []rune
 //     - Contains the text context which will be formatted within a
 //       text field specified by input parameter 'fieldLen'.
 //
-//  fieldLen            int
-//     - The length of the text field within which input parameter
-//       'textStr' will be positioned.
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabel' will
+//       be displayed. If 'fieldLen' is less than the length of the
+//       'textLabel' string, it will be automatically set equal to
+//       the 'textLabel' string length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabel', set this parameter to a value of minus one
+//       (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
 //
 //
-//  textJustify         TextJustify
-//     - Specifies the text justification which will be applied
-//       when positioning 'textStr' within the text field specified
-//       by 'fieldLen'. 'textJustify' MUST BE set to one of the
-//       three following values:
+//  textJustify                TextJustify
+//     - An enumeration which specifies the justification of the
+//       'textLabel' within the field specified by 'fieldLen'.
+//
+//       Text justification can only be evaluated in the context of
+//       a text label, field length and 'textJustification' object
+//       of type TextJustify. This is because text labels with a
+//       field length equal to or less than the length of the text
+//       label never use text justification. In these cases, text
+//       justification is completely ignored.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
 //           TextJustify(0).Left()
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
+//  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
@@ -94,24 +112,33 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		return fmt.Sprintf("%v\n", err.Error())
 	}
 
-	lenTxtLabel := len(textRunes)
+	txtLabelElectron := textFieldSpecLabelElectron{}
 
-	if lenTxtLabel == 0 &&
-		fieldLen <= 0 {
-		return ""
+	_,
+		err = txtLabelElectron.isTextLabelValid(
+		textRunes,
+		ePrefix.XCtx("textRunes"))
+
+	if err != nil {
+		return fmt.Sprintf("%v\n", err.Error())
 	}
 
-	if lenTxtLabel == 0 &&
-		fieldLen > 0 {
-		return strings.Repeat(" ", fieldLen)
+	err = txtLabelElectron.isFieldLengthValid(
+		fieldLen,
+		ePrefix.XCtx("fieldLen"))
+
+	if err != nil {
+		return fmt.Sprintf("%v\n", err.Error())
 	}
 
-	if !textJustify.XIsValid() {
-		return fmt.Sprintf("%v\n"+
-			"Text Justification Specification is INVALID!\n"+
-			"Text Justification Integer Value = '%v'\n",
-			ePrefix.String(),
-			textJustify.XValueInt())
+	err = txtLabelElectron.isTextJustificationValid(
+		textRunes,
+		fieldLen,
+		textJustify,
+		ePrefix.XCtx("textJustify"))
+
+	if err != nil {
+		return fmt.Sprintf("%v\n", err.Error())
 	}
 
 	var result string
