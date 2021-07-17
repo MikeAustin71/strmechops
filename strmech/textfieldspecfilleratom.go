@@ -60,34 +60,23 @@ func (txtFieldFillerAtom *textFieldSpecFillerAtom) isValidTextFieldSpecFiller(
 		return isValid, err
 	}
 
-	if txtFieldFiller.fillerCharsRepeatCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'incomingTxtFiller.fillerCharsRepeatCount' is "+
-			"less than one (+1)!\n"+
-			"incomingTxtFiller.fillerCharsRepeatCount='%v'\n",
-			ePrefix.String(),
-			txtFieldFiller.fillerCharsRepeatCount)
+	txtFillerElectron := textFieldSpecFillerElectron{}
 
+	_,
+		err = txtFillerElectron.isFillerCharsValid(
+		txtFieldFiller.fillerCharacters,
+		ePrefix.XCtx(
+			"txtFieldFiller.fillerCharacters"))
+
+	if err != nil {
 		return isValid, err
 	}
 
-	if txtFieldFiller.fillerCharsRepeatCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'incomingTxtFiller.fillerCharsRepeatCount' is "+
-			"less than one (+1)!\n"+
-			"incomingTxtFiller.fillerCharsRepeatCount='%v'\n",
-			ePrefix.String(),
-			txtFieldFiller.fillerCharsRepeatCount)
+	err = txtFillerElectron.isFillerCharsRepeatCountValid(
+		txtFieldFiller.fillerCharsRepeatCount,
+		ePrefix.XCtx("txtFieldFiller.fillerCharsRepeatCount"))
 
-		return isValid, err
-	}
-
-	if len(txtFieldFiller.fillerCharacters) == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'txtFieldFiller.fillerCharacters' is a zero "+
-			"length array!\n",
-			ePrefix.String())
-
+	if err != nil {
 		return isValid, err
 	}
 
