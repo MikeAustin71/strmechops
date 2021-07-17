@@ -46,65 +46,38 @@ type textFieldSpecFillerElectron struct {
 //       returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//  errPrefDto                 *ErrPrefixDto
+//     - This error prefix data transfer object encapsulates an
+//       error prefix string which is included in all returned
+//       error messages. Usually, it contains the names of the
+//       calling functions or methods included in this chain of
+//       code execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
-//
-// ------------------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
+//  err                        error
+//     - If 'fillerCharsRepeatCount' is found to be valid, this
+//       return parameter will be set to 'nil'.
+//
 //     - If 'fillerCharsRepeatCount' is found to be invalid, this
 //       method will return an error along with an appropriate
 //       error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errPrefDto'. The
+//       'errPrefDto' text will be attached to the beginning of the
+//       error message.
 //
 func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsRepeatCountValid(
 	fillerCharsRepeatCount int,
@@ -160,7 +133,7 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsRepeatCo
 // If input parameter 'fillerChars' is judged invalid, this method
 // will return an error along with an appropriate error message.
 //
-// If input parameter 'fillerChars' is valid this method
+// If input parameter 'fillerChars' is valid, this method
 // will return a 'nil' value.
 //
 //
@@ -185,50 +158,18 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsRepeatCo
 //       array, this method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//  errPrefDto                 *ErrPrefixDto
+//     - This error prefix data transfer object encapsulates an
+//       error prefix string which is included in all returned
+//       error messages. Usually, it contains the names of the
+//       calling functions or methods included in this chain of
+//       code execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -240,12 +181,18 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsRepeatCo
 //
 //
 //  err                        error
+//     - If 'fillerChars' is found to be valid, this return
+//       parameter will be set to 'nil'.
+//
 //     - If 'fillerChars' is found to be invalid, this method will
 //       return an error along with an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errPrefDto'. The
+//       'errPrefDto' text will be attached to the beginning of the
+//       error message.
 //
 func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 	fillerChars []rune,
@@ -295,11 +242,19 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 		return lenFillerChars, err
 	}
 
-	if lenFillerChars == 1 &&
-		fillerChars[0] == 0 {
+	var zeroCnt int
+
+	for i := 0; i < lenFillerChars; i++ {
+
+		if fillerChars[i] == 0 {
+			zeroCnt++
+		}
+	}
+
+	if zeroCnt == lenFillerChars {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerChars' has a\n"+
-			"single character with a zero value!\n",
+			"Error: All of the characters in Input parameter\n"+
+			"'fillerChars' have a zero value!\n",
 			ePrefix.String())
 	}
 
@@ -340,50 +295,18 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 //       method will return an error.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//  errPrefDto                 *ErrPrefixDto
+//     - This error prefix data transfer object encapsulates an
+//       error prefix string which is included in all returned
+//       error messages. Usually, it contains the names of the
+//       calling functions or methods included in this chain of
+//       code execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -391,12 +314,18 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 // Return Values
 //
 //  err                        error
-//     - If 'fillerChars' is found to be invalid, this method will
+//     - If 'fillerChar' is found to be valid, this return
+//       parameter will be set to 'nil'.
+//
+//     - If 'fillerChar' is found to be invalid, this method will
 //       return an error along with an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errPrefDto'. The
+//       'errPrefDto' text will be attached to the beginning of the
+//       error message.
 //
 func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharacterValid(
 	fillerChar rune,

@@ -818,10 +818,14 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //
 //
 //  fieldLen                   int
-//     - The length of the field in which the 'textLabel' will be
-//       displayed. If 'fieldLen' is less than the length of the
+//     - The length of the text field in which the 'textLabel' will
+//       be displayed. If 'fieldLen' is less than the length of the
 //       'textLabel' string, it will be automatically set equal to
 //       the 'textLabel' string length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabel', set this parameter to a value of minus one
+//       (-1).
 //
 //       If this parameter is submitted with a value less than
 //       minus one (-1) or greater than 1-million (1,000,000), an
