@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -2032,7 +2031,7 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 //
 func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 	fillerCharacters []rune,
-	fillerCharsCount int,
+	fillerCharsRepeatCount int,
 	errorPrefix interface{}) error {
 
 	if txtFillerField.lock == nil {
@@ -2056,46 +2055,36 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 		return err
 	}
 
-	lenRuneArray := len(fillerCharacters)
+	txtFillerElectron := textFieldSpecFillerElectron{}
 
-	if lenRuneArray == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is a zero length rune array!\n",
-			ePrefix.String())
+	var lenRuneArray int
 
+	lenRuneArray,
+		err = txtFillerElectron.isFillerCharsValid(
+		fillerCharacters,
+		ePrefix.XCtx(
+			"fillerCharacters"))
+
+	if err != nil {
 		return err
 	}
 
-	if fillerCharsCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is less than one (1)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
+	err = txtFillerElectron.isFillerCharsRepeatCountValid(
+		fillerCharsRepeatCount,
+		ePrefix.XCtx("fillerCharsRepeatCount"))
+
+	if err != nil {
 		return err
 	}
 
-	if fillerCharsCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is greater than one-million (+1,000,000)!\n"+
-			"'fillerCharsRepeatCount' controls the number of repetitions of 'fillerCharacters'\n"+
-			"in the Filler Text Field.\n",
-			ePrefix.String())
-		return err
-	}
-
-	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().
-		newEmpty()
-
-	newTxtFillerField.fillerCharacters =
+	txtFillerField.fillerCharacters =
 		make([]rune, lenRuneArray)
 
-	copy(
-		newTxtFillerField.fillerCharacters,
+	copy(txtFillerField.fillerCharacters,
 		fillerCharacters)
 
-	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsCount
+	txtFillerField.fillerCharsRepeatCount =
+		fillerCharsRepeatCount
 
 	return nil
 }
