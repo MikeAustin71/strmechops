@@ -63,13 +63,14 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 		return err
 	}
 
-	if incomingTxtFieldLabel.fieldLen < 0 {
-		incomingTxtFieldLabel.fieldLen = 0
-	}
+	_,
+		err = textFieldSpecLabelAtom{}.ptr().
+		isValidTextFieldLabel(
+			incomingTxtFieldLabel,
+			ePrefix.XCtx("incomingTxtFieldLabel"))
 
-	if !incomingTxtFieldLabel.textJustification.XIsValid() {
-		incomingTxtFieldLabel.textJustification =
-			TextJustify(0).None()
+	if err != nil {
+		return err
 	}
 
 	targetTxtFieldLabel.textLabel = nil
@@ -175,13 +176,14 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 		return TextFieldSpecLabel{}, err
 	}
 
-	if txtFieldLabel.fieldLen < 0 {
-		txtFieldLabel.fieldLen = 0
-	}
+	_,
+		err = textFieldSpecLabelAtom{}.ptr().
+		isValidTextFieldLabel(
+			txtFieldLabel,
+			ePrefix.XCtx("txtFieldLabel"))
 
-	if !txtFieldLabel.textJustification.XIsValid() {
-		txtFieldLabel.textJustification =
-			TextJustify(0).None()
+	if err != nil {
+		return TextFieldSpecLabel{}, err
 	}
 
 	newTxtFieldLabel := TextFieldSpecLabel{}
