@@ -105,7 +105,7 @@
 === RUN   TestNumberSignSymbolDto_CopyIn_000800
 --- PASS: TestNumberSignSymbolDto_CopyIn_000800 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyOut_000100
---- PASS: TestNumberSignSymbolDto_CopyOut_000100 (0.03s)
+--- PASS: TestNumberSignSymbolDto_CopyOut_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyOut_000200
 --- PASS: TestNumberSignSymbolDto_CopyOut_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_CopyOut_000300
@@ -1174,6 +1174,10 @@
 --- PASS: TestDataFieldTrailingDelimiterType_Value_01 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_CopyOut_000100
+--- PASS: TestTextFieldSpecLabel_CopyOut_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_CopyOut_000200
+--- PASS: TestTextFieldSpecLabel_CopyOut_000200 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_01
 --- PASS: TestStrOpsTextJustify_ParseString_01 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_02
@@ -1209,4 +1213,4 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/strmechops/strmech	0.550s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.564s
