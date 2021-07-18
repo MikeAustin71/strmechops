@@ -356,6 +356,262 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 	}
 }
 
+func TestTextFieldSpecLabel_NewConstructorRunes_000100(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_NewConstructorRunes_000100() "
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	expectedTextLabel :=
+		strings.Repeat(" ", 4) +
+			label +
+			strings.Repeat(" ", 4)
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewConstructorRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v - txtFieldLabelOne\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	err = txtFieldLabelTwo.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	err = txtFieldLabelTwo.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v - txtFieldLabelTwo\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelTwo) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n",
+			ePrefix)
+		return
+	}
+
+	actualLabel := txtFieldLabelOne.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v - txtFieldLabelOne\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+
+		return
+	}
+
+	actualLabel = txtFieldLabelTwo.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v - txtFieldLabelTwo\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+
+		return
+	}
+
+	if txtFieldLabelOne.GetFieldLength() !=
+		txtFieldLabelTwo.GetFieldLength() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelTwo\n"+
+			"field lengths are NOT equal!\n"+
+			" txtFieldLabelOne.GetFieldLength() == '%v'\n"+
+			" txtFieldLabelTwo.GetFieldLength() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetFieldLength(),
+			txtFieldLabelTwo.GetFieldLength())
+		return
+	}
+
+	if txtFieldLabelOne.GetTextJustification() !=
+		txtFieldLabelTwo.GetTextJustification() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelTwo\n"+
+			"text justification values are NOT equal!\n"+
+			" txtFieldLabelOne.GetTextJustification() == '%v'\n"+
+			" txtFieldLabelTwo.GetTextJustification() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetTextJustification().String(),
+			txtFieldLabelTwo.GetTextJustification().String())
+		return
+	}
+
+	if txtFieldLabelOne.GetTextLabel() !=
+		txtFieldLabelTwo.GetTextLabel() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelTwo\n"+
+			"text label values are NOT equal!\n"+
+			" txtFieldLabelOne.GetTextLabel() == '%v'\n"+
+			" txtFieldLabelTwo.GetTextLabel() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetTextLabel(),
+			txtFieldLabelTwo.GetTextLabel())
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_NewConstructorRunes_000200(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_NewConstructorRunes_000200() "
+
+	label := "12345"
+	fieldLen := 6
+	txtJustify := TxtJustify.Center()
+
+	expectedTextLabel :=
+		label + " "
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewConstructorRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v - txtFieldLabelOne\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	err = txtFieldLabelTwo.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelTwo.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v - txtFieldLabelTwo\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelTwo) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n",
+			ePrefix)
+		return
+	}
+
+	actualLabel := txtFieldLabelOne.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v - txtFieldLabelOne\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+
+		return
+	}
+
+	actualLabel = txtFieldLabelTwo.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v - txtFieldLabelTwo\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+
+		return
+	}
+
+	if txtFieldLabelOne.GetFieldLength() !=
+		txtFieldLabelTwo.GetFieldLength() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelTwo\n"+
+			"field lengths are NOT equal!\n"+
+			" txtFieldLabelOne.GetFieldLength() == '%v'\n"+
+			" txtFieldLabelTwo.GetFieldLength() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetFieldLength(),
+			txtFieldLabelTwo.GetFieldLength())
+		return
+	}
+
+	if txtFieldLabelOne.GetTextJustification() !=
+		txtFieldLabelTwo.GetTextJustification() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelTwo\n"+
+			"text justification values are NOT equal!\n"+
+			" txtFieldLabelOne.GetTextJustification() == '%v'\n"+
+			" txtFieldLabelTwo.GetTextJustification() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetTextJustification().String(),
+			txtFieldLabelTwo.GetTextJustification().String())
+		return
+	}
+
+	if txtFieldLabelOne.GetTextLabel() !=
+		txtFieldLabelTwo.GetTextLabel() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelTwo\n"+
+			"text label values are NOT equal!\n"+
+			" txtFieldLabelOne.GetTextLabel() == '%v'\n"+
+			" txtFieldLabelTwo.GetTextLabel() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetTextLabel(),
+			txtFieldLabelTwo.GetTextLabel())
+	}
+
+	return
+}
+
 func TestTextFieldSpecLabel_NewTextLabel_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_NewTextLabel_000100() "
@@ -1431,6 +1687,138 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000600(t *testing.T) {
 			ePrefix,
 			txtFieldLabelOne.GetTextLabel(),
 			txtFieldLabelTwo.GetTextLabel())
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_TextFieldName_0001000(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_TextFieldName_0001000()"
+
+	expectedTxtFieldName := "TextFieldSpecLabel"
+
+	actualTxtFieldName := TextFieldSpecLabel{}.TextFieldName()
+
+	if expectedTxtFieldName != actualTxtFieldName {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected Text Field Name = '%v'\n"+
+			"Instead, Actual Text Field Name = '%v'\n",
+			ePrefix,
+			expectedTxtFieldName,
+			actualTxtFieldName)
+
+		return
+	}
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Left()
+
+	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+
+	err := txtFieldLabelOne.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTxtFieldName = txtFieldLabelOne.TextFieldName()
+
+	if expectedTxtFieldName != actualTxtFieldName {
+		t.Errorf("%v - Test #2\n"+
+			"Error: Expected Text Field Name = '%v'\n"+
+			"Instead, Actual Text Field Name = '%v'\n",
+			ePrefix,
+			expectedTxtFieldName,
+			actualTxtFieldName)
+
+		return
+	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	actualTxtFieldName = txtFieldLabelTwo.TextFieldName()
+
+	if expectedTxtFieldName != actualTxtFieldName {
+		t.Errorf("%v - Test #2\n"+
+			"Error: Expected Text Field Name = '%v'\n"+
+			"Instead, Actual Text Field Name = '%v'\n",
+			ePrefix,
+			expectedTxtFieldName,
+			actualTxtFieldName)
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_TextTypeName_0001000(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_TextTypeName_0001000()"
+
+	expectedTxtTypeName := "TextFieldSpecLabel"
+
+	actualTxtTypeName := TextFieldSpecLabel{}.TextTypeName()
+
+	if expectedTxtTypeName != actualTxtTypeName {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected Text Type Name = '%v'\n"+
+			"Instead, Actual Text Type Name = '%v'\n",
+			ePrefix,
+			expectedTxtTypeName,
+			actualTxtTypeName)
+
+		return
+	}
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Left()
+
+	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+
+	err := txtFieldLabelOne.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTxtTypeName = txtFieldLabelOne.TextFieldName()
+
+	if expectedTxtTypeName != actualTxtTypeName {
+		t.Errorf("%v - Test #2\n"+
+			"Error: Expected Text Type Name = '%v'\n"+
+			"Instead, Actual Text Type Name = '%v'\n",
+			ePrefix,
+			expectedTxtTypeName,
+			actualTxtTypeName)
+
+		return
+	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	actualTxtTypeName = txtFieldLabelTwo.TextFieldName()
+
+	if expectedTxtTypeName != actualTxtTypeName {
+		t.Errorf("%v - Test #2\n"+
+			"Error: Expected Text Type Name = '%v'\n"+
+			"Instead, Actual Text Type Name = '%v'\n",
+			ePrefix,
+			expectedTxtTypeName,
+			actualTxtTypeName)
 	}
 
 	return

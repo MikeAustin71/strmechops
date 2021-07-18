@@ -1784,6 +1784,14 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 //
 func (txtFieldLabel TextFieldSpecLabel) TextFieldName() string {
 
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
 	return "TextFieldSpecLabel"
 }
 
@@ -1792,6 +1800,14 @@ func (txtFieldLabel TextFieldSpecLabel) TextFieldName() string {
 // the requirements of the ITextSpecification interface.
 //
 func (txtFieldLabel TextFieldSpecLabel) TextTypeName() string {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
 
 	return "TextFieldSpecLabel"
 }
