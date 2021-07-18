@@ -607,3 +607,220 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextFieldSpecLabel_SetTextLabel_000200(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_SetTextLabel_000200() "
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+	expectedTextLabel :=
+		strings.Repeat(" ", 4) +
+			label +
+			strings.Repeat(" ", 4)
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewConstructor(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	err = txtFieldLabelTwo.SetTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelTwo) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n"+
+			"txtFieldLabelTwo.SetTextLabel() did NOT produce an identical copy!\n",
+			ePrefix)
+		return
+	}
+
+	txtFieldLabelThree := TextFieldSpecLabel{}
+
+	err = txtFieldLabelThree.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelThree) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelThree!\n"+
+			"txtFieldLabelTwo.SetTextLabelRunes() did NOT produce an identical copy!\n",
+			ePrefix)
+		return
+	}
+
+	actualLabel := txtFieldLabelThree.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_SetTextLabel_000300(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_SetTextLabel_000300() "
+
+	label := "12345"
+	fieldLen := -1
+	txtJustify := TxtJustify.None()
+	expectedTextLabel := label
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewConstructor(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	err = txtFieldLabelTwo.SetTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelTwo) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n"+
+			"txtFieldLabelTwo.SetTextLabel() did NOT produce an identical copy!\n",
+			ePrefix)
+		return
+	}
+
+	txtFieldLabelThree := TextFieldSpecLabel{}
+
+	err = txtFieldLabelThree.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelThree) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelThree!\n"+
+			"txtFieldLabelTwo.SetTextLabelRunes() did NOT produce an identical copy!\n",
+			ePrefix)
+		return
+	}
+
+	actualLabel := txtFieldLabelThree.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_SetTextLabel_000400(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_SetTextLabel_000400() "
+
+	label := "12345"
+	fieldLen := -99
+	txtJustify := TxtJustify.None()
+
+	txtFieldLabelOne := TextFieldSpecLabel{}
+
+	err := txtFieldLabelOne.SetTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelOne.SetTextLabel()\n"+
+			"because 'fieldLen' == '-99' and is therefore INVALID!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_SetTextLabel_000500(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecLabel_SetTextLabel_000500() "
+
+	label := "12345"
+	fieldLen := 99
+	txtJustify := TxtJustify.None()
+
+	txtFieldLabelOne := TextFieldSpecLabel{}
+
+	err := txtFieldLabelOne.SetTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelOne.SetTextLabel()\n"+
+			"because 'txtJustify' == TxtJustify.None() and is therefore INVALID!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix)
+	}
+
+	return
+}
