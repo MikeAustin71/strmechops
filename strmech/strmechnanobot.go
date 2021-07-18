@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"strings"
 	"sync"
 )
 
@@ -114,45 +113,49 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 //  strToJustify        string
 //    - The string content or text which will be positioned and
 //      formatted inside the returned string ('justifiedStr')
-//      according to the text justification specification contained
-//      in input parameter, 'textJustify'.
+//      according to the field length and text justification
+//      specifications contained in input parameters, 'fieldLen'
+//      and 'textJustify'.
 //
-//      If 'strToJustify' is a zero length empty string, this
-//      method will return a string of white-space characters
-//      equal in length to the value of input parameter,
-//      'fieldLen'.
+//      If 'strToJustify' is a zero length or empty string, this
+//      method will return an error.
 //
 //
 //  fieldLen            int
 //     - The total length of the returned text field
-//       ('justifiedStr') in which 'strToJustify' will be positioned
-//       and formatted. If this 'fieldLen' value is less than the
-//       length of 'strToJustify', 'fieldLen' will be automatically
-//       increased to a value equal to the length of 'strToJustify'.
+//       ('justifiedStr') in which 'strToJustify' will be
+//       positioned and formatted. If this 'fieldLen' value is less
+//       than the length of 'strToJustify', 'fieldLen' will be
+//       automatically increased to a value equal to the length of
+//       'strToJustify'.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'strToJustify', set this parameter to a value of minus one
+//       (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
 //
 //
 //  textJustify         TextJustify
-//     - An enumeration value used to specify the type of text
-//       formatting which will be applied to 'strToJustify' when
-//       it is positioned inside of the returned text string,
-//       'justifiedStr'. This enumeration value must be one
-//       of the three following format specifications:
+//     - An enumeration which specifies the justification of the
+//       'strToJustify' within the field specified by 'fieldLen'.
 //
-//       1. Left   - Signals that the text justification format is
-//                   set to 'Left-Justify'. Strings within text
-//                   fields will be flush with the left margin.
-//                          Example: "TextString      "
+//       Text justification can only be evaluated in the context of
+//       a string to justify, field length and a 'textJustify'
+//       object of type TextJustify. This is because a string to
+//       justify with a field length equal to or less than the
+//       length of the string to justify will never use text
+//       justification. In these cases, text justification is
+//       completely ignored.
 //
-//       2. Right  - Signals that the text justification format is
-//                   set to 'Right-Justify'. Strings within text
-//                   fields will terminate at the right margin.
-//                          Example: "      TextString"
-//
-//       3. Center - Signals that the text justification format is
-//                   is set to 'Centered'. Strings will be positioned
-//                   in the center of the text field equidistant
-//                   from the left and right margins.
-//                           Example: "   TextString   "
+//       However, if the field length is greater than the length of
+//       the string to justify, text justification MUST be equal to
+//       one of these three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
 //
 //
 //  ePrefix             *ErrPrefixDto
@@ -244,33 +247,55 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 
 	lenStrToJustify := len(strToJustify)
 
-	if fieldLen < 1 &&
-		lenStrToJustify == 0 {
-
+	if lenStrToJustify == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameters 'strToJustify' and "+
-			"'fieldLen' are invalid!\n",
+			"Error: Input parameter 'strToJustify' is an empty string\n"+
+			"with zero string length!\n",
 			ePrefix.String())
 
 		return justifiedStr, err
-
-	} else if fieldLen < 1 &&
-		lenStrToJustify > 0 {
-
-		justifiedStr = strToJustify
-
-		return justifiedStr, err
-
-	} else if fieldLen > 0 && lenStrToJustify == 0 {
-
-		justifiedStr = strings.Repeat(justifiedStr, fieldLen)
-
-		return justifiedStr, err
-
 	}
 
-	if lenStrToJustify > fieldLen {
+	if fieldLen < -1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLen' is less than minus one (-1)!\n"+
+			"'fieldLen' controls the length of the Text Output Field,\n"+
+			"'justifiedStr'\n",
+			ePrefix.String())
+
+		return justifiedStr, err
+	}
+
+	if fieldLen > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLen' is greater than one-million (1,000,000)!\n"+
+			"'fieldLen' controls the length of the Text Output Field,\n"+
+			"'justifiedStr'\n",
+			ePrefix.String())
+
+		return justifiedStr, err
+	}
+
+	if fieldLen <= lenStrToJustify {
 		justifiedStr = strToJustify
+		return justifiedStr, err
+	}
+
+	if !textJustify.XIsValid() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Text Justification is INVALID!\n"+
+			"Text Justification MUST be set to\n"+
+			"Left, Right or Center.\n"+
+			"String To Justify Value = '%v'\n"+
+			"Field Length = '%v'\n"+
+			"'textJustify'  String Value = '%v'\n"+
+			"'textJustify' Integer Value = '%v'\n",
+			ePrefix.String(),
+			strToJustify,
+			fieldLen,
+			textJustify.String(),
+			textJustify.XValueInt())
+
 		return justifiedStr, err
 	}
 
@@ -311,8 +336,10 @@ func (sMechNanobot *strMechNanobot) justifyTextInStrField(
 	default:
 		err = fmt.Errorf("%v\n"+
 			"Invalid 'textJustify' value!\n"+
-			"'textJustify' integer value == '%v'\n",
+			"'textJustify'  String Value = '%v'\n"+
+			"'textJustify' Integer Value = '%v'\n",
 			ePrefix.String(),
+			textJustify.String(),
 			textJustify.XValueInt())
 	}
 

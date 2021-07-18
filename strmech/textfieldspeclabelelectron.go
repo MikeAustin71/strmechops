@@ -160,8 +160,8 @@ func (txtFieldLabelElectron *textFieldSpecLabelElectron) isFieldLengthValid(
 //       a text label, field length and 'textJustification' object
 //       of type TextJustify. This is because text labels with a
 //       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       label will never use text justification. In these cases,
+//       text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -242,8 +242,8 @@ func (txtFieldLabelElectron *textFieldSpecLabelElectron) isTextJustificationVali
 			"Left, Right or Center.\n"+
 			"Text Label= '%v'\n"+
 			"Field Length= '%v'\n"+
-			"Text Justification String Value= '%v'\n"+
-			"Text Justification Integer Vale= '%v'\n",
+			"Text Justification  String Value= '%v'\n"+
+			"Text Justification Integer Value= '%v'\n",
 			ePrefix.String(),
 			string(textLabel),
 			fieldLen,

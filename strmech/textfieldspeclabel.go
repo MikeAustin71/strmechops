@@ -835,8 +835,8 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //       a text label, field length and 'textJustification' object
 //       of type TextJustify. This is because text labels with a
 //       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       label will never use text justification. In these cases,
+//       text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
