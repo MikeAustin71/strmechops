@@ -7,7 +7,7 @@ import (
 
 func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecLabel_CopyIn_000100() "
+	ePrefix := "TestTextFieldSpecLabel_CopyIn_000100()"
 
 	label := "12345"
 	fieldLen := 13
