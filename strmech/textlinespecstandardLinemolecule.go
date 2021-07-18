@@ -93,9 +93,20 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 	targetStdLine.textFields =
 		make([]ITextFieldSpecification, lenIncomingTxtFields)
 
+	var tempITextField ITextFieldSpecification
+
 	for i := 0; i < lenIncomingTxtFields; i++ {
-		targetStdLine.textFields[i] =
-			incomingStdLine.textFields[i].CopyOutITextField()
+
+		tempITextField,
+			err = incomingStdLine.textFields[i].CopyOutITextField(
+			ePrefix.XCtx(
+				fmt.Sprintf("i='%v'", i)))
+
+		if err != nil {
+			return err
+		}
+
+		targetStdLine.textFields[i] = tempITextField
 	}
 
 	return nil
@@ -209,9 +220,20 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 		newStdLine.textFields = make([]ITextFieldSpecification,
 			lenTxtFields)
 
+		var tempITextField ITextFieldSpecification
+
 		for i := 0; i < lenTxtFields; i++ {
-			newStdLine.textFields[i] =
-				txtStdLine.textFields[i].CopyOutITextField()
+
+			tempITextField,
+				err = txtStdLine.textFields[i].CopyOutITextField(
+				ePrefix.XCtx(
+					fmt.Sprintf("i='%v'", i)))
+
+			if err != nil {
+				return TextLineSpecStandardLine{}, err
+			}
+
+			newStdLine.textFields[i] = tempITextField
 		}
 	}
 
