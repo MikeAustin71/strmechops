@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"testing"
 )
@@ -303,6 +304,146 @@ func TestTextFieldSpecLabel_CopyOut_000300(t *testing.T) {
 		return
 	}
 
+}
+
+func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOutPtr_000100()",
+		"")
+
+	labelText := "12345"
+	fieldLen := 14
+	txtJustify := TxtJustify.Right()
+	expectedTextLabel :=
+		strings.Repeat(" ", 9) +
+			labelText
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewTextLabel(
+		labelText,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("txtFieldLabelOne\n"+
+			"%v\n",
+			err.Error())
+		return
+	}
+
+	var txtFieldLabelTwo *TextFieldSpecLabel
+
+	txtFieldLabelTwo,
+		err = txtFieldLabelOne.CopyOutPtr(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelTwo.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("txtFieldLabelTwo\n"+
+			"%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(txtFieldLabelTwo) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n",
+			ePrefix)
+		return
+	}
+
+	var txtFieldLabelThree TextFieldSpecLabel
+
+	txtFieldLabelThree = *txtFieldLabelTwo
+
+	err = txtFieldLabelThree.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("Error: txtFieldLabelThree\n"+
+			"%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtFieldLabelOne.Equal(&txtFieldLabelThree) {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelThree!\n",
+			ePrefix)
+		return
+	}
+
+	actualLabel := txtFieldLabelThree.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+
+		return
+	}
+
+	if txtFieldLabelOne.GetFieldLength() !=
+		txtFieldLabelThree.GetFieldLength() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelThree\n"+
+			"field lengths are NOT equal!\n"+
+			" txtFieldLabelOne.GetFieldLength()   == '%v'\n"+
+			" txtFieldLabelThree.GetFieldLength() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetFieldLength(),
+			txtFieldLabelThree.GetFieldLength())
+		return
+	}
+
+	if txtFieldLabelOne.GetTextJustification() !=
+		txtFieldLabelThree.GetTextJustification() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelThree\n"+
+			"text justification values are NOT equal!\n"+
+			" txtFieldLabelOne.GetTextJustification()   == '%v'\n"+
+			" txtFieldLabelThree.GetTextJustification() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetTextJustification().String(),
+			txtFieldLabelThree.GetTextJustification().String())
+		return
+	}
+
+	if txtFieldLabelOne.GetTextLabel() !=
+		txtFieldLabelThree.GetTextLabel() {
+		t.Errorf("%v\n"+
+			"Error: txtFieldLabelOne and txtFieldLabelThree\n"+
+			"text label values are NOT equal!\n"+
+			" txtFieldLabelOne.GetTextLabel()   == '%v'\n"+
+			" txtFieldLabelThree.GetTextLabel() == '%v'\n",
+			ePrefix,
+			txtFieldLabelOne.GetTextLabel(),
+			txtFieldLabelThree.GetTextLabel())
+	}
+
+	return
 }
 
 func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
