@@ -1188,6 +1188,14 @@
 --- PASS: TestTextFieldSpecFiller_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyOutPtr_000200
 --- PASS: TestTextFieldSpecFiller_CopyOutPtr_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructor_000100
+--- PASS: TestTextFieldSpecFiller_NewConstructor_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructor_000200
+--- PASS: TestTextFieldSpecFiller_NewConstructor_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructor_000300
+--- PASS: TestTextFieldSpecFiller_NewConstructor_000300 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructor_000400
+--- PASS: TestTextFieldSpecFiller_NewConstructor_000400 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
@@ -1275,5 +1283,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 67.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.618s
+coverage: 67.7% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.555s
