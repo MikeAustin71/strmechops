@@ -750,3 +750,359 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_CopyOut_000300()",
+		"")
+
+	fillerChar := '&'
+
+	fillerCharsStr := string(fillerChar)
+	fillerRepeatCnt := 25
+
+	expectedFillerText :=
+		strings.Repeat(fillerCharsStr, fillerRepeatCnt)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewConstructorRune(
+		fillerChar,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldOne.fillerCharacters = []rune{0}
+
+	var fillerTxtFieldTwo TextFieldSpecFiller
+
+	fillerTxtFieldTwo,
+		err = fillerTxtFieldOne.CopyOut(
+		ePrefix.XCtx("fillerTxtFieldTwo - #1"))
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
+			"because fillerTxtFieldOne.fillerCharsRepeatCount = -7\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtx("fillerTxtFieldOne - invalid"))
+		return
+	}
+
+	err = fillerTxtFieldOne.SetTextFillerRune(
+		fillerChar,
+		fillerRepeatCnt,
+		ePrefix.XCtx("Repairing fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("Check repaired fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldTwo = TextFieldSpecFiller{}
+
+	fillerTxtFieldTwo,
+		err = fillerTxtFieldOne.CopyOut(
+		ePrefix.XCtx("fillerTxtFieldTwo - #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("Check new fillerTxtFieldTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !fillerTxtFieldTwo.Equal(fillerTxtFieldOne) {
+		t.Errorf("%v\n"+
+			"Error: fillerTxtFieldTwo IS NOT EQUAL to fillerTxtFieldOne!\n",
+			ePrefix)
+		return
+	}
+
+	var fillerTxtFieldThree TextFieldSpecFiller
+
+	fillerTxtFieldThree,
+		err = fillerTxtFieldTwo.CopyOut(
+		ePrefix.XCtx("fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldThree.IsValidInstanceError(
+		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !fillerTxtFieldThree.Equal(fillerTxtFieldOne) {
+		t.Errorf("%v\n"+
+			"Error: fillerTxtFieldThree IS NOT EQUAL to fillerTxtFieldOne!\n",
+			ePrefix)
+		return
+	}
+
+	actualFillerText := fillerTxtFieldThree.GetFormattedText()
+
+	if expectedFillerText != actualFillerText {
+		t.Errorf("%v\n"+
+			"Error: Expected fillerTxtFieldThree Filler Text = '%v'\n"+
+			"Instead, Actual fillerTxtFieldThree Filler Text = '%v'\n",
+			ePrefix,
+			expectedFillerText,
+			actualFillerText)
+		return
+	}
+
+	if fillerCharsStr != fillerTxtFieldThree.GetFillerChars() {
+		t.Errorf("%v\n"+
+			"Error: Expected fillerTxtFieldThree Filler Characters = '%v'\n"+
+			"Instead, Actual fillerTxtFieldThree Filler Characters = '%v'\n",
+			ePrefix,
+			fillerCharsStr,
+			fillerTxtFieldThree.GetFillerChars())
+
+		return
+	}
+
+	if fillerRepeatCnt != fillerTxtFieldThree.GetFillerCharsRepeatCount() {
+		t.Errorf("%v\n"+
+			"Error: Expected fillerTxtFieldThree Filler Repeat Count = '%v'\n"+
+			"Instead, Actual fillerTxtFieldThree Filler Repeat Count = '%v'\n",
+			ePrefix,
+			fillerRepeatCnt,
+			fillerTxtFieldThree.GetFillerCharsRepeatCount())
+
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_CopyOutPtr_000100()",
+		"")
+
+	fillerChar := '&'
+
+	fillerCharsStr := string(fillerChar)
+	fillerRepeatCnt := 25
+
+	expectedFillerText :=
+		strings.Repeat(fillerCharsStr, fillerRepeatCnt)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewConstructorRune(
+		fillerChar,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldOne.fillerCharacters = []rune{0}
+
+	var fillerTxtFieldTwo *TextFieldSpecFiller
+
+	fillerTxtFieldTwo,
+		err = fillerTxtFieldOne.CopyOutPtr(
+		ePrefix.XCtx("fillerTxtFieldTwo - #1"))
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
+			"because fillerTxtFieldOne.fillerCharsRepeatCount = -7\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtx("fillerTxtFieldOne - invalid"))
+		return
+	}
+
+	err = fillerTxtFieldOne.SetTextFillerRune(
+		fillerChar,
+		fillerRepeatCnt,
+		ePrefix.XCtx("Repairing fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("Check repaired fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldTwo = &TextFieldSpecFiller{}
+
+	fillerTxtFieldTwo,
+		err = fillerTxtFieldOne.CopyOutPtr(
+		ePrefix.XCtx("fillerTxtFieldTwo - #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("Check new fillerTxtFieldTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !fillerTxtFieldTwo.Equal(fillerTxtFieldOne) {
+		t.Errorf("%v\n"+
+			"Error: fillerTxtFieldTwo IS NOT EQUAL to fillerTxtFieldOne!\n",
+			ePrefix)
+		return
+	}
+
+	var fillerTxtFieldThree TextFieldSpecFiller
+
+	fillerTxtFieldThree,
+		err = fillerTxtFieldTwo.CopyOut(
+		ePrefix.XCtx("fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldThree.IsValidInstanceError(
+		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !fillerTxtFieldThree.Equal(fillerTxtFieldOne) {
+		t.Errorf("%v\n"+
+			"Error: fillerTxtFieldThree IS NOT EQUAL to fillerTxtFieldOne!\n",
+			ePrefix)
+		return
+	}
+
+	actualFillerText := fillerTxtFieldThree.GetFormattedText()
+
+	if expectedFillerText != actualFillerText {
+		t.Errorf("%v\n"+
+			"Error: Expected fillerTxtFieldThree Filler Text = '%v'\n"+
+			"Instead, Actual fillerTxtFieldThree Filler Text = '%v'\n",
+			ePrefix,
+			expectedFillerText,
+			actualFillerText)
+		return
+	}
+
+	if fillerCharsStr != fillerTxtFieldThree.GetFillerChars() {
+		t.Errorf("%v\n"+
+			"Error: Expected fillerTxtFieldThree Filler Characters = '%v'\n"+
+			"Instead, Actual fillerTxtFieldThree Filler Characters = '%v'\n",
+			ePrefix,
+			fillerCharsStr,
+			fillerTxtFieldThree.GetFillerChars())
+
+		return
+	}
+
+	if fillerRepeatCnt != fillerTxtFieldThree.GetFillerCharsRepeatCount() {
+		t.Errorf("%v\n"+
+			"Error: Expected fillerTxtFieldThree Filler Repeat Count = '%v'\n"+
+			"Instead, Actual fillerTxtFieldThree Filler Repeat Count = '%v'\n",
+			ePrefix,
+			fillerRepeatCnt,
+			fillerTxtFieldThree.GetFillerCharsRepeatCount())
+
+		return
+	}
+
+	var fillerTxtFieldFour TextFieldSpecFiller
+
+	fillerTxtFieldFour,
+		err = fillerTxtFieldThree.CopyOut(
+		ePrefix.XCtx("fillerTxtFieldFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldFour.IsValidInstanceError(
+		ePrefix.XCtx("fillerTxtFieldFour - Test #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !fillerTxtFieldFour.Equal(fillerTxtFieldOne) {
+		t.Errorf("%v\n"+
+			"Error: fillerTxtFieldFour IS NOT EQUAL to fillerTxtFieldOne!\n",
+			ePrefix)
+	}
+
+	return
+}
