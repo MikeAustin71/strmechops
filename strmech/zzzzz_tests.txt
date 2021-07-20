@@ -935,7 +935,7 @@
 === RUN   TestStrMech_ReplaceNewLines_02
 --- PASS: TestStrMech_ReplaceNewLines_02 (0.00s)
 === RUN   TestStrMech_ReplaceNewLines_03
---- PASS: TestStrMech_ReplaceNewLines_03 (0.01s)
+--- PASS: TestStrMech_ReplaceNewLines_03 (0.00s)
 === RUN   TestStrMech_ReplaceNewLines_04
 --- PASS: TestStrMech_ReplaceNewLines_04 (0.00s)
 === RUN   TestStrMech_ReplaceNewLines_05
@@ -1198,8 +1198,18 @@
 --- PASS: TestTextFieldSpecFiller_NewConstructor_000400 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRune_000100
 --- PASS: TestTextFieldSpecFiller_NewConstructorRune_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructorRune_000200
+--- PASS: TestTextFieldSpecFiller_NewConstructorRune_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructorRune_000300
+--- PASS: TestTextFieldSpecFiller_NewConstructorRune_000300 (0.01s)
+=== RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000100
+--- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000200
+--- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000300
+--- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
---- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.01s)
+--- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
 --- PASS: TestTextFieldSpecLabel_CopyIn_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000100
@@ -1219,7 +1229,7 @@
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000100
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000200
---- PASS: TestTextFieldSpecLabel_NewTextLabel_000200 (0.00s)
+--- PASS: TestTextFieldSpecLabel_NewTextLabel_000200 (0.01s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000300
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000400
@@ -1285,5 +1295,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 67.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.731s
+coverage: 67.9% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.694s
