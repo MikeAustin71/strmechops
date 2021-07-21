@@ -559,7 +559,7 @@
 === RUN   TestStrMech_ExtractDataField_14
 --- PASS: TestStrMech_ExtractDataField_14 (0.00s)
 === RUN   TestStrMech_ExtractDataField_15
---- PASS: TestStrMech_ExtractDataField_15 (0.00s)
+--- PASS: TestStrMech_ExtractDataField_15 (0.01s)
 === RUN   TestStrMech_ExtractDataField_16
 --- PASS: TestStrMech_ExtractDataField_16 (0.00s)
 === RUN   TestStrMech_ExtractDataField_17
@@ -855,7 +855,7 @@
 === RUN   TestStrMech_Read_02
 --- PASS: TestStrMech_Read_02 (0.00s)
 === RUN   TestStrMech_Read_03
---- PASS: TestStrMech_Read_03 (0.00s)
+--- PASS: TestStrMech_Read_03 (0.01s)
 === RUN   TestStrMech_Read_04
 --- PASS: TestStrMech_Read_04 (0.00s)
 === RUN   TestStrMech_ReadStringFromBytes_01
@@ -1208,6 +1208,12 @@
 --- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000300
 --- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000300 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewTextFiller_000100
+--- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewTextFiller_000200
+--- PASS: TestTextFieldSpecFiller_NewTextFiller_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewTextFiller_000300
+--- PASS: TestTextFieldSpecFiller_NewTextFiller_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
@@ -1229,7 +1235,7 @@
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000100
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000200
---- PASS: TestTextFieldSpecLabel_NewTextLabel_000200 (0.01s)
+--- PASS: TestTextFieldSpecLabel_NewTextLabel_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000300
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000400
@@ -1296,4 +1302,4 @@
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
 coverage: 67.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.694s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.925s
