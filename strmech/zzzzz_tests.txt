@@ -559,7 +559,7 @@
 === RUN   TestStrMech_ExtractDataField_14
 --- PASS: TestStrMech_ExtractDataField_14 (0.00s)
 === RUN   TestStrMech_ExtractDataField_15
---- PASS: TestStrMech_ExtractDataField_15 (0.01s)
+--- PASS: TestStrMech_ExtractDataField_15 (0.00s)
 === RUN   TestStrMech_ExtractDataField_16
 --- PASS: TestStrMech_ExtractDataField_16 (0.00s)
 === RUN   TestStrMech_ExtractDataField_17
@@ -855,7 +855,7 @@
 === RUN   TestStrMech_Read_02
 --- PASS: TestStrMech_Read_02 (0.00s)
 === RUN   TestStrMech_Read_03
---- PASS: TestStrMech_Read_03 (0.01s)
+--- PASS: TestStrMech_Read_03 (0.00s)
 === RUN   TestStrMech_Read_04
 --- PASS: TestStrMech_Read_04 (0.00s)
 === RUN   TestStrMech_ReadStringFromBytes_01
@@ -1201,7 +1201,7 @@
 === RUN   TestTextFieldSpecFiller_NewConstructorRune_000200
 --- PASS: TestTextFieldSpecFiller_NewConstructorRune_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRune_000300
---- PASS: TestTextFieldSpecFiller_NewConstructorRune_000300 (0.01s)
+--- PASS: TestTextFieldSpecFiller_NewConstructorRune_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000100
 --- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000200
@@ -1214,6 +1214,12 @@
 --- PASS: TestTextFieldSpecFiller_NewTextFiller_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000300
 --- PASS: TestTextFieldSpecFiller_NewTextFiller_000300 (0.00s)
+=== RUN   TestTextFieldSpecFiller_SetTextFillerRune_000100
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_SetTextFillerRune_000200
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_SetTextFillerRune_000300
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
@@ -1301,5 +1307,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 67.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.925s
+coverage: 68.0% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.586s
