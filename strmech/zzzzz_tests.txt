@@ -1183,7 +1183,7 @@
 === RUN   TestTextFieldSpecFiller_CopyOut_000200
 --- PASS: TestTextFieldSpecFiller_CopyOut_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyOut_000300
---- PASS: TestTextFieldSpecFiller_CopyOut_000300 (0.00s)
+--- PASS: TestTextFieldSpecFiller_CopyOut_000300 (0.01s)
 === RUN   TestTextFieldSpecFiller_CopyOutPtr_000100
 --- PASS: TestTextFieldSpecFiller_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyOutPtr_000200
@@ -1207,7 +1207,7 @@
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000200
 --- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000300
---- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000300 (0.00s)
+--- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000300 (0.01s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000100
 --- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000200
@@ -1220,10 +1220,16 @@
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRune_000300
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000300 (0.00s)
+=== RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000100
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000200
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000300
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
---- PASS: TestTextFieldSpecLabel_CopyIn_000200 (0.00s)
+--- PASS: TestTextFieldSpecLabel_CopyIn_000200 (0.01s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000100
 --- PASS: TestTextFieldSpecLabel_CopyOut_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000200
@@ -1308,4 +1314,4 @@
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
 coverage: 68.0% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.586s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.709s
