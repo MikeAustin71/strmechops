@@ -10,6 +10,74 @@ type strMechPreon struct {
 	lock *sync.Mutex
 }
 
+// copyRuneArrays - Copies a source rune array to a target rune
+// array.
+//
+func (sMechPreon *strMechPreon) copyRuneArrays(
+	targetRuneArray []rune,
+	sourceRuneArray []rune,
+	setZeroLenArrayToNil bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon.copyRuneArrays()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if sourceRuneArray == nil {
+		targetRuneArray = nil
+		return
+	}
+
+	lenSrcRuneAry := len(sourceRuneArray)
+
+	if lenSrcRuneAry == 0 &&
+		setZeroLenArrayToNil == true {
+
+		targetRuneArray = nil
+		return
+
+	} else if lenSrcRuneAry == 0 &&
+		setZeroLenArrayToNil == false {
+
+		targetRuneArray = make([]rune, 0)
+		return
+	}
+
+	targetRuneArray = make([]rune, lenSrcRuneAry)
+
+	itemsCopied := copy(targetRuneArray, sourceRuneArray)
+
+	if itemsCopied != lenSrcRuneAry {
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"Runes copied does not equal length of Source Rune Array\n"+
+			"Length Source Rune Array: '%v'\n"+
+			"  Number of Runes Copied: '%v'\n",
+			ePrefix.String(),
+			lenSrcRuneAry,
+			itemsCopied)
+	}
+
+	return err
+}
+
 // equalRuneArrays - Receives two rune arrays and proceeds to
 // determine if they are equal.
 //

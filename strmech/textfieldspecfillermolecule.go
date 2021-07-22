@@ -73,11 +73,17 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 		return err
 	}
 
-	targetTxtFiller.fillerCharacters =
-		make([]rune, len(incomingTxtFiller.fillerCharacters))
+	// Setting zero length array to nil.
+	err = strMechPreon{}.ptr().copyRuneArrays(
+		targetTxtFiller.fillerCharacters,
+		incomingTxtFiller.fillerCharacters,
+		true,
+		ePrefix.XCtx("targetTxtFiller.fillerCharacters=Target "+
+			"<-incomingTxtFiller.fillerCharacters=Source"))
 
-	copy(targetTxtFiller.fillerCharacters,
-		incomingTxtFiller.fillerCharacters)
+	if err != nil {
+		return err
+	}
 
 	targetTxtFiller.fillerCharsRepeatCount =
 		incomingTxtFiller.fillerCharsRepeatCount
@@ -180,11 +186,18 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
 
 	newTxtFieldFiller := TextFieldSpecFiller{}
 
-	newTxtFieldFiller.fillerCharacters =
-		make([]rune, len(txtFieldFiller.fillerCharacters))
+	// Set zero length array to nil = true
+	err = strMechPreon{}.ptr().copyRuneArrays(
+		newTxtFieldFiller.fillerCharacters,
+		txtFieldFiller.fillerCharacters,
+		true,
+		ePrefix.XCtx(
+			"newTxtFieldFiller.fillerCharacters=Target "+
+				"<-txtFieldFiller.fillerCharacters=Source"))
 
-	copy(newTxtFieldFiller.fillerCharacters,
-		txtFieldFiller.fillerCharacters)
+	if err != nil {
+		return TextFieldSpecFiller{}, err
+	}
 
 	newTxtFieldFiller.fillerCharsRepeatCount =
 		txtFieldFiller.fillerCharsRepeatCount

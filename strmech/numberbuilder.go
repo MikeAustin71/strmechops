@@ -1,10 +1,15 @@
 package strmech
 
+import "sync"
+
 type NumberBuilder struct {
+	numberType        NumStrFormatTypeCode
 	integerElement    []rune
 	fractionalElement []rune
-	decimalSeparator  FractionalSeparatorDto
-	currencySymbol    FractionalSeparatorDto
-	numberSignSymbol  NumberSignSymbolDto
+	decimalSeparator  []rune
+	currencySymbol    []rune
+	numberSignSymbol  []rune
 	integerSeparator  IntegerSeparatorDto
+	numberFieldLen    int
+	lock              *sync.Mutex
 }

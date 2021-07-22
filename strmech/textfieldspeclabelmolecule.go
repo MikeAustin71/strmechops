@@ -19,6 +19,57 @@ type textFieldSpecLabelMolecule struct {
 // Be advised that the data fields in 'targetTxtFieldLabel' will be
 // overwritten.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//  targetTxtFieldLabel        *TextFieldSpecLabel
+//     - A pointer to a TextFieldSpecLabel instance. All of the
+//       member variable data fields in this object will be
+//       replaced by data values extracted from input parameter
+//       'incomingTxtFieldLabel'.
+//
+//       'targetTxtFieldLabel' is the target of this copy
+//       operation.
+//
+//
+//  incomingTxtFieldLabel     *TextFieldSpecLabel
+//     - A pointer to a another TextFieldSpecLabel instance. All
+//       of the member variable data values from this object will
+//       be copied to corresponding member variables in
+//       'targetTxtFieldLabel'.
+//
+//       'incomingTxtFieldLabel' is the source for this copy
+//       operation.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 	targetTxtFieldLabel *TextFieldSpecLabel,
 	incomingTxtFieldLabel *TextFieldSpecLabel,
@@ -73,17 +124,16 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 		return err
 	}
 
-	targetTxtFieldLabel.textLabel = nil
+	// Set zero length arrays to nil == true
+	err = strMechPreon{}.ptr().copyRuneArrays(
+		targetTxtFieldLabel.textLabel,
+		incomingTxtFieldLabel.textLabel,
+		true,
+		ePrefix.XCtx("targetTxtFieldLabel.textLabel=Target "+
+			"<-incomingTxtFieldLabel.textLabel=Source"))
 
-	lenTxtRunes := len(incomingTxtFieldLabel.textLabel)
-
-	if lenTxtRunes > 0 {
-
-		targetTxtFieldLabel.textLabel =
-			make([]rune, lenTxtRunes)
-
-		copy(targetTxtFieldLabel.textLabel,
-			incomingTxtFieldLabel.textLabel)
+	if err != nil {
+		return err
 	}
 
 	targetTxtFieldLabel.fieldLen =
