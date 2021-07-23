@@ -719,6 +719,66 @@ func TestStrMech_CopyRuneArrays000100(t *testing.T) {
 	}
 }
 
+func TestStrMech_CopyRuneArrays000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000200()",
+		"")
+
+	targetRuneArray := []rune("Hello World")
+
+	sourceRuneArray := []rune("Good Morning Universe!")
+
+	sMechPreon := strMechPreon{}
+
+	err := sMechPreon.copyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		false,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if len(targetRuneArray) == 0 {
+		t.Errorf("%v - Error\n"+
+			"After copy operation the length of\n"+
+			"the target rune array is Zero!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	lenSrcArray := len(sourceRuneArray)
+
+	if len(targetRuneArray) != lenSrcArray {
+		t.Errorf("%v - Error\n"+
+			"len(targetRuneArray) != len(sourceRuneArray)\n"+
+			"len(targetRuneArray)= '%v'\n"+
+			"len(sourceRuneArray)= '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray),
+			len(sourceRuneArray))
+
+		return
+	}
+
+	areEqual := strMechQuark{}.ptr().equalNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!\n",
+			ePrefix.String())
+	}
+
+}
+
 func TestStrMech_CopyOut_01(t *testing.T) {
 
 	string1 := "What in the world is Garfield doing!"

@@ -413,6 +413,47 @@ func (sMechQuark *strMechQuark) doesLastCharExist(
 
 }
 
+// equalNilRuneArrays - Receives two rune arrays and proceeds to
+// determine if they are equal.
+//
+// If the two rune arrays are equivalent, this method returns
+// 'true'. Otherwise, the method returns 'false'.
+//
+// If one array is 'nil' and the other is a zero length array,
+// this method will return 'false'.
+//
+func (sMechQuark *strMechQuark) equalNilRuneArrays(
+	runeAryOne []rune,
+	runeAryTwo []rune) (
+	areEqual bool) {
+
+	if sMechQuark.lock == nil {
+		sMechQuark.lock = new(sync.Mutex)
+	}
+
+	sMechQuark.lock.Lock()
+
+	defer sMechQuark.lock.Unlock()
+
+	if runeAryOne == nil &&
+		runeAryTwo != nil &&
+		len(runeAryTwo) == 0 {
+
+		return false
+	}
+
+	if runeAryTwo == nil &&
+		runeAryOne != nil &&
+		len(runeAryOne) == 0 {
+		return false
+	}
+
+	return strMechPreon{}.ptr().
+		equalRuneArrays(
+			runeAryOne,
+			runeAryTwo)
+}
+
 // findLastNonSpaceChar - Returns the string index of the last non-space character in a
 // string segment.  The string to be searched is input parameter, 'targetStr'. The
 // string segment is further defined by input parameters 'startIdx' and  'endIdx'. These
@@ -434,7 +475,7 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 	targetStr string,
 	startIdx,
 	endIdx int,
-	ePrefix *ePref.ErrPrefixDto) (
+	errPrefDto *ePref.ErrPrefixDto) (
 	int,
 	error) {
 
@@ -446,15 +487,18 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 
 	defer sMechQuark.lock.Unlock()
 
-	if ePrefix == nil {
-		ePrefix = ePref.ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefix = ePrefix.CopyPtr()
-	}
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	ePrefix.SetEPref(
-		"strMechQuark." +
-			"findLastNonSpaceChar()")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechQuark.findLastNonSpaceChar()",
+		"")
+
+	if err != nil {
+		return -1, err
+	}
 
 	targetStrLen := len(targetStr)
 

@@ -14,7 +14,9 @@ type strMechPreon struct {
 // array.
 //
 // IMPORTANT
+//
 // -----------------------------------------------------------------
+//
 // Be advised that all the data in 'targetRuneArray' will be
 // deleted and replaced.
 //
@@ -158,6 +160,9 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 //
 // If the two rune arrays are equivalent, this method returns
 // 'true'. Otherwise, the method returns 'false'.
+//
+// If one array is 'nil' and the other is a zero length array,
+// this method will return 'true'.
 //
 func (sMechPreon *strMechPreon) equalRuneArrays(
 	runeAryOne []rune,

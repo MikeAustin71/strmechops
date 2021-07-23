@@ -446,7 +446,9 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 // will be identical in content to that of the source rune array.
 //
 // IMPORTANT
+//
 // -----------------------------------------------------------------
+//
 // Be advised that all the data in 'targetRuneArray' will be
 // deleted and replaced.
 //
@@ -617,12 +619,44 @@ func (sMech StrMech) DoesLastCharExist(
 		lastChar)
 }
 
+// EqualNilRuneArrays - Returns a boolean flag signaling whether two
+// rune arrays, submitted as input parameters, are equal in all
+// respects.
+//
+// If the two run arrays are equivalent, this method will return
+// 'true'.
+//
+// This method is similar to StrMech.EqualRuneArrays(), but differs
+// in one important respect. If one array is 'nil' and the other is
+// a zero length array, this method will return 'false'.
+//
+func (sMech *StrMech) EqualNilRuneArrays(
+	runeAryOne []rune,
+	runeAryTwo []rune) bool {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	return strMechQuark{}.ptr().
+		equalNilRuneArrays(
+			runeAryOne,
+			runeAryTwo)
+}
+
 // EqualRuneArrays - Returns a boolean flag signaling whether two
 // rune arrays, submitted as input parameters, are equal in all
 // respects.
 //
 // If the two run arrays are equivalent, this method will return
 // 'true'.
+//
+// If one array is 'nil' and the other is a zero length array,
+// this method will return 'true'.
 //
 func (sMech *StrMech) EqualRuneArrays(
 	runeAryOne []rune,
