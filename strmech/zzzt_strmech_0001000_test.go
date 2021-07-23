@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	ePref "github.com/MikeAustin71/errpref"
 	"testing"
 )
 
@@ -653,6 +654,69 @@ func TestStrMech_CopyIn_01(t *testing.T) {
 			"s1 StringData='%v'", string3, actualStr)
 	}
 
+}
+
+func TestStrMech_CopyRuneArrays000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000100()",
+		"")
+
+	var targetRuneArray []rune
+
+	sourceRuneArray := []rune("Hello World!")
+
+	err := StrMech{}.Ptr().CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		false,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if len(targetRuneArray) == 0 {
+		t.Errorf("%v - Error\n"+
+			"After copy operation the length of\n"+
+			"the target rune array is Zero!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	lenSrcArray := len(sourceRuneArray)
+
+	if len(targetRuneArray) != lenSrcArray {
+		t.Errorf("%v - Error\n"+
+			"len(targetRuneArray) != len(sourceRuneArray)\n"+
+			"len(targetRuneArray)= '%v'\n"+
+			"len(sourceRuneArray)= '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray),
+			len(sourceRuneArray))
+
+		return
+	}
+
+	for i := 0; i < lenSrcArray; i++ {
+		if targetRuneArray[i] != sourceRuneArray[i] {
+			t.Errorf("%v - Error\n"+
+				"targetRuneArray[i] != sourceRuneArray[i]\n"+
+				"i='%v'\n"+
+				"sourceRuneArray[i]='%v'\n"+
+				"sourceRuneArray='%v'\n",
+				ePrefix.String(),
+				i,
+				string(sourceRuneArray[i]),
+				string(sourceRuneArray))
+
+			return
+		}
+	}
 }
 
 func TestStrMech_CopyOut_01(t *testing.T) {

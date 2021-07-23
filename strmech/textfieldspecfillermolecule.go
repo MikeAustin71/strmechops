@@ -75,8 +75,8 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 
 	// Setting zero length array to nil.
 	err = strMechPreon{}.ptr().copyRuneArrays(
-		targetTxtFiller.fillerCharacters,
-		incomingTxtFiller.fillerCharacters,
+		&targetTxtFiller.fillerCharacters,
+		&incomingTxtFiller.fillerCharacters,
 		true,
 		ePrefix.XCtx("targetTxtFiller.fillerCharacters=Target "+
 			"<-incomingTxtFiller.fillerCharacters=Source"))
@@ -188,8 +188,8 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
 
 	// Set zero length array to nil = true
 	err = strMechPreon{}.ptr().copyRuneArrays(
-		newTxtFieldFiller.fillerCharacters,
-		txtFieldFiller.fillerCharacters,
+		&newTxtFieldFiller.fillerCharacters,
+		&txtFieldFiller.fillerCharacters,
 		true,
 		ePrefix.XCtx(
 			"newTxtFieldFiller.fillerCharacters=Target "+

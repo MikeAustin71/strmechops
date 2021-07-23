@@ -127,8 +127,8 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 
 	// Set zero length arrays to nil == true
 	err = strMechPreon{}.ptr().copyRuneArrays(
-		targetTxtFieldLabel.textLabel,
-		incomingTxtFieldLabel.textLabel,
+		&targetTxtFieldLabel.textLabel,
+		&incomingTxtFieldLabel.textLabel,
 		true,
 		ePrefix.XCtx("targetTxtFieldLabel.textLabel=Target "+
 			"<-incomingTxtFieldLabel.textLabel=Source"))

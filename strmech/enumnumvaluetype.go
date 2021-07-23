@@ -12,7 +12,7 @@ import (
 var mNumericValueTypeCodeToString = map[NumericValueType]string{
 	NumericValueType(0): "None",
 	NumericValueType(1): "FloatingPoint",
-	NumericValueType(0): "Integer",
+	NumericValueType(2): "Integer",
 }
 
 var mNumericValueTypeStringToCode = map[string]NumericValueType{

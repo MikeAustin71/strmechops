@@ -455,16 +455,18 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 //
 // Input Parameters
 //
-//  targetRuneArray            []rune
-//     - All of the data in the input parameter rune array,
-//       'sourceRuneArray', will be copied to this parameter,
-//       'targetRuneArray'. All of the pre-existing data in
-//       'targetRuneArray' will be deleted and replaced.
+//  targetRuneArray            *[]rune
+//     - A pointer to the target rune array. All of the data in the
+//       input parameter rune array, 'sourceRuneArray', will be
+//       copied to this parameter, 'targetRuneArray'. All of the
+//       pre-existing data in 'targetRuneArray' will be deleted and
+//       replaced.
 //
 //
-//  sourceRuneArray            []rune
-//     - The contents of this rune array will be copied to input
-//       parameter, 'targetRuneArray'.
+//  sourceRuneArray            *[]rune
+//     - A pointer to the source rune array. The contents of this
+//       rune array will be copied to input parameter,
+//       'targetRuneArray'.
 //
 //
 //  setZeroLenArrayToNil       bool
@@ -539,8 +541,8 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 //       prefixed at the beginning of the error message.
 //
 func (sMech *StrMech) CopyRuneArrays(
-	targetRuneArray []rune,
-	sourceRuneArray []rune,
+	targetRuneArray *[]rune,
+	sourceRuneArray *[]rune,
 	setZeroLenArrayToNil bool,
 	errorPrefix interface{}) (
 	err error) {

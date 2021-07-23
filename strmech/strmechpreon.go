@@ -73,8 +73,8 @@ type strMechPreon struct {
 //       attached at the beginning of the error message.
 //
 func (sMechPreon *strMechPreon) copyRuneArrays(
-	targetRuneArray []rune,
-	sourceRuneArray []rune,
+	targetRuneArray *[]rune,
+	sourceRuneArray *[]rune,
 	setZeroLenArrayToNil bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -100,11 +100,27 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 	}
 
 	if sourceRuneArray == nil {
-		targetRuneArray = nil
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceRuneArray' is a nil pointer!\n",
+			ePrefix.String())
+
 		return
 	}
 
-	lenSrcRuneAry := len(sourceRuneArray)
+	if targetRuneArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetRuneArray' is a nil pointer!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if *sourceRuneArray == nil {
+		*targetRuneArray = nil
+		return
+	}
+
+	lenSrcRuneAry := len(*sourceRuneArray)
 
 	if lenSrcRuneAry == 0 &&
 		setZeroLenArrayToNil == true {
@@ -115,13 +131,13 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 	} else if lenSrcRuneAry == 0 &&
 		setZeroLenArrayToNil == false {
 
-		targetRuneArray = make([]rune, 0)
+		*targetRuneArray = make([]rune, 0)
 		return
 	}
 
-	targetRuneArray = make([]rune, lenSrcRuneAry)
+	*targetRuneArray = make([]rune, lenSrcRuneAry)
 
-	itemsCopied := copy(targetRuneArray, sourceRuneArray)
+	itemsCopied := copy(*targetRuneArray, *sourceRuneArray)
 
 	if itemsCopied != lenSrcRuneAry {
 		err = fmt.Errorf("%v\n"+
