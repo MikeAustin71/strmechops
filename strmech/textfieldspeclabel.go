@@ -5,11 +5,21 @@ import (
 	"sync"
 )
 
+// TextFieldSpecLabel - The Text Field Specification for a text
+// label. The text label is positioned inside a text field with a
+// give field length. Text Justification within this text field
+// is controlled by the 'textJustification' value which may be
+// set to 'Left', 'Right' or 'Center'.
+//
 type TextFieldSpecLabel struct {
-	textLabel         []rune
-	fieldLen          int
-	textJustification TextJustify
-	lock              *sync.Mutex
+	textLabel []rune // The text content of the label.
+	fieldLen  int    // The length of the text field in which
+	//                       //  the text label will be positioned.
+	textJustification TextJustify // The specification which controls
+	//                            //  how the text label will be positioned
+	//                            //  within the text field: 'Left', 'Right'
+	//                            //  or 'Center'.
+	lock *sync.Mutex
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
