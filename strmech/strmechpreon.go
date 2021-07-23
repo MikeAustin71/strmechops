@@ -13,6 +13,65 @@ type strMechPreon struct {
 // copyRuneArrays - Copies a source rune array to a target rune
 // array.
 //
+// IMPORTANT
+// -----------------------------------------------------------------
+// Be advised that all the data in 'targetRuneArray' will be
+// deleted and replaced.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetRuneArray            []rune
+//     - All of the data in the input parameter rune array,
+//       'sourceRuneArray', will be copied to this parameter,
+//       'targetRuneArray'. All of the pre-existing data in
+//       'targetRuneArray' will be deleted and replaced.
+//
+//
+//  sourceRuneArray            []rune
+//     - The contents of this rune array will be copied to input
+//       parameter, 'targetRuneArray'.
+//
+//
+//  setZeroLenArrayToNil       bool
+//     - If sourceRuneArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'true', 'targetRuneArray'
+//       will be set to 'nil'.
+//
+//       If sourceRuneArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'false',
+//       'targetRuneArray' will be set to a zero length array.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (sMechPreon *strMechPreon) copyRuneArrays(
 	targetRuneArray []rune,
 	sourceRuneArray []rune,

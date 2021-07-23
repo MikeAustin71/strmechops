@@ -15,14 +15,15 @@ type textFieldSpecLabelMolecule struct {
 // 'targetTxtFieldLabel'.
 //
 // IMPORTANT
-// ----------------------------------------------------------------
+// -----------------------------------------------------------------
 // Be advised that the data fields in 'targetTxtFieldLabel' will be
 // overwritten.
 //
 //
-// ------------------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Input Parameters
+//
 //  targetTxtFieldLabel        *TextFieldSpecLabel
 //     - A pointer to a TextFieldSpecLabel instance. All of the
 //       member variable data fields in this object will be
@@ -33,7 +34,7 @@ type textFieldSpecLabelMolecule struct {
 //       operation.
 //
 //
-//  incomingTxtFieldLabel     *TextFieldSpecLabel
+//  incomingTxtFieldLabel      *TextFieldSpecLabel
 //     - A pointer to a another TextFieldSpecLabel instance. All
 //       of the member variable data values from this object will
 //       be copied to corresponding member variables in

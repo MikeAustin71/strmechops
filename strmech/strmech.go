@@ -439,6 +439,136 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 			nil)
 }
 
+// CopyRuneArrays - Copies a source rune array to a target rune
+// array.
+//
+// If this method completes successfully, the target rune array
+// will be identical in content to that of the source rune array.
+//
+// IMPORTANT
+// -----------------------------------------------------------------
+// Be advised that all the data in 'targetRuneArray' will be
+// deleted and replaced.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetRuneArray            []rune
+//     - All of the data in the input parameter rune array,
+//       'sourceRuneArray', will be copied to this parameter,
+//       'targetRuneArray'. All of the pre-existing data in
+//       'targetRuneArray' will be deleted and replaced.
+//
+//
+//  sourceRuneArray            []rune
+//     - The contents of this rune array will be copied to input
+//       parameter, 'targetRuneArray'.
+//
+//
+//  setZeroLenArrayToNil       bool
+//     - If sourceRuneArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'true', 'targetRuneArray'
+//       will be set to 'nil'.
+//
+//       If sourceRuneArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'false',
+//       'targetRuneArray' will be set to a zero length array.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered
+//       during processing, the returned error Type will
+//       encapsulate an error message. An error return signals
+//       that the copy operation failed.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (sMech *StrMech) CopyRuneArrays(
+	targetRuneArray []rune,
+	sourceRuneArray []rune,
+	setZeroLenArrayToNil bool,
+	errorPrefix interface{}) (
+	err error) {
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.CopyRuneArrays()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return strMechPreon{}.ptr().
+		copyRuneArrays(
+			targetRuneArray,
+			sourceRuneArray,
+			setZeroLenArrayToNil,
+			ePrefix)
+}
+
 // CopyOut - Creates a 'deep' copy of the current
 // StrMech instance and returns a pointer to a
 // new instance containing that copied information.
