@@ -122,12 +122,14 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 		return
 	}
 
+	// At this point, sourceRuneArray
+	// IS NOT 'nil'!
 	lenSrcRuneAry := len(*sourceRuneArray)
 
 	if lenSrcRuneAry == 0 &&
 		setZeroLenArrayToNil == true {
 
-		targetRuneArray = nil
+		*targetRuneArray = nil
 		return
 
 	} else if lenSrcRuneAry == 0 &&

@@ -549,6 +549,10 @@ func (sMech *StrMech) CopyRuneArrays(
 	errorPrefix interface{}) (
 	err error) {
 
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
 	sMech.stringDataMutex.Lock()
 
 	defer sMech.stringDataMutex.Unlock()

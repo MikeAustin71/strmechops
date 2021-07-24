@@ -502,6 +502,16 @@
 --- PASS: TestStrMech_CopyRuneArrays000100 (0.00s)
 === RUN   TestStrMech_CopyRuneArrays000200
 --- PASS: TestStrMech_CopyRuneArrays000200 (0.00s)
+=== RUN   TestStrMech_CopyRuneArrays000300
+--- PASS: TestStrMech_CopyRuneArrays000300 (0.00s)
+=== RUN   TestStrMech_CopyRuneArrays000400
+--- PASS: TestStrMech_CopyRuneArrays000400 (0.00s)
+=== RUN   TestStrMech_CopyRuneArrays000500
+--- PASS: TestStrMech_CopyRuneArrays000500 (0.00s)
+=== RUN   TestStrMech_CopyRuneArrays000600
+--- PASS: TestStrMech_CopyRuneArrays000600 (0.00s)
+=== RUN   TestStrMech_CopyRuneArrays000700
+--- PASS: TestStrMech_CopyRuneArrays000700 (0.00s)
 === RUN   TestStrMech_CopyOut_01
 --- PASS: TestStrMech_CopyOut_01 (0.00s)
 === RUN   TestStrMech_CopyOut_02
@@ -1201,7 +1211,7 @@
 === RUN   TestTextFieldSpecFiller_NewConstructor_000400
 --- PASS: TestTextFieldSpecFiller_NewConstructor_000400 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRune_000100
---- PASS: TestTextFieldSpecFiller_NewConstructorRune_000100 (0.01s)
+--- PASS: TestTextFieldSpecFiller_NewConstructorRune_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRune_000200
 --- PASS: TestTextFieldSpecFiller_NewConstructorRune_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRune_000300
@@ -1231,7 +1241,7 @@
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000300
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFiller_000100
---- PASS: TestTextFieldSpecFiller_SetTextFiller_000100 (0.01s)
+--- PASS: TestTextFieldSpecFiller_SetTextFiller_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000100
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
@@ -1319,5 +1329,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 66.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.417s
+coverage: 66.8% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.598s

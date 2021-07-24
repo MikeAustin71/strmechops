@@ -7,6 +7,6 @@ import (
 func main() {
 	mt := examples.MainTest{}
 
-	mt.NumSignCollection01()
+	mt.CopyRuneArrays01()
 
 }

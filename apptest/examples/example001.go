@@ -17,6 +17,115 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) CopyRuneArrays01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000300()",
+		"")
+
+	var outputStr string
+
+	fmt.Printf("%v\n\n",
+		ePrefix.String())
+
+	targetRuneArray := []rune("Hello World")
+
+	outputStr = fmt.Sprintf("targetRuneArray= '%v'\n"+
+		"targetRuneArray length= '%v'\n\n",
+		string(targetRuneArray),
+		len(targetRuneArray))
+
+	fmt.Printf(outputStr)
+
+	var sourceRuneArray = make([]rune, 0)
+
+	outputStr = fmt.Sprintf("sourceRuneArray= '%v'\n"+
+		"sourceRuneArray length= '%v'\n",
+		string(sourceRuneArray),
+		len(sourceRuneArray))
+
+	fmt.Printf(outputStr)
+
+	sMech := strmech.StrMech{}
+
+	err := sMech.CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		true,
+		&ePrefix)
+
+	if err != nil {
+		outputStr = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Printf(outputStr)
+
+		return
+	}
+
+	if targetRuneArray != nil {
+		outputStr = fmt.Sprintf("%v - Error\n"+
+			"After copy operation, expected that\n"+
+			"'targetRuneArray' == nil. Instead,\n"+
+			"len(targetRuneArray) = '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray))
+
+		fmt.Printf(outputStr)
+
+		return
+	}
+
+	areEqual := sMech.EqualNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if areEqual {
+		outputStr = fmt.Sprintf("%v - Error\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be 'nil'"+
+			"and sourceRuneArray should be a zero length array!\n",
+			ePrefix.String())
+
+		fmt.Printf(outputStr)
+
+		return
+	}
+
+	fmt.Printf(fmt.Sprintf("\nSUCCESS!\n"))
+
+	var isNil bool
+
+	if targetRuneArray == nil {
+		isNil = true
+	}
+
+	outputStr = fmt.Sprintf("targetRuneArray= '%v'\n"+
+		"targetRuneArray length= '%v'\n"+
+		"targetRuneArray is 'nil'= '%v'\n",
+		string(targetRuneArray),
+		len(targetRuneArray),
+		isNil)
+
+	fmt.Printf(outputStr)
+
+	isNil = false
+
+	if sourceRuneArray == nil {
+		isNil = true
+	}
+
+	outputStr = fmt.Sprintf("sourceRuneArray= '%v'\n"+
+		"sourceRuneArray length= '%v'\n"+
+		"sourceRuneArray is 'nil'= '%v'\n",
+		string(sourceRuneArray),
+		len(sourceRuneArray),
+		isNil)
+
+	fmt.Printf(outputStr)
+
+}
+
 func (mt MainTest) NumSignCollection01() {
 
 	ePrefix := "NumSignCollection01"

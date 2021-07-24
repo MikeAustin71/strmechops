@@ -779,6 +779,450 @@ func TestStrMech_CopyRuneArrays000200(t *testing.T) {
 
 }
 
+func TestStrMech_CopyRuneArrays000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000300()",
+		"")
+
+	targetRuneArray := []rune("Hello World")
+
+	var sourceRuneArray = make([]rune, 0)
+
+	sMechPreon := strMechPreon{}
+
+	err := sMechPreon.copyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		true,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if targetRuneArray != nil {
+		t.Errorf("%v - Error\n"+
+			"After copy operation, expected that\n"+
+			"'targetRuneArray' == nil. Instead,\n"+
+			"len(targetRuneArray) = '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray))
+
+		return
+	}
+
+	areEqual := strMechQuark{}.ptr().equalNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if areEqual {
+		t.Errorf("%v - Error\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be 'nil'"+
+			"and sourceRuneArray should be a zero length array!\n",
+			ePrefix.String())
+	}
+
+}
+
+func TestStrMech_CopyRuneArrays000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000400()",
+		"")
+
+	var targetRuneArray []rune = nil
+
+	expectedStr := "How now brown cow!\n"
+
+	var sourceRuneArray = []rune(expectedStr)
+
+	sMech := StrMech{}
+
+	err := sMech.CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		true,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	sMech2 := StrMech{}
+
+	areEqual := sMech2.EqualNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"sMech2.EqualNilRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be equal\n"+
+			"to sourceRuneArray!\n",
+			ePrefix.String())
+		return
+	}
+
+	actualStr := string(targetRuneArray)
+
+	if expectedStr != actualStr {
+		t.Errorf("%v - Error\n"+
+			"Expected that targetRuneArray string == sourceRuneArray string\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"Expected string =        '%v'\n"+
+			"targetRuneArray string = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	actualStr = string(sourceRuneArray)
+
+	if expectedStr != actualStr {
+		t.Errorf("%v - Error\n"+
+			"Expected that sourceRuneArray string == original rune array string\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"Original Rune Array string = '%v'\n"+
+			"sourceRuneArray string     = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be equal\n"+
+			"to sourceRuneArray!\n",
+			ePrefix.String())
+	}
+
+}
+
+func TestStrMech_CopyRuneArrays000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000500()",
+		"")
+
+	var targetRuneArray = []rune("How now brown cow!")
+
+	var sourceRuneArray = make([]rune, 0)
+
+	sMech := StrMech{}
+
+	err := sMech.CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		false,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if targetRuneArray == nil {
+		t.Errorf("%v - Error\n"+
+			"targetRuneArray == nil!\n"+
+			"This is WRONG!\n"+
+			"targetRuneArray should be equal to make( []rune, 0)!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if len(targetRuneArray) != 0 {
+		t.Errorf("%v - Error\n"+
+			"len(targetRuneArray) > 0! This is WRONG!\n"+
+			"len(targetRuneArray) SHOULD EQUAL '0'!\n"+
+			"Actual len(targetRuneArray) = '%v'\n"+
+			"targetRuneArray string = '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray),
+			string(targetRuneArray))
+
+		return
+	}
+
+	if sourceRuneArray == nil {
+		t.Errorf("%v - Error\n"+
+			"sourceRuneArray == nil!\n"+
+			"This is WRONG!\n"+
+			"sourceRuneArray should be equal to make( []rune, 0)!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if len(sourceRuneArray) != 0 {
+		t.Errorf("%v - Error\n"+
+			"len(sourceRuneArray) > 0! This is WRONG!\n"+
+			"len(sourceRuneArray) SHOULD EQUAL '0'!\n"+
+			"Actual len(sourceRuneArray) = '%v'\n"+
+			"sourceRuneArray string = '%v'\n",
+			ePrefix.String(),
+			len(sourceRuneArray),
+			string(sourceRuneArray))
+
+		return
+	}
+
+	sMech2 := StrMech{}
+
+	areEqual := sMech2.EqualNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"sMech2.EqualNilRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be equal\n"+
+			"to sourceRuneArray!\n",
+			ePrefix.String())
+		return
+	}
+
+	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be equal\n"+
+			"to sourceRuneArray!\n",
+			ePrefix.String())
+	}
+
+}
+
+func TestStrMech_CopyRuneArrays000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000600()",
+		"")
+
+	var targetRuneArray = []rune("How now brown cow!")
+
+	var sourceRuneArray = make([]rune, 0)
+
+	sMech := StrMech{}
+
+	err := sMech.CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		true,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if targetRuneArray != nil {
+		t.Errorf("%v - Error\n"+
+			"targetRuneArray != nil!\n"+
+			"This is WRONG!\n"+
+			"targetRuneArray should be equal to 'nil'"+
+			"because 'setZeroLenArrayToNil == 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if len(targetRuneArray) != 0 {
+		t.Errorf("%v - Error\n"+
+			"len(targetRuneArray) > 0! This is WRONG!\n"+
+			"len(targetRuneArray) SHOULD EQUAL '0'!\n"+
+			"Actual len(targetRuneArray) = '%v'\n"+
+			"targetRuneArray string = '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray),
+			string(targetRuneArray))
+
+		return
+	}
+
+	if sourceRuneArray == nil {
+		t.Errorf("%v - Error\n"+
+			"sourceRuneArray == nil!\n"+
+			"This is WRONG!\n"+
+			"sourceRuneArray should be equal to make([]rune, 0)!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if len(sourceRuneArray) != 0 {
+		t.Errorf("%v - Error\n"+
+			"len(sourceRuneArray) > 0! This is WRONG!\n"+
+			"len(sourceRuneArray) SHOULD EQUAL '0'!\n"+
+			"Actual len(sourceRuneArray) = '%v'\n"+
+			"sourceRuneArray string = '%v'\n",
+			ePrefix.String(),
+			len(sourceRuneArray),
+			string(sourceRuneArray))
+
+		return
+	}
+
+	sMech2 := StrMech{}
+
+	areEqual := sMech2.EqualNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if areEqual {
+		t.Errorf("%v - Error\n"+
+			"sMech2.EqualNilRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' ARE EQUAL!"+
+			"This is wrong. 'targetRuneArray' is 'nil' and\n"+
+			"sourceRuneArray = make([]rune, 0)!!\n",
+			ePrefix.String())
+		return
+	}
+
+	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be equal\n"+
+			"to sourceRuneArray!\n",
+			ePrefix.String())
+	}
+
+}
+
+func TestStrMech_CopyRuneArrays000700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_CopyRuneArrays000600()",
+		"")
+
+	var targetRuneArray []rune = nil
+
+	var sourceRuneArray = make([]rune, 0)
+
+	sMech := StrMech{}
+
+	err := sMech.CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		false,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if targetRuneArray == nil {
+		t.Errorf("%v - Error\n"+
+			"targetRuneArray == nil!\n"+
+			"This is WRONG!\n"+
+			"targetRuneArray should be equal to 'make([]rune, 0)'"+
+			"because 'setZeroLenArrayToNil == 'false'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if len(targetRuneArray) != 0 {
+		t.Errorf("%v - Error\n"+
+			"len(targetRuneArray) > 0! This is WRONG!\n"+
+			"len(targetRuneArray) SHOULD EQUAL '0'!\n"+
+			"Actual len(targetRuneArray) = '%v'\n"+
+			"targetRuneArray string = '%v'\n",
+			ePrefix.String(),
+			len(targetRuneArray),
+			string(targetRuneArray))
+
+		return
+	}
+
+	if sourceRuneArray == nil {
+		t.Errorf("%v - Error\n"+
+			"sourceRuneArray == nil!\n"+
+			"This is WRONG!\n"+
+			"sourceRuneArray should be equal to make([]rune, 0)!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if len(sourceRuneArray) != 0 {
+		t.Errorf("%v - Error\n"+
+			"len(sourceRuneArray) > 0! This is WRONG!\n"+
+			"len(sourceRuneArray) SHOULD EQUAL '0'!\n"+
+			"Actual len(sourceRuneArray) = '%v'\n"+
+			"sourceRuneArray string = '%v'\n",
+			ePrefix.String(),
+			len(sourceRuneArray),
+			string(sourceRuneArray))
+
+		return
+	}
+
+	sMech2 := StrMech{}
+
+	areEqual := sMech2.EqualNilRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"sMech2.EqualNilRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' ARE NOT EQUAL!"+
+			"This is wrong. Both 'targetRuneArray' and\n"+
+			"sourceRuneArray should be equal to make([]rune, 0)!!\n",
+			ePrefix.String())
+		return
+	}
+
+	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+		targetRuneArray,
+		sourceRuneArray)
+
+	if !areEqual {
+		t.Errorf("%v - Error\n"+
+			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
+			"This is wrong. 'targetRuneArray' should be equal\n"+
+			"to sourceRuneArray!\n",
+			ePrefix.String())
+	}
+
+}
+
 func TestStrMech_CopyOut_01(t *testing.T) {
 
 	string1 := "What in the world is Garfield doing!"
