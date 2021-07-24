@@ -108,13 +108,7 @@ var mNumStrFmtTypeCodeLwrCaseStringToCode = map[string]NumStrFormatTypeCode{
 //    display of text number strings in base-16 or binary format.
 //
 //
-// CountryCulture       (3)
-//  - This format specification provides extensive background
-//    information on the country or culture associated with the
-//    current format operation.
-//
-//
-// Currency             (4)
+// Currency             (3)
 //  - The 'Currency' format specification signals that all numeric
 //    values will be displayed in number strings as currency
 //    formatted with appropriate currency characters.
@@ -132,18 +126,18 @@ var mNumStrFmtTypeCodeLwrCaseStringToCode = map[string]NumStrFormatTypeCode{
 //       +132 = $132               -123 = ($123)
 //
 //
-// Hexadecimal          (5)
+// Hexadecimal          (4)
 //  - The 'Hexadecimal' format specification provides support for
 //    the display of text number strings in base-16 or hexadecimal
 //    format.
 //
 //
-// Octal                (6)
+// Octal                (5)
 //  - The 'Octal' format specification provides support for the
 //    display of text number strings in base-8 or octal format.
 //
 //
-// SignedNumber         (7)
+// SignedNumber         (6)
 //  - Signals that the numeric value will be displayed in text as a
 //    standard positive or negative value contingent upon the
 //    number sign associated with the numeric value. NO CURRENCY
@@ -160,7 +154,7 @@ var mNumStrFmtTypeCodeLwrCaseStringToCode = map[string]NumStrFormatTypeCode{
 //        +132 = 132               -123 = -123
 //
 //
-// ScientificNotation   (8)
+// ScientificNotation   (7)
 //  - Signals that the numeric value will be displayed in text as
 //    Scientific Notation.
 //
