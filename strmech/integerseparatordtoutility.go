@@ -49,6 +49,8 @@ func (intSeparatorUtil integerSeparatorDtoUtility) ptr() *integerSeparatorDtoUti
 // separator characters through input parameter
 // 'integerDigitsSeparators'.
 //
+// ----------------------------------------------------------------
+//
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
@@ -67,15 +69,21 @@ func (intSeparatorUtil integerSeparatorDtoUtility) ptr() *integerSeparatorDtoUti
 //       values.
 //
 //
-//  integerDigitsSeparators    string
+//  intSeparatorChars          string
 //     - One or more characters used to separate groups of
 //       integers. This separator is also known as the 'thousands'
 //       separator. It is used to separate groups of integer digits
-//       to the left of the decimal separator
-//       (a.k.a. decimal point). In the United States, the standard
-//       integer digits separator is the comma (",").
+//       to the left of the decimal separator (a.k.a. decimal
+//       point). In the United States, the standard integer digits
+//       separator is the comma (",").
+//             United States Example:  1,000,000,000
 //
-//             Example:  1,000,000,000
+//       In many European countries a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
+//
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
 //
 //       If this input parameter contains a zero length string, an
 //       error will be returned.
@@ -85,6 +93,9 @@ func (intSeparatorUtil integerSeparatorDtoUtility) ptr() *integerSeparatorDtoUti
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the names of the calling method or methods.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -104,7 +115,7 @@ func (intSeparatorUtil integerSeparatorDtoUtility) ptr() *integerSeparatorDtoUti
 //
 func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 	intSep *IntegerSeparatorDto,
-	integerDigitsSeparators string,
+	intSeparatorChars string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -138,10 +149,10 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 		return err
 	}
 
-	if len(integerDigitsSeparators) == 0 {
+	if len(intSeparatorChars) == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerDigitsSeparators' is invalid!\n"+
-			"'integerDigitsSeparators' is an empty string.\n",
+			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
+			"'intSeparatorChars' is an empty string.\n",
 			ePrefix.String())
 
 		return err
@@ -151,9 +162,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 		integerSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				intSep,
-				[]rune(integerDigitsSeparators),
-				3,
-				0,
+				[]rune(intSeparatorChars),
+				[]uint{3},
 				false,
 				ePrefix)
 
@@ -185,6 +195,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 // integer separator characters as an array of runes instead
 // of a string.
 //
+// ----------------------------------------------------------------
+//
 // IMPORTANT
 //
 // This method will overwrite all pre-existing data values in the
@@ -202,17 +214,24 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 //       values.
 //
 //
-//  integerDigitsSeparators    []rune
-//     - One or more characters used to separate groups of
-//       integers. This separator is also known as the 'thousands'
-//       separator. It is used to separate groups of integer digits
-//       to the left of the decimal separator
-//       (a.k.a. decimal point). In the United States, the standard
-//       integer digits separator is the comma (',').
+//  intSeparatorChars          []rune
+//     - A character, or series of characters, used to separate
+//       integer digits in a number string. These characters are
+//       commonly known as the 'thousands separator'. A 'thousands
+//       separator' is used to separate groups of integer digits to
+//       the left of the decimal separator (a.k.a. decimal point).
+//       In the United States, the standard integer digits
+//       separator is the single comma character (',').
+//             United States Example:  1,000,000,000
 //
-//             Example:  1,000,000,000
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//       If this input parameter contains a zero length string, an
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
 //       error will be returned.
 //
 //
@@ -220,6 +239,9 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the names of the calling method or methods.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -239,7 +261,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 //
 func (intSeparatorUtil *integerSeparatorDtoUtility) setBasicRunes(
 	intSep *IntegerSeparatorDto,
-	integerDigitsSeparators []rune,
+	intSeparatorChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -273,10 +295,10 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasicRunes(
 		return err
 	}
 
-	if len(integerDigitsSeparators) == 0 {
+	if len(intSeparatorChars) == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerDigitsSeparators' is invalid!\n"+
-			"'integerDigitsSeparators' is an empty string.\n",
+			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
+			"'intSeparatorChars' is an empty string.\n",
 			ePrefix.String())
 
 		return err
@@ -286,9 +308,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasicRunes(
 		integerSeparatorDtoMechanics{}.ptr().
 			setWithComponents(
 				intSep,
-				integerDigitsSeparators,
-				3,
-				0,
+				intSeparatorChars,
+				[]uint{3},
 				false,
 				ePrefix)
 
@@ -330,6 +351,12 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasicRunes(
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the names of the calling method or methods.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------

@@ -50,9 +50,7 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) empty(
 
 	nStrIntSep.intSeparatorChars = nil
 
-	nStrIntSep.intSeparatorGrouping = 0
-
-	nStrIntSep.intSeparatorRepetitions = 0
+	nStrIntSep.intGroupingSequence = nil
 
 	nStrIntSep.restartIntGroupingSequence = false
 
@@ -101,9 +99,9 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 		return isValid, err
 	}
 
-	lIntSepChars := len(nStrIntSep.intSeparatorChars)
+	arrayLen := len(nStrIntSep.intSeparatorChars)
 
-	if lIntSepChars == 0 {
+	if arrayLen == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'intSeparatorChars' is invalid!\n"+
 			"'intSeparatorChars' is a ZERO length rune array.\n",
@@ -112,26 +110,53 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 		return isValid, err
 	}
 
-	if nStrIntSep.intSeparatorGrouping > 10000000 {
+	for i := 0; i < arrayLen; i++ {
 
+		if nStrIntSep.intSeparatorChars[i] == 0 {
+			err = fmt.Errorf("%v\n"+
+				"Error: 'intSeparatorChars' is invalid!\n"+
+				"'intSeparatorChars' element number '%v' has zero value.\n",
+				ePrefix.String(),
+				i)
+
+			return isValid, err
+		}
+	}
+
+	arrayLen = len(nStrIntSep.intGroupingSequence)
+
+	if arrayLen == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'nStrIntSep.intSeparatorGrouping' is invalid!\n"+
-			"nStrIntSep.intSeparatorGrouping='%v'\n",
-			ePrefix,
-			nStrIntSep.intSeparatorGrouping)
+			"Error: 'intGroupingSequence' is invalid!\n"+
+			"'intGroupingSequence' is a ZERO length rune array.\n",
+			ePrefix.String())
 
 		return isValid, err
 	}
 
-	if nStrIntSep.intSeparatorRepetitions > 10000000 {
+	for i := 0; i < arrayLen; i++ {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: 'nStrIntSep.intSeparatorRepetitions' is invalid!\n"+
-			"nStrIntSep.intSeparatorRepetitions='%v'\n",
-			ePrefix,
-			nStrIntSep.intSeparatorRepetitions)
+		if nStrIntSep.intGroupingSequence[i] == 0 {
+			err = fmt.Errorf("%v\n"+
+				"Error: 'intGroupingSequence' is invalid!\n"+
+				"'intGroupingSequence' element number '%v' has zero value.\n",
+				ePrefix.String(),
+				i)
 
-		return isValid, err
+			return isValid, err
+		}
+
+		if nStrIntSep.intGroupingSequence[i] > 1000000 {
+			err = fmt.Errorf("%v\n"+
+				"Error: 'intGroupingSequence' is invalid!\n"+
+				"'intGroupingSequence' element number '%v' has value\n"+
+				"greater than 1,000,000!\n",
+				ePrefix.String(),
+				i)
+
+			return isValid, err
+		}
+
 	}
 
 	isValid = true

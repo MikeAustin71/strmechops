@@ -157,6 +157,302 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 	return err
 }
 
+// copyIntegerArrays - Copies a source integer array to a target
+// integer array.
+//
+// IMPORTANT
+//
+// -----------------------------------------------------------------
+//
+// Be advised that all the data in 'targetIntArray' will be
+// deleted and replaced.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetIntArray             []rune
+//     - All of the data in the input parameter rune array,
+//       'sourceIntArray', will be copied to this parameter,
+//       'targetIntArray'. All of the pre-existing data in
+//       'targetIntArray' will be deleted and replaced.
+//
+//
+//  sourceIntArray            []rune
+//     - The contents of this rune array will be copied to input
+//       parameter, 'targetIntArray'.
+//
+//
+//  setZeroLenArrayToNil       bool
+//     - If sourceIntArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'true', 'targetIntArray'
+//       will be set to 'nil'.
+//
+//       If sourceIntArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'false', 'targetIntArray'
+//       will be set to a zero length array.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMechPreon *strMechPreon) copyIntegerArrays(
+	targetIntArray *[]int,
+	sourceIntArray *[]int,
+	setZeroLenArrayToNil bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon.copyIntegerArrays()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if sourceIntArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceIntArray' is a nil pointer!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if targetIntArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetIntArray' is a nil pointer!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if *sourceIntArray == nil {
+		*targetIntArray = nil
+		return
+	}
+
+	// At this point, sourceIntArray
+	// IS NOT 'nil'!
+	lenSrcIntAry := len(*sourceIntArray)
+
+	if lenSrcIntAry == 0 &&
+		setZeroLenArrayToNil == true {
+
+		*targetIntArray = nil
+		return
+
+	} else if lenSrcIntAry == 0 &&
+		setZeroLenArrayToNil == false {
+
+		*targetIntArray = make([]int, 0)
+		return
+	}
+
+	*targetIntArray = make([]int, lenSrcIntAry)
+
+	itemsCopied := copy(*targetIntArray, *sourceIntArray)
+
+	if itemsCopied != lenSrcIntAry {
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"Runes copied does not equal length of Source "+
+			"Integer Array\n"+
+			"Length Source Integer Array: '%v'\n"+
+			"  Number of Integers Copied: '%v'\n",
+			ePrefix.String(),
+			lenSrcIntAry,
+			itemsCopied)
+	}
+
+	return err
+}
+
+// copyUnsignedIntArrays - Copies a source unsigned integer array
+// to a target unsigned integer array.
+//
+// IMPORTANT
+//
+// -----------------------------------------------------------------
+//
+// Be advised that all the data in 'targetUintArray' will be
+// deleted and replaced.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetUintArray            []rune
+//     - All of the data in the input parameter rune array,
+//       'sourceUintArray', will be copied to this parameter,
+//       'targetUintArray'. All of the pre-existing data in
+//       'targetUintArray' will be deleted and replaced.
+//
+//
+//  sourceUintArray            []rune
+//     - The contents of this rune array will be copied to input
+//       parameter, 'targetUintArray'.
+//
+//
+//  setZeroLenArrayToNil       bool
+//     - If sourceUintArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'true', 'targetUintArray'
+//       will be set to 'nil'.
+//
+//       If sourceUintArray is NOT 'nil', has a zero length and
+//       'setZeroLenArrayToNil' is set to 'false',
+//       'targetUintArray' will be set to a zero length array.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMechPreon *strMechPreon) copyUnsignedIntArrays(
+	targetUintArray *[]uint,
+	sourceUintArray *[]uint,
+	setZeroLenArrayToNil bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon.copyUnsignedIntArrays()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if sourceUintArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceUintArray' is a nil pointer!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if targetUintArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetUintArray' is a nil pointer!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if *sourceUintArray == nil {
+		*targetUintArray = nil
+		return
+	}
+
+	// At this point, sourceUintArray
+	// IS NOT 'nil'!
+	lenSrcUintAry := len(*sourceUintArray)
+
+	if lenSrcUintAry == 0 &&
+		setZeroLenArrayToNil == true {
+
+		*targetUintArray = nil
+		return
+
+	} else if lenSrcUintAry == 0 &&
+		setZeroLenArrayToNil == false {
+
+		*targetUintArray = make([]uint, 0)
+		return
+	}
+
+	*targetUintArray = make([]uint, lenSrcUintAry)
+
+	itemsCopied := copy(*targetUintArray, *sourceUintArray)
+
+	if itemsCopied != lenSrcUintAry {
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"Runes copied does not equal length of Source "+
+			"Unsigned Integer Array\n"+
+			"Length Source Unsigned Integer Array: '%v'\n"+
+			"  Number of Unsigned Integers Copied: '%v'\n",
+			ePrefix.String(),
+			lenSrcUintAry,
+			itemsCopied)
+	}
+
+	return err
+}
+
 // equalRuneArrays - Receives two rune arrays and proceeds to
 // determine if they are equal.
 //
@@ -194,6 +490,94 @@ func (sMechPreon *strMechPreon) equalRuneArrays(
 
 	for i := 0; i < lenAryOne; i++ {
 		if runeAryOne[i] != runeAryTwo[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+// equalIntArrays - Receives two integer arrays and proceeds to
+// determine if they are equal.
+//
+// If the two integer arrays are equivalent, this method returns
+// 'true'. Otherwise, this method returns 'false'.
+//
+// If one array is 'nil' and the other is a zero length array,
+// this method will return 'true'.
+//
+func (sMechPreon *strMechPreon) equalIntArrays(
+	integerAryOne []int,
+	integerAryTwo []int) (
+	areEqual bool) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	lenAryOne := len(integerAryOne)
+
+	lenAryTwo := len(integerAryTwo)
+
+	if lenAryOne != lenAryTwo {
+		return false
+	}
+
+	if lenAryOne == 0 {
+		// They are equal but both have a zero length.
+		return true
+	}
+
+	for i := 0; i < lenAryOne; i++ {
+		if integerAryOne[i] != integerAryTwo[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+// equalUintArrays - Receives two unsigned integer arrays and
+// proceeds to determine if they are equal.
+//
+// If the two unsigned integer arrays are equivalent, this method
+// returns 'true'. Otherwise, this method returns 'false'.
+//
+// If one array is 'nil' and the other is a zero length array,
+// this method will return 'true'.
+//
+func (sMechPreon *strMechPreon) equalUintArrays(
+	uintAryOne []uint,
+	uintAryTwo []uint) (
+	areEqual bool) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	lenAryOne := len(uintAryOne)
+
+	lenAryTwo := len(uintAryTwo)
+
+	if lenAryOne != lenAryTwo {
+		return false
+	}
+
+	if lenAryOne == 0 {
+		// They are equal but both have a zero length.
+		return true
+	}
+
+	for i := 0; i < lenAryOne; i++ {
+		if uintAryOne[i] != uintAryTwo[i] {
 			return false
 		}
 	}

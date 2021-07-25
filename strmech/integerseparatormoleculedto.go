@@ -76,33 +76,31 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 		return err
 	}
 
-	lIntSepChars :=
-		len(incomingNStrIntSeparator.intSeparatorChars)
+	sMechPreon := strMechPreon{}
 
-	if lIntSepChars == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'incomingNStrIntSeparator.intSeparatorChars' "+
-			"is invalid!\n"+
-			"'incomingNStrIntSeparator.intSeparatorChars' is a zero "+
-			"length array.\n",
-			ePrefix.XCtxEmpty().String())
+	err = sMechPreon.copyRuneArrays(
+		&targetNStrIntSeparator.intSeparatorChars,
+		&incomingNStrIntSeparator.intSeparatorChars,
+		true,
+		ePrefix.XCtx(
+			"incomingNStrIntSeparator.intSeparatorChars->"+
+				"targetNStrIntSeparator.intSeparatorChars"))
 
+	if err != nil {
 		return err
 	}
 
-	targetNStrIntSeparator.intSeparatorChars = nil
+	err = sMechPreon.copyUnsignedIntArrays(
+		&targetNStrIntSeparator.intGroupingSequence,
+		&incomingNStrIntSeparator.intGroupingSequence,
+		true,
+		ePrefix.XCtx(
+			"incomingNStrIntSeparator.intGroupingSequence->"+
+				"targetNStrIntSeparator.intGroupingSequence"))
 
-	targetNStrIntSeparator.intSeparatorChars =
-		make([]rune, lIntSepChars, lIntSepChars+5)
-
-	copy(targetNStrIntSeparator.intSeparatorChars,
-		incomingNStrIntSeparator.intSeparatorChars)
-
-	targetNStrIntSeparator.intSeparatorGrouping =
-		incomingNStrIntSeparator.intSeparatorGrouping
-
-	targetNStrIntSeparator.intSeparatorRepetitions =
-		incomingNStrIntSeparator.intSeparatorRepetitions
+	if err != nil {
+		return err
+	}
 
 	targetNStrIntSeparator.restartIntGroupingSequence =
 		incomingNStrIntSeparator.restartIntGroupingSequence
@@ -179,17 +177,31 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 		return newNumSrIntSeparator, err
 	}
 
-	newNumSrIntSeparator.intSeparatorChars =
-		make([]rune, lIntSepChars, lIntSepChars+5)
+	sMechPreon := strMechPreon{}
 
-	copy(newNumSrIntSeparator.intSeparatorChars,
-		numStrIntSeparator.intSeparatorChars)
+	err = sMechPreon.copyRuneArrays(
+		&newNumSrIntSeparator.intSeparatorChars,
+		&numStrIntSeparator.intSeparatorChars,
+		true,
+		ePrefix.XCtx(
+			"numStrIntSeparator.intSeparatorChars->"+
+				"newNumSrIntSeparator.intSeparatorChars"))
 
-	newNumSrIntSeparator.intSeparatorGrouping =
-		numStrIntSeparator.intSeparatorGrouping
+	if err != nil {
+		return newNumSrIntSeparator, err
+	}
 
-	newNumSrIntSeparator.intSeparatorRepetitions =
-		numStrIntSeparator.intSeparatorRepetitions
+	err = sMechPreon.copyUnsignedIntArrays(
+		&newNumSrIntSeparator.intGroupingSequence,
+		&numStrIntSeparator.intGroupingSequence,
+		true,
+		ePrefix.XCtx(
+			"numStrIntSeparator.intGroupingSequence->"+
+				"newNumSrIntSeparator.intGroupingSequence"))
+
+	if err != nil {
+		return newNumSrIntSeparator, err
+	}
 
 	newNumSrIntSeparator.restartIntGroupingSequence =
 		numStrIntSeparator.restartIntGroupingSequence
@@ -231,12 +243,15 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  equal             bool
+//  isEqual             bool
 //     - If all the data elements in 'nStrIntSepOne' are equal to
 //       all the corresponding data elements in 'nStrIntSepTwo',
 //       this return parameter will be set to 'true'. If all the
@@ -314,86 +329,41 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) equal(
 		return isEqual, err
 	}
 
-	if nStrIntSepOne.intSeparatorChars != nil &&
-		nStrIntSepTwo.intSeparatorChars == nil {
+	if nStrIntSepOne.intGroupingSequence != nil &&
+		nStrIntSepTwo.intGroupingSequence == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: nStrIntSepOne.intSeparatorChars != nil\n"+
-			"nStrIntSepTwo.intSeparatorChars == nil\n"+
-			"nStrIntSepOne.intSeparatorChars='%v'\n"+
-			"nStrIntSepTwo.intSeparatorChars='nil'\n",
+			"Error: nStrIntSepOne.intGroupingSequence != nil\n"+
+			"nStrIntSepTwo.intGroupingSequence == nil\n"+
+			"nStrIntSepOne.intGroupingSequence='%v'\n"+
+			"nStrIntSepTwo.intGroupingSequence='nil'\n",
 			ePrefix.String(),
-			string(nStrIntSepOne.intSeparatorChars))
+			nStrIntSepOne.intGroupingSequence)
 
 		return isEqual, err
 	}
 
-	lenIntSeps1 := len(nStrIntSepOne.intSeparatorChars)
+	sMechPreon := strMechPreon{}
 
-	if lenIntSeps1 != len(nStrIntSepTwo.intSeparatorChars) {
+	isEqual = sMechPreon.equalRuneArrays(
+		nStrIntSepOne.intSeparatorChars,
+		nStrIntSepTwo.intSeparatorChars)
 
-		err = fmt.Errorf("%v\n"+
-			"nStrIntSepOne.intSeparatorChars !="+
-			"nStrIntSepTwo.intSeparatorChars\n"+
-			"nStrIntSepOne.intSeparatorChars='%v'\n"+
-			"nStrIntSepTwo.intSeparatorChars='%v'\n",
-			ePrefix.String(),
-			string(nStrIntSepOne.intSeparatorChars),
-			string(nStrIntSepTwo.intSeparatorChars))
-
+	if !isEqual {
 		return isEqual, err
 	}
 
-	for i := 0; i < lenIntSeps1; i++ {
-		if nStrIntSepOne.intSeparatorChars[i] !=
-			nStrIntSepTwo.intSeparatorChars[i] {
-			err = fmt.Errorf("%v\n"+
-				"nStrIntSepOne.intSeparatorChars !="+
-				"nStrIntSepTwo.intSeparatorChars\n"+
-				"nStrIntSepOne.intSeparatorChars='%v'\n"+
-				"nStrIntSepTwo.intSeparatorChars='%v'\n"+
-				"Reference index '%v'\n",
-				ePrefix.String(),
-				string(nStrIntSepOne.intSeparatorChars),
-				string(nStrIntSepTwo.intSeparatorChars),
-				i)
+	isEqual = sMechPreon.equalUintArrays(
+		nStrIntSepOne.intGroupingSequence,
+		nStrIntSepTwo.intGroupingSequence)
 
-			return isEqual, err
-		}
-
-	}
-
-	if nStrIntSepOne.intSeparatorGrouping !=
-		nStrIntSepTwo.intSeparatorGrouping {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: nStrIntSepOne.intSeparatorGrouping !=\n"+
-			"nStrIntSepTwo.intSeparatorGrouping\n"+
-			"nStrIntSepOne.intSeparatorGrouping='%v'\n"+
-			"nStrIntSepTwo.intSeparatorGrouping='%v'\n",
-			ePrefix.String(),
-			nStrIntSepOne.intSeparatorGrouping,
-			nStrIntSepTwo.intSeparatorGrouping)
-
-		return isEqual, err
-	}
-
-	if nStrIntSepOne.intSeparatorRepetitions !=
-		nStrIntSepTwo.intSeparatorRepetitions {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: nStrIntSepOne.intSeparatorRepetitions !=\n"+
-			"nStrIntSepTwo.intSeparatorRepetitions\n"+
-			"nStrIntSepOne.intSeparatorRepetitions='%v'\n"+
-			"nStrIntSepTwo.intSeparatorRepetitions='%v'\n",
-			ePrefix.String(),
-			nStrIntSepOne.intSeparatorRepetitions,
-			nStrIntSepTwo.intSeparatorRepetitions)
-
+	if !isEqual {
 		return isEqual, err
 	}
 
 	if nStrIntSepOne.restartIntGroupingSequence !=
 		nStrIntSepTwo.restartIntGroupingSequence {
+
+		isEqual = false
 
 		err = fmt.Errorf("%v\n"+
 			"Error: nStrIntSepOne.restartIntGroupingSequence !=\n"+

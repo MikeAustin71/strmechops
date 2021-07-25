@@ -39,6 +39,13 @@ func (intSeparatorMech integerSeparatorDtoMechanics) ptr() *integerSeparatorDtoM
 //   United States Integer Separation Example:
 //         '1,000,000,000,000'
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All of the internal member variables in input parameter
+// 'nStrIntSep' will be deleted and replaced.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -47,7 +54,7 @@ func (intSeparatorMech integerSeparatorDtoMechanics) ptr() *integerSeparatorDtoM
 //  nStrIntSep                 *IntegerSeparatorDto
 //     - A pointer to an instance of IntegerSeparatorDto. All the
 //       internal member variable data values contained in this
-//       object will be overwritten and reset to default integer
+//       object will be deleted and reset to default integer
 //       separator values used in the United States.
 //           United States Integer Separation Example:
 //                  '1,000,000,000,000'
@@ -60,6 +67,9 @@ func (intSeparatorMech integerSeparatorDtoMechanics) ptr() *integerSeparatorDtoM
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -116,14 +126,9 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 		nStrIntSep.lock = new(sync.Mutex)
 	}
 
-	nStrIntSep.intSeparatorChars =
-		make([]rune, 1)
+	nStrIntSep.intSeparatorChars = []rune{','}
 
-	nStrIntSep.intSeparatorChars[0] = ','
-
-	nStrIntSep.intSeparatorGrouping = 3
-
-	nStrIntSep.intSeparatorRepetitions = 0
+	nStrIntSep.intGroupingSequence = []uint{3}
 
 	nStrIntSep.restartIntGroupingSequence = false
 
@@ -135,6 +140,13 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 // internal member variable data values based on the other input
 // parameters.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All of the internal member variables in input parameter
+// 'nStrIntSep' will be deleted and replaced.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -143,7 +155,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //  nStrIntSep                 *IntegerSeparatorDto
 //     - A pointer to an instance of IntegerSeparatorDto. All the
 //       internal member variable data values contained in this
-//       object will be overwritten and reset based on the
+//       object will be deleted and reset based on the
 //       following input parameters.
 //
 //
@@ -159,34 +171,58 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //       multiple characters to separate integers.
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer values specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
+//       error will be returned.
+//
+//
+//  intGroupingSequence        []uint
+//     - These unsigned integer values specify the number of
+//       integer digits within each group. This value is used to
+//       group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       intGroupingSequence value would be set to three
+//       ([]uint{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'.
-//
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       like this: '6,78,90,00,00,00,00,000'. The grouping sequence
+//       for the Indian numbering system is therefore []uint{3,2} .
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the IntegerSeparatorDto is the last element in an array
-//       of IntegerSeparatorDto objects, this boolean flag signals
-//       whether the entire integer grouping sequence will be
-//       restarted from array element zero.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
+//
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
+//
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errPrefDto                 *ErrPrefixDto
@@ -196,6 +232,9 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -216,8 +255,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 	nStrIntSep *IntegerSeparatorDto,
 	intSeparatorChars []rune,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intGroupingSequence []uint,
 	restartIntGroupingSequence bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -272,19 +310,29 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 		return err
 	}
 
-	nStrIntSep.intSeparatorChars =
-		make([]rune, lenIntSepChars, lenIntSepChars+5)
+	sMechPreon := strMechPreon{}
 
-	for i := 0; i < lenIntSepChars; i++ {
-		nStrIntSep.intSeparatorChars[i] =
-			intSeparatorChars[i]
+	err = sMechPreon.copyRuneArrays(
+		&nStrIntSep.intSeparatorChars,
+		&intSeparatorChars,
+		true,
+		ePrefix.XCtx(
+			"intSeparatorChars->nStrIntSep.intSeparatorChars"))
+
+	if err != nil {
+		return err
 	}
 
-	nStrIntSep.intSeparatorGrouping =
-		intSeparatorGrouping
+	err = sMechPreon.copyUnsignedIntArrays(
+		&nStrIntSep.intGroupingSequence,
+		&intGroupingSequence,
+		true,
+		ePrefix.XCtx(
+			"intGroupingSequence->nStrIntSep.intGroupingSequence"))
 
-	nStrIntSep.intSeparatorRepetitions =
-		intSeparatorRepetitions
+	if err != nil {
+		return err
+	}
 
 	nStrIntSep.restartIntGroupingSequence =
 		restartIntGroupingSequence

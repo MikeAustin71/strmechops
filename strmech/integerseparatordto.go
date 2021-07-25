@@ -29,12 +29,79 @@ import (
 // The IntegerSeparatorDto type provides the flexibility necessary
 // to process these complex number separation formats.
 //
+// ----------------------------------------------------------------
+//
+// Member Variables
+//
+//  intSeparatorChars          []rune
+//     - A character, or series of characters, used to separate
+//       integer digits in a number string. These characters are
+//       commonly known as the 'thousands separator'. A 'thousands
+//       separator' is used to separate groups of integer digits to
+//       the left of the decimal separator (a.k.a. decimal point).
+//       In the United States, the standard integer digits
+//       separator is the single comma character (',').
+//             United States Example:  1,000,000,000
+//
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
+//
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
+//
+//       In most western countries integer digits to the left of
+//       the decimal separator (a.k.a. decimal point) are separated
+//       into groups of three digits representing a grouping of
+//       'thousands' like this: '1,000,000,000'. In this case the
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
+//
+//       In some countries and cultures other integer groupings are
+//       used. In India, for example, a number might be formatted
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
+//
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
+//
+//
+//  restartIntGroupingSequence bool
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
+//
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
+//
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
+//
 type IntegerSeparatorDto struct {
-	intSeparatorChars       []rune // A series of runes used to separate integer digits.
-	intSeparatorGrouping    uint   // Number of integer digits in a group
-	intSeparatorRepetitions uint   // Number of times this character/group sequence is repeated
-	//                              // A zero value signals unlimited repetitions.
-	restartIntGroupingSequence bool // If true, the entire grouping sequence is repeated
+	intSeparatorChars          []rune // A series of runes used to separate integer digits.
+	intGroupingSequence        []uint // Number of integer digits in each group
+	restartIntGroupingSequence bool   // If true, the entire grouping sequence is repeated
 	//                              //  beginning at array index zero.
 	lock *sync.Mutex
 }
@@ -542,7 +609,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
 	return newIntSepChars, nil
 }
 
-// GetIntSeparatorGrouping - Returns an unsigned integer
+// GetIntegerGroupingSequence - Returns an unsigned integer
 // representing the number of integer digits included in an integer
 // group for the current IntegerSeparatorDto instance.
 //
@@ -553,14 +620,14 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
 // the decimal separator (a.k.a. decimal point) are separated
 // into groups of three digits representing a grouping of
 // 'thousands' like this: '1,000,000,000'. In this case the
-// intSeparatorGrouping value would be set to three ('3').
+// intGroupingSequence value would be set to three ('3').
 //
 // In some countries and cultures other integer groupings are
 // used. In India, for example, a number might be formatted
 // like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
 // would be formatted like this: 12,3456,7890,2345
 //
-func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorGrouping() uint {
+func (nStrIntSep *IntegerSeparatorDto) GetIntegerGroupingSequence() []uint {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -570,28 +637,16 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorGrouping() uint {
 
 	defer nStrIntSep.lock.Unlock()
 
-	return nStrIntSep.intSeparatorGrouping
-}
+	var newRuneArray []uint = nil
 
-// GetIntSeparatorRepetitions - Returns the Integer Separator
-// repetitions specification for the current IntegerSeparatorDto
-// instance.
-//
-// The returned unsigned integer value specifies the number of
-// times this integer grouping is repeated. A value of zero signals
-// that this integer grouping will be repeated indefinitely.
-//
-func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorRepetitions() uint {
+	_ = strMechPreon{}.ptr().
+		copyUnsignedIntArrays(
+			&newRuneArray,
+			&nStrIntSep.intGroupingSequence,
+			true,
+			nil)
 
-	if nStrIntSep.lock == nil {
-		nStrIntSep.lock = new(sync.Mutex)
-	}
-
-	nStrIntSep.lock.Lock()
-
-	defer nStrIntSep.lock.Unlock()
-
-	return nStrIntSep.intSeparatorRepetitions
+	return newRuneArray
 }
 
 // GetRestartIntGroupingSequence - Returns the internal member
@@ -807,8 +862,14 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //       to the left of the decimal separator
 //       (a.k.a. decimal point). In the United States, the standard
 //       integer digits separator is the comma (",").
+//             United States Example:  1,000,000,000
 //
-//             Example:  1,000,000,000
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
+//
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
 //
 //       If this input parameter contains a zero length string, an
 //       error will be returned.
@@ -959,10 +1020,16 @@ func (nStrIntSep IntegerSeparatorDto) NewBasic(
 //       to the left of the decimal separator (a.k.a. decimal
 //       point). In the United States, the standard integer digits
 //       separator is the comma (',').
+//             United States Example:  1,000,000,000
 //
-//             Example:  1,000,000,000
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//       If this input parameter contains a zero length string, an
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this input parameter contains a zero length array, an
 //       error will be returned.
 //
 //
@@ -1093,52 +1160,66 @@ func (nStrIntSep IntegerSeparatorDto) NewBasicRunes(
 //       separator' is used to separate groups of integer digits to
 //       the left of the decimal separator (a.k.a. decimal point).
 //       In the United States, the standard integer digits
-//       separator is the single comma character (','). Other
-//       countries and cultures use periods, spaces, apostrophes or
-//       multiple characters to separate integers.
+//       separator is the single comma character (',').
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer value specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
-//       have an integer grouping value of four ('4').
-//         Chinese Numerals Example: '12,3456,7890,2345'
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
 //
 //
 //  restartIntGroupingSequence bool
-//     - The IntegerSeparatorDto type is intended to be configured
-//       in an array of IntegerSeparatorDto objects which, taken as
-//       a whole, provides formatting specifications for complex
-//       integer group separation operations.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
 //
-//       If the current IntegerSeparatorDto is the last element in
-//       an array of IntegerSeparatorDto objects, the 'Restart
-//       Integer Grouping Sequence' flag signals whether the
-//       integer separation operation will be restarted from the
-//       first IntegerSeparatorDto object in the array.
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
 //
-//       In summary, if the IntegerSeparatorDto is the last element
-//       in an array of IntegerSeparatorDto objects, this boolean
-//       flag signals whether the entire integer grouping sequence
-//       will be restarted from array element zero.
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errorPrefix                interface{}
@@ -1210,8 +1291,7 @@ func (nStrIntSep IntegerSeparatorDto) NewBasicRunes(
 //
 func (nStrIntSep IntegerSeparatorDto) NewDetail(
 	intSeparatorChars string,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
 	newIntSep IntegerSeparatorDto,
@@ -1252,7 +1332,6 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 				&newIntSep,
 				[]rune(intSeparatorChars),
 				intSeparatorGrouping,
-				intSeparatorRepetitions,
 				restartIntGroupingSequence,
 				ePrefix.XCtx("newIntSep"))
 
@@ -1278,52 +1357,66 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 //       separator' is used to separate groups of integer digits to
 //       the left of the decimal separator (a.k.a. decimal point).
 //       In the United States, the standard integer digits
-//       separator is the single comma character (','). Other
-//       countries and cultures use periods, spaces, apostrophes or
-//       multiple characters to separate integers.
+//       separator is the single comma character (',').
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer value specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
+//       error will be returned.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
-//       have an integer grouping value of four ('4').
-//         Chinese Numerals Example: '12,3456,7890,2345'
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
 //
 //
 //  restartIntGroupingSequence bool
-//     - The IntegerSeparatorDto type is intended to be configured
-//       in an array of IntegerSeparatorDto objects which, taken as
-//       a whole, provides formatting specifications for complex
-//       integer group separation operations.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
 //
-//       If the current IntegerSeparatorDto is the last element in
-//       an array of IntegerSeparatorDto objects, the 'Restart
-//       Integer Grouping Sequence' flag signals whether the
-//       integer separation operation will be restarted from the
-//       first IntegerSeparatorDto object in the array.
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
 //
-//       In summary, if the IntegerSeparatorDto is the last element
-//       in an array of IntegerSeparatorDto objects, this boolean
-//       flag signals whether the entire integer grouping sequence
-//       will be restarted from array element zero.
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errorPrefix                interface{}
@@ -1395,8 +1488,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 //
 func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 	intSeparatorChars []rune,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
 	newIntSep IntegerSeparatorDto,
@@ -1437,7 +1529,6 @@ func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 				&newIntSep,
 				intSeparatorChars,
 				intSeparatorGrouping,
-				intSeparatorRepetitions,
 				restartIntGroupingSequence,
 				ePrefix.XCtx("newIntSep"))
 
@@ -1581,47 +1672,63 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 //       multiple characters to separate integers.
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer value specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
+//       error will be returned.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
-//       have an integer grouping value of four ('4').
-//         Chinese Numerals Example: '12,3456,7890,2345'
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
 //
 //
 //  restartIntGroupingSequence bool
-//     - The IntegerSeparatorDto type is intended to be configured
-//       in an array of IntegerSeparatorDto objects which, taken as
-//       a whole, provides formatting specifications for complex
-//       integer group separation operations.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
 //
-//       If the current IntegerSeparatorDto is the last element in
-//       an array of IntegerSeparatorDto objects, the 'Restart
-//       Integer Grouping Sequence' flag signals whether the
-//       integer separation operation will be restarted from the
-//       first IntegerSeparatorDto object in the array.
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
 //
-//       In summary, if the IntegerSeparatorDto is the last element
-//       in an array of IntegerSeparatorDto objects, this boolean
-//       flag signals whether the entire integer grouping sequence
-//       will be restarted from array element zero.
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errorPrefix                interface{}
@@ -1693,8 +1800,7 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 //
 func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 	intSeparatorChars []rune,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intSeparatorGrouping []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) (
 	newIntSep IntegerSeparatorDto,
@@ -1726,7 +1832,6 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 				&newIntSep,
 				intSeparatorChars,
 				intSeparatorGrouping,
-				intSeparatorRepetitions,
 				restartIntGroupingSequence,
 				ePrefix.XCtx("newIntSep"))
 
@@ -1768,8 +1873,14 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 //       to the left of the decimal separator
 //       (a.k.a. decimal point). In the United States, the standard
 //       integer digits separator is the comma (",").
+//             United States Example:  1,000,000,000
 //
-//             Example:  1,000,000,000
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
+//
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
 //
 //       If this input parameter contains a zero length string, an
 //       error will be returned.
@@ -1908,17 +2019,24 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasic(
 //
 // Input Parameters
 //
-//  integerDigitsSeparators    []rune
-//     - One or more characters used to separate groups of
-//       integers. This separator is also known as the 'thousands'
-//       separator. It is used to separate groups of integer digits
-//       to the left of the decimal separator
-//       (a.k.a. decimal point). In the United States, the standard
-//       integer digits separator is the comma (',').
+//  intSeparatorChars          []rune
+//     - A character, or series of characters, used to separate
+//       integer digits in a number string. These characters are
+//       commonly known as the 'thousands separator'. A 'thousands
+//       separator' is used to separate groups of integer digits to
+//       the left of the decimal separator (a.k.a. decimal point).
+//       In the United States, the standard integer digits
+//       separator is the single comma character (',').
+//             United States Example:  1,000,000,000
 //
-//             Example:  1,000,000,000
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//       If this input parameter contains a zero length string, an
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
 //       error will be returned.
 //
 //
@@ -1990,7 +2108,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasic(
 //       the error message.
 //
 func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
-	integerDigitsSeparators []rune,
+	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -2018,7 +2136,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
 	return integerSeparatorDtoUtility{}.ptr().
 		setBasicRunes(
 			nStrIntSep,
-			integerDigitsSeparators,
+			intSeparatorChars,
 			ePrefix.XCtx(
 				"nStrIntSep"))
 }
@@ -2045,40 +2163,63 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
 //       separator' is used to separate groups of integer digits to
 //       the left of the decimal separator (a.k.a. decimal point).
 //       In the United States, the standard integer digits
-//       separator is the single comma character (','). Other
-//       countries and cultures use periods, spaces, apostrophes or
-//       multiple characters to separate integers.
+//       separator is the single comma character (',').
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer values specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
-//       would be formatted like this: '12,3456,7890,2345'
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the IntegerSeparatorDto is the last element in an array
-//       of IntegerSeparatorDto objects, this boolean flag signals
-//       whether the entire integer grouping sequence will be
-//       restarted from array element zero.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
+//
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
+//
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errorPrefix                interface{}
@@ -2144,8 +2285,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
 //
 func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 	intSeparatorChars string,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intGroupingSequence []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) error {
 
@@ -2182,8 +2322,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 		setWithComponents(
 			nStrIntSep,
 			[]rune(intSeparatorChars),
-			intSeparatorGrouping,
-			intSeparatorRepetitions,
+			intGroupingSequence,
 			restartIntGroupingSequence,
 			ePrefix.XCtx("nStrIntSep"))
 }
@@ -2213,40 +2352,66 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 //       separator' is used to separate groups of integer digits to
 //       the left of the decimal separator (a.k.a. decimal point).
 //       In the United States, the standard integer digits
-//       separator is the single comma character (','). Other
-//       countries and cultures use periods, spaces, apostrophes or
-//       multiple characters to separate integers.
+//       separator is the single comma character (',').
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer values specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
+//       error will be returned.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
-//       would be formatted like this: '12,3456,7890,2345'
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the IntegerSeparatorDto is the last element in an array
-//       of IntegerSeparatorDto objects, this boolean flag signals
-//       whether the entire integer grouping sequence will be
-//       restarted from array element zero.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
+//
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
+//
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errorPrefix                interface{}
@@ -2312,8 +2477,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 //
 func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 	intSeparatorChars []rune,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intGroupingSequence []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) error {
 
@@ -2349,8 +2513,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 		setWithComponents(
 			nStrIntSep,
 			intSeparatorChars,
-			intSeparatorGrouping,
-			intSeparatorRepetitions,
+			intGroupingSequence,
 			restartIntGroupingSequence,
 			ePrefix.XCtx("nStrIntSep"))
 }
@@ -2364,18 +2527,23 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 // Input Parameters
 //
 //  intSeparatorChars          []rune
-//     - A series of runes or characters used to separate integer
-//       digits in a number string. These characters are commonly
-//       known as the 'thousands separator'. A 'thousands
+//     - A character, or series of characters, used to separate
+//       integer digits in a number string. These characters are
+//       commonly known as the 'thousands separator'. A 'thousands
 //       separator' is used to separate groups of integer digits to
 //       the left of the decimal separator (a.k.a. decimal point).
 //       In the United States, the standard integer digits
-//       separator is the single comma character (','). Other
-//       countries and cultures use periods, spaces, apostrophes or
-//       multiple characters to separate integers.
+//       separator is the single comma character (',').
 //             United States Example:  1,000,000,000
 //
-//       If this parameter resolves as a zero length array, an
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
+//
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
 //       error will be returned.
 //
 //
@@ -2465,27 +2633,26 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 		return err
 	}
 
-	lenIntSepChars := len(intSeparatorChars)
-
-	if lenIntSepChars == 0 {
+	if len(intSeparatorChars) == 0 {
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'intSeparatorChars' is invalid!\n"+
 			"'intSeparatorChars' is a zero length array.\n",
 			ePrefix.String())
 	}
 
-	nStrIntSep.intSeparatorChars =
-		make([]rune, lenIntSepChars, lenIntSepChars+5)
+	err = strMechPreon{}.ptr().
+		copyRuneArrays(
+			&nStrIntSep.intSeparatorChars,
+			&intSeparatorChars,
+			true,
+			ePrefix.XCtx(
+				"intSeparatorChars->"+
+					"nStrIntSep.intSeparatorChars"))
 
-	for i := 0; i < lenIntSepChars; i++ {
-		nStrIntSep.intSeparatorChars[i] =
-			intSeparatorChars[i]
-	}
-
-	return nil
+	return err
 }
 
-// SetIntSeparatorGrouping - Sets the 'Integer Separator Grouping'
+// SetIntGroupingSequence - Sets the 'Integer Separator Grouping'
 // specification for the current IntegerSeparatorDto instance.
 //
 // This unsigned integer values specifies the number of integer
@@ -2496,7 +2663,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 // decimal separator (a.k.a. decimal point) are separated into
 // groups of three digits representing a grouping of 'thousands'
 // like this: '1,000,000,000'. In this case the
-// 'intSeparatorGrouping' value would be set to three ('3').
+// 'intGroupingSequence' value would be set to three ('3').
 //
 // In some countries and cultures other integer groupings are used.
 // In India, for example, a number might be formatted like this:
@@ -2509,20 +2676,98 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 //
 // Input Parameters
 //
-//  intSeparatorGrouping       uint
-//     - The 'Integer Separator Grouping' value used to set
-//       the integer grouping specification for the current
-//       IntegerSeparatorDto instance.
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
+//
+//       In most western countries integer digits to the left of
+//       the decimal separator (a.k.a. decimal point) are separated
+//       into groups of three digits representing a grouping of
+//       'thousands' like this: '1,000,000,000'. In this case the
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
+//
+//       In some countries and cultures other integer groupings are
+//       used. In India, for example, a number might be formatted
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
+//
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
+//
+//       If this input parameter is submitted as a zero length
+//       array or is otherwise invalid, this method will take no
+//       action and exit.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  -- NONE --
+//  err                        error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
 //
-func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorGrouping(
-	intSeparatorGrouping uint) {
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errorPrefix'. The
+//       'errorPrefix' text will be attached to the beginning of
+//       the error message.
+//
+func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
+	intGroupingSequence []uint,
+	errorPrefix interface{}) (
+	err error) {
 
 	if nStrIntSep.lock == nil {
 		nStrIntSep.lock = new(sync.Mutex)
@@ -2532,56 +2777,61 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorGrouping(
 
 	defer nStrIntSep.lock.Unlock()
 
-	nStrIntSep.intSeparatorGrouping = intSeparatorGrouping
+	var ePrefix *ePref.ErrPrefixDto
 
-	return
-}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto.SetIntGroupingSequence()",
+		"")
 
-// SetIntSeparatorRepetitions - Sets the 'Integer Separator
-// Repetitions' specification for the current IntegerSeparatorDto
-// instance.
-//
-// The 'Integer Separator Repetitions' value is an unsigned integer
-// which specifies the number of cycles for which the integer
-// separation operation defined by separator characters and integer
-// digit grouping value in this IntegerSeparatorDto instance will be
-// repeated.
-//
-// A value of zero for 'Integer Separator Repetitions' specifies
-// that the integer separation operation configured by the current
-// IntegerSeparatorDto instance will be repeated indefinitely for
-// all integer numeric digits within the number string.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  intSeparatorRepetitions    uint
-//     - The 'Integer Separator Repetitions' value used to
-//       determine how many cycles the current integer digit
-//       separation operation will be repeated.
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  -- NONE --
-//
-func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorRepetitions(
-	intSeparatorRepetitions uint) {
-
-	if nStrIntSep.lock == nil {
-		nStrIntSep.lock = new(sync.Mutex)
+	if err != nil {
+		return err
 	}
 
-	nStrIntSep.lock.Lock()
+	lenArray := len(intGroupingSequence)
 
-	defer nStrIntSep.lock.Unlock()
+	if lenArray == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'intGroupingSequence'\n"+
+			"is a zero length array!\n",
+			ePrefix.String())
 
-	nStrIntSep.intSeparatorRepetitions =
-		intSeparatorRepetitions
+		return err
+	}
+
+	for i := 0; i < lenArray; i++ {
+
+		if intGroupingSequence[i] == 0 {
+			err = fmt.Errorf("%v\n"+
+				"Error: 'intGroupingSequence[%v]' is equal to zero!\n",
+				ePrefix.String(),
+				i)
+
+			return err
+		}
+
+		if intGroupingSequence[i] > 1000000 {
+			err = fmt.Errorf("%v\n"+
+				"Error: 'intGroupingSequence[%v]' is greater\n"+
+				"than 1,000,000!\n"+
+				"intGroupingSequence[%v]= '%v'",
+				ePrefix.String(),
+				i,
+				i,
+				intGroupingSequence[i])
+
+			return err
+		}
+
+	}
+
+	_ = strMechPreon{}.ptr().
+		copyUnsignedIntArrays(
+			&nStrIntSep.intGroupingSequence,
+			&intGroupingSequence,
+			true,
+			nil)
 
 	return
 }
@@ -2611,21 +2861,28 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorRepetitions(
 // Input Parameters
 //
 //  restartIntGroupingSequence bool
-//     - The IntegerSeparatorDto type is intended to be configured
-//       in an array of IntegerSeparatorDto objects which, taken as
-//       a whole, provides formatting specifications for complex
-//       integer group separation operations.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
 //
-//       If the current IntegerSeparatorDto is the last element in
-//       an array of IntegerSeparatorDto objects, the 'Restart
-//       Integer Grouping Sequence' flag signals whether the
-//       integer separation operation will be restarted from the
-//       first IntegerSeparatorDto object in the array.
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
 //
-//       In summary, if the IntegerSeparatorDto is the last element
-//       in an array of IntegerSeparatorDto objects, this boolean
-//       flag signals whether the entire integer grouping sequence
-//       will be restarted from array element zero.
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 // -----------------------------------------------------------------
@@ -2772,10 +3029,9 @@ func (nStrIntSep *IntegerSeparatorDto) SetToUSADefaults(
 //
 // United States default numeric separators are listed as follows:
 //
-//  Decimal Separator = '.'
 //  Thousands Separator (a.k.a Integer Digits Separator) = ','
-//  Integer Digits Grouping Sequence = 3
-//  Example Floating Point Number String: 1,000,000,000.456
+//  Integer Digits Grouping Sequence = []uint{3}
+//             United States Example:  1,000,000,000
 //
 // IMPORTANT
 //
@@ -2905,7 +3161,7 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 		string(nStrIntSep.intSeparatorChars))
 
 	str += fmt.Sprintf("Integer Separator Grouping = '%v'\n",
-		nStrIntSep.intSeparatorGrouping)
+		nStrIntSep.intGroupingSequence)
 
 	str += fmt.Sprintf("Restart Grouping Sequence  = '%v'\n",
 		nStrIntSep.restartIntGroupingSequence)
@@ -2929,46 +3185,72 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 // Input Parameters
 //
 //  intSeparatorChars          []rune
-//     - A series of runes or characters used to separate integer
-//       digits in a number string. These characters are commonly
-//       known as the 'thousands separator'. A 'thousands
+//     - A character, or series of characters, used to separate
+//       integer digits in a number string. These characters are
+//       commonly known as the 'thousands separator'. A 'thousands
 //       separator' is used to separate groups of integer digits to
 //       the left of the decimal separator (a.k.a. decimal point).
 //       In the United States, the standard integer digits
-//       separator is the single comma character (','). Other
-//       countries and cultures use periods, spaces, apostrophes or
-//       multiple characters to separate integers.
+//       separator is the single comma character (',').
 //             United States Example:  1,000,000,000
 //
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
 //
-//  intSeparatorGrouping       uint
-//     - This unsigned integer values specifies the number of
-//       integer digits within a group. This value is used to group
-//       integers within a number string.
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       If this parameter is submitted as a zero length array, an
+//       error will be returned.
+//
+//
+//  intGroupingSequence        []uint
+//     - This unsigned integer array specifies the number of
+//       integer digits within a series of groups. This value is
+//       used to group integers within a number string.
 //
 //       In most western countries integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
-//       intSeparatorGrouping value would be set to three ('3').
+//       'intGroupingSequence' value would be set to three
+//       (uint[]{3}).
 //
 //       In some countries and cultures other integer groupings are
 //       used. In India, for example, a number might be formatted
-//       like this: '6,78,90,00,00,00,00,000'. Chinese Numerals
-//       would be formatted like this: '12,3456,7890,2345'
+//       like this: '6,78,90,00,00,00,00,000'. In this case the
+//       'intGroupingSequence' value would be set to uint[]{3,2}.
 //
-//
-//  intSeparatorRepetitions    uint
-//     - This unsigned integer value specifies the number of times
-//       this integer grouping is repeated. A value of zero signals
-//       that this integer grouping will be repeated indefinitely.
+//       Chinese Numerals have an integer grouping value of four
+//       and are formatted like this: '12,3456,7890,2345'. In this
+//       case the 'intGroupingSequence' value would be set to four
+//       uint[]{4}.
 //
 //
 //  restartIntGroupingSequence bool
-//     - If the IntegerSeparatorDto is the last element in an array
-//       of IntegerSeparatorDto objects, this boolean flag signals
-//       whether the entire integer grouping sequence will be
-//       restarted from array element zero.
+//     - If if this flag is set to 'true', the grouping sequence
+//       will be restarted at the beginning of the
+//       'intGroupingSequence' array after completion of the last
+//        group in the 'intGroupingSequence' array.
+//        Example:
+//          restartIntGroupingSequence = 'true'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,456,78,901,23,456
+//
+//       If this flag is set to 'false', the last element or
+//       grouping in the 'intGroupingSequence' array will simply be
+//       repeated for all the remaining integer digits.
+//        Example:
+//          restartIntGroupingSequence = 'false'
+//          intGroupingSequence = uint{3,2}
+//          integer = 1234567890123456
+//          result  = 1,23,45,67,89,01,23,456
+//
+//       The need to set this value to 'true' is exceedingly rare.
+//       For the vast majority of integer separation scenarios, set
+//       this parameter should be set to 'false'.
 //
 //
 //  errorPrefix                interface{}
@@ -3034,8 +3316,7 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 //
 func (nStrIntSep *IntegerSeparatorDto) SetWithComponents(
 	intSeparatorChars []rune,
-	intSeparatorGrouping uint,
-	intSeparatorRepetitions uint,
+	intGroupingSequence []uint,
 	restartIntGroupingSequence bool,
 	errorPrefix interface{}) error {
 
@@ -3064,8 +3345,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetWithComponents(
 		setWithComponents(
 			nStrIntSep,
 			intSeparatorChars,
-			intSeparatorGrouping,
-			intSeparatorRepetitions,
+			intGroupingSequence,
 			restartIntGroupingSequence,
 			ePrefix.XCtx("nStrIntSep"))
 }

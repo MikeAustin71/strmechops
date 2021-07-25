@@ -7,6 +7,9 @@ type NumberBuilder struct {
 	numberFormatType NumStrFormatTypeCode // Absolute Value, Binary, Currency,
 	//                                     // Hexadecimal, Octal, SignedNumber,
 	//                                     // Scientific Notation
+	numberStrFormat string // A string containing format specifications for
+	//                       //  displaying the numeric value encapsulated by
+	//                       //  this NumberBuilder instance.
 	integerElement    []rune // The integer component of the number
 	fractionalElement []rune // The fractional component of the number
 	exponentElement   []rune // The exponent component of scientific notation
