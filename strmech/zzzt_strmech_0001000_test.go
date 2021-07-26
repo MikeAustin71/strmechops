@@ -767,7 +767,7 @@ func TestStrMech_CopyRuneArrays000200(t *testing.T) {
 		return
 	}
 
-	areEqual := strMechQuark{}.ptr().equalNilRuneArrays(
+	areEqual := strMechQuark{}.ptr().equalRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
@@ -815,7 +815,7 @@ func TestStrMech_CopyRuneArrays000300(t *testing.T) {
 		return
 	}
 
-	areEqual := strMechQuark{}.ptr().equalNilRuneArrays(
+	areEqual := strMechQuark{}.ptr().equalRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
@@ -858,13 +858,13 @@ func TestStrMech_CopyRuneArrays000400(t *testing.T) {
 
 	sMech2 := StrMech{}
 
-	areEqual := sMech2.EqualNilRuneArrays(
+	areEqual := sMech2.EqualRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"sMech2.EqualNilRuneArrays()\n"+
+			"sMech2.EqualRuneArraysNil()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
 			"This is wrong. 'targetRuneArray' should be equal\n"+
 			"to sourceRuneArray!\n",
@@ -988,13 +988,13 @@ func TestStrMech_CopyRuneArrays000500(t *testing.T) {
 
 	sMech2 := StrMech{}
 
-	areEqual := sMech2.EqualNilRuneArrays(
+	areEqual := sMech2.EqualRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"sMech2.EqualNilRuneArrays()\n"+
+			"sMech2.EqualRuneArraysNil()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
 			"This is wrong. 'targetRuneArray' should be equal\n"+
 			"to sourceRuneArray!\n",
@@ -1091,13 +1091,13 @@ func TestStrMech_CopyRuneArrays000600(t *testing.T) {
 
 	sMech2 := StrMech{}
 
-	areEqual := sMech2.EqualNilRuneArrays(
+	areEqual := sMech2.EqualRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if areEqual {
 		t.Errorf("%v - Error\n"+
-			"sMech2.EqualNilRuneArrays()\n"+
+			"sMech2.EqualRuneArraysNil()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' ARE EQUAL!"+
 			"This is wrong. 'targetRuneArray' is 'nil' and\n"+
 			"sourceRuneArray = make([]rune, 0)!!\n",
@@ -1194,13 +1194,13 @@ func TestStrMech_CopyRuneArrays000700(t *testing.T) {
 
 	sMech2 := StrMech{}
 
-	areEqual := sMech2.EqualNilRuneArrays(
+	areEqual := sMech2.EqualRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"sMech2.EqualNilRuneArrays()\n"+
+			"sMech2.EqualRuneArraysNil()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' ARE NOT EQUAL!"+
 			"This is wrong. Both 'targetRuneArray' and\n"+
 			"sourceRuneArray should be equal to make([]rune, 0)!!\n",

@@ -10,6 +10,268 @@ type integerSeparatorDtoMolecule struct {
 	lock *sync.Mutex
 }
 
+// applyIntSeparators - Receives an array of runes which consists
+// entirely of integer digit characters '0' to '9' inclusive. Input
+// parameter, 'nStrIntSeparator' supplies the information and
+// format parameters necessary to insert integer separators into
+// the integer digits supplied by input parameter, 'pureNumRunes'.
+//
+// Integer separators are often referred to as thousands separators.
+// The result is returned as an runes correctly formatted with
+// integer separators.
+//
+// Example:
+//  pureNumRunes = 123456789012345
+//  integer separator character = ','
+//  integer grouping for thousands = 3
+//  result = 123,456,789,012,345
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  nStrIntSeparator           *IntegerSeparatorDto
+//     - A pointer to an IntegerSeparatorDto object which contains
+//       the integer separation format parameters which will be
+//       used to insert integer separators.
+//
+//       Integer separators consist of a character, or series of
+//       characters, used to separate integer digits in a number
+//       string. These characters are commonly known as the
+//       'thousands separator'. A 'thousands separator' is used to
+//       separate groups of integer digits to the left of the
+//       decimal separator (a.k.a. decimal point). In the United
+//       States, the standard integer digits separator is the
+//       single comma character (',').
+//             United States Example:  1,000,000,000
+//
+//       In many European countries, a single period ('.') is used
+//       as the integer separator character.
+//             European Example: 1.000.000.000
+//
+//       Other countries and cultures use spaces, apostrophes or
+//       multiple characters to separate integers.
+//
+//       For additional details, reference the source code
+//       documentation for type  IntegerSeparatorDto.
+//
+//
+//  pureNumRunes               []rune
+//     - An array of runes consisting entirely of integer digit
+//       characters from '0' to '9' inclusive. If any character
+//       within this array is NOT an integer digit, this method
+//       will return an error.
+//
+//
+//  errPrefDto                 *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  numStrWithIntSeps          []rune
+//     - If this method completes successfully, an array of runes
+//       will be returned containing the integer digits supplied by
+//       input parameter 'pureNumRunes' properly formatted with
+//       integer digit separators (a.k.a. thousands separators).
+//       Example:
+//         pureNumRunes = 123456789012345
+//         integer separator character = ','
+//         integer grouping for thousands = 3
+//         numStrWithIntSeps = 123,456,789,012,345
+//
+//
+//  err                        error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errPrefDto'. The
+//       'errPrefDto' text will be attached to the beginning of the
+//       error message.
+//
+func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
+	nStrIntSeparator *IntegerSeparatorDto,
+	pureNumRunes []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numStrWithIntSeps []rune,
+	err error) {
+
+	if nStrIntSepMolecule.lock == nil {
+		nStrIntSepMolecule.lock = new(sync.Mutex)
+	}
+
+	nStrIntSepMolecule.lock.Lock()
+
+	defer nStrIntSepMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	numStrWithIntSeps = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"integerSeparatorDtoMolecule."+
+			"copyIn()",
+		"")
+
+	if err != nil {
+		return numStrWithIntSeps, err
+	}
+
+	if nStrIntSeparator == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrIntSeparator' (*IntegerSeparatorDto) is invalid!\n"+
+			"'nStrIntSeparator' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return numStrWithIntSeps, err
+	}
+
+	if pureNumRunes == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pureNumRunes' ([]rune) is invalid!\n"+
+			"'pureNumRunes' is 'nil'!\n",
+			ePrefix.String())
+
+		return numStrWithIntSeps, err
+	}
+
+	lenRawNumRunes := len(pureNumRunes)
+
+	if lenRawNumRunes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pureNumRunes' is invalid!\n"+
+			"'pureNumRunes' is a zero length array.\n",
+			ePrefix)
+
+		return numStrWithIntSeps, err
+	}
+
+	_,
+		err = integerSeparatorDtoQuark{}.ptr().
+		testValidityOfNumStrIntSeparator(
+			nStrIntSeparator,
+			ePrefix.XCtx("nStrIntSeparator->"))
+
+	if err != nil {
+		return numStrWithIntSeps, err
+	}
+
+	lenIGrpSeq := len(nStrIntSeparator.intGroupingSequence)
+
+	if lenIGrpSeq == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'integerGroupingSequence' is invalid!\n"+
+			"'integerGroupingSequence' is a ZERO length array.\n",
+			ePrefix)
+
+		return numStrWithIntSeps, err
+	}
+
+	lenIntSeparatorChars := len(nStrIntSeparator.intSeparatorChars)
+
+	if lenIntSeparatorChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'nStrIntSeparator.intSeparatorChars' is invalid!\n"+
+			"The Integer Separator Characters rune array is a ZERO length array.\n",
+			ePrefix)
+
+		return numStrWithIntSeps, err
+	}
+
+	lenOutRunes := lenRawNumRunes * 2 * lenIntSeparatorChars
+
+	outRunes := make([]rune, lenOutRunes)
+
+	outIdx := lenOutRunes - 1
+
+	groupCnt := uint(0)
+	maxGroupCnt := nStrIntSeparator.intGroupingSequence[0]
+	currGroupCntIdx := 0
+	lastGroupCntIdx := lenIGrpSeq - 1
+
+	for i := lenRawNumRunes - 1; i >= 0; i-- {
+
+		if pureNumRunes[i] >= '0' && pureNumRunes[i] <= '9' {
+
+			groupCnt++
+			outRunes[outIdx] = pureNumRunes[i]
+			outIdx--
+
+			if groupCnt == maxGroupCnt && i != 0 {
+
+				groupCnt = 0
+
+				copy(outRunes[outIdx:], nStrIntSeparator.intSeparatorChars)
+				outIdx = outIdx - lenIntSeparatorChars
+
+				if currGroupCntIdx+1 > lastGroupCntIdx {
+
+					maxGroupCnt =
+						nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+
+				} else {
+
+					currGroupCntIdx++
+
+					maxGroupCnt = nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+
+				}
+
+			} // End of if groupCnt == maxGroupCnt && i != 0
+
+			// End Of if pureNumRunes[i] >= '0' && pureNumRunes[i] <= '9'
+		} else {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter 'pureNumRunes' is invalid!\n"+
+				" The 'pureNumRunes' contains a character which is an integer digit!\n"+
+				"pureNumRunes[%v] = '%v'\n",
+				ePrefix.String(),
+				i,
+				string(pureNumRunes[i]))
+
+			return numStrWithIntSeps, err
+		}
+
+	} // End of for i := lenRawNumRunes - 1; i >= 0; i--
+
+	outputLen := outIdx + 1
+
+	numStrWithIntSeps = make([]rune, outputLen)
+
+	charsCopied := copy(numStrWithIntSeps, outRunes[outIdx:])
+
+	if charsCopied != outputLen {
+		err = fmt.Errorf("%v\n"+
+			"Calculation Error: The number of output characters copied is incorrect!\n"+
+			"Output Length is '%v'\n"+
+			"Characters Coped is '%v'\n"+
+			"outRunes[outIdx:] = '%v'\n",
+			ePrefix.String(),
+			outputLen,
+			charsCopied,
+			string(outRunes[outIdx:]))
+	}
+
+	return numStrWithIntSeps, err
+}
+
 // copyIn - Copies the data fields from input parameter
 // 'incomingNStrIntSeparator' to input parameter
 // 'targetNStrIntSeparator'.

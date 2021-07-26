@@ -623,35 +623,6 @@ func (sMech StrMech) DoesLastCharExist(
 		lastChar)
 }
 
-// EqualNilRuneArrays - Returns a boolean flag signaling whether two
-// rune arrays, submitted as input parameters, are equal in all
-// respects.
-//
-// If the two run arrays are equivalent, this method will return
-// 'true'.
-//
-// This method is similar to StrMech.EqualRuneArrays(), but differs
-// in one important respect. If one array is 'nil' and the other is
-// a zero length array, this method will return 'false'.
-//
-func (sMech *StrMech) EqualNilRuneArrays(
-	runeAryOne []rune,
-	runeAryTwo []rune) bool {
-
-	if sMech.stringDataMutex == nil {
-		sMech.stringDataMutex = new(sync.Mutex)
-	}
-
-	sMech.stringDataMutex.Lock()
-
-	defer sMech.stringDataMutex.Unlock()
-
-	return strMechQuark{}.ptr().
-		equalNilRuneArrays(
-			runeAryOne,
-			runeAryTwo)
-}
-
 // EqualRuneArrays - Returns a boolean flag signaling whether two
 // rune arrays, submitted as input parameters, are equal in all
 // respects.
@@ -676,6 +647,35 @@ func (sMech *StrMech) EqualRuneArrays(
 
 	return strMechPreon{}.ptr().
 		equalRuneArrays(
+			runeAryOne,
+			runeAryTwo)
+}
+
+// EqualRuneArraysNil - Returns a boolean flag signaling whether two
+// rune arrays, submitted as input parameters, are equal in all
+// respects.
+//
+// If the two run arrays are equivalent, this method will return
+// 'true'.
+//
+// This method is similar to StrMech.EqualRuneArrays(), but differs
+// in one important respect. If one array is 'nil' and the other is
+// a zero length array, this method will return 'false'.
+//
+func (sMech *StrMech) EqualRuneArraysNil(
+	runeAryOne []rune,
+	runeAryTwo []rune) bool {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	return strMechQuark{}.ptr().
+		equalRuneArraysNil(
 			runeAryOne,
 			runeAryTwo)
 }
@@ -3023,10 +3023,14 @@ func (sMech StrMech) NewPtr() *StrMech {
 	return &sopsNew
 }
 
+// NumberStringParser - Parses raw number strings.
+//
+// TODO - Fix NumberStringParser
+//
 func (sMech *StrMech) NumberStringParser(
 	numStr string,
 	numSignSymbols NumberSignSymbolCollection,
-	decimalSeparator FractionalSeparatorDto,
+	decimalSeparator string,
 	errorPrefix interface{}) (NumberBuilder, error) {
 
 	if sMech.stringDataMutex == nil {
@@ -3039,7 +3043,6 @@ func (sMech *StrMech) NumberStringParser(
 
 	numStr = ""
 	numSignSymbols.EmptyCollection()
-	decimalSeparator.numericSymbol = nil
 
 	//var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -3054,7 +3057,11 @@ func (sMech *StrMech) NumberStringParser(
 		return NumberBuilder{}, err
 	}
 
-	return NumberBuilder{}, err
+	newNumBuilder := NumberBuilder{}
+	newNumBuilder.decimalSeparator =
+		[]rune(decimalSeparator)
+
+	return newNumBuilder, err
 }
 
 // Ptr - Returns a pointer to a new instance of

@@ -76,7 +76,7 @@ func (mt MainTest) CopyRuneArrays01() {
 		return
 	}
 
-	areEqual := sMech.EqualNilRuneArrays(
+	areEqual := sMech.EqualRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 

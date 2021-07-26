@@ -413,7 +413,7 @@ func (sMechQuark *strMechQuark) doesLastCharExist(
 
 }
 
-// equalNilRuneArrays - Receives two rune arrays and proceeds to
+// equalRuneArraysNil - Receives two rune arrays and proceeds to
 // determine if they are equal.
 //
 // If the two rune arrays are equivalent, this method returns
@@ -422,7 +422,7 @@ func (sMechQuark *strMechQuark) doesLastCharExist(
 // If one array is 'nil' and the other is a zero length array,
 // this method will return 'false'.
 //
-func (sMechQuark *strMechQuark) equalNilRuneArrays(
+func (sMechQuark *strMechQuark) equalRuneArraysNil(
 	runeAryOne []rune,
 	runeAryTwo []rune) (
 	areEqual bool) {
