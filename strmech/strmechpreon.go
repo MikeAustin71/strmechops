@@ -884,6 +884,127 @@ func (sMechPreon *strMechPreon) isTargetRunesIndex(
 	return isTargetRunesIndex
 }
 
+// testValidityOfRuneCharArray - Performs a diagnostic analysis on
+// an array of runes to determine if the characters are valid.
+//
+// If the rune array is equal to 'nil', the array is judged to be
+// invalid.
+//
+// If the rune array is a zero length array, the array is judged to
+// be invalid.
+//
+// If any of the array elements are equal to integer zero (0), that
+// character element invalidates the entire array.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  charArray                  []rune
+//     - A an array of runes consisting entirely of alpha-numeric
+//       characters. This method will evaluate this array to
+//       determine whether or not it is valid.
+//
+//
+//  errPrefDto                 *ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid                    bool
+//     - If the input parameter 'charArray' is determined to be
+//       valid, this parameter will be set to 'true'. If
+//       'charArray' is invalid, this parameter will be set to
+//       'false'.
+//
+//
+//  err                        error
+//     - If the input parameter 'charArray' is determined to be
+//       valid, this parameter will be set to 'nil'.
+//
+//       If 'charArray' is invalid, the returned error Type will
+//       encapsulate an error message. This returned error message
+//       will incorporate the method chain and text passed by input
+//       parameter, 'errPrefDto'. The 'errPrefDto' text will be
+//       attached to the beginning of the error message.
+//
+func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
+	charArray []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon."+
+			"testValidityOfRuneCharArray()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if charArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'charArray' is invalid.\n"+
+			"'charArray' is equal to 'nil'!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	lenCharArray := len(charArray)
+
+	if lenCharArray == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'charArray' is invalid.\n"+
+			"'charArray' is a zero length array!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	for i := 0; i < lenCharArray; i++ {
+
+		if charArray[i] == 0 {
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter 'charArray' is invalid.\n"+
+				"'charArray' contains an invalid character element!\n"+
+				"charArray[%v] == 0",
+				ePrefix.String(),
+				i)
+
+			return isValid, err
+		}
+	}
+
+	isValid = true
+
+	return isValid, err
+}
+
 // ptr - Returns a pointer to a new instance of
 // strMechPreon.
 //
