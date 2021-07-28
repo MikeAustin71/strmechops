@@ -2671,14 +2671,14 @@ func (sMech *StrMech) IsTargetRunesIndex(
 // characters are valid.
 //
 // If the rune array is equal to 'nil', the array is judged to be
-// invalid.
+// invalid and an error will be returned.
 //
 // If the rune array is a zero length array, the array is judged to
-// be invalid.
+// be invalid and an error will be returned.
 //
 // If any of the array elements are equal to integer zero
-// (char == 0), that character element invalidates the entire
-// array.
+// (char==0), that character element invalidates the entire array
+// and an error will be returned.
 //
 //
 // ----------------------------------------------------------------
@@ -2698,7 +2698,7 @@ func (sMech *StrMech) IsTargetRunesIndex(
 //
 //       If any of the array elements are equal to integer zero
 //       (char == 0), that character element invalidates the entire
-//       array.
+//       array and an error will be returned.
 //
 //
 //  errorPrefix         interface{}
@@ -2763,10 +2763,11 @@ func (sMech *StrMech) IsTargetRunesIndex(
 //       valid, this parameter will be set to 'nil'.
 //
 //       If 'charArray' is invalid, the returned error Type will
-//       encapsulate an error message. This returned error message
-//       will incorporate the method chain and text passed by input
-//       parameter, 'errPrefDto'. The 'errPrefDto' text will be
-//       attached to the beginning of the error message.
+//       encapsulate an appropriate error message. This returned
+//       error message will also incorporate the method chain and
+//       text passed by input parameter, 'errorPrefix'. The
+//       'errorPrefix' text will be attached to the beginning of
+//       the error message.
 //
 func (sMech *StrMech) IsValidRuneCharArray(
 	charArray []rune,
@@ -2799,6 +2800,157 @@ func (sMech *StrMech) IsValidRuneCharArray(
 		err = strMechPreon{}.ptr().
 		testValidityOfRuneCharArray(
 			charArray,
+			ePrefix)
+
+	return isValid, err
+}
+
+// IsValidRuneIntArray - Performs a diagnostic analysis on
+// an array of runes to determine if all of the character values
+// in the array constitute integer digits '0' (0x30) through '9'
+// (0x39), inclusive.
+//
+// If the rune array is equal to 'nil', the array is judged to be
+// invalid and an error will be returned.
+//
+// If the rune array is a zero length array, the array is judged to
+// be invalid and an error will be returned.
+//
+// If any of the array elements are equal to an integer value of
+// zero (0), the array is judged to be invalid and an error will
+// be returned.
+//
+// If any of the array elements specify text characters which are
+// NOT integer digit characters zero ('0' or 0x30) through nine
+// ('9' or 0x39) inclusive, the array is judged to be invalid and
+// an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  intDigitsArray             []rune
+//     - A an array of runes consisting entirely of numeric text
+//       characters which represent integer digits zero ('0' or
+//       0x30) through ('9' or 0x39) inclusive. This method will
+//       evaluate this array to determine whether or not it is
+//       valid.
+//
+//       If the rune array is 'nil' or a zero length array, the
+//       array is judged to be invalid and an error will be
+//       returned.
+//
+//       If any of the array elements are equal to an integer
+//       value zero (0), the array is judged to be invalid and an
+//       error will be returned.
+//
+//       If any of the array elements specify text characters which
+//       are NOT integer digit characters zero ('0' or 0x30)
+//       through nine ('9' or 0x39) inclusive, the array is judged
+//       to be invalid and an error will be returned.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid                    bool
+//     - If the input parameter 'intDigitsArray' is determined to
+//       be valid, this parameter will be set to 'true'. If
+//       'intDigitsArray' is invalid, this parameter will be set
+//       to 'false'.
+//
+//
+//  err                        error
+//     - If the input parameter 'intDigitsArray' is determined to
+//       be valid, this parameter will be set to 'nil'.
+//
+//       If 'intDigitsArray' is invalid, the returned error Type
+//       will encapsulate an appropriate error message. This
+//       returned error message will also incorporate the method
+//       chain and text passed by input parameter, 'errorPrefix'.
+//       The 'errorPrefix' text will be attached to the beginning
+//       of the error message.
+//
+func (sMech *StrMech) IsValidRuneIntArray(
+	intDigitsArray []rune,
+	errorPrefix interface{}) (
+	isValid bool,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.IsValidRuneIntArray()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	isValid,
+		err = strMechPreon{}.ptr().
+		testValidityOfRuneIntArray(
+			intDigitsArray,
 			ePrefix)
 
 	return isValid, err

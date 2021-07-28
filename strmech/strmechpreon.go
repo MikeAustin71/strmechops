@@ -888,13 +888,14 @@ func (sMechPreon *strMechPreon) isTargetRunesIndex(
 // an array of runes to determine if the characters are valid.
 //
 // If the rune array is equal to 'nil', the array is judged to be
-// invalid.
+// invalid and an error will be returned.
 //
 // If the rune array is a zero length array, the array is judged to
-// be invalid.
+// be invalid and an error will be returned.
 //
-// If any of the array elements are equal to integer zero (0), that
-// character element invalidates the entire array.
+// If any of the array elements are equal to integer zero
+// (char==0), that character element invalidates the entire array
+// and an error will be returned.
 //
 //
 // ----------------------------------------------------------------
@@ -914,7 +915,7 @@ func (sMechPreon *strMechPreon) isTargetRunesIndex(
 //
 //       If any of the array elements are equal to integer zero
 //       (char == 0), that character element invalidates the entire
-//       array.
+//       array and an error will be returned.
 //
 //
 //  errPrefDto                 *ErrPrefixDto
@@ -942,10 +943,11 @@ func (sMechPreon *strMechPreon) isTargetRunesIndex(
 //       valid, this parameter will be set to 'nil'.
 //
 //       If 'charArray' is invalid, the returned error Type will
-//       encapsulate an error message. This returned error message
-//       will incorporate the method chain and text passed by input
-//       parameter, 'errPrefDto'. The 'errPrefDto' text will be
-//       attached to the beginning of the error message.
+//       encapsulate an appropriate error message. This returned
+//       error message will also incorporate the method chain and
+//       text passed by input parameter, 'errPrefDto'. The
+//       'errPrefDto' text will be attached to the beginning of the
+//       error message.
 //
 func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 	charArray []rune,
@@ -1017,21 +1019,23 @@ func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 
 // testValidityOfRuneIntArray - Performs a diagnostic analysis on
 // an array of runes to determine if all of the character values
-// in the array constitute integer digits '0' through '9',
-// inclusive.
+// in the array constitute integer digits '0' (0x30) through '9'
+// (0x39), inclusive.
 //
 // If the rune array is equal to 'nil', the array is judged to be
-// invalid.
+// invalid and an error will be returned.
 //
-// If the rune array is 'nil' or a zero length array, the array is
-// judged to be invalid.
+// If the rune array is a zero length array, the array is judged to
+// be invalid and an error will be returned.
 //
-// If any of the array elements are equal to an integer value zero
-// (0), the array is judged to be invalid.
+// If any of the array elements are equal to an integer value of
+// zero (0), the array is judged to be invalid and an error will be
+// returned.
 //
 // If any of the array elements specify text characters which are
 // NOT integer digit characters zero ('0' or 0x30) through nine
-// ('9' or 0x39) inclusive, the array is judged to be invalid.
+// ('9' or 0x39) inclusive, the array is judged to be invalid and
+// an error will be returned.
 //
 //
 // ----------------------------------------------------------------
@@ -1046,15 +1050,17 @@ func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 //       valid.
 //
 //       If the rune array is 'nil' or a zero length array, the
-//       array is judged to be invalid.
+//       array is judged to be invalid and an error will be
+//       returned.
 //
 //       If any of the array elements are equal to an integer
-//       value zero (0), the array is judged to be invalid.
+//       value zero (0), the array is judged to be invalid and an
+//       error will be returned.
 //
 //       If any of the array elements specify text characters which
 //       are NOT integer digit characters zero ('0' or 0x30)
 //       through nine ('9' or 0x39) inclusive, the array is judged
-//       to be invalid.
+//       to be invalid and an error will be returned.
 //
 //
 //  errPrefDto                 *ErrPrefixDto
@@ -1082,10 +1088,11 @@ func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 //       be valid, this parameter will be set to 'nil'.
 //
 //       If 'intDigitsArray' is invalid, the returned error Type
-//       will encapsulate an error message. This returned error
-//       message will incorporate the method chain and text passed
-//       by input parameter, 'errPrefDto'. The 'errPrefDto' text
-//       will be attached to the beginning of the error message.
+//       will encapsulate an appropriate error message. This
+//       returned error message will also incorporate the method
+//       chain and text passed by input parameter, 'errPrefDto'.
+//       The 'errPrefDto' text will be attached to the beginning of
+//       the error message.
 //
 func (sMechPreon *strMechPreon) testValidityOfRuneIntArray(
 	intDigitsArray []rune,
