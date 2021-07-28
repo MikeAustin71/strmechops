@@ -1342,6 +1342,136 @@ func TestStrMech_IsTargetRunesIndex_000800(t *testing.T) {
 
 }
 
+func TestStrMech_IsValidRuneCharArray_000100(t *testing.T) {
+
+	ePrefix := "TestStrMech_IsValidRuneCharArray_000100()"
+
+	charAry := []rune("abcdefghijklmnopqrstuvwxyz 1234567890 ABCDEFGHIJKLMNOPQRSTUVWXYZ!&*()@#$%^*_-+=-{}?.")
+
+	sMech := StrMech{}
+
+	isValid,
+		err := sMech.IsValidRuneCharArray(
+		charAry,
+		ePrefix)
+
+	if isValid == false {
+		t.Errorf("%v\n"+
+			"'isValid' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'false'. IT SHOULD BE 'true'!\n",
+			ePrefix)
+	}
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"'err' returned from sMech.IsValidRuneCharArray()\n"+
+			"is NOT 'nil'. IT SHOULD BE 'nil'!\n"+
+			"Error= '%v'\n",
+			ePrefix,
+			err.Error())
+	}
+
+	return
+}
+
+func TestStrMech_IsValidRuneCharArray_000200(t *testing.T) {
+
+	ePrefix := "TestStrMech_IsValidRuneCharArray_000200()"
+
+	var charAry []rune = nil
+
+	sMech := StrMech{}
+
+	isValid,
+		err := sMech.IsValidRuneCharArray(
+		charAry,
+		ePrefix)
+
+	if isValid == true {
+		t.Errorf("%v\n"+
+			"'isValid' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'true'. IT SHOULD BE 'false' because\n"+
+			"'charAry' is 'nil' !\n",
+			ePrefix)
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"'err' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'nil'. IT SHOULD BE NOT 'nil' because\n"+
+			"'charAry' is 'nil' !\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestStrMech_IsValidRuneCharArray_000300(t *testing.T) {
+
+	ePrefix := "TestStrMech_IsValidRuneCharArray_000300()"
+
+	charAry := make([]rune, 0)
+
+	sMech := StrMech{}
+
+	isValid,
+		err := sMech.IsValidRuneCharArray(
+		charAry,
+		ePrefix)
+
+	if isValid == true {
+		t.Errorf("%v\n"+
+			"'isValid' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'true'. IT SHOULD BE 'false' because\n"+
+			"'charAry' is a zero length array !\n",
+			ePrefix)
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"'err' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'nil'. IT SHOULD BE NOT 'nil' because\n"+
+			"'charAry' is a zero length array !\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestStrMech_IsValidRuneCharArray_000400(t *testing.T) {
+
+	ePrefix := "TestStrMech_IsValidRuneCharArray_000400()"
+
+	charAry := []rune{'H', 'e', 'l', 'l', 'o', 0, 'W', 'o', 'r', 'l', 'd'}
+
+	sMech := StrMech{}
+
+	isValid,
+		err := sMech.IsValidRuneCharArray(
+		charAry,
+		ePrefix)
+
+	if isValid == true {
+		t.Errorf("%v\n"+
+			"'isValid' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'true'. IT SHOULD BE 'false' because\n"+
+			"'charAry' contains an array element with a zero\n"+
+			"zero value!\n",
+			ePrefix)
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"'err' returned from sMech.IsValidRuneCharArray()\n"+
+			"is 'nil'. IT SHOULD BE NOT 'nil' because\n"+
+			"'charAry' contains an array element with a zero\n"+
+			"zero value!\n",
+			ePrefix)
+	}
+
+	return
+}
+
 func TestStrMech_LowerCaseFirstLetter_01(t *testing.T) {
 
 	testStr := "Now is the time for all good men to come to the aid of their country."
