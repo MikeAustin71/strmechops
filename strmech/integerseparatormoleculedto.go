@@ -139,26 +139,20 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		return numStrWithIntSeps, err
 	}
 
-	if pureNumRunes == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pureNumRunes' ([]rune) is invalid!\n"+
-			"'pureNumRunes' is 'nil'!\n",
-			ePrefix.String())
+	_,
+		err = strMechPreon{}.ptr().
+		testValidityOfRuneIntArray(
+			pureNumRunes,
+			ePrefix.XCtx(
+				"pureNumRunes"))
 
+	if err != nil {
 		return numStrWithIntSeps, err
 	}
 
+	// If this is zero, an error would have been
+	// thrown by testValidityOfRuneIntArray()
 	lenRawNumRunes := len(pureNumRunes)
-
-	if lenRawNumRunes == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pureNumRunes' is invalid!\n"+
-			"'pureNumRunes' is a zero length array.\n",
-			ePrefix)
-
-		return numStrWithIntSeps, err
-	}
 
 	_,
 		err = integerSeparatorDtoQuark{}.ptr().
@@ -170,29 +164,13 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		return numStrWithIntSeps, err
 	}
 
+	// If this is zero, an error would have been thrown by
+	// testValidityOfNumStrIntSeparator()
 	lenIGrpSeq := len(nStrIntSeparator.intGroupingSequence)
 
-	if lenIGrpSeq == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'integerGroupingSequence' is invalid!\n"+
-			"'integerGroupingSequence' is a ZERO length array.\n",
-			ePrefix)
-
-		return numStrWithIntSeps, err
-	}
-
+	// If this is zero, an error would have been thrown by
+	// testValidityOfNumStrIntSeparator()
 	lenIntSeparatorChars := len(nStrIntSeparator.intSeparatorChars)
-
-	if lenIntSeparatorChars == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'nStrIntSeparator.intSeparatorChars' is invalid!\n"+
-			"The Integer Separator Characters rune array is a ZERO length array.\n",
-			ePrefix)
-
-		return numStrWithIntSeps, err
-	}
 
 	lenOutRunes := lenRawNumRunes * 2 * lenIntSeparatorChars
 
@@ -207,47 +185,31 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	for i := lenRawNumRunes - 1; i >= 0; i-- {
 
-		if pureNumRunes[i] >= '0' && pureNumRunes[i] <= '9' {
+		groupCnt++
+		outRunes[outIdx] = pureNumRunes[i]
+		outIdx--
 
-			groupCnt++
-			outRunes[outIdx] = pureNumRunes[i]
-			outIdx--
+		if groupCnt == maxGroupCnt {
 
-			if groupCnt == maxGroupCnt && i != 0 {
+			groupCnt = 0
 
-				groupCnt = 0
+			copy(outRunes[outIdx:], nStrIntSeparator.intSeparatorChars)
+			outIdx = outIdx - lenIntSeparatorChars
 
-				copy(outRunes[outIdx:], nStrIntSeparator.intSeparatorChars)
-				outIdx = outIdx - lenIntSeparatorChars
+			if currGroupCntIdx+1 > lastGroupCntIdx {
 
-				if currGroupCntIdx+1 > lastGroupCntIdx {
+				maxGroupCnt =
+					nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
 
-					maxGroupCnt =
-						nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+			} else {
 
-				} else {
+				currGroupCntIdx++
 
-					currGroupCntIdx++
+				maxGroupCnt = nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
 
-					maxGroupCnt = nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+			}
 
-				}
-
-			} // End of if groupCnt == maxGroupCnt && i != 0
-
-			// End Of if pureNumRunes[i] >= '0' && pureNumRunes[i] <= '9'
-		} else {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'pureNumRunes' is invalid!\n"+
-				" The 'pureNumRunes' contains a character which is an integer digit!\n"+
-				"pureNumRunes[%v] = '%v'\n",
-				ePrefix.String(),
-				i,
-				string(pureNumRunes[i]))
-
-			return numStrWithIntSeps, err
-		}
+		} // End of if groupCnt == maxGroupCnt
 
 	} // End of for i := lenRawNumRunes - 1; i >= 0; i--
 
