@@ -17,10 +17,83 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) IntSeparateNumRunes01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.IntSeparateNumRunes01()",
+		"")
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var outStr string
+
+	intSepDto,
+		err := strmech.IntegerSeparatorDto{}.NewDetail(
+		",",
+		[]uint{3},
+		false,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprint(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	pureNumStr := []rune("123456789012345")
+	expectedNStr := "123,456,789,012,345"
+	sMech := strmech.StrMech{}
+
+	var numStrWithIntSeps []rune
+
+	numStrWithIntSeps,
+		err = sMech.IntSeparateNumStr(
+		&intSepDto,
+		pureNumStr,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprint(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	actualNumStr := string(numStrWithIntSeps)
+
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Expected Num Str: '%v'\n",
+		expectedNStr)
+	fmt.Printf("  Actual Num Str: '%v'\n",
+		actualNumStr)
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Length Expected Num Str: %v\n",
+		len(expectedNStr))
+	fmt.Printf("  Length Actual Num Str: %v\n",
+		len(actualNumStr))
+	fmt.Printf("------------------------------\n\n")
+
+	if actualNumStr == expectedNStr {
+		fmt.Printf("SUCCESSFUL COMPLETION!!\n\n")
+	} else {
+		fmt.Printf("ERROR Expected vs Actual\n" +
+			"DO NOT MATCH!\n\n")
+	}
+
+	fmt.Printf("\nEND of %v\n\n",
+		ePrefix.String())
+
+}
+
 func (mt MainTest) CopyRuneArrays01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestStrMech_CopyRuneArrays000300()",
+		"MainTest.CopyRuneArrays01()",
 		"")
 
 	var outputStr string

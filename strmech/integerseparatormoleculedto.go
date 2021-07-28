@@ -200,6 +200,8 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	lenOutRunes := lenRawNumRunes * 2 * lenIntSeparatorChars
 
+	//lenOutRunes := 1024
+
 	outRunes := make([]rune, lenOutRunes)
 
 	outIdx := lenOutRunes - 1
@@ -215,7 +217,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		outRunes[outIdx] = pureNumRunes[i]
 		outIdx--
 
-		if groupCnt == maxGroupCnt {
+		if groupCnt == maxGroupCnt && i != 0 {
 
 			groupCnt = 0
 
@@ -239,11 +241,16 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	} // End of for i := lenRawNumRunes - 1; i >= 0; i--
 
-	outputLen := outIdx + 1
+	outputLen := lenOutRunes - outIdx
 
 	numStrWithIntSeps = make([]rune, outputLen)
 
 	charsCopied := copy(numStrWithIntSeps, outRunes[outIdx:])
+
+	fmt.Printf("outputLen= '%v'\n",
+		outputLen)
+	fmt.Printf("outIdx= '%v'\n",
+		outIdx)
 
 	if charsCopied != outputLen {
 		err = fmt.Errorf("%v\n"+
