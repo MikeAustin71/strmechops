@@ -56,12 +56,15 @@ type integerSeparatorDtoMolecule struct {
 //       For additional details, reference the source code
 //       documentation for type  IntegerSeparatorDto.
 //
+//       If 'nStrIntSeparator' is invalid, this method will return
+//       an error.
+//
 //
 //  pureNumRunes               []rune
 //     - An array of runes consisting entirely of integer digit
-//       characters from '0' to '9' inclusive. If any character
-//       within this array is NOT an integer digit, this method
-//       will return an error.
+//       characters from '0' (0x30) to '9' (0x39) inclusive. If any
+//       character within this array is NOT an integer digit, this
+//       method will return an error.
 //
 //
 //  errPrefDto                 *ErrPrefixDto
