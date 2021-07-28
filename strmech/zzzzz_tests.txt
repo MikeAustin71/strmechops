@@ -854,6 +854,14 @@
 --- PASS: TestStrMech_IsValidRuneCharArray_000300 (0.00s)
 === RUN   TestStrMech_IsValidRuneCharArray_000400
 --- PASS: TestStrMech_IsValidRuneCharArray_000400 (0.00s)
+=== RUN   TestStrMech_IsValidRuneIntArray_000100
+--- PASS: TestStrMech_IsValidRuneIntArray_000100 (0.00s)
+=== RUN   TestStrMech_IsValidRuneIntArray_000200
+--- PASS: TestStrMech_IsValidRuneIntArray_000200 (0.00s)
+=== RUN   TestStrMech_IsValidRuneIntArray_000300
+--- PASS: TestStrMech_IsValidRuneIntArray_000300 (0.00s)
+=== RUN   TestStrMech_IsValidRuneIntArray_000400
+--- PASS: TestStrMech_IsValidRuneIntArray_000400 (0.00s)
 === RUN   TestStrMech_LowerCaseFirstLetter_01
 --- PASS: TestStrMech_LowerCaseFirstLetter_01 (0.00s)
 === RUN   TestStrMech_LowerCaseFirstLetter_02
@@ -1337,5 +1345,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 64.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.786s
+coverage: 65.2% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.552s
