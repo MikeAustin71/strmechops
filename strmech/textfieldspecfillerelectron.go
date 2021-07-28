@@ -242,28 +242,29 @@ func (txtFieldFillerElectron *textFieldSpecFillerElectron) isFillerCharsValid(
 		return lenFillerChars, err
 	}
 
-	var zeroCnt int
-
 	for i := 0; i < lenFillerChars; i++ {
 
 		if fillerChars[i] == 0 {
-			zeroCnt++
-		}
-	}
+			err = fmt.Errorf("%v\n"+
+				"Error: At least one of the characters in Input parameter\n"+
+				"'fillerChars' has a zero value!\n"+
+				"fillerChars[%v] == 0\n",
+				ePrefix.String(),
+				i)
 
-	if zeroCnt == lenFillerChars {
-		err = fmt.Errorf("%v\n"+
-			"Error: All of the characters in Input parameter\n"+
-			"'fillerChars' have a zero value!\n",
-			ePrefix.String())
+			lenFillerChars = -1
+
+			return lenFillerChars, err
+		}
+
 	}
 
 	return lenFillerChars, err
 }
 
-// isFillerCharsValid - Receives a single rune specifying the text
-// character to be used as the 'fillerCharacters' member variable
-// for a TextFieldSpecFiller object and subjects it to a
+// isFillerCharacterValid - Receives a single rune specifying the
+// text character to be used as the 'fillerCharacters' member
+// variable for a TextFieldSpecFiller object and subjects it to a
 // diagnostic review in order to determine if this filler character
 // is valid.
 //

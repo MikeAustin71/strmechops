@@ -359,20 +359,21 @@ func (txtFieldLabelElectron *textFieldSpecLabelElectron) isTextLabelValid(
 		return lenTextLabel, err
 	}
 
-	var zeroCnt int
-
 	for i := 0; i < lenTextLabel; i++ {
 
 		if textLabel[i] == 0 {
-			zeroCnt++
-		}
-	}
+			err = fmt.Errorf("%v\n"+
+				"Error: At least one of the characters in the\n"+
+				"'textLabel' array as a zero value!\n"+
+				"textLabel[%v]== 0\n",
+				ePrefix.String(),
+				i)
 
-	if zeroCnt == lenTextLabel {
-		err = fmt.Errorf("%v\n"+
-			"Error: All of the characters in Input parameter\n"+
-			"'textLabel' have a zero value!\n",
-			ePrefix.String())
+			lenTextLabel = -1
+
+			return lenTextLabel, err
+		}
+
 	}
 
 	return lenTextLabel, err

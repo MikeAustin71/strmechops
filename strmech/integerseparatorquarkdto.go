@@ -99,31 +99,17 @@ func (nStrIntSepQuark *integerSeparatorDtoQuark) testValidityOfNumStrIntSeparato
 		return isValid, err
 	}
 
-	arrayLen := len(nStrIntSep.intSeparatorChars)
+	isValid,
+		err = strMechPreon{}.ptr().
+		testValidityOfRuneCharArray(
+			nStrIntSep.intSeparatorChars,
+			ePrefix)
 
-	if arrayLen == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'intSeparatorChars' is invalid!\n"+
-			"'intSeparatorChars' is a ZERO length rune array.\n",
-			ePrefix.String())
-
+	if err != nil {
 		return isValid, err
 	}
 
-	for i := 0; i < arrayLen; i++ {
-
-		if nStrIntSep.intSeparatorChars[i] == 0 {
-			err = fmt.Errorf("%v\n"+
-				"Error: 'intSeparatorChars' is invalid!\n"+
-				"'intSeparatorChars' element number '%v' has zero value.\n",
-				ePrefix.String(),
-				i)
-
-			return isValid, err
-		}
-	}
-
-	arrayLen = len(nStrIntSep.intGroupingSequence)
+	arrayLen := len(nStrIntSep.intGroupingSequence)
 
 	if arrayLen == 0 {
 		err = fmt.Errorf("%v\n"+
