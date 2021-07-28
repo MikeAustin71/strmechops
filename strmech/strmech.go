@@ -2666,6 +2666,144 @@ func (sMech *StrMech) IsTargetRunesIndex(
 	return isTargetRunesIndex
 }
 
+// IsValidRuneCharArray - Performs a diagnostic analysis on
+// an array of runes to determine if the array and its constituent
+// characters are valid.
+//
+// If the rune array is equal to 'nil', the array is judged to be
+// invalid.
+//
+// If the rune array is a zero length array, the array is judged to
+// be invalid.
+//
+// If any of the array elements are equal to integer zero
+// (char == 0), that character element invalidates the entire
+// array.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  charArray                  []rune
+//     - A an array of runes consisting entirely of alpha-numeric
+//       characters. This method will evaluate this array to
+//       determine whether or not it is valid.
+//
+//       If the rune array is equal to 'nil', the array is judged
+//       to be invalid and an error will be returned.
+//
+//       If the rune array is a zero length array, the array is
+//       judged to be invalid and an error will be returned.
+//
+//       If any of the array elements are equal to integer zero
+//       (char == 0), that character element invalidates the entire
+//       array.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid                    bool
+//     - If the input parameter 'charArray' is determined to be
+//       valid, this parameter will be set to 'true'. If
+//       'charArray' is invalid, this parameter will be set to
+//       'false'.
+//
+//
+//  err                        error
+//     - If the input parameter 'charArray' is determined to be
+//       valid, this parameter will be set to 'nil'.
+//
+//       If 'charArray' is invalid, the returned error Type will
+//       encapsulate an error message. This returned error message
+//       will incorporate the method chain and text passed by input
+//       parameter, 'errPrefDto'. The 'errPrefDto' text will be
+//       attached to the beginning of the error message.
+//
+func (sMech *StrMech) IsValidRuneCharArray(
+	charArray []rune,
+	errorPrefix interface{}) (
+	isValid bool,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	isValid = false
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.IsValidRuneCharArray()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	isValid,
+		err = strMechPreon{}.ptr().
+		testValidityOfRuneCharArray(
+			charArray,
+			ePrefix)
+
+	return isValid, err
+}
+
 // JustifyTextInStrField - Creates a and returns a new string text
 // field with text 'strToJustify' positioned inside that new string
 // in accordance with the string justification formatting passed in
