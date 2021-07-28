@@ -10,21 +10,44 @@ type integerSeparatorDtoMolecule struct {
 	lock *sync.Mutex
 }
 
-// applyIntSeparators - Receives an array of runes which consists
-// entirely of integer digit characters '0' to '9' inclusive. Input
-// parameter, 'nStrIntSeparator' supplies the information and
-// format parameters necessary to insert integer separators into
-// the integer digits supplied by input parameter, 'pureNumRunes'.
+// applyIntSeparators - Inserts integer separators into an
+// an array of integer digits.
 //
-// Integer separators are often referred to as thousands separators.
-// The result is returned as an runes correctly formatted with
-// integer separators.
+// An integer separator is a character, or series of characters,
+// used to separate integer digits in a number string. These
+// characters are commonly known as the 'thousands separator'.
+// A 'thousands separator' is used to separate groups of integer
+// digits to the left of the decimal separator (a.k.a. decimal
+// point).
+//
+// In the United States, the standard integer digits separator is
+// the single comma character (',').
+//    United States Example:  1,000,000,000
+//
+//  In many European countries, a single period ('.') is used as
+//  the integer separator character.
+//    European Example: 1.000.000.000
+//
+//  Other countries and cultures use spaces, apostrophes or
+//  multiple characters to separate integers.
+//
+// This method receives an array of runes which consists
+// entirely of integer digit characters '0' (0x30) to '9' (0x39)
+// inclusive. Input parameter, 'nStrIntSeparator' supplies the
+// information and format parameters necessary to insert integer
+// separators into the sequence of integer digits supplied by input
+// parameter, 'pureNumRunes'. The result is a returned rune array
+// consisting of integer digits properly formatted with integer
+// separators.
 //
 // Example:
 //  pureNumRunes = 123456789012345
 //  integer separator character = ','
 //  integer grouping for thousands = 3
 //  result = 123,456,789,012,345
+//
+// For more information on integer grouping sequence, reference the
+// source documentation for type, IntegerSeparatorDto.
 //
 //
 // ----------------------------------------------------------------
