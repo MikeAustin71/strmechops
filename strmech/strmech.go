@@ -2602,6 +2602,9 @@ func (sMech *StrMech) GetValidString(
 //  integer grouping for thousands = 3
 //  result = 123,456,789,012,345
 //
+// The complexity inherent in the IntegerSeparatorDto type, used as
+// an input parameter, is necessary in order to provide support for
+// multi-national and multi-cultural integer separation algorithms.
 // For more information on integer grouping sequence, reference the
 // source documentation for type, IntegerSeparatorDto.
 //
@@ -2637,7 +2640,10 @@ func (sMech *StrMech) GetValidString(
 //       Other countries and cultures use spaces, apostrophes or
 //       multiple characters to separate integers.
 //
-//       For additional details, reference the source code
+//       The complexity inherent in the IntegerSeparatorDto type is
+//       necessary in order to provide support for multi-national
+//       and multi-cultural integer separation algorithms. For
+//       additional details, reference the source code
 //       documentation for type  IntegerSeparatorDto.
 //
 //       If 'nStrIntSeparator' is invalid, this method will return
