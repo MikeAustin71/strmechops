@@ -2605,6 +2605,11 @@ func (sMech *StrMech) GetValidString(
 // For more information on integer grouping sequence, reference the
 // source documentation for type, IntegerSeparatorDto.
 //
+// Be advised - This method will never return a number sign for the
+// returned formatted integer separated numeric value. The numeric
+// sign value (positive or negative) of the returned numeric value
+// (result) must be tracked externally.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -2669,6 +2674,11 @@ func (sMech *StrMech) GetValidString(
 //         integer separator character = ','
 //         integer grouping for thousands = 3
 //         numStrWithIntSeps = 123,456,789,012,345
+//
+//       Be advised - This method will never return a number sign
+//       for the formatted integer separated numeric value. The
+//       numeric sign value (positive or negative) of this numeric
+//       value must be tracked externally.
 //
 //
 //  err                        error

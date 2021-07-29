@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"math"
 	"sync"
 )
 
@@ -48,6 +49,11 @@ type integerSeparatorDtoMolecule struct {
 //
 // For more information on integer grouping sequence, reference the
 // source documentation for type, IntegerSeparatorDto.
+//
+// Be advised - This method will never return a number sign for the
+// returned formatted integer separated numeric value. The numeric
+// sign value (positive or negative) of the returned numeric value
+// (result) must be tracked externally.
 //
 //
 // ----------------------------------------------------------------
@@ -114,6 +120,11 @@ type integerSeparatorDtoMolecule struct {
 //         integer grouping for thousands = 3
 //         numStrWithIntSeps = 123,456,789,012,345
 //
+//       Be advised - This method will never return a number sign
+//       for the formatted integer separated numeric value. The
+//       numeric sign value (positive or negative) of this numeric
+//       value must be tracked externally.
+//
 //
 //  err                        error
 //     - If this method completes successfully, the returned error
@@ -178,7 +189,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	// If this is zero, an error would have been
 	// thrown by testValidityOfRuneIntArray()
-	lenRawNumRunes := len(pureNumRunes)
+	lenPureNumRunes := len(pureNumRunes)
 
 	_,
 		err = integerSeparatorDtoQuark{}.ptr().
@@ -194,24 +205,50 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	// testValidityOfNumStrIntSeparator()
 	lenIGrpSeq := len(nStrIntSeparator.intGroupingSequence)
 
+	var minimumGroupLength uint = math.MaxUint32
+
+	for i := 0; i < lenIGrpSeq; i++ {
+
+		if nStrIntSeparator.intGroupingSequence[i] < minimumGroupLength {
+			minimumGroupLength = nStrIntSeparator.intGroupingSequence[i]
+		}
+
+	}
+
 	// If this is zero, an error would have been thrown by
 	// testValidityOfNumStrIntSeparator()
 	lenIntSeparatorChars := len(nStrIntSeparator.intSeparatorChars)
 
-	lenOutRunes := lenRawNumRunes * 2 * lenIntSeparatorChars
+	var maximumIntSepCharLen = 0
 
-	//lenOutRunes := 1024
+	for i := 0; i < lenIntSeparatorChars; i++ {
+		lenIntSep := len(nStrIntSeparator.intSeparatorChars)
+
+		if lenIntSep > maximumIntSepCharLen {
+			maximumIntSepCharLen = lenIntSep
+		}
+	}
+
+	// 'Output Buffer Length ( lenOutRunes ) =
+	//  (((Length of pure integer digits/Minimum Grouping Length) + 1) X Length of Maximum Integer Separation Chars) +
+	//     Length of pure integer digits
+	lenOutRunes := ((lenPureNumRunes/int(minimumGroupLength) + 1) * maximumIntSepCharLen) + lenPureNumRunes
 
 	outRunes := make([]rune, lenOutRunes)
 
+	fmt.Printf("Beginning lenOutRunes: %v\n",
+		lenOutRunes)
+
 	outIdx := lenOutRunes - 1
+	fmt.Printf("Beginning outIdx: %v\n",
+		outIdx)
 
 	groupCnt := uint(0)
 	maxGroupCnt := nStrIntSeparator.intGroupingSequence[0]
 	currGroupCntIdx := 0
 	lastGroupCntIdx := lenIGrpSeq - 1
 
-	for i := lenRawNumRunes - 1; i >= 0; i-- {
+	for i := lenPureNumRunes - 1; i >= 0; i-- {
 
 		groupCnt++
 		outRunes[outIdx] = pureNumRunes[i]
@@ -239,17 +276,24 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 		} // End of if groupCnt == maxGroupCnt
 
-	} // End of for i := lenRawNumRunes - 1; i >= 0; i--
+	} // End of for i := lenPureNumRunes - 1; i >= 0; i--
+
+	// Adjust to last filled index
+	outIdx++
+
+	// Actual Output Length =
+	//   Original Length Of OutRunes - Final outIdx
 
 	outputLen := lenOutRunes - outIdx
 
 	numStrWithIntSeps = make([]rune, outputLen)
 
+	// Copy only the characters extracted!
 	charsCopied := copy(numStrWithIntSeps, outRunes[outIdx:])
 
-	fmt.Printf("outputLen= '%v'\n",
+	fmt.Printf("Final outputLen= '%v'\n",
 		outputLen)
-	fmt.Printf("outIdx= '%v'\n",
+	fmt.Printf("Final outIdx= '%v'\n",
 		outIdx)
 
 	if charsCopied != outputLen {

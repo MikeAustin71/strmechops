@@ -39,7 +39,84 @@ func (mt MainTest) IntSeparateNumRunes01() {
 		ePrefix)
 
 	if err != nil {
-		outStr = fmt.Sprint(
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	pureNumStr := []rune("1234")
+	expectedNStr := "1,234"
+	sMech := strmech.StrMech{}
+
+	var numStrWithIntSeps []rune
+
+	numStrWithIntSeps,
+		err = sMech.IntSeparateNumStr(
+		&intSepDto,
+		pureNumStr,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	actualNumStr := string(numStrWithIntSeps)
+
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Expected Num Str: '%v'\n",
+		expectedNStr)
+	fmt.Printf("  Actual Num Str: '%v'\n",
+		actualNumStr)
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Length Expected Num Str: %v\n",
+		len(expectedNStr))
+	fmt.Printf("  Length Actual Num Str: %v\n",
+		len(actualNumStr))
+	fmt.Printf("------------------------------\n")
+	// Decimal 48 = 0
+	fmt.Printf("Actual Rune Array: '%v'\n",
+		numStrWithIntSeps)
+	fmt.Printf("------------------------------\n\n")
+
+	if actualNumStr == expectedNStr {
+		fmt.Printf("SUCCESSFUL COMPLETION!!\n\n")
+	} else {
+		fmt.Printf("ERROR Expected vs Actual\n" +
+			"DO NOT MATCH!\n\n")
+	}
+
+	fmt.Printf("\nEND of %v\n\n",
+		ePrefix.String())
+
+}
+
+func (mt MainTest) IntSeparateNumRunes02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.IntSeparateNumRunes02()",
+		"")
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var outStr string
+
+	intSepDto,
+		err := strmech.IntegerSeparatorDto{}.NewDetail(
+		",",
+		[]uint{3},
+		false,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
 			"%v\n\n\n", err.Error())
 		fmt.Printf(outStr)
 		return
@@ -58,7 +135,7 @@ func (mt MainTest) IntSeparateNumRunes01() {
 		ePrefix)
 
 	if err != nil {
-		outStr = fmt.Sprint(
+		outStr = fmt.Sprintf(
 			"%v\n\n\n", err.Error())
 		fmt.Printf(outStr)
 		return
@@ -76,6 +153,10 @@ func (mt MainTest) IntSeparateNumRunes01() {
 		len(expectedNStr))
 	fmt.Printf("  Length Actual Num Str: %v\n",
 		len(actualNumStr))
+	fmt.Printf("------------------------------\n")
+	// Decimal 48 = 0
+	fmt.Printf("Actual Rune Array: '%v'\n",
+		numStrWithIntSeps)
 	fmt.Printf("------------------------------\n\n")
 
 	if actualNumStr == expectedNStr {
