@@ -7,6 +7,6 @@ import (
 func main() {
 	mt := examples.MainTest{}
 
-	mt.IntSeparateNumRunes02()
+	mt.IntSeparateNumRunes04()
 
 }

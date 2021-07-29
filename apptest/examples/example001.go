@@ -171,6 +171,352 @@ func (mt MainTest) IntSeparateNumRunes02() {
 
 }
 
+func (mt MainTest) IntSeparateNumRunes03() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.IntSeparateNumRunes03()",
+		"")
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var outStr string
+
+	intSepDto,
+		err := strmech.IntegerSeparatorDto{}.NewDetail(
+		",",
+		[]uint{3, 2},
+		false,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	pureNumStr := []rune("6789000000000000")
+	expectedNStr := "6,78,90,00,00,00,00,000"
+	sMech := strmech.StrMech{}
+
+	var numStrWithIntSeps []rune
+
+	numStrWithIntSeps,
+		err = sMech.IntSeparateNumStr(
+		&intSepDto,
+		pureNumStr,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	actualNumStr := string(numStrWithIntSeps)
+
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Expected Num Str: '%v'\n",
+		expectedNStr)
+	fmt.Printf("  Actual Num Str: '%v'\n",
+		actualNumStr)
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Length Expected Num Str: %v\n",
+		len(expectedNStr))
+	fmt.Printf("  Length Actual Num Str: %v\n",
+		len(actualNumStr))
+	fmt.Printf("------------------------------\n")
+	// Decimal 48 = 0
+	fmt.Printf("Actual Rune Array: '%v'\n",
+		numStrWithIntSeps)
+	fmt.Printf("------------------------------\n\n")
+
+	if actualNumStr == expectedNStr {
+		fmt.Printf("SUCCESSFUL COMPLETION!!\n\n")
+	} else {
+		fmt.Printf("ERROR Expected vs Actual\n" +
+			"DO NOT MATCH!\n\n")
+	}
+
+	fmt.Printf("\nEND of %v\n\n",
+		ePrefix.String())
+
+}
+
+func (mt MainTest) IntSeparateNumRunes04() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.IntSeparateNumRunes04()",
+		"")
+
+	var outStr string
+	var lineLen = 60
+
+	txtLineBreak,
+		err := strmech.TextFieldSpecFiller{}.
+		NewTextFiller(
+			"-",
+			lineLen,
+			ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf("%v\n",
+			err.Error())
+		fmt.Println(outStr)
+		return
+	}
+
+	var txtFuncName, txtLabel strmech.TextFieldSpecLabel
+
+	txtFuncName,
+		err = strmech.TextFieldSpecLabel{}.
+		NewTextLabel(
+			ePrefix.String(),
+			lineLen,
+			strmech.TxtJustify.Center(),
+			ePrefix.XCtx("ePrefix.String()"))
+
+	if err != nil {
+		outStr = fmt.Sprintf("%v\n",
+			err.Error())
+		fmt.Println(outStr)
+		return
+	}
+
+	txtLabel,
+		err = strmech.TextFieldSpecLabel{}.
+		NewTextLabel(
+			"Example Of restartIntGroupingSequence",
+			lineLen,
+			strmech.TxtJustify.Center(),
+			ePrefix.XCtx("txtLabel restartIntGroupingSequence"))
+
+	if err != nil {
+		outStr = fmt.Sprintf("%v\n",
+			err.Error())
+		fmt.Println(outStr)
+		return
+	}
+
+	fmt.Println()
+	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println(txtFuncName.GetFormattedText())
+	fmt.Println(txtLabel.GetFormattedText())
+	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println()
+
+	var intSepDto strmech.IntegerSeparatorDto
+
+	intSepDto,
+		err = strmech.IntegerSeparatorDto{}.NewDetail(
+		",",
+		[]uint{3, 2},
+		true,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	pureNumStr := []rune("6789000000000000")
+	expectedNStr := "6,78,900,00,000,00,000"
+	sMech := strmech.StrMech{}
+
+	var numStrWithIntSeps []rune
+
+	numStrWithIntSeps,
+		err = sMech.IntSeparateNumStr(
+		&intSepDto,
+		pureNumStr,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	actualNumStr := string(numStrWithIntSeps)
+
+	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Printf("Expected Num Str: '%v'\n",
+		expectedNStr)
+	fmt.Printf("  Actual Num Str: '%v'\n",
+		actualNumStr)
+	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Printf("Length Expected Num Str: %v\n",
+		len(expectedNStr))
+	fmt.Printf("  Length Actual Num Str: %v\n",
+		len(actualNumStr))
+	fmt.Println(txtLineBreak.GetFormattedText())
+	// Decimal 48 = 0
+	fmt.Printf("Actual Rune Array: '%v'\n",
+		numStrWithIntSeps)
+	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println()
+
+	if actualNumStr == expectedNStr {
+		err = txtLabel.SetTextLabel(
+			"SUCCESSFUL COMPLETION!!",
+			lineLen,
+			strmech.TxtJustify.Center(),
+			ePrefix.XCtx("SUCCESSFUL COMPLETION!!"))
+
+		if err != nil {
+			outStr = fmt.Sprintf(
+				"%v\n\n\n", err.Error())
+			fmt.Printf(outStr)
+			return
+		}
+		fmt.Println(txtLabel.GetFormattedText())
+		fmt.Println()
+	} else {
+
+		err = txtLabel.SetTextLabel(
+			"ERROR Expected vs Actual",
+			lineLen,
+			strmech.TxtJustify.Center(),
+			ePrefix.XCtx("SUCCESSFUL COMPLETION!!"))
+
+		if err != nil {
+			outStr = fmt.Sprintf(
+				"%v\n\n\n", err.Error())
+			fmt.Printf(outStr)
+			return
+		}
+
+		fmt.Println(txtLabel.GetFormattedText())
+
+		err = txtLabel.SetTextLabel(
+			"DO NOT MATCH!",
+			lineLen,
+			strmech.TxtJustify.Center(),
+			ePrefix.XCtx("DO NOT MATCH!"))
+
+		if err != nil {
+			outStr = fmt.Sprintf(
+				"%v\n\n\n", err.Error())
+			fmt.Printf(outStr)
+			return
+		}
+
+		fmt.Println(txtLabel.GetFormattedText())
+	}
+
+	fmt.Println()
+
+	fmt.Println(txtLineBreak.GetFormattedText())
+
+	err = txtLabel.SetTextLabel(
+		"End Of "+
+			txtFuncName.GetTextLabel(),
+		lineLen,
+		strmech.TxtJustify.Center(),
+		ePrefix.XCtx("End Of Function"))
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	fmt.Println(txtLabel.GetFormattedText())
+	fmt.Println(txtLineBreak.GetFormattedText())
+
+}
+
+func (mt MainTest) IntSeparateNumRunes05() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.IntSeparateNumRunes05()",
+		"")
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("Example Of Chinese Numerals")
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var outStr string
+	// Chinese Numerals have an integer grouping value of four
+	// and are formatted like this: '12,3456,7890,2345'. In this
+	// case the 'intGroupingSequence' value would be set to four
+	// uint[]{4}.
+
+	intSepDto,
+		err := strmech.IntegerSeparatorDto{}.NewDetail(
+		",",
+		[]uint{4},
+		false,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	pureNumStr := []rune("12345678902345")
+	expectedNStr := "12,3456,7890,2345"
+	sMech := strmech.StrMech{}
+
+	var numStrWithIntSeps []rune
+
+	numStrWithIntSeps,
+		err = sMech.IntSeparateNumStr(
+		&intSepDto,
+		pureNumStr,
+		ePrefix)
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	actualNumStr := string(numStrWithIntSeps)
+
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Expected Num Str: '%v'\n",
+		expectedNStr)
+	fmt.Printf("  Actual Num Str: '%v'\n",
+		actualNumStr)
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("Length Expected Num Str: %v\n",
+		len(expectedNStr))
+	fmt.Printf("  Length Actual Num Str: %v\n",
+		len(actualNumStr))
+	fmt.Printf("------------------------------\n")
+	// Decimal 48 = 0
+	fmt.Printf("Actual Rune Array: '%v'\n",
+		numStrWithIntSeps)
+	fmt.Printf("------------------------------\n\n")
+
+	if actualNumStr == expectedNStr {
+		fmt.Printf("SUCCESSFUL COMPLETION!!\n\n")
+	} else {
+		fmt.Printf("ERROR Expected vs Actual\n" +
+			"DO NOT MATCH!\n\n")
+	}
+
+	fmt.Printf("\nEND of %v\n\n",
+		ePrefix.String())
+
+}
+
 func (mt MainTest) CopyRuneArrays01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

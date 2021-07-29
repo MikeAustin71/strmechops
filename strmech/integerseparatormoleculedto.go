@@ -236,16 +236,21 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	}
 
 	// 'Output Buffer Length ( lenOutRunes ) =
-	//  (((Length of pure integer digits/Minimum Grouping Length) + 1) X Length of Maximum Integer Separation Chars) +
-	//     Length of pure integer digits
+	//  (((Length of pure integer digits/Minimum Grouping Length) + 1) X
+	//     Length of Maximum Integer Separation Chars) +
+	//         Length of pure integer digits
 	lenOutRunes := ((lenPureNumRunes/int(minimumGroupLength) + 1) * maximumIntSepCharLen) + lenPureNumRunes
 
 	outRunes := make([]rune, lenOutRunes)
 
+	outIdx := lenOutRunes - 1
+
+	fmt.Printf("Length Pure Num Runes: %v\n",
+		lenPureNumRunes)
+
 	fmt.Printf("Beginning lenOutRunes: %v\n",
 		lenOutRunes)
 
-	outIdx := lenOutRunes - 1
 	fmt.Printf("Beginning outIdx: %v\n",
 		outIdx)
 
@@ -267,13 +272,24 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 			copy(outRunes[outIdx:], nStrIntSeparator.intSeparatorChars)
 			outIdx = outIdx - lenIntSeparatorChars
 
+			// Is this this the last integer grouping index?
 			if currGroupCntIdx+1 > lastGroupCntIdx {
 
-				maxGroupCnt =
-					nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+				if nStrIntSeparator.restartIntGroupingSequence == true {
+					// Restart at the first Group Sequence Index
+					currGroupCntIdx = 0
+
+					maxGroupCnt =
+						nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+
+				} else {
+					// Repeat the Last Integer Grouping Index
+					maxGroupCnt =
+						nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
+				}
 
 			} else {
-
+				// Go to the next Integer Grouping Index
 				currGroupCntIdx++
 
 				maxGroupCnt = nStrIntSeparator.intGroupingSequence[currGroupCntIdx]
