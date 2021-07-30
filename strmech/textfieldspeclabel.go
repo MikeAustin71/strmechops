@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -589,6 +590,38 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFieldLength() int {
 // a length equal to field length and content equal to white space
 // (the space character " " x field length).
 //
+// This method is identical in function to
+// TextFieldSpecLabel.String()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
+//
 func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText() string {
 
 	if txtFieldLabel.lock == nil {
@@ -603,12 +636,18 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText() string {
 		"TextFieldSpecLabel.GetFormattedText()",
 		"")
 
-	result := textSpecificationMolecule{}.ptr().
+	result,
+		err := textSpecificationMolecule{}.ptr().
 		getFormattedText(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
 			txtFieldLabel.textJustification,
 			&ePrefix)
+
+	if err != nil {
+		result = fmt.Sprintf("%v\n",
+			err.Error())
+	}
 
 	return result
 }
@@ -855,6 +894,13 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
 //
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -921,6 +967,35 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
 //
 func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 	textLabel string,
@@ -1054,6 +1129,13 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
 //
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -1121,6 +1203,35 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
+//
 func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
 	textLabelChars []rune,
 	fieldLen int,
@@ -1143,7 +1254,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewConstructor()",
+		"TextFieldSpecFiller.NewConstructorRunes()",
 		"")
 
 	if err != nil {
@@ -1273,6 +1384,13 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
 //
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -1339,6 +1457,35 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
 //
 func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	textLabel string,
@@ -1417,6 +1564,28 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	return newTextLabel, nil
 }
 
+// SetText - Sets the text string which will be used as the text
+// label for this instance of TextFieldSpecLabel.
+//
+// When the text label is formatted for output, the existing field
+// length, and text justification parameters will be applied.
+//
+func (txtFieldLabel *TextFieldSpecLabel) SetText(
+	textLabel string) {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	txtFieldLabel.textLabel = []rune(textLabel)
+
+	return
+}
+
 // SetTextLabel - Sets the text label component values for the
 // current instance of TextFieldSpecLabel.
 //
@@ -1469,6 +1638,13 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //           TextJustify(0).Left()
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
+//
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
 //
 //
 //  errorPrefix                interface{}
@@ -1530,6 +1706,35 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
 //
 func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 	textLabel string,
@@ -1658,6 +1863,13 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
 //
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -1718,6 +1930,35 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
 //
 func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 	textLabelChars []rune,
@@ -1786,6 +2027,79 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 	txtFieldLabel.textJustification = textJustification
 
 	return nil
+}
+
+// String - Returns the formatted text generated by the
+// current instance of TextFieldSpecLabel.
+//
+// If the length of the text label string is zero and the field
+// length is zero this method returns an empty string.
+//
+// If the length of the text label string is zero and the field
+// length is greater than zero, this method returns a string with
+// a length equal to field length and content equal to white space
+// (the space character " " x field length).
+//
+// This method is identical in function to
+// TextFieldSpecLabel.GetFormattedText()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
+//
+func (txtFieldLabel TextFieldSpecLabel) String() string {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextFieldSpecLabel.String()",
+		"")
+
+	result,
+		err := textSpecificationMolecule{}.ptr().
+		getFormattedText(
+			txtFieldLabel.textLabel,
+			txtFieldLabel.fieldLen,
+			txtFieldLabel.textJustification,
+			&ePrefix)
+
+	if err != nil {
+		result = fmt.Sprintf("%v",
+			err.Error())
+	}
+
+	return result
 }
 
 // TextFieldName - returns a string specifying the name

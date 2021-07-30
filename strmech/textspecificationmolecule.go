@@ -81,15 +81,28 @@ type textSpecificationMolecule struct {
 //
 // Return Values
 //
-//  string
+//  formattedText              string
 //     - The formatted text is returned as a string. If an error
 //       occurs, the error message is included in this string.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
 //
 func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 	textRunes []rune,
 	fieldLen int,
 	textJustify TextJustify,
-	errPrefDto *ePref.ErrPrefixDto) string {
+	errPrefDto *ePref.ErrPrefixDto) (
+	formattedText string,
+	err error) {
 
 	if txtSpecMolecule.lock == nil {
 		txtSpecMolecule.lock = new(sync.Mutex)
@@ -99,8 +112,9 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 
 	defer txtSpecMolecule.lock.Unlock()
 
+	formattedText = ""
+
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -109,7 +123,9 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		"")
 
 	if err != nil {
-		return fmt.Sprintf("%v\n", err.Error())
+		err = fmt.Errorf("%v\n", err.Error())
+
+		return formattedText, err
 	}
 
 	txtLabelElectron := textFieldSpecLabelElectron{}
@@ -120,7 +136,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		ePrefix.XCtx("textRunes"))
 
 	if err != nil {
-		return fmt.Sprintf("%v\n", err.Error())
+		return formattedText, err
 	}
 
 	err = txtLabelElectron.isFieldLengthValid(
@@ -128,7 +144,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		ePrefix.XCtx("fieldLen"))
 
 	if err != nil {
-		return fmt.Sprintf("%v\n", err.Error())
+		return formattedText, err
 	}
 
 	err = txtLabelElectron.isTextJustificationValid(
@@ -138,23 +154,18 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		ePrefix.XCtx("textJustify"))
 
 	if err != nil {
-		return fmt.Sprintf("%v\n", err.Error())
+		return formattedText, err
 	}
 
-	var result string
-
-	result, err = strMechNanobot{}.ptr().
+	formattedText,
+		err = strMechNanobot{}.ptr().
 		justifyTextInStrField(
 			string(textRunes),
 			fieldLen,
 			textJustify,
 			ePrefix)
 
-	if err != nil {
-		return fmt.Sprintf("%v", err.Error())
-	}
-
-	return result
+	return formattedText, err
 }
 
 // ptr - Returns a pointer to a new instance of

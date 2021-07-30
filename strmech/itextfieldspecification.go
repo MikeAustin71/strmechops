@@ -17,4 +17,6 @@ type ITextFieldSpecification interface {
 	EqualITextField(iTextField ITextFieldSpecification) bool
 
 	IsValidInstanceError(errorPrefix interface{}) error
+
+	String() string
 }

@@ -287,6 +287,61 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) equal(
 	return true
 }
 
+func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) getFormattedText(
+	txtFieldFiller *TextFieldSpecFiller,
+	errPrefDto *ePref.ErrPrefixDto) (
+	formattedText string,
+	err error) {
+
+	if txtFieldFillerMolecule.lock == nil {
+		txtFieldFillerMolecule.lock = new(sync.Mutex)
+	}
+
+	txtFieldFillerMolecule.lock.Lock()
+
+	defer txtFieldFillerMolecule.lock.Unlock()
+
+	formattedText = ""
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"txtFieldFillerMolecule.getFormattedText()",
+		"")
+
+	if err != nil {
+		return formattedText, err
+	}
+
+	if txtFieldFiller == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtFieldFiller' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return formattedText, err
+	}
+
+	_,
+		err =
+		textFieldSpecFillerAtom{}.ptr().
+			isValidTextFieldSpecFiller(
+				txtFieldFiller,
+				ePrefix.XCtx("txtFieldFiller validation - "))
+
+	if err != nil {
+		return formattedText, err
+	}
+
+	for i := 0; i < txtFieldFiller.fillerCharsRepeatCount; i++ {
+		formattedText += string(txtFieldFiller.fillerCharacters)
+	}
+
+	return formattedText, err
+}
+
 // newEmpty - Returns a new unpopulated instance of
 // TextFieldSpecFiller. All of the member variables contained in
 // this new instance are set to their uninitialized or zero values.

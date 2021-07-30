@@ -305,8 +305,8 @@ func (mt MainTest) IntSeparateNumRunes04() {
 
 	fmt.Println()
 	fmt.Println(txtLineBreak.GetFormattedText())
-	fmt.Println(txtFuncName.GetFormattedText())
-	fmt.Println(txtLabel.GetFormattedText())
+	fmt.Println(txtFuncName.String())
+	fmt.Println(txtLabel.String())
 	fmt.Println(txtLineBreak.GetFormattedText())
 	fmt.Println()
 
@@ -365,73 +365,31 @@ func (mt MainTest) IntSeparateNumRunes04() {
 	fmt.Println()
 
 	if actualNumStr == expectedNStr {
-		err = txtLabel.SetTextLabel(
-			"SUCCESSFUL COMPLETION!!",
-			lineLen,
-			strmech.TxtJustify.Center(),
-			ePrefix.XCtx("SUCCESSFUL COMPLETION!!"))
+		txtLabel.SetText(
+			"SUCCESSFUL COMPLETION!!")
 
-		if err != nil {
-			outStr = fmt.Sprintf(
-				"%v\n\n\n", err.Error())
-			fmt.Printf(outStr)
-			return
-		}
-		fmt.Println(txtLabel.GetFormattedText())
+		fmt.Println(txtLabel.String())
 		fmt.Println()
+
 	} else {
 
-		err = txtLabel.SetTextLabel(
-			"ERROR Expected vs Actual",
-			lineLen,
-			strmech.TxtJustify.Center(),
-			ePrefix.XCtx("SUCCESSFUL COMPLETION!!"))
+		txtLabel.SetText(
+			"ERROR Expected vs Actual")
 
-		if err != nil {
-			outStr = fmt.Sprintf(
-				"%v\n\n\n", err.Error())
-			fmt.Printf(outStr)
-			return
-		}
+		fmt.Println(txtLabel.String())
 
-		fmt.Println(txtLabel.GetFormattedText())
+		txtLabel.SetText(
+			"DO NOT MATCH!")
 
-		err = txtLabel.SetTextLabel(
-			"DO NOT MATCH!",
-			lineLen,
-			strmech.TxtJustify.Center(),
-			ePrefix.XCtx("DO NOT MATCH!"))
+		fmt.Println(txtLabel.String())
 
-		if err != nil {
-			outStr = fmt.Sprintf(
-				"%v\n\n\n", err.Error())
-			fmt.Printf(outStr)
-			return
-		}
-
-		fmt.Println(txtLabel.GetFormattedText())
 	}
 
-	fmt.Println()
-
-	fmt.Println(txtLineBreak.GetFormattedText())
-
-	err = txtLabel.SetTextLabel(
-		"End Of "+
-			txtFuncName.GetTextLabel(),
-		lineLen,
-		strmech.TxtJustify.Center(),
-		ePrefix.XCtx("End Of Function"))
-
-	if err != nil {
-		outStr = fmt.Sprintf(
-			"%v\n\n\n", err.Error())
-		fmt.Printf(outStr)
-		return
-	}
-
-	fmt.Println(txtLabel.GetFormattedText())
-	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Printf("%v\n", txtLineBreak)
+	txtLabel.SetText("End Of ")
+	fmt.Printf("%s\n", txtLabel)
+	fmt.Printf("%s\n", txtFuncName)
+	fmt.Printf("%s\n", txtLineBreak)
 
 }
 
