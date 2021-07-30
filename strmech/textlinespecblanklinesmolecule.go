@@ -86,7 +86,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 // input parameter 'blkLines'.
 //
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
-	blkLines *TextLineSpecBlankLines,
+	txtBlankLines *TextLineSpecBlankLines,
 	errPrefDto *ePref.ErrPrefixDto) (
 	TextLineSpecBlankLines, error) {
 
@@ -111,32 +111,32 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 		return TextLineSpecBlankLines{}, err
 	}
 
-	if blkLines == nil {
+	if txtBlankLines == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'blkLines' is a nil pointer!\n",
+			"Error: Input parameter 'txtBlankLines' is a nil pointer!\n",
 			ePrefix.String())
 
 		return TextLineSpecBlankLines{}, err
 	}
 
-	if len(blkLines.newLineChars) == 0 {
-		blkLines.newLineChars = []rune{'\n'}
+	if len(txtBlankLines.newLineChars) == 0 {
+		txtBlankLines.newLineChars = []rune{'\n'}
 	}
 
-	if blkLines.numBlankLines < 0 {
-		blkLines.numBlankLines = 0
+	if txtBlankLines.numBlankLines < 0 {
+		txtBlankLines.numBlankLines = 0
 	}
 
 	newBlankLinesSpec := TextLineSpecBlankLines{}
 
-	newBlankLinesSpec.numBlankLines = blkLines.numBlankLines
+	newBlankLinesSpec.numBlankLines = txtBlankLines.numBlankLines
 
-	lenBlkLineChars := len(blkLines.newLineChars)
+	lenBlkLineChars := len(txtBlankLines.newLineChars)
 
 	newBlankLinesSpec.newLineChars = make([]rune, lenBlkLineChars)
 
 	copy(newBlankLinesSpec.newLineChars,
-		blkLines.newLineChars)
+		txtBlankLines.newLineChars)
 
 	return newBlankLinesSpec, nil
 }
@@ -182,8 +182,8 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) empty(
 // 'false'.
 //
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
-	blkLinesOne *TextLineSpecBlankLines,
-	blkLinesTwo *TextLineSpecBlankLines) bool {
+	txtBlankLinesOne *TextLineSpecBlankLines,
+	txtBlankLinesTwo *TextLineSpecBlankLines) bool {
 
 	if txtBlankLinesMolecule.lock == nil {
 		txtBlankLinesMolecule.lock = new(sync.Mutex)
@@ -193,24 +193,24 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 
 	defer txtBlankLinesMolecule.lock.Unlock()
 
-	if blkLinesOne == nil {
+	if txtBlankLinesOne == nil {
 		return false
 	}
 
-	if blkLinesTwo == nil {
+	if txtBlankLinesTwo == nil {
 		return false
 	}
 
-	if blkLinesOne.numBlankLines !=
-		blkLinesTwo.numBlankLines {
+	if txtBlankLinesOne.numBlankLines !=
+		txtBlankLinesTwo.numBlankLines {
 
 		return false
 	}
 
-	lenCurrBlkLineChars := len(blkLinesOne.newLineChars)
+	lenCurrBlkLineChars := len(txtBlankLinesOne.newLineChars)
 
 	if lenCurrBlkLineChars !=
-		len(blkLinesTwo.newLineChars) {
+		len(txtBlankLinesTwo.newLineChars) {
 		return false
 	}
 
@@ -218,14 +218,122 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 
 		for i := 0; i < lenCurrBlkLineChars; i++ {
 
-			if blkLinesOne.newLineChars[i] !=
-				blkLinesTwo.newLineChars[i] {
+			if txtBlankLinesOne.newLineChars[i] !=
+				txtBlankLinesTwo.newLineChars[i] {
 				return false
 			}
 		}
 	}
 
 	return true
+}
+
+// getFormattedText - Receives a pointer to an instance of
+// TextLineSpecBlankLines and generates formatted text for
+// output display and printing.
+//
+// The value of 'blkLines.newLineChars' will be replicated
+// multiple times as specified by 'blkLines.numBlankLines'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtBlankLines              *TextLineSpecBlankLines
+//     - A pointer to an instance of TextLineSpecBlankLines. The
+//       member variables encapsulated in this object will provide
+//       the data necessary to generate blank lines to text output
+//       display and printing.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  formattedText              string
+//     - If this method completes successfully, formatted text from
+//       input parameter 'txtBlankLines' will be generated and
+//       returned in this parameter.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+//
+func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) getFormattedText(
+	txtBlankLines *TextLineSpecBlankLines,
+	errPrefDto *ePref.ErrPrefixDto) (
+	formattedText string,
+	err error) {
+
+	if txtBlankLinesMolecule.lock == nil {
+		txtBlankLinesMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBlankLinesMolecule.lock.Lock()
+
+	defer txtBlankLinesMolecule.lock.Unlock()
+
+	formattedText = ""
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecBlankLinesMolecule.getFormattedText()",
+		"")
+
+	if err != nil {
+		return formattedText, err
+	}
+
+	if txtBlankLines == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtBlankLines' is a nil pointer!\n",
+			ePrefix.String())
+
+		return formattedText, err
+	}
+
+	_,
+		err = textLineSpecBlankLinesAtom{}.ptr().
+		testValidityOfTextLineSpecBlankLines(
+			txtBlankLines,
+			ePrefix.XCtx("txtBlankLines"))
+
+	if err != nil {
+		return formattedText, err
+	}
+
+	outStr := string(txtBlankLines.newLineChars)
+
+	for i := 0; i < txtBlankLines.numBlankLines; i++ {
+		formattedText += outStr
+	}
+
+	return formattedText, err
 }
 
 // ptr - Returns a pointer to a new instance of

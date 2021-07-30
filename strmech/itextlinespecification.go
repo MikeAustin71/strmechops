@@ -13,4 +13,6 @@ type ITextLineSpecification interface {
 
 	EqualITextLine(
 		iTextLine ITextLineSpecification) bool
+
+	String() string
 }

@@ -293,6 +293,9 @@ func (blkLines *TextLineSpecBlankLines) EqualITextLine(
 // The value of 'blkLines.newLineChars' will be replicated
 // multiple times as specified by 'blkLines.numBlankLines'.
 //
+// This method is identical in function to
+// TextLineSpecBlankLines.String()
+//
 func (blkLines *TextLineSpecBlankLines) GetFormattedText() string {
 
 	if blkLines.lock == nil {
@@ -303,43 +306,22 @@ func (blkLines *TextLineSpecBlankLines) GetFormattedText() string {
 
 	defer blkLines.lock.Unlock()
 
-	if len(blkLines.newLineChars) == 0 {
-		blkLines.newLineChars = []rune{'\n'}
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecBlankLines.GetFormattedText()",
+		"")
+
+	formattedText,
+		err := textLineSpecBlankLinesMolecule{}.ptr().
+		getFormattedText(
+			blkLines,
+			&ePrefix)
+
+	if err != nil {
+		formattedText = fmt.Sprintf("%v\n",
+			err.Error())
 	}
 
-	var result string
-
-	funcName := "TextLineSpecBlankLines.GetFormattedText()"
-
-	if blkLines.numBlankLines == 0 {
-		return result
-	}
-
-	if blkLines.numBlankLines > 1000000 {
-
-		result = fmt.Sprintf("%v\n"+
-			"Error:  blkLines.numBlankLines > 1,000,000!\n",
-			funcName)
-
-		return result
-	}
-
-	if blkLines.numBlankLines < 0 {
-
-		result = fmt.Sprintf("%v\n"+
-			"Error:  blkLines.numBlankLines < 0\n",
-			funcName)
-
-		return result
-	}
-
-	outStr := string(blkLines.newLineChars)
-
-	for i := 0; i < blkLines.numBlankLines; i++ {
-		result += outStr
-	}
-
-	return result
+	return formattedText
 }
 
 // GetLineTerminationChars - Returns the Line Termination character
@@ -491,6 +473,43 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 
 	blkLines.numBlankLines = numOfBlankLines
 
+}
+
+// String - Returns the formatted text for output and
+// printing.
+//
+// The value of 'blkLines.newLineChars' will be replicated
+// multiple times as specified by 'blkLines.numBlankLines'.
+//
+// This method is identical in function to
+// TextLineSpecBlankLines.GetFormattedText()
+//
+func (blkLines TextLineSpecBlankLines) String() string {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecBlankLines.GetFormattedText()",
+		"")
+
+	formattedText,
+		err := textLineSpecBlankLinesMolecule{}.ptr().
+		getFormattedText(
+			&blkLines,
+			&ePrefix)
+
+	if err != nil {
+		formattedText = fmt.Sprintf("%v\n",
+			err.Error())
+	}
+
+	return formattedText
 }
 
 // TextLineSpecName - returns Text Line Specification Name. This
