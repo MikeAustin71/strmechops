@@ -13,8 +13,68 @@ type textLineSpecStandardLineMolecule struct {
 // copyIn - Copies all data from input parameter 'incomingStdLine'
 // to input parameter 'targetStdLine'.
 //
-// Be advised that the data fields in 'targetStdLine' will be
-// overwritten.
+// Be advised that the pre-existing data fields in input parameter
+// 'targetStdLine' will be overwritten and deleted.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStdLine              *TextLineSpecStandardLine
+//     - A pointer to an instance of TextLineSpecStandardLine. Data
+//       extracted from input parameter 'incomingStdLine' will
+//       be copied to this input parameter, 'targetStdLine'. If
+//       this method completes successfully, all member data
+//       variables encapsulated in 'targetStdLine' will be
+//       identical to those contained in input parameter,
+//       'incomingStdLine'.
+//
+//       Be advised that the pre-existing data fields in input
+//       parameter 'targetStdLine' will be overwritten and
+//       deleted.
+//
+//
+//  incomingStdLine            *TextLineSpecStandardLine
+//     - A pointer to an instance of TextLineSpecStandardLine.
+//
+//       All data values in this TextLineSpecStandardLine instance
+//       will be copied to input parameter 'targetStdLine'.
+//
+//       The original member variable data values encapsulated in
+//       'incomingStdLine' will remain unchanged and will NOT be
+//       overwritten or deleted.
+//
+//       If 'incomingStdLine' contains invalid member data
+//       variables, this method will return an error.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
 //
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 	targetStdLine *TextLineSpecStandardLine,

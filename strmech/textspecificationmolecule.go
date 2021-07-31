@@ -10,6 +10,21 @@ type textSpecificationMolecule struct {
 	lock *sync.Mutex
 }
 
+// getDefaultTimeFormat - Returns a string containing the default
+// format for text display and output of time values.
+func (txtSpecMolecule *textSpecificationMolecule) getDefaultTimeFormat() string {
+
+	if txtSpecMolecule.lock == nil {
+		txtSpecMolecule.lock = new(sync.Mutex)
+	}
+
+	txtSpecMolecule.lock.Lock()
+
+	defer txtSpecMolecule.lock.Unlock()
+
+	return "2006-01-02 15:04:05.000000000 -0700 MST"
+}
+
 // getFormattedText - Formats text using text string, field
 // length and text justification values.
 //
