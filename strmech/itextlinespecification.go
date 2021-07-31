@@ -7,12 +7,17 @@ type ITextLineSpecification interface {
 
 	GetFormattedText() string
 
-	CopyOutITextLine() ITextLineSpecification
+	CopyOutITextLine(interface{}) (
+		ITextLineSpecification,
+		error)
 
 	Empty()
 
 	EqualITextLine(
 		iTextLine ITextLineSpecification) bool
+
+	IsValidInstanceError(
+		errorPrefix interface{}) error
 
 	String() string
 }

@@ -58,6 +58,16 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 		return err
 	}
 
+	_,
+		err = textLineSpecBlankLinesAtom{}.ptr().
+		testValidityOfTextLineSpecBlankLines(
+			incomingBlkLines,
+			ePrefix.XCtx("incomingBlkLines"))
+
+	if err != nil {
+		return err
+	}
+
 	if len(incomingBlkLines.newLineChars) == 0 {
 		incomingBlkLines.newLineChars = []rune{'\n'}
 	}
@@ -116,6 +126,16 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 			"Error: Input parameter 'txtBlankLines' is a nil pointer!\n",
 			ePrefix.String())
 
+		return TextLineSpecBlankLines{}, err
+	}
+
+	_,
+		err = textLineSpecBlankLinesAtom{}.ptr().
+		testValidityOfTextLineSpecBlankLines(
+			txtBlankLines,
+			ePrefix.XCtx("txtBlankLines"))
+
+	if err != nil {
 		return TextLineSpecBlankLines{}, err
 	}
 

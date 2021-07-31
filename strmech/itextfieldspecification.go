@@ -14,9 +14,11 @@ type ITextFieldSpecification interface {
 
 	Empty()
 
-	EqualITextField(iTextField ITextFieldSpecification) bool
+	EqualITextField(
+		iTextField ITextFieldSpecification) bool
 
-	IsValidInstanceError(errorPrefix interface{}) error
+	IsValidInstanceError(
+		errorPrefix interface{}) error
 
 	String() string
 }
