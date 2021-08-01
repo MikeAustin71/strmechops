@@ -13,10 +13,73 @@ type textFieldSpecFillerMolecule struct {
 // copyIn - Copies all data from input parameter
 // 'incomingTxtFiller' to input parameter 'incomingTxtFiller'.
 //
-// IMPORTANT
+//
 // ----------------------------------------------------------------
+//
+// IMPORTANT
+//
 // Be advised that the data fields in 'targetTxtFiller' will be
 // overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetTxtFiller            *TextFieldSpecFiller
+//     - A pointer to an instance of TextFieldSpecFiller. Data
+//       extracted from input parameter 'incomingTxtFiller' will
+//       be copied to this input parameter, 'targetTxtFiller'. If
+//       this method completes successfully, all member data
+//       variables encapsulated in 'targetTxtFiller' will be
+//       identical to those contained in input parameter,
+//       'incomingTxtFiller'.
+//
+//       Be advised that the pre-existing data fields in input
+//       parameter 'targetTxtFiller' will be overwritten and
+//       deleted.
+//
+//
+//  incomingTxtFiller          *TextFieldSpecFiller
+//     - A pointer to an instance of TextFieldSpecFiller.
+//
+//       All data values in this TextFieldSpecFiller instance
+//       will be copied to input parameter 'targetTxtFiller'.
+//
+//       The original member variable data values encapsulated in
+//       'incomingTxtFiller' will remain unchanged and will NOT be
+//       overwritten or deleted.
+//
+//       If 'incomingTxtFiller' contains invalid member data
+//       variables, this method will return an error.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
 //
 func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 	targetTxtFiller *TextFieldSpecFiller,
