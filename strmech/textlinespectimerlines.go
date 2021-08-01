@@ -32,8 +32,9 @@ type TextLineSpecTimerLines struct {
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
-// TextLineSpecBlankLines ('incomingBlkLines') to the data fields
-// of the current TextLineSpecBlankLines instance ('blkLines').
+// TextLineSpecTimerLines ('incomingTimerLines') to the data fields
+// of the current TextLineSpecTimerLines instance
+// ('txtSpecTimerLines').
 //
 // IMPORTANT
 // All of the data fields in current TextLineSpecTimerLines
