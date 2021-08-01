@@ -10,6 +10,24 @@ type textLineSpecTimerLinesAtom struct {
 	lock *sync.Mutex
 }
 
+// ptr - Returns a pointer to a new instance of
+// textLineSpecTimerLinesAtom.
+//
+func (txtTimerLinesAtom textLineSpecTimerLinesAtom) ptr() *textLineSpecTimerLinesAtom {
+
+	if txtTimerLinesAtom.lock == nil {
+		txtTimerLinesAtom.lock = new(sync.Mutex)
+	}
+
+	txtTimerLinesAtom.lock.Lock()
+
+	defer txtTimerLinesAtom.lock.Unlock()
+
+	return &textLineSpecTimerLinesAtom{
+		lock: new(sync.Mutex),
+	}
+}
+
 // testValidityOfTxtSpecTimerLines - Receives a pointer to an
 // instance of TextLineSpecTimerLines and performs a diagnostic
 // analysis to determine if that instance is valid in all respects.
@@ -141,7 +159,7 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 		txtTimerLines.startTimeLabel = []rune("Start Time")
 	}
 
-	if len(txtTimerLines.startTimeLabel) == 0 {
+	if len(txtTimerLines.endTimeLabel) == 0 {
 		txtTimerLines.endTimeLabel = []rune("End Time")
 	}
 
@@ -195,22 +213,4 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 	isValid = true
 
 	return isValid, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecTimerLinesAtom.
-//
-func (txtTimerLinesAtom textLineSpecTimerLinesAtom) ptr() *textLineSpecTimerLinesAtom {
-
-	if txtTimerLinesAtom.lock == nil {
-		txtTimerLinesAtom.lock = new(sync.Mutex)
-	}
-
-	txtTimerLinesAtom.lock.Lock()
-
-	defer txtTimerLinesAtom.lock.Unlock()
-
-	return &textLineSpecTimerLinesAtom{
-		lock: new(sync.Mutex),
-	}
 }

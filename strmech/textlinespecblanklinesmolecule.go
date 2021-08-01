@@ -153,12 +153,61 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 }
 
 // copyOut - Returns a deep copy of the TextLineSpecBlankLines
-// input parameter 'blkLines'.
+// input parameter 'txtBlankLines'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtBlankLines              *TextLineSpecBlankLines
+//     - A pointer to an instance of TextLineSpecBlankLines. A deep
+//       copy of the internal member variables will be created
+//       and returned in a new instance of TextLineSpecBlankLines.
+//
+//       If the member variable data values encapsulated by this
+//       'txtBlankLines' are found to be invalid, this method will
+//       return an error
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecBlankLines
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'txtBlankLines' will be created and
+//       returned in a new instance of TextLineSpecBlankLines.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
 //
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 	txtBlankLines *TextLineSpecBlankLines,
 	errPrefDto *ePref.ErrPrefixDto) (
-	TextLineSpecBlankLines, error) {
+	TextLineSpecBlankLines,
+	error) {
 
 	if txtBlankLinesMolecule.lock == nil {
 		txtBlankLinesMolecule.lock = new(sync.Mutex)

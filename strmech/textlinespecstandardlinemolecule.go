@@ -185,6 +185,10 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 //       deep copy of the internal member variables will be created
 //       and returned in a new instance of TextLineSpecStandardLine.
 //
+//       If the member variable data values encapsulated by this
+//       'txtStdLine' are found to be invalid, this method will
+//       return an error
+//
 //
 //  errPrefDto          *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is

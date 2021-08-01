@@ -159,6 +159,10 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 //       copy of the internal member variables will be created
 //       and returned in a new instance of TextFieldSpecLabel.
 //
+//       If the member variable data values encapsulated by this
+//       'txtFieldLabel' are found to be invalid, this method will
+//       return an error
+//
 //
 //  errPrefDto          *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
