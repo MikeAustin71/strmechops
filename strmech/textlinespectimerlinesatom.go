@@ -155,40 +155,11 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 		return isValid, err
 	}
 
-	if len(txtTimerLines.startTimeLabel) == 0 {
-		txtTimerLines.startTimeLabel = []rune("Start Time")
-	}
-
-	if len(txtTimerLines.endTimeLabel) == 0 {
-		txtTimerLines.endTimeLabel = []rune("End Time")
-	}
-
-	if len(txtTimerLines.timeDurationLabel) == 0 {
-		txtTimerLines.timeDurationLabel = []rune("Elapsed Time")
-	}
-
-	if len(txtTimerLines.labelOutputSeparationChars) == 0 {
-		txtTimerLines.labelOutputSeparationChars = []rune{' '}
-	}
-
-	if !txtTimerLines.labelJustification.XIsValid() {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'txtTimerLines.labelJustification' is invalid!\n"+
-			"'txtTimerLines.labelJustification' should be 'Left',\n"+
-			"'Right' or 'Center'.\n"+
-			"'txtTimerLines.labelJustification' string value  = '%v'\n"+
-			"'txtTimerLines.labelJustification' integer value = '%v'\n",
-			ePrefix.String(),
-			txtTimerLines.labelJustification.String(),
-			txtTimerLines.labelJustification.XValueInt())
-
-		return isValid, err
-	}
-
-	if txtTimerLines.labelFieldLen < -1 {
+	if txtTimerLines.labelFieldLen > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'txtTimerLines.labelFieldLen' is invalid!\n"+
-			"'txtTimerLines.labelFieldLen' is less than minus one (-1).'\n",
+			"'txtTimerLines.labelFieldLen' is greater than one million "+
+			"(1,000,000)'\n",
 			ePrefix.String())
 
 		return isValid, err
@@ -200,12 +171,53 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 				getDefaultTimeFormat()
 	}
 
-	if txtTimerLines.labelFieldLen > 1000000 {
+	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	if len(txtTimerLines.startTimeLabel) == 0 {
+		txtTimerLines.startTimeLabel =
+			txtTimerLinesElectron.getDefaultStartTimeLabel()
+	}
+
+	if len(txtTimerLines.endTimeLabel) == 0 {
+		txtTimerLines.endTimeLabel =
+			txtTimerLinesElectron.getDefaultEndTimeLabel()
+	}
+
+	if len(txtTimerLines.timeDurationLabel) == 0 {
+		txtTimerLines.timeDurationLabel =
+			txtTimerLinesElectron.getDefaultTimeDurationLabel()
+	}
+
+	if len(txtTimerLines.labelOutputSeparationChars) == 0 {
+		txtTimerLines.labelOutputSeparationChars =
+			txtTimerLinesElectron.getDefaultLabelOutputSeparationCharsLabel()
+	}
+
+	if txtTimerLines.labelFieldLen < -1 {
+		txtTimerLines.labelFieldLen = -1
+	}
+
+	maxLabelLen := len(txtTimerLines.startTimeLabel)
+
+	if len(txtTimerLines.endTimeLabel) > maxLabelLen {
+		maxLabelLen = len(txtTimerLines.endTimeLabel)
+	}
+
+	if len(txtTimerLines.timeDurationLabel) > maxLabelLen {
+		maxLabelLen = len(txtTimerLines.timeDurationLabel)
+	}
+
+	if txtTimerLines.labelFieldLen > maxLabelLen &&
+		!txtTimerLines.labelJustification.XIsValid() {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'txtTimerLines.labelFieldLen' is invalid!\n"+
-			"'txtTimerLines.labelFieldLen' is greater than one million "+
-			"(1,000,000)'\n",
-			ePrefix.String())
+			"Error: 'txtTimerLines.labelJustification' is invalid!\n"+
+			"'txtTimerLines.labelJustification' should be 'Left',\n"+
+			"'Right' or 'Center'.\n"+
+			"'txtTimerLines.labelJustification' string value  = '%v'\n"+
+			"'txtTimerLines.labelJustification' integer value = '%v'\n",
+			ePrefix.String(),
+			txtTimerLines.labelJustification.String(),
+			txtTimerLines.labelJustification.XValueInt())
 
 		return isValid, err
 	}

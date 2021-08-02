@@ -568,8 +568,14 @@ func (blkLines *TextLineSpecBlankLines) EqualITextLine(
 // The value of 'blkLines.newLineChars' will be replicated
 // multiple times as specified by 'blkLines.numBlankLines'.
 //
+// If an error occurs, the error message will be included in the
+// returned string.
+//
 // This method is identical in function to
 // TextLineSpecBlankLines.String()
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 func (blkLines *TextLineSpecBlankLines) GetFormattedText() string {
 
@@ -862,8 +868,14 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 // The value of 'blkLines.newLineChars' will be replicated
 // multiple times as specified by 'blkLines.numBlankLines'.
 //
+// If an error occurs, the error message will be included in the
+// returned string.
+//
 // This method is identical in function to
 // TextLineSpecBlankLines.GetFormattedText()
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 func (blkLines TextLineSpecBlankLines) String() string {
 
