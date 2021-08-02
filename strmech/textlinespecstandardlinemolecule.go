@@ -310,10 +310,14 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 // TextLineSpecStandardLine and proceeds to set all of the internal
 // member variables to their uninitialized or zero states.
 //
-// IMPORTANT
+//
 // ----------------------------------------------------------------
-// The values of all member variables contained in input parameter
-// 'txtStdLine' will be overwritten and deleted.
+//
+// IMPORTANT
+//
+// The data values of all member variables contained in input
+// parameter 'txtStdLine' will be overwritten and deleted.
+//
 //
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
 	txtStdLine *TextLineSpecStandardLine) {

@@ -905,19 +905,38 @@ func (blkLines TextLineSpecBlankLines) String() string {
 	return formattedText
 }
 
-// TextLineSpecName - returns Text Line Specification Name. This
-// method fulfills requirements of ITextSpecification interface.
+// TextLineSpecName - returns Text Line Specification Name.
+//
+// This method fulfills requirements of ITextSpecification
+// interface.
 //
 func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
 
 	return "TextLineSpecBlankLines"
 }
 
 // TextTypeName - returns a string specifying the type
-// of Text Line specification. This method fulfills
-// requirements of ITextSpecification interface.
+// of Text Line specification.
+//
+// This method fulfills requirements of ITextSpecification interface.
 //
 func (blkLines TextLineSpecBlankLines) TextTypeName() string {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
 
 	return "TextLineSpecBlankLines"
 }

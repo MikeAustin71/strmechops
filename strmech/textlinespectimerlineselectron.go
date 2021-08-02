@@ -198,6 +198,54 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 }
 
+// empty - Receives a pointer to an instance of
+// TextLineSpecTimerLines and proceeds to set all of the internal
+// member variables to their uninitialized or zero states.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The data values of all member variables contained in input
+// parameter 'txtTimerLines' will be overwritten and deleted.
+//
+func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) empty(
+	txtTimerLines *TextLineSpecTimerLines) {
+
+	if txtTimerLinesElectron.lock == nil {
+		txtTimerLinesElectron.lock = new(sync.Mutex)
+	}
+
+	txtTimerLinesElectron.lock.Lock()
+
+	defer txtTimerLinesElectron.lock.Unlock()
+
+	if txtTimerLines == nil {
+		return
+	}
+
+	txtTimerLines.startTimeLabel = nil
+
+	txtTimerLines.startTime = time.Time{}
+
+	txtTimerLines.endTimeLabel = nil
+
+	txtTimerLines.endTime = time.Time{}
+
+	txtTimerLines.timeFormat = ""
+
+	txtTimerLines.timeDurationLabel = nil
+
+	txtTimerLines.labelFieldLen = 0
+
+	txtTimerLines.labelJustification = TxtJustify.None()
+
+	txtTimerLines.labelOutputSeparationChars = nil
+
+	return
+}
+
 // getDefaultEndTimeLabel - Returns an array of runes containing
 // the default End Time Label for instances of
 // TextLineSpecTimerLines.

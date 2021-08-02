@@ -1,10 +1,6 @@
 package strmech
 
 type ITextLineSpecification interface {
-	TextTypeName() string
-
-	TextLineSpecName() string
-
 	GetFormattedText() string
 
 	CopyOutITextLine(interface{}) (
@@ -20,4 +16,8 @@ type ITextLineSpecification interface {
 		errorPrefix interface{}) error
 
 	String() string
+
+	TextTypeName() string
+
+	TextLineSpecName() string
 }

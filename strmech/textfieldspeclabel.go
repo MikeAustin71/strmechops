@@ -2108,8 +2108,8 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 	return result
 }
 
-// TextFieldName - returns a string specifying the name
-// of the Text Field specification.
+// TextFieldName - returns a string specifying the name of the Text
+// Field specification.
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
@@ -2127,9 +2127,11 @@ func (txtFieldLabel TextFieldSpecLabel) TextFieldName() string {
 	return "TextFieldSpecLabel"
 }
 
-// TextTypeName - returns a string specifying the type
-// of Text Field specification. This method fulfills
-// the requirements of the ITextSpecification interface.
+// TextTypeName - returns a string specifying the type of Text
+// Field specification.
+//
+// This method fulfills the requirements of the ITextSpecification
+// interface.
 //
 func (txtFieldLabel TextFieldSpecLabel) TextTypeName() string {
 
