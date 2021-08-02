@@ -655,6 +655,9 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerCharsRepeatCount() int {
 // This method is identical in function to
 // TextFieldSpecFiller.String()
 //
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -2228,6 +2231,9 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 //
 // This method is identical in function to
 // TextFieldSpecFiller.GetFormattedText()
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
 //
 //
 // ------------------------------------------------------------------------

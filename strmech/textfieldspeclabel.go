@@ -593,6 +593,9 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFieldLength() int {
 // This method is identical in function to
 // TextFieldSpecLabel.String()
 //
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -2043,6 +2046,9 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 // This method is identical in function to
 // TextFieldSpecLabel.GetFormattedText()
 //
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -2103,8 +2109,10 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 }
 
 // TextFieldName - returns a string specifying the name
-// of the Text Field specification. This method fulfills
-// the requirements of the ITextFieldSpecification interface.
+// of the Text Field specification.
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
 //
 func (txtFieldLabel TextFieldSpecLabel) TextFieldName() string {
 
