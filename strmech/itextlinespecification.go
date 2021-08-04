@@ -3,7 +3,8 @@ package strmech
 type ITextLineSpecification interface {
 	GetFormattedText() string
 
-	CopyOutITextLine(interface{}) (
+	CopyOutITextLine(
+		errorPrefix interface{}) (
 		ITextLineSpecification,
 		error)
 

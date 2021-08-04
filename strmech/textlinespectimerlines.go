@@ -259,6 +259,127 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOut(
 		ePrefix.XCtx("txtSpecTimerLines->"))
 }
 
+// CopyOutITextLine - Returns a deep copy of the current
+// TextLineSpecTimerLines instance cast as a type
+// ITextLineSpecification.
+//
+// This method fulfills requirements of ITextLineSpecification
+// interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ITextLineSpecification
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current TextLineSpecTimerLines instance cast as an
+//       ITextLineSpecification object.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutITextLine(
+	errorPrefix interface{}) (
+	ITextLineSpecification,
+	error) {
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines.CopyOutITextLine()",
+		"")
+
+	if err != nil {
+		return &TextLineSpecTimerLines{}, err
+	}
+
+	var newTxtLineSpecTimerLine TextLineSpecTimerLines
+
+	newTxtLineSpecTimerLine,
+		err = textLineSpecTimerLinesNanobot{}.ptr().
+		copyOut(
+			txtSpecTimerLines,
+			ePrefix.XCtx(
+				"txtSpecTimerLines->"))
+
+	if err != nil {
+		return &TextLineSpecTimerLines{}, err
+	}
+
+	return ITextLineSpecification(
+		&newTxtLineSpecTimerLine), nil
+}
+
 // CopyOutPtr - Returns a pointer to a deep copy of the current
 // TextLineSpecTimerLines instance.
 //
@@ -425,6 +546,43 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Equal(
 			incomingTxtSpecTimerLines)
 }
 
+// EqualITextLine - Receives an object implementing the
+// ITextLineSpecification interface and proceeds to compare
+// the member variables to those of the current
+// TextLineSpecTimerLines instance in order to determine if
+// they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables from both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+// This method is required by interface ITextLineSpecification.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) EqualITextLine(
+	iTextLine ITextLineSpecification) bool {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	incomingTxtSpecTimerLines, ok :=
+		iTextLine.(*TextLineSpecTimerLines)
+
+	if !ok {
+		return false
+	}
+
+	return textLineSpecTimerLinesAtom{}.ptr().
+		equal(
+			txtSpecTimerLines,
+			incomingTxtSpecTimerLines)
+}
+
 // GetFormattedText - Returns the formatted text generated by this
 // Text Line Specification for text display output and printing.
 //
@@ -472,6 +630,110 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText() string {
 	}
 
 	return formattedText
+}
+
+// IsValidInstanceError - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecTimerLines
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return an error.
+//
+// If the number of standard lines for the current
+// TextLineSpecTimerLines is set to a value less than one, this
+// method will consider the current TextLineSpecTimerLines instance
+// invalid and return an error.
+//
+// This method fulfills requirements of ITextLineSpecification
+// interface.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If any of the internal member data variables contained in
+//       the current instance of TextLineSpecTimerLines are found
+//       to be invalid, this method will return an error.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines.IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = textLineSpecTimerLinesAtom{}.ptr().
+		testValidityOfTxtSpecTimerLines(
+			txtSpecTimerLines,
+			ePrefix.XCtx("txtSpecTimerLines"))
+
+	return err
 }
 
 // String - Returns the formatted text generated by this

@@ -336,19 +336,12 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) equal(
 		return false
 	}
 
-	lenInTxtFiller := len(incomingTxtFieldFiller.fillerCharacters)
+	sMechPreon := strMechPreon{}
 
-	if lenInTxtFiller != len(txtFieldFiller.fillerCharacters) {
+	if !sMechPreon.equalRuneArrays(
+		txtFieldFiller.fillerCharacters,
+		incomingTxtFieldFiller.fillerCharacters) {
 		return false
-	}
-
-	if lenInTxtFiller > 0 {
-		for i := 0; i < lenInTxtFiller; i++ {
-			if incomingTxtFieldFiller.fillerCharacters[i] !=
-				txtFieldFiller.fillerCharacters[i] {
-				return false
-			}
-		}
 	}
 
 	return true

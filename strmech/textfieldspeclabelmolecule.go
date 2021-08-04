@@ -327,20 +327,12 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
 		return false
 	}
 
-	lenInTxtRunes := len(incomingTxtLabel.textLabel)
+	sMechPreon := strMechPreon{}
 
-	if lenInTxtRunes !=
-		len(txtLabel.textLabel) {
+	if !sMechPreon.equalRuneArrays(
+		txtLabel.textLabel,
+		incomingTxtLabel.textLabel) {
 		return false
-	}
-
-	if lenInTxtRunes > 0 {
-		for i := 0; i < lenInTxtRunes; i++ {
-			if incomingTxtLabel.textLabel[i] !=
-				txtLabel.textLabel[i] {
-				return false
-			}
-		}
 	}
 
 	if txtLabel.fieldLen !=

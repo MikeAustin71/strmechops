@@ -262,6 +262,9 @@ func (blkLines *TextLineSpecBlankLines) CopyOut(
 // TextLineSpecBlankLines instance cast as a type
 // ITextLineSpecification.
 //
+// This method fulfills requirements of ITextLineSpecification
+// interface.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -659,6 +662,10 @@ func (blkLines *TextLineSpecBlankLines) GetNumOfBlankLines() int {
 // method will consider the current TextLineSpecBlankLines instance
 // invalid and return an error.
 //
+// This method fulfills requirements of ITextLineSpecification
+// interface.
+//
+//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
@@ -907,7 +914,7 @@ func (blkLines TextLineSpecBlankLines) String() string {
 
 // TextLineSpecName - returns Text Line Specification Name.
 //
-// This method fulfills requirements of ITextSpecification
+// This method fulfills requirements of ITextLineSpecification
 // interface.
 //
 func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
@@ -926,7 +933,8 @@ func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
 // TextTypeName - returns a string specifying the type
 // of Text Line specification.
 //
-// This method fulfills requirements of ITextSpecification interface.
+// This method fulfills requirements of ITextLineSpecification
+// interface.
 //
 func (blkLines TextLineSpecBlankLines) TextTypeName() string {
 
