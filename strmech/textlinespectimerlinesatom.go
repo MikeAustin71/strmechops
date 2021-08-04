@@ -282,18 +282,7 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 		txtTimerLines.labelFieldLen = -1
 	}
 
-	maxLabelLen := len(txtTimerLines.startTimeLabel)
-
-	if len(txtTimerLines.endTimeLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.endTimeLabel)
-	}
-
-	if len(txtTimerLines.timeDurationLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.timeDurationLabel)
-	}
-
-	if txtTimerLines.labelFieldLen > maxLabelLen &&
-		!txtTimerLines.labelJustification.XIsValid() {
+	if !txtTimerLines.labelJustification.XIsValid() {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'txtTimerLines.labelJustification' is invalid!\n"+
 			"'txtTimerLines.labelJustification' should be 'Left',\n"+
