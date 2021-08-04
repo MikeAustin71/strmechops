@@ -114,6 +114,104 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 	return true
 }
 
+// testValidityOfEndTime - Tests the validity of the ending
+// time parameter for an instance of TextLineSpecTimerLines.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  endTime                    time.Time
+//     - The ending time parameter must be a non-zero value.
+//       If a zero value is submitted the time value will be
+//       declared invalid.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid                    bool
+//     - If input parameter 'endTime' is judged to be valid
+//       in all respects, this return parameter will be set to
+//       'true'.
+//
+//     - If input parameter 'endTime' is found to be invalid,
+//       this return parameter will be set to 'false'.
+//
+//
+//  err                        error
+//     - If input parameter 'endTime' is judged to be valid
+//       in all respects, this return parameter will be set to
+//       'nil'.
+//
+//       If input parameter, 'endTime' is found to be invalid,
+//       this return parameter will be configured with an
+//       appropriate error message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfEndTime(
+	endTime time.Time,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if txtTimerLinesAtom.lock == nil {
+		txtTimerLinesAtom.lock = new(sync.Mutex)
+	}
+
+	txtTimerLinesAtom.lock.Lock()
+
+	defer txtTimerLinesAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecTimerLinesAtom.testValidityOfEndTime()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if endTime.IsZero() {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'endTime' is invalid!\n"+
+			"The 'endTime' time value is zero.",
+			ePrefix.String())
+		return isValid, err
+	}
+
+	isValid = true
+
+	return isValid, err
+}
+
 // testValidityOfStartTime - Tests the validity of the starting
 // time parameter for an instance of TextLineSpecTimerLines.
 //
