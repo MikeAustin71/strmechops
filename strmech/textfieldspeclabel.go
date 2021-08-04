@@ -660,10 +660,17 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText() string {
 // position the text label string with a text field.
 //
 // The text justification enumeration specification should be set
-// to one of three values:
+// to one of three valid values:
 //           TextJustify(0).Left()
 //           TextJustify(0).Right()
 //           TextJustify(0).Center()
+//
+// You can also use the abbreviated text justification enumeration
+// syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
 //
 func (txtFieldLabel *TextFieldSpecLabel) GetTextJustification() TextJustify {
 

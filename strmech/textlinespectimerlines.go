@@ -342,6 +342,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutITextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
 	error) {
+
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
 	}
@@ -632,6 +633,205 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText() string {
 	return formattedText
 }
 
+// GetEndTimeLabel - Returns the internal member variable
+// 'endTimeLabel' as a rune array.
+//
+// 'endTimeLabel' is a text label inserted in the output
+// string to describe the ending time presentation.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() []rune {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.endTimeLabel
+}
+
+// GetEndTime - Returns the internal member variable 'startTime'
+// as time.Time value.
+//
+// The ending time is the end of the timing event
+// described by this instance of TextLineSpecTimerLines.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.endTime
+}
+
+// GetStartTimeLabel - Returns the internal member variable
+// 'startTimeLabel' as a rune array.
+//
+// 'startTimeLabel' is a text label inserted in the output
+// string to describe the starting time presentation.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() []rune {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.startTimeLabel
+}
+
+// GetStartTime - Returns the internal member variable 'startTime'
+// as time.Time value.
+//
+// The starting time is the start or beginning of the timing event
+// described by this instance of TextLineSpecTimerLines.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTime() time.Time {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.startTime
+}
+
+// GetLabelFieldLen - Returns the internal member variable
+// 'labelFieldLen' as an integer value.
+//
+// The Label Field Length specifies the length of the text field in
+// which all three labels, 'startTimeLabel', 'endTimeLabel' and
+// 'timeDurationLabel', will be positioned and justified.
+//
+// If Label Field Length is longer thant the length of the longest
+// label string, the Text Justification specification
+// 'labelJustification' will be applied to position all three
+// labels in their text fields. Text Justification can be set to
+// 'Right', 'Left' or 'Center'.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelFieldLen() int {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.labelFieldLen
+}
+
+// GetLabelJustification - Returns the internal member variable
+// 'labelJustification'.
+//
+// The Label Justification specification is of type, TextJustify.
+// TextJustify is an enumeration which specifies the position of a
+// string of text within a text field.
+//
+// The text justification enumeration specification should be set
+// to one of three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+// You can also use the abbreviated text justification enumeration
+// syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJustify {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.labelJustification
+}
+
+// GetLabelOutputSeparationChars - Returns the internal member
+// variable, 'labelOutputSeparationChars', as an array of runes.
+//
+// The 'labelOutputSeparationChars' is one or more characters used
+// to separate the text labels, 'startTime', 'endTime' and
+// 'timeDuration' from their respective output values. Usually,
+// 'labelOutputSeparationChars' is set to either a single white
+// space character or the default value which is a colon and a
+// white space character (": ").
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars() []rune {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.labelOutputSeparationChars
+}
+
+// GetTimeDurationLabel - Returns the internal member variable
+// 'timeDurationLabel' as an array of runes.
+//
+// 'timeDurationLabel' is a text label inserted in the output
+// string to describe the elapsed time presentation.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() []rune {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.timeDurationLabel
+}
+
+// GetTimeFormat - Returns the internal member variable
+// 'timeFormat'. This time format specification is used to format
+// all time values in text strings.
+//
+// The Go Programming language uses pattern formatting to format
+// time values. Reference:
+//   https://pkg.go.dev/time#Time.Format
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeFormat() string {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.timeFormat
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecTimerLines
 // instance to determine if they are valid.
@@ -713,6 +913,14 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText() string {
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 	errorPrefix interface{}) error {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
