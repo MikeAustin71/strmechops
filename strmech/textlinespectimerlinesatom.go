@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
+	"time"
 )
 
 type textLineSpecTimerLinesAtom struct {
@@ -113,6 +114,104 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 	return true
 }
 
+// testValidityOfStartTime - Tests the validity of the starting
+// time parameter for an instance of TextLineSpecTimerLines.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  startTime                  time.Time
+//     - The starting time parameter must be a non-zero
+//       value. If a zero value is submitted the time value
+//       will be declared invalid.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid                    bool
+//     - If input parameter 'startTime' is judged to be valid
+//       in all respects, this return parameter will be set to
+//       'true'.
+//
+//     - If input parameter 'startTime' is found to be invalid,
+//       this return parameter will be set to 'false'.
+//
+//
+//  err                        error
+//     - If input parameter 'startTime' is judged to be valid
+//       in all respects, this return parameter will be set to
+//       'nil'.
+//
+//       If input parameter, 'startTime' is found to be invalid,
+//       this return parameter will be configured with an
+//       appropriate error message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfStartTime(
+	startTime time.Time,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if txtTimerLinesAtom.lock == nil {
+		txtTimerLinesAtom.lock = new(sync.Mutex)
+	}
+
+	txtTimerLinesAtom.lock.Lock()
+
+	defer txtTimerLinesAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	isValid = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecTimerLinesAtom.testValidityOfStartTime()",
+		"")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	if startTime.IsZero() {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'startTime' is invalid!\n"+
+			"The 'startTime' time value is zero.",
+			ePrefix.String())
+		return isValid, err
+	}
+
+	isValid = true
+
+	return isValid, err
+}
+
 // testValidityOfTxtSpecTimerLines - Receives a pointer to an
 // instance of TextLineSpecTimerLines and performs a diagnostic
 // analysis to determine if that instance is valid in all respects.
@@ -156,20 +255,20 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 // Return Values
 //
 //  isValid                    bool
-//     - If input parameter 'txtBlankLines' is judged to be valid
+//     - If input parameter 'txtTimerLines' is judged to be valid
 //       in all respects, this return parameter will be set to
 //       'true'.
 //
-//     - If input parameter 'txtBlankLines' is found to be invalid,
+//     - If input parameter 'txtTimerLines' is found to be invalid,
 //       this return parameter will be set to 'false'.
 //
 //
 //  err                        error
-//     - If input parameter 'txtBlankLines' is judged to be valid
+//     - If input parameter 'txtTimerLines' is judged to be valid
 //       in all respects, this return parameter will be set to
 //       'nil'.
 //
-//       If input parameter, 'txtBlankLines' is found to be
+//       If input parameter, 'txtTimerLines' is found to be
 //       invalid, this return parameter will be configured with an
 //       appropriate error message.
 //
