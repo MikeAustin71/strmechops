@@ -336,22 +336,12 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 		return false
 	}
 
-	lenCurrBlkLineChars := len(txtBlankLinesOne.newLineChars)
+	sMechPreon := strMechPreon{}
 
-	if lenCurrBlkLineChars !=
-		len(txtBlankLinesTwo.newLineChars) {
+	if !sMechPreon.equalRuneArrays(
+		txtBlankLinesOne.newLineChars,
+		txtBlankLinesTwo.newLineChars) {
 		return false
-	}
-
-	if lenCurrBlkLineChars > 0 {
-
-		for i := 0; i < lenCurrBlkLineChars; i++ {
-
-			if txtBlankLinesOne.newLineChars[i] !=
-				txtBlankLinesTwo.newLineChars[i] {
-				return false
-			}
-		}
 	}
 
 	return true

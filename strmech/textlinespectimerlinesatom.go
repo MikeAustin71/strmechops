@@ -28,6 +28,91 @@ func (txtTimerLinesAtom textLineSpecTimerLinesAtom) ptr() *textLineSpecTimerLine
 	}
 }
 
+// equal - Receives pointers to two TextLineSpecTimerLines
+// instances and proceeds to compare the member data elements to
+// determine whether they are equal.
+//
+// If the data elements of both input parameters 'txtTimerLinesOne'
+// and 'txtTimerLinesTwo' are equal in all respects, this method
+// returns a boolean value of 'true'. Otherwise this method returns
+// 'false'.
+//
+func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
+	txtTimerLinesOne *TextLineSpecTimerLines,
+	txtTimerLinesTwo *TextLineSpecTimerLines) bool {
+
+	if txtTimerLinesAtom.lock == nil {
+		txtTimerLinesAtom.lock = new(sync.Mutex)
+	}
+
+	txtTimerLinesAtom.lock.Lock()
+
+	defer txtTimerLinesAtom.lock.Unlock()
+
+	if txtTimerLinesOne == nil {
+
+		return false
+	}
+
+	if txtTimerLinesTwo == nil {
+
+		return false
+	}
+
+	sMechPreon := strMechPreon{}
+
+	if !sMechPreon.equalRuneArrays(
+		txtTimerLinesOne.startTimeLabel,
+		txtTimerLinesTwo.startTimeLabel) {
+		return false
+	}
+
+	if txtTimerLinesOne.startTime !=
+		txtTimerLinesTwo.startTime {
+		return false
+	}
+
+	if !sMechPreon.equalRuneArrays(
+		txtTimerLinesOne.endTimeLabel,
+		txtTimerLinesTwo.endTimeLabel) {
+		return false
+	}
+
+	if txtTimerLinesOne.endTime !=
+		txtTimerLinesTwo.endTime {
+		return false
+	}
+
+	if txtTimerLinesOne.timeFormat !=
+		txtTimerLinesTwo.timeFormat {
+		return false
+	}
+
+	if !sMechPreon.equalRuneArrays(
+		txtTimerLinesOne.timeDurationLabel,
+		txtTimerLinesTwo.timeDurationLabel) {
+		return false
+	}
+
+	if txtTimerLinesOne.labelFieldLen !=
+		txtTimerLinesTwo.labelFieldLen {
+		return false
+	}
+
+	if txtTimerLinesOne.labelJustification !=
+		txtTimerLinesTwo.labelJustification {
+		return false
+	}
+
+	if !sMechPreon.equalRuneArrays(
+		txtTimerLinesOne.labelOutputSeparationChars,
+		txtTimerLinesTwo.labelOutputSeparationChars) {
+		return false
+	}
+
+	return true
+}
+
 // testValidityOfTxtSpecTimerLines - Receives a pointer to an
 // instance of TextLineSpecTimerLines and performs a diagnostic
 // analysis to determine if that instance is valid in all respects.

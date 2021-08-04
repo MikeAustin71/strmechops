@@ -352,10 +352,9 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
 // instances and proceeds to compare the member data elements to
 // determine whether they are equal.
 //
-// If the data elements of both input parameters 'blkLines' and
-// 'incomingBlkLines' are equal in all respects, this method
-// returns a boolean value of 'true'. Otherwise this method returns
-// 'false'.
+// If the data elements of both input parameters 'stdLineOne' and
+// 'stdLineTwo' are equal in all respects, this method returns a
+// boolean value of 'true'. Otherwise this method returns 'false'.
 //
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 	stdLineOne *TextLineSpecStandardLine,
@@ -381,19 +380,12 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 		return false
 	}
 
-	lenOneTextTermChars := len(stdLineOne.newLineChars)
+	sMechPreon := strMechPreon{}
 
-	if lenOneTextTermChars != len(stdLineTwo.newLineChars) {
+	if !sMechPreon.equalRuneArrays(
+		stdLineOne.newLineChars,
+		stdLineTwo.newLineChars) {
 		return false
-	}
-
-	if lenOneTextTermChars > 0 {
-		for i := 0; i < lenOneTextTermChars; i++ {
-			if stdLineOne.newLineChars[i] !=
-				stdLineTwo.newLineChars[i] {
-				return false
-			}
-		}
 	}
 
 	if stdLineOne.turnLineTerminatorOff !=
