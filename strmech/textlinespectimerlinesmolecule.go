@@ -116,6 +116,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
+	// Used to compute summary time duration left margin
 	maxLabelLen := 0
 
 	if len(txtTimerLines.startTimeLabel) > maxLabelLen {
@@ -133,6 +134,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	if txtTimerLines.labelFieldLen > maxLabelLen {
 		maxLabelLen = txtTimerLines.labelFieldLen
 	}
+
+	maxLabelLen += len(txtTimerLines.labelOutputSeparationChars)
 
 	// Begin First Line
 	var txtDescLabel *TextFieldSpecLabel
