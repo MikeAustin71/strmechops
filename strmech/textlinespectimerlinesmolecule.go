@@ -90,7 +90,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecTimerLinesMolecule.getFormattedText()",
+		"textLineSpecTimerLinesMolecule."+
+			"getFormattedText()",
 		"")
 
 	if err != nil {
@@ -113,6 +114,24 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	if err != nil {
 		return "", err
+	}
+
+	maxLabelLen := 0
+
+	if len(txtTimerLines.startTimeLabel) > maxLabelLen {
+		maxLabelLen = len(txtTimerLines.startTimeLabel)
+	}
+
+	if len(txtTimerLines.endTimeLabel) > maxLabelLen {
+		maxLabelLen = len(txtTimerLines.endTimeLabel)
+	}
+
+	if len(txtTimerLines.timeDurationLabel) > maxLabelLen {
+		maxLabelLen = len(txtTimerLines.timeDurationLabel)
+	}
+
+	if txtTimerLines.labelFieldLen > maxLabelLen {
+		maxLabelLen = txtTimerLines.labelFieldLen
 	}
 
 	// Begin First Line
@@ -248,37 +267,24 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	// Begin 3rd Standard Line
+	// Begin summary time duration lines
 
-	txtDescLabel,
-		err = TextFieldSpecLabel{}.NewConstructorRunes(
-		txtTimerLines.timeDurationLabel,
-		txtTimerLines.labelFieldLen,
-		txtTimerLines.labelJustification,
+	var txtFillerSumLeftMar *TextFieldSpecFiller
+
+	txtFillerSumLeftMar,
+		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		[]rune{' '},
+		maxLabelLen,
 		ePrefix.XCtx(
-			"txtTimerLines.timeDurationLabel"))
+			"Summary Line Left Margin"))
 
 	if err != nil {
 		return "", err
 	}
 
-	stdLine = TextLineSpecStandardLine{}.New()
+	var timeDurationStrs []string
 
-	stdLine.AddTextField(txtDescLabel)
-
-	txtFiller2,
-		err = txtFiller.CopyOut(
-		ePrefix.XCtx("txtFiller.CopyOut()"))
-
-	if err != nil {
-		return "", err
-	}
-
-	stdLine.AddTextField(&txtFiller2)
-
-	var timeDurationStr string
-
-	timeDurationStr,
+	timeDurationStrs,
 		err = textLineSpecTimerLinesElectron{}.ptr().
 		computeTimeDuration(
 			txtTimerLines.startTime,
@@ -289,29 +295,107 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	txtOutputLabel,
-		err = TextFieldSpecLabel{}.NewTextLabel(
-		timeDurationStr,
-		-1,
-		TxtJustify.Left(),
-		ePrefix.XCtx(
-			"timeDurationStr"))
+	for i := 0; i < len(timeDurationStrs); i++ {
 
-	stdLine.AddTextField(&txtOutputLabel)
+		stdLine = TextLineSpecStandardLine{}.New()
 
-	_,
-		err2 = sb.WriteString(stdLine.String())
+		if i == 0 {
 
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned by third standard line.\n"+
-			"sb.WriteString(stdLine.String())\n"+
-			"%v\n",
-			ePrefix.ZCtxEmpty().String(),
-			err2.Error())
+			txtDescLabel,
+				err = TextFieldSpecLabel{}.NewConstructorRunes(
+				txtTimerLines.timeDurationLabel,
+				txtTimerLines.labelFieldLen,
+				txtTimerLines.labelJustification,
+				ePrefix.XCtx(
+					"txtTimerLines.timeDurationLabel"))
 
-		return "", err
-	}
+			if err != nil {
+				return "", err
+			}
+
+			stdLine.AddTextField(txtDescLabel)
+
+			txtFiller2,
+				err = txtFiller.CopyOut(
+				ePrefix.XCtx("txtFiller.CopyOut()"))
+
+			if err != nil {
+				return "", err
+			}
+
+			stdLine.AddTextField(&txtFiller2)
+
+			txtOutputLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				timeDurationStrs[i],
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCtx(
+					"summary timeDurationStr #1"))
+
+			if err != nil {
+				return "", err
+			}
+
+			stdLine.AddTextField(&txtOutputLabel)
+
+			_,
+				err2 = sb.WriteString(stdLine.String())
+
+			if err2 != nil {
+				err = fmt.Errorf("%v\n"+
+					"Error returned by summary line #1.\n"+
+					"sb.WriteString(stdLine.String())\n"+
+					"%v\n",
+					ePrefix.ZCtxEmpty().String(),
+					err2.Error())
+
+				return "", err
+			}
+
+		} else {
+
+			txtFiller2,
+				err = txtFillerSumLeftMar.CopyOut(
+				ePrefix.XCtx("txtFillerSumLeftMar.CopyOut()"))
+
+			if err != nil {
+				return "", err
+			}
+
+			stdLine.AddTextField(&txtFiller2)
+
+			txtOutputLabel,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				timeDurationStrs[i],
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCtx(
+					fmt.Sprintf("summary timeDurationStr #%v",
+						i+1)))
+
+			if err != nil {
+				return "", err
+			}
+
+			stdLine.AddTextField(&txtOutputLabel)
+			_,
+				err2 = sb.WriteString(stdLine.String())
+
+			if err2 != nil {
+				err = fmt.Errorf("%v\n"+
+					"Error returned by summary line #%v.\n"+
+					"sb.WriteString(stdLine.String())\n"+
+					"%v\n",
+					ePrefix.ZCtxEmpty().String(),
+					i+1,
+					err2.Error())
+
+				return "", err
+			}
+
+		} // End of 'else'
+	} // End of time duration strings for loop
 
 	return sb.String(), nil
 }

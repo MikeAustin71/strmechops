@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -24,7 +25,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	startTime time.Time,
 	endTime time.Time,
 	errPrefDto *ePref.ErrPrefixDto) (
-	timeDurationStr string,
+	timeDurationStrs []string,
 	err error) {
 
 	if txtTimerLinesElectron.lock == nil {
@@ -37,7 +38,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	timeDurationStr = ""
+	timeDurationStrs = nil
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -47,7 +48,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		"")
 
 	if err != nil {
-		return timeDurationStr, err
+		return timeDurationStrs, err
 	}
 
 	if startTime.IsZero() {
@@ -55,7 +56,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			"Error: Input time parameter 'startTime' has a zero value!\n",
 			ePrefix.String())
 
-		return timeDurationStr, err
+		return timeDurationStrs, err
 	}
 
 	if endTime.IsZero() {
@@ -63,7 +64,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			"Error: Input time parameter 'endTime' has a zero value!\n",
 			ePrefix.String())
 
-		return timeDurationStr, err
+		return timeDurationStrs, err
 	}
 
 	if endTime.Before(startTime) {
@@ -82,7 +83,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			startTime.Format(timeFormat),
 			endTime.Format(timeFormat))
 
-		return timeDurationStr, err
+		return timeDurationStrs, err
 	}
 
 	// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond
@@ -109,6 +110,8 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	t2Dur := endTime.Sub(startTime)
 
 	totalNanoseconds := t2Dur.Nanoseconds()
+	summaryNanoseconds := totalNanoseconds
+
 	numOfDays := int64(0)
 	numOfHours := int64(0)
 	numOfMinutes := int64(0)
@@ -155,46 +158,237 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 	numOfNanoseconds = totalNanoseconds
 
+	var nStrIntSeparator IntegerSeparatorDto
+
+	nStrIntSeparator,
+		err = IntegerSeparatorDto{}.
+		NewUnitedStatesDefaults(
+			ePrefix.XCtxEmpty())
+
+	if err != nil {
+		return timeDurationStrs, err
+	}
+
+	nStrIntSepMolecule := integerSeparatorDtoMolecule{}
+
+	outputLine := ""
+	outputValStr := ""
+	var numStrWithIntSeps []rune
+
+	// numOfDays
 	if numOfDays > 0 {
-		timeDurationStr += fmt.Sprintf(
-			"%v-Days ", numOfDays)
+
+		outputValStr =
+			strconv.FormatInt(numOfDays, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(outputValStr),
+				ePrefix.XCtx("numOfDays"))
+
+		if err != nil {
+			return timeDurationStrs, err
+		}
+
+		outputLine += fmt.Sprintf(
+			"%v Days ",
+			string(numStrWithIntSeps))
+
+		if len(outputLine) >= 50 {
+			timeDurationStrs = append(
+				timeDurationStrs, outputLine)
+			outputLine = ""
+		}
 	}
 
-	if numOfHours > 0 || timeDurationStr != "" {
+	// numOfHours
+	if numOfHours > 0 || outputLine != "" {
 
-		timeDurationStr += fmt.Sprintf("%v-Hours ", numOfHours)
+		outputValStr =
+			strconv.FormatInt(numOfHours, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(outputValStr),
+				ePrefix.XCtx("numOfHours"))
+
+		if err != nil {
+			return timeDurationStrs, err
+		}
+
+		outputLine += fmt.Sprintf(
+			"%v Hours ",
+			string(numStrWithIntSeps))
+
+		if len(outputLine) >= 50 {
+			timeDurationStrs = append(
+				timeDurationStrs, outputLine)
+			outputLine = ""
+		}
 
 	}
 
-	if numOfMinutes > 0 || timeDurationStr != "" {
+	// numOfMinutes
+	if numOfMinutes > 0 || outputLine != "" {
 
-		timeDurationStr += fmt.Sprintf("%v-Minutes ", numOfMinutes)
+		outputValStr =
+			strconv.FormatInt(numOfMinutes, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(outputValStr),
+				ePrefix.XCtx("numOfMinutes"))
+
+		if err != nil {
+			return timeDurationStrs, err
+		}
+
+		outputLine += fmt.Sprintf("%v Minutes ",
+			string(numStrWithIntSeps))
+
+		if len(outputLine) >= 50 {
+			timeDurationStrs = append(
+				timeDurationStrs, outputLine)
+			outputLine = ""
+		}
 
 	}
 
-	if numOfSeconds > 0 || timeDurationStr != "" {
+	// numOfSeconds
+	if numOfSeconds > 0 || outputLine != "" {
 
-		timeDurationStr += fmt.Sprintf("%v-Seconds ", numOfSeconds)
+		outputValStr =
+			strconv.FormatInt(numOfSeconds, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(outputValStr),
+				ePrefix.XCtx("numOfSeconds"))
+
+		if err != nil {
+			return timeDurationStrs, err
+		}
+
+		outputLine += fmt.Sprintf("%v Seconds ",
+			string(numStrWithIntSeps))
+
+		if len(outputLine) >= 50 {
+			timeDurationStrs = append(
+				timeDurationStrs, outputLine)
+			outputLine = ""
+		}
 
 	}
 
-	if numOfMilliseconds > 0 || timeDurationStr != "" {
+	// numOfMilliseconds
+	if numOfMilliseconds > 0 || outputLine != "" {
 
-		timeDurationStr += fmt.Sprintf("%v-Milliseconds ", numOfMilliseconds)
+		outputValStr =
+			strconv.FormatInt(numOfMilliseconds, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(outputValStr),
+				ePrefix.XCtx("numOfMilliseconds"))
+
+		if err != nil {
+			return timeDurationStrs, err
+		}
+
+		outputLine += fmt.Sprintf(
+			"%v Milliseconds ",
+			string(numStrWithIntSeps))
+
+		if len(outputLine) >= 50 {
+			timeDurationStrs = append(
+				timeDurationStrs, outputLine)
+			outputLine = ""
+		}
 
 	}
 
-	if numOfMicroseconds > 0 || timeDurationStr != "" {
+	// numOfMicroseconds
+	if numOfMicroseconds > 0 || outputLine != "" {
 
-		timeDurationStr += fmt.Sprintf("%v-Microseconds ", numOfMicroseconds)
+		outputValStr =
+			strconv.FormatInt(numOfMicroseconds, 10)
+
+		numStrWithIntSeps,
+			err =
+			nStrIntSepMolecule.applyIntSeparators(
+				&nStrIntSeparator,
+				[]rune(outputValStr),
+				ePrefix.XCtx("numOfMicroseconds"))
+
+		if err != nil {
+			return timeDurationStrs, err
+		}
+
+		outputLine += fmt.Sprintf(
+			"%v Microseconds ",
+			string(numStrWithIntSeps))
+
+		if len(outputLine) >= 50 {
+			timeDurationStrs = append(
+				timeDurationStrs, outputLine)
+			outputLine = ""
+		}
 
 	}
 
-	timeDurationStr += fmt.Sprintf("%v-Nanoseconds", numOfNanoseconds)
+	// numOfNanoseconds
 
-	timeDurationStr += fmt.Sprintf(" - Total Elapsed Nanoseconds: %v", numOfNanoseconds)
+	outputValStr =
+		strconv.FormatInt(numOfNanoseconds, 10)
 
-	return timeDurationStr, err
+	numStrWithIntSeps,
+		err =
+		nStrIntSepMolecule.applyIntSeparators(
+			&nStrIntSeparator,
+			[]rune(outputValStr),
+			ePrefix.XCtx("numOfNanoseconds"))
+
+	if err != nil {
+		return timeDurationStrs, err
+	}
+
+	outputLine += fmt.Sprintf(
+		"%v Nanoseconds",
+		string(numStrWithIntSeps))
+
+	timeDurationStrs = append(
+		timeDurationStrs, outputLine)
+
+	// summaryNanoseconds
+
+	outputValStr =
+		strconv.FormatInt(summaryNanoseconds, 10)
+
+	numStrWithIntSeps,
+		err =
+		nStrIntSepMolecule.applyIntSeparators(
+			&nStrIntSeparator,
+			[]rune(outputValStr),
+			ePrefix.XCtx("summaryNanoseconds"))
+
+	outputLine =
+		fmt.Sprintf(" Total Elapsed Nanoseconds: %v",
+			string(numStrWithIntSeps))
+
+	timeDurationStrs = append(
+		timeDurationStrs, outputLine)
+
+	return timeDurationStrs, err
 
 }
 
