@@ -21,9 +21,65 @@ type textLineSpecTimerLinesElectron struct {
 // total nanoseconds. The output text display of these values begins
 // with the first category that has the first non-zero value.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  startTime                  time.Time
+//     - The starting time for the time duration event.
+//
+//  endTime                    time.Time
+//     - The ending time for the time duration event.
+//
+//  summaryTextLineLeftMargin  int
+//     - The left margin to be used in outputting the summary text
+//       line strings for text display or printing. The length of
+//       the returned time duration strings ('timeDurationStrs')
+//       will be computed and adjusted using this left margin value
+//       so that no time duration result string will exceed a
+//       length of 78-characters.
+//
+//       If 'summaryTextLineLeftMargin' is less than zero (0) or
+//       greater than sixty (60), this method will return an error.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  timeDurationStrs           []string
+//     - An array of text strings presenting the results of the time
+//       duration computation.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration(
 	startTime time.Time,
 	endTime time.Time,
+	summaryTextLineLeftMargin int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	timeDurationStrs []string,
 	err error) {
@@ -86,11 +142,25 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		return timeDurationStrs, err
 	}
 
-	// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond
+	if summaryTextLineLeftMargin < 0 ||
+		summaryTextLineLeftMargin > 60 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'summaryTextLineLeftMargin' is invalid!\n"+
+			"The valid range for 'summaryTextLineLeftMargin' is 0-60,"+
+			"inclusive.\n"+
+			"summaryTextLineLeftMargin= '%v'\n",
+			ePrefix.String(),
+			summaryTextLineLeftMargin)
+
+		return timeDurationStrs, err
+	}
+
+	// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond.
 	// 	A MicroSecond is 1/1,000,000 or 1 one-millionth of a second
 	MicroSecondNanoseconds := int64(time.Microsecond)
 
-	// MilliSecondNanoseconds - Number of Nanoseconds in a MilliSecond
+	// MilliSecondNanoseconds - Number of Nanoseconds in a MilliSecond.
 	//	 A millisecond is 1/1,000 or 1 one-thousandth of a second
 	MilliSecondNanoseconds := int64(time.Millisecond)
 
@@ -174,6 +244,9 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	outputLine := ""
 	outputValStr := ""
 	var numStrWithIntSeps []rune
+	var foundFirstValue = false
+	maxSummaryLineLen := 78 - summaryTextLineLeftMargin
+	newOutputLine := ""
 
 	// numOfDays
 	if numOfDays > 0 {
@@ -192,19 +265,17 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			return timeDurationStrs, err
 		}
 
-		outputLine += fmt.Sprintf(
+		newOutputLine = fmt.Sprintf(
 			"%v Days ",
 			string(numStrWithIntSeps))
 
-		if len(outputLine) >= 50 {
-			timeDurationStrs = append(
-				timeDurationStrs, outputLine)
-			outputLine = ""
-		}
+		outputLine += newOutputLine
+
+		foundFirstValue = true
 	}
 
 	// numOfHours
-	if numOfHours > 0 || outputLine != "" {
+	if numOfHours > 0 || foundFirstValue {
 
 		outputValStr =
 			strconv.FormatInt(numOfHours, 10)
@@ -220,20 +291,25 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			return timeDurationStrs, err
 		}
 
-		outputLine += fmt.Sprintf(
+		newOutputLine = fmt.Sprintf(
 			"%v Hours ",
 			string(numStrWithIntSeps))
 
-		if len(outputLine) >= 50 {
+		if len(outputLine)+
+			len(newOutputLine) >= maxSummaryLineLen {
 			timeDurationStrs = append(
 				timeDurationStrs, outputLine)
 			outputLine = ""
 		}
 
+		outputLine += newOutputLine
+
+		foundFirstValue = true
+
 	}
 
 	// numOfMinutes
-	if numOfMinutes > 0 || outputLine != "" {
+	if numOfMinutes > 0 || foundFirstValue {
 
 		outputValStr =
 			strconv.FormatInt(numOfMinutes, 10)
@@ -249,19 +325,25 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			return timeDurationStrs, err
 		}
 
-		outputLine += fmt.Sprintf("%v Minutes ",
-			string(numStrWithIntSeps))
+		newOutputLine =
+			fmt.Sprintf("%v Minutes ",
+				string(numStrWithIntSeps))
 
-		if len(outputLine) >= 50 {
+		if len(outputLine)+
+			len(newOutputLine) >= maxSummaryLineLen {
 			timeDurationStrs = append(
 				timeDurationStrs, outputLine)
 			outputLine = ""
 		}
 
+		outputLine += newOutputLine
+
+		foundFirstValue = true
+
 	}
 
 	// numOfSeconds
-	if numOfSeconds > 0 || outputLine != "" {
+	if numOfSeconds > 0 || foundFirstValue {
 
 		outputValStr =
 			strconv.FormatInt(numOfSeconds, 10)
@@ -277,19 +359,25 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			return timeDurationStrs, err
 		}
 
-		outputLine += fmt.Sprintf("%v Seconds ",
-			string(numStrWithIntSeps))
+		newOutputLine =
+			fmt.Sprintf("%v Seconds ",
+				string(numStrWithIntSeps))
 
-		if len(outputLine) >= 50 {
+		if len(outputLine)+
+			len(newOutputLine) >= maxSummaryLineLen {
 			timeDurationStrs = append(
 				timeDurationStrs, outputLine)
 			outputLine = ""
 		}
 
+		outputLine += newOutputLine
+
+		foundFirstValue = true
+
 	}
 
 	// numOfMilliseconds
-	if numOfMilliseconds > 0 || outputLine != "" {
+	if numOfMilliseconds > 0 || foundFirstValue {
 
 		outputValStr =
 			strconv.FormatInt(numOfMilliseconds, 10)
@@ -305,20 +393,25 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			return timeDurationStrs, err
 		}
 
-		outputLine += fmt.Sprintf(
-			"%v Milliseconds ",
-			string(numStrWithIntSeps))
+		newOutputLine =
+			fmt.Sprintf("%v Milliseconds ",
+				string(numStrWithIntSeps))
 
-		if len(outputLine) >= 50 {
+		if len(outputLine)+
+			len(newOutputLine) >= maxSummaryLineLen {
 			timeDurationStrs = append(
 				timeDurationStrs, outputLine)
 			outputLine = ""
 		}
 
+		outputLine += newOutputLine
+
+		foundFirstValue = true
+
 	}
 
 	// numOfMicroseconds
-	if numOfMicroseconds > 0 || outputLine != "" {
+	if numOfMicroseconds > 0 || foundFirstValue {
 
 		outputValStr =
 			strconv.FormatInt(numOfMicroseconds, 10)
@@ -334,19 +427,24 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			return timeDurationStrs, err
 		}
 
-		outputLine += fmt.Sprintf(
-			"%v Microseconds ",
-			string(numStrWithIntSeps))
+		newOutputLine =
+			fmt.Sprintf("%v Microseconds ",
+				string(numStrWithIntSeps))
 
-		if len(outputLine) >= 50 {
+		if len(outputLine)+
+			len(newOutputLine) >= maxSummaryLineLen {
 			timeDurationStrs = append(
 				timeDurationStrs, outputLine)
 			outputLine = ""
 		}
 
+		outputLine += newOutputLine
+
+		foundFirstValue = true
+
 	}
 
-	// numOfNanoseconds
+	// numOfNanoseconds is always presented
 
 	outputValStr =
 		strconv.FormatInt(numOfNanoseconds, 10)
@@ -362,14 +460,20 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		return timeDurationStrs, err
 	}
 
-	outputLine += fmt.Sprintf(
-		"%v Nanoseconds",
-		string(numStrWithIntSeps))
+	newOutputLine =
+		fmt.Sprintf("%v Nanoseconds",
+			string(numStrWithIntSeps))
 
-	timeDurationStrs = append(
-		timeDurationStrs, outputLine)
+	if len(outputLine)+
+		len(newOutputLine) >= maxSummaryLineLen {
+		timeDurationStrs = append(
+			timeDurationStrs, outputLine)
+		outputLine = ""
+	}
 
-	// summaryNanoseconds
+	outputLine += newOutputLine
+
+	// summaryNanoseconds is always presented
 
 	outputValStr =
 		strconv.FormatInt(summaryNanoseconds, 10)
@@ -381,19 +485,31 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			[]rune(outputValStr),
 			ePrefix.XCtx("summaryNanoseconds"))
 
-	outputLine =
+	if err != nil {
+		return timeDurationStrs, err
+	}
+
+	newOutputLine =
 		fmt.Sprintf(" Total Elapsed Nanoseconds: %v",
 			string(numStrWithIntSeps))
+
+	if len(outputLine)+
+		len(newOutputLine) >= maxSummaryLineLen {
+		timeDurationStrs = append(
+			timeDurationStrs, outputLine)
+		outputLine = ""
+	}
+
+	outputLine += newOutputLine
 
 	timeDurationStrs = append(
 		timeDurationStrs, outputLine)
 
 	return timeDurationStrs, err
-
 }
 
 // empty - Receives a pointer to an instance of
-// TextLineSpecTimerLines and proceeds to set all of the internal
+// TextLineSpecTimerLines and proceeds to set all the internal
 // member variables to their uninitialized or zero states.
 //
 //

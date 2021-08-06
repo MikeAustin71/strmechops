@@ -124,9 +124,12 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	if txtTimerLines.labelFieldLen > maxLabelLen {
 		maxLabelLen = txtTimerLines.labelFieldLen
+	} else {
+		txtTimerLines.labelFieldLen = maxLabelLen
 	}
 
-	maxLabelLen += len(txtTimerLines.labelOutputSeparationChars)
+	maxLabelLeftMargin := maxLabelLen +
+		len(txtTimerLines.labelOutputSeparationChars)
 
 	// Begin First Line
 	var txtDescLabel *TextFieldSpecLabel
@@ -268,7 +271,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	txtFillerSumLeftMar,
 		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
 		[]rune{' '},
-		maxLabelLen,
+		maxLabelLeftMargin,
 		ePrefix.XCtx(
 			"Summary Line Left Margin"))
 
@@ -283,6 +286,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		computeTimeDuration(
 			txtTimerLines.startTime,
 			txtTimerLines.endTime,
+			maxLabelLeftMargin,
 			ePrefix.XCtxEmpty())
 
 	if err != nil {
