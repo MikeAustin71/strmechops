@@ -41,8 +41,8 @@ type TextLineSpecTimerLines struct {
 //
 // IMPORTANT
 //
-// All of the data fields in current TextLineSpecTimerLines
-// instance ('txtSpecTimerLines') will be modified and overwritten.
+// All the data fields in current TextLineSpecTimerLines instance
+// ('txtSpecTimerLines') will be modified and overwritten.
 //
 //
 // ----------------------------------------------------------------
@@ -1082,7 +1082,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) String() string {
 //
 //  labelJustification         TextJustify
 //     - An enumeration which specifies the justification of the
-//       the three text labels 'startTimeLabel', 'endTimeLabel' and
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel' within the field length specified by
 //       'labelFieldLen'.
 //
@@ -1110,12 +1110,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) String() string {
 //
 //       Often this parameter is set to a single white space
 //       character (' ') or a colon plus white space character,
-//       ([]rune{':', ' "}).
+//       ([]rune{':', ' '}).
 //
 //
 //       If this array is submitted as a zero length rune array,
 //       'labelOutputSeparationChars' will be assigned a default value of
-//       []rune{':', ' "}. Example Output:
+//       []rune{':', ' '}. Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
 //
@@ -1317,7 +1317,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //
 //  labelJustification         TextJustify
 //     - An enumeration which specifies the justification of the
-//       the three text labels 'startTimeLabel', 'endTimeLabel' and
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel' within the field length specified by
 //       'labelFieldLen'.
 //
@@ -1345,12 +1345,12 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //
 //       Often this parameter is set to a single white space
 //       character (' ') or a colon plus white space character,
-//       ([]rune{':', ' "}).
+//       ([]rune{':', ' '}).
 //
 //
 //       If this array is submitted as a zero length rune array,
 //       'labelOutputSeparationChars' will be assigned a default value of
-//       []rune{':', ' "}. Example Output:
+//       []rune{':', ' '}. Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
 //
