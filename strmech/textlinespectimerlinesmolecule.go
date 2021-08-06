@@ -395,7 +395,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 // Input Parameters
 //
 //  txtTimerLines              *TextLineSpecTimerLines
-//     - A pointer to an instance of TextLineSpecTimerLines. All of
+//     - A pointer to an instance of TextLineSpecTimerLines. All
 //       the member variable data values for this instance will be
 //       overwritten and reset to new values extracted from the
 //       following input parameters.
@@ -475,7 +475,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //
 //  labelJustification         TextJustify
 //     - An enumeration which specifies the justification of the
-//       the three text labels 'startTimeLabel', 'endTimeLabel' and
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel' within the field length specified by
 //       'labelFieldLen'.
 //
@@ -504,12 +504,12 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //
 //       Often this parameter is set to a single white space
 //       character (' ') or a colon plus white space character,
-//       ([]rune{':', ' "}).
+//       ([]rune{':', ' '}).
 //
 //
 //       If this array is submitted as a zero length rune array,
 //       'labelOutputSeparationChars' will be assigned a default value of
-//       []rune{':', ' "}. Example Output:
+//       []rune{':', ' '}. Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
 //
