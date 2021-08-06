@@ -430,7 +430,7 @@ func (sMechMolecule *strMechMolecule) strCenterInStr(
 	return leftPadStr + strToCenter + rightPadStr, nil
 }
 
-// strLeftJustify - Creates a new string, left-justified, within a
+// strLeftJustify - Creates a new string, left-justified, within
 // a wider text field or output string. The text to be left
 // justified is specified by input parameter 'strToJustify'. The
 // length of the output string is defined by input parameter,
@@ -575,7 +575,7 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 // added to the beginning of a text string to achieve a centering
 // effect when displayed.
 //
-// Therefore the blank string returned by this method only
+// Therefore, the blank string returned by this method only
 // constitutes the left-padding of white space necessary to center
 // the input parameter, 'strToCenter'. It does not include the
 // right padding of white space.
@@ -634,7 +634,7 @@ func (sMechMolecule *strMechMolecule) strLeftJustify(
 //
 // Example Usage
 //
-// Assume that total field length ('fieldlen') is 70. Further
+// Assume that total field length ('fieldlen') is 70. Further,
 // assume that the string to Center ('strToCenter') is
 // 10-characters in length. In order to center a 10-character
 // string in a 70-character field, 30-space characters would need
