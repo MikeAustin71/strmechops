@@ -11,7 +11,7 @@ type integerSeparatorDtoMolecule struct {
 	lock *sync.Mutex
 }
 
-// applyIntSeparators - Inserts integer separators into an
+// applyIntSeparators - Inserts integer separators into
 // an array of integer digits.
 //
 // An integer separator is a character, or series of characters,
@@ -245,14 +245,16 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 
 	outIdx := lenOutRunes - 1
 
-	fmt.Printf("Length Pure Num Runes: %v\n",
-		lenPureNumRunes)
+	/*
+		fmt.Printf("Length Pure Num Runes: %v\n",
+			lenPureNumRunes)
 
-	fmt.Printf("Beginning lenOutRunes: %v\n",
-		lenOutRunes)
+		fmt.Printf("Beginning lenOutRunes: %v\n",
+			lenOutRunes)
 
-	fmt.Printf("Beginning outIdx: %v\n",
-		outIdx)
+		fmt.Printf("Beginning outIdx: %v\n",
+			outIdx)
+	*/
 
 	groupCnt := uint(0)
 	maxGroupCnt := nStrIntSeparator.intGroupingSequence[0]
@@ -313,10 +315,8 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 	// Copy only the characters extracted!
 	charsCopied := copy(numStrWithIntSeps, outRunes[outIdx:])
 
-	fmt.Printf("Final outputLen= '%v'\n",
-		outputLen)
-	fmt.Printf("Final outIdx= '%v'\n",
-		outIdx)
+	// fmt.Printf("Final outputLen= '%v'\n",	outputLen)
+	// fmt.Printf("Final outIdx= '%v'\n", outIdx)
 
 	if charsCopied != outputLen {
 		err = fmt.Errorf("%v\n"+

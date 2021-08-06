@@ -106,8 +106,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
+	txtTimerLinesAtom := textLineSpecTimerLinesAtom{}
+
 	_,
-		err = textLineSpecTimerLinesAtom{}.ptr().
+		err = txtTimerLinesAtom.
 		testValidityOfTxtSpecTimerLines(
 			txtTimerLines,
 			ePrefix.XCtx("txtTimerLines"))
@@ -117,19 +119,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	}
 
 	// Used to compute summary time duration left margin
-	maxLabelLen := 0
-
-	if len(txtTimerLines.startTimeLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.startTimeLabel)
-	}
-
-	if len(txtTimerLines.endTimeLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.endTimeLabel)
-	}
-
-	if len(txtTimerLines.timeDurationLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.timeDurationLabel)
-	}
+	maxLabelLen := txtTimerLinesAtom.getMaxLabelLength(
+		txtTimerLines)
 
 	if txtTimerLines.labelFieldLen > maxLabelLen {
 		maxLabelLen = txtTimerLines.labelFieldLen
@@ -342,20 +333,6 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 			stdLine.AddTextField(&txtOutputLabel)
 
-			_,
-				err2 = sb.WriteString(stdLine.String())
-
-			if err2 != nil {
-				err = fmt.Errorf("%v\n"+
-					"Error returned by summary line #1.\n"+
-					"sb.WriteString(stdLine.String())\n"+
-					"%v\n",
-					ePrefix.ZCtxEmpty().String(),
-					err2.Error())
-
-				return "", err
-			}
-
 		} else {
 
 			txtFiller2,
@@ -382,22 +359,24 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			}
 
 			stdLine.AddTextField(&txtOutputLabel)
-			_,
-				err2 = sb.WriteString(stdLine.String())
-
-			if err2 != nil {
-				err = fmt.Errorf("%v\n"+
-					"Error returned by summary line #%v.\n"+
-					"sb.WriteString(stdLine.String())\n"+
-					"%v\n",
-					ePrefix.ZCtxEmpty().String(),
-					i+1,
-					err2.Error())
-
-				return "", err
-			}
 
 		} // End of 'else'
+
+		_,
+			err2 = sb.WriteString(stdLine.String())
+
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error returned by summary line #%v .\n"+
+				"sb.WriteString(stdLine.String())\n"+
+				"%v\n",
+				ePrefix.ZCtxEmpty().String(),
+				i+1,
+				err2.Error())
+
+			return "", err
+		}
+
 	} // End of time duration strings for loop
 
 	return sb.String(), nil
