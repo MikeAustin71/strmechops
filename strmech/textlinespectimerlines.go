@@ -1147,7 +1147,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecTimerLines.NewFullTimerEvent()",
+		"TextLineSpecTimerLines.NewDefaultFullTimerEvent()",
 		"")
 
 	if err != nil {
@@ -1712,6 +1712,180 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 			ePrefix.XCtx("newTxtTimerLines"))
 
 	return newTxtTimerLines, err
+}
+
+// SetDefaultFullTimerEvent - This method configures the current
+// instance of TextLineSpecTimerLines using minimal input
+// parameters. All the formatting parameters are set to standard
+// default values.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+// Use this method when both start time and ending time for the
+// timer event are known quantities and default formatting
+// parameters are acceptable.
+//
+// ------------------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will overwrite and reset all the data values
+// encapsulated by the current TextLineSpecTimerLines instance.
+//
+//
+// This method will automatically set the following default values:
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+//  startTimeLabel      - Defaults to "Start Time"
+//
+//  endTimeLabel        - Defaults to "End Time".
+//
+//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  timeDurationLabel   - Defaults to "Elapsed Time"
+//
+//  labelFieldLen       - Defaults to  '12'
+//
+//  labelJustification  - Defaults to TextJustify(0).Right()
+//
+//  labelOutputSeparationChars
+//                      - Defaults to ": "
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  startTime                  time.Time
+//     - A time value which will be used in conjunction with
+//       'endTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'startTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  endTime                    time.Time
+//     - A time value which will be used in conjunction with
+//       'startTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'endTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
+	startTime time.Time,
+	endTime time.Time,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines.SetDefaultFullTimerEvent()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	timeDurationLabel :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTimeDurationLabel()
+
+	err = textLineSpecTimerLinesMolecule{}.ptr().
+		setTxtLineSpecTimerLines(
+			txtSpecTimerLines,
+			nil,
+			startTime,
+			nil,
+			endTime,
+			"",
+			timeDurationLabel,
+			len(timeDurationLabel),
+			TxtJustify.Right(),
+			nil,
+			ePrefix.XCtx("txtSpecTimerLines"))
+
+	return err
 }
 
 // SetEndTimeLabel - Sets the internal member variable
