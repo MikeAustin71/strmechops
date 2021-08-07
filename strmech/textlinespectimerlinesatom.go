@@ -11,16 +11,16 @@ type textLineSpecTimerLinesAtom struct {
 	lock *sync.Mutex
 }
 
-// getMaxLabelLength - Returns the longest string length of the
-// three text labels contained within an instance of
-// TextLineSpecTimerLines. The maximum label length is therefore
-// computed by comparing the string lengths of these three text
-// label strings:
+// getMaxTimerLabelLength - Returns the longest string length of
+// the three text labels contained within an instance of
+// TextLineSpecTimerLines. The maximum timer label length is
+// therefore computed by comparing the string lengths of these
+// three text label strings:
 //  (1) TextLineSpecTimerLines.startTimeLabel
 //  (2) TextLineSpecTimerLines.endTimeLabel
 //  (3) TextLineSpecTimerLines.timeDurationLabel
 //
-func (txtTimerLinesAtom textLineSpecTimerLinesAtom) getMaxLabelLength(
+func (txtTimerLinesAtom textLineSpecTimerLinesAtom) getMaxTimerLabelLength(
 	txtTimerLines *TextLineSpecTimerLines) int {
 
 	if txtTimerLinesAtom.lock == nil {

@@ -119,7 +119,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	}
 
 	// Used to compute summary time duration left margin
-	maxLabelLen := txtTimerLinesAtom.getMaxLabelLength(
+	maxLabelLen := txtTimerLinesAtom.getMaxTimerLabelLength(
 		txtTimerLines)
 
 	if txtTimerLines.labelFieldLen > maxLabelLen {
@@ -167,7 +167,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	txtFiller2,
 		err = txtFiller.CopyOut(
-		ePrefix.XCtx("txtFiller.CopyOut()"))
+		ePrefix.XCtx("txtFiller.CopyOut() Line#1"))
 
 	if err != nil {
 		return "", err
@@ -229,7 +229,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	txtFiller2,
 		err = txtFiller.CopyOut(
-		ePrefix.XCtx("txtFiller.CopyOut()"))
+		ePrefix.XCtx("txtFiller.CopyOut() Line#2"))
 
 	if err != nil {
 		return "", err
@@ -315,7 +315,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 			txtFiller2,
 				err = txtFiller.CopyOut(
-				ePrefix.XCtx("txtFiller.CopyOut()"))
+				ePrefix.XCtx(
+					fmt.Sprintf("txtFiller.CopyOut() Line #%v",
+						3+i)))
 
 			if err != nil {
 				return "", err
@@ -341,7 +343,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 			txtFiller2,
 				err = txtFillerSumLeftMar.CopyOut(
-				ePrefix.XCtx("txtFillerSumLeftMar.CopyOut()"))
+				ePrefix.XCtx(
+					fmt.Sprintf("txtFillerSumLeftMar.CopyOut() Line#%v",
+						i+3)))
 
 			if err != nil {
 				return "", err
@@ -416,6 +420,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       'startTimeLabel' will be assigned a default value of
 //       "Start Time".
 //
+//       If the length of the 'startTimeLabel' rune array is greater
+//       than 50-characters, this method will return an error.
+//
 //
 //  startTime                  time.Time
 //     - A time value which will be used in conjunction with
@@ -434,6 +441,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       If this array is submitted as a zero length rune array,
 //       'endTimeLabel' will be assigned a default value of
 //       "End Time".
+//
+//       If the length of the 'endTimeLabel' rune array is greater
+//       than 50-characters, this method will return an error.
 //
 //
 //  endTime                    time.Time
@@ -464,6 +474,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       If this array is submitted as a zero length rune array,
 //       'timeDurationLabel' will be assigned a default value of
 //       "Elapsed Time".
+//
+//       If the length of the 'timeDurationLabel' rune array is
+//       greater than 50-characters, this method will return an
+//       error.
 //
 //
 //  labelFieldLen              int
@@ -512,9 +526,14 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //
 //
 //       If this array is submitted as a zero length rune array,
-//       'labelOutputSeparationChars' will be assigned a default value of
-//       []rune{':', ' '}. Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//       'labelOutputSeparationChars' will be assigned a default
+//       value of []rune{':', ' '}.
+//       Example Output:
+//         Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       If the length of the 'labelOutputSeparationChars' rune
+//       array is greater than 5-characters, this method will
+//       return an error.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
@@ -547,7 +566,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-// TODO Apply Max Label String Length Validation
+//
 func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimerLines(
 	txtTimerLines *TextLineSpecTimerLines,
 	startTimeLabel []rune,
@@ -622,29 +641,103 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 				getDefaultTime()
 	}
 
+	maxLabelLen := txtTimerLinesElectron.
+		getMaximumTimerLabelLen()
+
+	maxTimerLabelLen := 0
+
+	labelLen := len(startTimeLabel)
+
 	if len(startTimeLabel) == 0 {
 		startTimeLabel =
 			txtTimerLinesElectron.getDefaultStartTimeLabel()
+	} else if labelLen > maxLabelLen {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startTimeLabel' is invalid!\n"+
+			"The maximum length for a timer label is %v-characters.\n"+
+			"startTimeLabel length = %v-characters.\n",
+			ePrefix.String(),
+			maxLabelLen,
+			labelLen)
+
+		return err
 	}
 
-	if len(endTimeLabel) == 0 {
+	if labelLen > maxTimerLabelLen {
+		maxTimerLabelLen = labelLen
+	}
+
+	labelLen = len(endTimeLabel)
+
+	if labelLen == 0 {
 		endTimeLabel =
 			txtTimerLinesElectron.getDefaultEndTimeLabel()
+	} else if labelLen > maxLabelLen {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'endTimeLabel' is invalid!\n"+
+			"The maximum length for a timer label is %v-characters.\n"+
+			"endTimeLabel length = %v-characters.\n",
+			ePrefix.String(),
+			maxLabelLen,
+			labelLen)
+
+		return err
 	}
+
+	if labelLen > maxTimerLabelLen {
+		maxTimerLabelLen = labelLen
+	}
+
+	labelLen = len(timeDurationLabel)
 
 	if len(timeDurationLabel) == 0 {
 		timeDurationLabel =
 			txtTimerLinesElectron.getDefaultTimeDurationLabel()
+
+	} else if labelLen > maxLabelLen {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'timeDurationLabel' is invalid!\n"+
+			"The maximum length for a timer label is %v-characters.\n"+
+			"timeDurationLabel length = %v-characters.\n",
+			ePrefix.String(),
+			maxLabelLen,
+			labelLen)
+
+		return err
 	}
+
+	if labelLen > maxTimerLabelLen {
+		maxTimerLabelLen = labelLen
+	}
+
+	if labelFieldLen < maxTimerLabelLen {
+		labelFieldLen = maxTimerLabelLen
+	}
+
+	maxLabelLen = txtTimerLinesElectron.
+		getMaximumLabelOutputSeparationCharsLen()
+
+	labelLen = len(labelOutputSeparationChars)
 
 	if len(labelOutputSeparationChars) == 0 {
 		labelOutputSeparationChars =
 			txtTimerLinesElectron.
 				getDefaultLabelOutputSeparationCharsLabel()
-	}
 
-	if labelFieldLen < -1 {
-		labelFieldLen = -1
+	} else if labelLen > maxLabelLen {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'labelOutputSeparationChars' is invalid!\n"+
+			"The maximum label output separation characters length is %v-characters.\n"+
+			"labelOutputSeparationChars length = %v-characters.\n",
+			ePrefix.String(),
+			maxLabelLen,
+			labelLen)
+
+		return err
 	}
 
 	if !txtTimerLines.labelJustification.XIsValid() {

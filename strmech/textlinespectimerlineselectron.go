@@ -41,7 +41,8 @@ type textLineSpecTimerLinesElectron struct {
 //       length of 78-characters.
 //
 //       If 'summaryTextLineLeftMargin' is less than zero (0) or
-//       greater than sixty (60), this method will return an error.
+//       greater than fifty-five (55) characters, this method will
+//       return an error.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
@@ -91,6 +92,8 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	txtTimerLinesElectron.lock.Lock()
 
 	defer txtTimerLinesElectron.lock.Unlock()
+
+	const maxSummaryTextLeftLineMargin = 55
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -143,14 +146,15 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	}
 
 	if summaryTextLineLeftMargin < 0 ||
-		summaryTextLineLeftMargin > 60 {
+		summaryTextLineLeftMargin > maxSummaryTextLeftLineMargin {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'summaryTextLineLeftMargin' is invalid!\n"+
-			"The valid range for 'summaryTextLineLeftMargin' is 0-60,"+
+			"The valid range for 'summaryTextLineLeftMargin' is 0-%v,"+
 			"inclusive.\n"+
 			"summaryTextLineLeftMargin= '%v'\n",
 			ePrefix.String(),
+			maxSummaryTextLeftLineMargin,
 			summaryTextLineLeftMargin)
 
 		return timeDurationStrs, err
