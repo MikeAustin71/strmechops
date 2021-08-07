@@ -17,6 +17,54 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) TimerEventText01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TimerEventText01()",
+		"")
+
+	startTime := time.Now()
+
+	elapsedTime := time.Second * 5
+	endTime := startTime.Add(elapsedTime)
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var errTxt string
+
+	timerLines,
+		err := strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		startTime,
+		endTime,
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	err = timerLines.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	fmt.Println("Time Lines Output")
+	fmt.Println()
+	fmt.Printf(timerLines.String())
+
+}
+
 func (mt MainTest) IntSeparateNumRunes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -408,7 +456,7 @@ func (mt MainTest) IntSeparateNumRunes05() {
 
 	var outStr string
 	// Chinese Numerals have an integer grouping value of four
-	// and are formatted like this: '12,3456,7890,2345'. In this
+	// and are formatted like this: "12,3456,7890,2345". In this
 	// case the 'intGroupingSequence' value would be set to four
 	// uint[]{4}.
 

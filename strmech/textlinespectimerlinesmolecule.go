@@ -739,7 +739,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		return err
 	}
 
-	if !txtTimerLines.labelJustification.XIsValid() {
+	if !labelJustification.XIsValid() {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'labelJustification' is invalid!\n"+
 			"'labelJustification' should be 'Left',\n"+
