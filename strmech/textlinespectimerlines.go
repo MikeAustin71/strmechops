@@ -2004,10 +2004,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 // TextLineSpecTimerLines using minimal input parameters. All the
 // formatting parameters are set to standard default values.
 //
-// Upon completion the current TextLineSpecTimerLines instance is
-// only configured with basic formatting parameters and is NOT
-// configured with the 'startTime' and 'endTime' parameters
-// necessary for a fully configured timer event.
+// Upon completion of this method, the current
+// TextLineSpecTimerLines instance is only configured with basic
+// default formatting parameters and is NOT configured with the
+// 'startTime' and 'endTime' parameters necessary for a fully
+// configured timer event.
+//
+// The intent is to create a shell or incomplete timer event with
+// default formatting parameters. The 'startTime' and 'endTime'
+// parameters can then be added later to create a fully configured
+// timer event.
 //
 // Use this method when the 'startTime' and 'endTime' parameters
 // are unknown and default formatting parameters are acceptable.
@@ -2559,6 +2565,262 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 			labelJustification,
 			[]rune(labelOutputSeparationChars),
 			ePrefix.XCtx("txtSpecTimerLines"))
+
+	return err
+}
+
+// SetShellTimerEvent - Reconfigures the current instance of
+// TextLineSpecTimerLines.
+//
+// Upon completion of this method, the current
+// TextLineSpecTimerLines instance is only configured with basic
+// formatting parameters and is NOT configured with the 'startTime'
+// and 'endTime' parameters necessary for a fully configured timer
+// event.
+//
+// Use this method when the 'startTime' and 'endTime' parameters
+// are unknown. Follow up later to complete the timer event by
+// calling one or more of the following methods when both starting
+// time and ending time are known:
+//
+//   TextLineSpecTimerLines.SetStartAndEndTime()
+//   - When both 'startTime' and 'endTime' are known.
+//
+//   TextLineSpecTimerLines.SetStartTime()
+//   - When the 'startTime' is known.
+//
+//   TextLineSpecTimerLines.SetEndTime()
+//   - When the 'startTime' is known.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+//
+// This method will automatically set the following default values:
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+//
+//  endTime             - Defaults to July 4, 1776 9:30AM UTC
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  startTimeLabel             string
+//     - A string containing the text characters constituting the
+//       starting time text label.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'startTimeLabel' will be assigned a default value
+//       of "Start Time".
+//
+//       If 'startTimeLabel' exceeds 50-characters in length, this
+//       method will return an error.
+//
+//
+//  endTimeLabel               string.
+//     - A string containing the text characters constituting the
+//       ending time text label.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'endTimeLabel' will be assigned a default value of
+//       "End Time".
+//
+//       If 'endTimeLabel' exceeds 50-characters in length, this
+//       method will return an error.
+//
+//
+//  timeFormat                 string
+//     - This string holds the time format parameters used to
+//       format starting time and ending time values for text
+//       display and output.
+//
+//       If this parameter is submitted as an empty string,
+//       parameter 'timeFormat' will be assigned a default value
+//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//
+//  timeDurationLabel          string
+//     - The text label used to describe the time duration or
+//       elapsed time computed from the 'startTime' and 'endTime'
+//       parameters.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'timeDurationLabel' will be assigned a default
+//       value of "Elapsed Time".
+//
+//       If 'timeDurationLabel' exceeds 50-characters in length,
+//       this method will return an error.
+//
+//
+//  labelFieldLen              int
+//     - The length of the text fields which will be used to
+//       position and display the three text labels provided by
+//       input parameters 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel'.
+//
+//       If labelFieldLen is less than the length of the longest
+//       text label it will be defaulted to the length of the
+//       longest text label.
+//
+//
+//  labelJustification         TextJustify
+//     - An enumeration which specifies the justification of the
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel' within the field length specified by
+//       'labelFieldLen'.
+//
+//       Label justification must be equal to one of these three
+//       valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       The abbreviated text justification enumeration syntax can
+//       also be used:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+//  labelOutputSeparationChars string
+//     - This string contains the character or characters which
+//       will be used to separate the text labels ('startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel') from the output or
+//       data values displayed on the same line.
+//       Example:
+//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       Often this parameter is set to a single white space
+//       character (" ") or a colon plus white space character,
+//       (": ").
+//
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'labelOutputSeparationChars' will be assigned a
+//       default value of  ": ". Example Output:
+//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       If the string length of 'labelOutputSeparationChars'
+//       exceeds the maximum length of 5-characters, this method
+//       will return an error.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
+	startTimeLabel string,
+	endTimeLabel string,
+	timeFormat string,
+	timeDurationLabel string,
+	labelFieldLen int,
+	labelJustification TextJustify,
+	labelOutputSeparationChars string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines.SetShellTimerEvent()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	defaultTime :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTime()
+
+	err = textLineSpecTimerLinesMolecule{}.ptr().
+		setTxtLineSpecTimerLines(
+			txtSpecTimerLines,
+			[]rune(startTimeLabel),
+			defaultTime,
+			[]rune(endTimeLabel),
+			defaultTime,
+			timeFormat,
+			[]rune(timeDurationLabel),
+			labelFieldLen,
+			labelJustification,
+			[]rune(labelOutputSeparationChars),
+			ePrefix.XCtx("newTxtTimerLines"))
 
 	return err
 }
