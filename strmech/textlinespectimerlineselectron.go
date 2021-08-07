@@ -479,6 +479,13 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 	// summaryNanoseconds is always presented
 
+	// Always Place Summary Nanoseconds on a
+	// separate line.
+	timeDurationStrs = append(
+		timeDurationStrs, outputLine)
+
+	outputLine = ""
+
 	outputValStr =
 		strconv.FormatInt(summaryNanoseconds, 10)
 
@@ -493,18 +500,9 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		return timeDurationStrs, err
 	}
 
-	newOutputLine =
-		fmt.Sprintf(" Total Elapsed Nanoseconds: %v",
+	outputLine =
+		fmt.Sprintf("Total Elapsed Nanoseconds: %v",
 			string(numStrWithIntSeps))
-
-	if len(outputLine)+
-		len(newOutputLine) >= maxSummaryLineLen {
-		timeDurationStrs = append(
-			timeDurationStrs, outputLine)
-		outputLine = ""
-	}
-
-	outputLine += newOutputLine
 
 	timeDurationStrs = append(
 		timeDurationStrs, outputLine)

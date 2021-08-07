@@ -93,16 +93,36 @@ func (mt MainTest) IntSeparateNumRunes01() {
 		return
 	}
 
-	pureNumStr := []rune("1234")
-	expectedNStr := "1,234"
+	pureNumStr := []rune("123456789012")
+	expectedNStr := "123,456,789,012"
 	sMech := strmech.StrMech{}
 
 	var numStrWithIntSeps []rune
+	var startTime, endTime time.Time
+
+	startTime = time.Now()
 
 	numStrWithIntSeps,
 		err = sMech.IntSeparateNumStr(
 		&intSepDto,
 		pureNumStr,
+		ePrefix)
+
+	endTime = time.Now()
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	var timerLines strmech.TextLineSpecTimerLines
+
+	timerLines,
+		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		startTime,
+		endTime,
 		ePrefix)
 
 	if err != nil {
@@ -128,6 +148,9 @@ func (mt MainTest) IntSeparateNumRunes01() {
 	// Decimal 48 = 0
 	fmt.Printf("Actual Rune Array: '%v'\n",
 		numStrWithIntSeps)
+
+	fmt.Printf("------------------------------\n\n")
+	fmt.Printf(timerLines.String())
 	fmt.Printf("------------------------------\n\n")
 
 	if actualNumStr == expectedNStr {
