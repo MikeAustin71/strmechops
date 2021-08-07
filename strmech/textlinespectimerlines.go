@@ -998,6 +998,183 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 	return formattedText
 }
 
+// NewDefaultFullTimerEvent - Creates and returns a new instance of
+// TextLineSpecTimerLines using minimal input parameters. All the
+// formatting parameters are set to standard default values.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+// Use this method when both start time and ending time for the
+// timer event are known quantities and default formatting
+// parameters are acceptable.
+//
+// This method will automatically set the following default values:
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+//  startTimeLabel      - Defaults to "Start Time"
+//
+//  endTimeLabel        - Defaults to "End Time".
+//
+//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  timeDurationLabel   - Defaults to "Elapsed Time"
+//
+//  labelFieldLen       - Defaults to  '12'
+//
+//  labelJustification  - Defaults to TextJustify(0).Right()
+//
+//  labelOutputSeparationChars
+//                      - Defaults to ": "
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  startTime                  time.Time
+//     - A time value which will be used in conjunction with
+//       'endTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'startTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  endTime                    time.Time
+//     - A time value which will be used in conjunction with
+//       'startTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'endTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecTimerLines
+//     - If this method completes successfully, it will create and
+//       return a new instance of TextLineSpecTimerLines which is
+//       fully configured with all the parameters necessary to
+//       format a complete timer event for text display output or
+//       printing.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
+	startTime time.Time,
+	endTime time.Time,
+	errorPrefix interface{}) (
+	TextLineSpecTimerLines,
+	error) {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	newTxtTimerLines := TextLineSpecTimerLines{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines.NewFullTimerEvent()",
+		"")
+
+	if err != nil {
+		return newTxtTimerLines, err
+	}
+
+	timeDurationLabel :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTimeDurationLabel()
+
+	err = textLineSpecTimerLinesMolecule{}.ptr().
+		setTxtLineSpecTimerLines(
+			&newTxtTimerLines,
+			nil,
+			startTime,
+			nil,
+			endTime,
+			"",
+			timeDurationLabel,
+			len(timeDurationLabel),
+			TxtJustify.Right(),
+			nil,
+			ePrefix.XCtx("newTxtTimerLines"))
+
+	return newTxtTimerLines, err
+}
+
 // NewEmptyTimerEvent - Creates and returns a new instance of
 // TextLineSpecTimerLines which is empty, invalid and
 // uninitialized.
@@ -1467,9 +1644,8 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //  TextLineSpecTimerLines
 //     - If this method completes successfully, it will create and
 //       return a new instance of TextLineSpecTimerLines which is
-//       fully configured with all the parameters necessary to
-//       format a complete timer event for text display output or
-//       printing.
+//       fully configured except for the starting time and ending
+//       time.
 //
 //
 //  error
