@@ -25,7 +25,7 @@ func (mt MainTest) TimerEventText01() {
 
 	startTime := time.Now()
 
-	elapsedTime := time.Second * 5
+	elapsedTime := (time.Second * 5) + 500
 	endTime := startTime.Add(elapsedTime)
 
 	fmt.Println()

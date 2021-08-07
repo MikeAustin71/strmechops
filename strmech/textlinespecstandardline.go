@@ -679,6 +679,26 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfStdLines() int {
 	return stdLine.numOfStdLines
 }
 
+// GetNumOfTextFields - Returns the number of text fields
+// encapsulated by the current TextLineSpecStandardLine instance.
+//
+// Text Fields constitute the granular elements of a standard text
+// line and provide verification that text fields exist and are
+// ready for formatting and text display output.
+//
+func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	return len(stdLine.textFields)
+}
+
 // GetTextFields - Returns a deep copy of the text fields contained
 // in the current TextLineSpecStandardLine instance.
 //

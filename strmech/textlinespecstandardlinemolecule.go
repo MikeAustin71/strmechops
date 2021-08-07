@@ -499,6 +499,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 
 		return formattedText, err
 	}
+
 	_,
 		err = textLineSpecStandardLineElectron{}.ptr().
 		testValidityOfTextLineSpecStdLine(
@@ -509,11 +510,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		return formattedText, err
 	}
 
-	lenInNewLineChars := len(txtStdLine.newLineChars)
-
-	if lenInNewLineChars == 0 {
+	if len(txtStdLine.newLineChars) == 0 {
 		txtStdLine.newLineChars = []rune{'\n'}
-		lenInNewLineChars = 1
 	}
 
 	lenTextFields := len(txtStdLine.textFields)
@@ -527,10 +525,10 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		return formattedText, err
 	}
 
-	var result, lineStr string
+	var lineStr string
 
 	for i := 0; i < lenTextFields; i++ {
-		result += txtStdLine.textFields[i].GetFormattedText()
+		lineStr += txtStdLine.textFields[i].GetFormattedText()
 	}
 
 	for j := 0; j < txtStdLine.numOfStdLines; j++ {
@@ -540,10 +538,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	if txtStdLine.turnLineTerminatorOff == true {
 
 		return formattedText, err
-	}
-
-	if len(txtStdLine.newLineChars) == 0 {
-		txtStdLine.newLineChars = []rune{'\n'}
 	}
 
 	formattedText += string(txtStdLine.newLineChars)
