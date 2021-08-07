@@ -1175,6 +1175,112 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 	return newTxtTimerLines, err
 }
 
+// NewDefaultShellTimerEvent - Creates and returns a new instance
+// of TextLineSpecTimerLines using minimal input parameters. All
+// the formatting parameters are set to standard default values.
+//
+// The return TextLineSpecTimerLines instance is only configured
+// with basic formatting parameters and is NOT configured with the
+// 'startTime' and 'endTime' parameters necessary for a fully
+// configured timer event.
+//
+// Use this method when the 'startTime' and 'endTime' parameters
+// are unknown. Follow up later to complete the timer event by
+// calling one or more of the following methods when both starting
+// time and ending time are known:
+//
+//   TextLineSpecTimerLines.SetStartAndEndTime()
+//   - When both 'startTime' and 'endTime' are known.
+//
+//   TextLineSpecTimerLines.SetStartTime()
+//   - When the 'startTime' is known.
+//
+//   TextLineSpecTimerLines.SetEndTime()
+//   - When the 'startTime' is known.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+// This method will automatically set the following default values:
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+//
+//  startTimeLabel      - Defaults to "Start Time"
+//
+//  endTimeLabel        - Defaults to "End Time".
+//
+//  endTime             - Defaults to July 4, 1776 9:30AM UTC
+//
+//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  timeDurationLabel   - Defaults to "Elapsed Time"
+//
+//  labelFieldLen       - Defaults to  '12'
+//
+//  labelJustification  - Defaults to TextJustify(0).Right()
+//
+//  labelOutputSeparationChars
+//                      - Defaults to ": "
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecTimerLines
+//     - This method will create and return a new instance of
+//       TextLineSpecTimerLines which is fully configured except
+//       for the starting time and ending time.
+//
+func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() TextLineSpecTimerLines {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	newTxtTimerLines := TextLineSpecTimerLines{}
+
+	timeDurationLabel :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTimeDurationLabel()
+
+	defaultTime :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTime()
+
+	_ = textLineSpecTimerLinesMolecule{}.ptr().
+		setTxtLineSpecTimerLines(
+			&newTxtTimerLines,
+			nil,
+			defaultTime,
+			nil,
+			defaultTime,
+			"",
+			timeDurationLabel,
+			len(timeDurationLabel),
+			TxtJustify.Right(),
+			nil,
+			nil)
+
+	return newTxtTimerLines
+}
+
 // NewEmptyTimerEvent - Creates and returns a new instance of
 // TextLineSpecTimerLines which is empty, invalid and
 // uninitialized.
@@ -1462,19 +1568,10 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 // basic parameters and is NOT configured with the 'startTime'
 // and 'endTime' parameters necessary for a fully configured timer event.
 //
-// The intent is to create a timer event shell which can later be
-// completed when the 'startTime' and 'endTime' are known. When
-// both 'startTime and 'endTime' are known, call the method
-// TextLineSpecTimerLines.SetStartEndTime() to complete the
-// configuration of this timer event.
-//
-// The purpose of a TextLineSpecTimerLines instance is to capture
-// all the essential elements of a timer event and format that
-// information for text display output or printing.
-//
 // Use this method when the 'startTime' and 'endTime' parameters
 // are unknown. Follow up later to complete the timer event by
-// calling one or more of the following method:
+// calling one or more of the following methods when both starting
+// time and ending time are known:
 //
 //   TextLineSpecTimerLines.SetStartAndEndTime()
 //   - When both 'startTime' and 'endTime' are known.
@@ -1484,6 +1581,21 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //
 //   TextLineSpecTimerLines.SetEndTime()
 //   - When the 'startTime' is known.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+//
+// This method will automatically set the following default values:
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+//
+//  endTime             - Defaults to July 4, 1776 9:30AM UTC
 //
 //
 // ------------------------------------------------------------------------
@@ -1886,6 +1998,118 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 			ePrefix.XCtx("txtSpecTimerLines"))
 
 	return err
+}
+
+// SetDefaultShellTimerEvent - Reconfigures the current instance of
+// TextLineSpecTimerLines using minimal input parameters. All the
+// formatting parameters are set to standard default values.
+//
+// Upon completion the current TextLineSpecTimerLines instance is
+// only configured with basic formatting parameters and is NOT
+// configured with the 'startTime' and 'endTime' parameters
+// necessary for a fully configured timer event.
+//
+// Use this method when the 'startTime' and 'endTime' parameters
+// are unknown and default formatting parameters are acceptable.
+// Follow up later to complete the timer event by calling one or
+// more of the following methods when both starting time and ending
+// time are known:
+//
+//   TextLineSpecTimerLines.SetStartAndEndTime()
+//   - When both 'startTime' and 'endTime' are known.
+//
+//   TextLineSpecTimerLines.SetStartTime()
+//   - When the 'startTime' is known.
+//
+//   TextLineSpecTimerLines.SetEndTime()
+//   - When the 'startTime' is known.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display output or printing.
+//
+// ------------------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will overwrite and reset all the data values
+// encapsulated by the current TextLineSpecTimerLines instance.
+//
+//
+// This method will automatically set the following default values:
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+//
+//  startTimeLabel      - Defaults to "Start Time"
+//
+//  endTime             - Defaults to July 4, 1776 9:30AM UTC
+//
+//  endTimeLabel        - Defaults to "End Time".
+//
+//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  timeDurationLabel   - Defaults to "Elapsed Time"
+//
+//  labelFieldLen       - Defaults to  '12'
+//
+//  labelJustification  - Defaults to TextJustify(0).Right()
+//
+//  labelOutputSeparationChars
+//                      - Defaults to ": "
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//     - This method will automatically set the internal member
+//       variables encapsulated by the current
+//       TextLineSpecTimerLines to default values.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	timeDurationLabel :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTimeDurationLabel()
+
+	defaultTime :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getDefaultTime()
+
+	_ = textLineSpecTimerLinesMolecule{}.ptr().
+		setTxtLineSpecTimerLines(
+			txtSpecTimerLines,
+			nil,
+			defaultTime,
+			nil,
+			defaultTime,
+			"",
+			timeDurationLabel,
+			len(timeDurationLabel),
+			TxtJustify.Right(),
+			nil,
+			nil)
+
 }
 
 // SetEndTimeLabel - Sets the internal member variable
