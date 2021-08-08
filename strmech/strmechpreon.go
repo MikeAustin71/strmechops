@@ -26,9 +26,9 @@ type strMechPreon struct {
 // Input Parameters
 //
 //  targetRuneArray            []rune
-//     - All of the data in the input parameter rune array,
+//     - All the data in the input parameter rune array,
 //       'sourceRuneArray', will be copied to this parameter,
-//       'targetRuneArray'. All of the pre-existing data in
+//       'targetRuneArray'. All the pre-existing data in
 //       'targetRuneArray' will be deleted and replaced.
 //
 //
@@ -173,9 +173,9 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 // Input Parameters
 //
 //  targetIntArray             []rune
-//     - All of the data in the input parameter rune array,
+//     - All the data in the input parameter rune array,
 //       'sourceIntArray', will be copied to this parameter,
-//       'targetIntArray'. All of the pre-existing data in
+//       'targetIntArray'. All the pre-existing data in
 //       'targetIntArray' will be deleted and replaced.
 //
 //
@@ -321,9 +321,9 @@ func (sMechPreon *strMechPreon) copyIntegerArrays(
 // Input Parameters
 //
 //  targetUintArray            []rune
-//     - All of the data in the input parameter rune array,
+//     - All the data in the input parameter rune array,
 //       'sourceUintArray', will be copied to this parameter,
-//       'targetUintArray'. All of the pre-existing data in
+//       'targetUintArray'. All the pre-existing data in
 //       'targetUintArray' will be deleted and replaced.
 //
 //
@@ -602,8 +602,8 @@ func (sMechPreon *strMechPreon) equalUintArrays(
 // Input Parameters
 //
 //  hostRunes           []rune
-//     - An array of runes. This rune array will searched to
-//       identify the the beginning index of input parameter
+//     - An array of runes. This rune array will be searched to
+//       identify the beginning index of input parameter
 //       'targetRunes'. If 'hostRunes' is a zero length array, an
 //       error will be returned.
 //
@@ -768,7 +768,7 @@ func (sMechPreon *strMechPreon) findRunesInRunes(
 // isTargetRunesIndex - Receives a host rune array and a starting
 // index to that array. Beginning with the starting index this
 // method determines whether the target rune array exists in the
-// the host rune array beginning at the starting index.
+// host rune array beginning at the starting index.
 //
 // If the target rune array is found in the host array at the host
 // array starting index, this method returns true.
@@ -779,7 +779,7 @@ func (sMechPreon *strMechPreon) findRunesInRunes(
 // Input Parameters
 //
 //  hostRunes           []rune
-//     - An array of runes. This rune array will searched to
+//     - An array of runes. This rune array will be searched to
 //       determine if the target runes array is present at the
 //       'hostStartIndex.
 //
@@ -903,9 +903,9 @@ func (sMechPreon *strMechPreon) isTargetRunesIndex(
 // Input Parameters
 //
 //  charArray                  []rune
-//     - A an array of runes consisting entirely of alpha-numeric
+//     - An array of runes consisting entirely of alpha-numeric
 //       characters. This method will evaluate this array to
-//       determine whether or not it is valid.
+//       determine whether it is valid.
 //
 //       If the rune array is equal to 'nil', the array is judged
 //       to be invalid and an error will be returned.
@@ -1018,7 +1018,7 @@ func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 }
 
 // testValidityOfRuneIntArray - Performs a diagnostic analysis on
-// an array of runes to determine if all of the character values
+// an array of runes to determine if all the character values
 // in the array constitute integer digits '0' (0x30) through '9'
 // (0x39), inclusive.
 //
@@ -1043,11 +1043,10 @@ func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 // Input Parameters
 //
 //  intDigitsArray             []rune
-//     - A an array of runes consisting entirely of numeric text
+//     - An array of runes consisting entirely of numeric text
 //       characters which represent integer digits zero ('0' or
 //       0x30) through ('9' or 0x39) inclusive. This method will
-//       evaluate this array to determine whether or not it is
-//       valid.
+//       evaluate this array to determine whether it is valid.
 //
 //       If the rune array is 'nil' or a zero length array, the
 //       array is judged to be invalid and an error will be

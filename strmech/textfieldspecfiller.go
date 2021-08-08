@@ -38,7 +38,7 @@ type TextFieldSpecFiller struct {
 // of the current TextFieldSpecFiller instance ('txtFillerField').
 //
 // IMPORTANT
-// All of the data fields in current TextFieldSpecFiller instance
+// All the data fields in current TextFieldSpecFiller instance
 // ('txtFillerField') will be modified and overwritten.
 //
 //
@@ -1427,7 +1427,7 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRuneArray(
 }
 
 // NewEmpty - Returns a new unpopulated instance of
-// TextFieldSpecFiller. All of the member variables contained in
+// TextFieldSpecFiller. All the member variables contained in
 // this new instance are set to their uninitialized or zero values.
 //
 // Be advised that setting member variables to their zero values

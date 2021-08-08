@@ -64,8 +64,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 // of the current TextLineSpecStandardLine instance ('stdLine').
 //
 // IMPORTANT
-// All of the data fields in current TextLineSpecStandardLine
-// instance ('stdLine') will be modified and overwritten.
+// All the data fields in current TextLineSpecStandardLine instance
+// ('stdLine') will be modified and overwritten.
 //
 //
 // ----------------------------------------------------------------
@@ -521,7 +521,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	return &newStdLine, err
 }
 
-// Empty - Deletes all of the text fields stored as an array of
+// Empty - Deletes all the text fields stored as an array of
 // ITextFieldSpecification pointers within the current
 // TextLineSpecStandardLine instance.
 //
@@ -990,9 +990,9 @@ func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 
 // SetLineTerminationChars - By default, the line termination
 // character for blank line produced and applied by this text line
-// specification is the the new line character, '\n'. However,
+// specification is the new line character, '\n'. However,
 // users have the option of substituting a character or series
-// of characters for the the line termination sequence using this
+// of characters for the line termination sequence using this
 // method.
 //
 // This method will receive a string as input and apply the
@@ -1031,7 +1031,7 @@ func (stdLine *TextLineSpecStandardLine) SetLineTerminationChars(
 // the current TextLineSpecStandardLine instance.
 //
 // If input parameter 'textFields' is nil or zero length, the internal
-// array of text fields will be emptied an set to nil.
+// array of text fields will be emptied and set to nil.
 //
 func (stdLine *TextLineSpecStandardLine) SetTextFields(
 	textFields []ITextFieldSpecification) {
