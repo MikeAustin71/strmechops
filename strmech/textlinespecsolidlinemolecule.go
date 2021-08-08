@@ -25,10 +25,11 @@ type textLineSpecSolidLineMolecule struct {
 // solid is specified by the calling function using input
 // parameter 'solidLineCharsRepeatCount'.
 //
-// By default, all solid lines are terminated by a new line
-// character. This means that each instance of a solid will be
-// formatted as a single line of text. The new line character or
-// characters may be customized by the calling function.
+// By default, all solid lines of text are terminated with a new
+// line character ('\n). This means that each instance of a solid
+// will be formatted as a single line of text. The new line
+// character or characters may be customized by the calling
+// function.
 //
 //
 // ------------------------------------------------------------------------
@@ -46,6 +47,12 @@ type textLineSpecSolidLineMolecule struct {
 //     - The number of white space characters which will be
 //       inserted on the left side of the solid line.
 //
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         Solid line = "   *****"
+//
 //       If this value is less than zero (0), it will be set to a
 //       default value of zero (0).
 //
@@ -55,6 +62,11 @@ type textLineSpecSolidLineMolecule struct {
 //       which will comprise the solid line output for text display
 //       or printing.
 //
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+///
 //       If this parameter is submitted as a zero length rune
 //       array, an error will be returned.
 //
@@ -74,8 +86,14 @@ type textLineSpecSolidLineMolecule struct {
 //
 //
 //  newLineChars               []rune
-//     - This rune array contains the character or characters which
-//       comprise the solid line.
+//     - This rune array contains one or more characters which will
+//       be used to terminate the solid text line.
+//
+//       Example:
+//         solidLineChars = '*'
+//         solidLineCharsRepeatCount = 5
+//         newLineChars = []rune{'??\n')
+//         Solid line = "*****??\n"
 //
 //       If this parameter is submitted as a zero length rune array,
 //       it will by default be set to a new line character ('\n').
