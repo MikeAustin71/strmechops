@@ -32,7 +32,7 @@ type TextLineSpecTimerLines struct {
 	lock                       *sync.Mutex
 }
 
-// CopyIn - Copies the data fields from an incoming instance of
+// CopyIn - Copies all the data fields from an incoming instance of
 // TextLineSpecTimerLines ('incomingTimerLines') to the data fields
 // of the current TextLineSpecTimerLines instance
 // ('txtSpecTimerLines').
@@ -51,8 +51,8 @@ type TextLineSpecTimerLines struct {
 //
 //  incomingTimerLines         *TextLineSpecTimerLines
 //     - A pointer to an instance of TextLineSpecTimerLines. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//       method will NOT change the member variable data values
+//       contained in this instance.
 //
 //       All data values in this TextLineSpecTimerLines instance
 //       will be copied to current TextLineSpecTimerLines

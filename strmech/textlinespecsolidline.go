@@ -33,6 +33,130 @@ type TextLineSpecSolidLine struct {
 	lock                      *sync.Mutex
 }
 
+// CopyIn - Copies all the data fields from an incoming instance of
+// TextLineSpecSolidLine ('incomingTxtSolidLine') to the data fields
+// of the current TextLineSpecSolidLine instance
+// ('txtSpecSolidLine').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current TextLineSpecSolidLine instance
+// ('txtSpecSolidLine') will be modified and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtSolidLine       *TextLineSpecSolidLine
+//     - A pointer to an instance of TextLineSpecSolidLine. This
+//       method will NOT change the member variable data values
+//       contained in this instance.
+//
+//       All data values in this TextLineSpecSolidLine instance
+//       will be copied to current TextLineSpecSolidLine
+//       instance ('txtSpecSolidLine').
+//
+//       If 'incomingTxtSolidLine' contains invalid member data
+//       variables, this method will return an error.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) CopyIn(
+	incomingTxtSolidLine *TextLineSpecSolidLine,
+	errorPrefix interface{}) error {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecSolidLineMolecule{}.ptr().
+		copyIn(
+			txtSpecSolidLine,
+			incomingTxtSolidLine,
+			ePrefix)
+
+	return err
+}
+
 // NewSolidLine - Creates and returns a new instance of
 // TextLineSpecSolidLine.
 //
@@ -138,7 +262,7 @@ type TextLineSpecSolidLine struct {
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (solidLine TextLineSpecSolidLine) NewSolidLine(
+func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 	leftMargin int,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
@@ -146,13 +270,13 @@ func (solidLine TextLineSpecSolidLine) NewSolidLine(
 	txtSolidLine TextLineSpecSolidLine,
 	err error) {
 
-	if solidLine.lock == nil {
-		solidLine.lock = new(sync.Mutex)
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
 	}
 
-	solidLine.lock.Lock()
+	txtSpecSolidLine.lock.Lock()
 
-	defer solidLine.lock.Unlock()
+	defer txtSpecSolidLine.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -216,16 +340,16 @@ func (solidLine TextLineSpecSolidLine) NewSolidLine(
 //
 //  --- NONE ---
 //
-func (solidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
 	newLineChars string) {
 
-	if solidLine.lock == nil {
-		solidLine.lock = new(sync.Mutex)
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
 	}
 
-	solidLine.lock.Lock()
+	txtSpecSolidLine.lock.Lock()
 
-	defer solidLine.lock.Unlock()
+	defer txtSpecSolidLine.lock.Unlock()
 
 	if len(newLineChars) == 0 {
 		newLineChars = "\n"
@@ -236,7 +360,7 @@ func (solidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
 	newLineRunes := []rune(newLineChars)
 
 	_ = sMechPreon.copyRuneArrays(
-		&solidLine.newLineChars,
+		&txtSpecSolidLine.newLineChars,
 		&newLineRunes,
 		true,
 		nil)
@@ -248,15 +372,15 @@ func (solidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
 // This method fulfills requirements of ITextSpecification
 // interface.
 //
-func (solidLine TextLineSpecSolidLine) TextTypeName() string {
+func (txtSpecSolidLine TextLineSpecSolidLine) TextTypeName() string {
 
-	if solidLine.lock == nil {
-		solidLine.lock = new(sync.Mutex)
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
 	}
 
-	solidLine.lock.Lock()
+	txtSpecSolidLine.lock.Lock()
 
-	defer solidLine.lock.Unlock()
+	defer txtSpecSolidLine.lock.Unlock()
 
 	return "TextLineSpecSolidLine"
 }
@@ -267,15 +391,15 @@ func (solidLine TextLineSpecSolidLine) TextTypeName() string {
 // This method fulfills requirements of ITextLineSpecification
 // interface.
 //
-func (solidLine TextLineSpecSolidLine) TextLineSpecName() string {
+func (txtSpecSolidLine TextLineSpecSolidLine) TextLineSpecName() string {
 
-	if solidLine.lock == nil {
-		solidLine.lock = new(sync.Mutex)
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
 	}
 
-	solidLine.lock.Lock()
+	txtSpecSolidLine.lock.Lock()
 
-	defer solidLine.lock.Unlock()
+	defer txtSpecSolidLine.lock.Unlock()
 
 	return "TextLineSpecStandardLine"
 }
