@@ -159,8 +159,8 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 //       and returned in a new instance of TextLineSpecTimerLines.
 //
 //       If the member variable data values encapsulated by this
-//       'txtTimerLines' are found to be invalid, this method will
-//       return an error
+//       'txtTimerLines' parameter are found to be invalid, an
+//       error will be returned.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
