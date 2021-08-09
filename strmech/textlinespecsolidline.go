@@ -45,7 +45,9 @@ type TextLineSpecSolidLine struct {
 // or asterisks ("*****"). Multiple characters may be used to
 // produce different line sequences ("--*--*--*"). The length of a
 // solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'.
+// parameter 'solidLineCharsRepeatCount'. The use of these types of
+// solid lines with text display are often described as
+// "line breaks" or "breaking lines".
 //
 // By default, all solid lines of text are terminated with a new
 // line character ('\n'). This means that each instance of a solid
@@ -195,11 +197,13 @@ func (solidLine TextLineSpecSolidLine) NewSolidLine(
 //     - This rune array contains one or more characters which will
 //       be used to terminate the solid text line.
 //
-//       Example:
+//       This example creates a line termination followed by a
+//       second blank line:
 //         solidLineChars = '*'
 //         solidLineCharsRepeatCount = 5
-//         newLineChars = []rune{'??\n'}
+//         newLineChars = "??\n\n"
 //         Solid line = "*****??\n"
+//                      "\n"
 //
 //       If this parameter is submitted as a zero length rune array,
 //       it will by default be set to a new line character ('\n').

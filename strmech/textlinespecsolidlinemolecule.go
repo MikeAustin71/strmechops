@@ -3,11 +3,71 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
 type textLineSpecSolidLineMolecule struct {
 	lock *sync.Mutex
+}
+
+func (txtSpecSolidLine *textLineSpecSolidLineMolecule) getFormattedText(
+	txtSolidLine *TextLineSpecSolidLine,
+	errPrefDto *ePref.ErrPrefixDto) (
+	formattedText string,
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecSolidLineMolecule."+
+			"setTxtSolidLine()",
+		"")
+
+	if err != nil {
+		return formattedText, err
+	}
+
+	if txtSolidLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtSolidLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return formattedText, err
+	}
+
+	//TODO - Add txtSolidLine validity check!
+	sb := strings.Builder{}
+
+	sb.Grow(256)
+
+	if txtSolidLine.leftMargin > 0 {
+		for i := 0; i < txtSolidLine.leftMargin; i++ {
+			sb.WriteString(" ")
+		}
+	}
+
+	str := string(txtSolidLine.solidLineChars)
+
+	for i := 0; i < txtSolidLine.solidLineCharsRepeatCount; i++ {
+		sb.WriteString(str)
+	}
+
+	sb.WriteString(string(txtSolidLine.newLineChars))
+
+	formattedText = sb.String()
+
+	return formattedText, err
 }
 
 // setTxtSolidLine - Sets the member variable data values for an
