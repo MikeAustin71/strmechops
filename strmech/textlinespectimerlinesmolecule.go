@@ -57,7 +57,7 @@ type textLineSpecTimerLinesMolecule struct {
 //  string
 //     - If this method completes successfully, a string of
 //       formatted text will be generated from the data provided by
-//       input parameter 'txtStdLine'.
+//       input parameter 'txtTimerLines'.
 //
 //
 //  error

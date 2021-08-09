@@ -84,8 +84,9 @@ type TextLineSpecSolidLine struct {
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length string, an
-//       error will be returned.
+//       If this parameter is submitted as a zero length rune array,
+//       or if 'newLineChars' contains invalid characters, it will
+//       be set to the default new line character ('\n').
 //
 //
 //  solidLineCharsRepeatCount  int
