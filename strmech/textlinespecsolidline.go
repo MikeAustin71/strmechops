@@ -27,6 +27,7 @@ import (
 //
 type TextLineSpecSolidLine struct {
 	leftMargin                int
+	rightMargin               int
 	solidLineChars            []rune
 	solidLineCharsRepeatCount int
 	newLineChars              []rune
@@ -271,6 +272,323 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 	return newTxtSolidLine, err
 }
 
+// CopyOutITextLine - Returns a deep copy of the current
+// TextLineSpecSolidLine instance cast as a type
+// ITextLineSpecification.
+//
+// This method fulfills requirements of ITextLineSpecification
+// interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ITextLineSpecification
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current TextLineSpecSolidLine instance cast as an
+//       ITextLineSpecification object.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutITextLine(
+	errorPrefix interface{}) (
+	ITextLineSpecification,
+	error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.CopyOutITextLine()",
+		"")
+
+	if err != nil {
+		return &TextLineSpecSolidLine{}, err
+	}
+
+	var newTxtSolidLine TextLineSpecSolidLine
+
+	newTxtSolidLine,
+		err = textLineSpecSolidLineMolecule{}.ptr().
+		copyOut(
+			txtSpecSolidLine,
+			ePrefix)
+
+	return ITextLineSpecification(&newTxtSolidLine), nil
+}
+
+// CopyOutPtr - Returns a pointer to a deep copy of the current
+// TextLineSpecSolidLine instance.
+//
+// If the current TextLineSpecSolidLine instance contains invalid
+// member variable data values, this method will return an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextLineSpecSolidLine
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a pointer to a
+//       deep copy of the current TextLineSpecSolidLine
+//       instance.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutPtr(
+	errorPrefix interface{}) (
+	*TextLineSpecSolidLine,
+	error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newTxtSolidLine := TextLineSpecSolidLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.CopyOutPtr()",
+		"")
+
+	if err != nil {
+		return &newTxtSolidLine, err
+	}
+
+	newTxtSolidLine,
+		err = textLineSpecSolidLineMolecule{}.ptr().
+		copyOut(
+			txtSpecSolidLine,
+			ePrefix)
+
+	return &newTxtSolidLine, err
+}
+
+// Empty - Resets all internal member variables to their initial
+// or zero states.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) Empty() {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	textLineSpecSolidLineAtom{}.ptr().
+		empty(txtSpecSolidLine)
+
+	txtSpecSolidLine.lock.Unlock()
+
+	txtSpecSolidLine.lock = nil
+}
+
+// Equal - Receives a pointer to another instance of
+// *TextLineSpecSolidLine and proceeds to compare the member
+// variables to those of the current TextLineSpecSolidLine
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) Equal(
+	incomingTxtSpecSolidLine *TextLineSpecSolidLine) bool {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	return textLineSpecSolidLineAtom{}.ptr().
+		equal(
+			txtSpecSolidLine,
+			incomingTxtSpecSolidLine)
+}
+
+// EqualITextLine - Receives an object implementing the
+// ITextLineSpecification interface and proceeds to compare
+// the member variables to those of the current
+// TextLineSpecSolidLine instance in order to determine if
+// they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables from both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+// This method is required by interface ITextLineSpecification.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) EqualITextLine(
+	iTextLine ITextLineSpecification) bool {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	incomingTxtSpecSolidLine, ok :=
+		iTextLine.(*TextLineSpecSolidLine)
+
+	if !ok {
+		return false
+	}
+
+	return textLineSpecSolidLineAtom{}.ptr().
+		equal(
+			txtSpecSolidLine,
+			incomingTxtSpecSolidLine)
+}
+
 // NewSolidLine - Creates and returns a new instance of
 // TextLineSpecSolidLine.
 //
@@ -309,7 +627,24 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 //         Solid line = "   *****"
 //
 //       If this value is less than zero (0), it will be set to a
-//       default value of zero (0).
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  rightMargin                 int
+//     - The number of white space characters appended to the
+//       end, or right side, of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -378,6 +713,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 	leftMargin int,
+	rightMargin int,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	errorPrefix interface{}) (
@@ -408,6 +744,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 		setTxtSolidLine(
 			&txtSolidLine,
 			leftMargin,
+			rightMargin,
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},

@@ -144,6 +144,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 	targetTxtSolidLine.leftMargin =
 		incomingTxtSolidLine.leftMargin
 
+	targetTxtSolidLine.rightMargin =
+		incomingTxtSolidLine.rightMargin
+
 	targetTxtSolidLine.solidLineCharsRepeatCount =
 		incomingTxtSolidLine.solidLineCharsRepeatCount
 
@@ -267,6 +270,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 	newTxtSolidLine.leftMargin =
 		txtSolidLine.leftMargin
 
+	newTxtSolidLine.rightMargin =
+		txtSolidLine.rightMargin
+
 	newTxtSolidLine.solidLineCharsRepeatCount =
 		txtSolidLine.solidLineCharsRepeatCount
 
@@ -382,16 +388,18 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 
 	sb.Grow(256)
 
-	if txtSolidLine.leftMargin > 0 {
-		for i := 0; i < txtSolidLine.leftMargin; i++ {
-			sb.WriteString(" ")
-		}
+	for i := 0; i < txtSolidLine.leftMargin; i++ {
+		sb.WriteString(" ")
 	}
 
 	str := string(txtSolidLine.solidLineChars)
 
 	for i := 0; i < txtSolidLine.solidLineCharsRepeatCount; i++ {
 		sb.WriteString(str)
+	}
+
+	for i := 0; i < txtSolidLine.rightMargin; i++ {
+		sb.WriteString(" ")
 	}
 
 	sb.WriteString(string(txtSolidLine.newLineChars))
@@ -463,7 +471,24 @@ func (txtSolidLineMolecule textLineSpecSolidLineMolecule) ptr() *textLineSpecSol
 //         Solid line = "   *****"
 //
 //       If this value is less than zero (0), it will be set to a
-//       default value of zero (0).
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  rightMargin                 int
+//     - The number of white space characters appended to the
+//       end, or right side, of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             []rune
@@ -540,6 +565,7 @@ func (txtSolidLineMolecule textLineSpecSolidLineMolecule) ptr() *textLineSpecSol
 func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	txtSolidLine *TextLineSpecSolidLine,
 	leftMargin int,
+	rightMargin int,
 	solidLineChars []rune,
 	solidLineCharsRepeatCount int,
 	newLineChars []rune,
@@ -603,6 +629,32 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		leftMargin = 0
 	}
 
+	if leftMargin > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'leftMargin' is invalid!\n"+
+			"The integer value of 'leftMargin' is greater than 1,000,000.\n"+
+			"leftMargin='%v'\n",
+			ePrefix.String(),
+			leftMargin)
+
+		return err
+	}
+
+	if rightMargin < 0 {
+		rightMargin = 0
+	}
+
+	if rightMargin > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'rightMargin' is invalid!\n"+
+			"The integer value of 'rightMargin' is greater than 1,000,000.\n"+
+			"leftMargin='%v'\n",
+			ePrefix.String(),
+			leftMargin)
+
+		return err
+	}
+
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineChars,
@@ -626,6 +678,8 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	}
 
 	txtSolidLine.leftMargin = leftMargin
+
+	txtSolidLine.leftMargin = rightMargin
 
 	txtSolidLine.solidLineCharsRepeatCount =
 		solidLineCharsRepeatCount

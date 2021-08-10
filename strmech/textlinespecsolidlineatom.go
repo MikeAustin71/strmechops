@@ -10,6 +10,98 @@ type textLineSpecSolidLineAtom struct {
 	lock *sync.Mutex
 }
 
+// empty - Receives a pointer to an instance of
+// TextLineSpecSolidLine and proceeds to set all the internal
+// member variables to their uninitialized or zero states.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The data values of all member variables contained in input
+// parameter 'txtSolidLine' will be overwritten and deleted.
+//
+func (txtSolidLineAtom *textLineSpecSolidLineAtom) empty(
+	txtSolidLine *TextLineSpecSolidLine) {
+
+	if txtSolidLineAtom.lock == nil {
+		txtSolidLineAtom.lock = new(sync.Mutex)
+	}
+
+	txtSolidLineAtom.lock.Lock()
+
+	defer txtSolidLineAtom.lock.Unlock()
+
+	txtSolidLine.leftMargin = 0
+	txtSolidLine.rightMargin = 0
+	txtSolidLine.solidLineChars = nil
+	txtSolidLine.solidLineCharsRepeatCount = 0
+	txtSolidLine.newLineChars = nil
+
+	return
+}
+
+// equal - Receives pointers to two TextLineSpecSolidLine
+// instances and proceeds to compare the member data elements to
+// determine whether they are equal.
+//
+// If the data elements of both input parameters 'txtSolidLineOne'
+// and 'txtSolidLineTwo' are equal in all respects, this method
+// returns a boolean value of 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (txtSolidLineAtom *textLineSpecSolidLineAtom) equal(
+	txtSolidLineOne *TextLineSpecSolidLine,
+	txtSolidLineTwo *TextLineSpecSolidLine) bool {
+
+	if txtSolidLineAtom.lock == nil {
+		txtSolidLineAtom.lock = new(sync.Mutex)
+	}
+
+	txtSolidLineAtom.lock.Lock()
+
+	defer txtSolidLineAtom.lock.Unlock()
+
+	if txtSolidLineOne == nil ||
+		txtSolidLineTwo == nil {
+		return false
+	}
+
+	if txtSolidLineOne.leftMargin !=
+		txtSolidLineTwo.leftMargin {
+		return false
+	}
+
+	if txtSolidLineOne.rightMargin !=
+		txtSolidLineTwo.rightMargin {
+		return false
+	}
+
+	sMechPreon := strMechPreon{}
+
+	if !sMechPreon.equalRuneArrays(
+		txtSolidLineOne.solidLineChars,
+		txtSolidLineTwo.solidLineChars) {
+		return false
+	}
+
+	if txtSolidLineOne.solidLineCharsRepeatCount !=
+		txtSolidLineTwo.solidLineCharsRepeatCount {
+		return false
+	}
+
+	// nil arrays and zero length arrays
+	// are treated as 'equal'
+	if !sMechPreon.equalRuneArrays(
+		txtSolidLineOne.newLineChars,
+		txtSolidLineTwo.newLineChars) {
+		return false
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecSolidLineAtom.
 //
@@ -163,6 +255,32 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 
 	if txtSolidLine.leftMargin < 0 {
 		txtSolidLine.leftMargin = 0
+	}
+
+	if txtSolidLine.leftMargin > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'txtSolidLine.leftMargin' is invalid!\n"+
+			"The integer value of 'txtSolidLine.leftMargin' is greater than 1,000,000.\n"+
+			"txtSolidLine.leftMargin='%v'\n",
+			ePrefix.String(),
+			txtSolidLine.leftMargin)
+
+		return isValid, err
+	}
+
+	if txtSolidLine.rightMargin < 0 {
+		txtSolidLine.rightMargin = 0
+	}
+
+	if txtSolidLine.rightMargin > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'txtSolidLine.rightMargin' is invalid!\n"+
+			"The integer value of 'txtSolidLine.rightMargin' is greater than 1,000,000.\n"+
+			"txtSolidLine.rightMargin='%v'\n",
+			ePrefix.String(),
+			txtSolidLine.rightMargin)
+
+		return isValid, err
 	}
 
 	_,

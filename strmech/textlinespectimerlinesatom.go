@@ -80,7 +80,7 @@ func (txtTimerLinesAtom textLineSpecTimerLinesAtom) ptr() *textLineSpecTimerLine
 //
 // If the data elements of both input parameters 'txtTimerLinesOne'
 // and 'txtTimerLinesTwo' are equal in all respects, this method
-// returns a boolean value of 'true'. Otherwise this method returns
+// returns a boolean value of 'true'. Otherwise, this method returns
 // 'false'.
 //
 func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(

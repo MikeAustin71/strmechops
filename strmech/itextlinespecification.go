@@ -1,8 +1,6 @@
 package strmech
 
 type ITextLineSpecification interface {
-	GetFormattedText() string
-
 	CopyOutITextLine(
 		errorPrefix interface{}) (
 		ITextLineSpecification,
@@ -12,6 +10,8 @@ type ITextLineSpecification interface {
 
 	EqualITextLine(
 		iTextLine ITextLineSpecification) bool
+
+	GetFormattedText() string
 
 	IsValidInstanceError(
 		errorPrefix interface{}) error
