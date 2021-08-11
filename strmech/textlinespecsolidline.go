@@ -1259,6 +1259,182 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 	return txtSolidLine, err
 }
 
+// SetFullSolidLineConfig - This method configures the current
+// TextLineSpecSolidLine instance with new solid line parameters.
+// All internal member variable data values for the current
+// TextLineSpecSolidLine instance will be reset and overwritten.
+// This method requires more input parameters than other similar
+// methods, but in return, it allows the user to exercise control
+// over all facets of the TextLineSpecSolidLine configuration.
+//
+// The TextLineSpecSolidLine type provides formatting
+// specifications for solid lines output for text display and
+// printing. A solid line consists of a single character or
+// multiple characters which constitute a solid line and are often
+// used for line breaks. Typically, solid lines consist of dashes
+// ("---"), underscore characters ("____"), equal signs ("=====")
+// or asterisks ("*****"). Multiple characters may be used to
+// produce different line sequences ("--*--*--*"). The length of a
+// solid is specified by the calling function using input
+// parameter 'solidLineCharsRepeatCount'. The use of these types of
+// solid lines with text display are often described as
+// "line breaks" or "breaking lines".
+//
+// ------------------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will overwrite and reset all the data values
+// encapsulated by the current TextLineSpecSolidLine instance.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMargin                 int
+//     - The number of white space characters which will be
+//       inserted on the left side of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         Solid line = "   *****"
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  rightMargin                 int
+//     - The number of white space characters appended to the
+//       end, or right side, of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  solidLineChars             string
+//     - This string specifies the character or characters which
+//       will comprise the solid line output for text display or
+//       printing.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//       If this parameter is submitted as a zero length rune array,
+//       or if 'newLineChars' contains invalid characters, it will
+//       be set to the default new line character ('\n').
+//
+//
+//  solidLineCharsRepeatCount  int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), an error will be returned.
+//
+//       Example:
+//         solidLineChars = '*'
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//
+//  newLineChars               string
+//     - This rune array contains one or more characters which will
+//       be used to terminate the solid text line.
+//
+//       Example:
+//         solidLineChars = '*'
+//         solidLineCharsRepeatCount = 5
+//         newLineChars = "??\n\n"
+//         Solid line = "*****??\n\n"
+//
+//       If this parameter is submitted as a zero length string
+//       it will be set to the default new line character ('\n').
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
+	leftMargin int,
+	rightMargin int,
+	solidLineChars string,
+	solidLineCharsRepeatCount int,
+	newLineChars string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.NewFullSolidLineConfig()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecSolidLineMolecule{}.ptr().
+		setTxtSolidLine(
+			txtSpecSolidLine,
+			leftMargin,
+			rightMargin,
+			[]rune(solidLineChars),
+			solidLineCharsRepeatCount,
+			[]rune(newLineChars),
+			ePrefix.XCtx("txtSpecSolidLine"))
+
+	return err
+}
+
 // SetNewLineCharsOverride - Sets the new line character or
 // characters which will be used to terminate the solid line
 // generated by this instance of TextLineSpecSolidLine.
