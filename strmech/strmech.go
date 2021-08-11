@@ -40,7 +40,7 @@ type StrMech struct {
 }
 
 // BreakTextAtLineLength - Breaks string text into lines. Takes a
-// string and inserts a line delimiter character (a.k.a 'rune') at
+// string and inserts a line delimiter character (a.k.a. 'rune') at
 // the specified line length ('lineLength').
 //
 // ------------------------------------------------------------------------
@@ -346,7 +346,7 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 //
 //  nonPrintableChars   []rune
 //     - An array of runes containing non-printable characters.
-//       The non-printable characters were be converted from the
+//       The non-printable characters will be converted from the
 //       printable characters contained in input parameter
 //       'printableChars'.
 //
@@ -458,9 +458,9 @@ func (sMech *StrMech) CopyIn(strops2 *StrMech) {
 // Input Parameters
 //
 //  targetRuneArray            *[]rune
-//     - A pointer to the target rune array. All of the data in the
+//     - A pointer to the target rune array. All the data in the
 //       input parameter rune array, 'sourceRuneArray', will be
-//       copied to this parameter, 'targetRuneArray'. All of the
+//       copied to this parameter, 'targetRuneArray'. All the
 //       pre-existing data in 'targetRuneArray' will be deleted and
 //       replaced.
 //
@@ -714,10 +714,10 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //
 //       If this parameter is populated, the search for a data field
 //       will begin immediately after the first located Key Word
-//       Delimiter string. If none of Key Words in this string array
+//       Delimiter string. If none of the Keywords in this string array
 //       are located in 'targetStr', an empty string will be returned
 //       for data field. If this parameter is populated, at least one
-//       of the Key Words MUST exist in 'targetStr' before a data field
+//       of the Keywords MUST exist in 'targetStr' before a data field
 //       will be extracted and returned.
 //
 //       If this parameter is an empty string array, the search for a
@@ -827,13 +827,15 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //     }
 //
 //   error
-//     - If the method completes successfully and no errors are encountered
-//       this return value is set to 'nil'. Otherwise, if errors are encountered
-//       this return value will contain an appropriate error message.
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
 //
 //       The most likely source of errors are invalid input parameters.
-//       Input parameters 'targetStr', 'startIdx', 'leadingFieldSeparators',
-//       'trailingFieldSeparators' and 'endOfStringDelimiters' are required input
+//       Input parameters 'targetStr', 'startIdx',
+//       'leadingFieldSeparators', 'trailingFieldSeparators' and
+//       'endOfStringDelimiters' are required to be input
 //       parameters and must be populated with valid data.
 //
 //       If an error message is returned, the input parameter
@@ -929,31 +931,39 @@ func (sMech *StrMech) ExtractDataField(
 			ePrefix)
 }
 
-// ExtractNumericDigits - Examines an input parameter 'targetStr' to identify and extract the
-// first instance of a number string. The number string will be comprised of one or more
-// consecutive numeric digits (0-9) and may include leading, trailing or interior non-numeric
-// characters as specified by input parameters.
+// ExtractNumericDigits - Examines an input parameter 'targetStr'
+// to identify and extract the first instance of a number string.
+// The number string will consist of one or more consecutive
+// numeric digits (0-9) and may include leading, trailing or
+// interior non-numeric characters as specified by input parameters.
 //
-// The search for this number string will be started at the index specified by input parameter
-// 'startIdx'. Beginning at 'startIdx' the 'targetStr' will be searched to identify and extract
-// the first instance of a number string.
+// The search for this number string will be started at the index
+// specified by input parameter 'startIdx'. Beginning at 'startIdx'
+// the 'targetStr' will be searched to identify and extract the
+// first instance of a number string.
 //
-// A number string is usually defined a string of consecutive numeric digits. However, this
-// method allows the caller to include additional non-numeric characters as identified by
-// input parameters	'keepLeadingChars', 'keepInteriorChars' and 'keepTrailingChars'.
+// A number string is usually defined a string of consecutive
+// numeric digits. However, this method allows the caller to
+// include additional non-numeric characters as identified by input
+// parameters 'keepLeadingChars', 'keepInteriorChars' and
+// 'keepTrailingChars'.
 //
-// 'keepLeadingChars' is a string of characters which will be prefixed to the number string
-// if those characters exist in 'targetStr' and immediately precede the number string.
+// 'keepLeadingChars' is a string of characters which will be
+// prefixed to the number string if those characters exist in
+// 'targetStr' and immediately precede the number string.
 //
-// 'keepInteriorChars' is a string of characters which, if they exist within the number string,
-// will be retained and presented in the final extracted number string.
+// 'keepInteriorChars' is a string of characters which, if they
+//  exist within the number string, will be retained and presented
+//  in the final extracted number string.
 //
-// 'keepTrailingChars' is a string of characters which will be suffixed to the end of the
-// final extracted number string.  To qualify, the designated 'keepTrailingChars' must immediately
+// 'keepTrailingChars' is a string of characters which will be
+// suffixed to the end of the final extracted number string.  To
+// qualify, the designated 'keepTrailingChars' must immediately
 // follow the number string contained in 'targetStr'.
 //
-// If successfully located within 'targetStr' the first instance of a number string along with
-// characteristics describing that number string are returned in a Type 'NumStrProfileDto'.
+// If successfully located within 'targetStr' the first instance of
+// a number string along with characteristics describing that
+// number string are returned in a Type 'NumStrProfileDto'.
 //
 // ------------------------------------------------------------------------
 //
@@ -1728,7 +1738,7 @@ func (sMech *StrMech) FindLastSpace(
 //
 // ------------------------------------------------------------------------
 //
-// Examples
+// Examples:
 //
 //
 //   Example (1)
@@ -1960,8 +1970,8 @@ func (sMech *StrMech) FindRegExIndex(
 // Input Parameters
 //
 //  hostRunes           []rune
-//     - An array of runes. This rune array will searched to
-//       identify the the beginning index of input parameter
+//     - An array of runes. This rune array will be searched to
+//       identify the beginning index of input parameter
 //       'targetRunes'. If 'hostRunes' is a zero length array, an
 //       error will be returned.
 //
@@ -2566,8 +2576,8 @@ func (sMech *StrMech) GetValidString(
 			ePrefix)
 }
 
-// IntSeparateNumStr - Inserts integer separators into an
-// an array of integer digits.
+// IntSeparateNumStr - Inserts integer separators into an array of
+// integer digits.
 //
 // An integer separator is a character, or series of characters,
 // used to separate integer digits in a number string. These
@@ -2755,7 +2765,7 @@ func (sMech *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 // IsTargetRunesIndex - Receives a host rune array and a starting
 // index to that array. Beginning with the starting index this
 // method determines whether the target rune array exists in the
-// the host rune array beginning at the starting index.
+// host rune array beginning at the starting index.
 //
 // If the target rune array is found in the host array at the host
 // array starting index, this method returns true.
@@ -2766,7 +2776,7 @@ func (sMech *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 // Input Parameters
 //
 //  hostRunes           []rune
-//     - An array of runes. This rune array will searched to
+//     - An array of runes. This rune array will be searched to
 //       determine if the target runes array is present at the
 //       'hostStartIndex.
 //
@@ -2854,9 +2864,9 @@ func (sMech *StrMech) IsTargetRunesIndex(
 // Input Parameters
 //
 //  charArray                  []rune
-//     - A an array of runes consisting entirely of alpha-numeric
+//     - An array of runes consisting entirely of alpha-numeric
 //       characters. This method will evaluate this array to
-//       determine whether or not it is valid.
+//       determine whether it is valid.
 //
 //       If the rune array is equal to 'nil', the array is judged
 //       to be invalid and an error will be returned.
@@ -2974,7 +2984,7 @@ func (sMech *StrMech) IsValidRuneCharArray(
 }
 
 // IsValidRuneIntArray - Performs a diagnostic analysis on
-// an array of runes to determine if all of the character values
+// an array of runes to determine if all the character values
 // in the array constitute integer digits '0' (0x30) through '9'
 // (0x39), inclusive.
 //
@@ -2999,11 +3009,10 @@ func (sMech *StrMech) IsValidRuneCharArray(
 // Input Parameters
 //
 //  intDigitsArray             []rune
-//     - A an array of runes consisting entirely of numeric text
+//     - An array of runes consisting entirely of numeric text
 //       characters which represent integer digits zero ('0' or
 //       0x30) through ('9' or 0x39) inclusive. This method will
-//       evaluate this array to determine whether or not it is
-//       valid.
+//       evaluate this array to determine whether it is valid.
 //
 //       If the rune array is 'nil' or a zero length array, the
 //       array is judged to be invalid and an error will be
@@ -3166,7 +3175,8 @@ func (sMech *StrMech) IsValidRuneIntArray(
 //  textJustify         TextJustify
 //     - An enumeration value used to specify the type of text
 //       formatting which will be applied to 'strToJustify' when
-//       it is positioned inside of the returned output string.
+//       it is positioned inside the returned output string.
+//
 //       This enumeration value must be one of the three following
 //       format specifications:
 //
@@ -3553,12 +3563,12 @@ func (sMech StrMech) Ptr() *StrMech {
 // Read - Implements io.Reader interface. Read reads up to len(p)
 // bytes into 'p'. This method supports buffered 'read' operations.
 //
-// The internal member string variable, 'StrMech.stringData' is written
-// into 'p'. When the end of 'StrMech.stringData' is written to 'p',
-// the method returns error = 'io.EOF'.
+// The internal member string variable, 'StrMech.stringData' is
+// written into 'p'. When the end of 'StrMech.stringData' is
+// written to 'p', the method returns error = 'io.EOF'.
 //
-// 'StrMech.stringData' can be accessed through Getter an Setter methods,
-// GetStringData() and SetStringData()
+// 'StrMech.stringData' can be accessed through Getter and Setter
+// methods, GetStringData() and SetStringData()
 //
 func (sMech *StrMech) Read(p []byte) (n int, err error) {
 
@@ -3610,13 +3620,14 @@ func (sMech *StrMech) Read(p []byte) (n int, err error) {
 // Return Values
 //
 //  extractedStr        string
-//     - The string extracted from input parameter 'bytes' beginning
-//       at the index in 'bytes' indicated by input parameter 'startIdx'.
+//     - The string extracted from input parameter 'bytes'
+//       beginning at the index in 'bytes' indicated by input
+//       parameter 'startIdx'.
 //
 //  nextStartIdx        int
-//     - The index of the beginning of the next string in the byte array
-//       'bytes' after 'extractedString'. If no more strings exist in the
-//       the byte array, 'nextStartIdx' will be set to -1.
+//     - The index of the beginning of the next string in the byte
+//       array 'bytes' after 'extractedString'. If no more strings
+//       exist in the byte array, 'nextStartIdx' will be set to -1.
 //
 func (sMech *StrMech) ReadStringFromBytes(
 	bytes []byte,
@@ -3782,7 +3793,7 @@ func (sMech *StrMech) RemoveStringChar(
 }
 
 // ReplaceBytes - Replaces characters in a target array of bytes ([]bytes) with those specified in
-// a two dimensional slice of bytes.
+// a two-dimensional slice of bytes.
 //
 // ------------------------------------------------------------------------
 //
@@ -3795,7 +3806,7 @@ func (sMech *StrMech) RemoveStringChar(
 //
 //
 //  replacementBytes    [][]byte
-//     - A two dimensional slice of type byte. Element [i][0] contains the
+//     - A two-dimensional slice of type byte. Element [i][0] contains the
 //       target character to locate in 'targetBytes'. Element[i][1] contains
 //       the replacement character which will replace the target character
 //       in 'targetBytes'. If the replacement character element [i][1] is
@@ -3958,7 +3969,7 @@ func (sMech *StrMech) ReplaceBytes(
 //       string from replaceArray[i][1].
 //
 //  replaceArray        [][]string
-//     - A two dimensional array of type 'string'. 'targetStr' will
+//     - A two-dimensional array of type 'string'. 'targetStr' will
 //       be searched for instances of replaceArray[i][0]. If found
 //       in 'targetStr' this string will be replaced with the string
 //       from replaceArray[i][1].
@@ -4182,7 +4193,7 @@ func (sMech *StrMech) ReplaceNewLines(
 //
 //
 //  replacementRunes    [][2]rune
-//     - A two dimensional slice of type 'rune'. Element [i][0]
+//     - A two-dimensional slice of type 'rune'. Element [i][0]
 //       contains the target character to locate in 'targetRunes'.
 //       Element[i][1] contains the replacement character which will
 //       replace the target character in 'targetRunes'. If the
@@ -4488,7 +4499,7 @@ func (sMech *StrMech) ReplaceStringChar(
 }
 
 // ReplaceStringChars - Replaces string characters in a target
-// string ('targetStr') with those specified in a two dimensional
+// string ('targetStr') with those specified in a two-dimensional
 // slice of runes, 'replacementRunes[][]'.
 //
 // ------------------------------------------------------------------------
@@ -4502,7 +4513,7 @@ func (sMech *StrMech) ReplaceStringChar(
 //       replacementRunes[i][1].
 //
 //  replacementRunes    [][2]rune
-//     - A two dimensional slice of type 'rune'. Element [i][0] contains
+//     - A two-dimensional slice of type 'rune'. Element [i][0] contains
 //       the target character to locate in 'targetStr'. Element[i][1]
 //       contains the replacement character which will replace the target
 //       character in 'targetStr'. If the replacement character
@@ -5431,7 +5442,7 @@ func (sMech *StrMech) StrLeftJustify(
 // added to the beginning of a text string to achieve a centering
 // effect when displayed.
 //
-// Therefore the blank string returned by this method only
+// Therefore, the blank string returned by this method only
 // constitutes the left-padding of white space necessary to center
 // the input parameter, 'strToCenter'. It does not include the
 // right padding of white space.
@@ -5523,7 +5534,7 @@ func (sMech *StrMech) StrLeftJustify(
 //
 // Example Usage
 //
-// Assume that total field length ('fieldlen') is 70. Further
+// Assume that total field length ('fieldlen') is 70. Further,
 // assume that the string to Center ('strToCenter') is
 // 10-characters in length. In order to center a 10-character
 // string in a 70-character field, 30-space characters would need
@@ -5994,7 +6005,7 @@ func (sMech *StrMech) SwapRune(
 // Return Values
 //
 //  rStr                string
-//     - This is the 'result' string. It is comprised of all the
+//     - This is the 'result' string. It consists of all the
 //       characters in the original 'targetStr' minus those
 //       'trimChar' characters deleted in the 'trim' operation.
 //
@@ -6134,7 +6145,7 @@ func (sMech StrMech) TrimMultipleChars(
 // Return Values
 //
 //  rStr                string
-//     - This is the 'result' string. It is comprised of all the
+//     - This is the 'result' string. It consists of all the
 //       characters in the original 'targetStr' minus those
 //       'trimChar' characters deleted in the 'trim' operation.
 //
