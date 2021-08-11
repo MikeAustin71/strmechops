@@ -961,11 +961,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 // timer event are known quantities and default formatting
 // parameters are acceptable.
 //
-// This method will automatically set the following default values:
-//
 // ------------------------------------------------------------------------
 //
 // Default Values
+//
+// This method will automatically set the following default values:
 //
 //  startTimeLabel      - Defaults to "Start Time"
 //
