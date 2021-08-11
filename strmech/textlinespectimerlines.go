@@ -2267,9 +2267,9 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 }
 
 // SetFullTimerEvent - This method configures the current
-// TextLineSpecTimerLines instance with new timer event values. All
-// internal member variable data values for the current
-// TextLineSpecTimerLines will be reset and overwritten.
+// TextLineSpecTimerLines instance with new timer event parameters.
+// All internal member variable data values for the current
+// TextLineSpecTimerLines instance will be reset and overwritten.
 //
 // The purpose of a TextLineSpecTimerLines instance is to capture
 // all the essential elements of a timer event and format that
