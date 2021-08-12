@@ -553,7 +553,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) empty(
 
 	txtTimerLines.labelJustification = TxtJustify.None()
 
-	txtTimerLines.labelOutputSeparationChars = nil
+	txtTimerLines.labelRightMarginChars = nil
 
 	return
 }
@@ -575,11 +575,11 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultEndTimeLa
 	return []rune("End Time")
 }
 
-// getDefaultLabelOutputSeparationCharsLabel - Returns an array of
+// getDefaultLabelRightMarginChars - Returns an array of
 // runes containing the default Label Output Separation Characters
 // Label for instances of TextLineSpecTimerLines.
 //
-func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultLabelOutputSeparationCharsLabel() []rune {
+func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultLabelRightMarginChars() []rune {
 
 	if txtTimerLinesElectron.lock == nil {
 		txtTimerLinesElectron.lock = new(sync.Mutex)

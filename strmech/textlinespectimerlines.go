@@ -20,16 +20,17 @@ import (
 // milliseconds and nanoseconds.
 //
 type TextLineSpecTimerLines struct {
-	startTimeLabel             []rune
-	startTime                  time.Time
-	endTimeLabel               []rune
-	endTime                    time.Time
-	timeFormat                 string
-	timeDurationLabel          []rune
-	labelFieldLen              int
-	labelJustification         TextJustify
-	labelOutputSeparationChars []rune
-	lock                       *sync.Mutex
+	labelLeftMarginChars  []rune
+	startTimeLabel        []rune
+	startTime             time.Time
+	endTimeLabel          []rune
+	endTime               time.Time
+	timeFormat            string
+	timeDurationLabel     []rune
+	labelFieldLen         int
+	labelJustification    TextJustify
+	labelRightMarginChars []rune
+	lock                  *sync.Mutex
 }
 
 // CopyIn - Copies all the data fields from an incoming instance of
@@ -772,12 +773,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJus
 }
 
 // GetLabelOutputSeparationChars - Returns the internal member
-// variable, 'labelOutputSeparationChars', as an array of runes.
+// variable, 'labelRightMarginChars', as an array of runes.
 //
-// The 'labelOutputSeparationChars' is one or more characters used
+// The 'labelRightMarginChars' is one or more characters used
 // to separate the text labels, 'startTime', 'endTime' and
 // 'timeDuration' from their respective output values. Usually,
-// 'labelOutputSeparationChars' is set to either a single white
+// 'labelRightMarginChars' is set to either a single white
 // space character or the default value which is a colon and a
 // white space character (": ").
 //
@@ -791,7 +792,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return txtSpecTimerLines.labelOutputSeparationChars
+	return txtSpecTimerLines.labelRightMarginChars
 }
 
 // GetTimeDurationLabel - Returns the internal member variable
@@ -979,7 +980,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 //
 //  labelJustification  - Defaults to TextJustify(0).Right()
 //
-//  labelOutputSeparationChars
+//  labelRightMarginChars
 //                      - Defaults to ": "
 //
 //
@@ -1175,7 +1176,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 //
 //  labelJustification  - Defaults to TextJustify(0).Right()
 //
-//  labelOutputSeparationChars
+//  labelRightMarginChars
 //                      - Defaults to ": "
 //
 //
@@ -1370,7 +1371,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //           TxtJustify.Center()
 //
 //
-//  labelOutputSeparationChars string
+//  labelRightMarginChars string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
@@ -1383,11 +1384,11 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       (": ").
 //
 //       If this string is submitted as a zero length or empty
-//       string, 'labelOutputSeparationChars' will be assigned a
+//       string, 'labelRightMarginChars' will be assigned a
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelOutputSeparationChars'
+//       If the string length of 'labelRightMarginChars'
 //       exceeds the maximum length of 5-characters, this method
 //       will return an error.
 //
@@ -1631,7 +1632,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //           TxtJustify.Center()
 //
 //
-//  labelOutputSeparationChars string
+//  labelRightMarginChars string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
@@ -1645,11 +1646,11 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //
 //
 //       If this string is submitted as a zero length or empty
-//       string, 'labelOutputSeparationChars' will be assigned a
+//       string, 'labelRightMarginChars' will be assigned a
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelOutputSeparationChars'
+//       If the string length of 'labelRightMarginChars'
 //       exceeds the maximum length of 5-characters, this method
 //       will return an error.
 //
@@ -1816,7 +1817,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 //
 //  labelJustification  - Defaults to TextJustify(0).Right()
 //
-//  labelOutputSeparationChars
+//  labelRightMarginChars
 //                      - Defaults to ": "
 //
 //
@@ -2015,7 +2016,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 //
 //  labelJustification  - Defaults to TextJustify(0).Right()
 //
-//  labelOutputSeparationChars
+//  labelRightMarginChars
 //                      - Defaults to ": "
 //
 //
@@ -2459,7 +2460,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //           TxtJustify.Center()
 //
 //
-//  labelOutputSeparationChars string
+//  labelRightMarginChars string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
@@ -2472,11 +2473,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //       (": ").
 //
 //       If this string is submitted as a zero length or empty
-//       string, 'labelOutputSeparationChars' will be assigned a
+//       string, 'labelRightMarginChars' will be assigned a
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelOutputSeparationChars'
+//       If the string length of 'labelRightMarginChars'
 //       exceeds the maximum length of 5-characters, this method
 //       will return an error.
 //
@@ -2712,7 +2713,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //           TxtJustify.Center()
 //
 //
-//  labelOutputSeparationChars string
+//  labelRightMarginChars string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
@@ -2726,11 +2727,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //
 //
 //       If this string is submitted as a zero length or empty
-//       string, 'labelOutputSeparationChars' will be assigned a
+//       string, 'labelRightMarginChars' will be assigned a
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelOutputSeparationChars'
+//       If the string length of 'labelRightMarginChars'
 //       exceeds the maximum length of 5-characters, this method
 //       will return an error.
 //
@@ -3486,24 +3487,24 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelJustification(
 	return err
 }
 
-// SetLabelOutputSeparationChars - Sets the internal member
-// variable, 'labelOutputSeparationChars'.
+// SetLabelRightMarginChars - Sets the internal member
+// variable, 'labelRightMarginChars'.
 //
-// The 'labelOutputSeparationChars' is one or more characters used
+// The 'labelRightMarginChars' is one or more characters used
 // to separate the text labels, 'startTime', 'endTime' and
 // 'timeDuration' from their respective output values. Usually,
-// 'labelOutputSeparationChars' is set to either a single white
+// 'labelRightMarginChars' is set to either a single white
 // space character or the default value which is a colon and a
 // white space character (": ").
 //       Examples:
 //        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-// If input parameter 'labelOutputSeparationChars' is set to an
+// If input parameter 'labelRightMarginChars' is set to an
 // empty string, its value will be defaulted to a colon and a white
 // space character  (": ").
 //
-// If the string length of 'labelOutputSeparationChars' exceeds the
+// If the string length of 'labelRightMarginChars' exceeds the
 // maximum length of 5-characters, this method will return an
 // error.
 //
@@ -3512,7 +3513,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelJustification(
 //
 // Input Parameters
 //
-//  labelOutputSeparationChars string
+//  labelRightMarginChars string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
@@ -3526,11 +3527,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelJustification(
 //
 //
 //       If this string is submitted as a zero length or empty
-//       string, 'labelOutputSeparationChars' will be assigned a
+//       string, 'labelRightMarginChars' will be assigned a
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelOutputSeparationChars'
+//       If the string length of 'labelRightMarginChars'
 //       exceeds the maximum length of 5-characters, this method
 //       will return an error.
 //
@@ -3595,7 +3596,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelJustification(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelOutputSeparationChars(
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelRightMarginChars(
 	labelOutputSeparationChars string,
 	errorPrefix interface{}) error {
 
@@ -3614,7 +3615,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelOutputSeparationChars(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecTimerLines."+
-			"SetLabelOutputSeparationChars()",
+			"SetLabelRightMarginChars()",
 		"")
 
 	if err != nil {
@@ -3629,10 +3630,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelOutputSeparationChars(
 	if lenLabel > maxLabelLen {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'labelOutputSeparationChars'\n"+
+			"Error: Input parameter 'labelRightMarginChars'\n"+
 			"exceeds the maximum label string length!\n"+
 			"The maximum label string length is %v-characters\n"+
-			"The length of 'labelOutputSeparationChars' is %v-characters\n",
+			"The length of 'labelRightMarginChars' is %v-characters\n",
 			ePrefix.String(),
 			maxLabelLen,
 			lenLabel)
@@ -3642,12 +3643,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelOutputSeparationChars(
 
 	if len(labelOutputSeparationChars) == 0 {
 
-		txtSpecTimerLines.labelOutputSeparationChars =
+		txtSpecTimerLines.labelRightMarginChars =
 			textLineSpecTimerLinesElectron{}.ptr().
-				getDefaultLabelOutputSeparationCharsLabel()
+				getDefaultLabelRightMarginChars()
 	} else {
 
-		txtSpecTimerLines.labelOutputSeparationChars =
+		txtSpecTimerLines.labelRightMarginChars =
 			[]rune(labelOutputSeparationChars)
 	}
 

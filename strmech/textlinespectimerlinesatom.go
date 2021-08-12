@@ -11,16 +11,23 @@ type textLineSpecTimerLinesAtom struct {
 	lock *sync.Mutex
 }
 
-// getMaxTimerLabelLength - Returns the longest string length of
-// the three text labels contained within an instance of
-// TextLineSpecTimerLines. The maximum timer label length is
-// therefore computed by comparing the string lengths of these
-// three text label strings:
+// getMaxTimerLabelLength - Returns the length of the longest
+// text label or the text field length contained within an instance
+// of TextLineSpecTimerLines.
+//
+// Each instance of TextLineSpecTimerLines has three text labels:
 //  (1) TextLineSpecTimerLines.startTimeLabel
 //  (2) TextLineSpecTimerLines.endTimeLabel
 //  (3) TextLineSpecTimerLines.timeDurationLabel
 //
-func (txtTimerLinesAtom textLineSpecTimerLinesAtom) getMaxTimerLabelLength(
+// In addition, each instance of TextLineSpecTimerLines also
+// contains a text label field length specification. This method
+// simply computes the length of the longest text label and
+// compares that to the text field length. It then returns
+// whichever is greater: the longest text label length or the text
+// field length.
+//
+func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) getMaxTimerLabelLength(
 	txtTimerLines *TextLineSpecTimerLines) int {
 
 	if txtTimerLinesAtom.lock == nil {
@@ -151,8 +158,8 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 	}
 
 	if !sMechPreon.equalRuneArrays(
-		txtTimerLinesOne.labelOutputSeparationChars,
-		txtTimerLinesTwo.labelOutputSeparationChars) {
+		txtTimerLinesOne.labelRightMarginChars,
+		txtTimerLinesTwo.labelRightMarginChars) {
 		return false
 	}
 
@@ -515,9 +522,9 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 			txtTimerLinesElectron.getDefaultTimeDurationLabel()
 	}
 
-	if len(txtTimerLines.labelOutputSeparationChars) == 0 {
-		txtTimerLines.labelOutputSeparationChars =
-			txtTimerLinesElectron.getDefaultLabelOutputSeparationCharsLabel()
+	if len(txtTimerLines.labelRightMarginChars) == 0 {
+		txtTimerLines.labelRightMarginChars =
+			txtTimerLinesElectron.getDefaultLabelRightMarginChars()
 	}
 
 	if txtTimerLines.labelFieldLen < -1 {

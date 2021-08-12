@@ -139,7 +139,7 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 			incomingTimerLines.timeDurationLabel,
 			incomingTimerLines.labelFieldLen,
 			incomingTimerLines.labelJustification,
-			incomingTimerLines.labelOutputSeparationChars,
+			incomingTimerLines.labelRightMarginChars,
 			ePrefix.XCtx("incomingTimerLines->targetTimerLines"))
 
 	return err
@@ -253,7 +253,7 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 			txtTimerLines.timeDurationLabel,
 			txtTimerLines.labelFieldLen,
 			txtTimerLines.labelJustification,
-			txtTimerLines.labelOutputSeparationChars,
+			txtTimerLines.labelRightMarginChars,
 			ePrefix.XCtx(
 				"txtTimerLines->newTxtTimerLines"))
 

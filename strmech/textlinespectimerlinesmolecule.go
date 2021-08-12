@@ -129,7 +129,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	}
 
 	maxLabelLeftMargin := maxLabelLen +
-		len(txtTimerLines.labelOutputSeparationChars)
+		len(txtTimerLines.labelRightMarginChars)
 
 	// Begin First Line
 	var txtDescLabel *TextFieldSpecLabel
@@ -154,10 +154,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	txtFiller,
 		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
-		txtTimerLines.labelOutputSeparationChars,
+		txtTimerLines.labelRightMarginChars,
 		1,
 		ePrefix.XCtx(
-			"txtTimerLines.labelOutputSeparationChars"))
+			"txtTimerLines.labelRightMarginChars"))
 
 	if err != nil {
 		return "", err
@@ -512,7 +512,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //           TxtJustify.Center()
 //
 //
-//  labelOutputSeparationChars []rune
+//  labelRightMarginChars []rune
 //     - This rune array contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
@@ -526,12 +526,12 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //
 //
 //       If this array is submitted as a zero length rune array,
-//       'labelOutputSeparationChars' will be assigned a default
+//       'labelRightMarginChars' will be assigned a default
 //       value of []rune{':', ' '}.
 //       Example Output:
 //         Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the length of the 'labelOutputSeparationChars' rune
+//       If the length of the 'labelRightMarginChars' rune
 //       array is greater than 5-characters, this method will
 //       return an error.
 //
@@ -724,14 +724,14 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	if len(labelOutputSeparationChars) == 0 {
 		labelOutputSeparationChars =
 			txtTimerLinesElectron.
-				getDefaultLabelOutputSeparationCharsLabel()
+				getDefaultLabelRightMarginChars()
 
 	} else if labelLen > maxLabelLen {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'labelOutputSeparationChars' is invalid!\n"+
+			"Error: Input parameter 'labelRightMarginChars' is invalid!\n"+
 			"The maximum label output separation characters length is %v-characters.\n"+
-			"labelOutputSeparationChars length = %v-characters.\n",
+			"labelRightMarginChars length = %v-characters.\n",
 			ePrefix.String(),
 			maxLabelLen,
 			labelLen)
@@ -798,11 +798,11 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		labelJustification
 
 	err = sMechPreon.copyRuneArrays(
-		&txtTimerLines.labelOutputSeparationChars,
+		&txtTimerLines.labelRightMarginChars,
 		&labelOutputSeparationChars,
 		true,
 		ePrefix.XCtx(
-			"labelOutputSeparationChars"))
+			"labelRightMarginChars"))
 
 	return err
 }
