@@ -850,17 +850,50 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //         Solid line = "*****"
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1008,17 +1041,50 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //         Solid line = "*****"
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1148,9 +1214,9 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, or
+//       if 'newLineChars' contains invalid characters, it will be
+//       set to the default new line character ('\n').
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1162,17 +1228,17 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //       (1), an error will be returned.
 //
 //       Example:
-//         solidLineChars = '*'
+//         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
 //
 //  newLineChars               string
-//     - This rune array contains one or more characters which will
+//     - This string contains one or more characters which will
 //       be used to terminate the solid text line.
 //
 //       Example:
-//         solidLineChars = '*'
+//         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
 //         newLineChars = "??\n\n"
 //         Solid line = "*****??\n\n"
@@ -1181,17 +1247,50 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //       it will be set to the default new line character ('\n').
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1254,6 +1353,219 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
+			ePrefix.XCtx("txtSolidLine"))
+
+	return txtSolidLine, err
+}
+
+// NewFullSolidLineRunesConfig - Creates and returns a new instance of
+// TextLineSpecSolidLine. This method requires more input
+// parameters than other similar methods, but in return, it allows
+// the user to exercise control over all facets of the
+// TextLineSpecSolidLine configuration.
+//
+// The TextLineSpecSolidLine type provides formatting
+// specifications for solid lines output for text display and
+// printing. A solid line consists of a single character or
+// multiple characters which constitute a solid line and are often
+// used for line breaks. Typically, solid lines consist of dashes
+// ("---"), underscore characters ("____"), equal signs ("=====")
+// or asterisks ("*****"). Multiple characters may be used to
+// produce different line sequences ("--*--*--*"). The length of a
+// solid is specified by the calling function using input
+// parameter 'solidLineCharsRepeatCount'. The use of these types of
+// solid lines with text display are often described as
+// "line breaks" or "breaking lines".
+//
+// This method is identical to
+// TextLineSpecSolidLine.NewFullSolidLineRunesConfig() with the
+// sole exception that this method accepts input parameters defined
+// as rune arrays instead of strings.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMargin                 int
+//     - The number of white space characters which will be
+//       inserted on the left side of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         Solid line = "   *****"
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  rightMargin                 int
+//     - The number of white space characters appended to the
+//       end, or right side, of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  solidLineChars             []
+//     - This rune array specifies the character or characters
+//       which will comprise the solid line output for text display
+//       or printing.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//       If this parameter is submitted as a zero length rune array,
+//       or if 'newLineChars' contains invalid characters, it will
+//       be set to the default new line character ('\n').
+//
+//
+//  solidLineCharsRepeatCount  int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), an error will be returned.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//
+//  newLineChars               []rune
+//     - This rune array contains one or more characters which will
+//       be used to terminate the solid text line.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         newLineChars =  []rune{'?','?','\n',\n'}
+//         Solid line = "*****??\n\n"
+//
+//       If this parameter is submitted as a zero length rune array
+//       it will be set to the default new line character ('\n').
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecSolidLine
+//     - If this method completes successfully, it will create and
+//       return a new instance of TextLineSpecSolidLine which is
+//       fully configured with all the parameters necessary to
+//       format a solid line of characters for text display output
+//       or printing.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
+	leftMargin int,
+	rightMargin int,
+	solidLineChars []rune,
+	solidLineCharsRepeatCount int,
+	newLineChars []rune,
+	errorPrefix interface{}) (
+	txtSolidLine TextLineSpecSolidLine,
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.NewFullSolidLineRunesConfig()",
+		"")
+
+	if err != nil {
+		return txtSolidLine, err
+	}
+
+	err = textLineSpecSolidLineMolecule{}.ptr().
+		setTxtSolidLine(
+			&txtSolidLine,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return txtSolidLine, err
@@ -1333,9 +1645,9 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, or
+//       if 'newLineChars' contains invalid characters, it will be
+//       set to the default new line character ('\n').
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1347,17 +1659,17 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       (1), an error will be returned.
 //
 //       Example:
-//         solidLineChars = '*'
+//         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
 //
 //  newLineChars               string
-//     - This rune array contains one or more characters which will
-//       be used to terminate the solid text line.
+//     - This string contains one or more characters which will be
+//       used to terminate the solid text line.
 //
 //       Example:
-//         solidLineChars = '*'
+//         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
 //         newLineChars = "??\n\n"
 //         Solid line = "*****??\n\n"
@@ -1366,17 +1678,50 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       it will be set to the default new line character ('\n').
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1415,7 +1760,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecSolidLine.NewFullSolidLineConfig()",
+		"TextLineSpecSolidLine.SetFullSolidLineConfig()",
 		"")
 
 	if err != nil {
@@ -1430,6 +1775,215 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
+			ePrefix.XCtx("txtSpecSolidLine"))
+
+	return err
+}
+
+// SetFullSolidLineRunesConfig - This method configures the current
+// TextLineSpecSolidLine instance with new solid line parameters.
+// All internal member variable data values for the current
+// TextLineSpecSolidLine instance will be reset and overwritten.
+// This method requires more input parameters than other similar
+// methods, but in return, it allows the user to exercise control
+// over all facets of the TextLineSpecSolidLine configuration.
+//
+// The TextLineSpecSolidLine type provides formatting
+// specifications for solid lines output for text display and
+// printing. A solid line consists of a single character or
+// multiple characters which constitute a solid line and are often
+// used for line breaks. Typically, solid lines consist of dashes
+// ("---"), underscore characters ("____"), equal signs ("=====")
+// or asterisks ("*****"). Multiple characters may be used to
+// produce different line sequences ("--*--*--*"). The length of a
+// solid is specified by the calling function using input
+// parameter 'solidLineCharsRepeatCount'. The use of these types of
+// solid lines with text display are often described as
+// "line breaks" or "breaking lines".
+//
+// ------------------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will overwrite and reset all the data values
+// encapsulated by the current TextLineSpecSolidLine instance.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMargin                 int
+//     - The number of white space characters which will be
+//       inserted on the left side of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         Solid line = "   *****"
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  rightMargin                 int
+//     - The number of white space characters appended to the
+//       end, or right side, of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//       If this value is less than zero (0), it will be set to a
+//       default value of zero (0). If this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  solidLineChars             []
+//     - This rune array specifies the character or characters
+//       which will comprise the solid line output for text display
+//       or printing.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//       If this parameter is submitted as a zero length rune array,
+//       or if 'newLineChars' contains invalid characters, it will
+//       be set to the default new line character ('\n').
+//
+//
+//  solidLineCharsRepeatCount  int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), an error will be returned.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//
+//  newLineChars               []rune
+//     - This rune array contains one or more characters which will
+//       be used to terminate the solid text line.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         newLineChars =  []rune{'?','?','\n',\n'}
+//         Solid line = "*****??\n\n"
+//
+//       If this parameter is submitted as a zero length rune array
+//       it will be set to the default new line character ('\n').
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
+	leftMargin int,
+	rightMargin int,
+	solidLineChars []rune,
+	solidLineCharsRepeatCount int,
+	newLineChars []rune,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.SetFullSolidLineRunesConfig()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecSolidLineMolecule{}.ptr().
+		setTxtSolidLine(
+			txtSpecSolidLine,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
 			ePrefix.XCtx("txtSpecSolidLine"))
 
 	return err
@@ -1605,17 +2159,50 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
 //         Solid line = "*****"
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
 //       If no error prefix information is needed, set this parameter
 //       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
