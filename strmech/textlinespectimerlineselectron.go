@@ -674,25 +674,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getMaximumLabelOutp
 	return 5
 }
 
-// getMaximumTimerLabelLen - Returns the maximum allowable length
-// for a text label string describing a timer event element for
-// type TextLineSpecTimerLines.
-//
-// The current maximum text label string length is 50-characters.
-//
-func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getMaximumTimerLabelLen() int {
-
-	if txtTimerLinesElectron.lock == nil {
-		txtTimerLinesElectron.lock = new(sync.Mutex)
-	}
-
-	txtTimerLinesElectron.lock.Lock()
-
-	defer txtTimerLinesElectron.lock.Unlock()
-
-	return 50
-}
-
 // ptr - Returns a pointer to a new instance of
 // textLineSpecTimerLinesElectron.
 //

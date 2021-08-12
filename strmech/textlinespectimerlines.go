@@ -2243,7 +2243,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTimeLabel(
 
 	lenLabel := len(endTimeLabel)
 
-	maxLabelLen := textLineSpecTimerLinesElectron{}.ptr().
+	maxLabelLen := textLineSpecTimerLinesPreon{}.ptr().
 		getMaximumTimerLabelLen()
 
 	if lenLabel > maxLabelLen {
@@ -3072,7 +3072,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTimeLabel(
 
 	lenLabel := len(startTimeLabel)
 
-	maxLabelLen := textLineSpecTimerLinesElectron{}.ptr().
+	maxLabelLen := textLineSpecTimerLinesPreon{}.ptr().
 		getMaximumTimerLabelLen()
 
 	if lenLabel > maxLabelLen {
@@ -3883,7 +3883,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeDurationLabel(
 
 	lenLabel := len(timeDurationLabel)
 
-	maxLabelLen := textLineSpecTimerLinesElectron{}.ptr().
+	maxLabelLen := textLineSpecTimerLinesPreon{}.ptr().
 		getMaximumTimerLabelLen()
 
 	if lenLabel > maxLabelLen {
