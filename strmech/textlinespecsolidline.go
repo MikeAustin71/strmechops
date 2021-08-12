@@ -7,24 +7,36 @@ import (
 )
 
 // TextLineSpecSolidLine - Used to create a solid line of text
-// characters for text display or printing.
+// characters for text display, file output or printing.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'.
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // By default, all solid lines are terminated by a new line
-// character. This means that each instance of a solid will be
-// formatted as a single line of text. If another new line
+// character ('\n'). This means that each instance of a solid will
+// be formatted as a single line of text. If another new line
 // character or characters is required, reference method:
 //    TextLineSpecSolidLine.SetNewLineCharsOverride()
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         rightMargin = 3
+//         Solid line = "   *****   "
 //
 type TextLineSpecSolidLine struct {
 	leftMargin                int
@@ -598,17 +610,20 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) EqualITextLine(
 // a solid line of text.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // If an error occurs, the error message will be included in the
 // returned string.
@@ -758,17 +773,20 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 // TextLineSpecSolidLine.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // By default, all solid lines of text are terminated with a new
 // line character ('\n'). This means that each instance of a solid
@@ -800,9 +818,11 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //         leftMargin = 3
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If this value is less than zero (0), 'leftMargin' will be
+//       set to a default value of zero (0).
+//
+//       If the 'leftMargin' value is greater than one-million
+//       (1,000,000), an error will be returned.
 //
 //
 //  rightMargin                 int
@@ -816,9 +836,11 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //         rightMargin = 3
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If this value is less than zero (0), 'rightMargin' will be
+//       set to a default value of zero (0).
+//
+//       If the 'rightMargin' value is greater than one-million
+//       (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -831,9 +853,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -976,17 +997,20 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //         Solid line = "*****"
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // By default, all solid lines of text are terminated with a new
 // line character ('\n'). This means that each instance of a solid
@@ -1022,9 +1046,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1156,17 +1179,20 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 // TextLineSpecSolidLine configuration.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 //
 // ------------------------------------------------------------------------
@@ -1183,9 +1209,11 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //         leftMargin = 3
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If this value is less than zero (0), 'leftMargin' will be
+//       set to a default value of zero (0).
+//
+//       If the 'leftMargin' value is greater than one-million
+//       (1,000,000), an error will be returned.
 //
 //
 //  rightMargin                 int
@@ -1199,9 +1227,11 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //         rightMargin = 3
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If this value is less than zero (0), 'rightMargin' will be
+//       set to a default value of zero (0).
+//
+//       If the 'rightMargin' value is greater than one-million
+//       (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -1214,9 +1244,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length string, or
-//       if 'newLineChars' contains invalid characters, it will be
-//       set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1243,8 +1272,9 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //         newLineChars = "??\n\n"
 //         Solid line = "*****??\n\n"
 //
-//       If this parameter is submitted as a zero length string
-//       it will be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length rune
+//       array, 'newLineChars' will be set to the default new
+//       line character ('\n').
 //
 //
 //  errorPrefix                interface{}
@@ -1365,17 +1395,20 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 // TextLineSpecSolidLine configuration.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // This method is identical to
 // TextLineSpecSolidLine.NewFullSolidLineRunesConfig() with the
@@ -1391,14 +1424,17 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       inserted on the left side of the solid line.
 //
 //       Example:
-//         solidLineChars = "*"
+//         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
 //         leftMargin = 3
+//         rightMargin = 0
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If this value is less than zero (0), 'leftMargin' will be
+//       set to a default value of zero (0).
+//
+//       If this value is greater than one-million (1,000,000), an
+//       error will be returned.
 //
 //
 //  rightMargin                 int
@@ -1406,18 +1442,20 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       end, or right side, of the solid line.
 //
 //       Example:
-//         solidLineChars = "*"
+//         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
 //         leftMargin = 0
 //         rightMargin = 3
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If this value is less than zero (0), 'rightMargin' will be
+//       set to a default value of zero (0).
+//
+//       If this value is greater than one-million (1,000,000), an
+//       error will be returned.
 //
 //
-//  solidLineChars             []
+//  solidLineChars             []rune
 //     - This rune array specifies the character or characters
 //       which will comprise the solid line output for text display
 //       or printing.
@@ -1425,11 +1463,12 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         Solid line = "*****"
+//         leftMargin = 0
+//         rightMargin = 0
+///        Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length rune
+//       array, an error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1443,6 +1482,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 0
 //         Solid line = "*****"
 //
 //
@@ -1453,11 +1494,14 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         newLineChars =  []rune{'?','?','\n',\n'}
+//         leftMargin = 0
+//         rightMargin = 0
+//         newLineChars =  []rune{'?','?','\n','\n'}
 //         Solid line = "*****??\n\n"
 //
-//       If this parameter is submitted as a zero length rune array
-//       it will be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length rune
+//       array, 'newLineChars' will be set to the default new
+//       line character ('\n').
 //
 //
 //  errorPrefix                interface{}
@@ -1580,17 +1624,20 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 // over all facets of the TextLineSpecSolidLine configuration.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // ------------------------------------------------------------------------
 //
@@ -1645,9 +1692,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length string, or
-//       if 'newLineChars' contains invalid characters, it will be
-//       set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1789,17 +1835,20 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 // over all facets of the TextLineSpecSolidLine configuration.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // ------------------------------------------------------------------------
 //
@@ -1844,7 +1893,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //       one-million (1,000,000), an error will be returned.
 //
 //
-//  solidLineChars             []
+//  solidLineChars             []rune
 //     - This rune array specifies the character or characters
 //       which will comprise the solid line output for text display
 //       or printing.
@@ -1854,9 +1903,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length rune
+//       array, an error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -1883,8 +1931,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //         newLineChars =  []rune{'?','?','\n',\n'}
 //         Solid line = "*****??\n\n"
 //
-//       If this parameter is submitted as a zero length rune array
-//       it will be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length rune
+//       array, 'newLineChars' will be set to the default new
+//       line character ('\n').
 //
 //
 //  errorPrefix                interface{}
@@ -1989,6 +2038,145 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 	return err
 }
 
+// SetLeftMargin - Sets the left margin for the current instance
+// of TextLineSpecSolidLine.
+//
+// The left margin defines the number of white space characters
+// which will be inserted on the left side of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         Solid line = "   *****"
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMargin                 int
+//     - The number of white space characters which will be
+//       inserted on the left side of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 3
+//         Solid line = "   *****"
+//
+//       If this value is less than zero (0), 'leftMargin' will be
+//       set to a default value of zero (0).
+//
+//       If the 'leftMargin' value is greater than one-million
+//       (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
+	leftMargin int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.SetLeftMargin()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if leftMargin < 0 {
+		leftMargin = 0
+	}
+
+	if leftMargin > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'leftMargin' is invalid!\n"+
+			"The integer value of 'leftMargin' is greater than 1,000,000.\n"+
+			"leftMargin='%v'\n",
+			ePrefix.String(),
+			leftMargin)
+
+		return err
+	}
+
+	txtSpecSolidLine.leftMargin = leftMargin
+
+	return
+}
+
 // SetNewLineCharsOverride - Sets the new line character or
 // characters which will be used to terminate the solid line
 // generated by this instance of TextLineSpecSolidLine.
@@ -2017,8 +2205,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 //         Solid line = "*****??\n"
 //                      "\n"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       it will by default be set to a new line character ('\n').
+//       If this parameter is submitted as a zero length rune
+//       array, 'newLineChars' will be set to the default new
+//       line character ('\n').
 //
 //
 // ------------------------------------------------------------------------
@@ -2053,23 +2242,168 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
 		nil)
 }
 
+// SetRightMargin - Sets the right margin for the current instance
+// of TextLineSpecSolidLine.
+//
+// The right margin defines the number of white space characters
+// which will be appended to the end, or right side, of the solid
+// line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  rightMargin                 int
+//     - The number of white space characters appended to the
+//       end, or right side, of the solid line.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 3
+//         Solid line = "*****   "
+//
+//       If this value is less than zero (0), 'rightMargin' will be
+//       set to a default value of zero (0).
+//
+//       If the 'rightMargin' value is greater than one-million
+//       (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
+	rightMargin int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.SetRightMargin()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if rightMargin < 0 {
+		rightMargin = 0
+	}
+
+	if rightMargin > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'rightMargin' is invalid!\n"+
+			"The integer value of 'rightMargin' is greater than 1,000,000.\n"+
+			"leftMargin='%v'\n",
+			ePrefix.String(),
+			rightMargin)
+
+		return err
+	}
+
+	txtSpecSolidLine.rightMargin = rightMargin
+
+	return
+}
+
 // SetSolidLine - This method configures the current
 // TextLineSpecSolidLine instance with new solid line parameters.
 // All internal member variable data values for the current
 // TextLineSpecSolidLine instance will be reset and overwritten.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // By default, all solid lines of text are terminated with a new
 // line character ('\n'). This means that each instance of a solid
@@ -2140,9 +2474,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineCharsOverride(
 //         solidLineCharsRepeatCount = 5
 //         Solid line = "*****"
 //
-//       If this parameter is submitted as a zero length rune array,
-//       or if 'newLineChars' contains invalid characters, it will
-//       be set to the default new line character ('\n').
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
 //
 //
 //  solidLineCharsRepeatCount  int
@@ -2260,6 +2593,386 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 	return err
 }
 
+// SetSolidLineStrChars - Sets the solid line character or
+// characters for the current instance of TextLineSpecSolidLine.
+//
+// The TextLineSpecSolidLine type provides formatting
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
+//
+// This method takes two input parameters which configure the solid
+// character(s) and the number of times that solid character(s) is
+// repeated to construct the entire solid line of text.
+//
+// This method is identical to
+// TextLineSpecSolidLine.SetSolidLineRuneChars with the sole
+// exception that this method receives solid line characters as a
+// string instead of a rune array.
+//
+// Be advised that this method does alter the current values for
+// left margin and right margin.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  solidLineChars             string
+//     - This string specifies the character or characters which
+//       will comprise the solid line output for text display or
+//       printing.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
+//
+//
+//  solidLineCharsRepeatCount  int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), an error will be returned.
+//
+//       Example:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineStrChars(
+	solidLineChars string,
+	solidLineCharsRepeatCount int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.SetSolidLineStrChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(solidLineChars) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineChars' is invalid!\n"+
+			"'solidLineChars' is a zero length string.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if solidLineCharsRepeatCount < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineCharsRepeatCount' is invalid!\n"+
+			"'solidLineCharsRepeatCount' has a value less than one (1).\n"+
+			"solidLineCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			solidLineCharsRepeatCount)
+
+		return err
+	}
+
+	solidLineRunes := []rune(solidLineChars)
+
+	err = strMechPreon{}.ptr().copyRuneArrays(
+		&txtSpecSolidLine.solidLineChars,
+		&solidLineRunes,
+		true,
+		ePrefix.XCtx("solidLineChars->"+
+			"txtSpecSolidLine.solidLineChars"))
+
+	if err != nil {
+		return err
+	}
+
+	txtSpecSolidLine.solidLineCharsRepeatCount =
+		solidLineCharsRepeatCount
+
+	return err
+}
+
+// SetSolidLineRuneChars - Sets the solid line character or
+// characters for the current instance of TextLineSpecSolidLine.
+//
+// The TextLineSpecSolidLine type provides formatting
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
+//
+// This method takes two input parameters which configure the solid
+// character(s) and the number of times that solid character(s) is
+// repeated to construct the entire solid line of text.
+//
+// This method is identical to
+// TextLineSpecSolidLine.SetSolidLineStrChars with the sole
+// exception that this method receives solid line characters as a
+// rune array instead of a string.
+//
+// Be advised that this method does alter the current values for
+// left margin and right margin.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  solidLineChars             []rune
+//     - This rune specifies the character or characters which
+//       will comprise the solid line formatted for text display,
+//       file output or printing.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 0
+///         Solid line = "*****"
+//
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
+//
+//
+//  solidLineCharsRepeatCount  int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), an error will be returned.
+//
+//       Example:
+//         solidLineChars = []rune{'*'}
+//         solidLineCharsRepeatCount = 5
+//         leftMargin = 0
+//         rightMargin = 0
+//         Solid line = "*****"
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineRuneChars(
+	solidLineChars []rune,
+	solidLineCharsRepeatCount int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.SetSolidLineRuneChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(solidLineChars) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineChars' is invalid!\n"+
+			"'solidLineChars' is a zero length rune array.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if solidLineCharsRepeatCount < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineCharsRepeatCount' is invalid!\n"+
+			"'solidLineCharsRepeatCount' has a value less than one (1).\n"+
+			"solidLineCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			solidLineCharsRepeatCount)
+
+		return err
+	}
+
+	err = strMechPreon{}.ptr().copyRuneArrays(
+		&txtSpecSolidLine.solidLineChars,
+		&solidLineChars,
+		true,
+		ePrefix.XCtx("solidLineChars->"+
+			"txtSpecSolidLine.solidLineChars"))
+
+	if err != nil {
+		return err
+	}
+
+	txtSpecSolidLine.solidLineCharsRepeatCount =
+		solidLineCharsRepeatCount
+
+	return err
+}
+
 // String - Returns the formatted text generated by this
 // Text Line Specification for text display output and printing.
 //
@@ -2268,17 +2981,20 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 // a solid line of text.
 //
 // The TextLineSpecSolidLine type provides formatting
-// specifications for solid lines output for text display and
-// printing. A solid line consists of a single character or
-// multiple characters which constitute a solid line and are often
-// used for line breaks. Typically, solid lines consist of dashes
-// ("---"), underscore characters ("____"), equal signs ("=====")
-// or asterisks ("*****"). Multiple characters may be used to
-// produce different line sequences ("--*--*--*"). The length of a
-// solid is specified by the calling function using input
-// parameter 'solidLineCharsRepeatCount'. The use of these types of
-// solid lines with text display are often described as
-// "line breaks" or "breaking lines".
+// specifications for solid lines output for text display, file
+// output and printing. The use of these types of solid lines with
+// text presentations are often referred to as "line breaks" or
+// "breaking lines".
+//
+// A solid line, as used here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'solidLineCharsRepeatCount'.
 //
 // If an error occurs, the error message will be included in the
 // returned string.

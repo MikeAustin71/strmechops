@@ -601,6 +601,14 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
+	if len(solidLineChars) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineChars' is empty (zero length)!\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	sMechPreon := strMechPreon{}
 
 	_,
