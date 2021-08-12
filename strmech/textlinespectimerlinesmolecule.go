@@ -568,6 +568,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //
 func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimerLines(
 	txtTimerLines *TextLineSpecTimerLines,
+	labelLeftMarginChars []rune,
 	startTimeLabel []rune,
 	startTime time.Time,
 	endTimeLabel []rune,
@@ -756,10 +757,21 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	sMechPreon := strMechPreon{}
 
 	err = sMechPreon.copyRuneArrays(
+		&txtTimerLines.labelLeftMarginChars,
+		&labelLeftMarginChars,
+		true,
+		ePrefix.XCtx("labelLeftMarginChars->"+
+			"txtTimerLines.labelLeftMarginChars,"))
+
+	if err != nil {
+		return err
+	}
+	err = sMechPreon.copyRuneArrays(
 		&txtTimerLines.startTimeLabel,
 		&startTimeLabel,
 		true,
-		ePrefix.XCtx("startTimeLabel"))
+		ePrefix.XCtx("startTimeLabel->"+
+			"txtTimerLines.startTimeLabel"))
 
 	if err != nil {
 		return err

@@ -968,20 +968,21 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 //
 // This method will automatically set the following default values:
 //
-//  startTimeLabel      - Defaults to "Start Time"
+//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  endTimeLabel        - Defaults to "End Time".
+//  startTimeLabel        - Defaults to "Start Time"
 //
-//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//  endTimeLabel          - Defaults to "End Time".
 //
-//  timeDurationLabel   - Defaults to "Elapsed Time"
+//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  labelFieldLen       - Defaults to  '12'
+//  timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  labelJustification  - Defaults to TextJustify(0).Right()
+//  textLabelFieldLen     - Defaults to  '12'
 //
-//  labelRightMarginChars
-//                      - Defaults to ": "
+//  labelJustification    - Defaults to TextJustify(0).Right()
+//
+//  labelRightMarginChars - Defaults to ": "
 //
 //
 // ------------------------------------------------------------------------
@@ -1114,6 +1115,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 		setTxtLineSpecTimerLines(
 			&newTxtTimerLines,
 			nil,
+			nil,
 			startTime,
 			nil,
 			endTime,
@@ -1154,30 +1156,31 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 // all the essential elements of a timer event and format that
 // information for text display output or printing.
 //
-// This method will automatically set the following default values:
-//
 // ------------------------------------------------------------------------
 //
 // Default Values
 //
-//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+// This method will automatically set the following default values:
 //
-//  startTimeLabel      - Defaults to "Start Time"
+//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  endTimeLabel        - Defaults to "End Time".
+//  startTime             - Defaults to July 4, 1776 9:30AM UTC
 //
-//  endTime             - Defaults to July 4, 1776 9:30AM UTC
+//  startTimeLabel        - Defaults to "Start Time"
 //
-//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//  endTimeLabel          - Defaults to "End Time".
 //
-//  timeDurationLabel   - Defaults to "Elapsed Time"
+//  endTime               - Defaults to July 4, 1776 9:30AM UTC
 //
-//  labelFieldLen       - Defaults to  '12'
+//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  labelJustification  - Defaults to TextJustify(0).Right()
+//  timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  labelRightMarginChars
-//                      - Defaults to ": "
+//  textLabelFieldLen     - Defaults to  '12'
+//
+//  labelJustification    - Defaults to TextJustify(0).Right()
+//
+//  labelRightMarginChars - Defaults to ": "
 //
 //
 // ------------------------------------------------------------------------
@@ -1219,6 +1222,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() Text
 	_ = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			&newTxtTimerLines,
+			nil,
 			nil,
 			defaultTime,
 			nil,
@@ -1273,6 +1277,16 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //
 // Input Parameters
 //
+//  labelLeftMarginChars       string
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
 //  startTimeLabel             string
 //     - A string containing the text characters constituting the
 //       starting time text label.
@@ -1281,8 +1295,10 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       string, 'startTimeLabel' will be assigned a default value
 //       of "Start Time".
 //
-//       If 'startTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  startTime                  time.Time
@@ -1303,8 +1319,10 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       string, 'endTimeLabel' will be assigned a default value of
 //       "End Time".
 //
-//       If 'endTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  endTime                    time.Time
@@ -1336,19 +1354,27 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       string, 'timeDurationLabel' will be assigned a default
 //       value of "Elapsed Time".
 //
-//       If 'timeDurationLabel' exceeds 50-characters in length,
-//       this method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
-//  labelFieldLen              int
+//  textLabelFieldLen          int
 //     - The length of the text fields which will be used to
 //       position and display the three text labels provided by
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
-//       If labelFieldLen is less than the length of the longest
-//       text label it will be defaulted to the length of the
-//       longest text label.
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  labelJustification         TextJustify
@@ -1371,13 +1397,13 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //           TxtJustify.Center()
 //
 //
-//  labelRightMarginChars string
+//  labelRightMarginChars      string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
 //       data values displayed on the same line.
 //       Example:
-//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
 //
 //       Often this parameter is set to a single white space
 //       character (" ") or a colon plus white space character,
@@ -1388,9 +1414,10 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelRightMarginChars'
-//       exceeds the maximum length of 5-characters, this method
-//       will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  errorPrefix                interface{}
@@ -1462,15 +1489,16 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       the beginning of the error message.
 //
 func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
+	labelLeftMarginChars string,
 	startTimeLabel string,
 	startTime time.Time,
 	endTimeLabel string,
 	endTime time.Time,
 	timeFormat string,
 	timeDurationLabel string,
-	labelFieldLen int,
+	textLabelFieldLen int,
 	labelJustification TextJustify,
-	labelOutputSeparationChars string,
+	labelRightMarginChars string,
 	errorPrefix interface{}) (
 	TextLineSpecTimerLines,
 	error) {
@@ -1501,15 +1529,16 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 	err = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			&newTxtTimerLines,
+			[]rune(labelLeftMarginChars),
 			[]rune(startTimeLabel),
 			startTime,
 			[]rune(endTimeLabel),
 			endTime,
 			timeFormat,
 			[]rune(timeDurationLabel),
-			labelFieldLen,
+			textLabelFieldLen,
 			labelJustification,
-			[]rune(labelOutputSeparationChars),
+			[]rune(labelRightMarginChars),
 			ePrefix.XCtx("newTxtTimerLines"))
 
 	return newTxtTimerLines, err
@@ -1554,6 +1583,16 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //
 // Input Parameters
 //
+//  labelLeftMarginChars       string
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
 //  startTimeLabel             string
 //     - A string containing the text characters constituting the
 //       starting time text label.
@@ -1562,8 +1601,11 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       string, 'startTimeLabel' will be assigned a default value
 //       of "Start Time".
 //
-//       If 'startTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  endTimeLabel               string.
@@ -1574,8 +1616,10 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       string, 'endTimeLabel' will be assigned a default value of
 //       "End Time".
 //
-//       If 'endTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  timeFormat                 string
@@ -1597,19 +1641,27 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       string, 'timeDurationLabel' will be assigned a default
 //       value of "Elapsed Time".
 //
-//       If 'timeDurationLabel' exceeds 50-characters in length,
-//       this method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
-//  labelFieldLen              int
+//  textLabelFieldLen          int
 //     - The length of the text fields which will be used to
 //       position and display the three text labels provided by
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
-//       If labelFieldLen is less than the length of the longest
-//       text label it will be defaulted to the length of the
-//       longest text label.
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  labelJustification         TextJustify
@@ -1650,9 +1702,10 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelRightMarginChars'
-//       exceeds the maximum length of 5-characters, this method
-//       will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  errorPrefix                interface{}
@@ -1723,13 +1776,14 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       the beginning of the error message.
 //
 func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
+	labelLeftMarginChars string,
 	startTimeLabel string,
 	endTimeLabel string,
 	timeFormat string,
 	timeDurationLabel string,
-	labelFieldLen int,
+	textLabelFieldLen int,
 	labelJustification TextJustify,
-	labelOutputSeparationChars string,
+	labelRightMarginChars string,
 	errorPrefix interface{}) (
 	TextLineSpecTimerLines,
 	error) {
@@ -1764,15 +1818,16 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 	err = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			&newTxtTimerLines,
+			[]rune(labelLeftMarginChars),
 			[]rune(startTimeLabel),
 			defaultTime,
 			[]rune(endTimeLabel),
 			defaultTime,
 			timeFormat,
 			[]rune(timeDurationLabel),
-			labelFieldLen,
+			textLabelFieldLen,
 			labelJustification,
-			[]rune(labelOutputSeparationChars),
+			[]rune(labelRightMarginChars),
 			ePrefix.XCtx("newTxtTimerLines"))
 
 	return newTxtTimerLines, err
@@ -1798,27 +1853,27 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
 //
-//
-// This method will automatically set the following default values:
-//
 // ------------------------------------------------------------------------
 //
 // Default Values
 //
-//  startTimeLabel      - Defaults to "Start Time"
+// This method will automatically set the following default values:
 //
-//  endTimeLabel        - Defaults to "End Time".
+//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//  startTimeLabel        - Defaults to "Start Time"
 //
-//  timeDurationLabel   - Defaults to "Elapsed Time"
+//  endTimeLabel          - Defaults to "End Time".
 //
-//  labelFieldLen       - Defaults to  '12'
+//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  labelJustification  - Defaults to TextJustify(0).Right()
+//  timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  labelRightMarginChars
-//                      - Defaults to ": "
+//  textLabelFieldLen     - Defaults to  '12'
+//
+//  labelJustification    - Defaults to TextJustify(0).Right()
+//
+//  labelRightMarginChars - Defaults to ": "
 //
 //
 // ------------------------------------------------------------------------
@@ -1939,6 +1994,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 		setTxtLineSpecTimerLines(
 			txtSpecTimerLines,
 			nil,
+			nil,
 			startTime,
 			nil,
 			endTime,
@@ -1993,31 +2049,31 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
 //
-//
-// This method will automatically set the following default values:
-//
 // ------------------------------------------------------------------------
 //
 // Default Values
 //
-//  startTime           - Defaults to July 4, 1776 9:30AM UTC
+// This method will automatically set the following default values:
 //
-//  startTimeLabel      - Defaults to "Start Time"
+//  labelLeftMarginChars  - Defaults to "" (Empty or Zero left margin)
 //
-//  endTime             - Defaults to July 4, 1776 9:30AM UTC
+//  startTime             - Defaults to July 4, 1776 9:30AM UTC
 //
-//  endTimeLabel        - Defaults to "End Time".
+//  startTimeLabel        - Defaults to "Start Time"
 //
-//  timeFormat          - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
+//  endTime               - Defaults to July 4, 1776 9:30AM UTC
 //
-//  timeDurationLabel   - Defaults to "Elapsed Time"
+//  endTimeLabel          - Defaults to "End Time".
 //
-//  labelFieldLen       - Defaults to  '12'
+//  timeFormat            - Defaults to "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//  labelJustification  - Defaults to TextJustify(0).Right()
+//  timeDurationLabel     - Defaults to "Elapsed Time"
 //
-//  labelRightMarginChars
-//                      - Defaults to ": "
+//  textLabelFieldLen     - Defaults to  '12'
+//
+//  labelJustification    - Defaults to TextJustify(0).Right()
+//
+//  labelRightMarginChars - Defaults to ": "
 //
 //
 // ------------------------------------------------------------------------
@@ -2057,6 +2113,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
 	_ = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			txtSpecTimerLines,
+			nil,
 			nil,
 			defaultTime,
 			nil,
@@ -2362,6 +2419,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //
 // Input Parameters
 //
+//  labelLeftMarginChars       string
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
 //  startTimeLabel             string
 //     - A string containing the text characters constituting the
 //       starting time text label.
@@ -2370,8 +2437,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //       string, 'startTimeLabel' will be assigned a default value
 //       of "Start Time".
 //
-//       If 'startTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  startTime                  time.Time
@@ -2392,8 +2461,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //       string, 'endTimeLabel' will be assigned a default value of
 //       "End Time".
 //
-//       If 'endTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  endTime                    time.Time
@@ -2425,19 +2496,27 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //       string, 'timeDurationLabel' will be assigned a default
 //       value of "Elapsed Time".
 //
-//       If 'timeDurationLabel' exceeds 50-characters in length,
-//       this method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
-//  labelFieldLen              int
+//  textLabelFieldLen          int
 //     - The length of the text fields which will be used to
 //       position and display the three text labels provided by
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
-//       If labelFieldLen is less than the length of the longest
-//       text label it will be defaulted to the length of the
-//       longest text label.
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  labelJustification         TextJustify
@@ -2460,13 +2539,13 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //           TxtJustify.Center()
 //
 //
-//  labelRightMarginChars string
+//  labelRightMarginChars      string
 //     - This string contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
 //       data values displayed on the same line.
 //       Example:
-//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
 //
 //       Often this parameter is set to a single white space
 //       character (" ") or a colon plus white space character,
@@ -2477,9 +2556,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelRightMarginChars'
-//       exceeds the maximum length of 5-characters, this method
-//       will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  errorPrefix                interface{}
@@ -2543,13 +2623,14 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //       the beginning of the error message.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
+	labelLeftMarginChars string,
 	startTimeLabel string,
 	startTime time.Time,
 	endTimeLabel string,
 	endTime time.Time,
 	timeFormat string,
 	timeDurationLabel string,
-	labelFieldLen int,
+	textLabelFieldLen int,
 	labelJustification TextJustify,
 	labelOutputSeparationChars string,
 	errorPrefix interface{}) (
@@ -2578,13 +2659,14 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 	err = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			txtSpecTimerLines,
+			[]rune(labelLeftMarginChars),
 			[]rune(startTimeLabel),
 			startTime,
 			[]rune(endTimeLabel),
 			endTime,
 			timeFormat,
 			[]rune(timeDurationLabel),
-			labelFieldLen,
+			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelOutputSeparationChars),
 			ePrefix.XCtx("txtSpecTimerLines"))
@@ -2635,6 +2717,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //
 // Input Parameters
 //
+//  labelLeftMarginChars       string
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
 //  startTimeLabel             string
 //     - A string containing the text characters constituting the
 //       starting time text label.
@@ -2643,8 +2735,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //       string, 'startTimeLabel' will be assigned a default value
 //       of "Start Time".
 //
-//       If 'startTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  endTimeLabel               string.
@@ -2655,8 +2750,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //       string, 'endTimeLabel' will be assigned a default value of
 //       "End Time".
 //
-//       If 'endTimeLabel' exceeds 50-characters in length, this
-//       method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  timeFormat                 string
@@ -2678,19 +2775,27 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //       string, 'timeDurationLabel' will be assigned a default
 //       value of "Elapsed Time".
 //
-//       If 'timeDurationLabel' exceeds 50-characters in length,
-//       this method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
-//  labelFieldLen              int
+//  textLabelFieldLen          int
 //     - The length of the text fields which will be used to
 //       position and display the three text labels provided by
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
-//       If labelFieldLen is less than the length of the longest
-//       text label it will be defaulted to the length of the
-//       longest text label.
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  labelJustification         TextJustify
@@ -2731,9 +2836,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //       default value of  ": ". Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'labelRightMarginChars'
-//       exceeds the maximum length of 5-characters, this method
-//       will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  errorPrefix                interface{}
@@ -2797,11 +2903,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 //       the beginning of the error message.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
+	labelLeftMarginChars string,
 	startTimeLabel string,
 	endTimeLabel string,
 	timeFormat string,
 	timeDurationLabel string,
-	labelFieldLen int,
+	textLabelFieldLen int,
 	labelJustification TextJustify,
 	labelOutputSeparationChars string,
 	errorPrefix interface{}) (
@@ -2834,13 +2941,14 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 	err = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			txtSpecTimerLines,
+			[]rune(labelLeftMarginChars),
 			[]rune(startTimeLabel),
 			defaultTime,
 			[]rune(endTimeLabel),
 			defaultTime,
 			timeFormat,
 			[]rune(timeDurationLabel),
-			labelFieldLen,
+			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelOutputSeparationChars),
 			ePrefix.XCtx("newTxtTimerLines"))
