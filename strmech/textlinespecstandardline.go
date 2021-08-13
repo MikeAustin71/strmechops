@@ -42,10 +42,84 @@ type TextLineSpecStandardLine struct {
 }
 
 // AddTextField - This method will append a text field object to
-// the end of the current array of text field objects.
+// the end of the current array of text field objects. The object
+// actually appended to the array is a deep copy of the input
+// parameter, 'textField'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textField                  ITextFieldSpecification
+//     - A text field object which implements the
+//       ITextFieldSpecification interface.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (stdLine *TextLineSpecStandardLine) AddTextField(
-	textField ITextFieldSpecification) {
+	textField ITextFieldSpecification,
+	errorPrefix interface{}) (
+	err error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -55,8 +129,32 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	defer stdLine.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.AddTextField()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newTextField ITextFieldSpecification
+
+	newTextField,
+		err = textField.CopyOutITextField(
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
 	stdLine.textFields = append(stdLine.textFields,
-		textField)
+		newTextField)
+
+	return err
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
@@ -523,7 +621,15 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 
 // Empty - Deletes all the text fields stored as an array of
 // ITextFieldSpecification pointers within the current
-// TextLineSpecStandardLine instance.
+// TextLineSpecStandardLine instance. In addition, this method
+// will set 'numOfStdLines', 'turnLIneTerminatorOff' and
+// 'newLineChars' will be set to their initial or zero values.
+//
+// After calling 'Empty', the caller CAN NOT reuse this instance of
+// TextLineSpecStandardLine.
+//
+// To empty and reuse this TextLineSpecStandardLine instance,
+// reference method TextLineSpecStandardLine.EmptyTextFields.
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
@@ -543,6 +649,35 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 	stdLine.lock.Unlock()
 
 	stdLine.lock = nil
+
+	return
+}
+
+// EmptyTextFields - Deletes all the text fields stored as an array of
+// ITextFieldSpecification pointers within the current
+// TextLineSpecStandardLine instance.
+//
+// This method will allow the user to clear and reuse the current
+// instance of TextLineSpecStandardLine because it only deletes the
+// existing text field collection. It does not overwrite member
+// variables 'numOfStdLines', 'turnLIneTerminatorOff' or
+// 'newLineChars'.
+//
+func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	for i := 0; i < len(stdLine.textFields); i++ {
+		stdLine.textFields[i].Empty()
+	}
+
+	stdLine.textFields = nil
 
 	return
 }

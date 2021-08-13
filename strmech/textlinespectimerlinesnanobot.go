@@ -131,14 +131,15 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 	err = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			targetTimerLines,
+			incomingTimerLines.labelLeftMarginChars,
 			incomingTimerLines.startTimeLabel,
 			incomingTimerLines.startTime,
 			incomingTimerLines.endTimeLabel,
 			incomingTimerLines.endTime,
 			incomingTimerLines.timeFormat,
 			incomingTimerLines.timeDurationLabel,
-			incomingTimerLines.labelFieldLen,
-			incomingTimerLines.labelJustification,
+			incomingTimerLines.textLabelFieldLen,
+			incomingTimerLines.textLabelJustification,
 			incomingTimerLines.labelRightMarginChars,
 			ePrefix.XCtx("incomingTimerLines->targetTimerLines"))
 
@@ -245,14 +246,15 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 	err = textLineSpecTimerLinesMolecule{}.ptr().
 		setTxtLineSpecTimerLines(
 			&newTxtTimerLines,
+			txtTimerLines.labelLeftMarginChars,
 			txtTimerLines.startTimeLabel,
 			txtTimerLines.startTime,
 			txtTimerLines.endTimeLabel,
 			txtTimerLines.endTime,
 			txtTimerLines.timeFormat,
 			txtTimerLines.timeDurationLabel,
-			txtTimerLines.labelFieldLen,
-			txtTimerLines.labelJustification,
+			txtTimerLines.textLabelFieldLen,
+			txtTimerLines.textLabelJustification,
 			txtTimerLines.labelRightMarginChars,
 			ePrefix.XCtx(
 				"txtTimerLines->newTxtTimerLines"))

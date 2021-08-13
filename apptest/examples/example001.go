@@ -25,7 +25,7 @@ func (mt MainTest) TimerEventText01() {
 
 	startTime := time.Now()
 
-	elapsedTime := (time.Second * 5) + 500
+	elapsedTime := (time.Microsecond * 5) + 50000
 	endTime := startTime.Add(elapsedTime)
 
 	fmt.Println()
@@ -342,7 +342,7 @@ func (mt MainTest) IntSeparateNumRunes04() {
 		return
 	}
 
-	var txtFuncName, txtLabel strmech.TextFieldSpecLabel
+	var txtFuncName, txtLabel *strmech.TextFieldSpecLabel
 
 	txtFuncName,
 		err = strmech.TextFieldSpecLabel{}.
@@ -436,28 +436,33 @@ func (mt MainTest) IntSeparateNumRunes04() {
 	fmt.Println()
 
 	if actualNumStr == expectedNStr {
-		txtLabel.SetText(
-			"SUCCESSFUL COMPLETION!!")
+		_ = txtLabel.SetText(
+			"SUCCESSFUL COMPLETION!!",
+			nil)
 
 		fmt.Println(txtLabel.String())
 		fmt.Println()
 
 	} else {
 
-		txtLabel.SetText(
-			"ERROR Expected vs Actual")
+		_ = txtLabel.SetText(
+			"ERROR Expected vs Actual",
+			nil)
 
 		fmt.Println(txtLabel.String())
 
-		txtLabel.SetText(
-			"DO NOT MATCH!")
+		_ = txtLabel.SetText(
+			"DO NOT MATCH!",
+			nil)
 
 		fmt.Println(txtLabel.String())
 
 	}
 
 	fmt.Printf("%v\n", txtLineBreak)
-	txtLabel.SetText("End Of ")
+
+	_ = txtLabel.SetText("End Of ", nil)
+
 	fmt.Printf("%s\n", txtLabel)
 	fmt.Printf("%s\n", txtFuncName)
 	fmt.Printf("%s\n", txtLineBreak)
@@ -2488,11 +2493,11 @@ func (mt MainTest) ExampleExtractNumRunes03(
 func (mt MainTest) Timer(
 	startTime, endTime time.Time) (totalNanoSecs int64, elapsedTime string) {
 
-	// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond
-	// 	A MicroSecond is 1/1,000,000 or 1 one-millionth of a second
+	// MicroSecondNanoseconds - Number of Nanoseconds in a Microsecond.
+	// A MicroSecond is 1/1,000,000 or 1 one-millionth of a second
 	MicroSecondNanoseconds := int64(time.Microsecond)
 
-	// MilliSecondNanoseconds - Number of Nanoseconds in a MilliSecond
+	// MilliSecondNanoseconds - Number of Nanoseconds in a MilliSecond.
 	//	 A millisecond is 1/1,000 or 1 one-thousandth of a second
 	MilliSecondNanoseconds := int64(time.Millisecond)
 

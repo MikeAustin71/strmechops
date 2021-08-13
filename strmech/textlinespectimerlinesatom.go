@@ -11,7 +11,7 @@ type textLineSpecTimerLinesAtom struct {
 	lock *sync.Mutex
 }
 
-// getMaxTimerLabelLength - Returns the length of the longest
+// getLongestTimerLabelLength - Returns the length of the longest
 // text label or the text field length contained within an instance
 // of TextLineSpecTimerLines.
 //
@@ -27,7 +27,7 @@ type textLineSpecTimerLinesAtom struct {
 // whichever is greater: the longest text label length or the text
 // field length.
 //
-func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) getMaxTimerLabelLength(
+func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) getLongestTimerLabelLength(
 	txtTimerLines *TextLineSpecTimerLines) int {
 
 	if txtTimerLinesAtom.lock == nil {
@@ -38,29 +38,27 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) getMaxTimerLabelLength(
 
 	defer txtTimerLinesAtom.lock.Unlock()
 
-	maxLabelLen := 0
+	longestTxtLabelLen := 0
 
 	if txtTimerLines == nil {
-		return maxLabelLen
+		return longestTxtLabelLen
 	}
 
-	if len(txtTimerLines.startTimeLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.startTimeLabel)
+	longestTxtLabelLen = len(txtTimerLines.startTimeLabel)
+
+	if len(txtTimerLines.endTimeLabel) > longestTxtLabelLen {
+		longestTxtLabelLen = len(txtTimerLines.endTimeLabel)
 	}
 
-	if len(txtTimerLines.endTimeLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.endTimeLabel)
+	if len(txtTimerLines.timeDurationLabel) > longestTxtLabelLen {
+		longestTxtLabelLen = len(txtTimerLines.timeDurationLabel)
 	}
 
-	if len(txtTimerLines.timeDurationLabel) > maxLabelLen {
-		maxLabelLen = len(txtTimerLines.timeDurationLabel)
+	if txtTimerLines.textLabelFieldLen > longestTxtLabelLen {
+		longestTxtLabelLen = txtTimerLines.textLabelFieldLen
 	}
 
-	if txtTimerLines.labelFieldLen > maxLabelLen {
-		maxLabelLen = txtTimerLines.labelFieldLen
-	}
-
-	return maxLabelLen
+	return longestTxtLabelLen
 }
 
 // ptr - Returns a pointer to a new instance of
@@ -147,13 +145,13 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 		return false
 	}
 
-	if txtTimerLinesOne.labelFieldLen !=
-		txtTimerLinesTwo.labelFieldLen {
+	if txtTimerLinesOne.textLabelFieldLen !=
+		txtTimerLinesTwo.textLabelFieldLen {
 		return false
 	}
 
-	if txtTimerLinesOne.labelJustification !=
-		txtTimerLinesTwo.labelJustification {
+	if txtTimerLinesOne.textLabelJustification !=
+		txtTimerLinesTwo.textLabelJustification {
 		return false
 	}
 
@@ -489,10 +487,10 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 		return isValid, err
 	}
 
-	if txtTimerLines.labelFieldLen > 1000000 {
+	if txtTimerLines.textLabelFieldLen > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'txtTimerLines.labelFieldLen' is invalid!\n"+
-			"'txtTimerLines.labelFieldLen' is greater than one million "+
+			"Error: 'txtTimerLines.textLabelFieldLen' is invalid!\n"+
+			"'txtTimerLines.textLabelFieldLen' is greater than one million "+
 			"(1,000,000)'\n",
 			ePrefix.String())
 
@@ -527,20 +525,64 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 			txtTimerLinesElectron.getDefaultLabelRightMarginChars()
 	}
 
-	if txtTimerLines.labelFieldLen < -1 {
-		txtTimerLines.labelFieldLen = -1
+	lenLongestLabel := txtTimerLinesElectron.getLengthOfLongestLabel(
+		txtTimerLines.startTimeLabel,
+		txtTimerLines.endTimeLabel,
+		txtTimerLines.timeDurationLabel)
+
+	totalLabelLen := txtTimerLinesElectron.
+		getTotalLabelLength(
+			txtTimerLines.labelLeftMarginChars,
+			txtTimerLines.startTimeLabel,
+			txtTimerLines.endTimeLabel,
+			txtTimerLines.timeDurationLabel,
+			txtTimerLines.textLabelFieldLen,
+			txtTimerLines.labelRightMarginChars)
+
+	maxAllowableLabelLen := textLineSpecTimerLinesPreon{}.ptr().
+		getMaximumTimerLabelLen()
+
+	if totalLabelLen > maxAllowableLabelLen {
+		err = fmt.Errorf("%v\n"+
+			"Error: The total length of the text label field is invalid!\n"+
+			"The maximum text label field length is %v-characters\n"+
+			"The total length of 'labelLeftMarginChars' plus 'labelRightMarginChars'"+
+			"plus the the text label field length is %v-characters."+
+			"'text label field length' is computed by taking the longest"+
+			"of the longest text label or the user entered text field length.\n"+
+			"txtTimerLines.labelLeftMarginChars  = '%v'\n"+
+			"txtTimerLines.startTimeLabel        = '%v'\n"+
+			"txtTimerLines.endTimeLabel          = '%v'\n"+
+			"txtTimerLines.timeDurationLabel     = '%v'\n"+
+			"txtTimerLines.labelRightMarginChars = '%v'\n"+
+			"txtTimerLines.textLabelFieldLen     = '%v'\n",
+			ePrefix.String(),
+			maxAllowableLabelLen,
+			totalLabelLen,
+			len(txtTimerLines.labelLeftMarginChars),
+			len(txtTimerLines.startTimeLabel),
+			len(txtTimerLines.endTimeLabel),
+			len(txtTimerLines.timeDurationLabel),
+			len(txtTimerLines.labelRightMarginChars),
+			txtTimerLines.textLabelFieldLen)
+
+		return isValid, err
 	}
 
-	if !txtTimerLines.labelJustification.XIsValid() {
+	if txtTimerLines.textLabelFieldLen < lenLongestLabel {
+		txtTimerLines.textLabelFieldLen = lenLongestLabel
+	}
+
+	if !txtTimerLines.textLabelJustification.XIsValid() {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'txtTimerLines.labelJustification' is invalid!\n"+
-			"'txtTimerLines.labelJustification' should be 'Left',\n"+
+			"Error: 'txtTimerLines.textLabelJustification' is invalid!\n"+
+			"'txtTimerLines.textLabelJustification' should be 'Left',\n"+
 			"'Right' or 'Center'.\n"+
-			"'txtTimerLines.labelJustification' string value  = '%v'\n"+
-			"'txtTimerLines.labelJustification' integer value = '%v'\n",
+			"'txtTimerLines.textLabelJustification' string value  = '%v'\n"+
+			"'txtTimerLines.textLabelJustification' integer value = '%v'\n",
 			ePrefix.String(),
-			txtTimerLines.labelJustification.String(),
-			txtTimerLines.labelJustification.XValueInt())
+			txtTimerLines.textLabelJustification.String(),
+			txtTimerLines.textLabelJustification.XValueInt())
 
 		return isValid, err
 	}

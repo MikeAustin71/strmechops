@@ -307,7 +307,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 }
 
 // empty - Receives a pointer to an instance of
-// TextLineSpecStandardLine and proceeds to set all of the internal
+// TextLineSpecStandardLine and proceeds to set all the internal
 // member variables to their uninitialized or zero states.
 //
 //
@@ -354,7 +354,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
 //
 // If the data elements of both input parameters 'stdLineOne' and
 // 'stdLineTwo' are equal in all respects, this method returns a
-// boolean value of 'true'. Otherwise this method returns 'false'.
+// boolean value of 'true'. Otherwise, this method returns 'false'.
 //
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 	stdLineOne *TextLineSpecStandardLine,

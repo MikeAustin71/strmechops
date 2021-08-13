@@ -549,9 +549,9 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) empty(
 
 	txtTimerLines.timeDurationLabel = nil
 
-	txtTimerLines.labelFieldLen = 0
+	txtTimerLines.textLabelFieldLen = 0
 
-	txtTimerLines.labelJustification = TxtJustify.None()
+	txtTimerLines.textLabelJustification = TxtJustify.None()
 
 	txtTimerLines.labelRightMarginChars = nil
 
@@ -654,14 +654,55 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getDefaultTime() ti
 	return defaultTime
 }
 
-// getMaximumLabelOutputSeparationCharsLen - Returns the maximum
-// allowable string length for Label Output Separation Characters
-// configured for a TextLineSpecTimerLines timer event.
+// getLengthOfLongestLabel - Returns the length of the longest text
+// label currently configured for a TextLineSpecTimerLines timer
+// event.
 //
-// The current maximum length for the Label Output Separation
-// Characters is 5-characters.
+// The length of the longest text label is determined by comparing
+// the individual string lengths of the three text labels
+// associated with every TextLineSpecTimerLines timer event.
+// Namely, these are 'startTimeLabel', 'endTimeLabel', and
+// 'timeDurationLabel'.
 //
-func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getMaximumLabelOutputSeparationCharsLen() int {
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  startTimeLabel             []rune
+//     - An array of runes containing the text characters
+//       constituting the starting time text label.
+//
+//
+//  endTimeLabel               []rune
+//     - An array of runes containing the text characters
+//       constituting the ending time text label.
+//
+//
+//  timeDurationLabel          []rune
+//     - The text label used to describe the time duration or
+//       elapsed time computed from the 'startTime' and 'endTime'
+//       parameters.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - An integer value identifying the length in runes of the
+//       longest text label for an instance of
+//       TextLineSpecTimerLines. All instances of
+//       TextLineSpecTimerLines encapsulate three text labels,
+//       'startTimeLabel', 'endTimeLabel', and 'timeDurationLabel'.
+//       This return parameter holds the length of the longest
+//       of these three text labels.
+//
+func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getLengthOfLongestLabel(
+	startTimeLabel []rune,
+	endTimeLabel []rune,
+	timeDurationLabel []rune) int {
 
 	if txtTimerLinesElectron.lock == nil {
 		txtTimerLinesElectron.lock = new(sync.Mutex)
@@ -671,7 +712,70 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getMaximumLabelOutp
 
 	defer txtTimerLinesElectron.lock.Unlock()
 
-	return 5
+	maxLabelLen := len(startTimeLabel)
+
+	itemLen := len(endTimeLabel)
+
+	if itemLen > maxLabelLen {
+		maxLabelLen = itemLen
+	}
+
+	itemLen = len(timeDurationLabel)
+
+	if itemLen > maxLabelLen {
+		maxLabelLen = itemLen
+	}
+
+	return maxLabelLen
+}
+
+// getTotalLabelLength - Returns the true length of a series of
+// text labels plus the label's left and right margins.
+//
+// 'textLabelFieldLen' is a user entered value defining the length
+// of all text label strings. If this value is greater than the
+// length of the longest text label, it is used to determine the
+// length of text label strings. Otherwise, the length of the
+// longest text label is used.
+//
+func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getTotalLabelLength(
+	labelLeftMarginChars []rune,
+	startTimeLabel []rune,
+	endTimeLabel []rune,
+	timeDurationLabel []rune,
+	textLabelFieldLen int,
+	labelRightMarginChars []rune) int {
+
+	if txtTimerLinesElectron.lock == nil {
+		txtTimerLinesElectron.lock = new(sync.Mutex)
+	}
+
+	txtTimerLinesElectron.lock.Lock()
+
+	defer txtTimerLinesElectron.lock.Unlock()
+
+	itemLen := len(startTimeLabel)
+	longestLabelLen := itemLen
+
+	itemLen = len(endTimeLabel)
+
+	if itemLen > longestLabelLen {
+		longestLabelLen = itemLen
+	}
+
+	itemLen = len(timeDurationLabel)
+
+	if itemLen > longestLabelLen {
+		longestLabelLen = itemLen
+	}
+
+	if textLabelFieldLen > longestLabelLen {
+		longestLabelLen = textLabelFieldLen
+	}
+
+	return textLabelFieldLen +
+		len(labelLeftMarginChars) +
+		len(labelRightMarginChars)
 }
 
 // ptr - Returns a pointer to a new instance of

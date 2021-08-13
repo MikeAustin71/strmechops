@@ -118,67 +118,88 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	// Used to compute summary time duration left margin
-	maxLabelLen := txtTimerLinesAtom.getMaxTimerLabelLength(
-		txtTimerLines)
+	// Text Formatting Setup
+	var txtLabelLeftFiller *TextFieldSpecFiller
 
-	if txtTimerLines.labelFieldLen > maxLabelLen {
-		maxLabelLen = txtTimerLines.labelFieldLen
-	} else {
-		txtTimerLines.labelFieldLen = maxLabelLen
-	}
+	var txtDescLabel *TextFieldSpecLabel
 
-	maxLabelLeftMargin := maxLabelLen +
-		len(txtTimerLines.labelRightMarginChars)
+	var txtLabelRightFiller *TextFieldSpecFiller
+
+	var txtOutputLabel *TextFieldSpecLabel
+
+	stdLine := TextLineSpecStandardLine{}.New()
 
 	// Begin First Line
-	var txtDescLabel *TextFieldSpecLabel
+
+	if len(txtTimerLines.labelLeftMarginChars) > 0 {
+
+		txtLabelLeftFiller,
+			err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+			txtTimerLines.labelLeftMarginChars,
+			1,
+			ePrefix.XCtx(
+				"First Line: "+
+					"txtTimerLines.labelLeftMarginChars"))
+
+		if err != nil {
+			return "", err
+		}
+
+		err = stdLine.AddTextField(
+			txtLabelLeftFiller,
+			ePrefix.XCtx(
+				"First Line: txtLabelLeftFiller"))
+
+		if err != nil {
+			return "", err
+		}
+
+	}
 
 	txtDescLabel,
 		err = TextFieldSpecLabel{}.NewConstructorRunes(
 		txtTimerLines.startTimeLabel,
-		txtTimerLines.labelFieldLen,
-		txtTimerLines.labelJustification,
+		txtTimerLines.textLabelFieldLen,
+		txtTimerLines.textLabelJustification,
 		ePrefix.XCtx(
-			"txtTimerLines.startTimeLabel"))
+			"txtDescLabel: txtTimerLines.startTimeLabel"))
 
 	if err != nil {
 		return "", err
 	}
 
-	stdLine := TextLineSpecStandardLine{}.New()
+	err = stdLine.AddTextField(
+		txtDescLabel,
+		ePrefix.XCtx(
+			"First Line: txtDescLabel"+
+				" - txtTimerLines.startTimeLabel"))
 
-	stdLine.AddTextField(txtDescLabel)
+	if err != nil {
+		return "", err
+	}
 
-	var txtFiller *TextFieldSpecFiller
-
-	txtFiller,
+	txtLabelRightFiller,
 		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
 		txtTimerLines.labelRightMarginChars,
 		1,
 		ePrefix.XCtx(
-			"txtTimerLines.labelRightMarginChars"))
+			"First Line: txtTimerLines.labelRightMarginChars"))
 
 	if err != nil {
 		return "", err
 	}
 
-	var txtFiller2 TextFieldSpecFiller
-
-	txtFiller2,
-		err = txtFiller.CopyOut(
-		ePrefix.XCtx("txtFiller.CopyOut() Line#1"))
+	err = stdLine.AddTextField(
+		txtLabelRightFiller,
+		ePrefix.XCtx(
+			"First Line: txtLabelRightFiller"))
 
 	if err != nil {
 		return "", err
 	}
-
-	stdLine.AddTextField(&txtFiller2)
 
 	startTimeStr := txtTimerLines.startTime.Format(
 		txtTimerLines.timeFormat)
-
-	var txtOutputLabel TextFieldSpecLabel
 
 	txtOutputLabel,
 		err = TextFieldSpecLabel{}.NewTextLabel(
@@ -186,9 +207,21 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		-1,
 		TxtJustify.Left(),
 		ePrefix.XCtx(
-			"startTimeStr"))
+			"startTimeStr: txtOutputLabel"))
 
-	stdLine.AddTextField(&txtOutputLabel)
+	if err != nil {
+		return "", err
+	}
+
+	err = stdLine.AddTextField(
+		txtOutputLabel,
+		ePrefix.XCtx(
+			"First Line - startTimeStr: "+
+				"txtOutputLabel"))
+
+	if err != nil {
+		return "", err
+	}
 
 	var err2 error
 
@@ -209,46 +242,75 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
+	stdLine.EmptyTextFields()
+
 	// Begin Second Line
 
-	txtDescLabel,
-		err = TextFieldSpecLabel{}.NewConstructorRunes(
+	if len(txtTimerLines.labelLeftMarginChars) > 0 {
+
+		err = stdLine.AddTextField(
+			txtLabelLeftFiller,
+			ePrefix.XCtx(
+				"Second Line - txtLabelLeftFiller"))
+
+		if err != nil {
+			return "", err
+		}
+
+	}
+
+	err = txtDescLabel.SetTextRunes(
 		txtTimerLines.endTimeLabel,
-		txtTimerLines.labelFieldLen,
-		txtTimerLines.labelJustification,
 		ePrefix.XCtx(
-			"txtTimerLines.endTimeLabel"))
+			"Second Line - txtDescLabel: "+
+				"txtTimerLines.endTimeLabel"))
 
 	if err != nil {
 		return "", err
 	}
 
-	stdLine = TextLineSpecStandardLine{}.New()
-
-	stdLine.AddTextField(txtDescLabel)
-
-	txtFiller2,
-		err = txtFiller.CopyOut(
-		ePrefix.XCtx("txtFiller.CopyOut() Line#2"))
+	err = stdLine.AddTextField(
+		txtDescLabel,
+		ePrefix.XCtx(
+			"Second Line - txtDescLabel: "+
+				"Add txtDescLabel"))
 
 	if err != nil {
 		return "", err
 	}
 
-	stdLine.AddTextField(&txtFiller2)
+	err =
+		stdLine.AddTextField(
+			txtLabelRightFiller,
+			ePrefix.XCtx(
+				"Second Line: txtLabelRightFiller"))
+
+	if err != nil {
+		return "", err
+	}
 
 	endTimeStr := txtTimerLines.endTime.Format(
 		txtTimerLines.timeFormat)
 
-	txtOutputLabel,
-		err = TextFieldSpecLabel{}.NewTextLabel(
+	err = txtOutputLabel.SetText(
 		endTimeStr,
-		-1,
-		TxtJustify.Left(),
 		ePrefix.XCtx(
-			"endTimeStr"))
+			"Second Line - txtOutputLabel: "+
+				"endTimeStr"))
 
-	stdLine.AddTextField(&txtOutputLabel)
+	if err != nil {
+		return "", err
+	}
+
+	err = stdLine.AddTextField(
+		txtOutputLabel,
+		ePrefix.XCtx(
+			"Second - endTimeStr: "+
+				"txtOutputLabel"))
+
+	if err != nil {
+		return "", err
+	}
 
 	_,
 		err2 = sb.WriteString(stdLine.String())
@@ -266,12 +328,22 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	// Begin summary time duration lines
 
+	totalLabelLen :=
+		textLineSpecTimerLinesElectron{}.ptr().
+			getTotalLabelLength(
+				txtTimerLines.labelLeftMarginChars,
+				txtTimerLines.startTimeLabel,
+				txtTimerLines.endTimeLabel,
+				txtTimerLines.timeDurationLabel,
+				txtTimerLines.textLabelFieldLen,
+				txtTimerLines.labelRightMarginChars)
+
 	var txtFillerSumLeftMar *TextFieldSpecFiller
 
 	txtFillerSumLeftMar,
 		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
 		[]rune{' '},
-		maxLabelLeftMargin,
+		totalLabelLen,
 		ePrefix.XCtx(
 			"Summary Line Left Margin"))
 
@@ -286,8 +358,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		computeTimeDuration(
 			txtTimerLines.startTime,
 			txtTimerLines.endTime,
-			maxLabelLeftMargin,
-			ePrefix.XCtxEmpty())
+			totalLabelLen,
+			ePrefix.XCtx(
+				"Timer Summary Line Calculation"))
 
 	if err != nil {
 		return "", err
@@ -295,15 +368,15 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	for i := 0; i < len(timeDurationStrs); i++ {
 
-		stdLine = TextLineSpecStandardLine{}.New()
+		stdLine.EmptyTextFields()
 
 		if i == 0 {
 
 			txtDescLabel,
 				err = TextFieldSpecLabel{}.NewConstructorRunes(
 				txtTimerLines.timeDurationLabel,
-				txtTimerLines.labelFieldLen,
-				txtTimerLines.labelJustification,
+				txtTimerLines.textLabelFieldLen,
+				txtTimerLines.textLabelJustification,
 				ePrefix.XCtx(
 					"txtTimerLines.timeDurationLabel"))
 
@@ -311,19 +384,30 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				return "", err
 			}
 
-			stdLine.AddTextField(txtDescLabel)
-
-			txtFiller2,
-				err = txtFiller.CopyOut(
+			err = stdLine.AddTextField(
+				txtDescLabel,
 				ePrefix.XCtx(
-					fmt.Sprintf("txtFiller.CopyOut() Line #%v",
-						3+i)))
+					fmt.Sprintf(
+						"Time Summary Line #%v : "+
+							"txtTimerLines.timeDurationLabel->"+
+							"txtDescLabel", i)))
 
 			if err != nil {
 				return "", err
 			}
 
-			stdLine.AddTextField(&txtFiller2)
+			err =
+				stdLine.AddTextField(
+					txtLabelRightFiller,
+					ePrefix.XCtx(
+						fmt.Sprintf(
+							"Time Summary Line #%v : "+
+								"txtLabelRightFiller->"+
+								"txtDescLabel", i+1)))
+
+			if err != nil {
+				return "", err
+			}
 
 			txtOutputLabel,
 				err = TextFieldSpecLabel{}.NewTextLabel(
@@ -331,27 +415,42 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				-1,
 				TxtJustify.Left(),
 				ePrefix.XCtx(
-					"summary timeDurationStr #1"))
+					fmt.Sprintf(
+						"Time Summary Line #%v : "+
+							"txtLabelRightFiller->"+
+							"txtDescLabel", i+1)))
 
 			if err != nil {
 				return "", err
 			}
 
-			stdLine.AddTextField(&txtOutputLabel)
+			err =
+				stdLine.AddTextField(
+					txtOutputLabel,
+					ePrefix.XCtx(
+						fmt.Sprintf(
+							"Time Summary Line #%v : "+
+								"txtOutputLabel->"+
+								"txtDescLabel", i+1)))
+
+			if err != nil {
+				return "", err
+			}
 
 		} else {
 
-			txtFiller2,
-				err = txtFillerSumLeftMar.CopyOut(
-				ePrefix.XCtx(
-					fmt.Sprintf("txtFillerSumLeftMar.CopyOut() Line#%v",
-						i+3)))
+			err =
+				stdLine.AddTextField(
+					txtFillerSumLeftMar,
+					ePrefix.XCtx(
+						fmt.Sprintf(
+							"Time Summary Line #%v : "+
+								"txtOutputLabel->"+
+								"txtDescLabel", i+1)))
 
 			if err != nil {
 				return "", err
 			}
-
-			stdLine.AddTextField(&txtFiller2)
 
 			txtOutputLabel,
 				err = TextFieldSpecLabel{}.NewTextLabel(
@@ -359,14 +458,26 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				-1,
 				TxtJustify.Left(),
 				ePrefix.XCtx(
-					fmt.Sprintf("summary timeDurationStr #%v",
-						i+1)))
+					fmt.Sprintf(
+						"Time Summary Line #%v : "+
+							"timeDurationStrs[%v]->"+
+							"txtOutputLabel", i+1, i)))
 
 			if err != nil {
 				return "", err
 			}
 
-			stdLine.AddTextField(&txtOutputLabel)
+			err = stdLine.AddTextField(
+				txtOutputLabel,
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"Time Summary Line #%v : "+
+							"timeDurationStrs[%v]->"+
+							"txtOutputLabel", i+1, i)))
+
+			if err != nil {
+				return "", err
+			}
 
 		} // End of 'else'
 
@@ -420,8 +531,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       'startTimeLabel' will be assigned a default value of
 //       "Start Time".
 //
-//       If the length of the 'startTimeLabel' rune array is greater
-//       than 50-characters, this method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  startTime                  time.Time
@@ -442,8 +555,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       'endTimeLabel' will be assigned a default value of
 //       "End Time".
 //
-//       If the length of the 'endTimeLabel' rune array is greater
-//       than 50-characters, this method will return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  endTime                    time.Time
@@ -475,27 +590,38 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       'timeDurationLabel' will be assigned a default value of
 //       "Elapsed Time".
 //
-//       If the length of the 'timeDurationLabel' rune array is
-//       greater than 50-characters, this method will return an
-//       error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
-//  labelFieldLen              int
-//     - The length of the text fields which will be used to
+//  textLabelFieldLen              int
+//     - A user entered value which defines the length of the text
+//       field used by all three text labels, 'startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel'.
+//
+//       The length of the text fields which will be used to
 //       position and display the three text labels provided by
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
-//       If labelFieldLen is less than the length of the longest
-//       text label it will be defaulted to the length of the
-//       longest text label.
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
-//  labelJustification         TextJustify
+//  textLabelJustification         TextJustify
 //     - An enumeration which specifies the justification of the
 //       three text labels 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel' within the field length specified by
-//       'labelFieldLen'.
+//       'textLabelFieldLen'.
 //
 //       If the field length is greater than the length of the
 //       longest of the three text labels, label justification must
@@ -512,11 +638,12 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //           TxtJustify.Center()
 //
 //
-//  labelRightMarginChars []rune
+//  labelRightMarginChars      []rune
 //     - This rune array contains the character or characters which
 //       will be used to separate the text labels ('startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel') from the output or
 //       data values displayed on the same line.
+//
 //       Example:
 //        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
 //
@@ -531,9 +658,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       Example Output:
 //         Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the length of the 'labelRightMarginChars' rune
-//       array is greater than 5-characters, this method will
-//       return an error.
+//       If the string length of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
@@ -575,9 +703,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	endTime time.Time,
 	timeFormat string,
 	timeDurationLabel []rune,
-	labelFieldLen int,
+	textLabelFieldLen int,
 	labelJustification TextJustify,
-	labelOutputSeparationChars []rune,
+	labelRightMarginChars []rune,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtTimerLinesMolecule.lock == nil {
@@ -611,11 +739,11 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		return err
 	}
 
-	if labelFieldLen > 1000000 {
+	if textLabelFieldLen > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'labelFieldLen' is invalid!\n"+
-			"'labelFieldLen' is greater than one million "+
-			"(1,000,000)'\n",
+			"Error: 'textLabelFieldLen' is invalid!\n"+
+			"'textLabelFieldLen' is greater than one million "+
+			"(1,000,000)\n",
 			ePrefix.String())
 
 		return err
@@ -641,31 +769,11 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 				getDefaultTime()
 	}
 
-	maxLabelLen := txtTimerLinesElectron.
-		getMaximumTimerLabelLen()
-
-	maxTimerLabelLen := 0
-
 	labelLen := len(startTimeLabel)
 
 	if len(startTimeLabel) == 0 {
 		startTimeLabel =
 			txtTimerLinesElectron.getDefaultStartTimeLabel()
-	} else if labelLen > maxLabelLen {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startTimeLabel' is invalid!\n"+
-			"The maximum length for a timer label is %v-characters.\n"+
-			"startTimeLabel length = %v-characters.\n",
-			ePrefix.String(),
-			maxLabelLen,
-			labelLen)
-
-		return err
-	}
-
-	if labelLen > maxTimerLabelLen {
-		maxTimerLabelLen = labelLen
 	}
 
 	labelLen = len(endTimeLabel)
@@ -673,21 +781,6 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	if labelLen == 0 {
 		endTimeLabel =
 			txtTimerLinesElectron.getDefaultEndTimeLabel()
-	} else if labelLen > maxLabelLen {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'endTimeLabel' is invalid!\n"+
-			"The maximum length for a timer label is %v-characters.\n"+
-			"endTimeLabel length = %v-characters.\n",
-			ePrefix.String(),
-			maxLabelLen,
-			labelLen)
-
-		return err
-	}
-
-	if labelLen > maxTimerLabelLen {
-		maxTimerLabelLen = labelLen
 	}
 
 	labelLen = len(timeDurationLabel)
@@ -696,57 +789,72 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		timeDurationLabel =
 			txtTimerLinesElectron.getDefaultTimeDurationLabel()
 
-	} else if labelLen > maxLabelLen {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'timeDurationLabel' is invalid!\n"+
-			"The maximum length for a timer label is %v-characters.\n"+
-			"timeDurationLabel length = %v-characters.\n",
-			ePrefix.String(),
-			maxLabelLen,
-			labelLen)
-
-		return err
 	}
 
-	if labelLen > maxTimerLabelLen {
-		maxTimerLabelLen = labelLen
-	}
+	labelLen = len(labelRightMarginChars)
 
-	if labelFieldLen < maxTimerLabelLen {
-		labelFieldLen = maxTimerLabelLen
-	}
-
-	maxLabelLen = txtTimerLinesElectron.
-		getMaximumLabelOutputSeparationCharsLen()
-
-	labelLen = len(labelOutputSeparationChars)
-
-	if len(labelOutputSeparationChars) == 0 {
-		labelOutputSeparationChars =
+	if len(labelRightMarginChars) == 0 {
+		labelRightMarginChars =
 			txtTimerLinesElectron.
 				getDefaultLabelRightMarginChars()
 
-	} else if labelLen > maxLabelLen {
+	}
 
+	lenLongestLabel := txtTimerLinesElectron.getLengthOfLongestLabel(
+		txtTimerLines.startTimeLabel,
+		txtTimerLines.endTimeLabel,
+		txtTimerLines.timeDurationLabel)
+
+	totalLabelLen := txtTimerLinesElectron.
+		getTotalLabelLength(
+			labelLeftMarginChars,
+			startTimeLabel,
+			endTimeLabel,
+			timeDurationLabel,
+			textLabelFieldLen,
+			labelRightMarginChars)
+
+	maxAllowableLabelLen := textLineSpecTimerLinesPreon{}.ptr().
+		getMaximumTimerLabelLen()
+
+	if totalLabelLen > maxAllowableLabelLen {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'labelRightMarginChars' is invalid!\n"+
-			"The maximum label output separation characters length is %v-characters.\n"+
-			"labelRightMarginChars length = %v-characters.\n",
+			"Error: The total length of the text label field is invalid!\n"+
+			"The maximum text label field length is %v-characters\n"+
+			"The total length of 'labelLeftMarginChars' plus 'labelRightMarginChars'"+
+			"plus the the text label field length is %v-characters."+
+			"'text label field length' is computed by taking the longest"+
+			"of the longest text label or the user entered text field length.\n"+
+			"labelLeftMarginChars  = '%v'\n"+
+			"startTimeLabel        = '%v'\n"+
+			"endTimeLabel          = '%v'\n"+
+			"timeDurationLabel     = '%v'\n"+
+			"labelRightMarginChars = '%v'\n"+
+			"textLabelFieldLen     = '%v'\n",
 			ePrefix.String(),
-			maxLabelLen,
-			labelLen)
+			maxAllowableLabelLen,
+			totalLabelLen,
+			len(txtTimerLines.labelLeftMarginChars),
+			len(txtTimerLines.startTimeLabel),
+			len(txtTimerLines.endTimeLabel),
+			len(txtTimerLines.timeDurationLabel),
+			len(txtTimerLines.labelRightMarginChars),
+			txtTimerLines.textLabelFieldLen)
 
 		return err
+	}
+
+	if textLabelFieldLen < lenLongestLabel {
+		textLabelFieldLen = lenLongestLabel
 	}
 
 	if !labelJustification.XIsValid() {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'labelJustification' is invalid!\n"+
-			"'labelJustification' should be 'Left',\n"+
+			"Error: 'textLabelJustification' is invalid!\n"+
+			"'textLabelJustification' should be 'Left',\n"+
 			"'Right' or 'Center'.\n"+
-			"'labelJustification' string value  = '%v'\n"+
-			"'labelJustification' integer value = '%v'\n",
+			"'textLabelJustification' string value  = '%v'\n"+
+			"'textLabelJustification' integer value = '%v'\n",
 			ePrefix.String(),
 			labelJustification.String(),
 			labelJustification.XValueInt())
@@ -766,6 +874,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	if err != nil {
 		return err
 	}
+
 	err = sMechPreon.copyRuneArrays(
 		&txtTimerLines.startTimeLabel,
 		&startTimeLabel,
@@ -803,15 +912,15 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		return err
 	}
 
-	txtTimerLines.labelFieldLen =
-		labelFieldLen
+	txtTimerLines.textLabelFieldLen =
+		textLabelFieldLen
 
-	txtTimerLines.labelJustification =
+	txtTimerLines.textLabelJustification =
 		labelJustification
 
 	err = sMechPreon.copyRuneArrays(
 		&txtTimerLines.labelRightMarginChars,
-		&labelOutputSeparationChars,
+		&labelRightMarginChars,
 		true,
 		ePrefix.XCtx(
 			"labelRightMarginChars"))
