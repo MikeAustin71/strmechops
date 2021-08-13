@@ -24,10 +24,10 @@ import (
 //
 // Sample Output
 //
-//      Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
 //      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
-//      Elapsed Time: 55 Microseconds 0 Nanoseconds
-//      Total Elapsed Nanoseconds: 55,000
+//  Elapsed Time: 55 Microseconds 0 Nanoseconds
+//                Total Elapsed Nanoseconds: 55,000
 //
 // The TextLineSpecTimerLines methods provide a lot of flexibility
 // for modifying this output format.
@@ -1175,12 +1175,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 //
 // Return Values
 //
-//  TextLineSpecTimerLines
+//  *TextLineSpecTimerLines
 //     - If this method completes successfully, it will create and
-//       return a new instance of TextLineSpecTimerLines which is
-//       fully configured with all the parameters necessary to
-//       format a complete timer event for text display output or
-//       printing.
+//       return a pointer to a new instance of
+//       TextLineSpecTimerLines which is fully configured with all
+//       the parameters necessary to format a complete timer event
+//       for text display, file output or printing.
 //
 //
 //  error
@@ -1197,7 +1197,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 	startTime time.Time,
 	endTime time.Time,
 	errorPrefix interface{}) (
-	TextLineSpecTimerLines,
+	*TextLineSpecTimerLines,
 	error) {
 
 	if txtSpecTimerLines.lock == nil {
@@ -1220,7 +1220,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 		"")
 
 	if err != nil {
-		return newTxtTimerLines, err
+		return &newTxtTimerLines, err
 	}
 
 	timeDurationLabel :=
@@ -1242,7 +1242,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 			nil,
 			ePrefix.XCtx("newTxtTimerLines"))
 
-	return newTxtTimerLines, err
+	return &newTxtTimerLines, err
 }
 
 // NewDefaultShellTimerEvent - Creates and returns a new instance
@@ -1310,12 +1310,12 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 //
 // Return Values
 //
-//  TextLineSpecTimerLines
-//     - This method will create and return a new instance of
-//       TextLineSpecTimerLines which is fully configured except
-//       for the starting time and ending time.
+//  *TextLineSpecTimerLines
+//     - This method will create and return a pointer to a new
+//       instance of TextLineSpecTimerLines which is fully
+//       configured except for the starting time and ending times.
 //
-func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() TextLineSpecTimerLines {
+func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() *TextLineSpecTimerLines {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -1350,7 +1350,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultShellTimerEvent() Text
 			nil,
 			nil)
 
-	return newTxtTimerLines
+	return &newTxtTimerLines
 }
 
 // NewEmptyTimerEvent - Creates and returns a new instance of
@@ -2190,11 +2190,11 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEventRunes(
 //
 // Return Values
 //
-//  TextLineSpecTimerLines
+//  *TextLineSpecTimerLines
 //     - If this method completes successfully, it will create and
-//       return a new instance of TextLineSpecTimerLines which is
-//       fully configured except for the starting time and ending
-//       time.
+//       return a pointer to a new instance of
+//       TextLineSpecTimerLines which is fully configured except
+//       for the starting time and ending time.
 //
 //
 //  error
@@ -2217,7 +2217,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 	labelJustification TextJustify,
 	labelRightMarginChars string,
 	errorPrefix interface{}) (
-	TextLineSpecTimerLines,
+	*TextLineSpecTimerLines,
 	error) {
 
 	if txtSpecTimerLines.lock == nil {
@@ -2240,7 +2240,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 		"")
 
 	if err != nil {
-		return newTxtTimerLines, err
+		return &newTxtTimerLines, err
 	}
 
 	defaultTime :=
@@ -2262,7 +2262,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 			[]rune(labelRightMarginChars),
 			ePrefix.XCtx("newTxtTimerLines"))
 
-	return newTxtTimerLines, err
+	return &newTxtTimerLines, err
 }
 
 // SetDefaultFullTimerEvent - This method configures the current

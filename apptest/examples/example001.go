@@ -117,7 +117,7 @@ func (mt MainTest) IntSeparateNumRunes01() {
 		return
 	}
 
-	var timerLines strmech.TextLineSpecTimerLines
+	var timerLines *strmech.TextLineSpecTimerLines
 
 	timerLines,
 		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
