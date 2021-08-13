@@ -8,16 +8,19 @@ import (
 )
 
 // TextLineSpecTimerLines - Implements a time which produces three
-// text lines of output for display or printing.
+// or more text lines of output for text display, file output or
+// printing.
 //
 // The first line of text shows the Starting Time. The second line
 // shows the Ending Time and the third line displays the time
 // duration or the difference between starting time and ending
 // time.
 //
-// The third line displaying time duration will format time
-// duration in days, hours, minutes, seconds, microseconds,
-// milliseconds and nanoseconds.
+// The remaining lines display time duration information. Time
+// duration, or elapsed time, will break down the duration into
+// days, hours, minutes, seconds, microseconds, milliseconds and
+// nanoseconds. The display will begin with the first category
+// containing valid time duration data.
 //
 // Sample Output
 //
@@ -1382,8 +1385,12 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 // all the essential elements of a timer event and format that
 // information for text display output or printing.
 //
-// Use this method when both start time and ending time for the
-// timer event are known quantities.
+// This method is designed to be used when both start time and
+// ending time for the timer event are known quantities. However,
+// one also has the option of setting 'startTime' and 'endTime' to
+// default values by passing time.Time{} (a.k.a. zero time) as
+// input parameters. 'startTime' and 'endTime' can then be entered
+// later using the appropriate setter methods.
 //
 //
 // ------------------------------------------------------------------------
@@ -1677,8 +1684,12 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 // all the essential elements of a timer event and format that
 // information for text display output or printing.
 //
-// Use this method when both start time and ending time for the
-// timer event are known quantities.
+// This method is designed to be used when both start time and
+// ending time for the timer event are known quantities. However,
+// one also has the option of setting 'startTime' and 'endTime' to
+// default values by passing time.Time{} (a.k.a. zero time) as
+// input parameters. 'startTime' and 'endTime' can then be entered
+// later using the appropriate setter methods.
 //
 //
 // ------------------------------------------------------------------------
@@ -2823,10 +2834,19 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTime(
 //
 // The purpose of a TextLineSpecTimerLines instance is to capture
 // all the essential elements of a timer event and format that
-// information for text display output or printing.
+// information for text display, file output or printing.
 //
-// Use this method when both start time and ending time for the
-// timer event are known quantities.
+// This method is designed to be used when both start time and
+// ending time for the timer event are known quantities. However,
+// one also has the option of setting 'startTime' and 'endTime' to
+// default values by passing time.Time{} (a.k.a. zero time) as
+// input parameters. 'startTime' and 'endTime' can then be entered
+// later using the appropriate setter methods.
+//
+// This method is very similar to
+// TextLineSpecTimerLines.SetFullTimerEventRunes() and differs only
+// in the respect that many input parameters use strings instead of
+// rune arrays.
 //
 // ------------------------------------------------------------------------
 //
@@ -3090,6 +3110,308 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelOutputSeparationChars),
+			ePrefix.XCtx("txtSpecTimerLines"))
+
+	return err
+}
+
+// SetFullTimerEventRunes - This method configures the current
+// TextLineSpecTimerLines instance with new timer event parameters.
+// All internal member variable data values for the current
+// TextLineSpecTimerLines instance will be reset and overwritten.
+//
+// The purpose of a TextLineSpecTimerLines instance is to capture
+// all the essential elements of a timer event and format that
+// information for text display, file output or printing.
+//
+// This method is designed to be used when both start time and
+// ending time for the timer event are known quantities. However,
+// one also has the option of setting 'startTime' and 'endTime' to
+// default values by passing time.Time{} (a.k.a. zero time) as
+// input parameters. 'startTime' and 'endTime' can then be entered
+// later using the appropriate setter methods.
+//
+// This method is very similar to
+// TextLineSpecTimerLines.SetFullTimerEvent() and differs only in
+// the respect that many input parameters use rune arrays instead of
+// strings.
+//
+// ------------------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will overwrite and reset all the data values
+// encapsulated by the current TextLineSpecTimerLines instance.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  labelLeftMarginChars       []rune
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the length in characters of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//       If labelLeftMarginChars is submitted with a 'nil' value or
+//       a zero length rune array, no error will be triggered. In
+//       this case, the left margin will simply be omitted.
+//
+//
+//  startTimeLabel             []rune
+//     - A string containing the text characters constituting the
+//       starting time text label.
+//
+//       If this parameter is submitted as a zero length or empty
+//       rune array, or if the rune array contains invalid zero
+//       rune values, 'startTimeLabel' will be assigned a default
+//       value of "Start Time".
+//
+//       If the length in characters of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  startTime                  time.Time
+//     - A time value which will be used in conjunction with
+//       'endTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'startTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  endTimeLabel               []rune
+//     - A string containing the text characters constituting the
+//       ending time text label.
+//
+//       If this parameter is submitted as a zero length or empty
+//       rune array, or if the rune array contains invalid zero
+//       rune values, 'endTimeLabel' will be assigned a default
+//       value of "End Time".
+//
+//       If the length in characters of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  endTime                    time.Time
+//     - A time value which will be used in conjunction with
+//       'startTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'endTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  timeFormat                 string
+//     - This string holds the time format parameters used to
+//       format starting time and ending time values for text
+//       display and output.
+//
+//       If this parameter is submitted as an empty string,
+//       parameter 'timeFormat' will be assigned a default value
+//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//
+//  timeDurationLabel          []rune
+//     - The text label used to describe the time duration or
+//       elapsed time computed from the 'startTime' and 'endTime'
+//       parameters.
+//
+//       If this parameter is submitted as a zero length or empty
+//       rune array, or if the rune array contains invalid zero
+//       rune values, 'timeDurationLabel' will be assigned a default
+//       value of "Elapsed Time".
+//
+//       If the length in characters of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  textLabelFieldLen          int
+//     - A user entered value which defines the length of the text
+//       field used by all three text labels, 'startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel'.
+//
+//       The length of the text fields which will be used to
+//       position and display the three text labels provided by
+//       input parameters 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel'.
+//
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the length in characters of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  textLabelJustification         TextJustify
+//     - An enumeration which specifies the justification of the
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel' within the field length specified by
+//       'textLabelFieldLen'.
+//
+//       Label justification must be equal to one of these three
+//       valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       The abbreviated text justification enumeration syntax can
+//       also be used:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+//  labelRightMarginChars      []rune
+//     - This rune array contains the character or characters which
+//       will be used to separate the text labels ('startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel') from the output or
+//       data values displayed on the same line.
+//       Example:
+//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       Often this parameter is set to a single white space
+//       character (" ") or a colon plus white space character,
+//       (": ").
+//
+//       If this parameter is submitted as a zero length array, or
+//       if rune array contains invalid zero rune values,
+//       'labelRightMarginChars' will be assigned a default value
+//       of  ": ".
+//       Example Output:
+//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       If the length in characters of 'labelLeftMarginChars' plus
+//       'labelRightMarginChars' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
+	labelLeftMarginChars []rune,
+	startTimeLabel []rune,
+	startTime time.Time,
+	endTimeLabel []rune,
+	endTime time.Time,
+	timeFormat string,
+	timeDurationLabel []rune,
+	textLabelFieldLen int,
+	labelJustification TextJustify,
+	labelRightMarginChars []rune,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines."+
+			"SetFullTimerEventRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecTimerLinesMolecule{}.ptr().
+		setTxtLineSpecTimerLines(
+			txtSpecTimerLines,
+			labelLeftMarginChars,
+			startTimeLabel,
+			startTime,
+			endTimeLabel,
+			endTime,
+			timeFormat,
+			timeDurationLabel,
+			textLabelFieldLen,
+			labelJustification,
+			labelRightMarginChars,
 			ePrefix.XCtx("txtSpecTimerLines"))
 
 	return err
