@@ -4,4 +4,7 @@
 TextFieldSpecFiller
 TextFieldSpecLabel
 
+TextLineSpecBlankLines
+TextLineSpecSolidLine
 TextLineSpecStandardLine
+TextLineSpecTimerLines
