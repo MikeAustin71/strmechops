@@ -2000,11 +2000,11 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEventRunes(
 // information for text display output or printing.
 //
 //
-// This method will automatically set the following default values:
-//
 // ------------------------------------------------------------------------
 //
 // Default Values
+//
+// This method will automatically set the following default values:
 //
 //  startTime           - Defaults to July 4, 1776 9:30AM UTC
 //
@@ -2284,6 +2284,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 //
 // This method will overwrite and reset all the data values
 // encapsulated by the current TextLineSpecTimerLines instance.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -3445,11 +3446,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
 // information for text display output or printing.
 //
 //
-// This method will automatically set the following default values:
-//
 // ------------------------------------------------------------------------
 //
 // Default Values
+//
+// This method will automatically set the following default values:
 //
 //  startTime           - Defaults to July 4, 1776 9:30AM UTC
 //

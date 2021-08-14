@@ -15,7 +15,9 @@ import (
 //
 //
 // IMPORTANT
+//
 // ----------------------------------------------------------------
+//
 // By default, the TextLineSpecStandardLine type will generate a
 // line of text with a "new line" ('\n') line termination
 // character. The application of this "new line" ('\n') character
@@ -28,10 +30,16 @@ import (
 //  TextLineSpecStandardLine.TurnAutoLineTerminationOff()
 //  TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
-// ----------------------------------------------------------------
 //
 // The TextLineSpecStandardLine type implements the
 // ITextLineSpecification interface.
+//
+//
+// Member Variables
+//
+// ----------------------------------------------------------------
+//
+//
 //
 type TextLineSpecStandardLine struct {
 	textFields            []ITextFieldSpecification
@@ -979,6 +987,21 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 // This means that the returned standard line instance will only
 // be output or printed once.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+// This method will automatically set the following default values:
+//
+//  numOfStdLines  - Defaults number of standard lines to one (1).
+//
+//  newLineChars   - Defaults new line character to '\n'.
+//                   To change the value of the new line character,
+//                   or characters, see methods:
+//                   TextLineSpecStandardLine.SetLineTerminationChars()
+//                   TextLineSpecStandardLine.SetLineTerminationRunes()
+//
 func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 
 	if stdLine.lock == nil {
@@ -1009,6 +1032,21 @@ func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 // This means that the returned standard line instance will only
 // be output or printed once.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+// This method will automatically set the following default values:
+//
+//  numOfStdLines  - Defaults number of standard lines to one (1).
+//
+//  newLineChars   - Defaults new line character to '\n'.
+//                   To change the value of the new line character,
+//                   or characters, see methods:
+//                   TextLineSpecStandardLine.SetLineTerminationChars()
+//                   TextLineSpecStandardLine.SetLineTerminationRunes()
+//
 func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 
 	if stdLine.lock == nil {
@@ -1037,24 +1075,149 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 // constructed from input parameters 'numOfStdLines' and
 // 'textFields'.
 //
-// 'numOfStdLines' specifies the number of repetitions for
-// standard line output or printing. If this value is set to zero,
-// no text line will be output or printed. If 'numOfStdLines' is
-// set to value less than zero, it will be automatically reset to
-// one ('1').
-//
-// A 'numOfStdLines' value of 1 means the line will be output once,
-// a value of 2 signals the line will be repeated or output twice,
-// a value of '3' signals the line will be output 3-times and so
-// on.
-//
 // Input parameter 'textFields' is an array of
 // ITextFieldSpecification objects which will be formatted on a
 // single line of text.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+// This method will automatically set the following default values:
+//
+//  newLineChars   - Defaults new line character to '\n'.
+//                   To change the value of the new line character,
+//                   or characters, see methods:
+//                   TextLineSpecStandardLine.SetLineTerminationChars()
+//                   TextLineSpecStandardLine.SetLineTerminationRunes()
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  numOfStdLines              int
+//     - An integer value specifying the number of repetitions for
+//       a standard line text formatted for text display, file
+//       output or printing.
+//
+//       A 'numOfStdLines' value of 1 means the line will be output
+//       once, a value of 2 signals the line will be repeated or
+//       output twice, a value of '3' signals the line will be output
+//       3-times and so on.
+//
+//       If the 'numOfStdLines' value is set to zero, no text line
+//       will be formatted for text display, file output or printing.
+//
+//       If this value is set to a value less than zero, it will be
+//       automatically reset to a value of one ('1').
+//
+//       The following examples illustrate the use of
+//       'numOfStdLines':
+//         Example #1:
+//          Standard Line Text = "Hello World"
+//          numOfStdLines = 1
+//          Text Output:
+//            "Hello World"
+//
+//         Example #2:
+//          Standard Line Text = "Hello World"
+//          numOfStdLines = 3
+//          Text Output:
+//            "Hello World"
+//            "Hello World"
+//            "Hello World"
+//
+//
+//  textFields                 []ITextFieldSpecification
+//     - 'textFields' is a collection of objects implementing the
+//       ITextLineSpecification interface. These text fields are
+//       assembled by the TextLineSpecStandardLine type and formatted
+//       as a single line of text. This single line of text is
+//       is output one or more times as specified by input
+//       parameter, 'numOfStdLines'.
+//
+//       If this parameter is submitted as a 'nil' value or a zero
+//       length array, an error will be returned.
+//
+//       If any of the objects contained in this collection are
+//       invalid, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextLineSpecStandardLine
+//     - If this method completes successfully, it will create and
+//       return a pointer to a new instance of
+//       TextLineSpecStandardLine which is fully configured with all
+//       the parameters necessary to format one or more standard lines
+//       of text for text display, file output or printing.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 	numOfStdLines int,
-	textFields []ITextFieldSpecification) *TextLineSpecStandardLine {
+	textFields []ITextFieldSpecification,
+	errorPrefix interface{}) (
+	*TextLineSpecStandardLine,
+	error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -1064,19 +1227,74 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 
 	defer stdLine.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
 	newStdLine := TextLineSpecStandardLine{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.NewWithFieldArray()",
+		"")
+
+	if err != nil {
+		return &newStdLine, err
+	}
 
 	newStdLine.lock = new(sync.Mutex)
 
+	if textFields == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is a 'nil' value.\n",
+			ePrefix.String())
+
+		return &newStdLine, err
+	}
+
 	lenTxtFields := len(textFields)
 
-	if lenTxtFields > 0 {
+	if lenTxtFields == 0 {
 
-		newStdLine.textFields = make([]ITextFieldSpecification,
-			lenTxtFields)
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is a zero length array.\n",
+			ePrefix.String())
 
-		copy(newStdLine.textFields,
-			textFields)
+		return &newStdLine, err
+	}
+
+	newStdLine.textFields = make([]ITextFieldSpecification,
+		lenTxtFields)
+
+	for i := 0; i < lenTxtFields; i++ {
+
+		err = textFields[i].IsValidInstanceError(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"textFields[%v] Error",
+					i)))
+
+		if err != nil {
+			return &newStdLine, err
+		}
+
+	}
+
+	var newTxtField ITextFieldSpecification
+
+	for j := 0; j < lenTxtFields; j++ {
+
+		newTxtField,
+			err = textFields[j].
+			CopyOutITextField(
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"textFields[%v] Error", j)))
+
+		newStdLine.textFields[j] = newTxtField
 	}
 
 	if numOfStdLines < 0 {
@@ -1089,7 +1307,7 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 
 	newStdLine.turnLineTerminatorOff = false
 
-	return &newStdLine
+	return &newStdLine, err
 }
 
 // SetNumOfStdLines - Sets the number of repetitions for this
@@ -1104,6 +1322,23 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 // If input parameter 'numOfStdLines' is set to a zero value, it
 // means that no text will be output or printed for this instance
 // of TextLineSpecStandardLine.
+//
+//       The following examples illustrate the use of
+//       'numOfStdLines':
+//         Example #1:
+//          Standard Line Text = "Hello World"
+//          numOfStdLines = 1
+//          Text Output:
+//            "Hello World"
+//
+//         Example #2:
+//          Standard Line Text = "Hello World"
+//          numOfStdLines = 3
+//          Text Output:
+//            "Hello World"
+//            "Hello World"
+//            "Hello World"
+//
 //
 func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 	numOfStdLines int) {
@@ -1124,8 +1359,8 @@ func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 }
 
 // SetLineTerminationChars - By default, the line termination
-// character for blank line produced and applied by this text line
-// specification is the new line character, '\n'. However,
+// character for standard lines produced and applied by this text
+// line specification is the new line character, '\n'. However,
 // users have the option of substituting a character or series
 // of characters for the line termination sequence using this
 // method.
@@ -1160,6 +1395,153 @@ func (stdLine *TextLineSpecStandardLine) SetLineTerminationChars(
 	}
 
 	stdLine.newLineChars = []rune(lineTerminationChars)
+}
+
+// SetLineTerminationRunes - By default, the line termination
+// character for standard lines produced and applied by this text
+// line specification is the new line character, '\n'. However,
+// users have the option of substituting a character, or series
+// of characters, for the line termination sequence using this
+// method.
+//
+// This method will receive an array of runes as input and applies
+// the characters in this array as the line termination sequence
+// for this instance of TextLineSpecStandardLine.
+//
+// If input parameter 'lineTerminationChars' is submitted as a zero
+// length array, or if any of the rune values in this array have a
+// zero value, this method will return an error.
+//
+// By default, the TextLineSpecStandardLine type applies the line
+// termination characters to each standard line of text generated.
+// However, users have the option of turning off the automatic
+// generation of text line terminators by calling method:
+//
+//   TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  lineTerminationChars       []rune
+//     - An array of runes containing the character or characters
+//       used to terminate each standard text line generated by
+//       the current instance of TextLineSpecStandardLine.
+//
+//       If this parameter is submitted as a zero length or empty
+//       rune array, or if the rune array contains invalid zero
+//       rune values, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) SetLineTerminationRunes(
+	lineTerminationChars []rune,
+	errorPrefix interface{}) (
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"SetLineTerminationRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	sMechPreon := strMechPreon{}
+
+	_,
+		err =
+		sMechPreon.testValidityOfRuneCharArray(
+			lineTerminationChars,
+			ePrefix.XCtx(
+				"lineTerminationChars Error"))
+
+	if err != nil {
+		return err
+	}
+
+	err =
+		sMechPreon.copyRuneArrays(
+			&stdLine.newLineChars,
+			&lineTerminationChars,
+			true,
+			ePrefix.XCtx(
+				"lineTerminationChars->"+
+					"stdLine.newLineChars"))
+
+	return err
 }
 
 // SetTextFields - Replaces the existing array of text fields for

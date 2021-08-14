@@ -10,13 +10,18 @@ import (
 // single character which is replicated for the entire length of
 // the Filler Text Field.
 //
-// Typically, filler fields are used as margins containing multiple
-// space characters, or line separators containing multiple dashes,
-// equal signs or underscore characters.
+// Text Field Specifications are designed to be configured within a
+// line of text. Those lines of text can then be formatted for text
+// displays, file output or printing. The type
+// TextLineSpecStandardLine can be used to compose a line of text
+// consisting of multiple Text Field Specifications like
+// TextFieldSpecFiller. Text Field Specifications are therefore
+// used as the components or building blocks for single line of
+// text.
 //
-// Which constructing a text line using type
-// TextLineSpecStandardLine, it is common to include multiple Text
-// Filler fields as required to separate labels or number strings.
+// Typically, filler fields are used as margins containing multiple
+// white space characters, or line separators containing multiple
+// dashes, equal signs or underscore characters.
 //
 // The 'fillerCharsRepeatCount' integer value is the number times
 // that 'fillerCharacters' is repeated in order to construct the
@@ -24,6 +29,38 @@ import (
 // 'fillerCharsRepeatCount' value greater than zero.
 // 'fillerCharsRepeatCount' values less than or equal to zero
 // constitute an error condition.
+//
+// Member Variables
+//
+// ----------------------------------------------------------------
+//
+//  fillerCharacters           []rune
+//     - A rune array containing the text characters which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from ths filler characters
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//       The Text Field Filler final formatted text is equal to:
+//          fillerCharacters X fillerCharsRepeatCount
+//          Example: fillerCharacters = []rune{'-','*'}
+//                   fillerRepeatCount = 3
+//                   Final Text Filler Field = "-*-*-*"
+//
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//         Text Field Filler Length =
+//           Length of fillerCharacters X fillerCharsRepeatCount
+//           Example: fillerCharacters = []rune{'-','*'}
+//                    fillerRepeatCount = 3
+//                    Final Text Filler Field = "-*-*-*"
 //
 type TextFieldSpecFiller struct {
 	fillerCharacters []rune // The base characters which comprise the text filler
