@@ -8,14 +8,69 @@ import (
 
 // TextFieldSpecLabel - The Text Field Specification for a text
 // label. The text label is positioned inside a text field with a
-// give field length. Text Justification within this text field
+// given field length. Text Justification within this text field
 // is controlled by the 'textJustification' value which may be
-// set to 'Left', 'Right' or 'Center'.
+// set to 'Left', 'Right' or 'Center'. A text label contains a
+// string of text characters.
+//
+// Text Label Examples:
+//   'Hello World  ' - Left Justified, Field Length= 13
+//   '  Hello World' - Right Justified, Field Length= 13
+//   ' Hello World ' - Centered, Field Length= 13
+//
+// Text Field Specifications are designed to be configured within a
+// line of text. Those lines of text can then be formatted for text
+// displays, file output or printing. The type
+// TextLineSpecStandardLine can be used to compose a line of text
+// consisting of multiple Text Field Specifications like
+// TextFieldSpecLabel. Text Field Specifications are therefore
+// used as the components or building blocks for single lines of
+// text.
+//
+// Member Variables
+//
+// ----------------------------------------------------------------
+//
+//  textLabel                  []rune
+//     - An array of runes or text characters which is used to
+//       generate string content for display as a text label.
+//
+//
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabel'
+//       characters will be displayed. If 'fieldLen' is less than the length
+//       of the 'textLabel' array, 'fieldLen' will be automatically
+//
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       'textLabelChars' within the field specified by 'fieldLen'.
+//
+//       Text justification can only be evaluated in the context of
+//       a text label, field length and 'textJustification' object
+//       of type TextJustify. This is because text labels with a
+//       field length equal to or less than the length of the text
+//       label never use text justification. In these cases, text
+//       justification is completely ignored.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
 //
 type TextFieldSpecLabel struct {
 	textLabel []rune // The text content of the label.
 	fieldLen  int    // The length of the text field in which
-	//                       //  the text label will be positioned.
+	//               //  the text label will be positioned.
 	textJustification TextJustify // The specification which controls
 	//                            //  how the text label will be positioned
 	//                            //  within the text field: 'Left', 'Right'
@@ -1111,9 +1166,10 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 //
 //  fieldLen                   int
 //     - The length of the text field in which the 'textLabelChars'
-//       will be displayed. If 'fieldLen' is less than the length
-//       of the 'textLabelChars' array, it will be automatically
-//       set equal to the 'textLabelChars' array length.
+//       characters will be displayed. If 'fieldLen' is less than
+//       the length of the 'textLabelChars' array, it will be
+//       automatically set equal to the 'textLabelChars' array
+//       length.
 //
 //       To automatically set the value of 'fieldLen' to the length
 //       of 'textLabelChars', set this parameter to a value of

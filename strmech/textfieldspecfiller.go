@@ -16,7 +16,7 @@ import (
 // TextLineSpecStandardLine can be used to compose a line of text
 // consisting of multiple Text Field Specifications like
 // TextFieldSpecFiller. Text Field Specifications are therefore
-// used as the components or building blocks for single line of
+// used as the components or building blocks for single lines of
 // text.
 //
 // Typically, filler fields are used as margins containing multiple
@@ -1582,10 +1582,10 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 //
 // Return Values
 //
-//  TextFieldSpecFiller
+//  *TextFieldSpecFiller
 //     - If this method completes successfully, this parameter will
-//       return a new, valid and fully populated Text Filler Field
-//       object.
+//       return a pointer to a new, valid and fully populated Text
+//       Filler Field object.
 //
 //
 //  error
@@ -1617,7 +1617,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
-	TextFieldSpecFiller,
+	*TextFieldSpecFiller,
 	error) {
 
 	if txtFillerField.lock == nil {
@@ -1631,6 +1631,8 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1638,7 +1640,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 		"")
 
 	if err != nil {
-		return TextFieldSpecFiller{}, err
+		return &newTxtFillerField, err
 	}
 
 	txtFillerElectron := textFieldSpecFillerElectron{}
@@ -1654,7 +1656,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 			"fillerCharacters"))
 
 	if err != nil {
-		return TextFieldSpecFiller{}, err
+		return &newTxtFillerField, err
 	}
 
 	err = txtFillerElectron.isFillerCharsRepeatCountValid(
@@ -1662,10 +1664,8 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 		ePrefix.XCtx("fillerCharsCount"))
 
 	if err != nil {
-		return TextFieldSpecFiller{}, err
+		return &newTxtFillerField, err
 	}
-
-	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
 
 	newTxtFillerField.fillerCharacters =
 		make([]rune, lenFillerChars)
@@ -1676,7 +1676,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	newTxtFillerField.fillerCharsRepeatCount =
 		fillerCharsRepeatCount
 
-	return newTxtFillerField, nil
+	return &newTxtFillerField, err
 }
 
 // SetTextFillerRune - Overwrites the internal member variables for
