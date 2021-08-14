@@ -31,7 +31,7 @@ type TextLineSpecBlankLines struct {
 // of the current TextLineSpecBlankLines instance ('blkLines').
 //
 // IMPORTANT
-// All of the data fields in current TextLineSpecBlankLines
+// All the data fields in current TextLineSpecBlankLines
 // instance ('blkLines') will be modified and overwritten.
 //
 //
@@ -804,9 +804,9 @@ func (blkLines TextLineSpecBlankLines) NewPtr(
 
 // SetLineTerminationChars - By default, the line termination
 // character for blank line produced and applied by this text line
-// specification is the the new line character, '\n'. However,
+// specification is the new line character, '\n'. However,
 // users have the option of substituting a character or series
-// of characters for the the line termination sequence using this
+// of characters for the line termination sequence using this
 // method.
 //
 // This method will receive a string as input and apply the
