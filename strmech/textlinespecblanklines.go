@@ -955,9 +955,10 @@ func (blkLines *TextLineSpecBlankLines) SetLineTerminationChars(
 // by this instance of TextLineSpecBlankLines.
 //
 // If input parameter 'numOfBlankLines' is less than zero, this
-// method will take no action and exit. If 'numOfBlankLines' is
-// set to zero, no blank lines will be produced by this text line
-// specification.
+// method will take no action and exit.
+//
+// If 'numOfBlankLines' is set to zero, no blank lines will be
+// produced by this text line specification.
 //
 func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 	numOfBlankLines int) {
