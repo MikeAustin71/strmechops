@@ -1,8 +1,6 @@
 package strmech
 
 import (
-	"fmt"
-	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
 
@@ -14,8 +12,7 @@ type textLineSpecLinesCollectionNanobot struct {
 // TextLineSpecLinesCollection.
 //
 func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) emptyCollection(
-	textLinesCol *TextLineSpecLinesCollection,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	textLinesCol *TextLineSpecLinesCollection) {
 
 	if txtLinesColNanobot.lock == nil {
 		txtLinesColNanobot.lock = new(sync.Mutex)
@@ -25,29 +22,15 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) emptyCollection(
 
 	defer txtLinesColNanobot.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textLineSpecLinesCollectionNanobot."+
-			"emptyCollection()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
 	if textLinesCol == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLinesCol' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
+		return
 	}
 
 	for i := 0; i < len(textLinesCol.textLines); i++ {
+
+		if textLinesCol.textLines[i] == nil {
+			continue
+		}
 
 		textLinesCol.textLines[i].Empty()
 
@@ -56,7 +39,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) emptyCollection(
 
 	textLinesCol.textLines = nil
 
-	return err
+	return
 }
 
 // ptr - Returns a pointer to a new instance of
