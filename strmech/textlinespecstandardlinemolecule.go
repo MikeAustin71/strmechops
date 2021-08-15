@@ -340,12 +340,11 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
 
 	txtStdLine.newLineChars = nil
 
-	for i := 0; i < len(txtStdLine.textFields); i++ {
-		txtStdLine.textFields[i].Empty()
-		txtStdLine.textFields[i] = nil
-	}
+	textLineSpecStandardLineElectron{}.ptr().
+		emptyTextFields(
+			txtStdLine)
 
-	txtStdLine.textFields = nil
+	return
 }
 
 // equal - Receives pointers to two TextLineSpecStandardLine

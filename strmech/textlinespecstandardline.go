@@ -695,11 +695,8 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 
 	defer stdLine.lock.Unlock()
 
-	for i := 0; i < len(stdLine.textFields); i++ {
-		stdLine.textFields[i].Empty()
-	}
-
-	stdLine.textFields = nil
+	textLineSpecStandardLineElectron{}.ptr().
+		emptyTextFields(stdLine)
 
 	return
 }

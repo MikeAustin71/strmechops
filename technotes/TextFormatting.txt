@@ -8,3 +8,5 @@ TextLineSpecBlankLines
 TextLineSpecSolidLine
 TextLineSpecStandardLine
 TextLineSpecTimerLines
+
+TextLineSpecLinesCollection

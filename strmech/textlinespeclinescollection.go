@@ -146,3 +146,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 
 	return err
 }
+
+func (txtLinesCol *TextLineSpecLinesCollection) Empty() {
+
+}

@@ -10,6 +10,49 @@ type textLineSpecStandardLineElectron struct {
 	lock *sync.Mutex
 }
 
+// emptyTextFields - Receives a pointer to an instance of
+// TextLineSpecStandardLine and proceeds to delete all the text
+// fields contained in the internal text field collection.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the text fields stored in the text field collection
+// maintained by input parameter 'txtStdLine' will be deleted.
+//
+func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyTextFields(
+	txtStdLine *TextLineSpecStandardLine) {
+
+	if txtStdLineElectron.lock == nil {
+		txtStdLineElectron.lock = new(sync.Mutex)
+	}
+
+	txtStdLineElectron.lock.Lock()
+
+	defer txtStdLineElectron.lock.Unlock()
+
+	if txtStdLine == nil {
+		return
+	}
+
+	for i := 0; i < len(txtStdLine.textFields); i++ {
+
+		if txtStdLine.textFields[i] == nil {
+			continue
+		}
+
+		txtStdLine.textFields[i].Empty()
+
+		txtStdLine.textFields[i] = nil
+	}
+
+	txtStdLine.textFields = nil
+
+	return
+}
+
 // testValidityOfTextLineSpecStdLine - Receives a pointer to an
 // instance of TextLineSpecStandardLine and performs a diagnostic
 // analysis to determine if that instance is valid in all respects.
