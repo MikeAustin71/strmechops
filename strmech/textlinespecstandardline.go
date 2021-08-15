@@ -50,7 +50,8 @@ type TextLineSpecStandardLine struct {
 }
 
 // AddTextField - This method will append a text field object to
-// the end of the current array of text field objects. The object
+// the end of the current array of text field objects maintained by
+// the current instance of TextLineSpecStandardLine. The object
 // actually appended to the array is a deep copy of the input
 // parameter, 'textField'.
 //
@@ -61,7 +62,13 @@ type TextLineSpecStandardLine struct {
 //
 //  textField                  ITextFieldSpecification
 //     - A text field object which implements the
-//       ITextFieldSpecification interface.
+//       ITextFieldSpecification interface. A deep copy of this
+//       object will be added to the text field collection
+//       maintained by this instance of TextLineSpecStandardLine.
+//
+//       If member variable data values contained in this
+//       'textField' parameter are found to be invalid, an error
+//       will be returned.
 //
 //
 //  errorPrefix                interface{}
@@ -149,11 +156,18 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		return err
 	}
 
+	err = textField.IsValidInstanceError(
+		ePrefix.XCtx("textField"))
+
+	if err != nil {
+		return err
+	}
+
 	var newTextField ITextFieldSpecification
 
 	newTextField,
 		err = textField.CopyOutITextField(
-		ePrefix)
+		ePrefix.XCtx("textField->newTextField"))
 
 	if err != nil {
 		return err
