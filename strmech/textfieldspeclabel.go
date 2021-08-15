@@ -47,11 +47,11 @@ import (
 //       'textLabelChars' within the field specified by 'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and 'textJustification' object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -946,11 +946,11 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //       'textLabel' within the field specified by 'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and 'textJustification' object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label will never use text justification. In these cases,
-//       text justification is completely ignored.
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -1084,7 +1084,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewConstructor()",
+		"TextFieldSpecLabel.NewConstructor()",
 		"")
 
 	if err != nil {
@@ -1182,14 +1182,15 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 //
 //  textJustification          TextJustify
 //     - An enumeration which specifies the justification of the
-//       'textLabelChars' within the field specified by 'fieldLen'.
+//       'textLabelChars' within the text field specified by
+//       'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and 'textJustification' object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -1323,7 +1324,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewConstructorRunes()",
+		"TextFieldSpecLabel.NewConstructorRunes()",
 		"")
 
 	if err != nil {
@@ -1440,11 +1441,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 //       'textLabel' within the field specified by 'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and 'textJustification' object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -1578,7 +1579,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.NewTextLabel()",
+		"TextFieldSpecLabel.NewTextLabel()",
 		"")
 
 	if err != nil {
@@ -1631,6 +1632,176 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	newTextLabel.lock = new(sync.Mutex)
 
 	return &newTextLabel, nil
+}
+
+// SetFieldLength - Sets The length of the text field in which the
+// text label string will be positioned for text display, file
+// output or printing.
+//
+// If field length is greater than the length of text label, the
+// text label string will be positioned within the text field using
+// text justification specifications as shown in the following
+// examples.
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//   fieldLen = 12
+//   textJustification = TextJustify(0).Center()
+//   result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//   fieldLen = 12
+//   textJustification = TextJustify(0).Left()
+//   result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//   fieldLen = 12
+//   textJustification = TextJustify(0).Right()
+//   result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//   fieldLen = -1
+//   textJustification = TextJustify(0).Right()
+//   result = "Hi There"
+//
+// For more information on Text Justification, see method:
+//   TextFieldSpecLabel.SetTextJustification()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabelChars'
+//       will be displayed. If 'fieldLen' is less than the length
+//       of the 'textLabelChars' array, it will be automatically
+//       set equal to the 'textLabelChars' array length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabelChars', set this parameter to a value of
+//       minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1), an error will be returned.
+//
+//       If 'fieldLen' is submitted with a value greater than
+//       1-million (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
+	fieldLen int,
+	errorPrefix interface{}) error {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecLabel.SetFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fieldLen < -1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLen' is invalid!\n"+
+			"The value of 'fieldLen' is less than minus one (-1)\n"+
+			"fieldLen= '%v'\n",
+			ePrefix.String(),
+			fieldLen)
+
+		return err
+	}
+
+	if fieldLen > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLen' is invalid!\n"+
+			"The value of 'fieldLen' is greater than one-million (1,000,000)\n"+
+			"fieldLen= '%v'\n",
+			ePrefix.String(),
+			fieldLen)
+
+		return err
+	}
+
+	txtFieldLabel.fieldLen = fieldLen
+
+	return err
 }
 
 // SetText - Sets the text string which will be used as the text
@@ -1738,7 +1909,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
-		"TextFieldSpecFiller.SetText()",
+		"TextFieldSpecLabel.SetText()",
 		"")
 
 	if err != nil {
@@ -1774,6 +1945,186 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 		ePrefix.XCtx(
 			"textLabel->textLabelRunes->"+
 				"txtFieldLabel.textLabel"))
+
+	return err
+}
+
+// SetTextJustification - Sets the text justification specification
+// for the current instance of TextFieldSpecLabel.
+//
+// TextJustify is An enumeration which specifies the justification
+// of the text field label string within a text field. The calling
+// function sets the text justification specification by passing an
+// appropriate TextJustify value.
+//
+// For more information on the text label, see methods:
+//  TextFieldSpecLabel.SetText()
+//  TextFieldSpecLabel.SetTextRunes()
+//
+// For more information on text field length, see method:
+//  TextFieldSpecLabel.SetFieldLength()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       Text label string within the text field specified by
+//       field length.
+//
+//       Text justification can only be evaluated in the context of
+//       a Text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
+//
+//       This method requires that text justification be set to one
+//       of the following three values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Center()
+//      result = "  Hi There  "
+//
+//  Example 2:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Left()
+//      result = "Hi There    "
+//
+//  Example 3:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = 12
+//    textJustification = TextJustify(0).Right()
+//      result = "    Hi There"
+//
+//  Example 4:
+//   textLabel = "Hi There" (Length = 8)
+//    fieldLen = -1
+//    textJustification = TextJustify(0).Right()
+//      result = "Hi There"
+//
+func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
+	textJustification TextJustify,
+	errorPrefix interface{}) error {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecLabel.SetFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if !textJustification.XIsValid() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Text Justification is INVALID!\n"+
+			"Text Justification MUST be set to\n"+
+			"Left, Right or Center.\n"+
+			"Text Justification  String Value= '%v'\n"+
+			"Text Justification Integer Value= '%v'\n",
+			ePrefix.String(),
+			textJustification.String(),
+			textJustification.XValueInt())
+
+		return err
+	}
+
+	txtFieldLabel.textJustification =
+		textJustification
 
 	return err
 }
@@ -1882,7 +2233,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
-		"TextFieldSpecFiller.SetTextRunes()",
+		"TextFieldSpecLabel.SetTextRunes()",
 		"")
 
 	sMechPreon := strMechPreon{}
@@ -1945,11 +2296,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 //       'textLabel' within the field specified by 'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and 'textJustification' object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -2075,7 +2426,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.SetTextLabel()",
+		"TextFieldSpecLabel.SetTextLabel()",
 		"")
 
 	if err != nil {
@@ -2169,11 +2520,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //       'textLabelChars' within the field specified by 'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and 'textJustification' object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
@@ -2299,7 +2650,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.SetTextLabelRunes()",
+		"TextFieldSpecLabel.SetTextLabelRunes()",
 		"")
 
 	if err != nil {
