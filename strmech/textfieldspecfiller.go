@@ -12,16 +12,30 @@ import (
 //
 // Text Field Specifications are designed to be configured within a
 // line of text. Those lines of text can then be formatted for text
-// displays, file output or printing. The type
-// TextLineSpecStandardLine can be used to compose a line of text
-// consisting of multiple Text Field Specifications like
-// TextFieldSpecFiller. Text Field Specifications are therefore
-// used as the components or building blocks for single lines of
-// text.
+// displays, file output or printing. Type TextLineSpecStandardLine
+// can be used to compose a line of text consisting of multiple Text
+// Field Specifications like TextFieldSpecFiller. Text Field
+// Specifications are therefore used as the components or building
+// blocks for constructing a single lines of text.
 //
 // Typically, filler fields are used as margins containing multiple
 // white space characters, or line separators containing multiple
-// dashes, equal signs or underscore characters.
+// dashes, equal signs or underscore characters. Filler fields
+// consist of filler characters ('fillerCharacters') and the filler
+// characters repeat count ('fillerCharsRepeatCount'). A filler
+// field is made up of one or more filler characters. These filler
+// characters are repeated one or more times in order to construct
+// the complete filler field as shown in the following examples:
+//
+//  Example 1:
+//   Filler Characters = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
 //
 // The 'fillerCharsRepeatCount' integer value is the number times
 // that 'fillerCharacters' is repeated in order to construct the
@@ -56,11 +70,16 @@ import (
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsRepeatCount'.
 //
-//         Text Field Filler Length =
-//           Length of fillerCharacters X fillerCharsRepeatCount
-//           Example: fillerCharacters = []rune{'-','*'}
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "-*-*-*"
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = []rune{'-','*'}
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = []rune{'-'}
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
 //
 type TextFieldSpecFiller struct {
 	fillerCharacters []rune // The base characters which comprise the text filler
@@ -924,9 +943,14 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 //
 //        Text Field Filler Length =
 //          Length of fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
 //
 //       If 'fillerCharsRepeatCount' has a value less than one (1) or
 //       greater than one-million (1,000,000), an error will be
@@ -1305,11 +1329,16 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRune(
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsRepeatCount'.
 //
-//         Text Field Filler Length =
-//           Length of fillerCharacters X fillerCharsRepeatCount
-//           Example: fillerCharacters = []rune{'-','*'}
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "-*-*-*"
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = []rune{'-','*'}
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = []rune{'-'}
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
 //
 //       If 'fillerCharsRepeatCount' has a value less than one (1) or
 //       greater than one-million (1,000,000), an error will be
@@ -1526,12 +1555,17 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //       repeated one or more times as specified by the
 //       'fillerCharsRepeatCount' parameter.
 //
-//       The Text Field Filler final formatted text is equal to:
-//          fillerCharacter X fillerCharsRepeatCount
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
 //
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+////
 //       If 'fillerCharacters' is submitted as an empty or zero
 //       length string, this method will return an error.
 //
@@ -1544,11 +1578,16 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsRepeatCount'.
 //
-//       Text Field Filler Length =
+//        Text Field Filler Length =
 //          Length of fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
 //
 //       If 'fillerCharsRepeatCount' has a value less than one (1) or
 //       greater than one-million (1,000,000), an error will be
@@ -1700,6 +1739,182 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 		fillerCharsRepeatCount
 
 	return &newTxtFillerField, err
+}
+
+// SetFillerCharsRepeatCount - Sets the Filler Characters Repeat
+// Count for the current instance of TextFieldSpecFiller.
+//
+// Text Field Specifications like TextFieldSpecFiller are used as
+// building blocks for constructing single lines of text which can
+// be configured for text display, file output or printing.
+//
+// Typically, filler fields (TextFieldSpecFiller) are used as
+// margins containing multiple white space characters, or line
+// separators containing multiple dashes, equal signs or underscore
+// characters. Filler fields consist of filler characters
+// ('fillerCharacters') and the filler characters repeat count
+// ('fillerCharsRepeatCount'). A filler field is made up of one
+// or more filler characters. These filler characters are
+// repeated one or more times in order to construct the complete
+// filler field as shown in the following examples:
+//
+//  Example 1:
+//   Filler Characters = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
+//
+// The 'fillerCharsRepeatCount' integer value is the number times
+// that 'fillerCharacters' is repeated in order to construct the
+// Filler Text Field. Be advised that Filler Text Fields requires a
+// 'fillerCharsRepeatCount' value greater than zero.
+// 'fillerCharsRepeatCount' values less than or equal to zero
+// will trigger an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
+	fillerCharsRepeatCount int,
+	errorPrefix interface{}) error {
+
+	if txtFillerField.lock == nil {
+		txtFillerField.lock = new(sync.Mutex)
+	}
+
+	txtFillerField.lock.Lock()
+
+	defer txtFillerField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecFiller.SetTextFiller()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fillerCharsRepeatCount < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'fillerCharsRepeatCount' is invalid!\n"+
+			"'fillerCharsRepeatCount' value is less than one (1)\n"+
+			"fillerCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			fillerCharsRepeatCount)
+
+		return err
+	}
+
+	if fillerCharsRepeatCount > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'fillerCharsRepeatCount' is invalid!\n"+
+			"'fillerCharsRepeatCount' value greater than one-million (1,000,000)\n"+
+			"fillerCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			fillerCharsRepeatCount)
+
+		return err
+	}
+
+	txtFillerField.fillerCharsRepeatCount =
+		fillerCharsRepeatCount
+
+	return err
 }
 
 // SetTextFillerRune - Overwrites the internal member variables for
@@ -1939,11 +2154,16 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 //       equal to the length of 'fillerCharacters' times the value
 //       of 'fillerCharsRepeatCount'.
 //
-//         Text Field Filler Length =
-//           Length of fillerCharacters X fillerCharsRepeatCount
-//           Example: fillerCharacters = []rune{'-','*'}
-//                    fillerRepeatCount = 3
-//                    Final Text Filler Field = "-*-*-*"
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = []rune{'-','*'}
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = []rune{'-'}
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
 //
 //       If 'fillerCharsRepeatCount' has a value less than one (1) or
 //       greater than one-million (1,000,000), an error will be
@@ -2126,9 +2346,14 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 //
 //        Text Field Filler Length =
 //          Length of fillerCharacters X fillerCharsRepeatCount
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
 //
 //       If 'fillerCharsRepeatCount' has a value less than one (1) or
 //       greater than one-million (1,000,000), an error will be
