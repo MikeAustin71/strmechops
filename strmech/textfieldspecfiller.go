@@ -1463,14 +1463,35 @@ func (txtFillerField TextFieldSpecFiller) NewConstructorRuneArray(
 	return &newTxtFillerField, nil
 }
 
-// NewEmpty - Returns a new unpopulated instance of
+// NewPtr - Returns a pointer to a new unpopulated instance of
 // TextFieldSpecFiller. All the member variables contained in
 // this new instance are set to their uninitialized or zero values.
 //
 // Be advised that setting member variables to their zero values
-// means that the TextFieldSpecFiller is invalid.
+// means that the returned TextFieldSpecFiller instance is invalid.
+// Therefore, in order to use this TextFieldSpecFiller instance,
+// users must later call the setter methods for this type in order
+// to configure valid and meaningful meaningful member variable
+// data values.
 //
-func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecFiller
+//     - This parameter returns a pointer to a new, empty instance
+//       of TextFieldSpecFiller. Member variable data values are
+//       set to their initial or zero values.
+//
+func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 
 	if txtFillerField.lock == nil {
 		txtFillerField.lock = new(sync.Mutex)
@@ -1480,8 +1501,10 @@ func (txtFillerField TextFieldSpecFiller) NewEmpty() TextFieldSpecFiller {
 
 	defer txtFillerField.lock.Unlock()
 
-	return textFieldSpecFillerMolecule{}.ptr().
+	newFillerField := textFieldSpecFillerMolecule{}.ptr().
 		newEmpty()
+
+	return &newFillerField
 }
 
 // NewTextFiller - Creates and returns a new, fully populated concrete
