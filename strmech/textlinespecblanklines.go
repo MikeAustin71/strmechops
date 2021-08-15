@@ -813,11 +813,83 @@ func (blkLines TextLineSpecBlankLines) NewPtr(
 // characters in that string as the line termination sequence for
 // this instance of TextLineSpecBlankLines.
 //
-// If input parameter 'lineTerminationChars' is submitted as an
-// empty string, this method will take no action and exit.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  lineTerminationChars       string
+//     - The line termination character or characters which will be
+//       applied to every blank line produced by this instance of
+//       TextLineSpecBlankLines.
+//
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (blkLines *TextLineSpecBlankLines) SetLineTerminationChars(
-	lineTerminationChars string) {
+	lineTerminationChars string,
+	errorPrefix interface{}) error {
 
 	if blkLines.lock == nil {
 		blkLines.lock = new(sync.Mutex)
@@ -827,15 +899,56 @@ func (blkLines *TextLineSpecBlankLines) SetLineTerminationChars(
 
 	defer blkLines.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecBlankLines.SetLineTerminationChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	if len(blkLines.newLineChars) == 0 {
 		blkLines.newLineChars = []rune{'\n'}
 	}
 
 	if len(lineTerminationChars) == 0 {
-		return
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineTerminationChars' is invalid!\n"+
+			"'lineTerminationChars' is an empty string.",
+			ePrefix.String())
+
+		return err
 	}
 
-	blkLines.newLineChars = []rune(lineTerminationChars)
+	sMechPreon := strMechPreon{}
+
+	newLineTermRunes := []rune(lineTerminationChars)
+
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		newLineTermRunes,
+		ePrefix.XCtx(
+			"lineTerminationChars->newLineTermRunes"))
+
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
+		&blkLines.newLineChars,
+		&newLineTermRunes,
+		true,
+		ePrefix.XCtx(
+			"lineTerminationChars->newLineTermRunes"+
+				"->blkLines.newLineChars"))
+
+	return err
 }
 
 // SetNumberOfBlankLines - Sets the number of blank lines produced
