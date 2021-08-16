@@ -175,6 +175,16 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextLi
 
 	for i := 0; i < lenTextFields; i++ {
 
+		if txtStdLine.textFields[i] == nil {
+			err = fmt.Errorf("%v\n"+
+				"Collection Element Error: A Starndard Line Text Field is invalid!\n"+
+				" txtStdLine.textFields[%v] has a 'nil' value.\n",
+				ePrefix.XCtx("txtStdLine"),
+				i)
+
+			return isValid, err
+		}
+
 		err2 = txtStdLine.textFields[i].IsValidInstanceError(ePrefix)
 
 		if err2 != nil {

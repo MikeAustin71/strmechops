@@ -183,9 +183,12 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 // TextLineSpecStandardLine ('incomingStdLine') to the data fields
 // of the current TextLineSpecStandardLine instance ('stdLine').
 //
+// ----------------------------------------------------------------
+//
 // IMPORTANT
+//
 // All the data fields in current TextLineSpecStandardLine instance
-// ('stdLine') will be modified and overwritten.
+// ('stdLine') will be deleted and overwritten.
 //
 //
 // ----------------------------------------------------------------
@@ -194,11 +197,11 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //
 //  incomingStdLine     *TextLineSpecStandardLine
 //     - A pointer to an instance of TextLineSpecStandardLine. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//       method will NOT change the data values of member variables
+//       contained in this instance.
 //
 //       All data values in this TextLineSpecStandardLine instance
-//       will be copied to current TextLineSpecStandardLine
+//       will be copied to the current TextLineSpecStandardLine
 //       instance ('stdLine').
 //
 //
@@ -208,8 +211,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -224,8 +227,9 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
@@ -245,7 +249,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------

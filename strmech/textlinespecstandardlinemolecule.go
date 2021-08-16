@@ -95,7 +95,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecStandardLineMolecule.copyIn()",
+		"textLineSpecStandardLineMolecule."+
+			"copyIn()",
 		"")
 
 	if err != nil {
@@ -120,22 +121,37 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 		return err
 	}
 
-	if incomingStdLine.numOfStdLines < 0 {
-		incomingStdLine.numOfStdLines = 0
+	txtStdLineElectron :=
+		textLineSpecStandardLineElectron{}
+
+	_,
+		err = txtStdLineElectron.
+		testValidityOfTextLineSpecStdLine(
+			incomingStdLine,
+			ePrefix.XCtx(
+				"incomingStdLine"))
+
+	if err != nil {
+		return err
 	}
 
-	lenInNewLineChars := len(incomingStdLine.newLineChars)
-
-	if lenInNewLineChars == 0 {
+	if len(incomingStdLine.newLineChars) == 0 {
 		incomingStdLine.newLineChars = []rune{'\n'}
-		lenInNewLineChars = 1
 	}
 
-	targetStdLine.newLineChars =
-		make([]rune, lenInNewLineChars)
+	sMechPreon := strMechPreon{}
 
-	copy(targetStdLine.newLineChars,
-		incomingStdLine.newLineChars)
+	err = sMechPreon.copyRuneArrays(
+		&targetStdLine.newLineChars,
+		&incomingStdLine.newLineChars,
+		true,
+		ePrefix.XCtx(
+			"incomingStdLine.newLineChars->"+
+				"targetStdLine.newLineChars"))
+
+	if err != nil {
+		return err
+	}
 
 	targetStdLine.turnLineTerminatorOff =
 		incomingStdLine.turnLineTerminatorOff
@@ -143,11 +159,13 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 	targetStdLine.numOfStdLines =
 		incomingStdLine.numOfStdLines
 
+	txtStdLineElectron.
+		emptyTextFields(targetStdLine)
+
 	lenIncomingTxtFields := len(incomingStdLine.textFields)
 
 	if lenIncomingTxtFields == 0 {
-		targetStdLine.textFields = nil
-		return nil
+		return err
 	}
 
 	targetStdLine.textFields =
@@ -157,10 +175,25 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 
 	for i := 0; i < lenIncomingTxtFields; i++ {
 
+		if incomingStdLine.textFields[i] == nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Incoming Text Field is invalid!\n"+
+				"incomingStdLine.textFields[%v] has a 'nil' value.\n",
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"incomingStdLine.textFields[%v] == nil",
+						i)),
+				i)
+
+			return err
+		}
+
 		tempITextField,
 			err = incomingStdLine.textFields[i].CopyOutITextField(
 			ePrefix.XCtx(
-				fmt.Sprintf("i='%v'", i)))
+				fmt.Sprintf("incomingStdLine.textFields[%v]",
+					i)))
 
 		if err != nil {
 			return err
@@ -169,7 +202,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 		targetStdLine.textFields[i] = tempITextField
 	}
 
-	return nil
+	return err
 }
 
 // copyOut - Returns a deep copy of the input parameter
@@ -257,6 +290,20 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 		return TextLineSpecStandardLine{}, err
 	}
 
+	txtStdLineElectron :=
+		textLineSpecStandardLineElectron{}
+
+	_,
+		err = txtStdLineElectron.
+		testValidityOfTextLineSpecStdLine(
+			txtStdLine,
+			ePrefix.XCtx(
+				"txtStdLine"))
+
+	if err != nil {
+		return TextLineSpecStandardLine{}, err
+	}
+
 	newStdLine := TextLineSpecStandardLine{}
 
 	newStdLine.lock = new(sync.Mutex)
@@ -268,42 +315,68 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 		lenInNewLineChars = 1
 	}
 
-	newStdLine.newLineChars =
-		make([]rune, lenInNewLineChars)
+	sMechPreon := strMechPreon{}
 
-	copy(newStdLine.newLineChars,
-		txtStdLine.newLineChars)
+	err = sMechPreon.copyRuneArrays(
+		&newStdLine.newLineChars,
+		&txtStdLine.newLineChars,
+		true,
+		ePrefix.XCtx(
+			"txtStdLine.newLineChars->"+
+				"newStdLine.newLineChars"))
+
+	if err != nil {
+		return TextLineSpecStandardLine{}, err
+	}
 
 	newStdLine.turnLineTerminatorOff =
 		txtStdLine.turnLineTerminatorOff
 
-	lenTxtFields := len(txtStdLine.textFields)
-
-	if lenTxtFields > 0 {
-
-		newStdLine.textFields = make([]ITextFieldSpecification,
-			lenTxtFields)
-
-		var tempITextField ITextFieldSpecification
-
-		for i := 0; i < lenTxtFields; i++ {
-
-			tempITextField,
-				err = txtStdLine.textFields[i].CopyOutITextField(
-				ePrefix.XCtx(
-					fmt.Sprintf("i='%v'", i)))
-
-			if err != nil {
-				return TextLineSpecStandardLine{}, err
-			}
-
-			newStdLine.textFields[i] = tempITextField
-		}
-	}
-
 	newStdLine.numOfStdLines = txtStdLine.numOfStdLines
 
-	return newStdLine, nil
+	newStdLine.textFields = nil
+
+	lenTxtFields := len(txtStdLine.textFields)
+
+	if lenTxtFields == 0 {
+		return newStdLine, err
+	}
+
+	newStdLine.textFields = make([]ITextFieldSpecification,
+		lenTxtFields)
+
+	var tempITextField ITextFieldSpecification
+
+	for i := 0; i < lenTxtFields; i++ {
+
+		if txtStdLine.textFields[i] == nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: txtStdLine Text Field is invalid!\n"+
+				"txtStdLine.textFields[%v] has a 'nil' value.\n",
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"txtStdLine.textFields[%v] == nil",
+						i)),
+				i)
+
+			return TextLineSpecStandardLine{}, err
+		}
+
+		tempITextField,
+			err = txtStdLine.textFields[i].CopyOutITextField(
+			ePrefix.XCtx(
+				fmt.Sprintf("txtStdLine.textFields[%v]",
+					i)))
+
+		if err != nil {
+			return TextLineSpecStandardLine{}, err
+		}
+
+		newStdLine.textFields[i] = tempITextField
+	}
+
+	return newStdLine, err
 }
 
 // empty - Receives a pointer to an instance of

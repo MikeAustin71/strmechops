@@ -148,6 +148,135 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 	return err
 }
 
+// CopyIn - Copies the text line collection from an incoming
+// instance of TextLineSpecLinesCollection
+// ('incomingTxtLinesCol') to the current
+// TextLineSpecLinesCollection instance ('txtLinesCol').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All data values in current TextLineSpecLinesCollection instance
+// ('txtLinesCol') will be deleted and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLinesCol        *TextLineSpecLinesCollection
+//     - A pointer to an instance of TextLineSpecLinesCollection.
+//       This method will NOT change the data values contained in
+//       this instance.
+//
+//       All text line collection member elements in this
+//       TextLineSpecLinesCollection instance will be copied to the
+//       current TextLineSpecLinesCollection instance ('txtLinesCol').
+//
+//       If 'incomingTextLineCol' contains invalid member data
+//       variables, this method will return an error.
+//
+//       If 'incomingTextLineCol' contains an empty, or zero
+//       length, Text Lines Collection, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) CopyIn(
+	incomingTxtLinesCol *TextLineSpecLinesCollection,
+	errorPrefix interface{}) error {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection.CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return textLineSpecLinesCollectionNanobot{}.ptr().
+		copyIn(
+			txtLinesCol,
+			incomingTxtLinesCol,
+			ePrefix.XCtx(
+				"incomingTxtLinesCol->"+
+					"txtLinesCol"))
+}
+
 // Empty - Empties the text line collection and resets all member
 // variables to their initial or zero values.
 //
@@ -167,7 +296,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) Empty() {
 
 	txtLinesCol.lock.Lock()
 
-	textLineSpecLinesCollectionNanobot{}.ptr().
+	textLineSpecLinesCollectionAtom{}.ptr().
 		emptyCollection(txtLinesCol)
 
 	txtLinesCol.lock.Unlock()
@@ -195,7 +324,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 
 	defer txtLinesCol.lock.Unlock()
 
-	textLineSpecLinesCollectionNanobot{}.ptr().
+	textLineSpecLinesCollectionAtom{}.ptr().
 		emptyCollection(txtLinesCol)
 
 	return
@@ -349,7 +478,8 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
 		return nil, err
 	}
 
-	newTextLines := make([]ITextLineSpecification, lenTxtLines)
+	newTextLines :=
+		make([]ITextLineSpecification, lenTxtLines)
 
 	for i := 0; i < lenTxtLines; i++ {
 
@@ -511,7 +641,8 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecLinesCollection.ReplaceTextLine()",
+		"TextLineSpecLinesCollection."+
+			"ReplaceTextLine()",
 		"")
 
 	if err != nil {
