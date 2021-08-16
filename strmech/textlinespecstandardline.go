@@ -837,8 +837,10 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfStdLines() int {
 // encapsulated by the current TextLineSpecStandardLine instance.
 //
 // Text Fields constitute the granular elements of a standard text
-// line and provide verification that text fields exist and are
-// ready for formatting and text display output.
+// line. Analyzing the number of text fields in the collection
+// provides verification that text fields exist and are ready for
+// formatting. Once properly formatted, text fields may be
+// presented for text display, file output or printing.
 //
 func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 
@@ -856,7 +858,94 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 // GetTextFields - Returns a deep copy of the text fields contained
 // in the current TextLineSpecStandardLine instance.
 //
-func (stdLine *TextLineSpecStandardLine) GetTextFields() []ITextFieldSpecification {
+// These text fields are returned in an array of
+// ITextFieldSpecification objects.
+//
+// If the text field collection maintained by the current
+// TextLineSpecStandardLine instance is empty (contains zero
+// elements), an error will be returned.
+//
+// If any of the text fields within the collection maintained by
+// the current TextLineSpecStandardLine instance are invalid,
+// an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  []ITextFieldSpecification
+//     - If this method completes successfully, a deep copy of the
+//       text field collection maintained by the current
+//       TextLineSpecStandardLine instance will be returned. These
+//       text fields are returned as an array of objects
+//       implementing the ITextFieldSpecification interface.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) GetTextFields(
+	errorPrefix interface{}) (
+	[]ITextFieldSpecification,
+	error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -866,17 +955,69 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields() []ITextFieldSpecificati
 
 	defer stdLine.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.GetTextFields()",
+		"")
+
+	if err != nil {
+		return nil, err
+	}
+
 	lenTxtFields := len(stdLine.textFields)
 
 	if lenTxtFields == 0 {
-		return nil
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The text fields collection is empty!\n"+
+			"TextLineSpecStandardLine.newTextFields contains zero text field objects!\n",
+			ePrefix.String())
+
+		return nil, err
 	}
 
-	textFields := make([]ITextFieldSpecification, lenTxtFields)
+	newTextFields := make([]ITextFieldSpecification, lenTxtFields)
 
-	copy(textFields, stdLine.textFields)
+	for i := 0; i < lenTxtFields; i++ {
 
-	return textFields
+		if stdLine.textFields[i] == nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: Text Field element stdLine.textFields[%v]\n"+
+				"has a 'nil' value!\n",
+				ePrefix.String())
+
+			return nil, err
+		}
+
+		err = stdLine.textFields[i].IsValidInstanceError(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"stdLine.newTextFields[%v] invalid",
+					i)))
+
+		if err != nil {
+			return nil, err
+		}
+
+		newTextField,
+			err2 := stdLine.textFields[i].CopyOutITextField(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"stdLine.newTextFields[%v] copy error",
+					i)))
+
+		if err2 != nil {
+			return nil, err2
+		}
+
+		newTextFields[i] = newTextField
+	}
+
+	return newTextFields, err
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the data

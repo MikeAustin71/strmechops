@@ -201,6 +201,194 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 	return
 }
 
+// GetNumberOfTextLines - Returns the number of text lines
+// encapsulated by the current TextLineSpecLinesCollection
+// instance.
+//
+// Analyzing the number of text lines in the collection provides
+// verification that text lines exist and are ready for formatting.
+// Once properly formatted text lines may be presented for text
+// display, file output or printing.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	return len(txtLinesCol.textLines)
+}
+
+// GetTextLines - Returns a deep copy of the text fields contained
+// in the current TextLineSpecStandardLine instance.
+//
+// These text fields are returned in an array of
+// ITextFieldSpecification objects.
+//
+// If the text field collection maintained by the current
+// TextLineSpecStandardLine instance is empty (contains zero
+// elements), an error will be returned.
+//
+// If any of the text fields within the collection maintained by
+// the current TextLineSpecStandardLine instance are invalid,
+// an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  []ITextFieldSpecification
+//     - If this method completes successfully, a deep copy of the
+//       text field collection maintained by the current
+//       TextLineSpecStandardLine instance will be returned. These
+//       text fields are returned as an array of objects
+//       implementing the ITextFieldSpecification interface.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
+	errorPrefix interface{}) (
+	[]ITextLineSpecification,
+	error) {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection.GetTextLines()",
+		"")
+
+	if err != nil {
+		return nil, err
+	}
+
+	lenTxtLines := len(txtLinesCol.textLines)
+
+	if lenTxtLines == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The text lines collection is empty!\n"+
+			"TextLineSpecLinesCollection.textLines contains zero text line objects!\n",
+			ePrefix.String())
+
+		return nil, err
+	}
+
+	newTextLines := make([]ITextLineSpecification, lenTxtLines)
+
+	for i := 0; i < lenTxtLines; i++ {
+
+		if txtLinesCol.textLines[i] == nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: Text Line element txtLinesCol.textLines[%v]\n"+
+				"has a 'nil' value!\n",
+				ePrefix.String(),
+				i)
+
+			return nil, err
+		}
+
+		err = txtLinesCol.textLines[i].IsValidInstanceError(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"txtLinesCol.textLines[%v] invalid",
+					i)))
+
+		if err != nil {
+			return nil, err
+		}
+
+		newTextLine,
+			err2 := txtLinesCol.textLines[i].CopyOutITextLine(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"txtLinesCol.textLines[%v] copy error",
+					i)))
+
+		if err2 != nil {
+			return nil, err2
+		}
+
+		newTextLines[i] = newTextLine
+	}
+
+	return newTextLines, err
+}
+
 // ReplaceTextLine - Receives an object which implements the
 // ITextLineSpecification interface. This object will replace an
 // existing text line object within the text line collection
