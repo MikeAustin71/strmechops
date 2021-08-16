@@ -223,18 +223,18 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 	return len(txtLinesCol.textLines)
 }
 
-// GetTextLines - Returns a deep copy of the text fields contained
-// in the current TextLineSpecStandardLine instance.
+// GetTextLines - Returns a deep copy of the text lines contained
+// in the current TextLineSpecLinesCollection instance.
 //
-// These text fields are returned in an array of
-// ITextFieldSpecification objects.
+// These text lines are returned in an array of
+// ITextLineSpecification objects.
 //
-// If the text field collection maintained by the current
-// TextLineSpecStandardLine instance is empty (contains zero
+// If the text line collection maintained by the current
+// TextLineSpecLinesCollection instance is empty (contains zero
 // elements), an error will be returned.
 //
-// If any of the text fields within the collection maintained by
-// the current TextLineSpecStandardLine instance are invalid,
+// If any of the text lines within the collection maintained by
+// the current TextLineSpecLinesCollection instance are invalid,
 // an error will be returned.
 //
 //
@@ -248,8 +248,8 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -285,19 +285,20 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  []ITextFieldSpecification
+//  []ITextLineSpecification
 //     - If this method completes successfully, a deep copy of the
-//       text field collection maintained by the current
-//       TextLineSpecStandardLine instance will be returned. These
-//       text fields are returned as an array of objects
-//       implementing the ITextFieldSpecification interface.
+//       text line collection maintained by the current
+//       TextLineSpecLinesCollection instance will be returned.
+//       These text lines are returned as an array of objects
+//       implementing the ITextLineSpecification interface.
 //
 //
 //  error
