@@ -206,6 +206,9 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 // existing text line object within the text line collection
 // maintained by this TextLineSpecLinesCollection instance.
 //
+// The text line object to be replaced must exist at the index
+// specified by input parameter, 'replaceAtIndex'.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -218,20 +221,25 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 //       text lines collection maintained by this instance of
 //       TextLineSpecLinesCollection. The text line object to
 //       be replaced is identified by the collection element index
-//       supplied by input parameter 'replaceIndex'.
+//       supplied by input parameter 'replaceAtIndex'.
 //
 //       If member variable data values contained in this
 //       'textLine' parameter are found to be invalid, an error
 //       will be returned.
 //
 //
-//  replaceIndex               int
+//  replaceAtIndex             int
 //     - The index of an element within the text lines collection
 //       maintained by the current TextLineSpecLinesCollection
 //       instance which will be replaced by input parameter
 //       'textLine'.
 //
-//       If 'replaceIndex' proves to be an invalid index, an error
+//       Remember that the text fields collection maintained by
+//       the current TextLineSpecLinesCollection instance is a zero
+//       based array. Therefore, the first index in the collection
+//       is zero (0).
+//
+//       If 'replaceAtIndex' proves to be an invalid index, an error
 //       will be returned.
 //
 //
@@ -297,7 +305,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 //
 func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 	textLine ITextLineSpecification,
-	replaceIndex int,
+	replaceAtIndex int,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -321,6 +329,17 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 		return err
 	}
 
+	lenOfTextLinesCol := len(txtLinesCol.textLines)
+
+	if lenOfTextLinesCol == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The text lines collection is empty and contains no text lines!\n"+
+			"First add some text lines before trying to replace a text line.\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	err = textLine.IsValidInstanceError(
 		ePrefix.XCtx("Input Parameter: textLine"))
 
@@ -328,37 +347,26 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 		return err
 	}
 
-	lenOfTextLinesCol := len(txtLinesCol.textLines)
-
-	if lenOfTextLinesCol == 0 {
+	if replaceAtIndex < 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: The text lines collection is empty!\n"+
-			"First add some text lines before trying to replace a text line.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if replaceIndex < 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'replaceIndex' is invalid!\n"+
-			"'replaceIndex' is less than zero (0).\n"+
-			"replaceIndex = '%v'\n",
+			"Error: Input parameter 'replaceAtIndex' is invalid!\n"+
+			"'replaceAtIndex' is less than zero (0).\n"+
+			"replaceAtIndex = '%v'\n",
 			ePrefix.String(),
-			replaceIndex)
+			replaceAtIndex)
 	}
 
 	lenOfTextLinesCol--
 
-	if replaceIndex > lenOfTextLinesCol {
+	if replaceAtIndex > lenOfTextLinesCol {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'replaceIndex' is out of range and invalid!\n"+
-			"'replaceIndex' is greater than the maximum collection index.\n"+
+			"Error: Input parameter 'replaceAtIndex' is out of range and invalid!\n"+
+			"'replaceAtIndex' is greater than the maximum collection index.\n"+
 			"The last element in the text lines collection is index '%v'.\n"+
-			"Input parameter 'replaceIndex' = '%v'\n",
+			"Input parameter 'replaceAtIndex' = '%v'\n",
 			ePrefix.String(),
 			lenOfTextLinesCol,
-			replaceIndex)
+			replaceAtIndex)
 
 		return err
 	}
@@ -374,11 +382,15 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 		return err
 	}
 
-	txtLinesCol.textLines[replaceIndex].Empty()
+	if txtLinesCol.textLines[replaceAtIndex] != nil {
 
-	txtLinesCol.textLines[replaceIndex] = nil
+		txtLinesCol.textLines[replaceAtIndex].Empty()
 
-	txtLinesCol.textLines[replaceIndex] = newTextLine
+		txtLinesCol.textLines[replaceAtIndex] = nil
+
+	}
+
+	txtLinesCol.textLines[replaceAtIndex] = newTextLine
 
 	return err
 }

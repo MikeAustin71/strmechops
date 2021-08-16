@@ -1321,6 +1321,200 @@ func (stdLine TextLineSpecStandardLine) NewWithFieldArray(
 	return &newStdLine, err
 }
 
+// ReplaceTextField - Receives an object which implements the
+// ITextFieldSpecification interface. A deep copy of this object
+// will replace an existing text field object within the text
+// fields collection maintained by this TextLineSpecStandardLine
+// instance.
+//
+// The text field object to be replaced must exist at the index
+// specified by input parameter, 'replaceAtIndex'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textField                  ITextFieldSpecification
+//     - A text line object which implements the
+//       ITextFieldSpecification interface. A deep copy of this
+//       object will replace an existing element within the
+//       text fields collection maintained by this instance of
+//       TextLineSpecStandardLine. The text line object to
+//       be replaced is identified by the collection element index
+//       supplied by input parameter 'replaceAtIndex'.
+//
+//       If member variable data values contained in this
+//       'textField' parameter are found to be invalid, an error
+//       will be returned.
+//
+//
+//  replaceAtIndex             int
+//     - The index of an element within the text fields collection
+//       maintained by the current TextLineSpecStandardLine
+//       instance which will be replaced by input parameter
+//       'textField'.
+//
+//       Remember that the text fields collection maintained by
+//       the current TextLineSpecStandardLine instance is a zero
+//       based array. Therefore, the first index in the collection
+//       is zero (0).
+//
+//       If 'replaceAtIndex' proves to be an invalid index, an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
+	textField ITextFieldSpecification,
+	replaceAtIndex int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.ReplaceTextField()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenOfTextFieldsCol := len(stdLine.textFields)
+
+	if lenOfTextFieldsCol == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The text fields collection is empty and contains no text fields!\n"+
+			"First add some text fields before trying to replace a text field.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = textField.IsValidInstanceError(
+		ePrefix.XCtx("Input Parameter: 'textField' is invalid"))
+
+	if err != nil {
+		return err
+	}
+
+	if replaceAtIndex < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'replaceAtIndex' is invalid!\n"+
+			"Index is out of range. 'replaceAtIndex' is less than zero (0).\n"+
+			"replaceAtIndex = '%v'\n",
+			ePrefix.String(),
+			replaceAtIndex)
+	}
+
+	lenOfTextFieldsCol--
+
+	if replaceAtIndex > lenOfTextFieldsCol {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'replaceAtIndex' is out of range and invalid!\n"+
+			"'replaceAtIndex' is greater than the maximum collection index.\n"+
+			"The last element in the text fields collection is index '%v'.\n"+
+			"Input parameter 'replaceAtIndex' = '%v'\n",
+			ePrefix.String(),
+			lenOfTextFieldsCol,
+			replaceAtIndex)
+
+		return err
+	}
+
+	var newTextField ITextFieldSpecification
+
+	newTextField,
+		err = textField.CopyOutITextField(
+		ePrefix.XCtx(
+			"newTextField"))
+
+	if err != nil {
+		return err
+	}
+
+	if stdLine.textFields[replaceAtIndex] != nil {
+
+		stdLine.textFields[replaceAtIndex].Empty()
+		stdLine.textFields[replaceAtIndex] = nil
+
+	}
+
+	stdLine.textFields[replaceAtIndex] = newTextField
+
+	return err
+}
+
 // SetNumOfStdLines - Sets the number of repetitions for this
 // instance of TextLineSpecStandardLine. The number of standard
 // lines is the number of times this standard line will be output
