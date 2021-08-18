@@ -670,7 +670,7 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 	stdLine.lock.Lock()
 
 	textLineSpecStandardLineMolecule{}.ptr().
-		empty(
+		emptyStdLineTextFields(
 			stdLine)
 
 	stdLine.lock.Unlock()
@@ -700,8 +700,8 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 
 	defer stdLine.lock.Unlock()
 
-	textLineSpecStandardLineElectron{}.ptr().
-		emptyTextFields(stdLine)
+	textLineSpecStandardLineMolecule{}.ptr().
+		emptyStdLineTextFields(stdLine)
 
 	return
 }
@@ -1134,7 +1134,7 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	}
 
 	_,
-		err = textLineSpecStandardLineElectron{}.ptr().
+		err = textLineSpecStandardLineAtom{}.ptr().
 		testValidityOfTextLineSpecStdLine(
 			stdLine,
 			ePrefix.XCtx("stdLine"))

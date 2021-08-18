@@ -121,11 +121,11 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 		return err
 	}
 
-	txtStdLineElectron :=
-		textLineSpecStandardLineElectron{}
+	txtStdLineAtom :=
+		textLineSpecStandardLineAtom{}
 
 	_,
-		err = txtStdLineElectron.
+		err = txtStdLineAtom.
 		testValidityOfTextLineSpecStdLine(
 			incomingStdLine,
 			ePrefix.XCtx(
@@ -159,7 +159,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 	targetStdLine.numOfStdLines =
 		incomingStdLine.numOfStdLines
 
-	return txtStdLineElectron.
+	return txtStdLineAtom.
 		copyTextFields(
 			targetStdLine.textFields,
 			incomingStdLine.textFields,
@@ -253,11 +253,11 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 		return TextLineSpecStandardLine{}, err
 	}
 
-	txtStdLineElectron :=
-		textLineSpecStandardLineElectron{}
+	txtStdLineAtom :=
+		textLineSpecStandardLineAtom{}
 
 	_,
-		err = txtStdLineElectron.
+		err = txtStdLineAtom.
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			ePrefix.XCtx(
@@ -297,7 +297,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 
 	newStdLine.numOfStdLines = txtStdLine.numOfStdLines
 
-	err = txtStdLineElectron.
+	err = txtStdLineAtom.
 		copyTextFields(
 			newStdLine.textFields,
 			txtStdLine.textFields,
@@ -308,20 +308,19 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 	return newStdLine, err
 }
 
-// empty - Receives a pointer to an instance of
-// TextLineSpecStandardLine and proceeds to set all the internal
-// member variables to their uninitialized or zero states.
+// emptyStdLineTextFields - Receives a pointer to an instance of
+// TextLineSpecStandardLine and proceeds to delete all the text
+// fields contained in the internal text field collection.
 //
 //
 // ----------------------------------------------------------------
 //
 // IMPORTANT
 //
-// The data values of all member variables contained in input
-// parameter 'txtStdLine' will be overwritten and deleted.
+// All the text fields stored in the text field collection
+// maintained by input parameter 'txtStdLine' will be deleted.
 //
-//
-func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
+func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFields(
 	txtStdLine *TextLineSpecStandardLine) {
 
 	if txtStdLineMolecule.lock == nil {
@@ -332,21 +331,9 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) empty(
 
 	defer txtStdLineMolecule.lock.Unlock()
 
-	if txtStdLine == nil {
-		return
-	}
-
-	txtStdLine.numOfStdLines = 0
-
-	txtStdLine.turnLineTerminatorOff = false
-
-	txtStdLine.newLineChars = nil
-
 	textLineSpecStandardLineElectron{}.ptr().
 		emptyTextFields(
-			txtStdLine)
-
-	return
+			txtStdLine.textFields)
 }
 
 // equal - Receives pointers to two TextLineSpecStandardLine
@@ -502,7 +489,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	}
 
 	_,
-		err = textLineSpecStandardLineElectron{}.ptr().
+		err = textLineSpecStandardLineAtom{}.ptr().
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			ePrefix.XCtx("txtStdLine"))
