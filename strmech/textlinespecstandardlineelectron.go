@@ -10,6 +10,180 @@ type textLineSpecStandardLineElectron struct {
 	lock *sync.Mutex
 }
 
+// copyTextFields - Copies an array of ITextFieldSpecification
+// objects from a source array to a target array.
+//
+// If any of the ITextFieldSpecification objects in the source
+// array input parameter 'sourceTextFields' are found to be
+// invalid, an error will be returned.
+//
+// The ITextFieldSpecification interface defines a text field used
+// in conjunction with the type, TextLineSpecStandardLine. This
+// type contains an array of text field or ITextFieldSpecification
+// objects. Text fields are the building blocks of lines of text
+// which are formatted by TextLineSpecStandardLine for text
+// displays, file output or printing.
+//
+// Often, the need arises to copy text fields between
+// TextLineSpecStandardLine objects. This method is designed to
+// facilitate those copy operations.
+//
+// IMPORTANT
+//
+// ----------------------------------------------------------------
+//
+// This method deletes and overwrites all the member elements, and
+// their data values, contained in input parameter,
+// 'targetTextFields'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetTextFields           []ITextFieldSpecification
+//     - All the array elements within input parameter
+//       'sourceTextFields' will be copied to this array,
+//       'targetTextFields'. When the copy operation is completed
+//       the elements and their data values contained in this array
+//       will be identical to those in 'sourceTextFields'.
+//
+//
+//  sourceTextFields           []ITextFieldSpecification
+//     - All the data elements in this array will be copied to the
+//       input parameter 'targetTextFields'. When the copy
+//       operation is completed all the array elements and their
+//       data values in 'targetTextFields' will be identical to
+//       those found in this array, 'sourceTextFields'.
+//
+//       If 'sourceTextFields' contains an empty or zero length
+//       array, an error will be returned.
+//
+//       If any of the ITextFieldSpecification objects in this
+//       array are found to be invalid, an error will be returned.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtStdLineElectron *textLineSpecStandardLineElectron) copyTextFields(
+	targetTextFields []ITextFieldSpecification,
+	sourceTextFields []ITextFieldSpecification,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtStdLineElectron.lock == nil {
+		txtStdLineElectron.lock = new(sync.Mutex)
+	}
+
+	txtStdLineElectron.lock.Lock()
+
+	defer txtStdLineElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineElectron.copyTextFields()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenSourceTxtFields := len(sourceTextFields)
+
+	if lenSourceTxtFields == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceTextFields' is a zero length\n"+
+			"empty array!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenTargetTxtFields := len(targetTextFields)
+
+	if lenTargetTxtFields > 0 {
+
+		for i := 0; i < lenTargetTxtFields; i++ {
+
+			if targetTextFields[i] == nil {
+				continue
+			}
+
+			targetTextFields[i].Empty()
+
+			targetTextFields[i] = nil
+		}
+	}
+
+	targetTextFields = nil
+
+	targetTextFields =
+		make(
+			[]ITextFieldSpecification,
+			lenSourceTxtFields)
+
+	var newITextField ITextFieldSpecification
+
+	for i := 0; i < lenSourceTxtFields; i++ {
+
+		if sourceTextFields[i] == nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Incoming Text Field is invalid!\n"+
+				"sourceTextFields[%v] has a 'nil' value.\n",
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"sourceTextFields[%v] == nil",
+						i)),
+				i)
+
+			return err
+		}
+
+		newITextField,
+			err = sourceTextFields[i].CopyOutITextField(
+			ePrefix.XCtx(
+				fmt.Sprintf("sourceTextFields[%v]",
+					i)))
+
+		if err != nil {
+			return err
+		}
+
+		targetTextFields[i] = newITextField
+	}
+
+	return err
+}
+
 // emptyTextFields - Receives a pointer to an instance of
 // TextLineSpecStandardLine and proceeds to delete all the text
 // fields contained in the internal text field collection.

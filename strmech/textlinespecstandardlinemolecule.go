@@ -159,50 +159,13 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 	targetStdLine.numOfStdLines =
 		incomingStdLine.numOfStdLines
 
-	txtStdLineElectron.
-		emptyTextFields(targetStdLine)
-
-	lenIncomingTxtFields := len(incomingStdLine.textFields)
-
-	if lenIncomingTxtFields == 0 {
-		return err
-	}
-
-	targetStdLine.textFields =
-		make([]ITextFieldSpecification, lenIncomingTxtFields)
-
-	var tempITextField ITextFieldSpecification
-
-	for i := 0; i < lenIncomingTxtFields; i++ {
-
-		if incomingStdLine.textFields[i] == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Incoming Text Field is invalid!\n"+
-				"incomingStdLine.textFields[%v] has a 'nil' value.\n",
-				ePrefix.XCtx(
-					fmt.Sprintf(
-						"incomingStdLine.textFields[%v] == nil",
-						i)),
-				i)
-
-			return err
-		}
-
-		tempITextField,
-			err = incomingStdLine.textFields[i].CopyOutITextField(
+	return txtStdLineElectron.
+		copyTextFields(
+			targetStdLine.textFields,
+			incomingStdLine.textFields,
 			ePrefix.XCtx(
-				fmt.Sprintf("incomingStdLine.textFields[%v]",
-					i)))
-
-		if err != nil {
-			return err
-		}
-
-		targetStdLine.textFields[i] = tempITextField
-	}
-
-	return err
+				"incomingStdLine.textFields->"+
+					"targetStdLine.textFields"))
 }
 
 // copyOut - Returns a deep copy of the input parameter
@@ -334,47 +297,13 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 
 	newStdLine.numOfStdLines = txtStdLine.numOfStdLines
 
-	newStdLine.textFields = nil
-
-	lenTxtFields := len(txtStdLine.textFields)
-
-	if lenTxtFields == 0 {
-		return newStdLine, err
-	}
-
-	newStdLine.textFields = make([]ITextFieldSpecification,
-		lenTxtFields)
-
-	var tempITextField ITextFieldSpecification
-
-	for i := 0; i < lenTxtFields; i++ {
-
-		if txtStdLine.textFields[i] == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: txtStdLine Text Field is invalid!\n"+
-				"txtStdLine.textFields[%v] has a 'nil' value.\n",
-				ePrefix.XCtx(
-					fmt.Sprintf(
-						"txtStdLine.textFields[%v] == nil",
-						i)),
-				i)
-
-			return TextLineSpecStandardLine{}, err
-		}
-
-		tempITextField,
-			err = txtStdLine.textFields[i].CopyOutITextField(
+	err = txtStdLineElectron.
+		copyTextFields(
+			newStdLine.textFields,
+			txtStdLine.textFields,
 			ePrefix.XCtx(
-				fmt.Sprintf("txtStdLine.textFields[%v]",
-					i)))
-
-		if err != nil {
-			return TextLineSpecStandardLine{}, err
-		}
-
-		newStdLine.textFields[i] = tempITextField
-	}
+				"txtStdLine.textFields->"+
+					"newStdLine.textFields"))
 
 	return newStdLine, err
 }
@@ -600,6 +529,18 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	var lineStr string
 
 	for i := 0; i < lenTextFields; i++ {
+
+		if txtStdLine.textFields[i] == nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: 'txtStdLine.textFields' is an invalid array!\n"+
+				"txtStdLine.textFields[%v] is a 'nil'value.\n",
+				ePrefix.XCtx(
+					"txtStdLine.textFields[i] == nil"),
+				i)
+
+			return formattedText, err
+		}
+
 		lineStr += txtStdLine.textFields[i].GetFormattedText()
 	}
 
