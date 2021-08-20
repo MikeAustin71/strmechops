@@ -2262,27 +2262,34 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 		return err
 	}
 
-	if len(stdLine.newLineChars) == 0 {
-
-		stdLine.newLineChars =
-			textLineSpecStandardLineElectron{}.ptr().
-				getDefaultNewLineChars()
-
-	}
-
 	var newLineChars []rune
 
-	err = strMechPreon{}.ptr().
-		copyRuneArrays(
-			&newLineChars,
-			&stdLine.newLineChars,
-			true,
-			ePrefix.XCtx(
-				"stdLine.newLineChars->"+
-					"newLineChars"))
+	if len(stdLine.newLineChars) == 0 {
 
-	if err != nil {
-		return err
+		err =
+			textLineSpecStandardLineProton{}.ptr().
+				setDefaultNewLineChars(
+					&newLineChars,
+					ePrefix)
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		err = strMechPreon{}.ptr().
+			copyRuneArrays(
+				&newLineChars,
+				&stdLine.newLineChars,
+				true,
+				ePrefix.XCtx(
+					"stdLine.newLineChars->"+
+						"newLineChars"))
+
+		if err != nil {
+			return err
+		}
 	}
 
 	turnLineTerminatorOff := stdLine.turnLineTerminatorOff
