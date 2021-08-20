@@ -369,7 +369,7 @@ func (stdLine *TextLineSpecStandardLine) CopyIn(
 		return err
 	}
 
-	err = textLineSpecStandardLineMolecule{}.ptr().
+	err = textLineSpecStandardLineNanobot{}.ptr().
 		copyIn(
 			stdLine,
 			incomingStdLine,
@@ -2294,7 +2294,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 
 	turnLineTerminatorOff := stdLine.turnLineTerminatorOff
 
-	return textLineSpecStandardLineMolecule{}.ptr().
+	return textLineSpecStandardLineNanobot{}.ptr().
 		setTxtSpecStandardLine(
 			stdLine,
 			numOfStdLines,
