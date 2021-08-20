@@ -212,6 +212,10 @@ func (txtStdLineAtom textLineSpecStandardLineAtom) ptr() *textLineSpecStandardLi
 // return a boolean flag ('isValid') of 'true' and the returned
 // error type ('err') will be set to 'nil'.
 //
+// If txtStdLine.newLineChars is a zero length array, this method
+// will automatically set this value to the default new line
+// character or characters.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -346,7 +350,17 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 	}
 
 	if len(txtStdLine.newLineChars) == 0 {
-		txtStdLine.newLineChars = []rune{'\n'}
+
+		err =
+			textLineSpecStandardLineProton{}.ptr().
+				setDefaultNewLineChars(
+					&txtStdLine.newLineChars,
+					ePrefix)
+
+		if err != nil {
+			return isValid, err
+		}
+
 	}
 
 	isValid = true

@@ -730,7 +730,8 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 // 'newLineChars' will be set to their initial or zero values.
 //
 // After calling 'Empty', the caller CAN NOT reuse this instance of
-// TextLineSpecStandardLine.
+// TextLineSpecStandardLine. All the internal member variables
+// would have to be re-initialized.
 //
 // To empty and reuse this TextLineSpecStandardLine instance,
 // reference method TextLineSpecStandardLine.EmptyTextFields.
@@ -2428,12 +2429,24 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 		return err
 	}
 
+	_,
+		err =
+		textLineSpecStandardLineElectron{}.ptr().
+			testValidityOfTextFields(
+				textFields,
+				ePrefix.XCtx("Input parameter textFields is invalid!"))
+
+	textLineSpecStandardLineMolecule{}.ptr().
+		emptyStdLineTextFields(stdLine)
+
 	err =
 		textLineSpecStandardLineAtom{}.ptr().
 			copyTextFields(
 				&stdLine.textFields,
 				&textFields,
-				ePrefix)
+				ePrefix.XCtx(
+					"textFields->"+
+						"stdLine.textFields"))
 
 	return err
 }

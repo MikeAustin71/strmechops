@@ -428,6 +428,17 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		return err
 	}
 
+	_,
+		err =
+		textLineSpecStandardLineElectron{}.ptr().
+			testValidityOfTextFields(
+				textFields,
+				ePrefix.XCtx("Input parameter textFields is invalid!"))
+
+	if err != nil {
+		return err
+	}
+
 	sMechPreon := strMechPreon{}
 
 	_,
