@@ -359,9 +359,32 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyOut(
 	TextLineSpecLinesCollection,
 	error) {
 
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	return TextLineSpecLinesCollection{}, err
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection.CopyOut()",
+		"")
+
+	if err != nil {
+		return TextLineSpecLinesCollection{}, err
+	}
+
+	return textLineSpecLinesCollectionNanobot{}.ptr().
+		copyOut(
+			txtLinesCol,
+			ePrefix.XCtx(
+				"txtLinesCol->"))
 }
 
 // Empty - Empties the text line collection and resets all member

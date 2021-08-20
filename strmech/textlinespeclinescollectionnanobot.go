@@ -187,6 +187,154 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyIn(
 	return err
 }
 
+// copyOut - Returns a deep copy of the input parameter
+// 'textLineCol'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLineCol          *TextLineSpecLinesCollection
+//     - A pointer to an instance of TextLineSpecLinesCollection. A
+//       deep copy of the internal member variables will be created
+//       and returned in a new instance of
+//       TextLineSpecLinesCollection.
+//
+//       If the member variable data values encapsulated by this
+//       'textLineCol' are found to be invalid, this method will
+//       return an error
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecLinesCollection
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'textLineCol' will be created and returned
+//       in a new instance of TextLineSpecLinesCollection.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
+	textLineCol *TextLineSpecLinesCollection,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextLineSpecLinesCollection, error) {
+
+	if txtLinesColNanobot.lock == nil {
+		txtLinesColNanobot.lock = new(sync.Mutex)
+	}
+
+	txtLinesColNanobot.lock.Lock()
+
+	defer txtLinesColNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newTxtLinesCol := TextLineSpecLinesCollection{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecLinesCollectionNanobot."+
+			"copyOut()",
+		"")
+
+	if err != nil {
+		return newTxtLinesCol, err
+	}
+
+	if textLineCol == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetTextLineCol' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return newTxtLinesCol, err
+	}
+
+	txtLinesColAtom := textLineSpecLinesCollectionAtom{}
+	_,
+		err = txtLinesColAtom.
+		testValidityOfTextLinesCollection(
+			textLineCol,
+			ePrefix.XCtx("incomingTextLineCol"))
+
+	if err != nil {
+		return newTxtLinesCol, err
+	}
+
+	lenTxtLineCol := len(textLineCol.textLines)
+
+	if lenTxtLineCol == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLineCol' is invalid!\n"+
+			"The 'textLineCol' text lines collection is empty.\n"+
+			"There is nothing to copy.\n",
+			ePrefix.XCtxEmpty().String())
+
+		return TextLineSpecLinesCollection{}, err
+	}
+
+	newTxtLinesCol.textLines =
+		make([]ITextLineSpecification, lenTxtLineCol)
+
+	var newTextLine ITextLineSpecification
+
+	for i := 0; i < lenTxtLineCol; i++ {
+
+		if newTxtLinesCol.textLines[i] == nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Text Line element newTxtLinesCol.textLines[%v]\n"+
+				"has a 'nil' value!\n",
+				ePrefix.String(),
+				i)
+
+			return TextLineSpecLinesCollection{}, err
+		}
+
+		newTextLine,
+			err = newTxtLinesCol.textLines[i].CopyOutITextLine(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"incomingTextLineCol.textLines[%v] copy error",
+					i)))
+
+		if err != nil {
+			return TextLineSpecLinesCollection{}, err
+		}
+
+		newTxtLinesCol.textLines[i] = newTextLine
+	}
+
+	return newTxtLinesCol, err
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecLinesCollectionNanobot.
 //
