@@ -484,7 +484,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = textLineSpecStandardLineNanobot{}.ptr().
 		copyOut(
 			stdLine,
 			ePrefix.XCtx("stdLine"))
@@ -600,7 +600,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = textLineSpecStandardLineNanobot{}.ptr().
 		copyOut(
 			stdLine,
 			ePrefix.XCtx("stdLine"))
@@ -715,7 +715,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	var newStdLine TextLineSpecStandardLine
 
 	newStdLine,
-		err = textLineSpecStandardLineMolecule{}.ptr().
+		err = textLineSpecStandardLineNanobot{}.ptr().
 		copyOut(
 			stdLine,
 			ePrefix.XCtx("stdLine"))

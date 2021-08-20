@@ -125,6 +125,20 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 		return err
 	}
 
+	if len(incomingStdLine.newLineChars) == 0 {
+
+		err =
+			textLineSpecStandardLineProton{}.ptr().
+				setDefaultNewLineChars(
+					&incomingStdLine.newLineChars,
+					ePrefix)
+
+		if err != nil {
+			return err
+		}
+
+	}
+
 	txtStdLineAtom :=
 		textLineSpecStandardLineAtom{}
 
@@ -137,10 +151,6 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 
 	if err != nil {
 		return err
-	}
-
-	if len(incomingStdLine.newLineChars) == 0 {
-		incomingStdLine.newLineChars = []rune{'\n'}
 	}
 
 	sMechPreon := strMechPreon{}
@@ -170,6 +180,153 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 			ePrefix.XCtx(
 				"incomingStdLine.textFields->"+
 					"targetStdLine.textFields"))
+}
+
+// copyOut - Returns a deep copy of the input parameter
+// 'txtStdLine'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtStdLine          *TextLineSpecStandardLine
+//     - A pointer to an instance of TextLineSpecStandardLine. A
+//       deep copy of the internal member variables will be created
+//       and returned in a new instance of TextLineSpecStandardLine.
+//
+//       If the member variable data values encapsulated by this
+//       'txtStdLine' are found to be invalid, this method will
+//       return an error
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecStandardLine
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'txtStdLine' will be created and returned
+//       in a new instance of TextLineSpecStandardLine.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
+	txtStdLine *TextLineSpecStandardLine,
+	errPrefDto *ePref.ErrPrefixDto) (
+	TextLineSpecStandardLine, error) {
+
+	if txtStdLineNanobot.lock == nil {
+		txtStdLineNanobot.lock = new(sync.Mutex)
+	}
+
+	txtStdLineNanobot.lock.Lock()
+
+	defer txtStdLineNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineMolecule.copyOut()",
+		"")
+
+	if err != nil {
+		return TextLineSpecStandardLine{}, err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return TextLineSpecStandardLine{}, err
+	}
+
+	if len(txtStdLine.newLineChars) == 0 {
+
+		err =
+			textLineSpecStandardLineProton{}.ptr().
+				setDefaultNewLineChars(
+					&txtStdLine.newLineChars,
+					ePrefix)
+
+		if err != nil {
+			return TextLineSpecStandardLine{}, err
+		}
+
+	}
+
+	txtStdLineAtom :=
+		textLineSpecStandardLineAtom{}
+
+	_,
+		err = txtStdLineAtom.
+		testValidityOfTextLineSpecStdLine(
+			txtStdLine,
+			ePrefix.XCtx(
+				"txtStdLine"))
+
+	if err != nil {
+		return TextLineSpecStandardLine{}, err
+	}
+
+	newStdLine := TextLineSpecStandardLine{}
+
+	newStdLine.lock = new(sync.Mutex)
+
+	sMechPreon := strMechPreon{}
+
+	err = sMechPreon.copyRuneArrays(
+		&newStdLine.newLineChars,
+		&txtStdLine.newLineChars,
+		true,
+		ePrefix.XCtx(
+			"txtStdLine.newLineChars->"+
+				"newStdLine.newLineChars"))
+
+	if err != nil {
+		return TextLineSpecStandardLine{}, err
+	}
+
+	newStdLine.turnLineTerminatorOff =
+		txtStdLine.turnLineTerminatorOff
+
+	newStdLine.numOfStdLines = txtStdLine.numOfStdLines
+
+	err = txtStdLineAtom.
+		copyTextFields(
+			&newStdLine.textFields,
+			&txtStdLine.textFields,
+			ePrefix.XCtx(
+				"txtStdLine.textFields->"+
+					"newStdLine.textFields"))
+
+	return newStdLine, err
 }
 
 // ptr - Returns a pointer to a new instance of
