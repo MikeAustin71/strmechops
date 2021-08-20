@@ -106,7 +106,7 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 			"Error: Input parameter 'sourceRuneArray' is a nil pointer!\n",
 			ePrefix.String())
 
-		return
+		return err
 	}
 
 	if targetRuneArray == nil {
@@ -114,15 +114,15 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 			"Error: Input parameter 'targetRuneArray' is a nil pointer!\n",
 			ePrefix.String())
 
-		return
+		return err
 	}
 
 	if *sourceRuneArray == nil {
 		*targetRuneArray = nil
-		return
+		return err
 	}
 
-	// At this point, sourceRuneArray
+	// At this point, concrete sourceRuneArray
 	// IS NOT 'nil'!
 	lenSrcRuneAry := len(*sourceRuneArray)
 
@@ -130,13 +130,15 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 		setZeroLenArrayToNil == true {
 
 		*targetRuneArray = nil
-		return
+
+		return err
 
 	} else if lenSrcRuneAry == 0 &&
 		setZeroLenArrayToNil == false {
 
 		*targetRuneArray = make([]rune, 0)
-		return
+
+		return err
 	}
 
 	*targetRuneArray = make([]rune, lenSrcRuneAry)
@@ -172,14 +174,14 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 //
 // Input Parameters
 //
-//  targetIntArray             []rune
+//  targetIntArray             *[]int
 //     - All the data in the input parameter rune array,
 //       'sourceIntArray', will be copied to this parameter,
 //       'targetIntArray'. All the pre-existing data in
 //       'targetIntArray' will be deleted and replaced.
 //
 //
-//  sourceIntArray            []rune
+//  sourceIntArray             *[]int
 //     - The contents of this rune array will be copied to input
 //       parameter, 'targetIntArray'.
 //
@@ -194,7 +196,7 @@ func (sMechPreon *strMechPreon) copyRuneArrays(
 //       will be set to a zero length array.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
+//  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed

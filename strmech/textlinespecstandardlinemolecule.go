@@ -13,8 +13,12 @@ type textLineSpecStandardLineMolecule struct {
 // copyIn - Copies all data from input parameter 'incomingStdLine'
 // to input parameter 'targetStdLine'.
 //
-// Be advised that the pre-existing data fields in input parameter
-// 'targetStdLine' will be overwritten and deleted.
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The pre-existing data fields for input parameter 'targetStdLine'
+// will be overwritten and deleted.
 //
 //
 // ----------------------------------------------------------------
@@ -161,8 +165,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyIn(
 
 	return txtStdLineAtom.
 		copyTextFields(
-			targetStdLine.textFields,
-			incomingStdLine.textFields,
+			&targetStdLine.textFields,
+			&incomingStdLine.textFields,
 			ePrefix.XCtx(
 				"incomingStdLine.textFields->"+
 					"targetStdLine.textFields"))
@@ -299,8 +303,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) copyOut(
 
 	err = txtStdLineAtom.
 		copyTextFields(
-			newStdLine.textFields,
-			txtStdLine.textFields,
+			&newStdLine.textFields,
+			&txtStdLine.textFields,
 			ePrefix.XCtx(
 				"txtStdLine.textFields->"+
 					"newStdLine.textFields"))
@@ -561,4 +565,124 @@ func (txtStdLineMolecule textLineSpecStandardLineMolecule) ptr() *textLineSpecSt
 	return &textLineSpecStandardLineMolecule{
 		lock: new(sync.Mutex),
 	}
+}
+
+// setTxtSpecStandardLine - Reconfigures all the data values for
+// input parameter 'txtStdLine', a pointer to an instance of
+// TextLineSpecStandardLine.
+func (txtStdLineMolecule *textLineSpecStandardLineMolecule) setTxtSpecStandardLine(
+	txtStdLine *TextLineSpecStandardLine,
+	numOfStdLines int,
+	textFields []ITextFieldSpecification,
+	newLineChars []rune,
+	turnLineTerminatorOff bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtStdLineMolecule.lock == nil {
+		txtStdLineMolecule.lock = new(sync.Mutex)
+	}
+
+	txtStdLineMolecule.lock.Lock()
+
+	defer txtStdLineMolecule.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineMolecule."+
+			"setTxtSpecStandardLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(textFields) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is invalid!\n"+
+			"'textFields' is an empty or zero length array.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numOfStdLines < 1 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfStdLines' is invalid!\n"+
+			"'numOfStdLines' has a value less than one (1).\n"+
+			"numOfStdLines = '%v'\n",
+			ePrefix.String(),
+			numOfStdLines)
+
+		return err
+	}
+
+	if numOfStdLines > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfStdLines' is invalid!\n"+
+			"'numOfStdLines' has a value greater than one-million (1,000,000).\n"+
+			"numOfStdLines = '%v'\n",
+			ePrefix.String(),
+			numOfStdLines)
+
+		return err
+	}
+
+	if len(newLineChars) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'newLineChars' is invalid!\n"+
+			"'newLineChars' is an empty or zero length array.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	sMechPreon := strMechPreon{}
+
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		newLineChars,
+		ePrefix.XCtx(
+			"newLineChars"))
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecStandardLineAtom{}.ptr().
+		copyTextFields(
+			&txtStdLine.textFields,
+			&textFields,
+			ePrefix.XCtx(
+				"textFields->"+
+					"txtStdLine.textFields"))
+
+	if err != nil {
+		return err
+	}
+
+	txtStdLine.numOfStdLines =
+		numOfStdLines
+
+	txtStdLine.turnLineTerminatorOff =
+		turnLineTerminatorOff
+
+	err = sMechPreon.copyRuneArrays(
+		&txtStdLine.newLineChars,
+		&newLineChars,
+		true,
+		ePrefix.XCtx(
+			"newLineChars->txtStdLine.newLineChars"))
+
+	return err
 }

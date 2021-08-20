@@ -41,16 +41,23 @@ type textLineSpecStandardLineAtom struct {
 //
 // Input Parameters
 //
-//  targetTextFields           []ITextFieldSpecification
-//     - All the array elements within input parameter
+//  targetTextFields           *[]ITextFieldSpecification
+//     - A pointer to the target text fields array.
+//
+//       All the array elements within input parameter
 //       'sourceTextFields' will be copied to this array,
 //       'targetTextFields'. When the copy operation is completed
 //       the elements and their data values contained in this array
 //       will be identical to those in 'sourceTextFields'.
 //
+//       Be advised, all the elements in the target text fields
+//       array will be deleted and overwritten.
 //
-//  sourceTextFields           []ITextFieldSpecification
-//     - All the data elements in this array will be copied to the
+//
+//  sourceTextFields           *[]ITextFieldSpecification
+//     - A pointer to the source text fields array.
+//
+//       All the data elements in this array will be copied to the
 //       input parameter 'targetTextFields'. When the copy
 //       operation is completed all the array elements and their
 //       data values in 'targetTextFields' will be identical to
@@ -91,8 +98,8 @@ type textLineSpecStandardLineAtom struct {
 //       attached at the beginning of the error message.
 //
 func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
-	targetTextFields []ITextFieldSpecification,
-	sourceTextFields []ITextFieldSpecification,
+	targetTextFields *[]ITextFieldSpecification,
+	sourceTextFields *[]ITextFieldSpecification,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -117,7 +124,30 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		return err
 	}
 
-	lenSourceTxtFields := len(sourceTextFields)
+	if targetTextFields == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetTextFields' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceTextFields == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceTextFields' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if *sourceTextFields == nil {
+
+		*targetTextFields = nil
+
+		return err
+	}
+
+	lenSourceTxtFields := len(*sourceTextFields)
 
 	if lenSourceTxtFields == 0 {
 		err = fmt.Errorf("%v\n"+
@@ -128,43 +158,24 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		return err
 	}
 
-	textLineSpecStandardLineElectron{}.ptr().
-		emptyTextFields(targetTextFields)
-
-	targetTextFields =
+	*targetTextFields =
 		make(
 			[]ITextFieldSpecification,
 			lenSourceTxtFields)
 
-	var newITextField ITextFieldSpecification
+	itemsCopied :=
+		copy(*targetTextFields, *sourceTextFields)
 
-	for i := 0; i < lenSourceTxtFields; i++ {
-
-		if sourceTextFields[i] == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Incoming Text Field is invalid!\n"+
-				"sourceTextFields[%v] has a 'nil' value.\n",
-				ePrefix.XCtx(
-					fmt.Sprintf(
-						"sourceTextFields[%v] == nil",
-						i)),
-				i)
-
-			return err
-		}
-
-		newITextField,
-			err = sourceTextFields[i].CopyOutITextField(
-			ePrefix.XCtx(
-				fmt.Sprintf("sourceTextFields[%v]",
-					i)))
-
-		if err != nil {
-			return err
-		}
-
-		targetTextFields[i] = newITextField
+	if itemsCopied != lenSourceTxtFields {
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"Number of elements copied from 'sourceTextFields' to 'targetTextFields'\n"+
+			"DOES NOT MATCH the number of elements in 'sourceTextFields'\n"+
+			"Number of elements copied to targetTextFields = '%v'\n"+
+			"     Number of elements in 'sourceTextFields' = '%v'\n",
+			ePrefix.String(),
+			itemsCopied,
+			lenSourceTxtFields)
 	}
 
 	return err
