@@ -335,9 +335,36 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFiel
 
 	defer txtStdLineMolecule.lock.Unlock()
 
-	textLineSpecStandardLineElectron{}.ptr().
-		emptyTextFields(
-			txtStdLine.textFields)
+	if txtStdLine == nil {
+		return
+	}
+
+	if txtStdLine.textFields == nil {
+		return
+	}
+
+	lenTextFields := len(txtStdLine.textFields)
+
+	if lenTextFields == 0 {
+		txtStdLine.textFields = nil
+		return
+	}
+
+	for i := 0; i < lenTextFields; i++ {
+
+		if txtStdLine.textFields[i] == nil {
+			continue
+		}
+
+		txtStdLine.textFields[i].Empty()
+
+		txtStdLine.textFields[i] = nil
+
+	}
+
+	txtStdLine.textFields = nil
+
+	return
 }
 
 // equal - Receives pointers to two TextLineSpecStandardLine
