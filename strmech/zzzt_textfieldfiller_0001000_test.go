@@ -659,25 +659,10 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 
 	fillerTxtFieldOne.fillerCharsRepeatCount = -7
 
-	var fillerTxtFieldTwo TextFieldSpecFiller
-
-	fillerTxtFieldTwo,
-		err = fillerTxtFieldOne.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldTwo - #1"))
-
-	if err == nil {
-		t.Errorf("%v - Error\n"+
-			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
-			"because fillerTxtFieldOne.fillerCharsRepeatCount = -7\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
-			ePrefix.XCtx("fillerTxtFieldOne - invalid"))
-		return
-	}
-
 	var fillerTxtFieldTwoPtr *TextFieldSpecFiller
 
 	fillerTxtFieldTwoPtr,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		string(fillerChars),
 		fillerRepeatCnt,
 		ePrefix.XCtx("fillerTxtFieldTwo"))
@@ -698,9 +683,9 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldTwo.Equal(fillerTxtFieldOne) {
+	if !fillerTxtFieldTwoPtr.Equal(fillerTxtFieldOne) {
 		t.Errorf("%v\n"+
-			"Error: fillerTxtFieldTwo IS NOT EQUAL to fillerTxtFieldOne!\n",
+			"Error: fillerTxtFieldTwoPtr IS NOT EQUAL to fillerTxtFieldOne!\n",
 			ePrefix)
 		return
 	}
@@ -3697,7 +3682,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewTextFiller(
+		err := TextFieldSpecFiller{}.NewConstructor(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3717,7 +3702,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 		return
 	}
 
-	var fillerTxtFieldTwo *TextFieldSpecFiller
+	var fillerTxtFieldTwo TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
 		err = TextFieldSpecFiller{}.NewTextFiller(
@@ -3768,7 +3753,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldOne.Equal(fillerTxtFieldTwo) {
+	if !fillerTxtFieldOne.Equal(&fillerTxtFieldTwo) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldOne IS NOT EQUAL to fillerTxtFieldTwo!\n",
 			ePrefix)
@@ -3863,7 +3848,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		"&&",
 		fillerRepeatCnt,
 		ePrefix)
@@ -3987,7 +3972,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		fillerChars,
 		-32,
 		ePrefix)
@@ -4015,7 +4000,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -4108,7 +4093,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldThree.Equal(fillerTxtFieldOne) {
+	if !fillerTxtFieldThree.Equal(&fillerTxtFieldOne) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldThree IS NOT EQUAL to fillerTxtFieldOne!\n",
 			ePrefix)
@@ -4127,7 +4112,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 		return
 	}
 
-	var fillerTxtFieldFour *TextFieldSpecFiller
+	var fillerTxtFieldFour TextFieldSpecFiller
 
 	fillerTxtFieldFour,
 		err = TextFieldSpecFiller{}.NewTextFiller(
@@ -4148,7 +4133,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 		return
 	}
 
-	if fillerTxtFieldOne.Equal(fillerTxtFieldFour) {
+	if fillerTxtFieldOne.Equal(&fillerTxtFieldFour) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldOne IS EQUAL to fillerTxtFieldFour!\n"+
 			"This wrong. fillerTxtFieldFour has a different filler character.\n",
@@ -4176,7 +4161,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldFour.Equal(fillerTxtFieldOne) {
+	if !fillerTxtFieldFour.Equal(&fillerTxtFieldOne) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldFour IS NOT EQUAL to fillerTxtFieldOne!\n",
 			ePrefix)
@@ -4251,7 +4236,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 		return
 	}
 
-	var fillerTxtFieldTwo *TextFieldSpecFiller
+	var fillerTxtFieldTwo TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
 		err = TextFieldSpecFiller{}.NewTextFiller(
@@ -4302,7 +4287,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldOne.Equal(fillerTxtFieldTwo) {
+	if !fillerTxtFieldOne.Equal(&fillerTxtFieldTwo) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldOne IS NOT EQUAL to fillerTxtFieldTwo!\n",
 			ePrefix)
@@ -4375,7 +4360,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldThree.Equal(fillerTxtFieldOne) {
+	if !fillerTxtFieldThree.Equal(&fillerTxtFieldOne) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldThree IS NOT EQUAL to fillerTxtFieldOne!\n",
 			ePrefix)
@@ -4443,7 +4428,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 		return
 	}
 
-	if !fillerTxtFieldFour.Equal(fillerTxtFieldOne) {
+	if !fillerTxtFieldFour.Equal(&fillerTxtFieldOne) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldFour IS NOT EQUAL to fillerTxtFieldOne!\n",
 			ePrefix)
@@ -6202,9 +6187,10 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	var fillerTxtFieldOne *TextFieldSpecFiller
+	var err error
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -6227,7 +6213,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		"",
 		fillerRepeatCnt,
 		ePrefix)
@@ -6255,7 +6241,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -6370,7 +6356,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewConstructor(
 		"&&",
 		fillerRepeatCnt,
 		ePrefix)

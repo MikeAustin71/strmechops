@@ -1548,7 +1548,7 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //
 // Input Parameters
 //
-//  fillerCharacters    string
+//  fillerCharacters           string
 //     - A string containing the text characters which will be
 //       included in the Text Filler Field. The final Text Filler
 //       Field will be constructed from the filler characters
@@ -1565,12 +1565,12 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //          Example #2: fillerCharacters = "-"
 //                      fillerRepeatCount = 3
 //                      Final Text Filler Field = "---"
-////
+//
 //       If 'fillerCharacters' is submitted as an empty or zero
 //       length string, this method will return an error.
 //
 //
-//  fillerCharsRepeatCount    int
+//  fillerCharsRepeatCount     int
 //     - Controls the number of times 'fillerCharacters' is
 //       repeated when constructing the final Text Filler Field
 //       returned by this method. The actual length of the string
@@ -1644,10 +1644,9 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
+//  TextFieldSpecFiller
 //     - If this method completes successfully, this parameter will
-//       return a pointer to a new, valid and fully populated Text
-//       Filler Field object.
+//       return a new concrete Text Filler Field object.
 //
 //
 //  error
@@ -1679,7 +1678,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
-	*TextFieldSpecFiller,
+	TextFieldSpecFiller,
 	error) {
 
 	if txtFillerField.lock == nil {
@@ -1702,7 +1701,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 		"")
 
 	if err != nil {
-		return &newTxtFillerField, err
+		return newTxtFillerField, err
 	}
 
 	txtFillerElectron := textFieldSpecFillerElectron{}
@@ -1718,7 +1717,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 			"fillerCharacters"))
 
 	if err != nil {
-		return &newTxtFillerField, err
+		return newTxtFillerField, err
 	}
 
 	err = txtFillerElectron.isFillerCharsRepeatCountValid(
@@ -1726,7 +1725,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 		ePrefix.XCtx("fillerCharsCount"))
 
 	if err != nil {
-		return &newTxtFillerField, err
+		return newTxtFillerField, err
 	}
 
 	newTxtFillerField.fillerCharacters =
@@ -1738,7 +1737,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	newTxtFillerField.fillerCharsRepeatCount =
 		fillerCharsRepeatCount
 
-	return &newTxtFillerField, err
+	return newTxtFillerField, err
 }
 
 // SetFillerCharsRepeatCount - Sets the Filler Characters Repeat

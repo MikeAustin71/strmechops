@@ -261,6 +261,174 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 	return err
 }
 
+// AddTextFieldFiller - This method will append a Filler text field
+// to the end of the current array of text field objects maintained
+// by the current instance of TextLineSpecStandardLine.
+//
+// This operation will create a new TextFieldSpecFiller object
+// based on the input parameters passed by the calling function.
+// This TextFieldSpecFiller object will then be added to the text
+// field objects collection for the current TextFieldSpecFiller
+// instance.
+//
+// Finally, a pointer to a deep copy of the newly created
+// TextFieldSpecFiller object will be returned to the calling
+// function.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fillerCharacters    string
+//     - A string containing the text characters which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from the filler characters
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//       If 'fillerCharacters' is submitted as an empty or zero
+//       length string, an error will be returned.
+//
+//
+//  fillerCharsRepeatCount    int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecFiller
+//     - If this method completes successfully, this parameter will
+//       return a pointer to a new, valid and fully populated Text
+//       Filler Field object. This Text Filler Field is a deep copy
+//       of the one added to the text fields collection of the
+//       current TextLineSpecStandardLine instance.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
+	fillerCharacters string,
+	fillerCharsRepeatCount int,
+	errorPrefix interface{}) (
+	*TextFieldSpecFiller,
+	error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.AddTextFieldFiller()",
+		"")
+
+	if err != nil {
+		return &TextFieldSpecFiller{}, err
+	}
+
+	var newFillerField *TextFieldSpecFiller
+
+	newFillerField,
+		err = TextFieldSpecFiller{}.NewConstructor(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix)
+
+	if err != nil {
+		return &TextFieldSpecFiller{}, err
+	}
+
+	stdLine.textFields = append(stdLine.textFields,
+		newFillerField)
+
+	return newFillerField, err
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // TextLineSpecStandardLine ('incomingStdLine') to the data fields
 // of the current TextLineSpecStandardLine instance ('stdLine').
