@@ -17,7 +17,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -662,7 +662,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 	var fillerTxtFieldTwoPtr *TextFieldSpecFiller
 
 	fillerTxtFieldTwoPtr,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		string(fillerChars),
 		fillerRepeatCnt,
 		ePrefix.XCtx("fillerTxtFieldTwo"))
@@ -1286,10 +1286,10 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructor_000100(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructor_000100()",
+		"TestTextFieldSpecFiller_NewPtrTextFiller_000100()",
 		"")
 
 	fillerChars := "-"
@@ -1299,7 +1299,7 @@ func TestTextFieldSpecFiller_NewConstructor_000100(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1322,14 +1322,14 @@ func TestTextFieldSpecFiller_NewConstructor_000100(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		"",
 		fillerRepeatCnt,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters parameter is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -1356,7 +1356,7 @@ func TestTextFieldSpecFiller_NewConstructor_000100(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1471,10 +1471,10 @@ func TestTextFieldSpecFiller_NewConstructor_000100(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructor_000200(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructor_000200()",
+		"TestTextFieldSpecFiller_NewPtrTextFiller_000200()",
 		"")
 
 	fillerChars := "_"
@@ -1484,7 +1484,7 @@ func TestTextFieldSpecFiller_NewConstructor_000200(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1507,14 +1507,14 @@ func TestTextFieldSpecFiller_NewConstructor_000200(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		-32,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters Repeat Count is '-32'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -1541,7 +1541,7 @@ func TestTextFieldSpecFiller_NewConstructor_000200(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1655,10 +1655,10 @@ func TestTextFieldSpecFiller_NewConstructor_000200(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructor_000300(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructor_000300()",
+		"TestTextFieldSpecFiller_NewPtrTextFiller_000300()",
 		"")
 
 	fillerChar := '_'
@@ -1669,7 +1669,7 @@ func TestTextFieldSpecFiller_NewConstructor_000300(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1692,14 +1692,14 @@ func TestTextFieldSpecFiller_NewConstructor_000300(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		1000001,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters Repeat Count is '1,000,001'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -1726,7 +1726,7 @@ func TestTextFieldSpecFiller_NewConstructor_000300(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1840,10 +1840,10 @@ func TestTextFieldSpecFiller_NewConstructor_000300(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructor_000400(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructor_000400()",
+		"TestTextFieldSpecFiller_NewPtrTextFiller_000400()",
 		"")
 
 	fillerCharRuneArray := []rune{'%'}
@@ -1854,7 +1854,7 @@ func TestTextFieldSpecFiller_NewConstructor_000400(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -1877,14 +1877,14 @@ func TestTextFieldSpecFiller_NewConstructor_000400(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		"",
 		fillerRepeatCnt,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters Filler Characters is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -1911,7 +1911,7 @@ func TestTextFieldSpecFiller_NewConstructor_000400(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -2069,7 +2069,7 @@ func TestTextFieldSpecFiller_NewConstructorRune_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters parameter is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -2343,7 +2343,7 @@ func TestTextFieldSpecFiller_NewConstructorRune_000200(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler characters repeat count parameter is -32.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -2617,7 +2617,7 @@ func TestTextFieldSpecFiller_NewConstructorRune_000300(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler characters repeat count parameter is 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -2891,7 +2891,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters parameter is zero ([]rune{0}).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -3165,7 +3165,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler characters repeat count parameter is -32.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -3439,7 +3439,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000300(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler characters repeat count parameter is 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -3682,7 +3682,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3712,7 +3712,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters parameter is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -3848,7 +3848,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		"&&",
 		fillerRepeatCnt,
 		ePrefix)
@@ -3972,14 +3972,14 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		-32,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler characters repeat count parameter is -32.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -4000,7 +4000,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -4246,7 +4246,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler characters repeat count parameter is 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -6190,7 +6190,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	var err error
 
 	fillerTxtFieldOne,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -6213,14 +6213,14 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		"",
 		fillerRepeatCnt,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewConstructor()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
 			"because filler chararacters parameter is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -6241,7 +6241,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -6356,7 +6356,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		"&&",
 		fillerRepeatCnt,
 		ePrefix)

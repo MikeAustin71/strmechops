@@ -414,7 +414,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 	var newFillerField *TextFieldSpecFiller
 
 	newFillerField,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerCharacters,
 		fillerCharsRepeatCount,
 		ePrefix)

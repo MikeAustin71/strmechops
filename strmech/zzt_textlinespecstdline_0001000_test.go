@@ -78,7 +78,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 	}
 
 	leftMargin,
-		err := TextFieldSpecFiller{}.NewConstructor(
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
 		" ",
 		2,
 		ePrefix)
@@ -96,7 +96,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 	var rightMargin *TextFieldSpecFiller
 
 	rightMargin,
-		err = TextFieldSpecFiller{}.NewConstructor(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		" ",
 		2,
 		ePrefix)
