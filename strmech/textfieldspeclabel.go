@@ -1574,7 +1574,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	fieldLen int,
 	textJustification TextJustify,
 	errorPrefix interface{}) (
-	*TextFieldSpecLabel,
+	TextFieldSpecLabel,
 	error) {
 
 	if txtFieldLabel.lock == nil {
@@ -1588,6 +1588,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	newTextLabel := TextFieldSpecLabel{}
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1595,55 +1597,18 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 		"")
 
 	if err != nil {
-		return &TextFieldSpecLabel{}, err
+		return newTextLabel, err
 	}
 
-	textRunes := []rune(textLabel)
+	err = textFieldSpecLabelNanobot{}.ptr().
+		setTextFieldLabel(
+			&newTextLabel,
+			[]rune(textLabel),
+			fieldLen,
+			textJustification,
+			ePrefix)
 
-	var lenTxtRunes int
-
-	txtLabelElectron := textFieldSpecLabelElectron{}
-
-	lenTxtRunes,
-		err = txtLabelElectron.isTextLabelValid(
-		textRunes,
-		ePrefix.XCtx("textLabel"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	err = txtLabelElectron.isFieldLengthValid(
-		fieldLen,
-		ePrefix.XCtx("fieldLen"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	err = txtLabelElectron.isTextJustificationValid(
-		textRunes,
-		fieldLen,
-		textJustification,
-		ePrefix.XCtx("textJustification"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	newTextLabel := TextFieldSpecLabel{}
-
-	newTextLabel.textLabel = make([]rune, lenTxtRunes)
-
-	copy(newTextLabel.textLabel, textRunes)
-
-	newTextLabel.fieldLen = fieldLen
-
-	newTextLabel.textJustification = textJustification
-
-	newTextLabel.lock = new(sync.Mutex)
-
-	return &newTextLabel, nil
+	return newTextLabel, nil
 }
 
 // SetFieldLength - Sets The length of the text field in which the
