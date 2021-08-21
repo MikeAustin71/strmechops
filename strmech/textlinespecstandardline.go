@@ -86,7 +86,7 @@ import (
 //            "Hello World"
 //
 //  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' controls whether a line
+//     - The 'turnLineTerminatorOff' flag controls whether a line
 //       termination character or characters will be automatically
 //       appended to each line of text produced by
 //       TextLineSpecStandardLine.
@@ -1185,9 +1185,10 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 // GetTurnLineTerminatorOff - Returns the internal member variable
 // 'turnLineTerminatorOff' as a boolean value.
 //
-// The 'turnLineTerminatorOff' controls whether a line termination
-// character or characters will be automatically appended to each
-// line of text produced by TextLineSpecStandardLine.
+// The 'turnLineTerminatorOff' flag controls whether a line
+// termination character or characters will be automatically
+// appended to each line of text produced by
+// TextLineSpecStandardLine.
 //
 // When the boolean flag 'turnLineTerminatorOff' is set to 'false',
 // line terminators as defined by member variable 'newLineChars'
@@ -1387,13 +1388,110 @@ func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 //
 // This method will automatically set the following default values:
 //
-//  numOfStdLines  - Defaults number of standard lines to one (1).
+//  textFields          []ITextFieldSpecification
+//     - 'textFields' is assigned a default value of 'nil' meaning
+//       that the collection of text fields for the returned
+//       instance of TextLineSpecStandardLine is empty.
 //
-//  newLineChars   - Defaults new line character to '\n'.
-//                   To change the value of the new line character,
-//                   or characters, see methods:
-//                   TextLineSpecStandardLine.SetLineTerminationChars()
-//                   TextLineSpecStandardLine.SetLineTerminationRunes()
+//       'textFields' is a collection of objects implementing the
+//       ITextLineSpecification interface. These text fields are
+//       assembled by the TextLineSpecStandardLine type and formatted
+//       as a single line of text. This single line of text is
+//       is output one or more times as specified by input
+//       parameter, 'numOfStdLines'.
+//
+//       Text fields are the building blocks used to assemble a
+//       standard line of text.
+//
+//
+//  numOfStdLines       int
+//     - Defaults number of standard lines to one (1).
+//
+//       'numOfStdLines' is an integer value specifying the number
+//        of repetitions for a standard line text formatted for
+//        text display, file output or printing.
+//
+//       A 'numOfStdLines' value of 1 means the line will be output
+//       once, a value of 2 signals the line will be repeated or
+//       output twice, a value of '3' signals the line will be output
+//       3-times and so on.
+//
+//       If the 'numOfStdLines' value is set to zero, no text line
+//       will be formatted for text display, file output or printing.
+//
+//       If this value is set to a value less than zero, it will be
+//       automatically reset to a value of one ('1').
+//
+//       The following examples illustrate the use of
+//       'numOfStdLines':
+//         Example #1:
+//          Standard Line Text = "Hello World"
+//          numOfStdLines = 1
+//          Text Output:
+//            "Hello World"
+//
+//         Example #2:
+//          Standard Line Text = "Hello World"
+//          numOfStdLines = 3
+//          Text Output:
+//            "Hello World"
+//            "Hello World"
+//            "Hello World"
+//
+//
+//  newLineChars        []rune{'\n'}
+//     - Defaults new line character to '\n'.
+//
+//       'newLineChars' is an array of runes which contains the
+//        text character or characters which will be applied as
+//        line termination characters for each line of text
+//        produced by the returned instance of TextLineSpecStandardLine.
+//
+//       To change the value of the new line character,
+//       or characters, see methods:
+//         TextLineSpecStandardLine.GetLineTerminationRunes()
+//         TextLineSpecStandardLine.SetLineTerminationChars()
+//         TextLineSpecStandardLine.SetLineTerminationRunes()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//
+//
+//  turnLineTerminatorOff      bool
+//     - Defaults 'turnLineTerminatorOff' flag to 'false'.
+//
+//       The 'turnLineTerminatorOff' flag controls whether a line
+//       termination character or characters will be automatically
+//       appended to each line of text produced by
+//       TextLineSpecStandardLine.
+//
+//       When the boolean flag 'turnLineTerminatorOff' is set to
+//       'false', line terminators as defined by parameter
+//       'newLineChars' will be applied as a line termination
+//       sequence for each line of text produced by
+//       TextLineSpecStandardLine.
+//
+//       When this boolean value is set to 'true', it turns off or
+//       cancels the automatic generation of line terminators for
+//       each line of text produced by TextLineSpecStandardLine.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextLineSpecStandardLine
+//     - This method will create and return a pointer to a new
+//       instance of TextLineSpecStandardLine which is fully
+//       configured except for text fields. To add text fields,
+//       see method TextLineSpecStandardLine.AddTextField()
 //
 func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 
@@ -1463,10 +1561,11 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 //         TextLineSpecStandardLine.SetLineTerminationChars()
 //         TextLineSpecStandardLine.SetLineTerminationRunes()
 //         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 //
 //  turnLineTerminatorOff      false
-//     - The 'turnLineTerminatorOff' controls whether a line
+//     - The 'turnLineTerminatorOff' flag controls whether a line
 //       termination character or characters will be automatically
 //       appended to each line of text produced by
 //       TextLineSpecStandardLine.
@@ -1790,7 +1889,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 //
 //
 //  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' controls whether a line
+//     - The 'turnLineTerminatorOff' flag controls whether a line
 //       termination character or characters will be automatically
 //       appended to each line of text produced by
 //       TextLineSpecStandardLine.
@@ -2411,10 +2510,11 @@ func (stdLine *TextLineSpecStandardLine) SetLineTerminationRunes(
 //         TextLineSpecStandardLine.SetLineTerminationChars()
 //         TextLineSpecStandardLine.SetLineTerminationRunes()
 //         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 //
 //  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' controls whether a line
+//     - The 'turnLineTerminatorOff' flag controls whether a line
 //       termination character or characters will be automatically
 //       appended to each line of text produced by
 //       TextLineSpecStandardLine.
@@ -2709,7 +2809,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 //
 //
 //  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' controls whether a line
+//     - The 'turnLineTerminatorOff' flag controls whether a line
 //       termination character or characters will be automatically
 //       appended to each line of text produced by
 //       TextLineSpecStandardLine.
