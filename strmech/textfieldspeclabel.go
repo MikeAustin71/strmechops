@@ -1608,7 +1608,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 			textJustification,
 			ePrefix)
 
-	return newTextLabel, nil
+	return newTextLabel, err
 }
 
 // SetFieldLength - Sets The length of the text field in which the
