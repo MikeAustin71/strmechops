@@ -1670,8 +1670,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //
 // Return Values
 //
-//  *TextFieldSpecLabel
-//     - This method will return a pointer to a new instance of
+//  TextFieldSpecLabel
+//     - This method will return a new concrete instance of
 //       TextFieldSpecLabel constructed from information provided
 //       by the input parameters.
 //
@@ -1720,7 +1720,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 	fieldLen int,
 	textJustification TextJustify,
 	errorPrefix interface{}) (
-	*TextFieldSpecLabel,
+	TextFieldSpecLabel,
 	error) {
 
 	if txtFieldLabel.lock == nil {
@@ -1734,6 +1734,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	newTextLabel := TextFieldSpecLabel{}
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1741,54 +1743,18 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 		"")
 
 	if err != nil {
-		return &TextFieldSpecLabel{}, err
+		return newTextLabel, err
 	}
 
-	var lenTxtRunes int
+	err = textFieldSpecLabelNanobot{}.ptr().
+		setTextFieldLabel(
+			&newTextLabel,
+			textLabelChars,
+			fieldLen,
+			textJustification,
+			ePrefix)
 
-	txtLabelElectron := textFieldSpecLabelElectron{}
-
-	lenTxtRunes,
-		err = txtLabelElectron.isTextLabelValid(
-		textLabelChars,
-		ePrefix.XCtx("textLabelChars"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	err = txtLabelElectron.isFieldLengthValid(
-		fieldLen,
-		ePrefix.XCtx("fieldLen"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	err = txtLabelElectron.isTextJustificationValid(
-		textLabelChars,
-		fieldLen,
-		textJustification,
-		ePrefix.XCtx("textJustification"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	newTextLabel := TextFieldSpecLabel{}
-
-	newTextLabel.textLabel = make([]rune, lenTxtRunes)
-
-	copy(newTextLabel.textLabel,
-		textLabelChars)
-
-	newTextLabel.fieldLen = fieldLen
-
-	newTextLabel.textJustification = textJustification
-
-	newTextLabel.lock = new(sync.Mutex)
-
-	return &newTextLabel, nil
+	return newTextLabel, err
 }
 
 // SetFieldLength - Sets The length of the text field in which the
