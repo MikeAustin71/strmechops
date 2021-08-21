@@ -1220,20 +1220,20 @@
 --- PASS: TestTextFieldSpecFiller_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyOutPtr_000200
 --- PASS: TestTextFieldSpecFiller_CopyOutPtr_000200 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructor_000100
---- PASS: TestTextFieldSpecFiller_NewConstructor_000100 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructor_000200
---- PASS: TestTextFieldSpecFiller_NewConstructor_000200 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructor_000300
---- PASS: TestTextFieldSpecFiller_NewConstructor_000300 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructor_000400
---- PASS: TestTextFieldSpecFiller_NewConstructor_000400 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructorRune_000100
---- PASS: TestTextFieldSpecFiller_NewConstructorRune_000100 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructorRune_000200
---- PASS: TestTextFieldSpecFiller_NewConstructorRune_000200 (0.00s)
-=== RUN   TestTextFieldSpecFiller_NewConstructorRune_000300
---- PASS: TestTextFieldSpecFiller_NewConstructorRune_000300 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFiller_000100
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFiller_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFiller_000200
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFiller_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFiller_000300
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFiller_000300 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFiller_000400
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFiller_000400 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFillerRune_000100
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRune_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFillerRune_000200
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRune_000200 (0.00s)
+=== RUN   TestTextFieldSpecFiller_NewPtrTextFillerRune_000300
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRune_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000100
 --- PASS: TestTextFieldSpecFiller_NewConstructorRuneArray_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewConstructorRuneArray_000200
@@ -1348,4 +1348,4 @@
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
 coverage: 48.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.673s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.764s
