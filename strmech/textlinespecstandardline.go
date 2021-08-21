@@ -86,6 +86,11 @@ import (
 //            "Hello World"
 //
 //  turnLineTerminatorOff      bool
+//     - The 'turnLineTerminatorOff' controls whether a line
+//       termination character or characters will be automatically
+//       appended to each line of text produced by
+//       TextLineSpecStandardLine.
+//
 //       When 'turnLineTerminatorOff' is set to 'false', line
 //       terminators as defined by member variable 'newLineChars'
 //       will be applied as a line termination sequence for each
@@ -1020,7 +1025,7 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 //
 // If the text field collection maintained by the current
 // TextLineSpecStandardLine instance is empty (contains zero
-// elements), an error will be returned.
+// elements), a 'nil' value will be returned.
 //
 // If any of the text fields within the collection maintained by
 // the current TextLineSpecStandardLine instance are invalid,
@@ -1131,11 +1136,6 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 
 	if lenTxtFields == 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: The text fields collection is empty!\n"+
-			"TextLineSpecStandardLine.newTextFields contains zero text field objects!\n",
-			ePrefix.String())
-
 		return nil, err
 	}
 
@@ -1180,6 +1180,40 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 	}
 
 	return newTextFields, err
+}
+
+// GetTurnLineTerminatorOff - Returns the internal member variable
+// 'turnLineTerminatorOff' as a boolean value.
+//
+// The 'turnLineTerminatorOff' controls whether a line termination
+// character or characters will be automatically appended to each
+// line of text produced by TextLineSpecStandardLine.
+//
+// When the boolean flag 'turnLineTerminatorOff' is set to 'false',
+// line terminators as defined by member variable 'newLineChars'
+// will be applied as a line termination sequence for each line of
+// text produced by TextLineSpecStandardLine.
+//
+// When this boolean value is set to 'true', it turns off or
+// cancels the automatic generation of line terminators for each
+// line of text produced by TextLineSpecStandardLine.
+//
+// The default line terminator is the new line character ('\n')
+// which is defined by member variable 'newLineChars'. However,
+// this value is subject to user control and may be overridden
+// by one or more characters supplied by the user.
+//
+func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	return stdLine.turnLineTerminatorOff
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the data
@@ -1432,6 +1466,11 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 //
 //
 //  turnLineTerminatorOff      false
+//     - The 'turnLineTerminatorOff' controls whether a line
+//       termination character or characters will be automatically
+//       appended to each line of text produced by
+//       TextLineSpecStandardLine.
+//
 //       When the boolean flag 'turnLineTerminatorOff' is set to
 //       'false', line terminators as defined by member variable
 //       'newLineChars' will be applied as a line termination
@@ -1751,6 +1790,11 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 //
 //
 //  turnLineTerminatorOff      bool
+//     - The 'turnLineTerminatorOff' controls whether a line
+//       termination character or characters will be automatically
+//       appended to each line of text produced by
+//       TextLineSpecStandardLine.
+//
 //       When the boolean flag 'turnLineTerminatorOff' is set to
 //       'false', line terminators as defined by parameter
 //       'newLineChars' will be applied as a line termination
@@ -2375,6 +2419,11 @@ func (stdLine *TextLineSpecStandardLine) SetLineTerminationRunes(
 //
 //
 //  turnLineTerminatorOff      bool
+//     - The 'turnLineTerminatorOff' controls whether a line
+//       termination character or characters will be automatically
+//       appended to each line of text produced by
+//       TextLineSpecStandardLine.
+//
 //       When the boolean flag 'turnLineTerminatorOff' is set to
 //       'false', line terminators as defined by member variable
 //       'newLineChars' will be applied as a line termination
