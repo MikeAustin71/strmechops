@@ -2556,48 +2556,13 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 		return err
 	}
 
-	textRunes := []rune(textLabel)
-
-	var lenTxtRunes int
-
-	txtLabelElectron := textFieldSpecLabelElectron{}
-
-	lenTxtRunes,
-		err = txtLabelElectron.isTextLabelValid(
-		textRunes,
-		ePrefix.XCtx("textLabel"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtLabelElectron.isFieldLengthValid(
-		fieldLen,
-		ePrefix.XCtx("fieldLen"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtLabelElectron.isTextJustificationValid(
-		textRunes,
-		fieldLen,
-		textJustification,
-		ePrefix.XCtx("textJustification"))
-
-	if err != nil {
-		return err
-	}
-
-	txtFieldLabel.textLabel = make([]rune, lenTxtRunes)
-
-	copy(txtFieldLabel.textLabel, textRunes)
-
-	txtFieldLabel.fieldLen = fieldLen
-
-	txtFieldLabel.textJustification = textJustification
-
-	return nil
+	return textFieldSpecLabelNanobot{}.ptr().
+		setTextFieldLabel(
+			txtFieldLabel,
+			[]rune(textLabel),
+			fieldLen,
+			textJustification,
+			ePrefix)
 }
 
 // SetTextLabelRunes - Sets the text label component values for
