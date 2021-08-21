@@ -19,7 +19,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 			strings.Repeat(" ", 4)
 
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewConstructor(
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
@@ -82,7 +82,7 @@ func TestTextFieldSpecLabel_CopyIn_000200(t *testing.T) {
 	txtJustify := TxtJustify.Center()
 
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewConstructor(
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
@@ -455,7 +455,7 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 	txtJustify := TxtJustify.Center()
 
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewConstructor(
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
@@ -957,7 +957,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 			strings.Repeat(" ", 4)
 
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewConstructor(
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
@@ -1018,7 +1018,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000200(t *testing.T) {
 			strings.Repeat(" ", 4)
 
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewConstructor(
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
@@ -1098,7 +1098,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000300(t *testing.T) {
 	expectedTextLabel := label
 
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewConstructor(
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,

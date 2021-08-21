@@ -202,7 +202,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		txtTimerLines.timeFormat)
 
 	txtOutputLabel,
-		err = TextFieldSpecLabel{}.NewConstructor(
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
 		startTimeStr,
 		-1,
 		TxtJustify.Left(),
@@ -410,7 +410,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			}
 
 			txtOutputLabel,
-				err = TextFieldSpecLabel{}.NewConstructor(
+				err = TextFieldSpecLabel{}.NewPtrTextLabel(
 				timeDurationStrs[i],
 				-1,
 				TxtJustify.Left(),
@@ -453,7 +453,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			}
 
 			txtOutputLabel,
-				err = TextFieldSpecLabel{}.NewConstructor(
+				err = TextFieldSpecLabel{}.NewPtrTextLabel(
 				timeDurationStrs[i],
 				-1,
 				TxtJustify.Left(),

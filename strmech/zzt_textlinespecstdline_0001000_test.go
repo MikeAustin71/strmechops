@@ -118,7 +118,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 	var centerLabel *TextFieldSpecLabel
 
 	centerLabel,
-		err = TextFieldSpecLabel{}.NewConstructor(
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
 		labelTxt,
 		-1,
 		TxtJustify.Left(),

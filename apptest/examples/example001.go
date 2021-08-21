@@ -346,7 +346,7 @@ func (mt MainTest) IntSeparateNumRunes04() {
 
 	txtFuncName,
 		err = strmech.TextFieldSpecLabel{}.
-		NewConstructor(
+		NewPtrTextLabel(
 			ePrefix.String(),
 			lineLen,
 			strmech.TxtJustify.Center(),
@@ -361,7 +361,7 @@ func (mt MainTest) IntSeparateNumRunes04() {
 
 	txtLabel,
 		err = strmech.TextFieldSpecLabel{}.
-		NewConstructor(
+		NewPtrTextLabel(
 			"Example Of restartIntGroupingSequence",
 			lineLen,
 			strmech.TxtJustify.Center(),

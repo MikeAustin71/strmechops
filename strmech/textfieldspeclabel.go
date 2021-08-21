@@ -906,7 +906,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	return err
 }
 
-// NewConstructor - Creates and returns a pointer to a new, fully
+// NewPtrTextLabel - Creates and returns a pointer to a new, fully
 // populated instance of TextFieldSpecLabel. This type encapsulates
 // a string which is formatted as a text label.
 //
@@ -1068,7 +1068,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 //    textJustification = TextJustify(0).Right()
 //      result = "Hi There"
 //
-func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
+func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 	textLabel string,
 	fieldLen int,
 	textJustification TextJustify,
@@ -1087,63 +1087,27 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructor(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	newTextLabel := TextFieldSpecLabel{}
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecLabel.NewConstructor()",
+		"TextFieldSpecLabel.NewPtrTextLabel()",
 		"")
 
 	if err != nil {
-		return &TextFieldSpecLabel{}, err
+		return &newTextLabel, err
 	}
 
-	textRunes := []rune(textLabel)
+	err = textFieldSpecLabelNanobot{}.ptr().
+		setTextFieldLabel(
+			&newTextLabel,
+			[]rune(textLabel),
+			fieldLen,
+			textJustification,
+			ePrefix)
 
-	var lenTxtRunes int
-
-	txtLabelElectron := textFieldSpecLabelElectron{}
-
-	lenTxtRunes,
-		err = txtLabelElectron.isTextLabelValid(
-		textRunes,
-		ePrefix.XCtx("textLabel"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	err = txtLabelElectron.isFieldLengthValid(
-		fieldLen,
-		ePrefix.XCtx("fieldLen"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	err = txtLabelElectron.isTextJustificationValid(
-		textRunes,
-		fieldLen,
-		textJustification,
-		ePrefix.XCtx("textJustification"))
-
-	if err != nil {
-		return &TextFieldSpecLabel{}, err
-	}
-
-	newTextLabel := TextFieldSpecLabel{}
-
-	newTextLabel.textLabel = make([]rune, lenTxtRunes)
-
-	copy(newTextLabel.textLabel,
-		textRunes)
-
-	newTextLabel.fieldLen = fieldLen
-
-	newTextLabel.textJustification = textJustification
-
-	newTextLabel.lock = new(sync.Mutex)
-
-	return &newTextLabel, nil
+	return &newTextLabel, err
 }
 
 // NewConstructorRunes - Creates and returns a pointer to a new,
