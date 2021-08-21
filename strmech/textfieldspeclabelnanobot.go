@@ -51,8 +51,8 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) ptr() *textFieldSpecLabelN
 //
 //
 //  textLabel                  []rune
-//     - The rune array contains the text characters which will be
-//       displayed within the text label.
+//     - An array of runes or text characters which is used to
+//       generate string content for display as a text label.
 //
 //       If this parameter is submitted as a 'nil' value or a zero
 //      length array, an error will be returned.
