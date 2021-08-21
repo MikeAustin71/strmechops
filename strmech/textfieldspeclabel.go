@@ -914,6 +914,12 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 // from input parameters, 'textLabel', 'fieldLen' and
 // 'textJustification'.
 //
+// This method is identical to TextFieldSpecLabel.NewTextLabel()
+// with the sole exception being that this method returns a pointer
+// to an instance of TextFieldSpecLabel and
+// TextFieldSpecLabel.NewTextLabel() returns a concrete instance of
+// TextFieldSpecLabel.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -1409,6 +1415,12 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 // from input parameters, 'textLabel', 'fieldLen' and
 // 'textJustification'.
 //
+// This method is identical to TextFieldSpecLabel.NewConstructor()
+// with the sole exception being that this method returns a concrete
+// instance of TextFieldSpecLabel and
+// TextFieldSpecLabel.NewConstructor() returns a pointer to a
+// TextFieldSpecLabel instance.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -1512,9 +1524,9 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 //
 // Return Values
 //
-//  *TextFieldSpecLabel
-//     - This method will return a pointer to a new instance of
-//       TextFieldSpecLabel constructed from the information
+//  TextFieldSpecLabel
+//     - This method will return a new, populated concrete instance
+//       of TextFieldSpecLabel constructed from the information
 //       provided by the input parameters.
 //
 //
