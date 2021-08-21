@@ -906,6 +906,29 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	return err
 }
 
+// NewEmpty - Returns a pointer to a new, empty instance of
+// TextFieldSpecLabel. The member variables of this returned
+// instance will all be set to their native zero values.
+//
+func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	newTxtFieldLabel := TextFieldSpecLabel{}
+
+	newTxtFieldLabel.textJustification = TextJustify(0).None()
+
+	newTxtFieldLabel.lock = new(sync.Mutex)
+
+	return &newTxtFieldLabel
+}
+
 // NewPtrTextLabel - Creates and returns a pointer to a new, fully
 // populated instance of TextFieldSpecLabel. This type encapsulates
 // a string which is formatted as a text label.
@@ -1110,7 +1133,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 	return &newTextLabel, err
 }
 
-// NewConstructorRunes - Creates and returns a pointer to a new,
+// NewPtrTextLabelRunes - Creates and returns a pointer to a new,
 // fully populated instance of TextFieldSpecLabel. This type
 // encapsulates a string which is formatted as a text label.
 //
@@ -1272,7 +1295,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 //    textJustification = TextJustify(0).Right()
 //      result = "Hi There"
 //
-func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
+func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 	textLabelChars []rune,
 	fieldLen int,
 	textJustification TextJustify,
@@ -1294,7 +1317,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecLabel.NewConstructorRunes()",
+		"TextFieldSpecLabel.NewPtrTextLabelRunes()",
 		"")
 
 	if err != nil {
@@ -1348,29 +1371,6 @@ func (txtFieldLabel TextFieldSpecLabel) NewConstructorRunes(
 	return &newTextLabel, nil
 }
 
-// NewEmpty - Returns a pointer to a new, empty instance of
-// TextFieldSpecLabel. The member variables of this returned
-// instance will all be set to their native zero values.
-//
-func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
-
-	if txtFieldLabel.lock == nil {
-		txtFieldLabel.lock = new(sync.Mutex)
-	}
-
-	txtFieldLabel.lock.Lock()
-
-	defer txtFieldLabel.lock.Unlock()
-
-	newTxtFieldLabel := TextFieldSpecLabel{}
-
-	newTxtFieldLabel.textJustification = TextJustify(0).None()
-
-	newTxtFieldLabel.lock = new(sync.Mutex)
-
-	return &newTxtFieldLabel
-}
-
 // NewTextLabel - Returns a new, populated concrete instance of
 // TextFieldSpecLabel. This type encapsulates a string which
 // is formatted as a text label.
@@ -1379,10 +1379,10 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 // from input parameters, 'textLabel', 'fieldLen' and
 // 'textJustification'.
 //
-// This method is identical to TextFieldSpecLabel.NewConstructor()
+// This method is identical to TextFieldSpecLabel.NewPtrTextLabel()
 // with the sole exception being that this method returns a concrete
 // instance of TextFieldSpecLabel and
-// TextFieldSpecLabel.NewConstructor() returns a pointer to a
+// TextFieldSpecLabel.NewPtrTextLabel() returns a pointer to a
 // TextFieldSpecLabel instance.
 //
 //
