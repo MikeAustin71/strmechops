@@ -2342,42 +2342,16 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 		return err
 	}
 
-	txtFillerElectron := textFieldSpecFillerElectron{}
+	fillerCharsRunes := []rune{fillerCharacter}
 
-	fillerCharsRunes := make([]rune, 1)
+	err = textFieldSpecFillerNanobot{}.ptr().
+		setTxtFieldSpecFiller(
+			txtFillerField,
+			fillerCharsRunes,
+			fillerCharsRepeatCount,
+			ePrefix)
 
-	fillerCharsRunes[0] = fillerCharacter
-
-	var lenFillerChars int
-
-	lenFillerChars,
-		err = txtFillerElectron.isFillerCharsValid(
-		fillerCharsRunes,
-		ePrefix.XCtx(
-			"fillerCharacter"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtFillerElectron.isFillerCharsRepeatCountValid(
-		fillerCharsRepeatCount,
-		ePrefix.XCtx("fillerCharsRepeatCount"))
-
-	if err != nil {
-		return err
-	}
-
-	txtFillerField.fillerCharacters =
-		make([]rune, lenFillerChars)
-
-	copy(txtFillerField.fillerCharacters,
-		fillerCharsRunes)
-
-	txtFillerField.fillerCharsRepeatCount =
-		fillerCharsRepeatCount
-
-	return nil
+	return err
 }
 
 // SetTextFillerRuneArray - Overwrites the internal member
