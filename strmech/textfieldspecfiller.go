@@ -1102,6 +1102,8 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 
 	defer txtFillerField.lock.Unlock()
 
+	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
+
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -1112,45 +1114,19 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 		"")
 
 	if err != nil {
-		return &TextFieldSpecFiller{}, err
+		return &newTxtFillerField, err
 	}
-
-	txtFillerElectron := textFieldSpecFillerElectron{}
 
 	fillerCharsRunes := []rune(fillerCharacters)
 
-	var lenFillerChars int
+	err = textFieldSpecFillerNanobot{}.ptr().
+		setTxtFieldSpecFiller(
+			&newTxtFillerField,
+			fillerCharsRunes,
+			fillerCharsRepeatCount,
+			ePrefix)
 
-	lenFillerChars,
-		err = txtFillerElectron.isFillerCharsValid(
-		fillerCharsRunes,
-		ePrefix.XCtx(
-			"fillerCharacters"))
-
-	if err != nil {
-		return &TextFieldSpecFiller{}, err
-	}
-
-	err = txtFillerElectron.isFillerCharsRepeatCountValid(
-		fillerCharsRepeatCount,
-		ePrefix.XCtx("fillerCharsRepeatCount"))
-
-	if err != nil {
-		return &TextFieldSpecFiller{}, err
-	}
-
-	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
-
-	newTxtFillerField.fillerCharacters =
-		make([]rune, lenFillerChars)
-
-	copy(newTxtFillerField.fillerCharacters,
-		fillerCharsRunes)
-
-	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsRepeatCount
-
-	return &newTxtFillerField, nil
+	return &newTxtFillerField, err
 }
 
 // NewPtrTextFillerRune - Creates and returns a pointer to a new,
