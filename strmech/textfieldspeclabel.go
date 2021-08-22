@@ -1144,7 +1144,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 // This method is identical to
 // TextFieldSpecLabel.NewTextLabelRunes() with the sole exception
 // being that this method returns a pointer to an instance of
-// TextFieldSpecLabel and TextFieldSpecLabel.NewTextLabelRunes()
+// TextFieldSpecLabel while TextFieldSpecLabel.NewTextLabelRunes()
 // returns a concrete instance of TextFieldSpecLabel.
 //
 //
@@ -1352,8 +1352,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 // 'textJustification'.
 //
 // This method is identical to TextFieldSpecLabel.NewPtrTextLabel()
-// with the sole exception being that this method returns a concrete
-// instance of TextFieldSpecLabel and
+// with the sole exception being that this method returns a
+// concrete instance of TextFieldSpecLabel and
 // TextFieldSpecLabel.NewPtrTextLabel() returns a pointer to a
 // TextFieldSpecLabel instance.
 //
