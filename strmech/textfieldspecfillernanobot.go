@@ -139,7 +139,6 @@ func (txtFieldFillerNanobot *textFieldSpecFillerNanobot) setTxtFieldSpecFiller(
 		err = txtFillerElectron.isFillerCharsValid(
 		fillerCharacters,
 		ePrefix.XCtx(
-
 			"Input parameter 'fillerCharacters' invalid!"))
 
 	if err != nil {

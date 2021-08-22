@@ -908,6 +908,51 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 	return err
 }
 
+// New - Returns a new concrete instance of TextFieldSpecFiller.
+// This returned instance is empty and unpopulated. All the member
+// variables contained in this new instance are set to their
+// uninitialized or zero values.
+//
+// Be advised that setting member variables to their zero values
+// means that the returned TextFieldSpecFiller instance is invalid.
+// Therefore, in order to use this TextFieldSpecFiller instance,
+// users must later call the setter methods on this type in order
+// to configure valid and meaningful meaningful member variable
+// data values.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  TextFieldSpecFiller
+//     - This parameter returns a new and empty concrete instance
+//       of TextFieldSpecFiller. Member variable data values are
+//       set to their initial or zero values.
+//
+func (txtFillerField TextFieldSpecFiller) New() TextFieldSpecFiller {
+
+	if txtFillerField.lock == nil {
+		txtFillerField.lock = new(sync.Mutex)
+	}
+
+	txtFillerField.lock.Lock()
+
+	defer txtFillerField.lock.Unlock()
+
+	newFillerField := textFieldSpecFillerMolecule{}.ptr().
+		newEmpty()
+
+	return newFillerField
+}
+
 // NewPtr - Returns a pointer to a new unpopulated instance of
 // TextFieldSpecFiller. All the member variables contained in
 // this new instance are set to their uninitialized or zero values.
@@ -915,7 +960,7 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 // Be advised that setting member variables to their zero values
 // means that the returned TextFieldSpecFiller instance is invalid.
 // Therefore, in order to use this TextFieldSpecFiller instance,
-// users must later call the setter methods for this type in order
+// users must later call the setter methods on this type in order
 // to configure valid and meaningful meaningful member variable
 // data values.
 //
@@ -2152,32 +2197,20 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldSpecFiller.SetTextFiller()",
+		"TextFieldSpecFiller.SetFillerCharsRepeatCount()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if fillerCharsRepeatCount < 1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'fillerCharsRepeatCount' is invalid!\n"+
-			"'fillerCharsRepeatCount' value is less than one (1)\n"+
-			"fillerCharsRepeatCount = '%v'\n",
-			ePrefix.String(),
-			fillerCharsRepeatCount)
+	err = textFieldSpecFillerElectron{}.ptr().
+		isFillerCharsRepeatCountValid(
+			fillerCharsRepeatCount,
+			ePrefix.XCtx(
+				"Input parameter 'fillerCharsRepeatCount' invalid!"))
 
-		return err
-	}
-
-	if fillerCharsRepeatCount > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'fillerCharsRepeatCount' is invalid!\n"+
-			"'fillerCharsRepeatCount' value greater than one-million (1,000,000)\n"+
-			"fillerCharsRepeatCount = '%v'\n",
-			ePrefix.String(),
-			fillerCharsRepeatCount)
-
+	if err != nil {
 		return err
 	}
 

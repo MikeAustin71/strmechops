@@ -512,6 +512,170 @@ func TestTextFieldSpecFiller_CopyIn_000300(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_copyIn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_copyIn_000100()",
+		"")
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+	expectedFillerText :=
+		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	txtFieldFillerMolecule := textFieldSpecFillerMolecule{}
+
+	err = txtFieldFillerMolecule.copyIn(
+		&fillerTxtFieldTwo,
+		fillerTxtFieldOne,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFillerText := fillerTxtFieldTwo.GetFormattedText()
+
+	if expectedFillerText != actualFillerText {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected fillerTxtFieldTwo Filler Text = '%v'\n"+
+			"Instead, Actual fillerTxtFieldTwo Filler Text = '%v'\n",
+			ePrefix,
+			expectedFillerText,
+			actualFillerText)
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_copyIn_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_copyIn_000200()",
+		"")
+
+	var fillerTxtFieldOne *TextFieldSpecFiller
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	txtFieldFillerMolecule := textFieldSpecFillerMolecule{}
+
+	err := txtFieldFillerMolecule.copyIn(
+		&fillerTxtFieldTwo,
+		fillerTxtFieldOne,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldFillerMolecule.copyIn()\n"+
+			"because fillerTxtFieldOne is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	fillerTxtFieldOne,
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var fillerTxtFieldThree *TextFieldSpecFiller
+
+	err = txtFieldFillerMolecule.copyIn(
+		fillerTxtFieldThree,
+		fillerTxtFieldOne,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldFillerMolecule.copyIn()\n"+
+			"because fillerTxtFieldThree is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	fillerTxtFieldFour := TextFieldSpecFiller{}
+
+	fillerTxtFieldOne.fillerCharacters = nil
+
+	err = txtFieldFillerMolecule.copyIn(
+		&fillerTxtFieldFour,
+		fillerTxtFieldOne,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldFillerMolecule.copyIn()\n"+
+			"because fillerTxtFieldOne.fillerCharacters = nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	fillerTxtFieldOne,
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldOne.fillerCharacters =
+		make([]rune, 0)
+
+	err = txtFieldFillerMolecule.copyIn(
+		&fillerTxtFieldFour,
+		fillerTxtFieldOne,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldFillerMolecule.copyIn()\n"+
+			"because fillerTxtFieldOne.fillerCharacters = zero length array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1280,6 +1444,98 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	if !fillerTxtFieldFour.Equal(fillerTxtFieldOne) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldFour IS NOT EQUAL to fillerTxtFieldOne!\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecFiller_GetFormattedText_000100()"
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedFillerText :=
+		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFillerText := fillerTxtFieldOne.GetFormattedText()
+
+	if expectedFillerText != actualFillerText {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected Filler Text = '%v'\n"+
+			"Instead, Actual Filler Text = '%v'\n",
+			ePrefix,
+			expectedFillerText,
+			actualFillerText)
+		return
+	}
+
+	fillerTxtFieldOne.fillerCharacters = nil
+
+	actualFillerText = fillerTxtFieldOne.GetFormattedText()
+
+	if !strings.Contains(actualFillerText, "Error") {
+		t.Errorf("%v - Test #1\n"+
+			"Expected 'actualFillerText' to contain word 'Error'.\n"+
+			"HOWEVER, There is no word 'Error' in the returned text.\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_New_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_New_000100()",
+		"")
+
+	txtFillerOne := TextFieldSpecFiller{}.New()
+
+	err := txtFillerOne.IsValidInstanceError(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFillerOne.IsValidInstanceError()\n"+
+			"because 'txtFillerOne' member variables contain zero values.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_NewPtr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_NewPtr_000100()",
+		"")
+
+	txtFillerOne := TextFieldSpecFiller{}.NewPtr()
+
+	err := txtFillerOne.IsValidInstanceError(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFillerOne.IsValidInstanceError()\n"+
+			"because 'txtFillerOne' member variables contain zero values.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix)
 	}
 
@@ -5745,6 +6001,82 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000200(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100()",
+		"")
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+	newFillerRepeatCnt := 15
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.SetFillerCharsRepeatCount(
+		newFillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualRepeatCount := fillerTxtFieldOne.GetFillerCharsRepeatCount()
+
+	if newFillerRepeatCnt != actualRepeatCount {
+		t.Errorf("%v\n"+
+			"Error: Expected Character Repeat Count = '%v'\n"+
+			"Instead- actual Character Repeat Count = '%v'\n",
+			ePrefix.String(),
+			newFillerRepeatCnt,
+			actualRepeatCount)
+
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	newFillerRepeatCnt = 25
+
+	err = fillerTxtFieldTwo.SetFillerCharsRepeatCount(
+		newFillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualRepeatCount = fillerTxtFieldTwo.GetFillerCharsRepeatCount()
+
+	if newFillerRepeatCnt != actualRepeatCount {
+		t.Errorf("%v - Text #2\n"+
+			"Error: Expected Character Repeat Count = '%v'\n"+
+			"Instead- actual Character Repeat Count = '%v'\n",
+			ePrefix.String(),
+			newFillerRepeatCnt,
+			actualRepeatCount)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -7714,6 +8046,154 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 			ePrefix,
 			fillerRepeatCnt,
 			fillerTxtFieldFour.GetFillerCharsRepeatCount())
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_String_000100(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecFiller_String_000100()"
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedFillerText :=
+		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFillerText := fillerTxtFieldOne.String()
+
+	if expectedFillerText != actualFillerText {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected Filler Text = '%v'\n"+
+			"Instead, Actual Filler Text = '%v'\n",
+			ePrefix,
+			expectedFillerText,
+			actualFillerText)
+		return
+	}
+
+	fillerTxtFieldOne.fillerCharacters = nil
+
+	actualFillerText = fillerTxtFieldOne.String()
+
+	if !strings.Contains(actualFillerText, "Error") {
+		t.Errorf("%v - Test #1\n"+
+			"Expected 'actualFillerText' to contain word 'Error'.\n"+
+			"HOWEVER, There is no word 'Error' in the returned text.\n",
+			ePrefix)
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_TextFieldName_000100(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecFiller_TextFieldName_000100()"
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedFieldName := "TextFieldSpecFiller"
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFieldName := fillerTxtFieldOne.TextFieldName()
+
+	if expectedFieldName != actualFieldName {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected Field Name = '%v'\n"+
+			"Instead, Actual Field Name = '%v'\n",
+			ePrefix,
+			expectedFieldName,
+			actualFieldName)
+		return
+	}
+
+	actualFieldName = "X Y Z A B C"
+
+	actualFieldName = TextFieldSpecFiller{}.TextFieldName()
+
+	if expectedFieldName != actualFieldName {
+		t.Errorf("%v - Test #2\n"+
+			"Error: Expected Field Name = '%v'\n"+
+			"Instead, Actual Field Name = '%v'\n",
+			ePrefix,
+			expectedFieldName,
+			actualFieldName)
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_TextTypeName_000100(t *testing.T) {
+
+	ePrefix := "TestTextFieldSpecFiller_TextTypeName_000100()"
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedTextTypeName := "TextFieldSpecFiller"
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTextTypeName := fillerTxtFieldOne.TextFieldName()
+
+	if expectedTextTypeName != actualTextTypeName {
+		t.Errorf("%v - Test #1\n"+
+			"Error: Expected Text Type Name = '%v'\n"+
+			"Instead, Actual Text Type Name = '%v'\n",
+			ePrefix,
+			expectedTextTypeName,
+			actualTextTypeName)
+
+		return
+	}
+
+	actualTextTypeName = "A B C D E F X Y Z"
+
+	actualTextTypeName = TextFieldSpecFiller{}.TextFieldName()
+
+	if expectedTextTypeName != actualTextTypeName {
+		t.Errorf("%v - Test #2\n"+
+			"Error: Expected Text Type Name = '%v'\n"+
+			"Instead, Actual Text Type Name = '%v'\n",
+			ePrefix,
+			expectedTextTypeName,
+			actualTextTypeName)
+
 	}
 
 	return
