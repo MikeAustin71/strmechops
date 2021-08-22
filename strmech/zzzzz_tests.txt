@@ -1,5 +1,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
---- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.01s)
 === RUN   TestNumberSignSymbolCollection_AddSymbol_000100
 --- PASS: TestNumberSignSymbolCollection_AddSymbol_000100 (0.00s)
 === RUN   TestNumberSignSymbolCollection_AddSymbol_000200
@@ -1347,5 +1347,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 47.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.681s
+coverage: 47.8% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.626s
