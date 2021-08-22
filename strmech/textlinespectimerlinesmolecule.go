@@ -134,7 +134,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	if len(txtTimerLines.labelLeftMarginChars) > 0 {
 
 		txtLabelLeftFiller,
-			err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+			err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 			txtTimerLines.labelLeftMarginChars,
 			1,
 			ePrefix.XCtx(
@@ -179,7 +179,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	}
 
 	txtLabelRightFiller,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		txtTimerLines.labelRightMarginChars,
 		1,
 		ePrefix.XCtx(
@@ -341,7 +341,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	var txtFillerSumLeftMar *TextFieldSpecFiller
 
 	txtFillerSumLeftMar,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{' '},
 		totalLabelLen,
 		ePrefix.XCtx(

@@ -178,7 +178,7 @@ func TestTextFieldSpecFiller_CopyIn_000200(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'-'},
 		5,
 		ePrefix)
@@ -362,7 +362,7 @@ func TestTextFieldSpecFiller_CopyIn_000300(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'-'},
 		5,
 		ePrefix)
@@ -637,7 +637,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 		strings.Repeat(string(fillerChars), fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -2847,10 +2847,10 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructorRuneArray_000100()",
+		"TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100()",
 		"")
 
 	fillerCharRuneArray := []rune{'-'}
@@ -2861,7 +2861,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -2884,14 +2884,14 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{0},
 		fillerRepeatCnt,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFillerRuneArray()\n"+
 			"because filler chararacters parameter is zero ([]rune{0}).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -2918,7 +2918,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3033,7 +3033,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -3121,10 +3121,10 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000100(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructorRuneArray_000200()",
+		"TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200()",
 		"")
 
 	fillerCharRuneArray := []rune{'?'}
@@ -3135,7 +3135,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3158,14 +3158,14 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		-32,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFillerRuneArray()\n"+
 			"because filler characters repeat count parameter is -32.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -3192,7 +3192,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3307,7 +3307,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -3395,10 +3395,10 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000200(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecFiller_NewConstructorRuneArray_000300(t *testing.T) {
+func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_NewConstructorRuneArray_000300()",
+		"TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300()",
 		"")
 
 	fillerCharRuneArray := []rune{'X'}
@@ -3409,7 +3409,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000300(t *testing.T) {
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3432,14 +3432,14 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000300(t *testing.T) {
 	var fillerTxtFieldTwo *TextFieldSpecFiller
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		1000001,
 		ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFiller()\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFillerRuneArray()\n"+
 			"because filler characters repeat count parameter is 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
 			ePrefix.String())
@@ -3466,7 +3466,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000300(t *testing.T) {
 	}
 
 	fillerTxtFieldTwo,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -3581,7 +3581,7 @@ func TestTextFieldSpecFiller_NewConstructorRuneArray_000300(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -4382,7 +4382,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -5450,7 +5450,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -5717,7 +5717,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -5805,7 +5805,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	fillerTxtFieldFive := &TextFieldSpecFiller{}
 
 	fillerTxtFieldFive,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
@@ -6035,7 +6035,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	var fillerTxtFieldFour *TextFieldSpecFiller
 
 	fillerTxtFieldFour,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{'&', '&'},
 		fillerRepeatCnt,
 		ePrefix)
@@ -6123,7 +6123,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	fillerTxtFieldFive := &TextFieldSpecFiller{}
 
 	fillerTxtFieldFive,
-		err = TextFieldSpecFiller{}.NewConstructorRuneArray(
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
 		ePrefix)
