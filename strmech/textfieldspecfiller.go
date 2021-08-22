@@ -1638,7 +1638,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newTxtFillerField := textFieldSpecFillerMolecule{}.ptr().newEmpty()
+	newTxtFillerField := TextFieldSpecFiller{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1650,38 +1650,14 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 		return newTxtFillerField, err
 	}
 
-	txtFillerElectron := textFieldSpecFillerElectron{}
-
 	fillerCharsRunes := []rune(fillerCharacters)
 
-	var lenFillerChars int
-
-	lenFillerChars,
-		err = txtFillerElectron.isFillerCharsValid(
-		fillerCharsRunes,
-		ePrefix.XCtx(
-			"fillerCharacters"))
-
-	if err != nil {
-		return newTxtFillerField, err
-	}
-
-	err = txtFillerElectron.isFillerCharsRepeatCountValid(
-		fillerCharsRepeatCount,
-		ePrefix.XCtx("fillerCharsCount"))
-
-	if err != nil {
-		return newTxtFillerField, err
-	}
-
-	newTxtFillerField.fillerCharacters =
-		make([]rune, lenFillerChars)
-
-	copy(newTxtFillerField.fillerCharacters,
-		fillerCharsRunes)
-
-	newTxtFillerField.fillerCharsRepeatCount =
-		fillerCharsRepeatCount
+	err = textFieldSpecFillerNanobot{}.ptr().
+		setTxtFieldSpecFiller(
+			&newTxtFillerField,
+			fillerCharsRunes,
+			fillerCharsRepeatCount,
+			ePrefix)
 
 	return newTxtFillerField, err
 }
