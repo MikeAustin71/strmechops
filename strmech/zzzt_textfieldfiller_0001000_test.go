@@ -1675,6 +1675,70 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextFieldSpecFiller_GetFillerRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_GetFillerRunes_000100()",
+		"")
+
+	txtFillerField := TextFieldSpecFiller{}
+
+	actualFillerRunes := txtFillerField.GetFillerRunes()
+
+	if actualFillerRunes != nil {
+
+		t.Errorf("%v\n"+
+			"Error: Expected a return value of 'nil' from txtFillerField.GetFillerRunes()\n"+
+			"because 'txtFillerField' is empty.\n"+
+			"HOWEVER, the return value is NOT 'nil'\n"+
+			"actualFillerRunes = '%v'\n",
+			ePrefix.String(),
+			string(actualFillerRunes))
+
+		return
+	}
+
+	fillerChars := []rune{'-', '*'}
+	fillerRepeatCnt := 3
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFillerRunes =
+		fillerTxtFieldOne.GetFillerRunes()
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		fillerChars,
+		actualFillerRunes)
+
+	if areEqual != true {
+
+		t.Errorf("%v\n"+
+			"Error: Expected a fillerChars==actualFillerRunes\n"+
+			"because 'fillerChars' is the original input value.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"      fillerChars = '%v'\n"+
+			"actualFillerRunes = '%v'\n",
+			ePrefix.String(),
+			string(fillerChars),
+			string(actualFillerRunes))
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

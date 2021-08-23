@@ -642,12 +642,28 @@ func (txtFillerField *TextFieldSpecFiller) EqualITextField(
 // GetFillerChars - Returns the internal member variable
 // TextFieldSpecFiller.fillerCharacters ([]rune) as a string.
 //
+// This method is identical to method
+// TextFieldSpecFiller.GetFillerRunes() with the sole exception
+// being that this method returns a string while method
+// TextFieldSpecFiller.GetFillerRunes() returns an array of runes.
+//
 // The filler characters are used to populate the Text Filler
-// Field formatted text. The final formatted text is equal
-// to:  Filler Characters  X  Filler Characters Repeat Count
-//          Example: fillerCharacters = "-*"
-//                   fillerRepeatCount = 3
-//                   Final Text Filler Field = "-*-*-*"
+// Field formatted text. The final Text Filler Field will be
+// constructed from ths filler characters repeated one or more
+// times as specified by the 'fillerCharsRepeatCount' parameter.
+//
+// The Text Field Filler final formatted text is equal to:
+//          fillerCharacters X fillerCharsRepeatCount
+//
+//  Example 1:
+//   Filler Characters Array = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters Array = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
 //
 // This method returns a string containing the Filler Characters.
 //
@@ -661,7 +677,65 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerChars() string {
 
 	defer txtFillerField.lock.Unlock()
 
+	if len(txtFillerField.fillerCharacters) == 0 {
+		return ""
+	}
+
 	return string(txtFillerField.fillerCharacters)
+}
+
+// GetFillerRunes - Returns the internal member variable
+// TextFieldSpecFiller.fillerCharacters as an array of runes.
+//
+// This method is identical to method
+// TextFieldSpecFiller.GetFillerChars() with the sole exception
+// being that this method returns an array of runes while method
+// TextFieldSpecFiller.GetFillerChars() returns a string.
+//
+// The filler characters are used to populate the Text Filler
+// Field formatted text. The final Text Filler Field will be
+// constructed from ths filler characters repeated one or more
+// times as specified by the 'fillerCharsRepeatCount' parameter.
+//
+// The Text Field Filler final formatted text is equal to:
+//          fillerCharacters X fillerCharsRepeatCount
+//
+//  Example #1: fillerCharacters = []rune{'-','*'}
+//              fillerRepeatCount = 3
+//              Final Text Filler Field = "-*-*-*"
+//
+//  Example #2: fillerCharacters = []rune{'-'}
+//              fillerRepeatCount = 3
+//              Final Text Filler Field = "---"
+//
+// This method returns an array of runes containing the Filler
+// Characters.
+//
+func (txtFillerField *TextFieldSpecFiller) GetFillerRunes() []rune {
+
+	if txtFillerField.lock == nil {
+		txtFillerField.lock = new(sync.Mutex)
+	}
+
+	txtFillerField.lock.Lock()
+
+	defer txtFillerField.lock.Unlock()
+
+	newRuneArray := make([]rune, 0)
+
+	sMechPreon := strMechPreon{}
+
+	err := sMechPreon.copyRuneArrays(
+		&newRuneArray,
+		&txtFillerField.fillerCharacters,
+		true,
+		nil)
+
+	if err != nil {
+		newRuneArray = nil
+	}
+
+	return newRuneArray
 }
 
 // GetFillerCharsRepeatCount - This method returns the integer
@@ -1897,7 +1971,7 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 //  fillerCharacters           []rune
 //     - A rune array containing the text characters which will be
 //       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from ths filler characters
+//       Field will be constructed from these filler characters
 //       repeated one or more times as specified by the
 //       'fillerCharsRepeatCount' parameter.
 //
