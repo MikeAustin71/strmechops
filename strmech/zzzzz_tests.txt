@@ -13,7 +13,7 @@
 === RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000100
 --- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000100 (0.00s)
 === RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200
---- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200 (0.01s)
+--- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000200 (0.00s)
 === RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300
 --- PASS: TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000300 (0.00s)
 === RUN   TestNumberSignSymbolCollection_IsLeadingNumSignAtHostIndex_000400
@@ -225,7 +225,7 @@
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000200 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300
---- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300 (0.01s)
+--- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000300 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400
 --- PASS: TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000400 (0.00s)
 === RUN   TestNumberSignSymbolDto_IsTrailingNumSignAtHostIndex_000500
@@ -1071,7 +1071,7 @@
 === RUN   TestStrMech_StrLeftJustify_04
 --- PASS: TestStrMech_StrLeftJustify_04 (0.00s)
 === RUN   TestStrMech_StrRightJustify_01
---- PASS: TestStrMech_StrRightJustify_01 (0.01s)
+--- PASS: TestStrMech_StrRightJustify_01 (0.00s)
 === RUN   TestStrMech_StrRightJustify_02
 --- PASS: TestStrMech_StrRightJustify_02 (0.00s)
 === RUN   TestStrMech_StrRightJustify_03
@@ -1099,7 +1099,7 @@
 === RUN   TestStrMech_StrPadLeftToCenter_03
 --- PASS: TestStrMech_StrPadLeftToCenter_03 (0.00s)
 === RUN   TestStrMech_StrPadLeftToCenter_04
---- PASS: TestStrMech_StrPadLeftToCenter_04 (0.01s)
+--- PASS: TestStrMech_StrPadLeftToCenter_04 (0.00s)
 === RUN   TestStrMech_StrPadLeftToCenter_05
 --- PASS: TestStrMech_StrPadLeftToCenter_05 (0.00s)
 === RUN   TestStrMech_SwapRune_01
@@ -1330,10 +1330,20 @@
 --- PASS: TestTextFieldSpecLabel_CopyOut_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOutPtr_000100
 --- PASS: TestTextFieldSpecLabel_CopyOutPtr_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_CopyOutPtr_000200
+--- PASS: TestTextFieldSpecLabel_CopyOutPtr_000200 (0.00s)
+=== RUN   TestTextFieldSpecLabel_CopyOutITextField_000100
+--- PASS: TestTextFieldSpecLabel_CopyOutITextField_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_Empty_000100
 --- PASS: TestTextFieldSpecLabel_Empty_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_EqualITextField_000100
+--- PASS: TestTextFieldSpecLabel_EqualITextField_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_GetFieldLength_000100
+--- PASS: TestTextFieldSpecLabel_GetFieldLength_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_GetTextJustification_000100
+--- PASS: TestTextFieldSpecLabel_GetTextJustification_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100
---- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100 (0.04s)
+--- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200
 --- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000100
@@ -1344,6 +1354,20 @@
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000400
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000400 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000100
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000200
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000200 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000300
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000300 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000400
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000400 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000500
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000500 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000600
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000600 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewTextTextLabelRunes_000700
+--- PASS: TestTextFieldSpecLabel_NewTextTextLabelRunes_000700 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextLabel_000100
 --- PASS: TestTextFieldSpecLabel_SetTextLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextLabel_000200
@@ -1405,5 +1429,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 49.1% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.843s
+coverage: 49.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.750s

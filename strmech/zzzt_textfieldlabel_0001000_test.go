@@ -446,9 +446,59 @@ func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecLabel_CopyOutPtr_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOutITextField_000100()",
+		"")
+
+	txtFieldLabel := TextFieldSpecLabel{}
+
+	_,
+		err := txtFieldLabel.CopyOutPtr(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtFieldLabel.CopyOutPtr()\n"+
+			"because 'txtFieldLabel' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETUNRED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOutITextField_000100()",
+		"")
+
+	txtFieldLabel := TextFieldSpecLabel{}
+
+	_,
+		err := txtFieldLabel.CopyOutITextField(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtFieldLabel.CopyOutITextField()\n"+
+			"because 'txtFieldLabel' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETUNRED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecLabel_CopyIn_000100() "
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_Empty_000100()",
+		"")
 
 	label := "12345"
 	fieldLen := 13
@@ -495,6 +545,81 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 			"to return 'false' INSTEAD, IT RETURNED 'true'!!\n",
 			ePrefix)
 	}
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	txtFieldLabelTwo.Empty()
+}
+
+func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_EqualITextField_000100()",
+		"")
+
+	txtFieldLabelOne := TextFieldSpecLabel{}
+
+	var txtFieldLabelTwo *TextFieldSpecLabel
+
+	areEqual :=
+		txtFieldLabelOne.EqualITextField(txtFieldLabelTwo)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtFieldLabelOne.EqualITextField(txtFieldLabelTwo)\n"+
+			"because 'txtFieldLabelTwo' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_GetFieldLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_GetFieldLength_000100()",
+		"")
+
+	txtFieldLabelOne := TextFieldSpecLabel{}
+
+	actualFieldLen := txtFieldLabelOne.GetFieldLength()
+
+	if actualFieldLen != 0 {
+		t.Errorf("%v\n"+
+			"Error: Expected actualFieldLen == 0 because\n"+
+			"txtFieldLabelOne is empty.\n"+
+			"HOWEVER 'actualFieldLen' IS A NON-ZERO VALUE!\n"+
+			"actualFieldLen = '%v'\n",
+			ePrefix.String(),
+			actualFieldLen)
+	}
+
+}
+
+func TestTextFieldSpecLabel_GetTextJustification_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_GetFieldLength_000100()",
+		"")
+
+	txtFieldLabelOne := TextFieldSpecLabel{}
+
+	txtJustification :=
+		txtFieldLabelOne.GetTextJustification()
+
+	if txtJustification != TxtJustify.None() {
+		t.Errorf("%v\n"+
+			"Error: Expected txtJustification == TxtJustify.None()\n"+
+			"because txtFieldLabelOne is empty.\n"+
+			"Instead, txtJustification string = '%v'\n"+
+			"  txtJustification integer value = '%v'\n",
+			ePrefix.String(),
+			txtJustification.String(),
+			txtJustification.XValueInt())
+	}
+
 }
 
 func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
@@ -939,6 +1064,238 @@ func TestTextFieldSpecLabel_NewTextLabel_000400(t *testing.T) {
 			"because 'txtJustify' ==  TxtJustify.None().\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix)
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextTextLabelRunes_000100()",
+		"")
+
+	labelTextRunes := []rune("12345")
+	fieldLen := 11
+
+	expectedOutput :=
+		strings.Repeat(" ", 6) +
+			string(labelTextRunes)
+
+	txtFieldLabel,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.Right(),
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	actualOutput := txtFieldLabel.String()
+
+	if expectedOutput != actualOutput {
+		t.Errorf("%v\n"+
+			"Error: Expected output string = '%v'\n"+
+			"         Actual output string = '%v'\n",
+			ePrefix.String(),
+			expectedOutput,
+			actualOutput)
+
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextTextLabelRunes_000200()",
+		"")
+
+	labelTextRunes := []rune("12345")
+	fieldLen := 11
+
+	expectedOutput :=
+		strings.Repeat(" ", 3) +
+			string(labelTextRunes) +
+			strings.Repeat(" ", 3)
+
+	txtFieldLabel,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.Center(),
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	actualOutput := txtFieldLabel.String()
+
+	if expectedOutput != actualOutput {
+		t.Errorf("%v\n"+
+			"Error: Expected output string = '%v'\n"+
+			"         Actual output string = '%v'\n",
+			ePrefix.String(),
+			expectedOutput,
+			actualOutput)
+
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextTextLabelRunes_000300()",
+		"")
+
+	labelTextRunes := []rune("12345")
+	fieldLen := 11
+
+	_,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.None(),
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from NewTextLabelRunes()\n"+
+			"because Text Justification was passed as 'None'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextTextLabelRunes_000400()",
+		"")
+
+	labelTextRunes := []rune("12345")
+	fieldLen := 1000001
+
+	_,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.Right(),
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from NewTextLabelRunes()\n"+
+			"because Field Length == 1,000,001\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextTextLabelRunes_000500()",
+		"")
+
+	labelTextRunes := make([]rune, 0)
+	fieldLen := 11
+
+	_,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.Right(),
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from NewTextLabelRunes()\n"+
+			"because labelTextRunes is a zero length array\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextTextLabelRunes_000600()",
+		"")
+
+	var labelTextRunes []rune
+	fieldLen := 11
+
+	_,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.Right(),
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from NewTextLabelRunes()\n"+
+			"because labelTextRunes is nil\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+
+}
+
+func TestTextFieldSpecLabel_NewTextTextLabelRunes_000700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_NewTextTextLabelRunes_000700()",
+		"")
+
+	labelTextRunes := []rune("12345")
+	fieldLen := -2
+
+	_,
+		err := TextFieldSpecLabel{}.NewTextLabelRunes(
+		labelTextRunes,
+		fieldLen,
+		TxtJustify.Right(),
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from NewTextLabelRunes()\n"+
+			"because fieldLen has a value of -2\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
 	}
 
 	return
