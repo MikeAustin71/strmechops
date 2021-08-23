@@ -1066,6 +1066,29 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_CopyOutITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_CopyOutITextField_000100()",
+		"")
+
+	fillerTxtFieldOne := TextFieldSpecFiller{}
+
+	_,
+		err := fillerTxtFieldOne.CopyOutITextField(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from fillerTxtFieldOne.CopyOutITextField()\n"+
+			"because fillerTxtFieldOne is empty!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			err.Error())
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1450,6 +1473,99 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_copyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_copyOut_000100()",
+		"")
+
+	var fillerTxtFieldSource *TextFieldSpecFiller
+
+	txtFieldFillerMolecule := textFieldSpecFillerMolecule{}
+
+	_,
+		err := txtFieldFillerMolecule.copyOut(
+		fillerTxtFieldSource,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldFillerMolecule.copyOut()\n"+
+			"because 'fillerTxtFieldSource' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecFiller_Equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_Equal_000100()",
+		"")
+
+	fillerChar := '-'
+	fillerRepeatCnt := 5
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRune(
+		fillerChar,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	isEqual := fillerTxtFieldTwo.Equal(fillerTxtFieldOne)
+
+	if isEqual == true {
+		t.Errorf("%v\n"+
+			"Error: Expected isEqual == 'false' because\n"+
+			"fillerTxtFieldTwo is empty.\n"+
+			"HOWEVER, isEqual == 'true'!!\n",
+			ePrefix)
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_CopyOut_000100()",
+		"")
+
+	var txtFieldLabel *TextFieldSpecLabel
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	isEqual :=
+		fillerTxtFieldTwo.EqualITextField(
+			txtFieldLabel)
+
+	if isEqual == true {
+		t.Errorf("%v\n"+
+			"Error: Expected isEqual == 'false' because\n"+
+			"txtFieldLabel is type TextFieldSpecLabel.\n"+
+			"HOWEVER, isEqual == 'true'!!\n",
+			ePrefix)
+
+		return
+	}
+
+	fillerTxtFieldThree := TextFieldSpecFiller{}
+
+	fillerTxtFieldThree.Empty()
+}
+
 func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecFiller_GetFormattedText_000100()"
@@ -1496,6 +1612,56 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 	}
 
 	return
+}
+func TestTextFieldSpecFiller_getFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_CopyOutPtr_000200()",
+		"")
+
+	txtFieldFillerMolecule := textFieldSpecFillerMolecule{}
+
+	var txtFillerField *TextFieldSpecFiller
+
+	_,
+		err := txtFieldFillerMolecule.getFormattedText(
+		txtFillerField,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtFieldFillerMolecule.getFormattedText()\n"+
+			"because 'txtFillerField' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+	}
+
+}
+
+func TestTextFieldSpecFiller_isValidTextFieldSpecFiller_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_isValidTextFieldSpecFiller_000100()",
+		"")
+
+	var txtFillerField *TextFieldSpecFiller
+
+	txtFieldFillerAtom := textFieldSpecFillerAtom{}
+
+	_,
+		err := txtFieldFillerAtom.isValidTextFieldSpecFiller(
+		txtFillerField,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldFillerAtom.isValidTextFieldSpecFiller()\n"+
+			"because txtFillerField is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+	}
+
 }
 
 func TestTextFieldSpecFiller_New_000100(t *testing.T) {
@@ -5818,6 +5984,30 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_newEmpty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_newEmpty_000100()",
+		"")
+
+	var txtFillerField TextFieldSpecFiller
+
+	txtFieldFillerMolecule := textFieldSpecFillerMolecule{}
+
+	txtFillerField =
+		txtFieldFillerMolecule.newEmpty()
+
+	if txtFillerField.fillerCharacters != nil {
+		t.Errorf("%v\n"+
+			"Error: txtFillerField.fillerCharacters IS NOT EQUAL to nil\n"+
+			"txtFillerField.fillerCharacters = '%v'\n",
+			ePrefix.String(),
+			string(txtFillerField.fillerCharacters))
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -6075,6 +6265,42 @@ func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000200()",
+		"")
+
+	fillerTxtFieldOne := TextFieldSpecFiller{}
+
+	newFillerCharsRepeatCnt := fillerTxtFieldOne.GetFillerCharsRepeatCount()
+
+	if newFillerCharsRepeatCnt != 0 {
+		t.Errorf("%v\n"+
+			"Error: Expected newFillerCharsRepeatCnt== 0\n"+
+			"However:       newFillerCharsRepeatCnt == %v\n",
+			ePrefix.String(),
+			newFillerCharsRepeatCnt)
+
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	newFillerChars := fillerTxtFieldTwo.GetFillerChars()
+
+	if len(newFillerChars) != 0 {
+		t.Errorf("%v\n"+
+			"Error: Expected len(newFillerChars) == 0\n"+
+			"However:        len(newFillerChars) == %v\n",
+			ePrefix.String(),
+			len(newFillerChars))
+
+		return
+	}
+
 }
 
 func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
