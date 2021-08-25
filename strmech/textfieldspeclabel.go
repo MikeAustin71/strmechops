@@ -756,6 +756,35 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextLabel() string {
 	return string(txtFieldLabel.textLabel)
 }
 
+// GetTextLabelRunes - Returns an array of rune characters representing
+// the un-formatted text label associated with the current instance of TextFieldSpecLabel.
+//
+func (txtFieldLabel *TextFieldSpecLabel) GetTextLabelRunes() []rune {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var newTextLabelRunes []rune
+
+	err :=
+		strMechPreon{}.ptr().copyRuneArrays(
+			&newTextLabelRunes,
+			&txtFieldLabel.textLabel,
+			true,
+			nil)
+
+	if err != nil {
+		return nil
+	}
+
+	return newTextLabelRunes
+}
+
 // IsValidInstance - Performs a diagnostic review of the data
 // values encapsulated in the current TextFieldSpecLabel instance
 // to determine if they are valid.
@@ -1900,25 +1929,14 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 		return err
 	}
 
-	if fieldLen < -1 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLen' is invalid!\n"+
-			"The value of 'fieldLen' is less than minus one (-1)\n"+
-			"fieldLen= '%v'\n",
-			ePrefix.String(),
-			fieldLen)
+	err =
+		textFieldSpecLabelElectron{}.ptr().
+			isFieldLengthValid(
+				fieldLen,
+				ePrefix.XCtx(
+					"fieldLen Invalid!"))
 
-		return err
-	}
-
-	if fieldLen > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLen' is invalid!\n"+
-			"The value of 'fieldLen' is greater than one-million (1,000,000)\n"+
-			"fieldLen= '%v'\n",
-			ePrefix.String(),
-			fieldLen)
-
+	if err != nil {
 		return err
 	}
 
