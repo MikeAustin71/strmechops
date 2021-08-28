@@ -2445,6 +2445,60 @@ func TestTextFieldSpecLabel_SetTextLabel_000500(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecLabel_setTextLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetText_000100()",
+		"")
+
+	txtFieldLabelNanobot := textFieldSpecLabelNanobot{}
+
+	textLabel := []rune("12345")
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	err :=
+		txtFieldLabelNanobot.setTextFieldLabel(
+			nil,
+			textLabel,
+			fieldLen,
+			txtJustify,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelNanobot.setTextFieldLabel()\n"+
+			"because 'textFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	textFieldLabel := TextFieldSpecLabel{}
+
+	textLabel = []rune{'H', 'e', 'l', 0, 'l', 'o'}
+
+	err =
+		txtFieldLabelNanobot.setTextFieldLabel(
+			&textFieldLabel,
+			textLabel,
+			fieldLen,
+			txtJustify,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelNanobot.setTextFieldLabel()\n"+
+			"because 'textLabel' contains a rune with a zero value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_TestTextFieldSpecLabel_SetTextLabelRunes_000100() "
