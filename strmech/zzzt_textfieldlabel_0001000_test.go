@@ -994,6 +994,7 @@ func TestTextFieldSpecLabel_GetTextLabelRunes_000200(t *testing.T) {
 	}
 
 }
+
 func TestTextFieldSpecLabel_isValidTextFieldLabel_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1064,6 +1065,52 @@ func TestTextFieldSpecLabel_isValidTextFieldLabel_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Expected an error return from txtFieldLabelAtom.isValidTextFieldLabel()\n"+
 			"because 'txtFieldLabelOne' text justification = 'NONE'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecLabel_isTextLabelValid_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_isTextLabelValid_000100()",
+		"")
+
+	textLabel := make([]rune, 0)
+
+	txtFieldLabelElectron := textFieldSpecLabelElectron{}
+
+	_,
+		err :=
+		txtFieldLabelElectron.isTextLabelValid(
+			textLabel,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelElectron.isTextLabelValid()\n"+
+			"because 'textLabel' is an empty rune array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	textLabel = []rune{'H', 'e', 0, 'l', 'l', 'o'}
+
+	_,
+		err =
+		txtFieldLabelElectron.isTextLabelValid(
+			textLabel,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelElectron.isTextLabelValid()\n"+
+			"because 'textLabel' contains a rune with a zero value.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
@@ -3290,4 +3337,29 @@ func TestTextFieldSpecLabel_TextTypeName_0001000(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextFieldSpecLabel_textFieldSpecLabelElectron_000100(t *testing.T) {
+	// Edge Cases
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_textFieldSpecLabelElectron_000100()",
+		"")
+
+	txtFieldLabelElectron1 := textFieldSpecLabelElectron{}
+
+	_ =
+		txtFieldLabelElectron1.isFieldLengthValid(
+			37,
+			&ePrefix)
+
+	txtFieldLabelElectron2 := textFieldSpecLabelElectron{}
+
+	_ =
+		txtFieldLabelElectron2.isTextJustificationValid(
+			[]rune("Hello"),
+			25,
+			TxtJustify.Right(),
+			&ePrefix)
+
 }

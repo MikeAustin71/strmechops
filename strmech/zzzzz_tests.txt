@@ -1207,7 +1207,7 @@
 === RUN   TestTextFieldSpecFiller_CopyIn_000100
 --- PASS: TestTextFieldSpecFiller_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyIn_000200
---- PASS: TestTextFieldSpecFiller_CopyIn_000200 (0.00s)
+--- PASS: TestTextFieldSpecFiller_CopyIn_000200 (0.01s)
 === RUN   TestTextFieldSpecFiller_CopyIn_000300
 --- PASS: TestTextFieldSpecFiller_CopyIn_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_copyIn_000100
@@ -1271,9 +1271,9 @@
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200
 --- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300
---- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300 (0.00s)
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300 (0.01s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000100
---- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.01s)
+--- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000200
 --- PASS: TestTextFieldSpecFiller_NewTextFiller_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000300
@@ -1341,7 +1341,7 @@
 === RUN   TestTextFieldSpecLabel_Empty_000100
 --- PASS: TestTextFieldSpecLabel_Empty_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_equal_000100
---- PASS: TestTextFieldSpecLabel_equal_000100 (0.01s)
+--- PASS: TestTextFieldSpecLabel_equal_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_EqualITextField_000100
 --- PASS: TestTextFieldSpecLabel_EqualITextField_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_empty_000100
@@ -1362,6 +1362,8 @@
 --- PASS: TestTextFieldSpecLabel_GetTextLabelRunes_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_isValidTextFieldLabel_000100
 --- PASS: TestTextFieldSpecLabel_isValidTextFieldLabel_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_isTextLabelValid_000100
+--- PASS: TestTextFieldSpecLabel_isTextLabelValid_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100
 --- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200
@@ -1434,6 +1436,8 @@
 --- PASS: TestTextFieldSpecLabel_TextFieldName_0001000 (0.00s)
 === RUN   TestTextFieldSpecLabel_TextTypeName_0001000
 --- PASS: TestTextFieldSpecLabel_TextTypeName_0001000 (0.00s)
+=== RUN   TestTextFieldSpecLabel_textFieldSpecLabelElectron_000100
+--- PASS: TestTextFieldSpecLabel_textFieldSpecLabelElectron_000100 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_01
 --- PASS: TestStrOpsTextJustify_ParseString_01 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_02
@@ -1469,5 +1473,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 50.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.473s
+coverage: 50.7% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.549s
