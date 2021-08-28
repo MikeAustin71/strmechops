@@ -2270,133 +2270,6 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 	return err
 }
 
-// SetTextRunes - Sets the text characters which will be used as
-// the text label for this instance of TextFieldSpecLabel.
-//
-// When the text label is formatted for output, the existing field
-// length, and text justification parameters will be applied.
-//
-// This method is identical to TextFieldSpecLabel.SetText()
-// with the sole difference being that this method receives an
-// array of runes as an input parameter.
-//
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters
-//
-//  textLabelChars             []rune
-//     - An array of runes or text characters which is used to
-//       generate string content for display as a text label.
-//
-//       If this parameter is submitted as a zero length array,
-//       an error will be returned.
-//
-//       If this parameter is submitted with invalid zero character
-//       values, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
-	textLabelChars []rune,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if txtFieldLabel.lock == nil {
-		txtFieldLabel.lock = new(sync.Mutex)
-	}
-
-	txtFieldLabel.lock.Lock()
-
-	defer txtFieldLabel.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errPrefDto,
-		"TextFieldSpecLabel.SetTextRunes()",
-		"")
-
-	sMechPreon := strMechPreon{}
-	_,
-		err = sMechPreon.testValidityOfRuneCharArray(
-		textLabelChars,
-		ePrefix.XCtx("textLabelChars"))
-
-	if err != nil {
-		return err
-	}
-
-	err = sMechPreon.copyRuneArrays(
-		&txtFieldLabel.textLabel,
-		&textLabelChars,
-		true,
-		ePrefix.XCtx(
-			"textLabelChars->txtFieldLabel.textLabel"))
-
-	return err
-}
-
 // SetTextLabel - Sets the text label component values for the
 // current instance of TextFieldSpecLabel.
 //
@@ -2770,6 +2643,133 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 			fieldLen,
 			textJustification,
 			ePrefix)
+}
+
+// SetTextRunes - Sets the text characters which will be used as
+// the text label for this instance of TextFieldSpecLabel.
+//
+// When the text label is formatted for output, the existing field
+// length, and text justification parameters will be applied.
+//
+// This method is identical to TextFieldSpecLabel.SetText()
+// with the sole difference being that this method receives an
+// array of runes as an input parameter.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLabelChars             []rune
+//     - An array of runes or text characters which is used to
+//       generate string content for display as a text label.
+//
+//       If this parameter is submitted as a zero length array,
+//       an error will be returned.
+//
+//       If this parameter is submitted with invalid zero character
+//       values, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
+	textLabelChars []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		"TextFieldSpecLabel.SetTextRunes()",
+		"")
+
+	sMechPreon := strMechPreon{}
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		textLabelChars,
+		ePrefix.XCtx("textLabelChars"))
+
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
+		&txtFieldLabel.textLabel,
+		&textLabelChars,
+		true,
+		ePrefix.XCtx(
+			"textLabelChars->txtFieldLabel.textLabel"))
+
+	return err
 }
 
 // String - Returns the formatted text generated by the

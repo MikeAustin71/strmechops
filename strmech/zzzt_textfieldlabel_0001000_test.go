@@ -1667,6 +1667,132 @@ func TestTextFieldSpecLabel_SetText_000200(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetTextJustification_000100()",
+		"")
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	expectedTextLabel :=
+		strings.Repeat(" ", 4) +
+			label +
+			strings.Repeat(" ", 4)
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabel := txtFieldLabelOne.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v Test #1\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+
+		return
+	}
+
+	txtJustify = TxtJustify.Left()
+
+	expectedTextLabel =
+		label +
+			strings.Repeat(" ", 8)
+
+	err =
+		txtFieldLabelOne.SetTextJustification(
+			txtJustify,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n Test #2",
+			err.Error())
+		return
+	}
+
+	actualLabel = txtFieldLabelOne.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+		return
+	}
+
+	txtJustify = TxtJustify.Right()
+
+	expectedTextLabel =
+		strings.Repeat(" ", 8) +
+			label
+
+	err =
+		txtFieldLabelOne.SetTextJustification(
+			txtJustify,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v Test #3\n",
+			err.Error())
+		return
+	}
+
+	actualLabel = txtFieldLabelOne.GetFormattedText()
+
+	if expectedTextLabel != actualLabel {
+		t.Errorf("%v Test #3\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedTextLabel,
+			actualLabel)
+		return
+	}
+
+}
+
+func TestTextFieldSpecLabel_SetTextJustification_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetTextJustification_000200()",
+		"")
+
+	txtLabelOne := TextFieldSpecLabel{}
+
+	err :=
+		txtLabelOne.SetTextJustification(
+			TxtJustify.None(),
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtLabelOne.SetTextJustification()\n"+
+			"because input justification = TxtJustify.None() .\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_SetTextLabel_000100() "
@@ -2551,6 +2677,142 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000600(t *testing.T) {
 			ePrefix,
 			txtFieldLabelOne.GetTextLabel(),
 			txtFieldLabelTwo.GetTextLabel())
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetTextRunes_000100()",
+		"")
+
+	expectedLabel := "67890"
+
+	initialLabel := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+		initialLabel,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabel := txtFieldLabelOne.GetTextLabel()
+
+	if actualLabel != initialLabel {
+		t.Errorf("%v Test #1\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			initialLabel,
+			actualLabel)
+
+		return
+	}
+
+	err =
+		txtFieldLabelOne.SetTextRunes(
+			[]rune(expectedLabel),
+			&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabel = txtFieldLabelOne.GetTextLabel()
+
+	if actualLabel != expectedLabel {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedLabel,
+			actualLabel)
+
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_SetTextRunes_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetTextRunes_000200()",
+		"")
+
+	txtLabelOne := TextFieldSpecLabel{}
+
+	var txtRunes []rune
+
+	err :=
+		txtLabelOne.SetTextRunes(
+			txtRunes,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtLabelOne.SetText()\n"+
+			"because the input label is an empty rune array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLabelTwo := TextFieldSpecLabel{}
+
+	expectedLabel := "12345"
+
+	err =
+		txtLabelTwo.SetTextRunes(
+			[]rune(expectedLabel),
+			&ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabel := txtLabelTwo.GetTextLabel()
+
+	if expectedLabel != actualLabel {
+		t.Errorf("%v Test #1\n"+
+			"Error: Expected Label = '%v'\n"+
+			"Instead, Actual Label = '%v'\n",
+			ePrefix,
+			expectedLabel,
+			actualLabel)
+
+		return
+	}
+
+	badLabel := []rune{'6', '7', 0, '8', '9'}
+
+	err =
+		txtLabelTwo.SetTextRunes(
+			badLabel,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtLabelOne.SetText()\n"+
+			"because the input label rune array contains a zero element value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
 	}
 
 	return
