@@ -427,3 +427,41 @@ func (txtFieldSpacer *TextFieldSpecSpacer) SetFieldLen(
 
 	return err
 }
+
+// TextFieldName - returns a string specifying the name of the Text
+// Field specification.
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
+func (txtFieldSpacer *TextFieldSpecSpacer) TextFieldName() string {
+
+	if txtFieldSpacer.lock == nil {
+		txtFieldSpacer.lock = new(sync.Mutex)
+	}
+
+	txtFieldSpacer.lock.Lock()
+
+	defer txtFieldSpacer.lock.Unlock()
+
+	return "TextFieldSpecSpacer"
+}
+
+// TextTypeName - returns a string specifying the type of Text
+// Field specification.
+//
+// This method fulfills the requirements of the ITextSpecification
+// interface.
+//
+func (txtFieldSpacer *TextFieldSpecSpacer) TextTypeName() string {
+
+	if txtFieldSpacer.lock == nil {
+		txtFieldSpacer.lock = new(sync.Mutex)
+	}
+
+	txtFieldSpacer.lock.Lock()
+
+	defer txtFieldSpacer.lock.Unlock()
+
+	return "TextFieldSpecSpacer"
+}
