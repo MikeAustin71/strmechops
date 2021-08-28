@@ -114,7 +114,6 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 
 		return err
 	}
-
 	_,
 		err = textFieldSpecLabelAtom{}.ptr().
 		isValidTextFieldLabel(

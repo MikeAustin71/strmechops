@@ -120,6 +120,85 @@ func TestTextFieldSpecLabel_CopyIn_000200(t *testing.T) {
 
 }
 
+func TestTextFieldSpecLabel_copyIn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_copyIn_000100()",
+		"")
+
+	txtFieldLabelMolecule := textFieldSpecLabelMolecule{}
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtFieldLabelMolecule.copyIn(
+			txtFieldLabelOne,
+			nil,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelMolecule.copyIn()\n"+
+			"because 'incomingTxtFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err =
+		txtFieldLabelMolecule.copyIn(
+			nil,
+			txtFieldLabelOne,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelMolecule.copyIn()\n"+
+			"because 'targetTxtFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldLabelOne.textLabel = nil
+
+	txtFieldLabelTwo := TextFieldSpecLabel{}
+
+	err =
+		txtFieldLabelMolecule.copyIn(
+			&txtFieldLabelTwo,
+			txtFieldLabelOne,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelMolecule.copyIn()\n"+
+			"because 'targetTxtFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_CopyOut_000100() "
@@ -300,6 +379,49 @@ func TestTextFieldSpecLabel_CopyOut_000300(t *testing.T) {
 			"because txtFieldLabelOne is an invalid Text Field Label.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix)
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecLabel_copyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_copyOut_000100()",
+		"")
+
+	labelRunes := []rune("12345")
+	fieldLen := 14
+	txtJustify := TxtJustify.Left()
+
+	_,
+		err := TextFieldSpecLabel{}.NewPtrTextLabelRunes(
+		labelRunes,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelMolecule := textFieldSpecLabelMolecule{}
+
+	_,
+		err =
+		txtFieldLabelMolecule.copyOut(
+			nil,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelMolecule.copyIn()\n"+
+			"because 'txtFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
 
 		return
 	}
@@ -551,6 +673,127 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 	txtFieldLabelTwo.Empty()
 }
 
+func TestTextFieldSpecLabel_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_equal_000100()",
+		"")
+
+	labelRunes := []rune("12345")
+	fieldLen := 14
+	txtJustify := TxtJustify.Left()
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabelRunes(
+		labelRunes,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelMolecule := textFieldSpecLabelMolecule{}
+
+	result :=
+		txtFieldLabelMolecule.equal(
+			txtFieldLabelOne,
+			nil)
+
+	if result == true {
+		t.Errorf("%v Test #1\n"+
+			"Error: Expected result = 'false'\n"+
+			"Instead, result = 'true'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	result =
+		txtFieldLabelMolecule.equal(
+			nil,
+			txtFieldLabelOne)
+
+	if result == true {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected result = 'false'\n"+
+			"Instead, result = 'true'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	labelRunes = []rune("67890")
+	fieldLen = 20
+	txtJustify = TxtJustify.Right()
+
+	var txtFieldLabelTwo *TextFieldSpecLabel
+
+	txtFieldLabelTwo,
+		err = TextFieldSpecLabel{}.NewPtrTextLabelRunes(
+		labelRunes,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	result =
+		txtFieldLabelMolecule.equal(
+			txtFieldLabelTwo,
+			txtFieldLabelOne)
+
+	if result == true {
+		t.Errorf("%v Test #3\n"+
+			"Error: Expected result = 'false'\n"+
+			"Instead, result = 'true'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	labelRunes = []rune("12345")
+	fieldLen = 19
+	txtJustify = TxtJustify.Left()
+
+	var txtFieldLabelThree *TextFieldSpecLabel
+
+	txtFieldLabelThree,
+		err = TextFieldSpecLabel{}.NewPtrTextLabelRunes(
+		labelRunes,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	result =
+		txtFieldLabelMolecule.equal(
+			txtFieldLabelThree,
+			txtFieldLabelOne)
+
+	if result == true {
+		t.Errorf("%v Test #4\n"+
+			"Error: Expected result = 'false'\n"+
+			"Instead, result = 'true'\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -574,6 +817,13 @@ func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextFieldSpecLabel_empty_000100(t *testing.T) {
+
+	txtFieldLabelMolecule := textFieldSpecLabelMolecule{}
+
+	txtFieldLabelMolecule.empty(nil)
 }
 
 func TestTextFieldSpecLabel_EqualITextField_000200(t *testing.T) {
@@ -741,6 +991,83 @@ func TestTextFieldSpecLabel_GetTextLabelRunes_000200(t *testing.T) {
 			ePrefix.String(),
 			string(expectedLabelRunes),
 			string(actualRuneArray))
+	}
+
+}
+func TestTextFieldSpecLabel_isValidTextFieldLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_isValidTextFieldLabel_000100()",
+		"")
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelAtom := textFieldSpecLabelAtom{}
+
+	_,
+		err = txtFieldLabelAtom.isValidTextFieldLabel(
+		nil,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelAtom.isValidTextFieldLabel()\n"+
+			"because 'txtFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldLabelOne.fieldLen = -99
+
+	_,
+		err = txtFieldLabelAtom.isValidTextFieldLabel(
+		txtFieldLabelOne,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelAtom.isValidTextFieldLabel()\n"+
+			"because 'txtFieldLabelOne' field length = -99.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldLabelOne.fieldLen = 13
+
+	txtFieldLabelOne.textJustification = TxtJustify.None()
+
+	_,
+		err = txtFieldLabelAtom.isValidTextFieldLabel(
+		txtFieldLabelOne,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldLabelAtom.isValidTextFieldLabel()\n"+
+			"because 'txtFieldLabelOne' text justification = 'NONE'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
 	}
 
 }

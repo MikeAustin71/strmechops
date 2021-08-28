@@ -2752,6 +2752,10 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 		"TextFieldSpecLabel.SetTextRunes()",
 		"")
 
+	if err != nil {
+		return err
+	}
+
 	sMechPreon := strMechPreon{}
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(

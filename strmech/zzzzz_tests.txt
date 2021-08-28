@@ -1273,7 +1273,7 @@
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300
 --- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000100
---- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.00s)
+--- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.01s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000200
 --- PASS: TestTextFieldSpecFiller_NewTextFiller_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000300
@@ -1307,7 +1307,7 @@
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000100
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000200
---- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000200 (0.00s)
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000200 (0.01s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000300
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFiller_000100
@@ -1322,12 +1322,16 @@
 --- PASS: TestTextFieldSpecLabel_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyIn_000200
 --- PASS: TestTextFieldSpecLabel_CopyIn_000200 (0.00s)
+=== RUN   TestTextFieldSpecLabel_copyIn_000100
+--- PASS: TestTextFieldSpecLabel_copyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000100
 --- PASS: TestTextFieldSpecLabel_CopyOut_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000200
 --- PASS: TestTextFieldSpecLabel_CopyOut_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000300
 --- PASS: TestTextFieldSpecLabel_CopyOut_000300 (0.00s)
+=== RUN   TestTextFieldSpecLabel_copyOut_000100
+--- PASS: TestTextFieldSpecLabel_copyOut_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOutPtr_000100
 --- PASS: TestTextFieldSpecLabel_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOutPtr_000200
@@ -1336,8 +1340,12 @@
 --- PASS: TestTextFieldSpecLabel_CopyOutITextField_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_Empty_000100
 --- PASS: TestTextFieldSpecLabel_Empty_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_equal_000100
+--- PASS: TestTextFieldSpecLabel_equal_000100 (0.01s)
 === RUN   TestTextFieldSpecLabel_EqualITextField_000100
 --- PASS: TestTextFieldSpecLabel_EqualITextField_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_empty_000100
+--- PASS: TestTextFieldSpecLabel_empty_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_EqualITextField_000200
 --- PASS: TestTextFieldSpecLabel_EqualITextField_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_EqualITextField_000300
@@ -1352,10 +1360,12 @@
 --- PASS: TestTextFieldSpecLabel_GetTextLabelRunes_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_GetTextLabelRunes_000200
 --- PASS: TestTextFieldSpecLabel_GetTextLabelRunes_000200 (0.00s)
+=== RUN   TestTextFieldSpecLabel_isValidTextFieldLabel_000100
+--- PASS: TestTextFieldSpecLabel_isValidTextFieldLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100
 --- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200
---- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200 (0.01s)
+--- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000100
 --- PASS: TestTextFieldSpecLabel_NewTextLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewTextLabel_000200
@@ -1415,7 +1425,7 @@
 === RUN   TestTextFieldSpecLabel_SetTextLabelRunes_000600
 --- PASS: TestTextFieldSpecLabel_SetTextLabelRunes_000600 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextRunes_000100
---- PASS: TestTextFieldSpecLabel_SetTextRunes_000100 (0.00s)
+--- PASS: TestTextFieldSpecLabel_SetTextRunes_000100 (0.01s)
 === RUN   TestTextFieldSpecLabel_SetTextRunes_000200
 --- PASS: TestTextFieldSpecLabel_SetTextRunes_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_String_000100
@@ -1459,5 +1469,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 50.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.399s
+coverage: 50.6% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.473s
