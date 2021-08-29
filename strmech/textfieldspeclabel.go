@@ -540,8 +540,8 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr(
 	return &newTxtFieldLabel, err
 }
 
-// Empty - Resets all internal member variables to their initial
-// or zero states.
+// Empty - Resets all internal member variables for the current
+// instance of TextFieldSpecLabel to their initial or zero states.
 //
 func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 
