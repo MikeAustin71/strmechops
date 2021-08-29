@@ -111,6 +111,9 @@ type TextFieldSpecFiller struct {
 //       will be copied to current TextFieldSpecFiller
 //       instance ('txtFillerField').
 //
+//       If parameter 'incomingTxtFieldFiller' is determined to be
+//       invalid, an error will be returned.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is

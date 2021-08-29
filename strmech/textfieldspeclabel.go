@@ -100,6 +100,9 @@ type TextFieldSpecLabel struct {
 //       will be copied to current TextFieldSpecLabel
 //       instance ('txtFieldLabel').
 //
+//       If parameter 'incomingTxtFieldLabel' is determined to be
+//       invalid, an error will be returned.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
