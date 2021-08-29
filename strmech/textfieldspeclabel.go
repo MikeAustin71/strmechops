@@ -199,6 +199,9 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 // CopyOut - Returns a deep copy of the current TextFieldSpecLabel
 // instance.
 //
+// If the current TextFieldSpecLabel instance is invalid, an error
+// will be returned.
+//
 //
 // ----------------------------------------------------------------
 //
