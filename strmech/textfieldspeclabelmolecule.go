@@ -25,7 +25,7 @@ type textFieldSpecLabelMolecule struct {
 // Input Parameters
 //
 //  targetTxtFieldLabel        *TextFieldSpecLabel
-//     - A pointer to a TextFieldSpecLabel instance. All of the
+//     - A pointer to a TextFieldSpecLabel instance. All the
 //       member variable data fields in this object will be
 //       replaced by data values extracted from input parameter
 //       'incomingTxtFieldLabel'.
@@ -35,13 +35,16 @@ type textFieldSpecLabelMolecule struct {
 //
 //
 //  incomingTxtFieldLabel      *TextFieldSpecLabel
-//     - A pointer to a another TextFieldSpecLabel instance. All
-//       of the member variable data values from this object will
+//     - A pointer to another TextFieldSpecLabel instance. All
+//       the member variable data values from this object will
 //       be copied to corresponding member variables in
 //       'targetTxtFieldLabel'.
 //
 //       'incomingTxtFieldLabel' is the source for this copy
 //       operation.
+//
+//       If 'incomingTxtFieldLabel' is determined to be invalid,
+//       an error will be returned.
 //
 //
 //  errPrefDto          *ePref.ErrPrefixDto
@@ -114,6 +117,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 
 		return err
 	}
+
 	_,
 		err = textFieldSpecLabelAtom{}.ptr().
 		isValidTextFieldLabel(
@@ -265,13 +269,13 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 }
 
 // empty - Receives a pointer to an instance of TextFieldSpecLabel
-// and proceeds to set all of the internal member variables to
+// and proceeds to set all the internal member variables to
 // their uninitialized or zero states.
 //
 // IMPORTANT
 // ----------------------------------------------------------------
 // The values of all member variables contained in input parameter
-// 'txtFieldLabel' will be overwritten and deleted.
+// 'txtFieldLabel' will be overwritten and replaced.
 //
 func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 	txtFieldLabel *TextFieldSpecLabel) {

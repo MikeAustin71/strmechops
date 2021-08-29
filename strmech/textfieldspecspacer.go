@@ -153,9 +153,9 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewPtrSpacer(
 		return &newTextSpacer, err
 	}
 
-	_,
-		err = textFieldSpecSpacerElectron{}.ptr().
-		isFieldLenValidError(
+	err = textFieldSpecSpacerNanobot{}.ptr().
+		setTextFieldSpacer(
+			&newTextSpacer,
 			fieldLen,
 			ePrefix.XCtx("fieldLen invalid"))
 
@@ -163,8 +163,6 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewPtrSpacer(
 
 		return &newTextSpacer, err
 	}
-
-	newTextSpacer.fieldLen = fieldLen
 
 	return &newTextSpacer, err
 }
@@ -287,18 +285,11 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewSpacer(
 		return newTextSpacer, err
 	}
 
-	_,
-		err = textFieldSpecSpacerElectron{}.ptr().
-		isFieldLenValidError(
+	err = textFieldSpecSpacerNanobot{}.ptr().
+		setTextFieldSpacer(
+			&newTextSpacer,
 			fieldLen,
 			ePrefix.XCtx("fieldLen invalid"))
-
-	if err != nil {
-
-		return newTextSpacer, err
-	}
-
-	newTextSpacer.fieldLen = fieldLen
 
 	return newTextSpacer, err
 }
@@ -412,18 +403,11 @@ func (txtFieldSpacer *TextFieldSpecSpacer) SetFieldLen(
 		return err
 	}
 
-	_,
-		err = textFieldSpecSpacerElectron{}.ptr().
-		isFieldLenValidError(
+	err = textFieldSpecSpacerNanobot{}.ptr().
+		setTextFieldSpacer(
+			txtFieldSpacer,
 			fieldLen,
-			ePrefix.XCtx("fieldLen invalid"))
-
-	if err != nil {
-
-		return err
-	}
-
-	txtFieldSpacer.fieldLen = fieldLen
+			ePrefix)
 
 	return err
 }
