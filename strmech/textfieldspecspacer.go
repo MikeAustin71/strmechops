@@ -526,6 +526,34 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Empty() {
 	return
 }
 
+// Equal - Receives a pointer to another instance of
+// TextFieldSpecSpacer and proceeds to compare the member variables
+// to those of the current TextFieldSpecSpacer instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables are equal in all respects,
+// this flag is set to 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (txtFieldSpacer *TextFieldSpecSpacer) Equal(
+	incomingTxtFieldSpacer *TextFieldSpecSpacer) bool {
+
+	if txtFieldSpacer.lock == nil {
+		txtFieldSpacer.lock = new(sync.Mutex)
+	}
+
+	txtFieldSpacer.lock.Lock()
+
+	defer txtFieldSpacer.lock.Unlock()
+
+	return textFieldSpecSpacerNanobot{}.ptr().
+		equal(
+			txtFieldSpacer,
+			incomingTxtFieldSpacer)
+
+}
+
 // EqualITextField - Receives an object implementing the
 // ITextFieldSpecification interface and proceeds to compare
 // the member variables to those of the current TextFieldSpecSpacer
