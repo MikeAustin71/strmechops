@@ -942,8 +942,8 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 }
 
 // NewEmpty - Returns a pointer to a new, empty instance of
-// TextFieldSpecLabel. The member variables of this returned
-// instance will all be set to their native zero values.
+// TextFieldSpecLabel. The member variables encapsulated in this
+// returned instance will all be set to their native zero values.
 //
 func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 

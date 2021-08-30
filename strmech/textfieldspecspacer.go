@@ -837,6 +837,23 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 	return err
 }
 
+// NewEmpty - Returns a pointer to a new, empty instance of
+// TextFieldSpecSpacer. The member variables encapsulated in this
+// returned instance will all be set to their native zero values.
+//
+func (txtFieldSpacer TextFieldSpecSpacer) NewEmpty() *TextFieldSpecSpacer {
+
+	if txtFieldSpacer.lock == nil {
+		txtFieldSpacer.lock = new(sync.Mutex)
+	}
+
+	txtFieldSpacer.lock.Lock()
+
+	defer txtFieldSpacer.lock.Unlock()
+
+	return &TextFieldSpecSpacer{}
+}
+
 // NewPtrSpacer - Creates and returns a pointer to a new instance
 // of TextFieldSpecSpacer.
 //
