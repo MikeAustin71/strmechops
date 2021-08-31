@@ -824,3 +824,99 @@ func TestTextFieldSpecSpacer_Equal_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextFieldSpecSpacer_EqualITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_Equal_000100()",
+		"")
+
+	var txtFieldSpacerOne TextFieldSpecSpacer
+	var err error
+
+	expectedFieldLen := 4
+
+	txtFieldSpacerOne,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldSpacerTwo := TextFieldSpecSpacer{}
+
+	areEqual := txtFieldSpacerTwo.EqualITextField(
+		nil)
+
+	if areEqual == true {
+		t.Errorf("%v Test #1\n"+
+			"Error: areEqual should be 'false'\n"+
+			"because 'txtFieldSpacerTwo' is empty!\n"+
+			"are equal. HOWEVER, THE RETURN VALUE IS 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFiller := TextFieldSpecFiller{}
+
+	areEqual = txtFieldSpacerOne.EqualITextField(
+		&txtFiller)
+
+	if areEqual == true {
+		t.Errorf("%v Test #2\n"+
+			"Error: areEqual should be 'false'\n"+
+			"because 'txtFiller' is of type 'TextFieldSpecFiller'!\n"+
+			"are equal. HOWEVER, THE RETURN VALUE IS 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldSpacerTwo,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual = txtFieldSpacerOne.EqualITextField(
+		&txtFieldSpacerTwo)
+
+	if areEqual == false {
+		t.Errorf("%v Test #2\n"+
+			"Error: areEqual should be 'true'\n"+
+			"because 'txtFieldSpacerOne' and 'txtFieldSpacerTwo'\n"+
+			"are equal. HOWEVER, THE RETURN VALUE IS 'false'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldSpacerTwo.fieldLen = 42
+
+	areEqual = txtFieldSpacerOne.EqualITextField(
+		&txtFieldSpacerTwo)
+
+	if areEqual == true {
+		t.Errorf("%v Test #3\n"+
+			"Error: areEqual should be 'false'\n"+
+			"because 'txtFieldSpacerOne' and 'txtFieldSpacerTwo'\n"+
+			"are NOT equal. HOWEVER, THE RETURN VALUE IS 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
