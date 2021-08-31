@@ -1427,7 +1427,7 @@
 === RUN   TestTextFieldSpecLabel_SetTextLabelRunes_000500
 --- PASS: TestTextFieldSpecLabel_SetTextLabelRunes_000500 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextLabelRunes_000600
---- PASS: TestTextFieldSpecLabel_SetTextLabelRunes_000600 (0.00s)
+--- PASS: TestTextFieldSpecLabel_SetTextLabelRunes_000600 (0.01s)
 === RUN   TestTextFieldSpecLabel_SetTextRunes_000100
 --- PASS: TestTextFieldSpecLabel_SetTextRunes_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextRunes_000200
@@ -1450,6 +1450,12 @@
 --- PASS: TestTextFieldSpecSpacer_CopyOut_000200 (0.00s)
 === RUN   TestTextFieldSpecSpacer_CopyOutITextField_000100
 --- PASS: TestTextFieldSpecSpacer_CopyOutITextField_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_CopyOutPtr_000100
+--- PASS: TestTextFieldSpecSpacer_CopyOutPtr_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_empty_000100
+--- PASS: TestTextFieldSpecSpacer_empty_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_Empty_000100
+--- PASS: TestTextFieldSpecSpacer_Empty_000100 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_01
 --- PASS: TestStrOpsTextJustify_ParseString_01 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_02
@@ -1485,5 +1491,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 51.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.368s
+coverage: 51.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.363s
