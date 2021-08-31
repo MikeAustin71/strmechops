@@ -662,3 +662,165 @@ func TestTextFieldSpecSpacer_Empty_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextFieldSpecSpacer_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_Empty_000100()",
+		"")
+
+	expectedFieldLen := 14
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSpacerNanobot := textFieldSpecSpacerNanobot{}
+
+	areEqual :=
+		txtSpacerNanobot.equal(
+			nil,
+			&txtFieldSpacerOne)
+
+	if areEqual == true {
+		t.Errorf("%v Test #1\n"+
+			"Error: areEqual should be 'false'"+
+			"because 'txtFieldSpacer' is 'nil'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtSpacerNanobot2 := textFieldSpecSpacerNanobot{}
+
+	areEqual =
+		txtSpacerNanobot2.equal(
+			&txtFieldSpacerOne,
+			nil)
+
+	if areEqual == true {
+		t.Errorf("%v Test #1\n"+
+			"Error: areEqual should be 'false'"+
+			"because 'txtFieldSpacer' is 'nil'\n"+
+			"HOWEVER, THE RETURN VALUE IS 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	expectedFieldLen = 37
+	var txtFieldSpacerThree *TextFieldSpecSpacer
+
+	txtFieldSpacerThree,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual =
+		txtSpacerNanobot2.equal(
+			&txtFieldSpacerOne,
+			txtFieldSpacerThree)
+
+	if areEqual == true {
+		t.Errorf("%v Test #2\n"+
+			"Error: areEqual should be 'false'"+
+			"because 'txtFieldSpacerOne' and 'txtFieldSpacerThree'\n"+
+			"are not equal\n"+
+			"HOWEVER, THE RETURN VALUE IS 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtFieldSpacerFour *TextFieldSpecSpacer
+
+	txtFieldSpacerFour,
+		err = txtFieldSpacerOne.CopyOutPtr(
+		ePrefix.XCtx(
+			"txtFieldSpacerOne->txtFieldSpacerFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual =
+		txtSpacerNanobot2.equal(
+			&txtFieldSpacerOne,
+			txtFieldSpacerFour)
+
+	if areEqual == false {
+		t.Errorf("%v Test #3\n"+
+			"Error: areEqual should be 'true'\n"+
+			"because 'txtFieldSpacerOne' and 'txtFieldSpacerFour'\n"+
+			"are equal. HOWEVER, THE RETURN VALUE IS 'false'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_Equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_Equal_000100()",
+		"")
+
+	var txtFieldSpacerOne, txtFieldSpacerTwo TextFieldSpecSpacer
+	var err error
+
+	expectedFieldLen := 4
+
+	txtFieldSpacerOne,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if txtFieldSpacerTwo.Equal(&txtFieldSpacerOne) {
+		t.Errorf("%v\n"+
+			"Error: 'txtFieldSpacerOne' should NOT be equal to"+
+			"'txtFieldSpacerTwo' HOWEVER, THEY ARE SHOWING AS EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldSpacerTwo.fieldLen = expectedFieldLen
+
+	if !txtFieldSpacerTwo.Equal(&txtFieldSpacerOne) {
+		t.Errorf("%v\n"+
+			"Error: 'txtFieldSpacerOne' should be equal to\n"+
+			"'txtFieldSpacerTwo' HOWEVER, THEY ARE SHOWING AS NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
