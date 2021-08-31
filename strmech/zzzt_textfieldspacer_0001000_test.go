@@ -251,6 +251,24 @@ func TestTextFieldSpecSpacer_CopyIn_000200(t *testing.T) {
 
 	}
 
+	txtSpacerNanobot3 := textFieldSpecSpacerNanobot{}
+
+	err =
+		txtSpacerNanobot3.copyIn(
+			&txtFieldSpacerOne,
+			nil,
+			ePrefix.XCtx(
+				"nil->txtFieldSpacerOne"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtSpacerNanobot2.copyIn()\n"+
+			"because 'targetTxtFieldSpacer' is a nil pointer!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+	}
+
 	return
 }
 
@@ -300,7 +318,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 
 	}
 
-	txtFieldSpacerTwo.fieldLen = -59
+	txtFieldSpacerTwo.fieldLen = 1000001
 
 	txtFieldSpacerThree,
 		err =
@@ -359,4 +377,110 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 		return
 	}
 
+}
+
+func TestTextFieldSpecSpacer_CopyOut_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_CopyOut_000200()",
+		"")
+
+	txtFieldSpacerOne := TextFieldSpecSpacer{}
+
+	_,
+		err :=
+		txtFieldSpacerOne.CopyOut(
+			ePrefix.XCtx(
+				"txtFieldSpacerOne"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldSpacerOne.CopyOut()\n"+
+			"because 'txtFieldSpacerOne' is empty and uninitialized!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_CopyOutITextField_000100()",
+		"")
+
+	expectedFieldLen := 9
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var iTextField ITextFieldSpecification
+
+	iTextField,
+		err =
+		txtFieldSpacerOne.CopyOutITextField(
+			ePrefix.XCtx("iTextField"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSpacer, ok := iTextField.(*TextFieldSpecSpacer)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: Expected iTextField.(*TextFieldSpecSpacer)\n"+
+			"would return an object of type *TextFieldSpecSpacer!\n"+
+			"HOWEVER, the type cast FAILED!\n",
+			ePrefix.String())
+	}
+
+	actualFieldLen := txtSpacer.GetFieldLength()
+
+	if expectedFieldLen != actualFieldLen {
+
+		t.Errorf("%v\n"+
+			"Error: Invalid Field Length returned by\n"+
+			"txtSpacer.GetFieldLength()\n"+
+			"Expected Field Length = '%v'\n"+
+			"Instead, Actual Field Length = '%v'\n",
+			ePrefix.String(),
+			expectedFieldLen,
+			actualFieldLen)
+
+		return
+	}
+
+	txtFieldSpacerTwo := TextFieldSpecSpacer{}
+
+	_,
+		err =
+		txtFieldSpacerTwo.CopyOutITextField(
+			ePrefix.XCtx("Empty txtFieldSpacerTwo"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: Expected an error return from txtFieldSpacerTwo.CopyOutITextField()\n"+
+			"because field length = 0\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
 }
