@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 )
 
@@ -916,6 +917,352 @@ func TestTextFieldSpecSpacer_EqualITextField_000100(t *testing.T) {
 			ePrefix.String())
 
 		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_getFormattedText_000100()",
+		"")
+
+	expectedFieldLen := 4
+
+	expectedStr := strings.Repeat(" ", expectedFieldLen)
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldSpacerNanobot := textFieldSpecSpacerNanobot{}
+
+	_,
+		err =
+		txtFieldSpacerNanobot.getFormattedText(
+			nil,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldSpacerNanobot.getFormattedText()\n"+
+			"because input parameter 'txtFieldSpacer' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("txtFieldSpacer = nil"))
+
+		return
+	}
+
+	txtFieldSpacerNanobot2 := textFieldSpecSpacerNanobot{}
+
+	var actualStr string
+
+	actualStr,
+		err =
+		txtFieldSpacerNanobot2.getFormattedText(
+			&txtFieldSpacerOne,
+			ePrefix.XCtx(
+				"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedStr != actualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected formtted string = '%v'\n"+
+			"Instead,       formatted string = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	var txtFieldSpacerTwo TextFieldSpecSpacer
+
+	txtFieldSpacerTwo,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldSpacerTwo.fieldLen = -99
+
+	_,
+		err =
+		txtFieldSpacerNanobot.getFormattedText(
+			&txtFieldSpacerTwo,
+			ePrefix.XCtx("txtFieldSpacerTwo.fieldLen = -99"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from txtFieldSpacerNanobot.getFormattedText()\n"+
+			"because input parameter txtFieldSpacer.fieldLen is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_GetFormattedText_000100()",
+		"")
+
+	expectedFieldLen := 14
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := strings.Repeat(" ", expectedFieldLen)
+
+	actualStr :=
+		txtFieldSpacerOne.GetFormattedText()
+
+	if expectedStr != actualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected formtted string = '%v'\n"+
+			"Instead,       formatted string = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	txtFieldSpacerTwo := TextFieldSpecSpacer{}
+
+	txtFieldSpacerTwo.fieldLen = -99
+
+	actualStr =
+		txtFieldSpacerTwo.GetFormattedText()
+
+	if !strings.Contains(actualStr, "Error") {
+		t.Errorf("%v\n"+
+			"Error: Expected 'actualStr' to contain the word 'Error'.\n"+
+			"because txtFieldSpacerTwo.fieldLen = -99\n"+
+			"HOWEVER, the returned 'actualStr' did NOT contain the "+
+			"word 'Error'\n"+
+			"'actualStr' = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualStr)
+
+		return
+	}
+
+	txtFieldSpacerThree := TextFieldSpecSpacer{}
+	txtFieldSpacerThree.fieldLen = 20
+	expectedStr = strings.Repeat(" ", 20)
+
+	actualStr = txtFieldSpacerThree.GetFormattedText()
+
+	if expectedStr != actualStr {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected formtted string = '%v'\n"+
+			"Instead,       formatted string = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_NewSpacer_000100()",
+		"")
+
+	expectedFieldLen := -2
+
+	_,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from TextFieldSpecSpacer{}.NewSpacer()\n"+
+			"because Field Length = '-2' and is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+	}
+
+}
+
+func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_NewPtrSpacer_000100()",
+		"")
+
+	expectedFieldLen := 1000001
+
+	_,
+		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from TextFieldSpecSpacer{}.NewPtrSpacer()\n"+
+			"because Field Length = '1000001' and is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+	}
+
+}
+
+func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_String_000100()",
+		"")
+
+	expectedFieldLen := 14
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := strings.Repeat(" ", expectedFieldLen)
+
+	actualStr :=
+		txtFieldSpacerOne.String()
+
+	if expectedStr != actualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected formtted string = '%v'\n"+
+			"Instead,       formatted string = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	txtFieldSpacerTwo := TextFieldSpecSpacer{}
+
+	txtFieldSpacerTwo.fieldLen = -99
+
+	actualStr =
+		txtFieldSpacerTwo.String()
+
+	if !strings.Contains(actualStr, "Error") {
+		t.Errorf("%v\n"+
+			"Error: Expected 'actualStr' to contain the word 'Error'.\n"+
+			"because txtFieldSpacerTwo.fieldLen = -99\n"+
+			"HOWEVER, the returned 'actualStr' did NOT contain the "+
+			"word 'Error'\n"+
+			"'actualStr' = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualStr)
+
+		return
+	}
+
+	txtFieldSpacerThree := TextFieldSpecSpacer{}
+	txtFieldSpacerThree.fieldLen = 20
+	expectedStr = strings.Repeat(" ", 20)
+
+	actualStr = txtFieldSpacerThree.String()
+
+	if expectedStr != actualStr {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected formtted string = '%v'\n"+
+			"Instead,       formatted string = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_TextFieldName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_TextFieldName_000100()",
+		"")
+
+	txtFieldSpacerOne := TextFieldSpecSpacer{}.NewEmpty()
+
+	fieldName := txtFieldSpacerOne.TextFieldName()
+
+	if fieldName != "TextFieldSpecSpacer" {
+
+		t.Errorf("%v\n"+
+			"Expected txtFieldSpacerOne.TextFieldName()\n"+
+			"to return 'TextFieldSpecSpacer'.\n"+
+			"Instead, Field Name = '%v'\n",
+			ePrefix.String(),
+			fieldName)
+
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_TextTypeName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_TextTypeName_000100()",
+		"")
+
+	txtFieldSpacerOne := TextFieldSpecSpacer{}.NewEmpty()
+
+	fieldName := txtFieldSpacerOne.TextTypeName()
+
+	if fieldName != "TextFieldSpecSpacer" {
+
+		t.Errorf("%v\n"+
+			"Expected txtFieldSpacerOne.TextTypeName()\n"+
+			"to return 'TextFieldSpecSpacer'.\n"+
+			"Instead, Field Name = '%v'\n",
+			ePrefix.String(),
+			fieldName)
+
 	}
 
 	return

@@ -1171,7 +1171,7 @@
 === RUN   TestStrMech_JustifyTextInStrField_02
 --- PASS: TestStrMech_JustifyTextInStrField_02 (0.00s)
 === RUN   TestStrMech_JustifyTextInStrField_03
---- PASS: TestStrMech_JustifyTextInStrField_03 (0.00s)
+--- PASS: TestStrMech_JustifyTextInStrField_03 (0.01s)
 === RUN   TestStrMech_JustifyTextInStrField_04
 --- PASS: TestStrMech_JustifyTextInStrField_04 (0.00s)
 === RUN   TestStrMech_JustifyTextInStrField_05
@@ -1269,11 +1269,11 @@
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100
 --- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200
---- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200 (0.01s)
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300
 --- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000100
---- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.00s)
+--- PASS: TestTextFieldSpecFiller_NewTextFiller_000100 (0.01s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000200
 --- PASS: TestTextFieldSpecFiller_NewTextFiller_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000300
@@ -1309,7 +1309,7 @@
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000200
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000300
---- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000300 (0.00s)
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000300 (0.01s)
 === RUN   TestTextFieldSpecFiller_SetTextFiller_000100
 --- PASS: TestTextFieldSpecFiller_SetTextFiller_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_String_000100
@@ -1441,11 +1441,11 @@
 === RUN   TestTextFieldSpecLabel_textFieldSpecLabelElectron_000100
 --- PASS: TestTextFieldSpecLabel_textFieldSpecLabelElectron_000100 (0.00s)
 === RUN   TestTextFieldSpecSpacer_CopyIn_000100
---- PASS: TestTextFieldSpecSpacer_CopyIn_000100 (0.01s)
+--- PASS: TestTextFieldSpecSpacer_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecSpacer_CopyIn_000200
 --- PASS: TestTextFieldSpecSpacer_CopyIn_000200 (0.00s)
 === RUN   TestTextFieldSpecSpacer_CopyOut_000100
---- PASS: TestTextFieldSpecSpacer_CopyOut_000100 (0.00s)
+--- PASS: TestTextFieldSpecSpacer_CopyOut_000100 (0.01s)
 === RUN   TestTextFieldSpecSpacer_CopyOut_000200
 --- PASS: TestTextFieldSpecSpacer_CopyOut_000200 (0.00s)
 === RUN   TestTextFieldSpecSpacer_CopyOutITextField_000100
@@ -1462,6 +1462,20 @@
 --- PASS: TestTextFieldSpecSpacer_Equal_000100 (0.00s)
 === RUN   TestTextFieldSpecSpacer_EqualITextField_000100
 --- PASS: TestTextFieldSpecSpacer_EqualITextField_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_getFormattedText_000100
+--- PASS: TestTextFieldSpecSpacer_getFormattedText_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_GetFormattedText_000100
+--- PASS: TestTextFieldSpecSpacer_GetFormattedText_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_NewSpacer_000100
+--- PASS: TestTextFieldSpecSpacer_NewSpacer_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_NewPtrSpacer_000100
+--- PASS: TestTextFieldSpecSpacer_NewPtrSpacer_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_String_000100
+--- PASS: TestTextFieldSpecSpacer_String_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_TextFieldName_000100
+--- PASS: TestTextFieldSpecSpacer_TextFieldName_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_TextTypeName_000100
+--- PASS: TestTextFieldSpecSpacer_TextTypeName_000100 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_01
 --- PASS: TestStrOpsTextJustify_ParseString_01 (0.00s)
 === RUN   TestStrOpsTextJustify_ParseString_02
@@ -1497,5 +1511,5 @@
 === RUN   TestStrOpsTextJustify_XIsValid_02
 --- PASS: TestStrOpsTextJustify_XIsValid_02 (0.00s)
 PASS
-coverage: 51.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.353s
+coverage: 52.3% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.346s
