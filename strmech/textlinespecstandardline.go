@@ -1968,7 +1968,7 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 	}
 
 	newLineChars :=
-		textLineSpecStandardLineElectron{}.ptr().
+		textSpecificationAtom{}.ptr().
 			getDefaultNewLineChars()
 
 	err = textLineSpecStandardLineNanobot{}.ptr().
@@ -2242,7 +2242,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 	}
 
 	newLineChars :=
-		textLineSpecStandardLineElectron{}.ptr().
+		textSpecificationAtom{}.ptr().
 			getDefaultNewLineChars()
 
 	err = textLineSpecStandardLineNanobot{}.ptr().
@@ -3433,7 +3433,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 	if len(stdLine.newLineChars) == 0 {
 
 		err =
-			textLineSpecStandardLineProton{}.ptr().
+			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&newLineChars,
 					ePrefix)
@@ -3668,7 +3668,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 	if len(newLineChars) == 0 {
 
 		err =
-			textLineSpecStandardLineProton{}.ptr().
+			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&newLineChars,
 					ePrefix)

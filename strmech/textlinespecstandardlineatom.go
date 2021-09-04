@@ -352,7 +352,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 	if len(txtStdLine.newLineChars) == 0 {
 
 		err =
-			textLineSpecStandardLineProton{}.ptr().
+			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&txtStdLine.newLineChars,
 					ePrefix)

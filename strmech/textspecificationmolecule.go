@@ -200,3 +200,130 @@ func (txtSpecMolecule textSpecificationMolecule) ptr() *textSpecificationMolecul
 		lock: new(sync.Mutex),
 	}
 }
+
+// setDefaultNewLineChars - Receives a pointer to a target rune
+// array. The default new line characters will be copied to this
+// target rune array.
+//
+// This method will copy that default new line character or
+// characters to the target rune array. This target rune array is
+// typically part of a TextLineSpecStandardLine or
+// TextLineSpecPlainText configuration.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All pre-existing data in input parameter 'targetNewLineChars'
+// will be deleted and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetNewLineChars         *[]rune
+//     - A pointer to an array of runes. The default new line
+//       character or characters will be copied to this array.
+//
+//       Be advised - All pre-existing data in this array will be
+//       deleted and overwritten.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtSpecMolecule *textSpecificationMolecule) setDefaultNewLineChars(
+	targetNewLineChars *[]rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtSpecMolecule.lock == nil {
+		txtSpecMolecule.lock = new(sync.Mutex)
+	}
+
+	txtSpecMolecule.lock.Lock()
+
+	defer txtSpecMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textSpecificationMolecule."+
+			"setDefaultNewLineChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if targetNewLineChars == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter *targetNewLineChars is invalid!\n"+
+			"*targetNewLineChars is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	defaultNewLineChars :=
+		textSpecificationAtom{}.ptr().
+			getDefaultNewLineChars()
+
+	lenDefaultChars := len(defaultNewLineChars)
+
+	if lenDefaultChars == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: textSpecificationAtom{}.getDefaultNewLineChars()\n"+
+			"returned a zero length array of default new line characters!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	*targetNewLineChars =
+		make([]rune, lenDefaultChars)
+
+	itemsCopied :=
+		copy(*targetNewLineChars, defaultNewLineChars)
+
+	if itemsCopied != lenDefaultChars {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"Runes copied does not equal length of Default Rune Array\n"+
+			"Length Default Rune Array: '%v'\n"+
+			"   Number of Runes Copied: '%v'\n",
+			ePrefix.String(),
+			lenDefaultChars,
+			itemsCopied)
+	}
+
+	return err
+}

@@ -128,7 +128,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 	if len(incomingStdLine.newLineChars) == 0 {
 
 		err =
-			textLineSpecStandardLineProton{}.ptr().
+			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&incomingStdLine.newLineChars,
 					ePrefix)
@@ -270,7 +270,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 	if len(txtStdLine.newLineChars) == 0 {
 
 		err =
-			textLineSpecStandardLineProton{}.ptr().
+			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&txtStdLine.newLineChars,
 					ePrefix)
