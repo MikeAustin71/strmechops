@@ -99,7 +99,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecStandardLineMolecule."+
+		"textLineSpecStandardLineNanobot."+
 			"copyIn()",
 		"")
 
@@ -252,7 +252,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecStandardLineMolecule.copyOut()",
+		"textLineSpecStandardLineNanobot.copyOut()",
 		"")
 
 	if err != nil {

@@ -454,6 +454,9 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 //       will be copied to the current TextLineSpecStandardLine
 //       instance ('stdLine').
 //
+//       If 'incomingStdLine' contains invalid member variable data
+//       values, this method will return an error.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
