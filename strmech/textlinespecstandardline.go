@@ -907,7 +907,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 //
 // After calling 'Empty', the caller CAN NOT reuse this instance of
 // TextLineSpecStandardLine. All the internal member variables
-// would have to be re-initialized.
+// will have to be re-initialized.
 //
 // To empty and reuse this TextLineSpecStandardLine instance,
 // reference method TextLineSpecStandardLine.EmptyTextFields.
