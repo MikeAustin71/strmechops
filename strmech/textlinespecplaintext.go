@@ -831,6 +831,34 @@ func (plainTextLine *TextLineSpecPlainText) GetRightMarginRunes() []rune {
 	return newRightMarginChars
 }
 
+// GetTextString - Returns string representing the core text
+// characters for the plain text line.
+//
+// The TextLineSpecPlainText type provides formatting
+// specifications for a simple line of text characters for text
+// display, file output or printing.
+//
+// The plain text line consists of a left margin, the text string,
+// the right margin and a line termination character or characters.
+// The line termination character is usually a new line character
+// ('\n').
+//
+// This method returns the text string element of the plain text
+// line.
+//
+func (plainTextLine *TextLineSpecPlainText) GetTextString() string {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	return plainTextLine.textString
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecPlainText
 // instance to determine if they are valid.
