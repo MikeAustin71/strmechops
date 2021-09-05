@@ -701,6 +701,136 @@ func (plainTextLine *TextLineSpecPlainText) GetFormattedText() string {
 	return formattedTxtStr
 }
 
+// GetLeftMarginStr - Returns a string containing the characters
+// currently configured as the left margin of the Plain Text
+// String.
+//
+// This method is similar to
+// TextLineSpecPlainText.GetLeftMarginRunes(). The sole difference
+// is that this method returns the left margin characters as a
+// string.
+//
+func (plainTextLine *TextLineSpecPlainText) GetLeftMarginStr() string {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	if len(plainTextLine.leftMarginChars) == 0 {
+		return ""
+	}
+
+	return string(plainTextLine.leftMarginChars)
+}
+
+// GetLeftMarginRunes - Returns a string containing the characters
+// currently configured as the left margin of the Plain Text
+// String.
+//
+// This method is similar to
+// TextLineSpecPlainText.GetLeftMarginStr(). The sole difference
+// is that this method returns the left margin characters as an
+// array of runes.
+//
+func (plainTextLine *TextLineSpecPlainText) GetLeftMarginRunes() []rune {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	if len(plainTextLine.leftMarginChars) == 0 {
+		return nil
+	}
+
+	var newLeftMarginChars []rune
+
+	err :=
+		strMechPreon{}.ptr().copyRuneArrays(
+			&newLeftMarginChars,
+			&plainTextLine.leftMarginChars,
+			true,
+			nil)
+
+	if err != nil {
+		return nil
+	}
+
+	return newLeftMarginChars
+}
+
+// GetRightMarginStr - Returns a string containing the characters
+// currently configured as the right margin of the Plain Text
+// String.
+//
+// This method is similar to
+// TextLineSpecPlainText.GetRightMarginRunes(). The sole difference
+// is that this method returns the right margin characters as a
+// string.
+//
+func (plainTextLine *TextLineSpecPlainText) GetRightMarginStr() string {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	if len(plainTextLine.rightMarginChars) == 0 {
+		return ""
+	}
+
+	return string(plainTextLine.rightMarginChars)
+}
+
+// GetRightMarginRunes - Returns a string containing the characters
+// currently configured as the right margin of the Plain Text
+// String.
+//
+// This method is similar to
+// TextLineSpecPlainText.GetRightMarginStr(). The sole difference
+// is that this method returns the right margin characters as an
+// array of runes.
+//
+func (plainTextLine *TextLineSpecPlainText) GetRightMarginRunes() []rune {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	if len(plainTextLine.rightMarginChars) == 0 {
+		return nil
+	}
+
+	var newRightMarginChars []rune
+
+	err :=
+		strMechPreon{}.ptr().copyRuneArrays(
+			&newRightMarginChars,
+			&plainTextLine.rightMarginChars,
+			true,
+			nil)
+
+	if err != nil {
+		return nil
+	}
+
+	return newRightMarginChars
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecPlainText
 // instance to determine if they are valid.
