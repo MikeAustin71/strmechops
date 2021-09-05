@@ -1089,12 +1089,13 @@ func (stdLine *TextLineSpecStandardLine) GetFormattedText() string {
 // This method returns the current value of 'newLineChars',
 // otherwise known as the line termination sequence.
 //
-// To override, change or control the behavior of 'newLineChars',
+// To override, monitor or control the behavior of 'newLineChars',
 // see the following methods:
 //         TextLineSpecStandardLine.GetLineTerminationRunes()
 //         TextLineSpecStandardLine.SetLineTerminationChars()
 //         TextLineSpecStandardLine.SetLineTerminationRunes()
 //         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 func (stdLine *TextLineSpecStandardLine) GetLineTerminationChars() string {
 
@@ -1120,12 +1121,16 @@ func (stdLine *TextLineSpecStandardLine) GetLineTerminationChars() string {
 // standard line of text produced by the current
 // TextLineSpecStandardLine instance.
 //
-// This method the current value of 'newLineChars', otherwise known
-// as the line termination sequence.
+// This method returns the current value of 'newLineChars',
+// otherwise known as the line termination sequence.
 //
-// To override, change or control the behavior of 'newLineChars',
+// To override, monitor or control the behavior of 'newLineChars',
 // see the following methods:
+//         TextLineSpecStandardLine.GetLineTerminationChars()
 //         TextLineSpecStandardLine.SetLineTerminationChars()
+//         TextLineSpecStandardLine.SetLineTerminationRunes()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 func (stdLine *TextLineSpecStandardLine) GetLineTerminationRunes() []rune {
 
