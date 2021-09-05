@@ -144,8 +144,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 //  txtStdLine                 *TextLineSpecStandardLine
 //     - A pointer to an instance of TextLineSpecStandardLine. The
 //       member variables encapsulated by this instance will be
-//       used to generate formatted text for output display and
-//       printing.
+//       used to generate formatted text for text display, file
+//       output and printing.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
