@@ -859,6 +859,42 @@ func (plainTextLine *TextLineSpecPlainText) GetTextString() string {
 	return plainTextLine.textString
 }
 
+// GetTurnLineTerminatorOff - Returns the internal member variable
+// 'turnLineTerminatorOff' as a boolean value.
+//
+// The 'turnLineTerminatorOff' flag controls whether a line
+// termination character or characters will be automatically
+// appended to each line of text produced by
+// TextLineSpecPlainText.
+//
+// When the boolean flag 'turnLineTerminatorOff' is set to 'false',
+// line terminators as defined by member variable 'newLineChars'
+// WILL BE applied as a line termination sequence for the line of
+// text produced by TextLineSpecPlainText. The default value for
+// for 'turnLineTerminatorOff' is 'false'.
+//
+// When this boolean value is set to 'true', it turns off or
+// cancels the automatic generation of line terminators for each
+// line of text produced by TextLineSpecPlainText.
+//
+// The default line terminator is the new line character ('\n')
+// which is defined by member variable 'newLineChars'. However,
+// this value is subject to user control and may be overridden
+// by one or more characters.
+//
+func (plainTextLine *TextLineSpecPlainText) GetTurnLineTerminatorOff() bool {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	return plainTextLine.turnLineTerminatorOff
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecPlainText
 // instance to determine if they are valid.

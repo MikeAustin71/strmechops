@@ -1364,8 +1364,9 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 //
 // When the boolean flag 'turnLineTerminatorOff' is set to 'false',
 // line terminators as defined by member variable 'newLineChars'
-// will be applied as a line termination sequence for each line of
-// text produced by TextLineSpecStandardLine.
+// WILL BE applied as a line termination sequence for each line of
+// text produced by TextLineSpecStandardLine. The default value for
+// for 'turnLineTerminatorOff' is 'false'.
 //
 // When this boolean value is set to 'true', it turns off or
 // cancels the automatic generation of line terminators for each
@@ -1374,7 +1375,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 // The default line terminator is the new line character ('\n')
 // which is defined by member variable 'newLineChars'. However,
 // this value is subject to user control and may be overridden
-// by one or more characters supplied by the user.
+// by one or more characters.
 //
 func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 
