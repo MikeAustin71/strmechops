@@ -55,6 +55,14 @@ func (txtLinePlainTextAtom textLineSpecPlainTextAtom) ptr() *textLineSpecPlainTe
 //
 // Input Parameters
 //
+//  plainTxtLine               *TextLineSpecPlainText
+//     - A pointer to an instance of TextLineSpecPlainText.
+//       If this method completes successfully, all member data
+//       variables encapsulated in 'targetPlainTextLine' will be
+//       deleted and overwritten with new values extracted from the
+//       following input parameters.
+//
+//
 //  leftMarginRunes            []rune
 //     - An array of runes containing the text characters which
 //       will be used to construct the left margin of the plain
