@@ -44,6 +44,11 @@ func (txtLinePlainTextAtom textLineSpecPlainTextAtom) ptr() *textLineSpecPlainTe
 // Left and right margins consist of zero or more characters
 // customized and provided by the calling function.
 //
+// This method is similar to
+// textLineSpecPlainTextNanobot.setPlainTextSpecRunes() with the
+// sole exception being that this method receives input parameter
+// 'textString' as a string instead of an array of runes.
+//
 //
 // ------------------------------------------------------------------------
 //
