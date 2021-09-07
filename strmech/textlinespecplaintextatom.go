@@ -30,7 +30,8 @@ func (txtLinePlainTextAtom textLineSpecPlainTextAtom) ptr() *textLineSpecPlainTe
 
 // setPlainTextSpec - Receives a pointer to an instance of
 // TextLineSpecPlainText and proceeds to reset all the member
-// variable data values using the input parameter values.
+// variable data values using the values passed through input
+// parameters.
 //
 // The TextLineSpecPlainText type provides formatting
 // specifications for a simple line of text characters for text

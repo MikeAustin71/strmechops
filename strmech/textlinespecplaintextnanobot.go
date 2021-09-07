@@ -18,8 +18,8 @@ type textLineSpecPlainTextNanobot struct {
 //
 // IMPORTANT
 //
-// The pre-existing data fields for input parameter 'targetStdLine'
-// will be overwritten and deleted.
+// The pre-existing data fields for input parameter
+// 'targetPlainTextLine' will be overwritten and deleted.
 //
 //
 // ----------------------------------------------------------------
@@ -480,6 +480,19 @@ func (txtLinePlainTextNanobot textLineSpecPlainTextNanobot) ptr() *textLineSpecP
 // ------------------------------------------------------------------------
 //
 // Input Parameters
+//
+//  targetPlainTextLine        *TextLineSpecPlainText
+//     - A pointer to an instance of TextLineSpecPlainText. Data
+//       extracted from input parameter 'incomingPlainTextLine'
+//       will be copied to this input parameter,
+//       'targetPlainTextLine'. If this method completes
+//       successfully, all member data variables encapsulated in
+//       'targetPlainTextLine' will be identical to those contained
+//       in input parameter, 'incomingPlainTextLine'.
+//
+//       Be advised that the pre-existing data fields in input
+//       parameter 'targetPlainTextLine' will be overwritten and
+//       deleted.
 //
 //  leftMarginRunes            []rune
 //     - An array of runes containing the text characters which
