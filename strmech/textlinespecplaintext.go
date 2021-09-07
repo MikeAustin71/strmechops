@@ -1381,7 +1381,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginRunes(
 		err = fmt.Errorf("%v\n"+
 			"Error: The 'leftMarginsRunes' rune array exceeds\n"+
 			"one-million (1,000,000) characters in length.\n"+
-			"Length of 'leftMarginsChars' = '%v'\n",
+			"Length of 'leftMarginsRunes' = '%v'\n",
 			ePrefix.String(),
 			lenLeftMargin)
 
@@ -2013,7 +2013,7 @@ func (plainTextLine *TextLineSpecPlainText) SetRightMarginRunes(
 		err = fmt.Errorf("%v\n"+
 			"Error: The 'rightMarginsRunes' rune array exceeds\n"+
 			"one-million (1,000,000) characters in length.\n"+
-			"Length of 'rightMarginsChars' = '%v'\n",
+			"Length of 'rightMarginsRunes' = '%v'\n",
 			ePrefix.String(),
 			lenRightMargin)
 
