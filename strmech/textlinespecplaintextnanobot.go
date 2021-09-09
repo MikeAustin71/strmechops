@@ -582,14 +582,10 @@ func (txtLinePlainTextNanobot textLineSpecPlainTextNanobot) ptr() *textLineSpecP
 //
 // Return Values
 //
-//  err                        error
+//  error
 //     - If input parameter 'plainTextLine' is judged to be valid
 //       in all respects, this return parameter will be set to
 //       'nil'.
-//
-//       If input parameter, 'plainTextLine' is found to be
-//       invalid, this return parameter will be configured with an
-//       appropriate error message.
 //
 //       If an error message is returned, the text value for input
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
@@ -789,14 +785,10 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 //
 // Return Values
 //
-//  err                        error
+//  error
 //     - If input parameter 'plainTextLine' is judged to be valid
 //       in all respects, this return parameter will be set to
 //       'nil'.
-//
-//       If input parameter, 'plainTextLine' is found to be
-//       invalid, this return parameter will be configured with an
-//       appropriate error message.
 //
 //       If an error message is returned, the text value for input
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
