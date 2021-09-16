@@ -1950,7 +1950,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainTextStrings(
 // white space characters specified in parameter
 // 'rightMarginSpaces'.
 //
-// Each line of text produced by the returned instance of
+// The line of text produced by the returned instance of
 // TextLineSpecPlainText will be automatically terminated with a
 // new line character ('\n').
 //
@@ -1979,7 +1979,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainTextStrings(
 //
 //  turnLineTerminatorOff
 //     - Defaults to a value of 'false'. This means that the new
-//       line character ('\n') will be applied to each line of text
+//       line character ('\n') WILL BE applied to the line of text
 //       produced by the returned instance of TextLineSpecPlainText.
 //
 //
@@ -3426,7 +3426,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 // white space characters specified in parameter
 // 'rightMarginSpaces'.
 //
-// Each line of text produced by the returned instance of
+// The line of text produced by the returned instance of
 // TextLineSpecPlainText will be automatically terminated with a
 // new line character ('\n').
 //
@@ -3463,7 +3463,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 //
 //  turnLineTerminatorOff
 //     - Defaults to a value of 'false'. This means that the new
-//       line character ('\n') will be applied to each line of text
+//       line character ('\n') WILL BE applied to the line of text
 //       produced by the returned instance of TextLineSpecPlainText.
 //
 //
@@ -4794,4 +4794,58 @@ func (plainTextLine *TextLineSpecPlainText) TurnAutoLineTerminationOff() {
 	defer plainTextLine.lock.Unlock()
 
 	plainTextLine.turnLineTerminatorOff = true
+}
+
+// TurnAutoLineTerminationOn - Turns on or engages the automatic
+// generation of new line terminators for the line of text
+// produced by this instance of TextLineSpecPlainText.
+//
+// This means that a new line termination sequence with characters
+// defined by member variable 'newLineChars' WILL BE applied to
+// the line of text produced by the current instance of
+// TextLineSpecPlainText.
+//
+// When the member variable 'turnLineTerminatorOff' is set to
+// 'false', line terminators as defined by member variable
+// 'newLineChars' WILL BE applied as a line termination sequence
+// for each line of text produced by TextLineSpecPlainText.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will always set 'turnLineTerminatorOff' to 'false'
+// thereby ensuring that line termination characters WILL BE
+// automatically appended to the line of text produced by the
+// current instance of TextLineSpecPlainText.
+//
+// ----------------------------------------------------------------
+//
+// In contrast, method
+// TextLineSpecPlainText.TurnAutoLineTerminationOff will always
+// set member variable 'turnLineTerminatorOff' to 'true'. This
+// means that the automatic generation of line terminators is
+// 'turned off' and a line termination sequence WILL NOT BE applied
+// for the line of text produced by TextLineSpecPlainText.
+//
+// The default line terminator is the new line character ('\n')
+// which is defined by member variable 'newLineChars'. However,
+// this value is subject to user control and may be overridden by
+// one or more characters supplied by the user.
+//
+// Again, this method will always set 'turnLineTerminatorOff' to
+// 'false' meaning that line terminators WILL BE applied to
+// the line of text produced by this instance of TextLineSpecPlainText.
+//
+func (plainTextLine *TextLineSpecPlainText) TurnAutoLineTerminationOn() {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	plainTextLine.turnLineTerminatorOff = false
 }

@@ -4133,7 +4133,7 @@ func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOff() {
 // one or more characters supplied by the user.
 //
 // Again, this method will always set 'turnLineTerminatorOff' to
-// 'false' meaning that line terminators WILL NOT BE applied to
+// 'false' meaning that line terminators WILL BE applied to
 // each line of text produced by this instance of TextLineSpecStandardLine.
 //
 func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOn() {
