@@ -4747,3 +4747,51 @@ func (plainTextLine *TextLineSpecPlainText) TextLineSpecName() string {
 
 	return "TextLineSpecPlainText"
 }
+
+// TurnAutoLineTerminationOff - Turns off or cancels the automatic
+// generation of new line terminators for the line of text
+// produced by this instance of TextLineSpecPlainText.
+//
+// When the member variable 'turnLineTerminatorOff' is set to
+// 'true', line terminators as defined by member variable
+// 'newLineChars' WILL NOT be applied as a line termination sequence
+// for the line of text produced by TextLineSpecPlainText.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will always set 'turnLineTerminatorOff' to 'true'
+// thereby removing new line terminators for the line of text
+// produced by this instance of TextLineSpecPlainText.
+//
+// ----------------------------------------------------------------
+//
+// In contrast, method
+// TextLineSpecPlainText.TurnAutoLineTerminationOn will always
+// set member variable 'turnLineTerminatorOff' to 'false'. This
+// means that the automatic generation of line terminators is
+// 'turned on' and a line termination sequence WILL BE applied for
+// the line of text produced by TextLineSpecPlainText.
+//
+// The default line terminator is the new line character ('\n')
+// which is defined by member variable 'newLineChars'. However,
+// this value is subject to user control and may be overridden by
+// one or more characters supplied by the user.
+//
+// Again, this method will always set 'turnLineTerminatorOff' to
+// 'true'.  This means that line terminators WILL NOT BE applied to
+// each line of text produced by this instance of TextLineSpecPlainText.
+//
+func (plainTextLine *TextLineSpecPlainText) TurnAutoLineTerminationOff() {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	plainTextLine.turnLineTerminatorOff = true
+}
