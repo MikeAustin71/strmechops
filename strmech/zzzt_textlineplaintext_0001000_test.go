@@ -341,6 +341,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtx("Missing Error Return"))
 
+		return
 	}
 
 	return
@@ -746,6 +747,108 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 			"Expected turnLineTerminatorOff = 'false'\n"+
 			"Instead, turnLineTerminatorOff = 'true'\n",
 			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"")
+
+	leftMargin := 3
+	rightMargin := 3
+	textString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var plainTextLine02 *TextLineSpecPlainText
+
+	plainTextLine02,
+		err = plainTextLine01.CopyOutPtr(
+		ePrefix.XCtx(
+			"plainTextLine01->plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !plainTextLine02.Equal(&plainTextLine01) {
+		t.Errorf("%v\n"+
+			"Error: Expected plainTextLine02 == plainTextLine01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var plainTextLine03 *TextLineSpecPlainText
+
+	plainTextLine02.textString = ""
+
+	plainTextLine03,
+		err = plainTextLine02.CopyOutPtr(
+		ePrefix.XCtx(
+			"plainTextLine02->plainTextLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"plainTextLine02.CopyOutPtr()\n"+
+			"because 'plainTextLine02' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	err = plainTextLine03.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"plainTextLine03.IsValidInstanceError()\n"+
+			"because 'plainTextLine03' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
 
 		return
 	}
