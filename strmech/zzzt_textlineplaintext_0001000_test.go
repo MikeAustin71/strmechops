@@ -220,8 +220,8 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"Expected Right Margin Chars = '%v'\n"+
 			"Instead, Right Margin Chars = '%v'\n",
 			ePrefix.String(),
-			string(expectedLeftMarginChars),
-			string(plainTextLine01.leftMarginChars))
+			string(expectedRightMarginChars),
+			string(plainTextLine01.rightMarginChars))
 
 		return
 	}
@@ -235,8 +235,8 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"Expected New Line Chars = '%v'\n"+
 			"Instead, New Line Chars = '%v'\n",
 			ePrefix.String(),
-			string(expectedLeftMarginChars),
-			string(plainTextLine01.leftMarginChars))
+			string(expectedNewLineChars),
+			string(plainTextLine01.newLineChars))
 
 		return
 	}
@@ -340,6 +340,412 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"because input parameter 'incomingPlainTextLine' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtx("Missing Error Return"))
+
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_copyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextStringRunes := []rune("How now brown cow!")
+	expectedTextString := string(expectedTextStringRunes)
+
+	txtLinePlainTextNanobot := textLineSpecPlainTextNanobot{}
+
+	err :=
+		txtLinePlainTextNanobot.setPlainTextSpecRunes(
+			nil,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			expectedTextStringRunes,
+			expectedNewLineChars,
+			false,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot.setPlainTextSpecRunes()\n"+
+			"Expected an error return because input parameter\n"+
+			"'plainTxtLine' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecRunes(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			nil,
+			expectedNewLineChars,
+			false,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot.setPlainTextSpecRunes()\n"+
+			"Expected an error return because input parameter\n"+
+			"'textRune' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	badRunes := make([]rune, 1000001)
+
+	for i := 0; i < 1000001; i++ {
+		badRunes[i] = 'x'
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecRunes(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			badRunes,
+			expectedNewLineChars,
+			false,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot.setPlainTextSpecRunes()\n"+
+			"Expected an error return because input parameter\n"+
+			"'textRunes' is has a length of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	badRunes = make([]rune, 0)
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecRunes(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			expectedTextStringRunes,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinePlainTextNanobot2 := textLineSpecPlainTextNanobot{}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	plainTextLine02,
+		err = txtLinePlainTextNanobot2.copyOut(
+		nil,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.copyOut()\n"+
+			"Expected an error return because input parameter\n"+
+			"'plainTxtLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	plainTextLine02,
+		err = txtLinePlainTextNanobot2.copyOut(
+		&plainTextLine01,
+		ePrefix.XCtx(
+			"plainTextLine01->plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !plainTextLine02.Equal(&plainTextLine01) {
+		t.Errorf("%v\n"+
+			"Error: Expected plainTextLine02 == plainTextLine01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	actualTextString := plainTextLine02.GetTextString()
+
+	if expectedTextString != actualTextString {
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextString,
+			actualTextString)
+
+		return
+	}
+
+	plainTextLine02.textString = ""
+
+	_,
+		err = txtLinePlainTextNanobot2.copyOut(
+		&plainTextLine02,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.copyOut()\n"+
+			"Expected an error return because input parameter\n"+
+			"'plainTxtLine' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	plainTextLine02,
+		err = plainTextLine01.CopyOut(
+		ePrefix.XCtx("plainTextLine01->" +
+			"plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !plainTextLine02.Equal(&plainTextLine01) {
+		t.Errorf("%v\n"+
+			"Error: Expected plainTextLine02 == plainTextLine01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	actualTextStr :=
+		plainTextLine02.GetTextString()
+
+	if expectedTextString != actualTextStr {
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextString,
+			actualTextStr)
+
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	if !sMechPreon.equalRuneArrays(
+		plainTextLine02.leftMarginChars,
+		expectedLeftMarginChars) {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02\n"+
+			"Expected Left Margin Chars = '%v'\n"+
+			"Instead, Left Margin Chars = '%v'\n",
+			ePrefix.String(),
+			string(expectedLeftMarginChars),
+			string(plainTextLine02.leftMarginChars))
+
+		return
+	}
+
+	actualLeftMarginChars :=
+		plainTextLine02.GetLeftMarginRunes()
+
+	if !sMechPreon.equalRuneArrays(
+		actualLeftMarginChars,
+		expectedLeftMarginChars) {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02.GetLeftMarginRunes()\n"+
+			"Expected Left Margin Chars = '%v'\n"+
+			"Instead, Left Margin Chars = '%v'\n",
+			ePrefix.String(),
+			string(expectedLeftMarginChars),
+			string(actualLeftMarginChars))
+
+		return
+	}
+
+	if !sMechPreon.equalRuneArrays(
+		plainTextLine02.rightMarginChars,
+		expectedRightMarginChars) {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02\n"+
+			"Expected Right Margin Chars = '%v'\n"+
+			"Instead, Right Margin Chars = '%v'\n",
+			ePrefix.String(),
+			string(expectedRightMarginChars),
+			string(plainTextLine02.rightMarginChars))
+
+		return
+	}
+
+	actualRightMarginChars :=
+		plainTextLine02.GetRightMarginRunes()
+
+	if !sMechPreon.equalRuneArrays(
+		actualRightMarginChars,
+		expectedRightMarginChars) {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02.GetRightMarginRunes()\n"+
+			"Expected Right Margin Chars = '%v'\n"+
+			"Instead, Right Margin Chars = '%v'\n",
+			ePrefix.String(),
+			string(actualRightMarginChars),
+			string(actualRightMarginChars))
+
+		return
+	}
+
+	if !sMechPreon.equalRuneArrays(
+		plainTextLine02.newLineChars,
+		expectedNewLineChars) {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02\n"+
+			"Expected New Line Chars = '%v'\n"+
+			"Instead, New Line Chars = '%v'\n",
+			ePrefix.String(),
+			string(expectedNewLineChars),
+			string(plainTextLine02.newLineChars))
+
+		return
+	}
+
+	actualNewLineChars :=
+		plainTextLine02.GetLineTerminationRunes()
+
+	if !sMechPreon.equalRuneArrays(
+		actualNewLineChars,
+		expectedNewLineChars) {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02.GetLineTerminationRunes()\n"+
+			"Expected New Line Chars = '%v'\n"+
+			"Instead, New Line Chars = '%v'\n",
+			ePrefix.String(),
+			string(expectedNewLineChars),
+			string(actualNewLineChars))
+
+		return
+	}
+
+	if plainTextLine02.turnLineTerminatorOff != false {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02\n"+
+			"Expected turnLineTerminatorOff = 'false'\n"+
+			"Instead, turnLineTerminatorOff = 'true'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if plainTextLine02.GetTurnLineTerminatorOff() != false {
+
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02.GetTurnLineTerminatorOff()\n"+
+			"Expected turnLineTerminatorOff = 'false'\n"+
+			"Instead, turnLineTerminatorOff = 'true'\n",
+			ePrefix.String())
 
 		return
 	}

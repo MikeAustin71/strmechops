@@ -1,5 +1,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
---- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 === RUN   TestNumberSignSymbolCollection_AddSymbol_000100
 --- PASS: TestNumberSignSymbolCollection_AddSymbol_000100 (0.00s)
 === RUN   TestNumberSignSymbolCollection_AddSymbol_000200
@@ -1269,7 +1269,7 @@
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100
 --- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200
---- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200 (0.01s)
+--- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300
 --- PASS: TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_NewTextFiller_000100
@@ -1299,7 +1299,7 @@
 === RUN   TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000200
 --- PASS: TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRune_000100
---- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000100 (0.01s)
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRune_000200
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRune_000300
@@ -1327,7 +1327,7 @@
 === RUN   TestTextFieldSpecLabel_CopyOut_000100
 --- PASS: TestTextFieldSpecLabel_CopyOut_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000200
---- PASS: TestTextFieldSpecLabel_CopyOut_000200 (0.01s)
+--- PASS: TestTextFieldSpecLabel_CopyOut_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_CopyOut_000300
 --- PASS: TestTextFieldSpecLabel_CopyOut_000300 (0.00s)
 === RUN   TestTextFieldSpecLabel_copyOut_000100
@@ -1413,7 +1413,7 @@
 === RUN   TestTextFieldSpecLabel_SetTextLabel_000400
 --- PASS: TestTextFieldSpecLabel_SetTextLabel_000400 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextLabel_000500
---- PASS: TestTextFieldSpecLabel_SetTextLabel_000500 (0.01s)
+--- PASS: TestTextFieldSpecLabel_SetTextLabel_000500 (0.00s)
 === RUN   TestTextFieldSpecLabel_setTextLabel_000100
 --- PASS: TestTextFieldSpecLabel_setTextLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextLabelRunes_000100
@@ -1514,6 +1514,10 @@
 --- PASS: TestTextLineSpecPlainText_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_CopyIn_000100
 --- PASS: TestTextLineSpecPlainText_CopyIn_000100 (0.00s)
+=== RUN   TestTextLineSpecPlainText_copyOut_000100
+--- PASS: TestTextLineSpecPlainText_copyOut_000100 (0.00s)
+=== RUN   TestTextLineSpecPlainText_CopyOut_000100
+--- PASS: TestTextLineSpecPlainText_CopyOut_000100 (0.00s)
 PASS
-coverage: 49.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.916s
+coverage: 51.0% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.667s
