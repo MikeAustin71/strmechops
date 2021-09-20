@@ -350,7 +350,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 func TestTextLineSpecPlainText_copyOut_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"TestTextLineSpecPlainText_copyOut_000100()",
 		"")
 
 	expectedLeftMarginChars := []rune{' ', ' ', ' '}
@@ -757,7 +757,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"TestTextLineSpecPlainText_CopyOutITextLine_000100()",
 		"")
 
 	expectedLeftMarginChars := "   "
@@ -848,10 +848,11 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 
 	return
 }
+
 func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"TestTextLineSpecPlainText_CopyOutPtr_000100()",
 		"")
 
 	leftMargin := 3
@@ -943,6 +944,312 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 			"because 'plainTextLine03' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_empty_000100()",
+		"")
+
+	txtLinePlainTextElectron01 := textLineSpecPlainTextElectron{}
+
+	txtLinePlainTextElectron01.empty(
+		nil)
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOff()
+
+	txtLinePlainTextElectron02 := textLineSpecPlainTextElectron{}
+
+	txtLinePlainTextElectron02.empty(
+		plainTextLine01)
+
+	if len(plainTextLine01.textString) != 0 {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.textString\n"+
+			"Expected length of textString == 0\n"+
+			"Instead, length of textString == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			len(plainTextLine01.textString))
+
+		return
+	}
+
+	if plainTextLine01.leftMarginChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.leftMarginChars\n"+
+			"Expected leftMarginChars == 'nil'\n"+
+			"Instead, leftMarginChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.leftMarginChars))
+
+		return
+	}
+
+	if plainTextLine01.rightMarginChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.rightMarginChars\n"+
+			"Expected rightMarginChars == 'nil'\n"+
+			"Instead, rightMarginChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.rightMarginChars))
+
+		return
+	}
+
+	if plainTextLine01.newLineChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.newLineChars\n"+
+			"Expected newLineChars == 'nil'\n"+
+			"Instead, newLineChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.newLineChars))
+
+		return
+	}
+
+	if plainTextLine01.turnLineTerminatorOff == true {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.turnLineTerminatorOff\n"+
+			"Expected turnLineTerminatorOff == 'false'\n"+
+			"Instead, turnLineTerminatorOff == 'true'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_Empty_000100()",
+		"")
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOff()
+
+	plainTextLine01.Empty()
+
+	if len(plainTextLine01.textString) != 0 {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.textString\n"+
+			"Expected length of textString == 0\n"+
+			"Instead, length of textString == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			len(plainTextLine01.textString))
+
+		return
+	}
+
+	if plainTextLine01.leftMarginChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.leftMarginChars\n"+
+			"Expected leftMarginChars == 'nil'\n"+
+			"Instead, leftMarginChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.leftMarginChars))
+
+		return
+	}
+
+	if plainTextLine01.rightMarginChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.rightMarginChars\n"+
+			"Expected rightMarginChars == 'nil'\n"+
+			"Instead, rightMarginChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.rightMarginChars))
+
+		return
+	}
+
+	if plainTextLine01.newLineChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.newLineChars\n"+
+			"Expected newLineChars == 'nil'\n"+
+			"Instead, newLineChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.newLineChars))
+
+		return
+	}
+
+	if plainTextLine01.turnLineTerminatorOff == true {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.turnLineTerminatorOff\n"+
+			"Expected turnLineTerminatorOff == 'false'\n"+
+			"Instead, turnLineTerminatorOff == 'true'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_Empty_000200()",
+		"")
+
+	plainTextLine00 := TextLineSpecPlainText{}
+
+	plainTextLine00.Empty()
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	var plainTextLine01 *TextLineSpecPlainText
+	var err error
+
+	plainTextLine01,
+		err = TextLineSpecPlainText{}.NewPtrPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOff()
+
+	plainTextLine01.Empty()
+
+	if len(plainTextLine01.textString) != 0 {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.textString\n"+
+			"Expected length of textString == 0\n"+
+			"Instead, length of textString == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			len(plainTextLine01.textString))
+
+		return
+	}
+
+	if plainTextLine01.leftMarginChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.leftMarginChars\n"+
+			"Expected leftMarginChars == 'nil'\n"+
+			"Instead, leftMarginChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.leftMarginChars))
+
+		return
+	}
+
+	if plainTextLine01.rightMarginChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.rightMarginChars\n"+
+			"Expected rightMarginChars == 'nil'\n"+
+			"Instead, rightMarginChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.rightMarginChars))
+
+		return
+	}
+
+	if plainTextLine01.newLineChars != nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.newLineChars\n"+
+			"Expected newLineChars == 'nil'\n"+
+			"Instead, newLineChars == '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(plainTextLine01.newLineChars))
+
+		return
+	}
+
+	if plainTextLine01.turnLineTerminatorOff == true {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.turnLineTerminatorOff\n"+
+			"Expected turnLineTerminatorOff == 'false'\n"+
+			"Instead, turnLineTerminatorOff == 'true'\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
