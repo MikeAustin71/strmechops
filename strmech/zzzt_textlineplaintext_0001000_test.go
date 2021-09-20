@@ -754,6 +754,100 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_CopyOut_000100()",
+		"")
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTurnLineTerminatorOff :=
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if false != actualTurnLineTerminatorOff {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.GetTurnLineTerminatorOff()"+
+			"Expected TurnLineTerminatorOff == 'false'\n"+
+			"Instead, TurnLineTerminatorOff == 'true'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var iTextLine ITextLineSpecification
+
+	iTextLine, err =
+		plainTextLine01.CopyOutITextLine(
+			ePrefix.XCtx(
+				"plainTextLine01->iTextLine"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine02, ok := iTextLine.(*TextLineSpecPlainText)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: iTextLine.(*TextLineSpecPlainText)\n"+
+			"Could not convert 'iTextLine' to TextLineSpecPlainText\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if !plainTextLine02.Equal(&plainTextLine01) {
+		t.Errorf("%v\n"+
+			"Error: Expected plainTextLine02 == plainTextLine01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if !plainTextLine01.EqualITextLine(iTextLine) {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.EqualITextLine(iTextLine)\n"+
+			"Expected plainTextLine01 == iTextLine\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
 func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
