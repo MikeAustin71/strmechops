@@ -240,7 +240,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 
 	sMechPreon := strMechPreon{}
 
-	if len(leftMarginChars) > 0 {
+	if lenLeftMargin > 0 {
 		_,
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
@@ -269,7 +269,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 		plainTxtLine.leftMarginChars = nil
 	}
 
-	if len(rightMarginChars) > 0 {
+	if lenRightMargin > 0 {
 
 		_,
 			err =

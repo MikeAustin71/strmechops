@@ -696,16 +696,32 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 		return err
 	}
 
-	leftMarginChars := make([]rune, leftMarginSpaces)
+	sMechPreon := strMechPreon{}
 
-	for i := 0; i < leftMarginSpaces; i++ {
-		leftMarginChars[i] = ' '
+	var leftMarginChars []rune
+
+	leftMarginChars,
+		err = sMechPreon.getRepeatRuneChar(
+		leftMarginSpaces,
+		' ',
+		ePrefix.XCtx(
+			"spaces->leftMarginChars"))
+
+	if err != nil {
+		return err
 	}
 
-	rightMarginChars := make([]rune, rightMarginSpaces)
+	var rightMarginChars []rune
 
-	for i := 0; i < rightMarginSpaces; i++ {
-		rightMarginChars[i] = ' '
+	rightMarginChars,
+		err = sMechPreon.getRepeatRuneChar(
+		rightMarginSpaces,
+		' ',
+		ePrefix.XCtx(
+			"spaces->rightMarginChars"))
+
+	if err != nil {
+		return err
 	}
 
 	newLinChars := []rune{'\n'}
@@ -919,8 +935,38 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 		return err
 	}
 
+	sMechPreon := strMechPreon{}
+
+	if len(leftMarginChars) > 0 {
+		_,
+			err = sMechPreon.
+			testValidityOfRuneCharArray(
+				leftMarginChars,
+				ePrefix.XCtx(
+					"leftMarginChars invalid!"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if len(rightMarginChars) > 0 {
+		_,
+			err = sMechPreon.
+			testValidityOfRuneCharArray(
+				rightMarginChars,
+				ePrefix.XCtx(
+					"rightMarginChars invalid!"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
 	_,
-		err = strMechPreon{}.ptr().
+		err = sMechPreon.
 		testValidityOfRuneCharArray(
 			textRunes,
 			ePrefix.XCtx(

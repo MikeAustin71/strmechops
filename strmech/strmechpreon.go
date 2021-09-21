@@ -25,16 +25,29 @@ type strMechPreon struct {
 //
 // Input Parameters
 //
-//  targetRuneArray            []rune
-//     - All the data in the input parameter rune array,
-//       'sourceRuneArray', will be copied to this parameter,
-//       'targetRuneArray'. All the pre-existing data in
-//       'targetRuneArray' will be deleted and replaced.
+//  targetRuneArray            *[]rune
+//     - A pointer to the target rune array. All the data in the
+//       input parameter rune array, 'sourceRuneArray', will be
+//       copied to this parameter, 'targetRuneArray'.
+//
+//       All the pre-existing data in 'targetRuneArray' will be
+//       deleted and replaced with data copied from 'sourceRuneArray'.
+//
+//       If the 'targetRuneArray' pointer is 'nil', an error will
+//       be returned.
 //
 //
-//  sourceRuneArray            []rune
-//     - The contents of this rune array will be copied to input
-//       parameter, 'targetRuneArray'.
+//  sourceRuneArray            *[]rune
+//     - A pointer to the source rune array. The contents of this
+//       rune array will be copied to input parameter,
+//       'targetRuneArray'.
+//
+//       If the 'sourceRuneArray' pointer is 'nil', an error will
+//       be returned.
+//
+//       If the concrete rune array pointed to by this pointer is
+//       is nil, 'targetRuneArray' concrete rune array is set to
+//       'nil' and NO error is returned.
 //
 //
 //  setZeroLenArrayToNil       bool
@@ -767,6 +780,143 @@ func (sMechPreon *strMechPreon) findRunesInRunes(
 	return foundIndex, err
 }
 
+// getRepeatRuneChar - Returns a slice of runes containing a single
+// rune character repeated multiple times.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeRepeatCount            int
+//     - An integer value specifying the number of times a rune
+//       character will be repeated in the slice of runes returned
+//       by this method.
+//
+//       If 'runeRepeatCount' is less than zero (0), an error will
+//       be returned.
+//
+//       If 'runeRepeatCount' is set to zero (0), the returned
+//       slice runes will be set to a 'nil' value and NO error will
+//       be returned.
+//
+//       BE CAREFUL, the maximum value of 'runeRepeatCount' is
+//       limited only by available memory.
+//
+//
+//  repeatRuneChar             rune
+//     - This rune specifies the text character which will be
+//       repeated multiple times in the slice of runes returned by
+//       this method.
+//
+//       If this value is equal to integer zero (0), an error will
+//       be returned.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  runeChars                  []rune
+//     - If this method completes successfully, this parameter will
+//       return a slice of runes containing a single text character
+//       repeated multiple times.
+//
+//       The single text character is specified by input parameter,
+//       'repeatRuneChar'. The number of times this character is
+//       repeated will be specified by input parameter,
+//       'runeRepeatCount'.
+//
+//       If this method completes successfully, the length of
+//       'runeChars' will be equal to 'repeatRuneChar'.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMechPreon *strMechPreon) getRepeatRuneChar(
+	runeRepeatCount int,
+	repeatRuneChar rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	runeChars []rune,
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	runeChars = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon.getRepeatRuneChar()",
+		"")
+
+	if err != nil {
+		return runeChars, err
+	}
+
+	if runeRepeatCount < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeRepeatCount' is invalid!\n"+
+			"'runeRepeatCount' has a value less than zero (0).\n"+
+			"runeRepeatCount = '%v'\n",
+			ePrefix.String(),
+			runeRepeatCount)
+
+		return runeChars, err
+	}
+
+	if repeatRuneChar == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'repeatRuneChar' is INVALID!\n"+
+			"'repeatRuneChar' is equal to zero (0).\n",
+			ePrefix.String())
+
+		return runeChars, err
+	}
+
+	if runeRepeatCount == 0 {
+
+		return runeChars, err
+	}
+
+	runeChars = make([]rune, runeRepeatCount)
+
+	for i := 0; i < runeRepeatCount; i++ {
+		runeChars[i] = repeatRuneChar
+	}
+
+	return runeChars, err
+}
+
 // isTargetRunesIndex - Receives a host rune array and a starting
 // index to that array. Beginning with the starting index this
 // method determines whether the target rune array exists in the
@@ -884,6 +1034,173 @@ func (sMechPreon *strMechPreon) isTargetRunesIndex(
 	isTargetRunesIndex = true
 
 	return isTargetRunesIndex
+}
+
+// setRepeatRuneChar - Receives a pointer to a rune array and
+// proceeds to populate that rune array with a single rune
+// character which is repeated multiple times as specified by
+// input parameter, 'runeRepeatCount'.
+//
+// IMPORTANT
+//
+// -----------------------------------------------------------------
+//
+// Be advised that all the data in 'targetRuneArray' will be
+// deleted and replaced.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetRuneArray            *[]rune
+//     - A pointer to a rune target rune array. This rune array
+//       will be configured with a single rune which is repeated
+//       multiple times as specified by the input parameter,
+//       'runeRepeatCount'.
+//
+//       All the pre-existing data in 'targetRuneArray' will be
+//       deleted and replaced.
+//
+//       If the 'targetRuneArray' pointer is 'nil', an error will
+//       be returned.
+//
+//
+//  runeRepeatCount            int
+//     - An integer value specifying the number of times a rune
+//       character will be repeated in the rune array specified by
+//       input parameter, 'targetRuneArray'
+//
+//       If 'runeRepeatCount' is less than zero (0), an error will
+//       be returned.
+//
+//       If 'runeRepeatCount' is set to zero (0), input parameter
+//       'targetRuneArray' will be set to 'nil', and NO error will
+//       be returned.
+//
+//       BE CAREFUL, the maximum value of 'runeRepeatCount' is
+//       limited only by available memory.
+//
+//
+//  repeatRuneChar             rune
+//     - This rune specifies the text character which will be
+//       repeated in input parameter 'targetRuneArray'.
+//
+//       If this value is equal to integer zero (0), an error will
+//       be returned.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMechPreon *strMechPreon) setRepeatRuneChar(
+	targetRuneArray *[]rune,
+	runeRepeatCount int,
+	repeatRuneChar rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon.setRepeatRuneChar()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if targetRuneArray == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetRuneArray' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if runeRepeatCount < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeRepeatCount' is invalid!\n"+
+			"'runeRepeatCount' has a value less than zero (0).\n"+
+			"runeRepeatCount = '%v'\n",
+			ePrefix.String(),
+			runeRepeatCount)
+
+		return err
+	}
+
+	if repeatRuneChar == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'repeatRuneChar' is INVALID!\n"+
+			"'repeatRuneChar' is equal to zero (0).\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if runeRepeatCount == 0 {
+
+		*targetRuneArray = nil
+
+		return err
+	}
+
+	*targetRuneArray = make([]rune, runeRepeatCount)
+
+	sourceArray := make([]rune, runeRepeatCount)
+
+	for i := 0; i < runeRepeatCount; i++ {
+		sourceArray[i] = repeatRuneChar
+	}
+
+	itemsCopied := copy(*targetRuneArray, sourceArray)
+
+	if itemsCopied != runeRepeatCount {
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"Runes copied does not equal length of 'runeRepeatCount'\n"+
+			"Length 'runeRepeatCount': '%v'\n"+
+			"  Number of Runes Copied: '%v'\n",
+			ePrefix.String(),
+			runeRepeatCount,
+			itemsCopied)
+	}
+
+	return err
 }
 
 // testValidityOfRuneCharArray - Performs a diagnostic analysis on

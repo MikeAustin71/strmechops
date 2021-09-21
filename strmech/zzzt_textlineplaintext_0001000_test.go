@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 )
 
@@ -841,6 +842,24 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 			"Error: plainTextLine01.EqualITextLine(iTextLine)\n"+
 			"Expected plainTextLine01 == iTextLine\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine03 := TextLineSpecPlainText{}
+
+	_,
+		err =
+		plainTextLine03.CopyOutITextLine(
+			ePrefix.XCtx(
+				"plainTextLine03->iTextLine"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine03.CopyOutITextLine()\n"+
+			"Expected an error return because 'plainTextLine03' is empty!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
@@ -1726,4 +1745,183 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecPlainText_setDefaultPlainTextSpec_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_CopyOutITextLine_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	txtLinePlainTextNanobot := textLineSpecPlainTextNanobot{}
+
+	err :=
+		txtLinePlainTextNanobot.setDefaultPlainTextSpec(
+			nil,
+			leftMarginSpaces,
+			rightMarginSpaces,
+			textString,
+			ePrefix.XCtx(
+				"'plainTxtLine' == 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'plainTxtLine' == 'nil'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	txtLinePlainTextNanobot2 := textLineSpecPlainTextNanobot{}
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			leftMarginSpaces,
+			rightMarginSpaces,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			-1,
+			rightMarginSpaces,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'leftMarginSpaces' == -1\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			leftMarginSpaces,
+			-1,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'rightMarginSpaces' == -1\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			1000001,
+			rightMarginSpaces,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'leftMarginSpaces' == 1,000,001\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			leftMarginSpaces,
+			1000001,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'rightMarginSpaces' == 1,000,001\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString = ""
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			leftMarginSpaces,
+			rightMarginSpaces,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'textString' is an empty string.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString = strings.Repeat("x", 1000001)
+
+	err =
+		txtLinePlainTextNanobot2.setDefaultPlainTextSpec(
+			&plainTextLine01,
+			leftMarginSpaces,
+			rightMarginSpaces,
+			textString,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextNanobot2.setDefaultPlainTextSpec()\n"+
+			"Expected an error return because input parameter\n"+
+			"'textString' has a length of 1,000,001 characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString = ""
+
 }
