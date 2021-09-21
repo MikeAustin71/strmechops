@@ -1256,3 +1256,474 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecPlainText_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_equal_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+	expectedTextChars := []rune(expectedTextString)
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainTextRunes(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextChars,
+		expectedNewLineChars,
+		true,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinePlainTextElectron := textLineSpecPlainTextElectron{}
+
+	areEqual :=
+		txtLinePlainTextElectron.equal(
+			nil,
+			&plainTextLine01)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"parameter 'plainTxtLineOne is 'nil'.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	areEqual =
+		txtLinePlainTextElectron.equal(
+			&plainTextLine01,
+			nil)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"parameter 'plainTxtLineTwo is 'nil'.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var plainTextLine02 *TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPtrPlainTextRunes(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextChars,
+		expectedNewLineChars,
+		true,
+		ePrefix.XCtx(
+			"plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinePlainTextElectron2 := textLineSpecPlainTextElectron{}
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			plainTextLine02)
+
+	if areEqual == false {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == true because input\n"+
+			"parameters 'plainTextLine01' and 'plainTextLine02'"+
+			"are euqal.\n"+
+			"HOWEVER, areEqual == false\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine03 := TextLineSpecPlainText{}
+
+	_,
+		err = plainTextLine03.CopyOut(
+		ePrefix.XCtxEmpty())
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine03.CopyOut()\n"+
+			"Expected an error return because \n"+
+			"'plainTextLine03' is empty an invalid\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine04 := TextLineSpecPlainText{}
+
+	_,
+		err = plainTextLine04.CopyOutPtr(
+		ePrefix.XCtxEmpty())
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine04.CopyOutPtr()\n"+
+			"Expected an error return because \n"+
+			"'plainTextLine04' is empty an invalid\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine03,
+		err = plainTextLine01.CopyOut(
+		ePrefix.XCtx(
+			"plainTextLine01->plainTextLine03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			&plainTextLine03)
+
+	if areEqual == false {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == true because input\n"+
+			"parameters 'plainTextLine01' and 'plainTextLine03'"+
+			"are equal.\n"+
+			"HOWEVER, areEqual == false\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine03.leftMarginChars = []rune{'x'}
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			&plainTextLine03)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"'plainTextLine01.leftMarginChars' and\n"+
+			"'plainTextLine03.leftMarginChars'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine05 := TextLineSpecPlainText{}
+
+	err =
+		plainTextLine05.CopyIn(
+			&plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01->plainTextLine05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine05.rightMarginChars = []rune{'B', 'B'}
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			&plainTextLine05)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"'plainTextLine01.rightMarginChars' and\n"+
+			"'plainTextLine05.rightMarginChars'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		plainTextLine04.CopyIn(
+			&plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01->plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine04.textString = "X X X X X X X!!!!&&&&"
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			&plainTextLine04)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"'plainTextLine01.textString' and\n"+
+			"'plainTextLine04.textString'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		plainTextLine03.CopyIn(
+			&plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01->plainTextLine03 #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine03.TurnAutoLineTerminationOn()
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			&plainTextLine03)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"'plainTextLine01.turnLineTerminatorOff' and\n"+
+			"'plainTextLine03.turnLineTerminatorOff'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		plainTextLine02.CopyIn(
+			&plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01->plainTextLine02 #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine02.newLineChars = []rune{'y', 'v', '5'}
+
+	areEqual =
+		txtLinePlainTextElectron2.equal(
+			&plainTextLine01,
+			plainTextLine02)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"'plainTextLine01.newLineChars' and\n"+
+			"'plainTextLine02.newLineChars'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine06 := TextLineSpecPlainText{}
+
+	areEqual =
+		plainTextLine06.Equal(
+			&plainTextLine01)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: txtLinePlainTextElectron2.equal()\n"+
+			"Expected areEqual == false because input\n"+
+			"'plainTextLine01' and 'plainTextLine06'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine07 := TextLineSpecPlainText{}
+
+	areEqual =
+		plainTextLine07.EqualITextLine(
+			&plainTextLine01)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine07.EqualITextLine()\n"+
+			"Expected areEqual == false because 'plainTextLine07'\n"+
+			"and input parameter 'plainTextLine01'"+
+			"are ARE NOT equal.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_EqualITextLine_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var standardLineSpec *TextLineSpecStandardLine
+
+	standardLineSpec = TextLineSpecStandardLine{}.NewPtr()
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	areEqual :=
+		plainTextLine02.EqualITextLine(
+			standardLineSpec)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine02.EqualITextLine()\n"+
+			"Expected areEqual == false because input\n"+
+			"parameter 'standardLineSpec is the wrong type.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	areEqual =
+		plainTextLine01.EqualITextLine(
+			standardLineSpec)
+
+	if areEqual == true {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.EqualITextLine()\n"+
+			"Expected areEqual == false because input\n"+
+			"parameter 'standardLineSpec is the wrong type.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		plainTextLine02.CopyIn(
+			plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01->plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual =
+		plainTextLine01.EqualITextLine(
+			&plainTextLine02)
+
+	if areEqual == false {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.EqualITextLine(plainTextLine02)\n"+
+			"Expected areEqual == true because \n"+
+			"'plainTextLine01' == 'plainTextLine02'\n"+
+			"HOWEVER, areEqual == false\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

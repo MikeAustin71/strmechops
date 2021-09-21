@@ -77,13 +77,13 @@ func (txtLinePlainTextElectron *textLineSpecPlainTextElectron) equal(
 
 	if !sMechPreon.equalRuneArrays(
 		plainTxtLineOne.leftMarginChars,
-		plainTxtLineOne.leftMarginChars) {
+		plainTxtLineTwo.leftMarginChars) {
 		return false
 	}
 
 	if !sMechPreon.equalRuneArrays(
 		plainTxtLineOne.rightMarginChars,
-		plainTxtLineOne.rightMarginChars) {
+		plainTxtLineTwo.rightMarginChars) {
 		return false
 	}
 
@@ -99,7 +99,7 @@ func (txtLinePlainTextElectron *textLineSpecPlainTextElectron) equal(
 
 	if !sMechPreon.equalRuneArrays(
 		plainTxtLineOne.newLineChars,
-		plainTxtLineOne.newLineChars) {
+		plainTxtLineTwo.newLineChars) {
 		return false
 	}
 
