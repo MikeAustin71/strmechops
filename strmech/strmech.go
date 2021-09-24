@@ -6267,7 +6267,8 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 }
 
 // Write - Implements the io.Writer interface.
-// Write writes len(p) bytes from p to the underlying
+//
+// Method 'Write' writes len(p) bytes from p to the underlying
 // data stream. In this case the underlying data stream
 // is private member variable string, 'StrMech.stringData'.
 //
@@ -6277,6 +6278,14 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 // 'StrMech.stringData' can be accessed through 'Getter' and
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
 //
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  p                          []byte
+//     -
 func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
 	if sMech.stringDataMutex == nil {

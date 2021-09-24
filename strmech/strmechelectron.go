@@ -843,7 +843,7 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 func (sMechElectron *strMechElectron) write(
 	strOpsInstance *StrMech,
 	p []byte,
-	ePrefix *ePref.ErrPrefixDto) (
+	errPrefDto *ePref.ErrPrefixDto) (
 	n int,
 	err error) {
 
@@ -855,18 +855,20 @@ func (sMechElectron *strMechElectron) write(
 
 	defer sMechElectron.lock.Unlock()
 
-	if ePrefix == nil {
-		ePrefix = ePref.ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefix = ePrefix.CopyPtr()
-	}
-
-	ePrefix.SetEPref(
-		"strMechElectron." +
-			"write()")
+	var ePrefix *ePref.ErrPrefixDto
 
 	n = 0
 	err = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechElectron.write()",
+		"")
+
+	if err != nil {
+		return n, err
+	}
 
 	if strOpsInstance.cntBytesWritten == 0 {
 		strOpsInstance.stringData = ""

@@ -265,7 +265,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 		}
 
 	} else {
-		// len(leftMarginChars) == 0
+		// lenLeftMargin == 0
 		plainTxtLine.leftMarginChars = nil
 	}
 
@@ -295,7 +295,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 		}
 
 	} else {
-		// len(rightMarginChars) == 0
+		// lenRightMargin == 0
 
 		plainTxtLine.rightMarginChars = nil
 
