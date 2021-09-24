@@ -6279,13 +6279,43 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 // 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
 //
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
 //  p                          []byte
-//     -
+//     - An array of bytes used as a byte buffer. Data from this
+//       byte buffer will be written to private member variable
+//       string 'StrMech.stringData'. The number of bytes written
+//       will be equal to the length of 'p'.
+//
+//       This method will never modify the contents of 'p'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  n                          int
+//     - 'n' contains the number of bytes written from 'p', the
+//       byte buffer, to the private member variable,
+//       StrMech.stringData'.
+//
+//
+//  err                        error
+//     - If input parameter 'plainTextLine' is judged to be valid
+//       in all respects, this return parameter will be set to
+//       'nil'.
+//
+//       Any condition encountered that caused the write operation
+//       to stop early will trigger an error. This method will
+//       return a non-nil error if return parameter "n" is less
+//       than the length of the byte buffer 'p'.
+
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
 	if sMech.stringDataMutex == nil {

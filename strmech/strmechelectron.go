@@ -874,9 +874,9 @@ func (sMechElectron *strMechElectron) write(
 		strOpsInstance.stringData = ""
 	}
 
-	n = len(p)
+	pLen := len(p)
 
-	if n == 0 {
+	if pLen == 0 {
 
 		strOpsInstance.cntBytesWritten = 0
 
@@ -888,12 +888,12 @@ func (sMechElectron *strMechElectron) write(
 	}
 
 	w := strings.Builder{}
-	w.Grow(n + 5)
+	w.Grow(pLen + 5)
 	cnt := 0
 
 	endOfString := false
 
-	for i := 0; i < n; i++ {
+	for i := 0; i < pLen; i++ {
 
 		if p[i] == 0 {
 			endOfString = true
