@@ -1751,7 +1751,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 func TestTextLineSpecPlainText_setDefaultPlainTextSpec_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_CopyOutITextLine_000100()",
+		"TestTextLineSpecPlainText_setDefaultPlainTextSpec_000100()",
 		"")
 
 	leftMarginSpaces := 2
@@ -2286,6 +2286,181 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 			printableActualStr)
 
 		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TextLineBuilder_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	expectedTextStr :=
+		leftMargin +
+			textString +
+			rightMargin +
+			"\n"
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err :=
+		plainTextLine01.SetPlainTextSpecRunes(
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			[]rune(textString),
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb := strings.Builder{}
+
+	err = plainTextLine01.TextLineBuilder(
+		&sb,
+		ePrefix.XCtx("plainTextLine01->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TextLineBuilder_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+	sb := strings.Builder{}
+
+	err := plainTextLine01.TextLineBuilder(
+		&sb,
+		ePrefix.XCtx("empty plainTextLine01->sb"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected error return from plainTextLine01.TextLineBuilder()\n"+
+			"because 'plainTextLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	expectedTextStr :=
+		leftMargin +
+			textString +
+			rightMargin +
+			"\n"
+
+	err =
+		plainTextLine01.SetPlainTextSpecRunes(
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			[]rune(textString),
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.TextLineBuilder(
+		nil,
+		ePrefix.XCtx("plainTextLine01->nil sb"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected error return from plainTextLine01.TextLineBuilder()\n"+
+			"because strings.Builder pointer is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = plainTextLine01.TextLineBuilder(
+		&sb,
+		ePrefix.XCtx("valid plainTextLine01->sb"))
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
 	}
 
 	return
