@@ -55,8 +55,100 @@ func (txtSpecAtom textSpecificationAtom) ptr() *textSpecificationAtom {
 	}
 }
 
-// readBytes - The helper method is designed to support the
+// readBytes - This helper method is designed to support the
 // io.Reader interface.
+//
+// This method reads up to len(p) bytes into p. It returns the
+// number of bytes read (0 <= n <= len(p)) and any error
+// encountered. Even if read returns n < len(p), it may use all
+// of p as scratch space during the call.
+//
+// If some data is available but not len(p) bytes, readBytes()
+// conventionally returns what is available instead of waiting
+// for more.
+//
+// When this method encounters an error or end-of-file condition
+// after successfully reading n > 0 bytes, it returns the number
+// of bytes read. It may return the (non-nil) error from the same
+// call or return the error (and n == 0) from a subsequent call.
+// An instance of this general case is that a Reader returning
+// a non-zero number of bytes at the end of the input stream may
+// return either err == EOF or err == nil. The next Read operation
+// should return 0, EOF.
+//
+// Callers should always process the n > 0 bytes returned before
+// considering the error err. Doing so correctly handles I/O errors
+// that happen after reading some bytes and also both of the
+// allowed EOF behaviors.
+//
+// This method supports buffered 'read' operations.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textReader                 *strings.Reader
+//     - A pointer to an instance of strings.Reader. The text
+//       string encapsulated by 'textReader' will be written to the
+//       byte buffer 'p'.
+//
+//
+//  p                          []byte
+//     - The byte buffer into which the text string encapsulated by
+//       parameter 'textReader' will be written.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  n                          int
+//     - The number of bytes written to byte buffer 'p'.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       readBytes() reads up to len(p) bytes into p. It returns
+//       the number of bytes read (0 <= n <= len(p)) and any error
+//       encountered. Even if readBytes() returns n < len(p), it
+//       may use all of p as scratch space during the call. If some
+//       data is available but not len(p) bytes, readBytes()
+//       conventionally returns what is available instead of
+//       waiting for more.
+//
+//       When readBytes() encounters an error or end-of-file
+//       condition after successfully reading n > 0 bytes, it
+//       returns the number of bytes read. It may return the
+//       (non-nil) error from the same call or return the error
+//       (and n == 0) from a subsequent call. An instance of this
+//       general case is that a Reader returning a non-zero number
+//       of bytes at the end of the input stream may return either
+//       err == EOF or err == nil. The next Read operation should
+//       return 0, EOF.
+//
+//       If an error message is returned and the error is NOT equal
+//       to io.EOF, the text value for input parameter 'errPrefDto'
+//       (error prefix) will be prefixed or attached at the beginning
+//       of the error message.
+//
 func (txtSpecAtom *textSpecificationAtom) readBytes(
 	textReader *strings.Reader,
 	p []byte,
@@ -108,11 +200,6 @@ func (txtSpecAtom *textSpecificationAtom) readBytes(
 
 	n,
 		err = textReader.Read(p)
-	/*
-		if err == io.EOF {
-			textReader = nil
-		}
-	*/
 
 	return n, err
 }

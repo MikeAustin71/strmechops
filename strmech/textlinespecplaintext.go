@@ -2841,6 +2841,40 @@ func (plainTextLine TextLineSpecPlainText) NewPtrPlainTextStrings(
 //       end of the input stream may return either err == EOF or
 //       err == nil. The next read operation should return 0, EOF.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Usage Example
+//
+//  p := make([]byte, 50)
+//
+//  var n, readBytesCnt int
+//  var actualStr string
+//
+//  for {
+//
+//    n,
+//    err = plainTextLine01.Read(p)
+//
+//    if n == 0 {
+//      break
+//    }
+//
+//    actualStr += string(p[:n])
+//    readBytesCnt += n
+//  }
+//
+//  if err != nil &&
+//    err != io.EOF {
+//     return fmt.Errorf(
+//      "Error Returned From plainTextLine01.Read(p)\n"+
+//      "Error = \n%v\n",
+//       err.Error())
+//  }
+//
+//  fmt.Printf("Text Line String: %v\n",
+//                actualStr)
+//
 func (plainTextLine *TextLineSpecPlainText) Read(
 	p []byte) (
 	n int,
@@ -2857,14 +2891,6 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TextLineSpecPlainText.Read()",
 		"")
-
-	/*	n,
-		err = textLineSpecPlainTextElectron{}.ptr().
-		readBytes(
-			plainTextLine,
-			p,
-			ePrefix.XCtx("p"))
-	*/
 
 	if plainTextLine.textLineReader == nil {
 
@@ -2903,10 +2929,45 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 				"p -> plainTextLine.textLineReader"))
 
 	if err == io.EOF {
+
 		plainTextLine.textLineReader = nil
+
 	}
 
 	return n, err
+}
+
+// ReaderInitialize - This method will reset the internal member
+// variable TextLineSpecPlainText.textLineReader to its initial
+// zero state of 'nil'.
+//
+// This method is rarely used. It provides a means of
+// reinitializing the internal strings.Reader in case an error
+// occurs during a read operation initiated by method
+// TextLineSpecPlainText.Read().
+//
+// Calling this method cleans up the residue from an aborted read
+// operation and allows the calling function to start a new read
+// operation.
+//
+// If any errors are returned by method
+// TextLineSpecPlainText.Read() which are NOT equal to io.EOF, call
+// this method, TextLineSpecPlainText.ReaderInitialize(), to reset
+// the internal reader for future read operations.
+//
+func (plainTextLine *TextLineSpecPlainText) ReaderInitialize() {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	plainTextLine.textLineReader = nil
+
+	return
 }
 
 // SetLeftMarginChars - Sets the left margin characters for the
