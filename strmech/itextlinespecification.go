@@ -11,7 +11,8 @@ type ITextLineSpecification interface {
 	EqualITextLine(
 		iTextLine ITextLineSpecification) bool
 
-	GetFormattedText() string
+	GetFormattedText(
+		errorPrefix interface{}) (string, error)
 
 	IsValidInstanceError(
 		errorPrefix interface{}) error
