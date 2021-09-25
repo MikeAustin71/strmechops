@@ -1,6 +1,11 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"strings"
+	"sync"
+)
 
 type textSpecificationAtom struct {
 	lock *sync.Mutex
@@ -48,4 +53,66 @@ func (txtSpecAtom textSpecificationAtom) ptr() *textSpecificationAtom {
 	return &textSpecificationAtom{
 		lock: new(sync.Mutex),
 	}
+}
+
+// readBytes - The helper method is designed to support the
+// io.Reader interface.
+func (txtSpecAtom *textSpecificationAtom) readBytes(
+	textReader *strings.Reader,
+	p []byte,
+	errPrefDto *ePref.ErrPrefixDto) (
+	n int,
+	err error) {
+
+	if txtSpecAtom.lock == nil {
+		txtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	txtSpecAtom.lock.Lock()
+
+	defer txtSpecAtom.lock.Unlock()
+
+	n = 0
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textSpecificationAtom."+
+			"readBytes()",
+		"")
+
+	if err != nil {
+		return n, err
+	}
+
+	if textReader == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textReader' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return n, err
+	}
+
+	pLen := len(p)
+
+	if pLen == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input byte array 'p' has zero length!\n",
+			ePrefix)
+
+		return n, err
+	}
+
+	n,
+		err = textReader.Read(p)
+	/*
+		if err == io.EOF {
+			textReader = nil
+		}
+	*/
+
+	return n, err
 }

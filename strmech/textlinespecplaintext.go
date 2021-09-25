@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"strings"
 	"sync"
 )
@@ -2857,12 +2858,53 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 		"TextLineSpecPlainText.Read()",
 		"")
 
-	n,
+	/*	n,
 		err = textLineSpecPlainTextElectron{}.ptr().
 		readBytes(
 			plainTextLine,
 			p,
 			ePrefix.XCtx("p"))
+	*/
+
+	if plainTextLine.textLineReader == nil {
+
+		var formattedText string
+
+		formattedText,
+			err = textLineSpecPlainTextNanobot{}.ptr().
+			getFormattedText(
+				plainTextLine,
+				ePrefix.XCtx("plainTextLine"))
+
+		if err != nil {
+			return n, err
+		}
+
+		plainTextLine.textLineReader =
+			strings.NewReader(formattedText)
+
+		if plainTextLine.textLineReader == nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: strings.NewReader(formattedText)\n"+
+				"returned a nil pointer.\n"+
+				"plainTextLine.textLineReader == nil\n",
+				ePrefix.XCtxEmpty().String())
+
+			return n, err
+		}
+	}
+
+	n,
+		err = textSpecificationAtom{}.ptr().
+		readBytes(
+			plainTextLine.textLineReader,
+			p,
+			ePrefix.XCtx(
+				"p -> plainTextLine.textLineReader"))
+
+	if err == io.EOF {
+		plainTextLine.textLineReader = nil
+	}
 
 	return n, err
 }
