@@ -2155,3 +2155,192 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_Read_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 2
+	textString := "How now brown cow"
+
+	expectedTextStr :=
+		strings.Repeat(" ", leftMarginSpaces) +
+			textString +
+			strings.Repeat(" ", rightMarginSpaces) +
+			"\n"
+
+	lenExpectedStr := len(expectedTextStr)
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err :=
+		plainTextLine01.SetPlainTextSpec(
+			[]rune(strings.Repeat(" ", leftMarginSpaces)),
+			[]rune(strings.Repeat(" ", rightMarginSpaces)),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextElectron := textLineSpecPlainTextElectron{}
+
+	var n int
+	p := make([]byte, 100)
+
+	n,
+		err = plainTextElectron.readBytes(
+		nil,
+		p,
+		ePrefix.XCtx("plainTextLine == 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from plainTextElectron.readBytes()"+
+			"because input parameter 'plainTextLine' == 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	p = make([]byte, 0)
+
+	n,
+		err = plainTextElectron.readBytes(
+		&plainTextLine01,
+		p,
+		ePrefix.XCtx("plainTextLine == 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from plainTextElectron.readBytes()"+
+			"because input parameter 'p' is a zero length byte array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	p = make([]byte, 100)
+
+	n,
+		err = plainTextElectron.readBytes(
+		&plainTextLine01,
+		p,
+		ePrefix.XCtx("plainTextLine is valid"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error Returned From plainTextLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if n != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: plainTextLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			n)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(string(p[:n])),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_TextTypeName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TextTypeName_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	actualTxtTypeName :=
+		plainTextLine01.TextTypeName()
+
+	expectedTxtTypeName := "TextLineSpecPlainText"
+
+	if expectedTxtTypeName !=
+		actualTxtTypeName {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.TextTypeName()\n"+
+			"Expected Text Type Name = '%v'\n"+
+			"Instead, Text Type Name = '%v'\n",
+			ePrefix.String(),
+			expectedTxtTypeName,
+			actualTxtTypeName)
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_TextLineSpecName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TextLineSpecName_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	actualTxtLineSpecName :=
+		plainTextLine01.TextLineSpecName()
+
+	expectedTxtLineSpecName := "TextLineSpecPlainText"
+
+	if expectedTxtLineSpecName !=
+		actualTxtLineSpecName {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.TextLineSpecName()\n"+
+			"Expected Text Line Spec Name = '%v'\n"+
+			"Instead, Text Line Spec Name = '%v'\n",
+			ePrefix.String(),
+			expectedTxtLineSpecName,
+			actualTxtLineSpecName)
+	}
+
+	return
+}
