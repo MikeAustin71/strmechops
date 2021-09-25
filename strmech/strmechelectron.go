@@ -292,13 +292,14 @@ func (sMechElectron strMechElectron) ptr() *strMechElectron {
 // is written into 'p'. When the end of 'StrMech.stringData'
 // is written to 'p', the method returns error = 'io.EOF'.
 //
-// 'StrMech.stringData' can be accessed through Getter an Setter methods,
-// StrMech.GetStringData() and StrMech.SetStringData()
+// 'StrMech.stringData' can be accessed through Getter and
+// Setter methods, StrMech.GetStringData() and
+// StrMech.SetStringData()
 //
 func (sMechElectron *strMechElectron) readBytes(
 	strOpsInstance *StrMech,
 	p []byte,
-	ePrefix *ePref.ErrPrefixDto) (
+	errPrefDto *ePref.ErrPrefixDto) (
 	n int,
 	err error) {
 
@@ -310,18 +311,19 @@ func (sMechElectron *strMechElectron) readBytes(
 
 	defer sMechElectron.lock.Unlock()
 
-	if ePrefix == nil {
-		ePrefix = ePref.ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefix = ePrefix.CopyPtr()
-	}
-
-	ePrefix.SetEPref(
-		"strMechElectron." +
-			"readBytes()")
-
 	n = 0
-	err = nil
+
+	var ePrefix *ePref.ErrPrefixDto
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechElectron."+
+			"readBytes()",
+		"")
+
+	if err != nil {
+		return n, err
+	}
 
 	if strOpsInstance == nil {
 		err = fmt.Errorf("%v\n"+
@@ -337,7 +339,7 @@ func (sMechElectron *strMechElectron) readBytes(
 	if n == 0 {
 		strOpsInstance.cntBytesRead = 0
 		err = fmt.Errorf("%v\n"+
-			"Error: Input byte array 'p' is zero length!\n",
+			"Error: Input byte array 'p' has zero length!\n",
 			ePrefix)
 
 		return 0, err

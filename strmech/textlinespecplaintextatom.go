@@ -50,6 +50,17 @@ func (txtLinePlainTextAtom textLineSpecPlainTextAtom) ptr() *textLineSpecPlainTe
 // sole exception being that this method receives input parameter
 // 'textString' as a string instead of an array of runes.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The pre-existing member variable data fields for the
+// 'plainTxtLine' instance of TextLineSpecPlainText will be
+// overwritten and deleted.
+//
+// Member variable plainTxtLine.textLineReader will be set to
+// 'nil'.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -333,6 +344,8 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 
 	plainTxtLine.turnLineTerminatorOff =
 		turnLineTerminatorOff
+
+	plainTxtLine.textLineReader = nil
 
 	return err
 }

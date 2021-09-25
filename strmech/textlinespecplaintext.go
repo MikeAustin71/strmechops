@@ -97,6 +97,7 @@ type TextLineSpecPlainText struct {
 	textString            string
 	turnLineTerminatorOff bool
 	newLineChars          []rune
+	textLineReader        *strings.Reader
 	lock                  *sync.Mutex
 }
 
@@ -3438,6 +3439,9 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 // The pre-existing member variable data fields for the current
 // instance of TextLineSpecPlainText will be overwritten and
 // deleted.
+//
+// Member variable plainTxtLine.textLineReader will be set to
+// 'nil'.
 //
 //
 // ------------------------------------------------------------------------

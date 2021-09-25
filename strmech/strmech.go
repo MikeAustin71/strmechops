@@ -6311,7 +6311,7 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 //       to stop early will trigger an error. This method will
 //       return a non-nil error if return parameter "n" is less
 //       than the length of the byte buffer 'p'.
-
+//
 //       If an error message is returned, the text value for input
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.

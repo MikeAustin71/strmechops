@@ -21,6 +21,9 @@ type textLineSpecPlainTextNanobot struct {
 // The pre-existing data fields for input parameter
 // 'targetPlainTextLine' will be overwritten and deleted.
 //
+// Member variable targetPlainTextLine.textLineReader will be set
+// to 'nil'.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -169,6 +172,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 	targetPlainTextLine.turnLineTerminatorOff =
 		incomingPlainTextLine.turnLineTerminatorOff
 
+	targetPlainTextLine.textLineReader = nil
+
 	err = sMechPreon.copyRuneArrays(
 		&targetPlainTextLine.newLineChars,
 		&incomingPlainTextLine.newLineChars,
@@ -183,6 +188,12 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 // copyOut - Returns a deep copy of the input parameter
 // 'plainTxtLine'.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The returned instance of TextLineSpecPlainText will always set
+// member variable 'textLineReader' to 'nil'.
 //
 // ------------------------------------------------------------------------
 //
@@ -247,6 +258,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	newPlainTxtLine := TextLineSpecPlainText{}
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -254,7 +267,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 		"")
 
 	if err != nil {
-		return TextLineSpecPlainText{}, err
+		return newPlainTxtLine, err
 	}
 
 	if plainTxtLine == nil {
@@ -262,7 +275,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 			"Error: Input parameter 'plainTxtLine' is a nil pointer!\n",
 			ePrefix.String())
 
-		return TextLineSpecPlainText{}, err
+		return newPlainTxtLine, err
 	}
 
 	_,
@@ -273,10 +286,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 				"plainTxtLine"))
 
 	if err != nil {
-		return TextLineSpecPlainText{}, err
+		return newPlainTxtLine, err
 	}
-
-	newPlainTxtLine := TextLineSpecPlainText{}
 
 	sMechPreon := strMechPreon{}
 
@@ -289,7 +300,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 				"newPlainTxtLine.leftMarginChars"))
 
 	if err != nil {
-		return TextLineSpecPlainText{}, err
+		return newPlainTxtLine, err
 	}
 
 	err = sMechPreon.copyRuneArrays(
@@ -301,7 +312,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 				"newPlainTxtLine.rightMarginChars"))
 
 	if err != nil {
-		return TextLineSpecPlainText{}, err
+		return newPlainTxtLine, err
 	}
 
 	newPlainTxtLine.textString =
