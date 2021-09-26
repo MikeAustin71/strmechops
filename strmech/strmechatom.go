@@ -441,10 +441,10 @@ func (sMechAtom *strMechAtom) copyOut(
 //
 //                                       If this parameter is populated, the search for a data field
 //                                       will begin immediately after the first located Key Word
-//                                       Delimiter string. If none of Key Words in this string array
+//                                       Delimiter string. If none of the Keywords in this string array
 //                                       are located in 'targetStr', an empty string will be returned
 //                                       for data field. If this parameter is populated, at least one
-//                                       of the Key Words MUST exist in 'targetStr' before a data field
+//                                       of the Keywords MUST exist in 'targetStr' before a data field
 //                                       will be extracted and returned.
 //
 //                                       If this parameter is an empty string array, the search for a
@@ -881,13 +881,13 @@ func (sMechAtom *strMechAtom) extractDataField(
 		}
 
 		if delimiterIdx > -1 {
-			// All of the key word delimiters were zero
+			// All the key word delimiters were zero
 			// length strings. Therefore, ignore
 			// key word delimiters.
 			delimiterIdx += startIdx
 
 			if delimiterIdx >= lastGoodTargetStrIdx {
-				// Key Word Delimiter was found but it is
+				// Key Word Delimiter was found, but it is
 				// located beyond the last good character index.
 				// Probably located inside a comment or after a new-line.
 				return newDataDto, nil
@@ -982,7 +982,7 @@ exitMainTargetLoop:
 }
 
 // ExtractNumericDigits - Examines an input parameter 'targetStr' to identify and extract the
-// first instance of a number string. The number string will be comprised of one or more
+// first instance of a number string. The number string will be comprised if one or more
 // consecutive numeric digits (0-9) and may include leading, trailing or interior non-numeric
 // characters as specified by input parameters.
 //
