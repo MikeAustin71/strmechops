@@ -1310,7 +1310,7 @@ func (blkLines TextLineSpecBlankLines) String() string {
 }
 
 // TextBuilder - Configures the line of text produced by this
-// instance of TextLineSpecPlainText, and writes it to an instance
+// instance of TextLineSpecBlankLines, and writes it to an instance
 // of strings.Builder.
 //
 //
@@ -1319,9 +1319,9 @@ func (blkLines TextLineSpecBlankLines) String() string {
 // Input Parameters
 //
 //  sBuilder                   *strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextLineSpecPlainText and writes
-//      that text to 'sBuilder'.
+//    - A pointer to an instance of strings.Builder. The line of
+//      text produced by the current instance of
+//      TextLineSpecBlankLines and writes that text to 'sBuilder'.
 //
 //
 //  errorPrefix                interface{}

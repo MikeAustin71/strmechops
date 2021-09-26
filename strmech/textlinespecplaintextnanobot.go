@@ -315,6 +315,8 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 		return newPlainTxtLine, err
 	}
 
+	newPlainTxtLine.textLineReader = nil
+
 	newPlainTxtLine.textString =
 		plainTxtLine.textString
 

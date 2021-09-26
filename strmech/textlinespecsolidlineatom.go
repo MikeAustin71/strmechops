@@ -38,6 +38,7 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) empty(
 	txtSolidLine.solidLineChars = nil
 	txtSolidLine.solidLineCharsRepeatCount = 0
 	txtSolidLine.newLineChars = nil
+	txtSolidLine.textLineReader = nil
 
 	return
 }

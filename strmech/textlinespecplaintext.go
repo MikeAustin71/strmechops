@@ -3012,21 +3012,22 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 
 // ReaderInitialize - This method will reset the internal member
 // variable 'TextLineSpecPlainText.textLineReader' to its initial
-// zero state of 'nil'.
+// zero state of 'nil'. Effectively, this resets the internal
+// strings.Reader object for use in future read operations.
 //
-// This method is rarely used. It provides a means of
-// reinitializing the internal strings.Reader in case an error
-// occurs during a read operation initiated by method
+// This method is rarely used or needed. It provides a means of
+// reinitializing the internal strings.Reader object in case an
+// error occurs during a read operation initiated by method
 // TextLineSpecPlainText.Read().
 //
 // Calling this method cleans up the residue from an aborted read
-// operation and allows the calling function to start a new read
-// operation.
+// operation and prepares the strings.Reader object for future read
+// operations.
 //
 // If any errors are returned by method
 // TextLineSpecPlainText.Read() which are NOT equal to io.EOF, call
 // this method, TextLineSpecPlainText.ReaderInitialize(), to reset
-// the internal reader for future read operations.
+// and prepare the internal reader for future read operations.
 //
 func (plainTextLine *TextLineSpecPlainText) ReaderInitialize() {
 
@@ -5006,9 +5007,9 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 // Input Parameters
 //
 //  sBuilder                   *strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextLineSpecPlainText and writes
-//      that text to 'sBuilder'.
+//    - A pointer to an instance of strings.Builder. The line of
+//      text produced by the current instance of
+//      TextLineSpecPlainText and writes that text to 'sBuilder'.
 //
 //
 //  errorPrefix                interface{}

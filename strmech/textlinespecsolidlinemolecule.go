@@ -150,6 +150,8 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 	targetTxtSolidLine.solidLineCharsRepeatCount =
 		incomingTxtSolidLine.solidLineCharsRepeatCount
 
+	targetTxtSolidLine.textLineReader = nil
+
 	err = sMechPreon.copyRuneArrays(
 		&targetTxtSolidLine.newLineChars,
 		&incomingTxtSolidLine.newLineChars,
