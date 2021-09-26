@@ -555,6 +555,8 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) empty(
 
 	txtTimerLines.labelRightMarginChars = nil
 
+	txtTimerLines.textLineReader = nil
+
 	return
 }
 

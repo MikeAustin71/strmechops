@@ -118,6 +118,8 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 		return err
 	}
 
+	targetBlkLines.textLineReader = nil
+
 	_,
 		err = textLineSpecBlankLinesAtom{}.ptr().
 		testValidityOfTextLineSpecBlankLines(
@@ -139,17 +141,17 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 	targetBlkLines.numBlankLines =
 		incomingBlkLines.numBlankLines
 
-	lenIncomingChars := len(incomingBlkLines.newLineChars)
+	sMechPreon := strMechPreon{}
 
-	targetBlkLines.newLineChars =
-		make([]rune, lenIncomingChars)
+	err = sMechPreon.copyRuneArrays(
+		&targetBlkLines.newLineChars,
+		&incomingBlkLines.newLineChars,
+		true,
+		ePrefix.XCtx(
+			"incomingBlkLines.newLineChars->"+
+				"targetBlkLines.newLineChars"))
 
-	for i := 0; i < lenIncomingChars; i++ {
-		targetBlkLines.newLineChars[i] =
-			incomingBlkLines.newLineChars[i]
-	}
-
-	return nil
+	return err
 }
 
 // copyOut - Returns a deep copy of the TextLineSpecBlankLines
@@ -260,14 +262,19 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 
 	newBlankLinesSpec.numBlankLines = txtBlankLines.numBlankLines
 
-	lenBlkLineChars := len(txtBlankLines.newLineChars)
+	newBlankLinesSpec.textLineReader = nil
 
-	newBlankLinesSpec.newLineChars = make([]rune, lenBlkLineChars)
+	sMechPreon := strMechPreon{}
 
-	copy(newBlankLinesSpec.newLineChars,
-		txtBlankLines.newLineChars)
+	err = sMechPreon.copyRuneArrays(
+		&newBlankLinesSpec.newLineChars,
+		&txtBlankLines.newLineChars,
+		true,
+		ePrefix.XCtx(
+			"txtBlankLines.newLineChars->"+
+				"newBlankLinesSpec.newLineChars"))
 
-	return newBlankLinesSpec, nil
+	return newBlankLinesSpec, err
 }
 
 // empty - Receives a pointer to an instance of
@@ -295,6 +302,8 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) empty(
 	}
 
 	textSpecBlkLines.numBlankLines = 0
+
+	textSpecBlkLines.textLineReader = nil
 
 	textSpecBlkLines.newLineChars = nil
 

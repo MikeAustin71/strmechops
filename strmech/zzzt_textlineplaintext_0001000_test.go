@@ -2710,7 +2710,7 @@ func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
 
 	sb := strings.Builder{}
 
-	err = plainTextLine01.TextLineBuilder(
+	err = plainTextLine01.TextBuilder(
 		&sb,
 		ePrefix.XCtx("plainTextLine01->sb"))
 
@@ -2755,14 +2755,14 @@ func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
 	plainTextLine01 := TextLineSpecPlainText{}
 	sb := strings.Builder{}
 
-	err := plainTextLine01.TextLineBuilder(
+	err := plainTextLine01.TextBuilder(
 		&sb,
 		ePrefix.XCtx("empty plainTextLine01->sb"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error:\n"+
-			"Expected error return from plainTextLine01.TextLineBuilder()\n"+
+			"Expected error return from plainTextLine01.TextBuilder()\n"+
 			"because 'plainTextLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -2800,14 +2800,14 @@ func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = plainTextLine01.TextLineBuilder(
+	err = plainTextLine01.TextBuilder(
 		nil,
 		ePrefix.XCtx("plainTextLine01->nil sb"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error:\n"+
-			"Expected error return from plainTextLine01.TextLineBuilder()\n"+
+			"Expected error return from plainTextLine01.TextBuilder()\n"+
 			"because strings.Builder pointer is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -2815,7 +2815,7 @@ func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = plainTextLine01.TextLineBuilder(
+	err = plainTextLine01.TextBuilder(
 		&sb,
 		ePrefix.XCtx("valid plainTextLine01->sb"))
 

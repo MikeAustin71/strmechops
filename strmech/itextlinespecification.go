@@ -1,5 +1,10 @@
 package strmech
 
+import "strings"
+
+// ITextLineSpecification - Types that support this interface
+// also support the io.Reader interface.
+//
 type ITextLineSpecification interface {
 	CopyOutITextLine(
 		errorPrefix interface{}) (
@@ -17,9 +22,17 @@ type ITextLineSpecification interface {
 	IsValidInstanceError(
 		errorPrefix interface{}) error
 
+	Read(p []byte) (n int, err error)
+
+	ReaderInitialize()
+
 	String() string
 
-	TextTypeName() string
+	TextBuilder(
+		sBuilder *strings.Builder,
+		errorPrefix interface{}) error
 
 	TextLineSpecName() string
+
+	TextTypeName() string
 }

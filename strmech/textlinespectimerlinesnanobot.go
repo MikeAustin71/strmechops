@@ -118,6 +118,8 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 		return err
 	}
 
+	targetTimerLines.textLineReader = nil
+
 	_,
 		err = textLineSpecTimerLinesAtom{}.ptr().
 		testValidityOfTxtSpecTimerLines(
@@ -262,6 +264,8 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 	if err != nil {
 		return TextLineSpecTimerLines{}, err
 	}
+
+	newTxtTimerLines.textLineReader = nil
 
 	newTxtTimerLines.lock = new(sync.Mutex)
 
