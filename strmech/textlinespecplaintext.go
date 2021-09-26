@@ -5062,13 +5062,14 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 // Return Values
 //
 //  error
-//     - If input parameter 'plainTextLine' is judged to be valid
-//       in all respects, this return parameter will be set to
-//       'nil'.
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 	sBuilder *strings.Builder,

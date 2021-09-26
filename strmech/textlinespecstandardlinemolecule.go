@@ -62,6 +62,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFiel
 
 	txtStdLine.textFields = nil
 
+	txtStdLine.textLineReader = nil
+
 	return
 }
 

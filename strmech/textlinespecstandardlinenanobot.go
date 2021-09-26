@@ -173,6 +173,8 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 	targetStdLine.numOfStdLines =
 		incomingStdLine.numOfStdLines
 
+	targetStdLine.textLineReader = nil
+
 	return txtStdLineAtom.
 		copyTextFields(
 			&targetStdLine.textFields,
@@ -298,6 +300,8 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 	newStdLine := TextLineSpecStandardLine{}
 
 	newStdLine.lock = new(sync.Mutex)
+
+	newStdLine.textLineReader = nil
 
 	sMechPreon := strMechPreon{}
 
