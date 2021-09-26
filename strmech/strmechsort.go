@@ -2,7 +2,8 @@ package strmech
 
 // SortStrLengthHighestToLowest - Uses to perform two level sort
 // on string arrays. The strings are first sorted by string length
-// (greatest length to Lowest length) and then by alphabetic sort.
+// (sorted by greatest length to the lowest length) and then by
+// alphabetic sort.
 //
 // This type is designed to be used in conjunction with 'sort.Sort()'
 // Reference the Go Sort Package:
@@ -23,10 +24,10 @@ package strmech
 //
 //     Output:
 //
-//        ================================
-//        Sort by Length Highest To Lowest
+//        ==================================
+//        Sort by Length (Highest To Lowest)
 //        Ordered List
-//        ================================
+//        ==================================
 //
 //        1. fffffffffff
 //        2. eeeeeeeeeee
@@ -72,7 +73,8 @@ func (sortStrLenHigh SortStrLengthHighestToLowest) Less(i, j int) bool {
 
 // SortStrLengthLowestToHighest - Uses to perform two level sort
 // on string arrays. The strings are first sorted by string length
-// (smallest length to greatest length) and then by alphabetic sort.
+// (sorted by smallest length to the greatest length) and then by
+// alphabetic sort.
 //
 // This type is designed to be used in conjunction with 'sort.Sort()'
 // Reference the Go Sort Package:
@@ -93,10 +95,10 @@ func (sortStrLenHigh SortStrLengthHighestToLowest) Less(i, j int) bool {
 //
 //     Output:
 //
-//       ================================
-//       Sort by Length Lowest To Highest
+//       ==================================
+//       Sort by Length (Lowest To Highest)
 //       Ordered List
-//       ================================
+//       ==================================
 //       1. z
 //       2. xx
 //       3. aaaaa

@@ -227,7 +227,18 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	rawOutput := stdLine.GetFormattedText()
+	var rawOutput string
+
+	rawOutput,
+		err = stdLine.GetFormattedText(
+		ePrefix.XCtx("stdLine->rawOutput"))
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
 
 	sMech := StrMech{}
 
@@ -244,7 +255,16 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	rawOutput = stdLineTwo.GetFormattedText()
+	rawOutput,
+		err = stdLineTwo.GetFormattedText(
+		"stdLineTwo->rawOutput")
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
 
 	actualStr = sMech.ConvertNonPrintableChars([]rune(rawOutput), false)
 

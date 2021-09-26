@@ -18,7 +18,7 @@ type NumberBuilder struct {
 	currencySymbol   []rune              // The currency symbol
 	numberSignSymbol []rune              // The number sign symbol
 	integerSeparator IntegerSeparatorDto // Integer separator format information.
-	//                                    //  This is usually the thousands separator.
+	//                                    //  This is usually the thousand's separator.
 	numberFieldLen int // The length of the text number field in which the
 	//                       //  numeric value will be displayed
 	textJustification TextJustify // The justification specification which will

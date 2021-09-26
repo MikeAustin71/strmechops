@@ -271,7 +271,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 }
 
 // empty - Receives a pointer to an instance of
-// TextLineSpecBlankLines and proceeds to set all of the internal
+// TextLineSpecBlankLines and proceeds to set all the internal
 // member variables to their uninitialized or zero states.
 //
 // IMPORTANT
@@ -307,8 +307,8 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) empty(
 //
 // If the data elements of both input parameters 'blkLines' and
 // 'incomingBlkLines' are equal in all respects, this method
-// returns a boolean value of 'true'. Otherwise this method returns
-// 'false'.
+// returns a boolean value of 'true'. Otherwise, this method
+// returns 'false'.
 //
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) equal(
 	txtBlankLinesOne *TextLineSpecBlankLines,
