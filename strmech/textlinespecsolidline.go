@@ -1774,7 +1774,43 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //
 // ------------------------------------------------------------------------
 //
-// Usage Example
+// Usage Examples:
+//
+//  Example # 1
+//
+//  p := make([]byte, 50)
+//
+//  var n, readBytesCnt int
+//  sb := strings.Builder{}
+//
+//  for {
+//
+//    n,
+//    err = txtSpecSolidLine01.Read(p)
+//
+//    if n == 0 {
+//      break
+//    }
+//
+//    sb.Write(p[:n])
+//    readBytesCnt += n
+//  }
+//
+//  if err != nil &&
+//    err != io.EOF {
+//     return fmt.Errorf(
+//      "Error Returned From txtSpecSolidLine01.Read(p)\n"+
+//      "Error = \n%v\n",
+//       err.Error())
+//  }
+//
+//  fmt.Printf("Text Line String: %s\n",
+//                sb.String())
+//
+//  fmt.Printf("Number of bytes Read: %v\n",
+//                readBytesCnt)
+//
+//  Example # 2
 //
 //  p := make([]byte, 50)
 //
@@ -1804,6 +1840,9 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //
 //  fmt.Printf("Text Line String: %v\n",
 //                actualStr)
+//
+//  fmt.Printf("Number of bytes Read: %v\n",
+//                readBytesCnt)
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) Read(
 	p []byte) (

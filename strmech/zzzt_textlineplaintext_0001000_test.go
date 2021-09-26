@@ -2419,6 +2419,142 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_Read_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 2
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+	newLineTerminator := "\n"
+
+	expectedTextStr :=
+		leftMargin +
+			textString +
+			rightMargin +
+			newLineTerminator
+
+	lenExpectedStr := len(expectedTextStr)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainTextStrings(
+		leftMargin,
+		rightMargin,
+		textString,
+		newLineTerminator,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	p := make([]byte, 15)
+
+	var n, readBytesCnt int
+	sb := strings.Builder{}
+	sb.Grow(128)
+
+	for {
+
+		n,
+			err = plainTextLine01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		sb.Write(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From plainTextLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if plainTextLine01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"plainTextLine01.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: plainTextLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

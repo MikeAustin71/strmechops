@@ -12,7 +12,7 @@ type strMechAtom struct {
 }
 
 // breakTextAtLineLength - Breaks string text into lines. Takes a
-// string and inserts a line delimiter character (a.k.a 'rune') at
+// string and inserts a line delimiter character (a.k.a. 'rune') at
 // the specified line length ('lineLength').
 //
 // ------------------------------------------------------------------------
