@@ -788,8 +788,8 @@ func (txtFillerField *TextFieldSpecFiller) GetFillerCharsRepeatCount() int {
 //  Filler Characters Array Length  X
 //               Filler Characters Repeat Count
 //
-// This method is identical in function to
-// TextFieldSpecFiller.String()
+// This method is similar to method TextFieldSpecFiller.String()
+// with the exception that this method returns an error.
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
@@ -910,7 +910,8 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedText(
 	return textFieldSpecFillerMolecule{}.ptr().
 		getFormattedText(
 			txtFillerField,
-			ePrefix)
+			ePrefix.XCtx(
+				"txtFillerField"))
 }
 
 // IsValidInstance - Performs a diagnostic review of the data
@@ -2399,7 +2400,7 @@ func (txtFillerField *TextFieldSpecFiller) Read(
 			err = fmt.Errorf("%v\n"+
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
-				"plainTextLine.textLineReader == nil\n",
+				"txtFillerField.textLineReader == nil\n",
 				ePrefix.XCtxEmpty().String())
 
 			return n, err
@@ -3144,8 +3145,9 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 //  Filler Characters Array Length  X
 //               Filler Characters Repeat Count
 //
-// This method is identical in function to
-// TextFieldSpecFiller.GetFormattedText()
+// This method is similar to method
+// TextFieldSpecFiller.GetFormattedText() with the exception that
+// this method does NOT return an error.
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
