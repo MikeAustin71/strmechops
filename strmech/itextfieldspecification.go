@@ -1,12 +1,8 @@
 package strmech
 
+import "strings"
+
 type ITextFieldSpecification interface {
-	TextTypeName() string
-
-	TextFieldName() string
-
-	GetFormattedText() string
-
 	CopyOutITextField(
 		errorPrefix interface{}) (
 		ITextFieldSpecification,
@@ -17,8 +13,23 @@ type ITextFieldSpecification interface {
 	EqualITextField(
 		iTextField ITextFieldSpecification) bool
 
+	GetFormattedText(
+		errorPrefix interface{}) (string, error)
+
 	IsValidInstanceError(
 		errorPrefix interface{}) error
 
+	Read(p []byte) (n int, err error)
+
+	ReaderInitialize()
+
 	String() string
+
+	TextTypeName() string
+
+	TextFieldName() string
+
+	TextBuilder(
+		sBuilder *strings.Builder,
+		errorPrefix interface{}) error
 }

@@ -151,6 +151,8 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 	targetTxtFiller.fillerCharsRepeatCount =
 		incomingTxtFiller.fillerCharsRepeatCount
 
+	targetTxtFiller.textLineReader = nil
+
 	return nil
 }
 
@@ -269,6 +271,8 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
 	newTxtFieldFiller.fillerCharsRepeatCount =
 		txtFieldFiller.fillerCharsRepeatCount
 
+	newTxtFieldFiller.textLineReader = nil
+
 	newTxtFieldFiller.lock = new(sync.Mutex)
 
 	return newTxtFieldFiller, nil
@@ -301,6 +305,8 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) empty(
 	txtFieldFiller.fillerCharacters = nil
 
 	txtFieldFiller.fillerCharsRepeatCount = 0
+
+	txtFieldFiller.textLineReader = nil
 
 	return
 }
@@ -462,6 +468,8 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) newEmpty() TextFieldS
 	newFillerField.fillerCharacters = nil
 
 	newFillerField.fillerCharsRepeatCount = 0
+
+	newFillerField.textLineReader = nil
 
 	newFillerField.lock = new(sync.Mutex)
 

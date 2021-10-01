@@ -244,7 +244,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		return formattedText, err
 	}
 
-	var lineStr string
+	var lineStr, tempStr string
 
 	for i := 0; i < lenTextFields; i++ {
 
@@ -259,7 +259,18 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 			return formattedText, err
 		}
 
-		lineStr += txtStdLine.textFields[i].GetFormattedText()
+		tempStr,
+			err = txtStdLine.textFields[i].GetFormattedText(
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"txtStdLine.textFields[%v]",
+					i)))
+
+		if err != nil {
+			return formattedText, err
+		}
+
+		lineStr += tempStr
 	}
 
 	for j := 0; j < txtStdLine.numOfStdLines; j++ {

@@ -374,11 +374,17 @@ func (mt MainTest) IntSeparateNumRunes04() {
 		return
 	}
 
+	var str string
+
 	fmt.Println()
-	fmt.Println(txtLineBreak.GetFormattedText())
+
+	str,
+		_ = txtLineBreak.GetFormattedText(ePrefix.XCtxEmpty())
+
+	fmt.Println(str)
 	fmt.Println(txtFuncName.String())
 	fmt.Println(txtLabel.String())
-	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println(txtLineBreak.GetFormattedText(nil))
 	fmt.Println()
 
 	var intSepDto strmech.IntegerSeparatorDto
@@ -418,21 +424,36 @@ func (mt MainTest) IntSeparateNumRunes04() {
 
 	actualNumStr := string(numStrWithIntSeps)
 
-	fmt.Println(txtLineBreak.GetFormattedText())
+	var lineBreak string
+
+	lineBreak,
+		err = txtLineBreak.GetFormattedText(
+		ePrefix.XCtx("LineBreak"))
+
+	if err != nil {
+		outStr = fmt.Sprintf(
+			"%v\n\n\n", err.Error())
+		fmt.Printf(outStr)
+		return
+	}
+
+	ePrefix.XCtxEmpty()
+
+	fmt.Println(lineBreak)
 	fmt.Printf("Expected Num Str: '%v'\n",
 		expectedNStr)
 	fmt.Printf("  Actual Num Str: '%v'\n",
 		actualNumStr)
-	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println(lineBreak)
 	fmt.Printf("Length Expected Num Str: %v\n",
 		len(expectedNStr))
 	fmt.Printf("  Length Actual Num Str: %v\n",
 		len(actualNumStr))
-	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println(lineBreak)
 	// Decimal 48 = 0
 	fmt.Printf("Actual Rune Array: '%v'\n",
 		numStrWithIntSeps)
-	fmt.Println(txtLineBreak.GetFormattedText())
+	fmt.Println(lineBreak)
 	fmt.Println()
 
 	if actualNumStr == expectedNStr {
