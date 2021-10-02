@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"strings"
 	"testing"
 )
@@ -1163,6 +1164,365 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 			ePrefix.String())
 	}
 
+}
+
+func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_Read_000100()",
+		"")
+
+	expectedFieldLen := 14
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := strings.Repeat(" ", expectedFieldLen)
+
+	p := make([]byte, 500)
+
+	var n, readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = txtFieldSpacerOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtFieldSpacerOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if txtFieldSpacerOne.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"fillerTxtFieldOne.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != expectedFieldLen {
+		t.Errorf("%v\n"+
+			"Byte Length Error: fillerTxtFieldOne.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedFieldLen,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_ReadInitialize_000100()",
+		"")
+
+	expectedFieldLen := 14
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := strings.Repeat(" ", expectedFieldLen)
+
+	p := make([]byte, 5)
+
+	var n int
+
+	n,
+		err = txtFieldSpacerOne.Read(p)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldSpacerOne.Read(p)\n"+
+			"Error:\n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if n != 5 {
+		t.Errorf("%v\n"+
+			"Error: txtFieldSpacerOne.Read(p)\n"+
+			"Expected n == 5\n"+
+			"Instead, n == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			n)
+
+		return
+	}
+
+	p = make([]byte, 100)
+
+	txtFieldSpacerOne.ReaderInitialize()
+
+	var readBytesCnt int
+	var actualStr string
+	n = 0
+
+	for {
+
+		n,
+			err = txtFieldSpacerOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtFieldSpacerOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if txtFieldSpacerOne.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"fillerTxtFieldOne.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != expectedFieldLen {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtFieldSpacerOne.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read Length = '%v'\n"+
+			"       Actual Bytes Length = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedFieldLen,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	if txtFieldSpacerOne.textLineReader != nil {
+		t.Errorf("%v Test #1\n"+
+			"Completed Read Operation but txtFieldSpacerOne.textLineReader\n"+
+			"is NOT equal to 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	p = make([]byte, 100)
+	n = 0
+	actualStr = ""
+	readBytesCnt = 0
+
+	for {
+
+		n,
+			err = txtFieldSpacerOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error Returned From txtFieldSpacerOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	if txtFieldSpacerOne.textLineReader != nil {
+		t.Errorf("%v Test #2\n"+
+			"Completed Read Operation but txtFieldSpacerOne.textLineReader\n"+
+			"is NOT equal to 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
