@@ -690,21 +690,14 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 
 	txtFieldLabelOne.Empty()
 
-	var textLabel string
-
-	textLabel,
+	_,
 		err = txtFieldLabelOne.GetFormattedText(
 		ePrefix.XCtx("txtFieldLabelOne"))
 
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	if !strings.Contains(textLabel, "Error") {
+	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: Expected an error string from txtFieldLabelOne.GetFormattedText()\n"+
+			"because txtFieldLabelOne is empty and txtFieldLabelOne.textLabel is nil.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix)
 		return

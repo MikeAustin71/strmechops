@@ -1081,22 +1081,13 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 			ePrefix.XCtx(
 				"txtFieldSpacerTwo"))
 
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	if !strings.Contains(actualStr, "Error") {
+	if err == nil {
 		t.Errorf("%v\n"+
-			"Error: Expected 'actualStr' to contain the word 'Error'.\n"+
-			"because txtFieldSpacerTwo.fieldLen = -99\n"+
-			"HOWEVER, the returned 'actualStr' did NOT contain the "+
-			"word 'Error'\n"+
-			"'actualStr' = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			actualStr)
-
+			"Error:\n"+
+			"Expected an error return from txtFieldSpacerTwo.GetFormattedText()\n"+
+			"because txtFieldSpacerTwo.fieldLen = -99 and is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			err.Error())
 		return
 	}
 

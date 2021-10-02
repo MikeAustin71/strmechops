@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"strings"
 	"testing"
 )
@@ -1790,17 +1791,14 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 		err = fillerTxtFieldOne.GetFormattedText(
 		ePrefix)
 
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	if !strings.Contains(actualFillerText, "Error") {
+	if err == nil {
 		t.Errorf("%v - Test #1\n"+
-			"Expected 'actualFillerText' to contain word 'Error'.\n"+
-			"HOWEVER, There is no word 'Error' in the returned text.\n",
+			"Error:\n"+
+			"Expected an error return from fillerTxtFieldOne.GetFormattedText()\n"+
+			"because fillerTxtFieldOne.fillerCharacters == nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix)
+		return
 	}
 
 	return
@@ -6890,6 +6888,375 @@ func TestTextFieldSpecFiller_newEmpty_000100(t *testing.T) {
 			"txtFillerField.fillerCharacters = '%v'\n",
 			ePrefix.String(),
 			string(txtFillerField.fillerCharacters))
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_Read_000100()",
+		"")
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedFillerText :=
+		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	lenExpectedFillerText := len(expectedFillerText)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	p := make([]byte, 500)
+
+	var n, readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = fillerTxtFieldOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if fillerTxtFieldOne.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"fillerTxtFieldOne.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedFillerText {
+		t.Errorf("%v\n"+
+			"Byte Length Error: fillerTxtFieldOne.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedFillerText,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFillerText),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
+func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_Read_000100()",
+		"")
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedFillerText :=
+		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	lenExpectedFillerText := len(expectedFillerText)
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	p := make([]byte, 5)
+
+	var n int
+
+	n,
+		err = fillerTxtFieldOne.Read(p)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by fillerTxtFieldOne.Read(p)\n"+
+			"Error:\n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if n != 5 {
+		t.Errorf("%v\n"+
+			"Error: fillerTxtFieldOne.Read(p)\n"+
+			"Expected n == 5\n"+
+			"Instead, n == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			n)
+
+		return
+	}
+
+	p = make([]byte, 100)
+
+	fillerTxtFieldOne.ReaderInitialize()
+
+	var readBytesCnt int
+	var actualStr string
+	n = 0
+
+	for {
+
+		n,
+			err = fillerTxtFieldOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if fillerTxtFieldOne.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"fillerTxtFieldOne.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedFillerText {
+		t.Errorf("%v\n"+
+			"Byte Length Error: fillerTxtFieldOne.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedFillerText,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFillerText),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	if fillerTxtFieldOne.textLineReader != nil {
+		t.Errorf("%v Test #1\n"+
+			"Completed Read Operation but fillerTxtFieldOne.textLineReader\n"+
+			"is NOT equal to 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	p = make([]byte, 100)
+	n = 0
+	actualStr = ""
+	readBytesCnt = 0
+
+	for {
+
+		n,
+			err = fillerTxtFieldOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	if fillerTxtFieldOne.textLineReader != nil {
+		t.Errorf("%v Test #2\n"+
+			"Completed Read Operation but fillerTxtFieldOne.textLineReader\n"+
+			"is NOT equal to 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
 	}
 
 	return
