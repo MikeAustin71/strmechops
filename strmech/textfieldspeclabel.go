@@ -1039,9 +1039,59 @@ func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
 
 	newTxtFieldLabel.textJustification = TextJustify(0).None()
 
+	newTxtFieldLabel.textLineReader = nil
+
 	newTxtFieldLabel.lock = new(sync.Mutex)
 
 	return &newTxtFieldLabel
+}
+
+// NewPtr - Returns a pointer to a new unpopulated instance of
+// TextFieldSpecLabel. All the member variables contained in
+// this new instance are set to their uninitialized or zero values.
+//
+// Be advised that setting member variables to their zero values
+// means that the returned TextFieldSpecLabel instance is invalid.
+// Therefore, in order to use this TextFieldSpecLabel instance,
+// users must later call the setter methods on this type in order
+// to configure valid and meaningful member variable data values.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecLabel
+//     - This parameter returns a pointer to a new, empty instance
+//       of TextFieldSpecLabel. Member variable data values are
+//       set to their initial or zero values.
+//
+func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	newLabelField := TextFieldSpecLabel{}
+
+	newLabelField.textJustification = TextJustify(0).None()
+
+	newLabelField.textLineReader = nil
+
+	newLabelField.lock = new(sync.Mutex)
+
+	return &newLabelField
 }
 
 // NewPtrTextLabel - Creates and returns a pointer to a new, fully
@@ -1906,6 +1956,12 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 // that happen after reading some bytes and also both of the
 // allowed EOF behaviors.
 //
+// The last read operation performed on the formatted text string
+// will always return n==0 and err==io.EOF.
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -2084,6 +2140,43 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 	}
 
 	return n, err
+}
+
+// ReaderInitialize - This method will reset the internal member
+// variable 'TextFieldSpecLabel.textLineReader' to its initial
+// zero state of 'nil'. Effectively, this resets the internal
+// strings.Reader object for use in future read operations.
+//
+// This method is rarely used or needed. It provides a means of
+// reinitializing the internal strings.Reader object in case an
+// error occurs during a read operation initiated by method
+// TextFieldSpecLabel.Read().
+//
+// Calling this method cleans up the residue from an aborted read
+// operation and prepares the strings.Reader object for future read
+// operations.
+//
+// If any errors are returned by method
+// TextFieldSpecLabel.Read() which are NOT equal to io.EOF, call
+// this method, TextFieldSpecLabel.ReaderInitialize(), to reset
+// and prepare the internal reader for future read operations.
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
+func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	txtFieldLabel.textLineReader = nil
+
+	return
 }
 
 // SetFieldLength - Sets The length of the text field in which the
@@ -3150,6 +3243,148 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 	}
 
 	return result
+}
+
+// TextBuilder - Configures the line of text produced by this
+// instance of TextFieldSpecLabel, and writes it to an instance
+// of strings.Builder.
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  sBuilder                   *strings.Builder
+//    - A pointer to an instance of strings.Builder. The line of
+//      text produced by the current instance of
+//      TextFieldSpecLabel and writes that text to 'sBuilder'.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
+	sBuilder *strings.Builder,
+	errorPrefix interface{}) error {
+
+	if txtFieldLabel.lock == nil {
+		txtFieldLabel.lock = new(sync.Mutex)
+	}
+
+	txtFieldLabel.lock.Lock()
+
+	defer txtFieldLabel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecLabel.TextBuilder()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if sBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sBuilder' (strings.Builder)\n"+
+			"is invalid! 'sBuilder' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var formattedTxtStr string
+
+	formattedTxtStr,
+		err = textSpecificationMolecule{}.ptr().
+		getFormattedText(
+			txtFieldLabel.textLabel,
+			txtFieldLabel.fieldLen,
+			txtFieldLabel.textJustification,
+			ePrefix.XCtx(
+				"txtFieldLabel"))
+
+	if err != nil {
+		return err
+	}
+
+	var err2 error
+
+	_,
+		err2 = sBuilder.WriteString(formattedTxtStr)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
+			"%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err2.Error())
+	}
+
+	return err
 }
 
 // TextFieldName - returns a string specifying the name of the Text

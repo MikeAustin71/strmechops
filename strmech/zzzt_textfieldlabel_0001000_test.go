@@ -59,7 +59,17 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -251,7 +261,16 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -349,7 +368,17 @@ func TestTextFieldSpecLabel_CopyOut_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelThree.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelThree.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -514,7 +543,17 @@ func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelThree.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelThree.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -651,7 +690,17 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 
 	txtFieldLabelOne.Empty()
 
-	textLabel := txtFieldLabelOne.GetFormattedText()
+	var textLabel string
+
+	textLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix.XCtx("txtFieldLabelOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if !strings.Contains(textLabel, "Error") {
 		t.Errorf("%v\n"+
@@ -1178,7 +1227,17 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelOne\n"+
@@ -1191,7 +1250,15 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelTwo.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelTwo\n"+
@@ -1308,7 +1375,17 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelOne\n"+
@@ -1321,7 +1398,15 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelTwo.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelTwo\n"+
@@ -1432,7 +1517,17 @@ func TestTextFieldSpecLabel_NewTextLabel_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -1500,7 +1595,17 @@ func TestTextFieldSpecLabel_NewTextLabel_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -2069,7 +2174,18 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v Test #1\n"+
@@ -2099,7 +2215,16 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelOne.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v Test #2\n"+
@@ -2128,7 +2253,16 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelOne.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldLabelOne #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v Test #3\n"+
@@ -2214,7 +2348,17 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelTwo.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -2297,7 +2441,17 @@ func TestTextFieldSpecLabel_SetTextLabel_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelThree.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelThree.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -2377,7 +2531,17 @@ func TestTextFieldSpecLabel_SetTextLabel_000300(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelThree.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelThree.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -2566,7 +2730,17 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelOne\n"+
@@ -2579,7 +2753,15 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelTwo.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelTwo\n"+
@@ -2699,7 +2881,17 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelOne\n"+
@@ -2712,7 +2904,15 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000200(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelTwo.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelTwo\n"+
@@ -2832,7 +3032,17 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000300(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelOne\n"+
@@ -2845,7 +3055,15 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000300(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelTwo.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelTwo\n"+
@@ -3043,7 +3261,17 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000600(t *testing.T) {
 		return
 	}
 
-	actualLabel := txtFieldLabelOne.GetFormattedText()
+	var actualLabel string
+
+	actualLabel,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelOne\n"+
@@ -3056,7 +3284,15 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000600(t *testing.T) {
 		return
 	}
 
-	actualLabel = txtFieldLabelTwo.GetFormattedText()
+	actualLabel,
+		err = txtFieldLabelTwo.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v - txtFieldLabelTwo\n"+
@@ -3267,7 +3503,8 @@ func TestTextFieldSpecLabel_TextFieldName_0001000(t *testing.T) {
 
 	expectedTxtFieldName := "TextFieldSpecLabel"
 
-	actualTxtFieldName := TextFieldSpecLabel{}.TextFieldName()
+	actualTxtFieldName := TextFieldSpecLabel{}.
+		NewPtr().TextFieldName()
 
 	if expectedTxtFieldName != actualTxtFieldName {
 		t.Errorf("%v - Test #1\n"+
@@ -3333,7 +3570,8 @@ func TestTextFieldSpecLabel_TextTypeName_0001000(t *testing.T) {
 
 	expectedTxtTypeName := "TextFieldSpecLabel"
 
-	actualTxtTypeName := TextFieldSpecLabel{}.TextTypeName()
+	actualTxtTypeName := TextFieldSpecLabel{}.
+		NewPtr().TextTypeName()
 
 	if expectedTxtTypeName != actualTxtTypeName {
 		t.Errorf("%v - Test #1\n"+

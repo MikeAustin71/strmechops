@@ -316,6 +316,12 @@ func TestTextFieldSpecFiller_CopyIn_000200(t *testing.T) {
 		err = fillerTxtFieldThree.GetFormattedText(
 		ePrefix)
 
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if expectedFillerText != actualFillerText {
 		t.Errorf("%v - Test #3\n"+
 			"Error: Expected Filler Text = '%v'\n"+
@@ -1110,6 +1116,12 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 		ePrefix.XCtx(
 			"fillerTxtFieldThree"))
 
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if expectedFillerText != actualFillerText {
 		t.Errorf("%v\n"+
 			"Error: Expected fillerTxtFieldThree Filler Text = '%v'\n"+
@@ -1325,6 +1337,12 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 		err = fillerTxtFieldThree.GetFormattedText(
 		ePrefix.XCtx(
 			"fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedFillerText != actualFillerText {
 		t.Errorf("%v\n"+
@@ -3552,6 +3570,12 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 		err = fillerTxtFieldOne.GetFormattedText(
 		ePrefix.XCtx(
 			"fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedFillerText != actualFillerText {
 		t.Errorf("%v - Test #1\n"+
@@ -6334,7 +6358,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
 		ePrefix.XCtx(
-			"fillerTxtFieldTwo"))
+			"fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8270,6 +8294,12 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 		ePrefix.XCtx(
 			"fillerTxtFieldThree"))
 
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if expectedFillerText != actualFillerText {
 		t.Errorf("%v - Test #3\n"+
 			"Error: Expected fillerTxtFieldThree Filler Text = '%v'\n"+
@@ -9281,7 +9311,8 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCtx(
+			"fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9357,7 +9388,14 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx("fillerTxtFieldFour"))
+		ePrefix.XCtx(
+			"fillerTxtFieldFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedFillerText != actualFillerText {
 		t.Errorf("%v - fillerTxtFieldFour - Test #2\n"+

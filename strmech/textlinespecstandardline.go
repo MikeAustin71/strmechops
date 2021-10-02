@@ -2918,6 +2918,12 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 // that happen after reading some bytes and also both of the
 // allowed EOF behaviors.
 //
+// The last read operation performed on the formatted text string
+// will always return n==0 and err==io.EOF.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -3114,6 +3120,9 @@ func (stdLine *TextLineSpecStandardLine) Read(
 // call this method, TextLineSpecStandardLine.ReaderInitialize(),
 // to reset and prepare the internal reader for future read
 // operations.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 func (stdLine *TextLineSpecStandardLine) ReaderInitialize() {
 
@@ -4336,6 +4345,9 @@ func (stdLine TextLineSpecStandardLine) String() string {
 // TextBuilder - Configures the line of text produced by this
 // instance of TextLineSpecPlainText, and writes it to an instance
 // of strings.Builder.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 //
 // ----------------------------------------------------------------

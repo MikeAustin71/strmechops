@@ -2872,6 +2872,12 @@ func (plainTextLine TextLineSpecPlainText) NewPtrPlainTextStrings(
 // that happen after reading some bytes and also both of the
 // allowed EOF behaviors.
 //
+// The last read operation performed on the formatted text string
+// will always return n==0 and err==io.EOF.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -3067,6 +3073,9 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 // TextLineSpecPlainText.Read() which are NOT equal to io.EOF, call
 // this method, TextLineSpecPlainText.ReaderInitialize(), to reset
 // and prepare the internal reader for future read operations.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 func (plainTextLine *TextLineSpecPlainText) ReaderInitialize() {
 
@@ -5039,6 +5048,9 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 // TextBuilder - Configures the line of text produced by this
 // instance of TextLineSpecPlainText, and writes it to an instance
 // of strings.Builder.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 //
 // ----------------------------------------------------------------

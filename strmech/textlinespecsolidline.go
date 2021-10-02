@@ -1729,6 +1729,12 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 // that happen after reading some bytes and also both of the
 // allowed EOF behaviors.
 //
+// The last read operation performed on the formatted text string
+// will always return n==0 and err==io.EOF.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -1924,6 +1930,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) Read(
 // TextLineSpecSolidLine.Read() which are NOT equal to io.EOF, call
 // this method, TextLineSpecSolidLine.ReaderInitialize(), to reset
 // and prepare the internal reader for future read operations.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) ReaderInitialize() {
 
@@ -3362,6 +3371,9 @@ func (txtSpecSolidLine TextLineSpecSolidLine) String() string {
 // TextBuilder - Configures the line of text produced by this
 // instance of TextLineSpecSolidLine, and writes it to an instance
 // of strings.Builder.
+//
+// This method fulfills requirements of the ITextLineSpecification
+// interface.
 //
 //
 // ----------------------------------------------------------------
