@@ -128,6 +128,8 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 		return err
 	}
 
+	targetTxtFieldLabel.textLineReader = nil
+
 	// Set zero length arrays to nil == true
 	err = strMechPreon{}.ptr().copyRuneArrays(
 		&targetTxtFieldLabel.textLabel,
@@ -263,6 +265,8 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 	newTxtFieldLabel.textJustification =
 		txtFieldLabel.textJustification
 
+	newTxtFieldLabel.textLineReader = nil
+
 	newTxtFieldLabel.lock = new(sync.Mutex)
 
 	return newTxtFieldLabel, nil
@@ -297,6 +301,8 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 	txtFieldLabel.fieldLen = 0
 
 	txtFieldLabel.textJustification = TextJustify(0).None()
+
+	txtFieldLabel.textLineReader = nil
 
 	return
 }

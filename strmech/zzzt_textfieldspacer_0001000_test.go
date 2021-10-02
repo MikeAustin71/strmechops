@@ -1046,8 +1046,19 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 
 	expectedStr := strings.Repeat(" ", expectedFieldLen)
 
-	actualStr :=
-		txtFieldSpacerOne.GetFormattedText()
+	var actualStr string
+
+	actualStr,
+		err =
+		txtFieldSpacerOne.GetFormattedText(
+			ePrefix.XCtx(
+				"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedStr != actualStr {
 		t.Errorf("%v\n"+
@@ -1064,8 +1075,17 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 
 	txtFieldSpacerTwo.fieldLen = -99
 
-	actualStr =
-		txtFieldSpacerTwo.GetFormattedText()
+	actualStr,
+		err =
+		txtFieldSpacerTwo.GetFormattedText(
+			ePrefix.XCtx(
+				"txtFieldSpacerTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if !strings.Contains(actualStr, "Error") {
 		t.Errorf("%v\n"+
@@ -1084,7 +1104,16 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 	txtFieldSpacerThree.fieldLen = 20
 	expectedStr = strings.Repeat(" ", 20)
 
-	actualStr = txtFieldSpacerThree.GetFormattedText()
+	actualStr,
+		err = txtFieldSpacerThree.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldSpacerThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	if expectedStr != actualStr {
 		t.Errorf("%v Test #2\n"+

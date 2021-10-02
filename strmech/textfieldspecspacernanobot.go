@@ -119,6 +119,8 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyIn(
 		return err
 	}
 
+	targetTxtFieldSpacer.textLineReader = nil
+
 	_,
 		err = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(
@@ -239,6 +241,8 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyOut(
 	newTxtFieldSpacer.fieldLen =
 		txtFieldSpacer.fieldLen
 
+	newTxtFieldSpacer.textLineReader = nil
+
 	return newTxtFieldSpacer, err
 }
 
@@ -267,6 +271,8 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) empty(
 	}
 
 	txtFieldSpacer.fieldLen = 0
+
+	txtFieldSpacer.textLineReader = nil
 
 	return
 }
