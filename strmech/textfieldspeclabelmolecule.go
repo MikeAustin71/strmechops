@@ -307,7 +307,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 	return
 }
 
-// equal - Receives a pointer to two instances of
+// equal - Receives pointers to two instances of
 // TextFieldSpecLabel and proceeds to compare their member
 // variables in order to determine if they are equivalent.
 //
@@ -317,8 +317,8 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 // method returns 'false'.
 //
 func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
-	txtLabel *TextFieldSpecLabel,
-	incomingTxtLabel *TextFieldSpecLabel) bool {
+	txtLabelOne *TextFieldSpecLabel,
+	txtLabelTwo *TextFieldSpecLabel) bool {
 
 	if txtFieldLabelMolecule.lock == nil {
 		txtFieldLabelMolecule.lock = new(sync.Mutex)
@@ -328,29 +328,26 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
 
 	defer txtFieldLabelMolecule.lock.Unlock()
 
-	if txtLabel == nil {
-		return false
-	}
-
-	if incomingTxtLabel == nil {
+	if txtLabelOne == nil ||
+		txtLabelTwo == nil {
 		return false
 	}
 
 	sMechPreon := strMechPreon{}
 
 	if !sMechPreon.equalRuneArrays(
-		txtLabel.textLabel,
-		incomingTxtLabel.textLabel) {
+		txtLabelOne.textLabel,
+		txtLabelTwo.textLabel) {
 		return false
 	}
 
-	if txtLabel.fieldLen !=
-		incomingTxtLabel.fieldLen {
+	if txtLabelOne.fieldLen !=
+		txtLabelTwo.fieldLen {
 		return false
 	}
 
-	if txtLabel.textJustification !=
-		incomingTxtLabel.textJustification {
+	if txtLabelOne.textJustification !=
+		txtLabelTwo.textJustification {
 		return false
 	}
 

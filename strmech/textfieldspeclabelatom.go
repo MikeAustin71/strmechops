@@ -12,7 +12,7 @@ type textFieldSpecLabelAtom struct {
 
 // isValidTextFieldLabel - This method receives a pointer to
 // an instance of TextFieldSpecLabel and performs a diagnostic on
-// on the object to determine if it is valid or not.
+// the object to determine if it is valid or not.
 //
 // This method returns two parameters, 'isValid' and 'err'. If
 // input parameter 'txtFieldLabel' is valid, the return parameter
@@ -95,7 +95,7 @@ func (txtFieldLabelAtom *textFieldSpecLabelAtom) isValidTextFieldLabel(
 }
 
 // ptr - Returns a pointer to a new instance of
-// textFieldSpecLabelMolecule.
+// textFieldSpecLabelAtom.
 //
 func (txtFieldLabelAtom textFieldSpecLabelAtom) ptr() *textFieldSpecLabelAtom {
 

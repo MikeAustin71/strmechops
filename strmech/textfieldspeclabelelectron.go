@@ -332,7 +332,7 @@ func (txtFieldLabelElectron *textFieldSpecLabelElectron) isTextLabelValid(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"txtFieldFillerElectron.isFillerCharsValid()",
+		"textFieldSpecLabelElectron.isTextLabelValid()",
 		"")
 
 	if err != nil {
