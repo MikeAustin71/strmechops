@@ -1021,11 +1021,36 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	return err
 }
 
-// New - Returns a pointer to a new, empty instance of
-// TextFieldSpecLabel. The member variables encapsulated in this
-// returned instance will all be set to their native zero values.
+// New - Returns a new concrete instance of TextFieldSpecLabel.
+// This returned instance is empty and unpopulated. All the member
+// variables contained in this new instance are set to their
+// uninitialized or zero values.
 //
-func (txtFieldLabel TextFieldSpecLabel) New() *TextFieldSpecLabel {
+// Be advised that setting member variables to their zero values
+// means that the returned TextFieldSpecLabel instance is invalid.
+// Therefore, in order to use this TextFieldSpecLabel instance,
+// users must later call the setter methods on this type in order
+// to configure valid and meaningful meaningful member variable
+// data values.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  TextFieldSpecLabel
+//     - This parameter returns a new and empty concrete instance
+//       of TextFieldSpecLabel. Member variable data values are
+//       set to their initial or zero values.
+//
+func (txtFieldLabel TextFieldSpecLabel) New() TextFieldSpecLabel {
 
 	if txtFieldLabel.lock == nil {
 		txtFieldLabel.lock = new(sync.Mutex)
@@ -1043,7 +1068,7 @@ func (txtFieldLabel TextFieldSpecLabel) New() *TextFieldSpecLabel {
 
 	newTxtFieldLabel.lock = new(sync.Mutex)
 
-	return &newTxtFieldLabel
+	return newTxtFieldLabel
 }
 
 // NewPtr - Returns a pointer to a new unpopulated instance of
