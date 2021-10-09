@@ -19,3 +19,20 @@ type TextFieldSpecDateTime struct {
 	textLineReader *strings.Reader
 	lock           *sync.Mutex
 }
+
+// Empty - Resets all internal member variables to their initial
+// or zero states.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) Empty() {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	textFieldSpecDateTimeAtom{}.ptr().empty(
+		txtDateTimeField)
+
+	txtDateTimeField.lock = nil
+}
