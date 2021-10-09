@@ -34,5 +34,33 @@ func (txtDateTimeField *TextFieldSpecDateTime) Empty() {
 	textFieldSpecDateTimeAtom{}.ptr().empty(
 		txtDateTimeField)
 
+	txtDateTimeField.lock.Unlock()
+
 	txtDateTimeField.lock = nil
+}
+
+// Equal - Receives a pointer to another instance of
+// TextFieldSpecDateTime and proceeds to compare the member
+// variables to those of the current TextFieldSpecDateTime instance
+// in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables are equal in all respects,
+// this flag is set to 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) Equal(
+	incomingTxtFieldDateTime *TextFieldSpecDateTime) bool {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	return textFieldSpecDateTimeAtom{}.ptr().equal(
+		txtDateTimeField,
+		incomingTxtFieldDateTime)
 }
