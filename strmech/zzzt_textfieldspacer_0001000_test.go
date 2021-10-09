@@ -1606,7 +1606,7 @@ func TestTextFieldSpecSpacer_TextFieldName_000100(t *testing.T) {
 		"TestTextFieldSpecSpacer_TextFieldName_000100()",
 		"")
 
-	txtFieldSpacerOne := TextFieldSpecSpacer{}.NewEmpty()
+	txtFieldSpacerOne := TextFieldSpecSpacer{}.New()
 
 	fieldName := txtFieldSpacerOne.TextFieldName()
 
@@ -1630,7 +1630,7 @@ func TestTextFieldSpecSpacer_TextTypeName_000100(t *testing.T) {
 		"TestTextFieldSpecSpacer_TextTypeName_000100()",
 		"")
 
-	txtFieldSpacerOne := TextFieldSpecSpacer{}.NewEmpty()
+	txtFieldSpacerOne := TextFieldSpecSpacer{}.New()
 
 	fieldName := txtFieldSpacerOne.TextTypeName()
 

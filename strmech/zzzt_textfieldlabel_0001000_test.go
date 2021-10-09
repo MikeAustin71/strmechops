@@ -3051,7 +3051,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 			label +
 			strings.Repeat(" ", 4)
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3202,7 +3202,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000200(t *testing.T) {
 		label +
 			strings.Repeat(" ", 8)
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3353,7 +3353,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000300(t *testing.T) {
 		strings.Repeat(" ", 8) +
 			label
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3500,7 +3500,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000400(t *testing.T) {
 	fieldLen := 1000001
 	txtJustify := TxtJustify.Right()
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3540,7 +3540,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000500(t *testing.T) {
 	fieldLen := 45
 	txtJustify := TxtJustify.None()
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3582,7 +3582,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000600(t *testing.T) {
 
 	expectedTextLabel := label
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3896,7 +3896,7 @@ func TestTextFieldSpecLabel_TextFieldName_0001000(t *testing.T) {
 	fieldLen := 13
 	txtJustify := TxtJustify.Left()
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
@@ -3963,7 +3963,7 @@ func TestTextFieldSpecLabel_TextTypeName_0001000(t *testing.T) {
 	fieldLen := 13
 	txtJustify := TxtJustify.Left()
 
-	txtFieldLabelOne := TextFieldSpecLabel{}.NewEmpty()
+	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
 	err := txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),

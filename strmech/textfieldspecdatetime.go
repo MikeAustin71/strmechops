@@ -64,3 +64,29 @@ func (txtDateTimeField *TextFieldSpecDateTime) Equal(
 		txtDateTimeField,
 		incomingTxtFieldDateTime)
 }
+
+// New - Returns a pointer to a new, empty instance of
+// TextFieldSpecLabel. The member variables encapsulated in this
+// returned instance will all be set to their native zero values.
+//
+func (txtDateTimeField TextFieldSpecDateTime) New() *TextFieldSpecDateTime {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	newTxtFieldDateTime := TextFieldSpecDateTime{}
+
+	newTxtFieldDateTime.textJustification = TextJustify(0).None()
+
+	newTxtFieldDateTime.textLineReader = nil
+
+	newTxtFieldDateTime.lock = new(sync.Mutex)
+
+	return &newTxtFieldDateTime
+
+}

@@ -901,7 +901,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 	return err
 }
 
-// NewEmpty - Returns a pointer to a new unpopulated instance of
+// New - Returns a pointer to a new unpopulated instance of
 // TextFieldSpecSpacer. All the member variables contained in
 // this new instance are set to their uninitialized or zero values.
 //
@@ -928,7 +928,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 //       of TextFieldSpecSpacer. Member variable data values are
 //       set to their initial or zero values.
 //
-func (txtFieldSpacer TextFieldSpecSpacer) NewEmpty() *TextFieldSpecSpacer {
+func (txtFieldSpacer TextFieldSpecSpacer) New() *TextFieldSpecSpacer {
 
 	if txtFieldSpacer.lock == nil {
 		txtFieldSpacer.lock = new(sync.Mutex)

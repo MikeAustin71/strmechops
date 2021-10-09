@@ -1021,11 +1021,11 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	return err
 }
 
-// NewEmpty - Returns a pointer to a new, empty instance of
+// New - Returns a pointer to a new, empty instance of
 // TextFieldSpecLabel. The member variables encapsulated in this
 // returned instance will all be set to their native zero values.
 //
-func (txtFieldLabel TextFieldSpecLabel) NewEmpty() *TextFieldSpecLabel {
+func (txtFieldLabel TextFieldSpecLabel) New() *TextFieldSpecLabel {
 
 	if txtFieldLabel.lock == nil {
 		txtFieldLabel.lock = new(sync.Mutex)
