@@ -901,15 +901,17 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 	return err
 }
 
-// New - Returns a pointer to a new unpopulated instance of
-// TextFieldSpecSpacer. All the member variables contained in
-// this new instance are set to their uninitialized or zero values.
+// New - Returns a new concrete instance of TextFieldSpecSpacer.
+// This returned instance is empty and unpopulated. All the member
+// variables contained in this new instance are set to their
+// uninitialized or zero values.
 //
 // Be advised that setting member variables to their zero values
-// means that the returned TextFieldSpecSpacer instance is invalid.
-// Therefore, in order to use this TextFieldSpecSpacer instance,
-// users must later call the setter methods on this type in order
-// to configure valid and meaningful member variable data values.
+// means that the returned TextFieldSpecSpacer instance is
+// invalid. Therefore, in order to use this TextFieldSpecSpacer
+// instance, users must later call the setter methods on this type
+// in order to configure valid and meaningful meaningful member
+// variable data values.
 //
 //
 // ------------------------------------------------------------------------
@@ -923,12 +925,12 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 //
 // Return Values
 //
-//  *TextFieldSpecSpacer
-//     - This parameter returns a pointer to a new, empty instance
+//  TextFieldSpecSpacer
+//     - This parameter returns a new and empty concrete instance
 //       of TextFieldSpecSpacer. Member variable data values are
 //       set to their initial or zero values.
 //
-func (txtFieldSpacer TextFieldSpecSpacer) New() *TextFieldSpecSpacer {
+func (txtFieldSpacer TextFieldSpecSpacer) New() TextFieldSpecSpacer {
 
 	if txtFieldSpacer.lock == nil {
 		txtFieldSpacer.lock = new(sync.Mutex)
@@ -942,7 +944,7 @@ func (txtFieldSpacer TextFieldSpecSpacer) New() *TextFieldSpecSpacer {
 
 	newTxtFieldSpacer.textLineReader = nil
 
-	return &newTxtFieldSpacer
+	return newTxtFieldSpacer
 }
 
 // NewPtr - Returns a pointer to a new unpopulated instance of

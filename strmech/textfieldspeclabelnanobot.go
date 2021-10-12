@@ -147,8 +147,8 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"strMechPreon."+
-			"testValidityOfRuneCharArray()",
+		"textFieldSpecLabelNanobot."+
+			"setTextFieldLabel()",
 		"")
 
 	if err != nil {
@@ -237,6 +237,8 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 	textFieldLabel.fieldLen = fieldLen
 
 	textFieldLabel.textJustification = textJustification
+
+	textFieldLabel.textLineReader = nil
 
 	return err
 }
