@@ -444,7 +444,7 @@ func TestTextFieldSpecDateTimeAtom_equal_000100(t *testing.T) {
 func TestTextFieldSpecDateTime_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecDateTimeAtom_equal_000100()",
+		"TestTextFieldSpecDateTime_Equal_000100()",
 		"")
 
 	txtFieldDateTimeOne := TextFieldSpecDateTime{}
@@ -811,6 +811,196 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100(t *testing.T
 			"Error: Expected txtFieldDateTimeTwo and txtFieldDateTimeThree\n"+
 			"to have equal member variable data values.\n"+
 			"HOWERVER, THE DATA VALUES ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_NewPtrDateTimeField_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	txtFieldDateTimeOne.dateTime = time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	txtFieldDateTimeOne.dateTimeFormat =
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	txtFieldDateTimeOne.fieldLen =
+		len(txtFieldDateTimeOne.dateTimeFormat) + 8
+
+	txtFieldDateTimeOne.textJustification = TxtJustify.Center()
+
+	var txtFieldDateTimeTwo *TextFieldSpecDateTime
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewPtrDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewPtrDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if !txtFieldDateTimeTwo.Equal(
+		&txtFieldDateTimeOne) {
+
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected 'txtFieldDateTimeOne' to equal to 'txtFieldDateTimeTwo'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_NewDateTimeField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_NewDateTimeField_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	txtFieldDateTimeOne.dateTime = time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	txtFieldDateTimeOne.dateTimeFormat =
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	txtFieldDateTimeOne.fieldLen =
+		len(txtFieldDateTimeOne.dateTimeFormat) + 8
+
+	txtFieldDateTimeOne.textJustification = TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if !txtFieldDateTimeTwo.Equal(
+		&txtFieldDateTimeOne) {
+
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected 'txtFieldDateTimeOne' to equal to 'txtFieldDateTimeTwo'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
 			ePrefix.String())
 
 		return
