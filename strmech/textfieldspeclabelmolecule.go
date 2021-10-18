@@ -159,7 +159,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 //
 // Input Parameters
 //
-//  txtFieldLabel       *TextFieldSpecLabel
+//  txtFieldLabel              *TextFieldSpecLabel
 //     - A pointer to an instance of TextFieldSpecLabel. A deep
 //       copy of the internal member variables will be created
 //       and returned in a new instance of TextFieldSpecLabel.
@@ -169,7 +169,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 //       return an error
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
+//  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
