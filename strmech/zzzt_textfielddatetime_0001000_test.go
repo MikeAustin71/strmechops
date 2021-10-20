@@ -822,7 +822,7 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100(t *testing.T
 func TestTextFieldSpecDateTimeNanobot_copyIn_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100()",
+		"TestTextFieldSpecDateTimeNanobot_copyIn_000100()",
 		"")
 
 	timeZoneName := "America/Chicago"
@@ -957,6 +957,136 @@ func TestTextFieldSpecDateTimeNanobot_copyIn_000100(t *testing.T) {
 		t.Errorf("%v - Error\n"+
 			"Expected an error return from txtFieldDateTimeNanobotTwo.copyIn()\n"+
 			"because parameter 'incomingDateTimeTxtField' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTimeNanobot_copyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTimeNanobot_copyOut_000100()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var oldTxtFieldDateTime TextFieldSpecDateTime
+
+	oldTxtFieldDateTime,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("oldTxtFieldDateTime"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	newTxtFieldDateTime := TextFieldSpecDateTime{}.New()
+
+	txtFieldDateTimeNanobot := textFieldSpecDateTimeNanobot{}
+
+	newTxtFieldDateTime,
+		err = txtFieldDateTimeNanobot.copyOut(
+		&oldTxtFieldDateTime,
+		ePrefix.XCtx("oldTxtFieldDateTime"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeNanobot.copyOut()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtx("newTxtFieldDateTime").String(),
+			err.Error())
+
+		return
+	}
+
+	if !newTxtFieldDateTime.Equal(
+		&oldTxtFieldDateTime) {
+
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected 'newTxtFieldDateTime' to equal 'oldTxtFieldDateTime'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldDateTimeNanobotTwo := textFieldSpecDateTimeNanobot{}
+
+	_,
+		err =
+		txtFieldDateTimeNanobotTwo.copyOut(
+			nil,
+			ePrefix.XCtxEmpty())
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from txtFieldDateTimeNanobotTwo.copyOut()\n"+
+			"because parameter 'dateTimeTxtField' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	oldTxtFieldDateTime.fieldLen = -9004
+
+	_,
+		err =
+		txtFieldDateTimeNanobotTwo.copyOut(
+			&oldTxtFieldDateTime,
+			ePrefix.XCtxEmpty())
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from txtFieldDateTimeNanobotTwo.copyOut()\n"+
+			"because parameter 'oldTxtFieldDateTime' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
