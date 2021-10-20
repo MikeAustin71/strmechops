@@ -103,6 +103,208 @@ func TestTextFieldSpecDateTimeAtom_empty_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_CopyIn_000100()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var incomingTxtFieldDateTime TextFieldSpecDateTime
+
+	incomingTxtFieldDateTime,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("incomingTxtFieldDateTime"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	targetTxtFieldDateTime := TextFieldSpecDateTime{}.NewPtr()
+
+	err = targetTxtFieldDateTime.CopyIn(
+		&incomingTxtFieldDateTime,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by targetTxtFieldDateTime.CopyIn()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if !targetTxtFieldDateTime.Equal(
+		&incomingTxtFieldDateTime) {
+
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected 'targetTxtFieldDateTime' to equal 'incomingTxtFieldDateTime'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	targetTxtFieldDateTime2 := TextFieldSpecDateTime{}.New()
+
+	err =
+		targetTxtFieldDateTime2.CopyIn(
+			nil,
+			ePrefix.XCtx("incomingTxtFieldDateTime==nil"))
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from targetTxtFieldDateTime2.CopyIn()\n"+
+			"because parameter 'incomingTxtFieldDateTime' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	incomingTxtFieldDateTime.fieldLen = -9009
+
+	err =
+		targetTxtFieldDateTime2.CopyIn(
+			&incomingTxtFieldDateTime,
+			ePrefix.XCtx("incomingTxtFieldDateTime==nil"))
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from targetTxtFieldDateTime2.CopyIn()\n"+
+			"because parameter 'incomingTxtFieldDateTime' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	incomingTxtFieldDateTime.fieldLen =
+		len(dateTimeFormat) + 8
+
+	timeZoneName = "America/Los_Angeles"
+
+	tzLocPtr, err = time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	dateTime = time.Date(
+		2021,
+		time.Month(10),
+		20,
+		13,
+		34,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat =
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen = len(dateTimeFormat) + 8
+
+	textJustification = TxtJustify.Left()
+
+	var targetTxtFieldDateTime3 *TextFieldSpecDateTime
+
+	targetTxtFieldDateTime3,
+		err = TextFieldSpecDateTime{}.NewPtrDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("targetTxtFieldDateTime3"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewPtrDateTimeField()\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	err =
+		targetTxtFieldDateTime3.CopyIn(
+			targetTxtFieldDateTime,
+			ePrefix.XCtx("targetTxtFieldDateTime"))
+
+	if !targetTxtFieldDateTime3.Equal(
+		targetTxtFieldDateTime) {
+
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected 'targetTxtFieldDateTime3' to equal 'targetTxtFieldDateTime'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_Empty_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
