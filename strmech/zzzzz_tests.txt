@@ -1212,6 +1212,8 @@
 --- PASS: TestTextFieldSpecDateTime_Equal_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100
 --- PASS: TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTimeNanobot_copyIn_000100
+--- PASS: TestTextFieldSpecDateTimeNanobot_copyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_NewPtrDateTimeField_000100
 --- PASS: TestTextFieldSpecDateTime_NewPtrDateTimeField_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_NewDateTimeField_000100
@@ -1581,5 +1583,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 52.8% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.607s
+coverage: 53.0% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.526s
