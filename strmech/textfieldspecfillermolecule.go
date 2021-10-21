@@ -370,12 +370,6 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) equal(
 //  Filler Characters Array Length  X
 //               Filler Characters Repeat Count
 //
-// This method is identical in function to
-// TextFieldSpecFiller.String()
-//
-// This method fulfills the requirements of the
-// ITextFieldSpecification interface.
-//
 //
 // ------------------------------------------------------------------------
 //

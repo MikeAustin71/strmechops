@@ -358,6 +358,398 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOut(
 			ePrefix.XCtx("txtDateTimeField"))
 }
 
+// CopyOutITextField - Returns a deep copy of the current
+// TextFieldSpecDateTime instance cast as an ITextFieldSpecification
+// object.
+//
+// If the current TextFieldSpecDateTime instance is invalid, an error
+// is returned.
+//
+// This method is required by the ITextFieldSpecification
+// interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ITextFieldSpecification
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of
+//       the current TextFieldSpecDateTime instance cast as an
+//       ITextFieldSpecification object.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) CopyOutITextField(
+	errorPrefix interface{}) (
+	ITextFieldSpecification,
+	error) {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var iTxtFieldSpec ITextFieldSpecification
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecDateTime.CopyOutITextField()",
+		"")
+
+	if err != nil {
+		return iTxtFieldSpec, err
+	}
+
+	var newTxtDateTimeField TextFieldSpecDateTime
+
+	newTxtDateTimeField,
+		err = textFieldSpecDateTimeNanobot{}.ptr().
+		copyOut(
+			txtDateTimeField,
+			ePrefix.XCtx("txtDateTimeField"))
+
+	if err != nil {
+		return iTxtFieldSpec, err
+	}
+
+	iTxtFieldSpec =
+		ITextFieldSpecification(&newTxtDateTimeField)
+
+	return iTxtFieldSpec, nil
+}
+
+// CopyOutPtr - Returns a pointer to a deep copy of the current
+// TextFieldSpecDateTime instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextFieldSpecDateTime
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a pointer to a
+//       deep copy of the current TextFieldSpecDateTime instance.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) CopyOutPtr(
+	errorPrefix interface{}) (
+	*TextFieldSpecDateTime,
+	error) {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecDateTime.CopyOutPtr()",
+		"")
+
+	if err != nil {
+		return &TextFieldSpecDateTime{}, err
+	}
+
+	var newTxtDateTimeField TextFieldSpecDateTime
+
+	newTxtDateTimeField,
+		err =
+		textFieldSpecDateTimeNanobot{}.ptr().
+			copyOut(
+				txtDateTimeField,
+				ePrefix.XCtx("txtDateTimeField"))
+
+	return &newTxtDateTimeField, err
+}
+
+// GetFieldLength - Returns the length of the text field in which
+// the formatted date/time text string will be positioned.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) GetFieldLength() int {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	return txtDateTimeField.fieldLen
+}
+
+// GetFormattedText - Returns the formatted text generated by the
+// current instance of TextFieldSpecDateTime.
+//
+// If the length of the date/time text string is zero and the field
+// length is zero this method returns an empty string.
+//
+// If the length of the date/time text string is zero and the field
+// length is greater than zero, this method returns a string with
+// a length equal to field length and content equal to white space
+// (the space character " " x field length).
+//
+// If the current instance of TextFieldSpecDateTime is invalid, an
+// error will be returned.
+//
+// This method is similar to method TextFieldSpecDateTime.String()
+// with the exception that this method returns an error.
+//
+// This method fulfills the requirements of the
+// ITextFieldSpecification interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - The formatted text string generated by the current
+//       instance of TextFieldSpecDateTime.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//  dateTime = October 11, 2021 19:01:00-hours
+//  fieldLen = 43
+//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
+//  textJustification = TxtJustify.Center()
+//
+//  Result = "  2021-10-11 19:01:00.000000000 -0500 CDT  "
+func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedText(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecDateTime.GetFormattedText()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return textFieldSpecDateTimeNanobot{}.ptr().
+		getFormattedText(
+			txtDateTimeField,
+			ePrefix)
+}
+
 // Empty - Resets all internal member variables to their initial
 // or zero states.
 //
