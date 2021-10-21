@@ -8,12 +8,13 @@ import (
 	"sync"
 )
 
-// TextFieldSpecLabel - The Text Field Specification for a text
-// label. The text label is positioned inside a text field with a
-// given field length. Text Justification within this text field
-// is controlled by the 'textJustification' value which may be
-// set to 'Left', 'Right' or 'Center'. A text label contains a
-// string of text characters.
+// TextFieldSpecLabel - This Text Field Specification is used to
+// generate a text label string. The text label is positioned
+// inside a text field with a given field length. Text
+// Justification within this text field is controlled by the
+// Text Justification specification value which may be set to
+// 'Left', 'Right' or 'Center'. A text label contains a string of
+// text characters.
 //
 // Text Label Examples:
 //   'Hello World  ' - Left Justified, Field Length= 13
@@ -630,6 +631,24 @@ func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
 // GetFieldLength - Returns the length of the text field in which
 // the text label string will be positioned.
 //
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// Field Length specifies the length of the text field in which the
+// formatted text label will be displayed.
+//
+// If Field Length is less than the length of the formatted text
+// label string, it will be automatically set equal to the length
+// of the formatted text label string.
+//
+// If Field Length is greater than the length of the length of the
+// formatted text label string, the text label text will be
+// positioned within a text field with a length equal to Field
+// Length. In this case, the position of the text label string
+// within the text field will be controlled by the text
+// justification specification.
+//
 func (txtFieldLabel *TextFieldSpecLabel) GetFieldLength() int {
 
 	if txtFieldLabel.lock == nil {
@@ -797,8 +816,12 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText(
 }
 
 // GetTextJustification - Returns the value of the text
-// justification enumeration specification which will be used to
-// position the text label string with a text field.
+// justification specification which will be used to position the
+// text label string with a text field.
+//
+// ------------------------------------------------------------------------
+//
+// Background
 //
 // The text justification enumeration specification should be set
 // to one of three valid values:
@@ -812,6 +835,9 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText(
 //           TxtJustify.Left()
 //           TxtJustify.Right()
 //           TxtJustify.Center()
+//
+// Text justification is only applied when the text field length is
+// greater than the length of the formatted text label string.
 //
 func (txtFieldLabel *TextFieldSpecLabel) GetTextJustification() TextJustify {
 
@@ -828,6 +854,22 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextJustification() TextJustify {
 
 // GetTextLabel - Returns the un-formatted text label string
 // associated with the current instance of TextFieldSpecLabel.
+//
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// The Text Field Specification is used to generate a text label
+// string. The text label is positioned inside a text field with a
+// given field length. Text Justification within this text field
+// is controlled by the Text Justification specification value
+// which may be set to 'Left', 'Right' or 'Center'. A text label
+// contains a string of text characters.
+//
+// Text Label Examples:
+//   'Hello World  ' - Left Justified, Field Length= 13
+//   '  Hello World' - Right Justified, Field Length= 13
+//   ' Hello World ' - Centered, Field Length= 13
 //
 func (txtFieldLabel *TextFieldSpecLabel) GetTextLabel() string {
 

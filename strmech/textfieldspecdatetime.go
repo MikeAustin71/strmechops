@@ -598,8 +598,111 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOutPtr(
 	return &newTxtDateTimeField, err
 }
 
+// Empty - Resets all internal member variables to their initial
+// or zero states.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) Empty() {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	textFieldSpecDateTimeAtom{}.ptr().empty(
+		txtDateTimeField)
+
+	txtDateTimeField.lock.Unlock()
+
+	txtDateTimeField.lock = nil
+}
+
+// Equal - Receives a pointer to another instance of
+// TextFieldSpecDateTime and proceeds to compare the member
+// variables to those of the current TextFieldSpecDateTime instance
+// in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables are equal in all respects,
+// this flag is set to 'true'. Otherwise, this method returns
+// 'false'.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) Equal(
+	incomingTxtFieldDateTime *TextFieldSpecDateTime) bool {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	return textFieldSpecDateTimeAtom{}.ptr().equal(
+		txtDateTimeField,
+		incomingTxtFieldDateTime)
+}
+
+// GetDateTime - Returns the date/time value encapsulated by the
+// current TextFieldSpecDateTime instance.
+//
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// The Date/Time Text Field specification (TextFieldSpecDateTime)
+// is used to generate a formatted text string from a date/time
+// value.
+//
+// The golang date/time types are documented at:
+//      https://pkg.go.dev/time
+//
+func (txtDateTimeField *TextFieldSpecDateTime) GetDateTime() time.Time {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	return txtDateTimeField.dateTime
+}
+
+func (txtDateTimeField *TextFieldSpecDateTime) GetDateTimeFormat() string {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	return txtDateTimeField.dateTimeFormat
+}
+
 // GetFieldLength - Returns the length of the text field in which
 // the formatted date/time text string will be positioned.
+//
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// Field Length specifies the length of the text field in which the
+// formatted date/time text will be displayed.
+//
+// If Field Length is less than the length of the formatted date/time
+// string, it will be automatically set equal to the length of the
+// formatted date/time string.
+//
+// If Field Length is greater than the length of the length of the
+// formatted date/time string, the date/time text will be
+// positioned within a text field with a length equal to Field
+// Length. In this case, the position of the date/time string within
+// the text field will be controlled by the text justification
+// specification.
 //
 func (txtDateTimeField *TextFieldSpecDateTime) GetFieldLength() int {
 
@@ -712,12 +815,46 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFieldLength() int {
 // Example Usage
 //
 //  Example 1:
-//  dateTime = October 11, 2021 19:01:00-hours
-//  fieldLen = 43
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
 //  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-11 19:01:00.000000000 -0500 CDT  "
+//  Result = "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
+//  textJustification = TxtJustify.Center()
+//
+//  Result = "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
 func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
@@ -750,37 +887,31 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedText(
 			ePrefix)
 }
 
-// Empty - Resets all internal member variables to their initial
-// or zero states.
+// GetTextJustification - Returns the value of the text
+// justification specification which will be used to position the
+// date/time text string within a text field.
 //
-func (txtDateTimeField *TextFieldSpecDateTime) Empty() {
-
-	if txtDateTimeField.lock == nil {
-		txtDateTimeField.lock = new(sync.Mutex)
-	}
-
-	txtDateTimeField.lock.Lock()
-
-	textFieldSpecDateTimeAtom{}.ptr().empty(
-		txtDateTimeField)
-
-	txtDateTimeField.lock.Unlock()
-
-	txtDateTimeField.lock = nil
-}
-
-// Equal - Receives a pointer to another instance of
-// TextFieldSpecDateTime and proceeds to compare the member
-// variables to those of the current TextFieldSpecDateTime instance
-// in order to determine if they are equivalent.
+// ------------------------------------------------------------------------
 //
-// A boolean flag showing the result of this comparison is
-// returned. If the member variables are equal in all respects,
-// this flag is set to 'true'. Otherwise, this method returns
-// 'false'.
+// Background
 //
-func (txtDateTimeField *TextFieldSpecDateTime) Equal(
-	incomingTxtFieldDateTime *TextFieldSpecDateTime) bool {
+// The text justification enumeration specification should be set
+// to one of three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+// You can also use the abbreviated text justification enumeration
+// syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+// Text justification is only applied when the text field length is
+// greater than the length of the formatted date/time text string.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) GetTextJustification() TextJustify {
 
 	if txtDateTimeField.lock == nil {
 		txtDateTimeField.lock = new(sync.Mutex)
@@ -790,9 +921,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) Equal(
 
 	defer txtDateTimeField.lock.Unlock()
 
-	return textFieldSpecDateTimeAtom{}.ptr().equal(
-		txtDateTimeField,
-		incomingTxtFieldDateTime)
+	return txtDateTimeField.textJustification
 }
 
 // New - Returns a new concrete instance of TextFieldSpecDateTime.
