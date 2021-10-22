@@ -598,8 +598,8 @@ func (txtFieldLabel *TextFieldSpecLabel) Equal(
 //
 // A boolean flag showing the result of this comparison is
 // returned. If the member variables from both instances are equal
-// in all respects, this flag is set to 'true'. Otherwise, this method returns
-// 'false'.
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
 //
 func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
 	iTextField ITextFieldSpecification) bool {
@@ -3252,6 +3252,10 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
+//
+// This method also fulfills the requirements of the 'Stringer'
+// interface defined in the Golang package 'fmt'. Reference:
+//   https://pkg.go.dev/fmt#Stringer
 //
 //
 // ------------------------------------------------------------------------
