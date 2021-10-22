@@ -17,6 +17,78 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) DateTimeTextField01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.DateTimeTextField01()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	var errTxt string
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := -1
+
+	textJustification := strmech.TxtJustify.Center()
+
+	var txtFieldDateTimeOne strmech.TextFieldSpecDateTime
+
+	txtFieldDateTimeOne,
+		err = strmech.TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeOne"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	strLen := txtFieldDateTimeOne.GetFormattedStrLength()
+
+	fmt.Printf("Formatted string length = '%v'\n",
+		strLen)
+
+}
+
 func (mt MainTest) TimerEventText01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
