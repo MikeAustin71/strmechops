@@ -46,17 +46,17 @@ func (mt MainTest) DateTimeTextField01() {
 	dateTime := time.Date(
 		2021,
 		time.Month(10),
+		21,
 		14,
-		15,
-		28,
-		0,
+		19,
+		3,
 		0,
 		tzLocPtr)
 
 	dateTimeFormat :=
-		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+		"2006-01-02 15:04:05.000000000 -0700 MST"
 
-	fieldLen := -1
+	fieldLen := 39 + 4
 
 	textJustification := strmech.TxtJustify.Center()
 
@@ -82,11 +82,242 @@ func (mt MainTest) DateTimeTextField01() {
 		return
 	}
 
-	strLen := txtFieldDateTimeOne.GetFormattedStrLength()
+	var fmtText, convertedFmtText string
 
-	fmt.Printf("Formatted string length = '%v'\n",
-		strLen)
+	fmtText,
+		err = txtFieldDateTimeOne.GetFormattedText(
+		ePrefix)
 
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by txtFieldDateTimeOne.GetFormattedText()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	fmt.Printf("Formatted string = \n"+
+		"          \"%v\"\n",
+		fmtText)
+	fmt.Println()
+
+	sMech := strmech.StrMech{}
+
+	convertedFmtText = sMech.ConvertNonPrintableChars(
+		[]rune("\""+fmtText+"\""),
+		false)
+
+	fmt.Printf("Printable string = \n"+
+		"          %v\n",
+		convertedFmtText)
+
+	return
+}
+
+func (mt MainTest) DateTimeTextField02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.DateTimeTextField02()",
+		"")
+
+	timeZoneName := "America/Los_Angeles"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	var errTxt string
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		10,
+		20,
+		13,
+		34,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := 39 + 4
+
+	textJustification := strmech.TxtJustify.Center()
+
+	var txtFieldDateTimeOne strmech.TextFieldSpecDateTime
+
+	txtFieldDateTimeOne,
+		err = strmech.TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeOne"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	var fmtText, convertedFmtText string
+
+	fmtText,
+		err = txtFieldDateTimeOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by txtFieldDateTimeOne.GetFormattedText()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	fmt.Printf("Formatted string = \n"+
+		"          \"%v\"\n",
+		fmtText)
+	fmt.Println()
+
+	sMech := strmech.StrMech{}
+
+	convertedFmtText = sMech.ConvertNonPrintableChars(
+		[]rune("\""+fmtText+"\""),
+		false)
+
+	fmt.Printf("Printable string = \n"+
+		"          %v\n",
+		convertedFmtText)
+
+	return
+}
+
+func (mt MainTest) DateTimeTextField03() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.DateTimeTextField03()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	var errTxt string
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		21,
+		14,
+		19,
+		3,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := 52 + 6
+
+	textJustification := strmech.TxtJustify.Center()
+
+	var txtFieldDateTimeOne strmech.TextFieldSpecDateTime
+
+	txtFieldDateTimeOne,
+		err = strmech.TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeOne"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	var fmtText, convertedFmtText string
+
+	fmtText,
+		err = txtFieldDateTimeOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf("%v\n"+
+			"Error returned by txtFieldDateTimeOne.GetFormattedText()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	fmt.Printf("Formatted string = \n"+
+		"          \"%v\"\n",
+		fmtText)
+	fmt.Println()
+
+	sMech := strmech.StrMech{}
+
+	convertedFmtText = sMech.ConvertNonPrintableChars(
+		[]rune("\""+fmtText+"\""),
+		false)
+
+	fmt.Printf("Printable string = \n"+
+		"          %v\n",
+		convertedFmtText)
+
+	return
 }
 
 func (mt MainTest) TimerEventText01() {

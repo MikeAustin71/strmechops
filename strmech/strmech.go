@@ -170,9 +170,10 @@ func (sMech *StrMech) BreakTextAtLineLength(
 		ePrefix)
 }
 
-// ConvertNonPrintableChars - Receives a string containing
-// non-printable characters and converts them to 'printable'
-// characters returned in a string.
+// ConvertNonPrintableChars - A string containing non-printable
+// characters is passed to this method. The method then converts
+// the non-printable characters to 'printable' characters and
+// returns the converted string.
 //
 // Examples of non-printable characters are '\n', '\t' or 0x06
 // (Acknowledge). These example characters would be translated into

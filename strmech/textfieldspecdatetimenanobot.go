@@ -299,9 +299,10 @@ func (txtFieldDateTimeNanobot *textFieldSpecDateTimeNanobot) getFormattedText(
 	}
 
 	_,
-		err = textFieldSpecDateTimeAtom{}.ptr().isValidTextFieldDateTime(
-		dateTimeTxtField,
-		ePrefix.XCtx("testing validity of dateTimeTxtField"))
+		err = textFieldSpecDateTimeAtom{}.ptr().
+		isValidTextFieldDateTime(
+			dateTimeTxtField,
+			ePrefix.XCtx("testing validity of dateTimeTxtField"))
 
 	if err != nil {
 		return "", err

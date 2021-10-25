@@ -2434,7 +2434,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 			isFieldLengthValid(
 				fieldLen,
 				ePrefix.XCtx(
-					"fieldLen Invalid!"))
+					"'fieldLen' Invalid!"))
 
 	if err != nil {
 		return err

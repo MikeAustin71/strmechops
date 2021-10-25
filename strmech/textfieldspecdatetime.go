@@ -25,6 +25,27 @@ import (
 // TextFieldSpecDateTime are therefore used as the components or
 // building blocks for constructing a single lines of text.
 //
+// For Type TextFieldSpecDateTime, the user will typically supply a
+// date time value ('dateTime'), a field length value ('fieldLen'),
+// a date time format ('dateTimeFormat') and a text justification
+// specification ('textJustification'). Type TextFieldSpecDateTime
+// will convert the date time value ('dateTime') to a date time
+// string using the format specifications provided in
+// 'dateTimeFormat'. Next a text field will be created.
+//
+// If field length ('fieldLen') is less than the length of the
+// computed date time string, the length of the text field will be
+// set equal to the length of the date time string. If the field
+// length ('fieldLen') is greater than the length of the computed
+// date time string, the date time string will be positioned within
+// the text field using the text justification specification (left,
+// center, right). The justified text field will then be returned to
+// the user by calling methods:
+//     TextFieldSpecDateTime.GetFormattedText()
+//                    or
+//     TextFieldSpecDateTime.String()
+//
+//
 // Member Variables
 //
 // ----------------------------------------------------------------
@@ -98,27 +119,80 @@ import (
 //
 // ----------------------------------------------------------------
 //
-// Typically the user will supply a date time value ('dateTime'), a
-// field length value ('fieldLen'), a date time format
-// ('dateTimeFormat') and a text justification specification
-// ('textJustification'). Type TextFieldSpecDateTime will convert
-// the date time value ('dateTime') to a date time string using the
-// format specifications provided in 'dateTimeFormat'. Next a text
-// field will be created. If field length ('fieldLen') is less than
-// the length of the computed date time string, the length of the
-// text field will be set equal to the length of the date time
-// string. If the field length ('fieldLen') is greater than the
-// length of the computed date time string, the date time string
-// will be positioned within the text field using the text
-// justification specification (left, center, right). The justified
-// text field will then be returned to the user.
 //
-//  dateTime = October 11, 2021 19:01:00-hours
-//  fieldLen = 43
-//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
+//  Example 1:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-11 19:01:00.000000000 -0500 CDT  "
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 52 + 6
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  Thursday October 21, 2021 14:19:03.000000000 -0500 CDT  "
 //
 type TextFieldSpecDateTime struct {
 	dateTime time.Time // The content of the datetime text.
@@ -937,10 +1011,14 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedStrLength() int {
 //       tzLocPtr)
 //
 //  fieldLen = 39 + 4
-//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
 //
 //
 //  Example 2:
@@ -958,10 +1036,39 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedStrLength() int {
 //       tzLocPtr)
 //
 //  fieldLen = 39 + 4
-//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//  Result =
+//     "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 52 + 6
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  Thursday October 21, 2021 14:19:03.000000000 -0500 CDT  "
 //
 func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedText(
 	errorPrefix interface{}) (
@@ -1018,6 +1125,85 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedText(
 //
 // Text justification is only applied when the text field length is
 // greater than the length of the formatted date/time text string.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Left()
+//
+//  Result =
+//     "2021-10-10 20:13:34.000000000 -0700 PDT    "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 52 + 6
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Right()
+//
+//  Result =
+//     "    Thursday October 21, 2021 14:19:03.000000000 -0500 CDT"
 //
 func (txtDateTimeField *TextFieldSpecDateTime) GetTextJustification() TextJustify {
 
@@ -1310,6 +1496,42 @@ func (txtDateTimeField TextFieldSpecDateTime) NewPtr() *TextFieldSpecDateTime {
 //
 // ------------------------------------------------------------------------
 //
+// Background
+//
+// Type TextFieldSpecDateTime is a Text Field Specification. Text
+// Field Specifications are designed to be configured as one
+// element within a single line of text. That line of text can then
+// be used for text displays, file output or printing.
+//
+// Type TextLineSpecStandardLine can be used to compose a line of
+// text consisting of multiple Text Field Specifications like
+// TextFieldSpecDateTime. Text Field Specifications like
+// TextFieldSpecDateTime are therefore used as the components or
+// building blocks for constructing a single lines of text.
+//
+// For Type TextFieldSpecDateTime, the user will typically supply a
+// date time value ('dateTime'), a field length value ('fieldLen'),
+// a date time format ('dateTimeFormat') and a text justification
+// specification ('textJustification'). Type TextFieldSpecDateTime
+// will convert the date time value ('dateTime') to a date time
+// string using the format specifications provided in
+// 'dateTimeFormat'. Next a text field will be created.
+//
+// If field length ('fieldLen') is less than the length of the
+// computed date time string, the length of the text field will be
+// set equal to the length of the date time string. If the field
+// length ('fieldLen') is greater than the length of the computed
+// date time string, the date time string will be positioned within
+// the text field using the text justification specification (left,
+// center, right). The justified text field will then be returned to
+// the user by calling methods:
+//     TextFieldSpecDateTime.GetFormattedText()
+//                    or
+//     TextFieldSpecDateTime.String()
+//
+//
+// ------------------------------------------------------------------------
+//
 // Input Parameters
 //
 //  dateTime                   time.Time
@@ -1459,39 +1681,83 @@ func (txtDateTimeField TextFieldSpecDateTime) NewPtr() *TextFieldSpecDateTime {
 //       the beginning of the error message.
 //
 //
+// ------------------------------------------------------------------------
+//
 // Example Usage
 //
-// ----------------------------------------------------------------
+//  Example 1:
 //
-// Typically the user will supply a date time value ('dateTime'), a
-// field length value ('fieldLen'), a date time format
-// ('dateTimeFormat') and a text justification specification
-// ('textJustification').
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
 //
-// Type TextFieldSpecDateTime will convert the date time value
-// ('dateTime') to a date time string using the format
-// specifications provided in 'dateTimeFormat'. Next a text field
-// will be created.
+//  fieldLen = 39 + 4
 //
-// If field length ('fieldLen') is less than the length of the
-// computed date time string, the length of the text field will be
-// set equal to the length of the date time string. If the field
-// length ('fieldLen') is greater than the length of the computed
-// date time string, the date time string will be positioned within
-// the text field using the text justification specification (left,
-// center, right). The justified text field will then be returned to
-// the user by calling methods:
-//     TextFieldSpecDateTime.GetFormattedText()
-//                    or
-//     TextFieldSpecDateTime.String()
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//         Example
-//  dateTime = October 11, 2021 19:01:00-hours
-//  fieldLen = 43
-//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-11 19:01:00.000000000 -0500 CDT  "
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 52 + 6
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  Thursday October 21, 2021 14:19:03.000000000 -0500 CDT  "
 //
 func (txtDateTimeField TextFieldSpecDateTime) NewDateTimeField(
 	dateTime time.Time,
@@ -1549,6 +1815,42 @@ func (txtDateTimeField TextFieldSpecDateTime) NewDateTimeField(
 // TextFieldSpecDateTime and
 // TextFieldSpecDateTime.NewDateTimeField() returns a concrete
 // instance of TextFieldSpecDateTime.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// Type TextFieldSpecDateTime is a Text Field Specification. Text
+// Field Specifications are designed to be configured as one
+// element within a single line of text. That line of text can then
+// be used for text displays, file output or printing.
+//
+// Type TextLineSpecStandardLine can be used to compose a line of
+// text consisting of multiple Text Field Specifications like
+// TextFieldSpecDateTime. Text Field Specifications like
+// TextFieldSpecDateTime are therefore used as the components or
+// building blocks for constructing a single lines of text.
+//
+// For Type TextFieldSpecDateTime, the user will typically supply a
+// date time value ('dateTime'), a field length value ('fieldLen'),
+// a date time format ('dateTimeFormat') and a text justification
+// specification ('textJustification'). Type TextFieldSpecDateTime
+// will convert the date time value ('dateTime') to a date time
+// string using the format specifications provided in
+// 'dateTimeFormat'. Next a text field will be created.
+//
+// If field length ('fieldLen') is less than the length of the
+// computed date time string, the length of the text field will be
+// set equal to the length of the date time string. If the field
+// length ('fieldLen') is greater than the length of the computed
+// date time string, the date time string will be positioned within
+// the text field using the text justification specification (left,
+// center, right). The justified text field will then be returned to
+// the user by calling methods:
+//     TextFieldSpecDateTime.GetFormattedText()
+//                    or
+//     TextFieldSpecDateTime.String()
 //
 //
 // ------------------------------------------------------------------------
@@ -1702,39 +2004,83 @@ func (txtDateTimeField TextFieldSpecDateTime) NewDateTimeField(
 //       the beginning of the error message.
 //
 //
+// ------------------------------------------------------------------------
+//
 // Example Usage
 //
-// ----------------------------------------------------------------
+//  Example 1:
 //
-// Typically the user will supply a date time value ('dateTime'), a
-// field length value ('fieldLen'), a date time format
-// ('dateTimeFormat') and a text justification specification
-// ('textJustification').
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
 //
-// Type TextFieldSpecDateTime will convert the date time value
-// ('dateTime') to a date time string using the format
-// specifications provided in 'dateTimeFormat'. Next a text field
-// will be created.
+//  fieldLen = 39 + 4
 //
-// If field length ('fieldLen') is less than the length of the
-// computed date time string, the length of the text field will be
-// set equal to the length of the date time string. If the field
-// length ('fieldLen') is greater than the length of the computed
-// date time string, the date time string will be positioned within
-// the text field using the text justification specification (left,
-// center, right). The justified text field will then be returned to
-// the user by calling methods:
-//     TextFieldSpecDateTime.GetFormattedText()
-//                    or
-//     TextFieldSpecDateTime.String()
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//         Example
-//  dateTime = October 11, 2021 19:01:00-hours
-//  fieldLen = 43
-//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-11 19:01:00.000000000 -0500 CDT  "
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 52 + 6
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  Thursday October 21, 2021 14:19:03.000000000 -0500 CDT  "
 //
 func (txtDateTimeField TextFieldSpecDateTime) NewPtrDateTimeField(
 	dateTime time.Time,
@@ -2047,6 +2393,42 @@ func (txtDateTimeField *TextFieldSpecDateTime) ReaderInitialize() {
 //
 // ------------------------------------------------------------------------
 //
+// Background
+//
+// Type TextFieldSpecDateTime is a Text Field Specification. Text
+// Field Specifications are designed to be configured as one
+// element within a single line of text. That line of text can then
+// be used for text displays, file output or printing.
+//
+// Type TextLineSpecStandardLine can be used to compose a line of
+// text consisting of multiple Text Field Specifications like
+// TextFieldSpecDateTime. Text Field Specifications like
+// TextFieldSpecDateTime are therefore used as the components or
+// building blocks for constructing a single lines of text.
+//
+// For Type TextFieldSpecDateTime, the user will typically supply a
+// date time value ('dateTime'), a field length value ('fieldLen'),
+// a date time format ('dateTimeFormat') and a text justification
+// specification ('textJustification'). Type TextFieldSpecDateTime
+// will convert the date time value ('dateTime') to a date time
+// string using the format specifications provided in
+// 'dateTimeFormat'. Next a text field will be created.
+//
+// If field length ('fieldLen') is less than the length of the
+// computed date time string, the length of the text field will be
+// set equal to the length of the date time string. If the field
+// length ('fieldLen') is greater than the length of the computed
+// date time string, the date time string will be positioned within
+// the text field using the text justification specification (left,
+// center, right). The justified text field will then be returned to
+// the user by calling methods:
+//     TextFieldSpecDateTime.GetFormattedText()
+//                    or
+//     TextFieldSpecDateTime.String()
+//
+//
+// ------------------------------------------------------------------------
+//
 // Input Parameters
 //
 //  dateTime                   time.Time
@@ -2190,39 +2572,83 @@ func (txtDateTimeField *TextFieldSpecDateTime) ReaderInitialize() {
 //       the beginning of the error message.
 //
 //
+// ------------------------------------------------------------------------
+//
 // Example Usage
 //
-// ----------------------------------------------------------------
+//  Example 1:
 //
-// Typically the user will supply a date time value ('dateTime'), a
-// field length value ('fieldLen'), a date time format
-// ('dateTimeFormat') and a text justification specification
-// ('textJustification').
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
 //
-// Type TextFieldSpecDateTime will convert the date time value
-// ('dateTime') to a date time string using the format
-// specifications provided in 'dateTimeFormat'. Next a text field
-// will be created.
+//  fieldLen = 39 + 4
 //
-// If field length ('fieldLen') is less than the length of the
-// computed date time string, the length of the text field will be
-// set equal to the length of the date time string. If the field
-// length ('fieldLen') is greater than the length of the computed
-// date time string, the date time string will be positioned within
-// the text field using the text justification specification (left,
-// center, right). The justified text field will then be returned to
-// the user by calling methods:
-//     TextFieldSpecDateTime.GetFormattedText()
-//                    or
-//     TextFieldSpecDateTime.String()
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//         Example
-//  dateTime = October 11, 2021 19:01:00-hours
-//  fieldLen = 43
-//  dateTimeFormat = "2006-01-02 15:04:05.000000000 -0700 MST"
 //  textJustification = TxtJustify.Center()
 //
-//  Result = "  2021-10-11 19:01:00.000000000 -0500 CDT  "
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 52 + 6
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  Thursday October 21, 2021 14:19:03.000000000 -0500 CDT  "
 //
 func (txtDateTimeField *TextFieldSpecDateTime) SetDateTimeField(
 	dateTime time.Time,
@@ -2260,6 +2686,429 @@ func (txtDateTimeField *TextFieldSpecDateTime) SetDateTimeField(
 			dateTimeFormat,
 			textJustification,
 			ePrefix)
+
+	return err
+}
+
+// SetDateTimeValue - Sets the Date/Time value for the current
+// instance of TextFieldSpecDateTime.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  dateTime                   time.Time
+//     - A valid date time value which is used to generate a
+//       formatted date/time text string. Type time.Time is part of
+//       the Golang time package:
+//              https://pkg.go.dev/time.
+//
+//       If this parameter is submitted as a zero value, an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtDateTimeField *TextFieldSpecDateTime) SetDateTimeValue(
+	dateTime time.Time,
+	errorPrefix interface{}) error {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecDateTime.SetFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if dateTime.IsZero() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dateTime' has a ZERO value!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtDateTimeField.dateTime = dateTime
+
+	return err
+}
+
+// SetFieldLength - Sets The length of the text field in which the
+// text label string will be positioned for text display, file
+// output or printing.
+//
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// Field Length specifies the length of the text field in which the
+// formatted date/time text will be displayed.
+//
+// If Field Length is less than the length of the formatted date/time
+// string, it will be automatically set equal to the length of the
+// formatted date/time string.
+//
+// If Field Length is greater than the length of the length of the
+// formatted date/time string, the date/time text will be
+// positioned within a text field with a length equal to Field
+// Length. In this case, the position of the date/time string within
+// the text field will be controlled by the text justification
+// specification.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabelChars'
+//       will be displayed. If 'fieldLen' is less than the length
+//       of the 'textLabelChars' array, it will be automatically
+//       set equal to the 'textLabelChars' array length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabelChars', set this parameter to a value of
+//       minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1), an error will be returned.
+//
+//       If 'fieldLen' is submitted with a value greater than
+//       1-million (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fieldLen                   int
+//     - The length of the text field in which the Date/Time text
+//       string will be displayed. If 'fieldLen' is less than the
+//       length of the Date/Time text string, it will be
+//       automatically set equal to the length of the Date/Time
+//       text string.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of the Date/Time text string, set this parameter to a
+//       value of minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1), an error will be returned.
+//
+//       If 'fieldLen' is submitted with a value greater than
+//       1-million (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  Example 1:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-21 14:19:03.000000000 -0500 CDT  "
+//
+//
+//  Example 2:
+//
+//  // dateTime = October 10, 2021 20:13:34-hours
+//  // Time Zone = "America/Los_Angeles"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       10,
+//       20,
+//       13,
+//       34,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = 39 + 4
+//
+//  dateTimeFormat =
+//     "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "  2021-10-10 20:13:34.000000000 -0700 PDT  "
+//
+//
+//  Example 3:
+//
+//  // dateTime = October 21, 2021 14:19:03-hours
+//  // Time Zone = "America/Chicago"
+//    dateTime = time.Date(
+//       2021,
+//       time.Month(10),
+//       21,
+//       14,
+//       19,
+//       3,
+//       0,
+//       tzLocPtr)
+//
+//  fieldLen = -1
+//
+//  dateTimeFormat =
+//     "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+//
+//  textJustification = TxtJustify.Center()
+//
+//  Result =
+//     "Thursday October 21, 2021 14:19:03.000000000 -0500 CDT"
+//
+func (txtDateTimeField *TextFieldSpecDateTime) SetFieldLength(
+	fieldLen int,
+	errorPrefix interface{}) error {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecDateTime.SetFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err =
+		textFieldSpecLabelElectron{}.ptr().
+			isFieldLengthValid(
+				fieldLen,
+				ePrefix.XCtx(
+					"'fieldLen' Invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	txtDateTimeField.fieldLen = fieldLen
 
 	return err
 }
