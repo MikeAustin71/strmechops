@@ -1753,7 +1753,7 @@ func TestTextFieldSpecDateTime_SetDateTimeField_000100(t *testing.T) {
 	}
 
 	err =
-		txtFieldDateTimeTwo.SetDateTimeField(
+		txtFieldDateTimeTwo.SetDateTimeFieldSpec(
 			dateTime,
 			fieldLen,
 			dateTimeFormat,
@@ -1762,7 +1762,7 @@ func TestTextFieldSpecDateTime_SetDateTimeField_000100(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("%v\n"+
-			"Error returned by txtFieldDateTimeTwo.SetDateTimeField()\n"+
+			"Error returned by txtFieldDateTimeTwo.SetDateTimeFieldSpec()\n"+
 			"Error:\n'%v'\n",
 			ePrefix.String(),
 			err.Error())
