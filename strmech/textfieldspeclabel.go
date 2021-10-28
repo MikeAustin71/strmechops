@@ -2767,7 +2767,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 	txtFieldLabel.textJustification =
 		textJustification
 
-	return err
+	return nil
 }
 
 // SetTextLabel - Sets the text label component values for the

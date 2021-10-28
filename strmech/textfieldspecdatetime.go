@@ -1523,18 +1523,19 @@ func (txtDateTimeField TextFieldSpecDateTime) NewPtr() *TextFieldSpecDateTime {
 // building blocks for constructing a single lines of text.
 //
 // For Type TextFieldSpecDateTime, the user will typically supply a
-// date time value ('dateTime'), a field length value ('fieldLen'),
-// a date time format ('dateTimeFormat') and a text justification
+// Date/Time value ('dateTime'), a field length value ('fieldLen'),
+// a Date/Time format ('dateTimeFormat') and a text justification
 // specification ('textJustification'). Type TextFieldSpecDateTime
-// will convert the date time value ('dateTime') to a date time
+// will convert the Date/Time value ('dateTime') to a Date/Time
 // string using the format specifications provided in
-// 'dateTimeFormat'. Next a text field will be created.
+// 'dateTimeFormat'. Next, the Date/Time string will be positioned
+// within a text field using the field length parameter.
 //
 // If field length ('fieldLen') is less than the length of the
-// computed date time string, the length of the text field will be
-// set equal to the length of the date time string. If the field
+// computed Date/Time string, the length of the text field will be
+// set equal to the length of the Date/Time string. If the field
 // length ('fieldLen') is greater than the length of the computed
-// date time string, the date time string will be positioned within
+// Date/Time string, the Date/Time string will be positioned within
 // the text field using the text justification specification (left,
 // center, right). The justified text field will then be returned to
 // the user by calling methods:
@@ -3306,6 +3307,195 @@ func (txtDateTimeField *TextFieldSpecDateTime) SetFieldLength(
 	}
 
 	txtDateTimeField.fieldLen = fieldLen
+
+	return nil
+}
+
+// SetTextJustification - Sets the text justification specification
+// for the current instance of TextFieldSpecDateTime.
+//
+// TextJustify is An enumeration which specifies the justification
+// of the text field label string within a text field. The calling
+// function sets the text justification specification by passing an
+// appropriate TextJustify value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Background
+//
+// Type TextFieldSpecDateTime is a Text Field Specification. Text
+// Field Specifications are designed to be configured as one
+// element within a single line of text. That line of text can then
+// be used for text displays, file output or printing.
+//
+// Type TextLineSpecStandardLine can be used to compose a line of
+// text consisting of multiple Text Field Specifications like
+// TextFieldSpecDateTime. Text Field Specifications like
+// TextFieldSpecDateTime are therefore used as the components or
+// building blocks for constructing a single lines of text.
+//
+// For Type TextFieldSpecDateTime, the user will typically supply a
+// date time value (time.Time), a field length value, a date/time
+// format (https://pkg.go.dev/time#Time.Format) and a text
+// justification specification (TextJustify). Type
+// TextFieldSpecDateTime will convert the date/time value
+// (time.Time) to a date/time string using the format
+// specifications provided by the date/time format parameter. Next,
+// the Date/Time string will be positioned within a text field
+// using the field length parameter.
+//
+// If field length is less than the length of the computed Date/Time string, the length of the text field will be
+// set equal to the length of the Date/Time string. If the field
+// length ('fieldLen') is greater than the length of the computed
+// Date/Time string, the Date/Time string will be positioned within
+// the text field using the text justification specification (left,
+// center, right). The justified text field will then be returned to
+// the user by calling methods:
+//     TextFieldSpecDateTime.GetFormattedText()
+//                    or
+//     TextFieldSpecDateTime.String()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       'dateTime' string within a text field with a field length
+//       specified by parameter 'fieldLen'.
+//
+//       Text justification can only be evaluated in the context of
+//       a 'dateTime' text string, field length and a
+//       'textJustification' object of type TextJustify. This is
+//       because a field length ('fieldLen') value equal to or less
+//       than the length of the 'dateTime' text string will never
+//       use text justification. In these cases, text justification
+//       is completely ignored because the length of the text field
+//       ('fieldLen') is automatically set equal to the length of
+//       the 'dateTime' text string.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//       If 'textJustification' is NOT equal to 'Left', 'Right' or
+//       'Center', an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+func (txtDateTimeField *TextFieldSpecDateTime) SetTextJustification(
+	textJustification TextJustify,
+	errorPrefix interface{}) error {
+
+	if txtDateTimeField.lock == nil {
+		txtDateTimeField.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeField.lock.Lock()
+
+	defer txtDateTimeField.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFieldSpecDateTime.SetDateTimeFormat()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if !textJustification.XIsValid() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Text Justification is INVALID!\n"+
+			"Text Justification MUST be set to\n"+
+			"Left, Right or Center.\n"+
+			"Text Justification  String Value= '%v'\n"+
+			"Text Justification Integer Value= '%v'\n",
+			ePrefix.String(),
+			textJustification.String(),
+			textJustification.XValueInt())
+
+		return err
+	}
+
+	txtDateTimeField.textJustification =
+		textJustification
 
 	return nil
 }
