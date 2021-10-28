@@ -49,13 +49,13 @@ type NumberSignSymbolDto struct {
 	trailingNumSignFoundIndex    int                   // Index of Trailing Number Sign Symbol in target number.
 	numSignPosition              NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
 	numSignValueType             NumericSignValueType  // Must be positive or negative
-	numSymbolClass               NumericSymbolClass    // Always NumericSymbolClass(0).NumberSign()
+	numSymbolClass               NumericSymbolClass    // Always set to NumericSymbolClass(0).NumberSign()
 	numSymbolDisplayMode         NumSignSymbolDisplayMode
 	lock                         *sync.Mutex
 }
 
 // ClearLeadingNumSignTracking - This method will clear or delete
-// all of the tracking data collected for the Leading Number Sign
+// all the tracking data collected for the Leading Number Sign
 // Symbol encapsulated by the current NumberSignSymbolDto instance.
 //
 // Specifically, this means that member variables
@@ -80,7 +80,7 @@ func (nSignSymbol *NumberSignSymbolDto) ClearLeadingNumSignTracking() {
 }
 
 // ClearTrailingNumSignTracking - This method will clear or delete
-// all of the tracking data collected for the Trailing Number Sign
+// all the tracking data collected for the Trailing Number Sign
 // Symbol encapsulated by the current NumberSignSymbolDto instance.
 //
 // Specifically, this means that member variables
@@ -109,7 +109,7 @@ func (nSignSymbol *NumberSignSymbolDto) ClearTrailingNumSignTracking() {
 // the current NumberSignSymbolDto instance ('nSignSymbol').
 //
 // IMPORTANT
-// All of the data fields in current NumberSignSymbolDto instance
+// All the data fields in current NumberSignSymbolDto instance
 // ('nSignSymbol') will be modified and overwritten.
 //
 //
@@ -288,7 +288,7 @@ func (nSignSymbol *NumberSignSymbolDto) CopyIn(
 //  newNumSignSymbol    NumberSignSymbolDto
 //     - If this method completes successfully, a new instance of
 //       NumberSignSymbolDto will be created and returned
-//       containing all of the data values copied from the current
+//       containing all the data values copied from the current
 //       instance of NumberSignSymbolDto.
 //
 //
@@ -389,9 +389,9 @@ func (nSignSymbol *NumberSignSymbolDto) Equal(
 
 // EqualNumberSignRunes - Receives a pointer to an incoming
 // instance of NumberSignSymbolDto and proceeds to compare the
-// the leading and trailing number sign runes with those of the
-// current NumberSignSymbolDto instance. If both sets of number
-// sign runes are equivalent, this method returns 'true'.
+// leading and trailing number sign runes with those of the current
+// NumberSignSymbolDto instance. If both sets of number sign runes
+// are equivalent, this method returns 'true'.
 //
 // If the two number sign rune arrays differ in any respect, this
 // method will return false.
@@ -732,7 +732,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
 // Input Parameters
 //
 //  hostRunes                  []rune
-//     - An array of runes. This rune array will searched to
+//     - An array of runes. This rune array will be searched to
 //       determine if the leading number sign symbol is present in
 //       the array beginning at the 'hostStartIndex.
 //
@@ -848,7 +848,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 // Input Parameters
 //
 //  hostRunes                  []rune
-//     - An array of runes. This rune array will searched to
+//     - An array of runes. This rune array will be searched to
 //       determine if the trailing number sign symbol is present in
 //       the array beginning at the 'hostStartIndex.
 //

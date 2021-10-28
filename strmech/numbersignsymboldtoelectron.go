@@ -10,8 +10,8 @@ type numberSignSymbolDtoElectron struct {
 	lock *sync.Mutex
 }
 
-// emptyNumSignSymbol - Receives a pointer to an NumberSignSymbolDto
-// object an proceeds to set all internal member variables to their
+// emptyNumSignSymbol - Receives a pointer to a NumberSignSymbolDto
+// object and proceeds to set all internal member variables to their
 // zero or uninitialized state.
 //
 func (nSignSymElectron *numberSignSymbolDtoElectron) emptyNumSignSymbol(
@@ -228,8 +228,8 @@ func (nSignSymElectron numberSignSymbolDtoElectron) ptr() *numberSignSymbolDtoEl
 //
 //  numSignSymbol       *NumberSignSymbolDto
 //     - A pointer to an instance of NumberSignSymbolDto. This object
-//       will be evaluated to determine whether or not it is a
-//       valid instance.
+//       will be evaluated to determine whether it is a valid
+//       instance.
 //
 //
 //  errPrefDto          *ErrPrefixDto

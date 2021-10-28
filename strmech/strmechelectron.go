@@ -420,7 +420,7 @@ func (sMechElectron *strMechElectron) readBytes(
 //
 //  nextStartIdx      int - The index of the beginning of the next string in the byte array
 //                          'bytes' after 'extractedString'. If no more strings exist in the
-//                          the byte array, 'nextStartIdx' will be set to -1.
+//                          byte array, 'nextStartIdx' will be set to -1.
 //
 func (sMechElectron *strMechElectron) readStringFromBytes(
 	bytes []byte,
@@ -497,7 +497,7 @@ func (sMechElectron *strMechElectron) readStringFromBytes(
 }
 
 // ReplaceBytes - Replaces characters in a target array of bytes ([]bytes) with those specified in
-// a two dimensional slice of bytes.
+// a two-dimensional slice of bytes.
 //
 // ------------------------------------------------------------------------
 //
@@ -510,7 +510,7 @@ func (sMechElectron *strMechElectron) readStringFromBytes(
 //       replaced by the character specified in replacementBytes[i][1].
 //
 //  replacementBytes    [][]byte
-//     - A two dimensional slice of type byte. Element [i][0] contains the
+//     - A two-dimensional slice of type byte. Element [i][0] contains the
 //       target character to locate in 'targetBytes'. Element[i][1] contains
 //       the replacement character which will replace the target character
 //       in 'targetBytes'. If the replacement character element [i][1] is
@@ -714,7 +714,7 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 }
 
 // ReplaceStringChars - Replaces string characters in a target string ('targetStr') with those
-// specified in a two dimensional slice of runes, 'replacementRunes[][]'.
+// specified in a two-dimensional slice of runes, 'replacementRunes[][]'.
 //
 // ------------------------------------------------------------------------
 //
@@ -727,7 +727,7 @@ func (sMechElectron *strMechElectron) replaceMultipleStrs(
 //       replacementRunes[i][1].
 //
 //  replacementRunes    [][2]rune
-//     - A two dimensional slice of type 'rune'. Element [i][0] contains
+//     - A two-dimensional slice of type 'rune'. Element [i][0] contains
 //       the target character to locate in 'targetStr'. Element[i][1]
 //       contains the replacement character which will replace the target
 //       character in 'targetStr'. If the replacement character

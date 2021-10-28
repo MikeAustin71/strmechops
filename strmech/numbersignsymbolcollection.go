@@ -321,9 +321,10 @@ func (numSignSymCol *NumberSignSymbolCollection) AddNewSymbol(
 }
 
 // EmptyCollection - Deletes all member NumberSignSymbolDto objects
-// currently stored in the the Number Sign Symbol Collection. Upon
+// currently stored in the Number Sign Symbol Collection. Upon
 // completion, this method will ensure that the internal collection
 // of NumberSignSymbolDto objects has a length of zero.
+//
 func (numSignSymCol *NumberSignSymbolCollection) EmptyCollection() {
 
 	if numSignSymCol.lock == nil {
@@ -349,7 +350,7 @@ func (numSignSymCol *NumberSignSymbolCollection) EmptyCollection() {
 	numSignSymCol.numSignSymbols = nil
 }
 
-// GetCollection - Returns a array of NumberSignSymbolDto objects
+// GetCollection - Returns an array of NumberSignSymbolDto objects
 // which comprise the collection maintained by the current
 // NumberSignSymbolCollection instance.
 //
@@ -623,7 +624,7 @@ func (numSignSymCol *NumberSignSymbolCollection) IsCollectionEmpty() bool {
 // Input Parameters
 //
 //  hostRunes                  []rune
-//     - An array of runes. This rune array will searched to
+//     - An array of runes. This rune array will be searched to
 //       determine if the leading number sign symbol is present in
 //       the array beginning at the 'hostStartIndex.
 //
@@ -719,7 +720,7 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 // Input Parameters
 //
 //  hostRunes                  []rune
-//     - An array of runes. This rune array will searched to
+//     - An array of runes. This rune array will be searched to
 //       determine if the trailing number sign symbol is present in
 //       the array beginning at the 'hostStartIndex.
 //

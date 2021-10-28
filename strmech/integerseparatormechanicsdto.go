@@ -43,7 +43,7 @@ func (intSeparatorMech integerSeparatorDtoMechanics) ptr() *integerSeparatorDtoM
 //
 // IMPORTANT
 //
-// All of the internal member variables in input parameter
+// All the internal member variables in input parameter
 // 'nStrIntSep' will be deleted and replaced.
 //
 //
@@ -144,7 +144,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //
 // IMPORTANT
 //
-// All of the internal member variables in input parameter
+// All the internal member variables in input parameter
 // 'nStrIntSep' will be deleted and replaced.
 //
 //
@@ -187,7 +187,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //       integer digits within each group. This value is used to
 //       group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -201,7 +201,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setToUSADefaults(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.

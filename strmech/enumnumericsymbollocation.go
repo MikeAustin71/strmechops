@@ -225,11 +225,11 @@ func (nSymLocation NumericSymbolLocation) XIsValid() bool {
 //
 //
 //  caseSensitive   bool
-//     - If 'true' the search for enumeration names will be case
-//       sensitive and will require an exact match. Therefore,
+//     - If 'true' the search for enumeration names will be
+//       case-sensitive and will require an exact match. Therefore,
 //       'before' will NOT match the enumeration name, 'Before'.
 //
-//       If 'false' a case insensitive search is conducted for the
+//       If 'false' a case-insensitive search is conducted for the
 //       enumeration name. In this case, 'before' will match the
 //       enumeration name 'Before'.
 //
@@ -345,7 +345,7 @@ func (nSymLocation NumericSymbolLocation) XValueInt() int {
 // NSymLocation - public global constant of type
 // NumericSymbolLocation.
 //
-// This variable serves as an easier, short hand technique for
+// This variable serves as an easier, shorthand technique for
 // accessing NumericSymbolLocation values.
 //
 // For easy access to these enumeration values, use this global

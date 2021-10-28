@@ -239,11 +239,11 @@ func (sopsTxtJustify TextJustify) XIsValid() bool {
 //                        and return the correct enumeration value.
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
-//                        will be case sensitive and will require an
+//                        will be case-sensitive and will require an
 //                        exact match. Therefore, 'right' will NOT
 //                        match the enumeration name, 'Right'.
 //
-//                        If 'false' a case insensitive search is conducted
+//                        If 'false' a case-insensitive search is conducted
 //                        for the enumeration name. In this case, 'right'
 //                        will match the enumeration name 'Right'.
 //
@@ -352,7 +352,7 @@ func (sopsTxtJustify TextJustify) XValueInt() int {
 // TxtJustify - public global variable of
 // type TextJustify.
 //
-// This variable serves as an easier, short hand
+// This variable serves as an easier, shorthand
 // technique for accessing TextJustify values.
 //
 // Usage:

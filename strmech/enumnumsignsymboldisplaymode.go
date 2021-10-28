@@ -43,7 +43,7 @@ var mapNumSignSymbolDisplayModeLwrCaseStringToCode = map[string]NumSignSymbolDis
 // Symbol is implied or 'implicit'. This means that the Number Sign
 // Symbol is NOT displayed and the numeric value is assumed to be
 // positive. For example the numeric value '123' has an assumed or
-// implicit numeric sign of plus ('+') meaning the the value '123'
+// implicit numeric sign of plus ('+') meaning the value '123'
 // is equal to the positive value '+123'.
 //
 // The NumSignSymbolDisplayMode enumeration is used to signal whether
@@ -224,12 +224,12 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XIsValid() bool {
 //
 //
 //  caseSensitive   bool - If 'true' the search for enumeration
-//                         names will be case sensitive and will
+//                         names will be case-sensitive and will
 //                         require an exact match. Therefore,
 //                         'explicit' will NOT match the enumeration
 //                         name, 'Explicit'.
 //
-//                         If 'false' a case insensitive search is
+//                         If 'false' a case-insensitive search is
 //                         conducted for the enumeration name. In
 //                         this case, 'explicit' will match the
 //                         enumeration name 'Explicit'.
@@ -346,7 +346,7 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XValueInt() int {
 // NSignSymDisplayMode - public global constant of type
 // NumSignSymbolDisplayMode.
 //
-// This variable serves as an easier, short hand technique for
+// This variable serves as an easier, shorthand technique for
 // accessing NumSignSymbolDisplayMode values.
 //
 // For easy access to these enumeration values, use this global

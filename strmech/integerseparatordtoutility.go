@@ -63,9 +63,9 @@ func (intSeparatorUtil integerSeparatorDtoUtility) ptr() *integerSeparatorDtoUti
 // Input Parameters
 //
 //  intSep                     *IntegerSeparatorDto
-//     - A pointer to an instance of IntegerSeparatorDto. All of
-//       the member variable data values will be overwritten and
-//       reset using the input parameters listed below and default
+//     - A pointer to an instance of IntegerSeparatorDto. All the
+//       member variable data values will be overwritten and reset
+//       using the input parameters listed below and default
 //       values.
 //
 //
@@ -208,9 +208,9 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasic(
 // Input Parameters
 //
 //  intSep                     *IntegerSeparatorDto
-//     - A pointer to an instance of IntegerSeparatorDto. All of
-//       the member variable data values will be overwritten and
-//       reset using the input parameters listed below and default
+//     - A pointer to an instance of IntegerSeparatorDto. All the
+//       member variable data values will be overwritten and reset
+//       using the input parameters listed below and default
 //       values.
 //
 //
@@ -326,7 +326,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setBasicRunes(
 // United States default numeric separators are listed as follows:
 //
 //  Decimal Separator = '.'
-//  Thousands Separator (a.k.a Integer Digits Separator) = ','
+//  Thousands Separator (a.k.a. Integer Digits Separator) = ','
 //  Integer Digits Grouping Sequence = 3
 //  Example Floating Point Number String: 1,000,000,000.456
 //

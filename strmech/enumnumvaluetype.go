@@ -254,11 +254,11 @@ func (numValType NumericValueType) XIsValid() bool {
 //       return the correct enumeration value.
 //
 // caseSensitive   bool
-//     - If 'true' the search for enumeration names will be case
-//       sensitive and will require an exact match. Therefore,
+//     - If 'true' the search for enumeration names will be
+//       case-sensitive and will require an exact match. Therefore,
 //       'integer' will NOT match the enumeration name, 'Integer'.
 //
-//       A case sensitive search will match any of the following strings:
+//       A case-sensitive search will match any of the following strings:
 //           "None"
 //           "FloatingPoint"
 //           "Floating Point"
@@ -266,11 +266,11 @@ func (numValType NumericValueType) XIsValid() bool {
 //           "Integer"
 //           "Int"
 //
-//       If 'false', a case insensitive search is conducted for the
+//       If 'false', a case-insensitive search is conducted for the
 //       enumeration name. In this example, 'integer' WILL MATCH
 //       the enumeration name, 'Integer'.
 //
-//       A case insensitive search will match any of the following
+//       A case-insensitive search will match any of the following
 //       lower case names:
 //           "none"
 //           "floatingpoint"
@@ -383,7 +383,7 @@ func (numValType NumericValueType) XValueInt() int {
 
 // NumValType - public global constant of type NumericValueType.
 //
-// This variable serves as an easier, short hand technique for
+// This variable serves as an easier, shorthand technique for
 // accessing NumericValueType values.
 //
 // For easy access to these enumeration values, use the

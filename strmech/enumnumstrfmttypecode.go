@@ -432,12 +432,12 @@ func (nStrValSpec NumStrFormatTypeCode) XIsValid() bool {
 //       return the correct enumeration value.
 //
 // caseSensitive   bool
-//     - If 'true' the search for enumeration names will be case
-//       sensitive and will require an exact match. Therefore,
+//     - If 'true' the search for enumeration names will be
+//       case-sensitive and will require an exact match. Therefore,
 //       'scientificnotation' will NOT match the enumeration name,
 //        'ScientificNotation'.
 //
-//       A case sensitive search will match any of the following strings:
+//       A case-sensitive search will match any of the following strings:
 //           "None"
 //           "AbsoluteValue"
 //           "Absolute Value"
@@ -458,11 +458,11 @@ func (nStrValSpec NumStrFormatTypeCode) XIsValid() bool {
 //           "Scientific Notation"
 //           "SCI"
 //
-//       If 'false', a case insensitive search is conducted for the
+//       If 'false', a case-insensitive search is conducted for the
 //       enumeration name. In this example, 'scientificnotation'
 //       will match enumeration name 'ScientificNotation'.
 //
-//       A case insensitive search will match any of the following
+//       A case-insensitive search will match any of the following
 //       lower case names:
 //             "none"
 //             "absolutevalue"
@@ -590,7 +590,7 @@ func (nStrValSpec NumStrFormatTypeCode) XValueInt() int {
 // NStrFmtType - public global variable of type
 // NumStrFormatTypeCode.
 //
-// This variable serves as an easier, short hand
+// This variable serves as an easier, shorthand
 // technique for accessing NumStrFormatTypeCode values.
 //
 // For easy access to these enumeration values, use the

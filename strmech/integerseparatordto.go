@@ -10,7 +10,7 @@ import (
 // primarily thousands separators, for different countries and
 // cultures.
 //
-// In the USA and many other countries integer numbers are often
+// In the USA and many other countries, integer numbers are often
 // separated by commas separating the number into thousands.
 //     Example: 1,000,000,000
 //
@@ -56,7 +56,7 @@ import (
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -75,7 +75,7 @@ import (
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -113,7 +113,7 @@ type IntegerSeparatorDto struct {
 // If input parameter 'incomingNStrIntSeparator' is judged to be
 // invalid, this method will return an error.
 //
-// Be advised, all of the data fields in the current
+// Be advised, all the data fields in the current
 // IntegerSeparatorDto instance will be overwritten.
 //
 //
@@ -287,7 +287,7 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //  IntegerSeparatorDto
 //     - If this method completes successfully, a new instance of
 //       IntegerSeparatorDto will be created and returned containing
-//       all of the data values copied from the current instance of
+//       all the data values copied from the current instance of
 //       IntegerSeparatorDto.
 //
 //
@@ -616,7 +616,7 @@ func (nStrIntSep *IntegerSeparatorDto) GetIntSeparatorChars(
 // This unsigned integer value is used to group integers within a
 // number string.
 //
-// In most western countries integer digits to the left of
+// In most western countries, integer digits to the left of
 // the decimal separator (a.k.a. decimal point) are separated
 // into groups of three digits representing a grouping of
 // 'thousands' like this: '1,000,000,000'. In this case the
@@ -1179,7 +1179,7 @@ func (nStrIntSep IntegerSeparatorDto) NewBasicRunes(
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -1198,7 +1198,7 @@ func (nStrIntSep IntegerSeparatorDto) NewBasicRunes(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -1376,7 +1376,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -1395,7 +1395,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -1688,7 +1688,7 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -1707,7 +1707,7 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -2179,7 +2179,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -2198,7 +2198,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -2371,7 +2371,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -2390,7 +2390,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -2659,7 +2659,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 // digits within a group. This value is used to group integers
 // within a number string.
 //
-// In most western countries integer digits to the left of the
+// In most western countries, integer digits to the left of the
 // decimal separator (a.k.a. decimal point) are separated into
 // groups of three digits representing a grouping of 'thousands'
 // like this: '1,000,000,000'. In this case the
@@ -2681,7 +2681,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -2861,7 +2861,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntGroupingSequence(
 // Input Parameters
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.
@@ -3029,7 +3029,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetToUSADefaults(
 //
 // United States default numeric separators are listed as follows:
 //
-//  Thousands Separator (a.k.a Integer Digits Separator) = ','
+//  Thousands Separator (a.k.a. Integer Digits Separator) = ','
 //  Integer Digits Grouping Sequence = []uint{3}
 //             United States Example:  1,000,000,000
 //
@@ -3210,7 +3210,7 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 //       integer digits within a series of groups. This value is
 //       used to group integers within a number string.
 //
-//       In most western countries integer digits to the left of
+//       In most western countries, integer digits to the left of
 //       the decimal separator (a.k.a. decimal point) are separated
 //       into groups of three digits representing a grouping of
 //       'thousands' like this: '1,000,000,000'. In this case the
@@ -3229,7 +3229,7 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 //
 //
 //  restartIntGroupingSequence bool
-//     - If if this flag is set to 'true', the grouping sequence
+//     - If this flag is set to 'true', the grouping sequence
 //       will be restarted at the beginning of the
 //       'intGroupingSequence' array after completion of the last
 //        group in the 'intGroupingSequence' array.

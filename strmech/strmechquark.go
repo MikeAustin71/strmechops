@@ -251,7 +251,7 @@ func (sMechQuark *strMechQuark) convertNonPrintableChars(
 //
 //  nonPrintableChars   []rune
 //     - An array of runes containing non-printable characters.
-//       The non-printable characters were be converted from the
+//       The non-printable characters will be converted from the
 //       printable characters contained in input parameter
 //       'printableChars'.
 //
@@ -737,14 +737,14 @@ func (sMechQuark *strMechQuark) findLastSpace(
 // Examples
 //
 //
-//   Example (1)
+//   Example-1
 //     In the text string segment:
 //
 //     "The cow jumped over the moon."
 //
 //     The last word would be defined as "moon."
 //
-//     Example (2)
+//     Example-2
 //       In the text string segment:
 //
 //       "  somewhere over the rainbow  "
@@ -1948,7 +1948,7 @@ func (sMechQuark *strMechQuark) removeSubString(
 //
 //
 //  replacementRunes    [][2]rune
-//     - A two dimensional slice of type 'rune'. Element [i][0]
+//     - A two-dimensional slice of type 'rune'. Element [i][0]
 //       contains the target character to locate in 'targetRunes'.
 //       Element[i][1] contains the replacement character which will
 //       replace the target character in 'targetRunes'. If the
@@ -3058,7 +3058,7 @@ func (sMechQuark *strMechQuark) swapRune(
 // Return Values
 //
 //  rStr                string
-//     - This is the 'result' string. It is comprised of all the
+//     - This is the 'result' string. It consists of all the
 //       characters in the original 'targetStr' minus those
 //       'trimChar' characters deleted in the 'trim' operation.
 //
@@ -3217,7 +3217,7 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 // Return Values
 //
 //  rStr                string
-//     - This is the 'result' string. It is comprised of all the
+//     - This is the 'result' string. It comprises all the
 //       characters in the original 'targetStr' minus those
 //       'trimChar' characters deleted in the 'trim' operation.
 //

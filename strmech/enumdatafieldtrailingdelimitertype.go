@@ -31,7 +31,7 @@ var mDataFieldTrailingDelimiterToString = map[DataFieldTrailingDelimiterType]str
 }
 
 // DataFieldTrailingDelimiterType - Enumerates the type of delimiters used to mark the
-// end of a a data field within a host string.
+// end of a data field within a host string.
 //
 // DataFieldTrailingDelimiterType has been adapted to function as an enumeration of valid
 // Data Field Delimiter Types. Since Go does not directly support enumerations, the
@@ -238,11 +238,11 @@ func (dfTrailDelimiter DataFieldTrailingDelimiterType) XIsValid() bool {
 //	                       method will proceed to successful completion
 //
 //	caseSensitive   bool - If 'true' the search for enumeration names
-//	                       will be case sensitive and will require an
+//	                       will be case-sensitive and will require an
 //	                       exact match. Therefore, 'valid' will NOT
 //	                       match the enumeration name, 'Valid'.
 //
-//	                       If 'false' a case insensitive search is
+//	                       If 'false' a case-insensitive search is
 //	                       conducted for the enumeration name. In
 //	                       this case, 'valid' will match the
 //	                       enumeration name 'Valid'.
@@ -271,8 +271,8 @@ func (dfTrailDelimiter DataFieldTrailingDelimiterType) XIsValid() bool {
 //                            OR
 //  t, err := DataFieldTrailingDelimiterType(0).ParseString("endofline", false)
 //
-//  For all of the cases shown above,
-//  t is now equal to DataFieldTrailingDelimiterType(0).EndOfLine()
+//  For all the cases shown above, t is now equal to
+//  DataFieldTrailingDelimiterType(0).EndOfLine()
 //
 func (dfTrailDelimiter DataFieldTrailingDelimiterType) XParseString(
 	valueString string,
@@ -346,7 +346,7 @@ func (dfTrailDelimiter DataFieldTrailingDelimiterType) XValueInt() int {
 // DfTrailDelimiter - public global variable of
 // type DataFieldTrailingDelimiterType.
 //
-// This variable serves as an easier, short hand
+// This variable serves as an easier, shorthand
 // technique for accessing DataFieldTrailingDelimiterType
 // values.
 //

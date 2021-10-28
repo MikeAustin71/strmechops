@@ -13,6 +13,8 @@ type ITextFieldSpecification interface {
 	EqualITextField(
 		iTextField ITextFieldSpecification) bool
 
+	GetFormattedStrLength() int
+
 	GetFormattedText(
 		errorPrefix interface{}) (string, error)
 

@@ -59,8 +59,8 @@ var mapNumericSymClassLwrCaseStringToCode = map[string]NumericSymbolClass{
 //
 //  CurrencySign     (2) - Signals that the numeric symbol is
 //                         classified as a currency sign such as
-//                         the the USA Dollar Sign ('$').
-//                         (Example: $256.00)
+//                         the USA Dollar Sign ('$').
+//                            (Example: $256.00)
 //
 //  IntegerSeparator (3) - Signals that the numeric symbol is
 //                         classified as an integer separator or
@@ -69,7 +69,7 @@ var mapNumericSymClassLwrCaseStringToCode = map[string]NumericSymbolClass{
 //                         of three (thousands) separated by a comma.
 //                         The Integer Separator in this case is a
 //                         comma.
-//                         (Example:  1,000,000,000)
+//                            (Example:  1,000,000,000)
 //
 //  DecimalSeparator (4) - Signals that the numeric symbol is
 //                         classified as a decimal separator.
@@ -79,7 +79,7 @@ var mapNumericSymClassLwrCaseStringToCode = map[string]NumericSymbolClass{
 //                         integer and fractional components of a
 //                         floating point number are separated by a
 //                         decimal point.
-//                         (Example: 256.32)
+//                            (Example: 256.32)
 //
 // For easy access to these enumeration values, use the global
 // constant NumSymClass. Example: NumSymClass.DecimalSeparator()
@@ -124,7 +124,7 @@ func (nSymbolClass NumericSymbolClass) NumberSign() NumericSymbolClass {
 }
 
 // CurrencySign - Signals that the numeric symbol is classified as
-// a currency sign such as the the USA Dollar Sign ('$').
+// a currency sign such as the USA Dollar Sign ('$').
 //  (Example: $256.00)
 //
 func (nSymbolClass NumericSymbolClass) CurrencySign() NumericSymbolClass {
@@ -252,12 +252,12 @@ func (nSymbolClass NumericSymbolClass) XIsValid() bool {
 //       completion and return the correct enumeration value.
 //
 // caseSensitive        bool
-//     - If 'true' the search for enumeration names will be case
-//       sensitive and will require an exact match. Therefore,
-//       'currencysign' will NOT match the enumeration name,
-//       'CurrencySign'.
+//     - If 'true' the search for enumeration names will be
+//       case-sensitive and will require an exact match. Therefore,
+//       "currencysign" will NOT match the enumeration name,
+//       "CurrencySign".
 //
-//       If 'false' a case insensitive search is conducted for the
+//       If 'false' a case-insensitive search is conducted for the
 //       enumeration name. In this case, 'currencysign' will match
 //       the enumeration name 'CurrencySign'.
 //
@@ -367,7 +367,7 @@ func (nSymbolClass NumericSymbolClass) XValueInt() int {
 // NumSymClass - public global constant of type
 // NumericSymbolClass.
 //
-// This variable serves as an easier, short hand technique for
+// This variable serves as an easier, shorthand technique for
 // accessing NumericSymbolClass values.
 //
 // Usage:

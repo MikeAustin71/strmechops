@@ -61,8 +61,8 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 //  After            (2) - Signals that the Numeric Symbol is
 //                         positioned 'After' the numeric value.
 //
-//  BeforeAndAfter   (3) - Signals that the Numeric Symbol is
-//                         comprised of two symbols, one positioned
+//  BeforeAndAfter   (3) - Signals that the Numeric Symbol
+//                         comprises two symbols, one positioned
 //                         'Before' the numeric value and one
 //                         positioned 'After' the numeric value.
 //
@@ -120,7 +120,7 @@ func (nSignSymPos NumSignSymbolPosition) After() NumSignSymbolPosition {
 	return NumSignSymbolPosition(2)
 }
 
-// BeforeAndAfter - Signals that the Numeric Symbol is comprised of
+// BeforeAndAfter - Signals that the Numeric Symbol consists of
 // two symbols, one positioned 'Before' the numeric value and one
 // positioned 'After' the numeric value.
 //
@@ -217,11 +217,11 @@ func (nSignSymPos NumSignSymbolPosition) XIsValid() bool {
 //                        and return the correct enumeration value.
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
-//                        will be case sensitive and will require an
+//                        will be case-sensitive and will require an
 //                        exact match. Therefore, 'before' will NOT
 //                        match the enumeration name, 'Before'.
 //
-//                        If 'false' a case insensitive search is conducted
+//                        If 'false' a case-insensitive search is conducted
 //                        for the enumeration name. In this case, 'before'
 //                        will match the enumeration name 'Before'.
 //
@@ -337,7 +337,7 @@ func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 // NSignSymPos - public global constant of type
 // NumSignSymbolPosition.
 //
-// This variable serves as an easier, short hand technique for
+// This variable serves as an easier, shorthand technique for
 // accessing NumSignSymbolPosition values.
 //
 // Usage:

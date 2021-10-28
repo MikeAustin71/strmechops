@@ -34,7 +34,7 @@ var mapNumSignValueTypeLwrCaseStringToCode = map[string]NumericSignValueType{
 // Any number can be positive, negative or zero.
 //
 // Positive numeric values are greater than zero. Negative numeric
-// values are less than zero and zero is neither positive or
+// values are less than zero and zero is neither positive nor
 // negative.
 //
 // Since the Go Programming Language does not directly support
@@ -297,11 +297,11 @@ func (nSignValue NumericSignValueType) XIsValid() bool {
 //                        and return the correct enumeration value.
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
-//                        will be case sensitive and will require an
+//                        will be case-sensitive and will require an
 //                        exact match. Therefore, 'negative' will NOT
 //                        match the enumeration name, 'Negative'.
 //
-//                        If 'false' a case insensitive search is conducted
+//                        If 'false' a case-insensitive search is conducted
 //                        for the enumeration name. In this case, 'negative'
 //                        will match the enumeration name 'Negative'.
 //
@@ -416,7 +416,7 @@ func (nSignValue NumericSignValueType) XValueInt() int {
 // NumSignVal - public global constant of type
 // NumericSignValueType.
 //
-// This variable serves as an easier, short hand technique for
+// This variable serves as an easier, shorthand technique for
 // accessing NumericSignValueType values.
 //
 // Usage:
