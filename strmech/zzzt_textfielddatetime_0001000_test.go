@@ -210,6 +210,176 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 
 func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_CopyIn_000200()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	err :=
+		txtFieldDateTimeOne.CopyIn(
+			nil,
+			ePrefix.XCtx(
+				"incomingDateTimeTxtField='nil'"))
+
+	if err == nil {
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from txtFieldDateTimeOne.CopyIn()\n"+
+			"because 'incomingDateTimeTxtField' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	fieldLen := -1
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.
+		NewDateTimeField(
+			dateTime,
+			fieldLen,
+			dateTimeFormat,
+			textJustification,
+			ePrefix.XCtx(
+				"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	dateTimeRawString :=
+		txtFieldDateTimeTwo.GetDateTimeRawString()
+
+	fieldLen = len(dateTimeRawString) + 4
+
+	err =
+		txtFieldDateTimeTwo.SetFieldLength(
+			fieldLen,
+			ePrefix.XCtx(
+				"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeTwo.SetFieldLength()\n"+
+			"Error='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	var dateTimeTwoFmtStr, dateTimeThreeFmtStr string
+
+	dateTimeTwoFmtStr,
+		err =
+		txtFieldDateTimeTwo.GetFormattedText(
+			ePrefix.XCtx(
+				"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeTwo.GetFormattedText()\n"+
+			"Error='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	txtFieldDateTimeThree := TextFieldSpecDateTime{}
+
+	err =
+		txtFieldDateTimeThree.CopyIn(
+			&txtFieldDateTimeTwo,
+			ePrefix.XCtx(
+				"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeTwo.CopyIn()\n"+
+			"Error='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if !txtFieldDateTimeTwo.Equal(&txtFieldDateTimeThree) {
+		t.Errorf("%v - Error\n"+
+			"Expected txtFieldDateTimeTwo==txtFieldDateTimeThree.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	dateTimeThreeFmtStr,
+		err =
+		txtFieldDateTimeThree.GetFormattedText(
+			ePrefix.XCtx(
+				"txtFieldDateTimeThree"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeThree.GetFormattedText()\n"+
+			"Error='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if dateTimeTwoFmtStr != dateTimeThreeFmtStr {
+		t.Errorf("%v - Error\n"+
+			"Expected dateTimeTwoFmtStr==dateTimeThreeFmtStr.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecDateTime_CopyOut_000100(t *testing.T) {

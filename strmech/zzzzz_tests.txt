@@ -1204,6 +1204,8 @@
 --- PASS: TestDataFieldTrailingDelimiterType_Value_01 (0.00s)
 === RUN   TestTextFieldSpecDateTime_CopyIn_000100
 --- PASS: TestTextFieldSpecDateTime_CopyIn_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTime_CopyIn_000200
+--- PASS: TestTextFieldSpecDateTime_CopyIn_000200 (0.00s)
 === RUN   TestTextFieldSpecDateTime_CopyOut_000100
 --- PASS: TestTextFieldSpecDateTime_CopyOut_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_Empty_000100
@@ -1603,5 +1605,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 52.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.679s
+coverage: 52.7% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.631s
