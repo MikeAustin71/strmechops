@@ -566,6 +566,134 @@ func TestTextFieldSpecDateTime_CopyOut_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_CopyOutITextField_000100()",
+		"")
+
+	txtFieldDateTime := TextFieldSpecDateTime{}
+
+	_,
+		err := txtFieldDateTime.CopyOutITextField(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtFieldLabel.CopyOutITextField()\n"+
+			"because 'txtFieldLabel' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETUNRED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	var tzLocPtr *time.Location
+
+	tzLocPtr, err = time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	err = txtFieldDateTimeTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtFieldSpec ITextFieldSpecification
+
+	txtFieldSpec,
+		err = txtFieldDateTimeTwo.CopyOutITextField(
+		ePrefix.XCtx(
+			"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var ok bool
+	var txtFieldDateTimeThree *TextFieldSpecDateTime
+
+	txtFieldDateTimeThree, ok =
+		txtFieldSpec.(*TextFieldSpecDateTime)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: Could not convert 'txtFieldSpec' to "+
+			"'*TextFieldSpecDateTime'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = txtFieldDateTimeThree.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldDateTimeThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_Empty_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -588,7 +716,6 @@ func TestTextFieldSpecDateTime_Empty_000100(t *testing.T) {
 			err.Error())
 
 		return
-
 	}
 
 	txtFieldDateTime.dateTime = time.Date(

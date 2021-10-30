@@ -1,0 +1,1 @@
+wt.exe -p "Command Prompt" -d D:\gowork\src\MikeAustin71\strmechops\strmech

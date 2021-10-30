@@ -654,6 +654,75 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 		return
 	}
 
+	labelText := "12345"
+	fieldLen := 14
+	txtJustify := TxtJustify.Right()
+
+	var txtFieldLabelTwo TextFieldSpecLabel
+
+	txtFieldLabelTwo,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		labelText,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtFieldSpec ITextFieldSpecification
+
+	txtFieldSpec,
+		err = txtFieldLabelTwo.CopyOutITextField(
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var ok bool
+	var txtFieldLabelThree *TextFieldSpecLabel
+
+	txtFieldLabelThree, ok =
+		txtFieldSpec.(*TextFieldSpecLabel)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: Could not convert 'txtFieldSpec' to "+
+			"'*TextFieldSpecLabel'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = txtFieldLabelThree.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldLabelThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
