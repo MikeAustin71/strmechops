@@ -1510,6 +1510,106 @@ func TestTextFieldSpecDateTime_GetDateTimeRawStrLen_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_GetFieldLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_GetFieldLength_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	expectedFieldLength := 0
+
+	actualFieldLength :=
+		txtFieldDateTimeOne.GetFieldLength()
+
+	if expectedFieldLength !=
+		actualFieldLength {
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Field Length is NOT EQUAL to Actual Field Length!\n"+
+			"Expected Field Length = '%v'\n"+
+			"Actual Field Length   = '%v'\n",
+			ePrefix.String(),
+			expectedFieldLength,
+			actualFieldLength)
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	expectedFieldLength = len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		expectedFieldLength,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualFieldLength =
+		txtFieldDateTimeTwo.GetFieldLength()
+
+	if expectedFieldLength !=
+		actualFieldLength {
+		t.Errorf("%v - ERROR\n"+
+			"Test #2"+
+			"Expected Field Length is NOT EQUAL to Actual Field Length!\n"+
+			"Expected Field Length = '%v'\n"+
+			"Actual Field Length   = '%v'\n",
+			ePrefix.String(),
+			expectedFieldLength,
+			actualFieldLength)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
