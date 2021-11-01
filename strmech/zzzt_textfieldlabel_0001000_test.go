@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
@@ -920,12 +921,133 @@ func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
 		txtFieldLabelOne.EqualITextField(txtFieldLabelTwo)
 
 	if areEqual == true {
-		t.Errorf("%v\n"+
-			"Error: Expected error return from txtFieldLabelOne.EqualITextField(txtFieldLabelTwo)\n"+
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtFieldLabelOne.EqualITextField(txtFieldLabelTwo)\n"+
+			"Expected areEqual == false\n"+
 			"because 'txtFieldLabelTwo' is a nil pointer.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			"HOWEVER, areEqual == true!\n",
 			ePrefix.String())
 
+		return
+	}
+
+	txtFieldLabelThree,
+		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+		"Hello World",
+		24,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"txtFieldLabelThree"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecLabel{}.NewPtrTextLabel()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	var tzLocPtr *time.Location
+
+	tzLocPtr,
+		err = time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTime *TextFieldSpecDateTime
+
+	txtFieldDateTime,
+		err = TextFieldSpecDateTime{}.NewPtrDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTime"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewPtrDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	areEqual =
+		txtFieldLabelThree.EqualITextField(txtFieldDateTime)
+
+	if areEqual == true {
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtFieldLabelThree.EqualITextField(txtFieldDateTime)\n"+
+			"Expected areEqual == 'false'\n"+
+			"because 'txtFieldDateTime' is of type 'TextFieldSpecDateTime'.\n"+
+			"HOWEVER, areEqual == 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtITextFieldSpecLabel ITextFieldSpecification
+
+	txtITextFieldSpecLabel,
+		err = txtFieldLabelThree.CopyOutITextField(
+		ePrefix.XCtx(
+			"txtITextFieldSpecLabel"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldLabelThree.CopyOutITextField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	areEqual = txtFieldLabelThree.EqualITextField(
+		txtITextFieldSpecLabel)
+
+	if areEqual == false {
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtFieldLabelThree.EqualITextField(txtITextFieldSpecLabel)\n"+
+			"Expected areEqual == 'true'\n"+
+			"HOWEVER, areEqual == 'false'!\n",
+			ePrefix.String())
+
+		return
 	}
 
 	return
