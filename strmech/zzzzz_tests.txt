@@ -1228,6 +1228,8 @@
 --- PASS: TestTextFieldSpecDateTime_GetFieldLength_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_GetFormattedStrLength_000100
 --- PASS: TestTextFieldSpecDateTime_GetFormattedStrLength_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTime_GetFormattedText_000100
+--- PASS: TestTextFieldSpecDateTime_GetFormattedText_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_NewPtrDateTimeField_000100
 --- PASS: TestTextFieldSpecDateTime_NewPtrDateTimeField_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_NewDateTimeField_000100
@@ -1622,4 +1624,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 53.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.558s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.624s
