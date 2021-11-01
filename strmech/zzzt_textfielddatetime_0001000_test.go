@@ -1849,6 +1849,110 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_GetTextJustification_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_GetTextJustification_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	expectedTextJustification := TxtJustify.None()
+
+	actualTextJustification :=
+		txtFieldDateTimeOne.GetTextJustification()
+
+	if expectedTextJustification !=
+		actualTextJustification {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected Text Justification is NOT EQUAL to\n"+
+			"Actual Text Justification!\n"+
+			"Expected Text Justification = '%v'\n"+
+			"Actual Text Justification   = '%v'\n",
+			ePrefix.String(),
+			expectedTextJustification,
+			actualTextJustification)
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 4
+
+	expectedTextJustification = TxtJustify.Left()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		expectedTextJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualTextJustification =
+		txtFieldDateTimeTwo.GetTextJustification()
+
+	if expectedTextJustification !=
+		actualTextJustification {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"Expected Text Justification is NOT EQUAL to\n"+
+			"Actual Text Justification!\n"+
+			"Expected Text Justification = '%v'\n"+
+			"Actual Text Justification   = '%v'\n",
+			ePrefix.String(),
+			expectedTextJustification,
+			actualTextJustification)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
