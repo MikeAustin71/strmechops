@@ -1610,6 +1610,128 @@ func TestTextFieldSpecDateTime_GetFieldLength_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_GetFormattedStrLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_GetFormattedStrLength_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	expectedFormattedStringLength := -1
+
+	actualFormattedStringLength :=
+		txtFieldDateTimeOne.GetFormattedStrLength()
+
+	if expectedFormattedStringLength !=
+		actualFormattedStringLength {
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected Formatted String Length is NOT EQUAL to\n"+
+			"Actual Formatted String Length!\n"+
+			"Expected Formatted String Length = '%v'\n"+
+			"Actual Formatted String Length   = '%v'\n",
+			ePrefix.String(),
+			expectedFormattedStringLength,
+			actualFormattedStringLength)
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	var formattedString string
+
+	formattedString,
+		err = txtFieldDateTimeTwo.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeTwo.GetFormattedText()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	expectedFormattedStringLength =
+		len(formattedString)
+
+	actualFormattedStringLength =
+		txtFieldDateTimeTwo.GetFormattedStrLength()
+
+	if expectedFormattedStringLength !=
+		actualFormattedStringLength {
+		t.Errorf("%v - ERROR\n"+
+			"Test #2"+
+			"Expected Formatted String Length is NOT EQUAL to\n"+
+			"Actual Formatted String Length!\n"+
+			"Expected Formatted String Length = '%v'\n"+
+			"Actual Formatted String Length   = '%v'\n",
+			ePrefix.String(),
+			expectedFormattedStringLength,
+			actualFormattedStringLength)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
