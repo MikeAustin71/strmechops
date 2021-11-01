@@ -2299,7 +2299,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("%v\n"+
-			"Error returned by fillerTxtFieldOne.Read(p)\n"+
+			"Error returned by txtFieldLabelOne.Read(p)\n"+
 			"Error:\n%v\n",
 			ePrefix.XCtxEmpty().String(),
 			err.Error())
@@ -2309,7 +2309,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 
 	if n != 5 {
 		t.Errorf("%v\n"+
-			"Error: fillerTxtFieldOne.Read(p)\n"+
+			"Error: txtFieldLabelOne.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
 			ePrefix.XCtxEmpty().String(),
@@ -2342,7 +2342,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 	if err != nil &&
 		err != io.EOF {
 		t.Errorf("%v\n"+
-			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
+			"Error Returned From txtFieldLabelOne.Read(p)\n"+
 			"Error = \n%v\n",
 			ePrefix.XCtxEmpty().String(),
 			err.Error())
