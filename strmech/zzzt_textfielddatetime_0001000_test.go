@@ -1399,6 +1399,117 @@ func TestTextFieldSpecDateTime_GetDateTimeFormat_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_GetDateTimeRawStrLen_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_GetDateTime_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	expectedDateTimeRawStringLen :=
+		len(time.Time{}.Format(""))
+
+	actualDateTimeRawStringLen :=
+		txtFieldDateTimeOne.GetDateTimeRawStrLen()
+
+	if expectedDateTimeRawStringLen !=
+		actualDateTimeRawStringLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test # 1"+
+			"Expected Date Time Raw String Length is NOT\n"+
+			"EQUAL to the Actual Date Time Raw String Length!\n"+
+			"Expected Date Time Raw String Length = '%v'\n"+
+			"Actual Date Time Raw String Length   = '%v'\n",
+			ePrefix.String(),
+			expectedDateTimeRawStringLen,
+			actualDateTimeRawStringLen)
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	rawDateTimeStr :=
+		txtFieldDateTimeTwo.GetDateTimeRawString()
+
+	expectedDateTimeRawStringLen =
+		len(rawDateTimeStr)
+
+	actualDateTimeRawStringLen =
+		txtFieldDateTimeTwo.GetDateTimeRawStrLen()
+
+	if expectedDateTimeRawStringLen !=
+		actualDateTimeRawStringLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test # 2"+
+			"Expected Date Time Raw String Length is NOT\n"+
+			"EQUAL to the Actual Date Time Raw String Length!\n"+
+			"Expected Date Time Raw String Length = '%v'\n"+
+			"Actual Date Time Raw String Length   = '%v'\n",
+			ePrefix.String(),
+			expectedDateTimeRawStringLen,
+			actualDateTimeRawStringLen)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
