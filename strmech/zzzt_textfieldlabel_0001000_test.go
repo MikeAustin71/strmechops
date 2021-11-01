@@ -568,6 +568,22 @@ func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
 		return
 	}
 
+	expectedTextLabelLen := len(expectedTextLabel)
+
+	actualTextLabelLen :=
+		txtFieldLabelThree.GetFormattedStrLength()
+
+	if expectedTextLabelLen != actualTextLabelLen {
+		t.Errorf("%v\n"+
+			"Error: Expected Label Length = '%v'\n"+
+			"Instead, Actual Label Length = '%v'\n",
+			ePrefix,
+			expectedTextLabelLen,
+			actualTextLabelLen)
+
+		return
+	}
+
 	if txtFieldLabelOne.GetFieldLength() !=
 		txtFieldLabelThree.GetFieldLength() {
 		t.Errorf("%v\n"+
@@ -1128,6 +1144,30 @@ func TestTextFieldSpecLabel_GetFieldLength_000100(t *testing.T) {
 			actualFieldLen)
 	}
 
+}
+
+func TestTextFieldSpecLabel_GetFormattedStrLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_GetFormattedStrLength_000100()",
+		"")
+
+	txtFieldLabelOne := TextFieldSpecLabel{}
+
+	formattedStrLen :=
+		txtFieldLabelOne.GetFormattedStrLength()
+
+	if formattedStrLen != -1 {
+		t.Errorf("%v - ERROR\n"+
+			"Expected Formatted String Length = -1\n"+
+			"Instead, Formatted String Length = %v\n",
+			ePrefix.String(),
+			formattedStrLen)
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecLabel_GetTextJustification_000100(t *testing.T) {
