@@ -1953,6 +1953,94 @@ func TestTextFieldSpecDateTime_GetTextJustification_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_IsValidInstance_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	actualIsValid := txtFieldDateTimeOne.IsValidInstance()
+
+	if actualIsValid {
+		t.Errorf("%v - ERROR\n"+
+			"Expected 'isValid' == 'false' because\n"+
+			"'txtFieldDateTimeOne' is an empty object.\n"+
+			"HOWEVER, 'isValid' == 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 4
+
+	textJustification := TxtJustify.Left()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualIsValid = txtFieldDateTimeTwo.IsValidInstance()
+
+	if !actualIsValid {
+		t.Errorf("%v - ERROR\n"+
+			"Expected 'isValid' == 'true' because\n"+
+			"'txtFieldDateTimeTwo' is valid.\n"+
+			"HOWEVER, 'isValid' == 'false'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
