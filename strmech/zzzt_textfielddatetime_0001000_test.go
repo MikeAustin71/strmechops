@@ -1215,6 +1215,98 @@ func TestTextFieldSpecDateTime_EqualITextField_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecDateTime_GetDateTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_NewPtrDateTimeField_000100()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	actualDateTime :=
+		txtFieldDateTimeOne.GetDateTime()
+
+	if !actualDateTime.IsZero() {
+		t.Errorf("%v - ERROR\n"+
+			"Expected 'actualDateTime' == ZERO.\n"+
+			"HOWEVER, 'actualDateTime' IS NOT ZERO!\n"+
+			"actualDateTime = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualDateTime.Format(dateTimeFormat))
+
+		return
+	}
+
+	txtFieldDateTimeOne,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeOne"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualDateTime =
+		txtFieldDateTimeOne.GetDateTime()
+
+	if dateTime != actualDateTime {
+		t.Errorf("%v - ERROR\n"+
+			"Expected dateTime == actualDateTime\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"dateTime       = '%v'\n"+
+			"actualDateTime = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			dateTime.Format(dateTimeFormat),
+			actualDateTime.Format(dateTimeFormat))
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
