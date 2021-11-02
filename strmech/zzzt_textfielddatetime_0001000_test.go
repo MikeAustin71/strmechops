@@ -3635,3 +3635,256 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextFieldSpecDateTime_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_String_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	formattedText :=
+		txtFieldDateTimeOne.String()
+
+	if !strings.Contains(formattedText, "Error") {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.String()\n"+
+			"because object 'txtFieldDateTimeOne' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n"+
+			"formattedText = '%v'\n",
+			ePrefix.String(),
+			formattedText)
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 4
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	expectedFormattedText :=
+		strings.Repeat(" ", 2) +
+			dateTime.Format(dateTimeFormat) +
+			strings.Repeat(" ", 2)
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualFormattedText :=
+		txtFieldDateTimeTwo.String()
+
+	if expectedFormattedText !=
+		actualFormattedText {
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeTwo.String()\n"+
+			"Expected Formatted Text = '%v'\n"+
+			"Instead, Formatted Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedFormattedText,
+			actualFormattedText)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_TextBuilder_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	err :=
+		txtFieldDateTimeOne.TextBuilder(
+			nil,
+			ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.SetFieldLength()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 4
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	expectedFormattedText :=
+		strings.Repeat(" ", 2) +
+			dateTime.Format(dateTimeFormat) +
+			strings.Repeat(" ", 2)
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	sb := strings.Builder{}
+
+	err =
+		txtFieldDateTimeTwo.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldDateTimeTwo->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeTwo.TextBuilder()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFormattedText),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr !=
+		printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeTwo.TextBuilder()\n"+
+			"Expected Formatted Text = '%v'\n"+
+			"Instead, Formatted Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_TextFieldName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_String_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	textFieldName :=
+		txtFieldDateTimeOne.TextFieldName()
+
+	if textFieldName != "TextFieldSpecDateTime" {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeOne.TextFieldName()\n"+
+			"Expected Text Field Name = 'TextFieldSpecDateTime'\n"+
+			"Instead, Text Field Name = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			textFieldName)
+
+		return
+	}
+
+}
