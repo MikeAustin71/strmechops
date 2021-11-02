@@ -3372,3 +3372,132 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 	}
 
 }
+
+func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_SetFieldLength_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	err :=
+		txtFieldDateTimeOne.SetFieldLength(
+			1000001,
+			ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.SetFieldLength()\n"+
+			"because input parameter 'fieldLen' has an invalid value (1000001).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err =
+		txtFieldDateTimeOne.SetFieldLength(
+			-2,
+			ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.SetFieldLength()\n"+
+			"because input parameter 'fieldLen' has an invalid value (-2).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	var tzLocPtr *time.Location
+
+	tzLocPtr, err = time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := -1
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	expectedFieldLen := 40
+
+	err =
+		txtFieldDateTimeTwo.SetFieldLength(
+			expectedFieldLen,
+			ePrefix.XCtx(
+				"fieldLen==40"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeTwo.SetFieldLength()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualFieldLen :=
+		txtFieldDateTimeTwo.GetFieldLength()
+
+	if expectedFieldLen != actualFieldLen {
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeTwo.GetFieldLength()\n"+
+			"Expected Field Length = '%v'\n"+
+			"Instead, Field Length = '%v'\n",
+			ePrefix.String(),
+			expectedFieldLen,
+			actualFieldLen)
+
+		return
+	}
+
+	return
+}
