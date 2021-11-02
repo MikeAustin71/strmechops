@@ -1254,6 +1254,8 @@
 --- PASS: TestTextFieldSpecDateTime_SetDateTimeValue_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_SetFieldLength_000100
 --- PASS: TestTextFieldSpecDateTime_SetFieldLength_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTime_TextJustification_000100
+--- PASS: TestTextFieldSpecDateTime_TextJustification_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTimeAtom_empty_000100
 --- PASS: TestTextFieldSpecDateTimeAtom_empty_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTimeAtom_equal_000100
@@ -1644,4 +1646,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 54.0% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.660s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.622s

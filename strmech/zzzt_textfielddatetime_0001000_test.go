@@ -3489,12 +3489,146 @@ func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
 
 	if expectedFieldLen != actualFieldLen {
 		t.Errorf("%v - ERROR\n"+
-			"txtFieldDateTimeTwo.GetFieldLength()\n"+
+			"txtFieldDateTimeTwo.SetFieldLength()\n"+
 			"Expected Field Length = '%v'\n"+
 			"Instead, Field Length = '%v'\n",
 			ePrefix.String(),
 			expectedFieldLen,
 			actualFieldLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_TextJustification_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	err :=
+		txtFieldDateTimeOne.SetTextJustification(
+			TxtJustify.None(),
+			ePrefix.XCtx(
+				"txtFieldDateTimeOne"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.SetTextJustification()\n"+
+			"because input parameter 'textJustification' has an invalid value (None).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtFieldDateTimeTwo := TextFieldSpecDateTime{}
+
+	err =
+		txtFieldDateTimeTwo.SetTextJustification(
+			TextJustify(-99),
+			ePrefix.XCtx(
+				"txtFieldDateTimeOne"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.SetTextJustification()\n"+
+			"because input parameter 'textJustification' has an invalid value (-99).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeZoneName := "America/Chicago"
+
+	var tzLocPtr *time.Location
+
+	tzLocPtr, err = time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := -1
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeThree TextFieldSpecDateTime
+
+	txtFieldDateTimeThree,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeThree"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	expectedTxtJustification :=
+		TxtJustify.Left()
+
+	err =
+		txtFieldDateTimeThree.SetTextJustification(
+			expectedTxtJustification,
+			ePrefix.XCtx(
+				"txtFieldDateTimeThree"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldDateTimeThree.SetTextJustification()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	actualTxtJustification :=
+		txtFieldDateTimeThree.GetTextJustification()
+
+	if expectedTxtJustification != actualTxtJustification {
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeTwo.SetTextJustification()\n"+
+			"Expected Field Length = '%v'\n"+
+			"Instead, Field Length = '%v'\n",
+			ePrefix.String(),
+			expectedTxtJustification.String(),
+			actualTxtJustification.String())
 
 		return
 	}
