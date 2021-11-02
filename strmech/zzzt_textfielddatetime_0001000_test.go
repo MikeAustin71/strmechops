@@ -3867,7 +3867,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 func TestTextFieldSpecDateTime_TextFieldName_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecDateTime_String_000100()",
+		"TestTextFieldSpecDateTime_TextFieldName_000100()",
 		"")
 
 	txtFieldDateTimeOne := TextFieldSpecDateTime{}
@@ -3883,6 +3883,31 @@ func TestTextFieldSpecDateTime_TextFieldName_000100(t *testing.T) {
 			"Instead, Text Field Name = '%v'\n",
 			ePrefix.XCtxEmpty().String(),
 			textFieldName)
+
+		return
+	}
+
+}
+
+func TestTextFieldSpecDateTime_TextTypeName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_TextTypeName_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	textTypeName :=
+		txtFieldDateTimeOne.TextTypeName()
+
+	if textTypeName != "TextFieldSpecDateTime" {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeOne.TextTypeName()\n"+
+			"Expected Text Type Name = 'TextFieldSpecDateTime'\n"+
+			"Instead, Text Type Name = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			textTypeName)
 
 		return
 	}
