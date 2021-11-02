@@ -1211,6 +1211,19 @@ func TestTextFieldSpecDateTime_EqualITextField_000100(t *testing.T) {
 		return
 	}
 
+	areEqual = txtFieldDateTimeThree.EqualITextField(
+		nil)
+
+	if areEqual == true {
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtFieldDateTimeThree.EqualITextField(nil)\n"+
+			"Expected areEqual == 'false'\n"+
+			"HOWEVER, areEqual == 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 

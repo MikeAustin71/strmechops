@@ -3401,13 +3401,14 @@ func (txtDateTimeField *TextFieldSpecDateTime) SetFieldLength(
 // the Date/Time string will be positioned within a text field
 // using the field length parameter.
 //
-// If field length is less than the length of the computed Date/Time string, the length of the text field will be
-// set equal to the length of the Date/Time string. If the field
-// length ('fieldLen') is greater than the length of the computed
+// If field length is less than the length of the computed
+// Date/Time string, the length of the text field will be set equal
+// to the length of the Date/Time string. If the field length
+// ('fieldLen') is greater than the length of the computed
 // Date/Time string, the Date/Time string will be positioned within
 // the text field using the text justification specification (left,
-// center, right). The justified text field will then be returned to
-// the user by calling methods:
+// center, right). The justified text field will then be returned
+// to the user by calling methods:
 //     TextFieldSpecDateTime.GetFormattedText()
 //                    or
 //     TextFieldSpecDateTime.String()
