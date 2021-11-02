@@ -3774,7 +3774,9 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	timeZoneName := "America/Chicago"
 
-	tzLocPtr, err := time.LoadLocation(timeZoneName)
+	var tzLocPtr *time.Location
+
+	tzLocPtr, err = time.LoadLocation(timeZoneName)
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -3870,6 +3872,94 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_TextBuilder_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_TextBuilder_000200()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	var tzLocPtr *time.Location
+	var err error
+
+	tzLocPtr, err = time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"2006-01-02 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 4
+
+	textJustification := TxtJustify.Center()
+
+	var txtFieldDateTimeTwo TextFieldSpecDateTime
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	// This should invalidate 'fieldLen' and
+	// trigger an error.
+	txtFieldDateTimeTwo.fieldLen = -999
+
+	sb := strings.Builder{}
+
+	err =
+		txtFieldDateTimeTwo.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldDateTimeTwo->sb"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo.TextBuilder()\n"+
+			"because 'fieldLen' is set to an invalid value of '-999'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
 
 		return
 	}
