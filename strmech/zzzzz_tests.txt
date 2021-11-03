@@ -1290,6 +1290,14 @@
 --- PASS: TestTextFieldSpecDateTimeNanobot_getFormattedText_000200 (0.00s)
 === RUN   TestTextFieldSpecDateTimeNanobot_getFormattedText_000300
 --- PASS: TestTextFieldSpecDateTimeNanobot_getFormattedText_000300 (0.00s)
+=== RUN   TestTextFieldSpecDateTimeEdge_CopyIn_000100
+--- PASS: TestTextFieldSpecDateTimeEdge_CopyIn_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTimeEdge_CopyOut_000100
+--- PASS: TestTextFieldSpecDateTimeEdge_CopyOut_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTimeEdge_CopyOutITextField_000100
+--- PASS: TestTextFieldSpecDateTimeEdge_CopyOutITextField_000100 (0.00s)
+=== RUN   TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100
+--- PASS: TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyIn_000100
 --- PASS: TestTextFieldSpecFiller_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyIn_000200
@@ -1656,4 +1664,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 54.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.185s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.558s
