@@ -9,7 +9,9 @@ import (
 
 func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecFiller_CopyIn_000100()"
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_CopyIn_000100()",
+		"")
 
 	fillerChars := "-"
 	fillerRepeatCnt := 5
@@ -102,9 +104,23 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v - Test #2\n"+
 			"Error: Expected Filler Text = '%v'\n"+
 			"Instead, Actual Filler Text = '%v'\n",
-			ePrefix,
+			ePrefix.String(),
 			expectedFillerText,
 			actualFillerText)
+		return
+	}
+
+	err = fillerTxtFieldTwo.CopyIn(
+		fillerTxtFieldOne,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldTwo.CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
 		return
 	}
 
@@ -114,7 +130,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFillerRune(
 		rune(fillerChars[0]),
 		fillerRepeatCnt,
-		ePrefix)
+		ePrefix.String())
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -126,7 +142,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldThree.IsValidInstance()\n"+
 			"returned 'false'!\n",
-			ePrefix)
+			ePrefix.String())
 
 		return
 	}
@@ -134,7 +150,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 	if !fillerTxtFieldOne.Equal(fillerTxtFieldThree) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldOne IS NOT EQUAL to fillerTxtFieldThree!\n",
-			ePrefix)
+			ePrefix.String())
 		return
 	}
 
@@ -149,7 +165,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldOne.CopyIn()\n"+
 			"because 'fillerTxtFieldThree' is invalid!\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
-			ePrefix)
+			ePrefix.String())
 
 		return
 	}
@@ -157,7 +173,9 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 	if !fillerTxtFieldOne.Equal(&fillerTxtFieldTwo) {
 		t.Errorf("%v - Final Check\n"+
 			"Error: fillerTxtFieldOne IS NOT EQUAL to fillerTxtFieldTwo!\n",
-			ePrefix)
+			ePrefix.String())
+
+		return
 	}
 
 	return
@@ -852,6 +870,20 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 
 	}
 
+	_,
+		err = fillerTxtFieldOne.CopyOut(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
@@ -1199,6 +1231,77 @@ func TestTextFieldSpecFiller_CopyOutITextField_000100(t *testing.T) {
 			"because fillerTxtFieldOne is empty!\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			err.Error())
+	}
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	var fillerTxtFieldTwo TextFieldSpecFiller
+
+	fillerTxtFieldTwo,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecFiller{}.NewTextFiller()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	var txtFieldSpec ITextFieldSpecification
+
+	txtFieldSpec,
+		err = fillerTxtFieldTwo.CopyOutITextField(
+		ePrefix)
+
+	var ok bool
+	var fillerTxtFieldThree *TextFieldSpecFiller
+
+	fillerTxtFieldThree, ok =
+		txtFieldSpec.(*TextFieldSpecFiller)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: Could not convert 'txtFieldSpec' to "+
+			"'*TextFieldSpecFiller'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		fillerTxtFieldThree.IsValidInstanceError(
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by fillerTxtFieldThree.IsValidInstanceError()\n"+
+			"'fillerTxtFieldThree' is INVALID!\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	_,
+		err = fillerTxtFieldThree.CopyOutITextField(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldThree.CopyOutITextField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
 	}
 
 	return
