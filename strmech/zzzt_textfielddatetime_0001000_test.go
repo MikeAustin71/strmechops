@@ -1858,6 +1858,21 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err = txtFieldDateTimeTwo.GetFormattedText(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo."+
+			"GetFormattedText(TextFieldSpecDateTime{})\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
@@ -2053,13 +2068,11 @@ func TestTextFieldSpecDateTime_IsValidInstance_000100(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
+func TestTextFieldSpecDateTime_IsValidInstanceError_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextFieldSpecDateTime_NewPtrDateTimeField_000100()",
 		"")
-
-	txtFieldDateTimeOne := TextFieldSpecDateTime{}
 
 	timeZoneName := "America/Chicago"
 
@@ -2078,26 +2091,6 @@ func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	}
 
-	txtFieldDateTimeOne.dateTime = time.Date(
-		2021,
-		time.Month(10),
-		6,
-		23,
-		55,
-		0,
-		0,
-		tzLocPtr)
-
-	txtFieldDateTimeOne.dateTimeFormat =
-		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
-
-	txtFieldDateTimeOne.fieldLen =
-		len(txtFieldDateTimeOne.dateTimeFormat) + 8
-
-	txtFieldDateTimeOne.textJustification = TxtJustify.Center()
-
-	var txtFieldDateTimeTwo *TextFieldSpecDateTime
-
 	dateTime := time.Date(
 		2021,
 		time.Month(10),
@@ -2109,14 +2102,16 @@ func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 		tzLocPtr)
 
 	dateTimeFormat :=
-		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+		"2006-01-02 15:04:05.000000000 -0700 MST"
 
 	fieldLen := len(dateTimeFormat) + 8
 
 	textJustification := TxtJustify.Center()
 
-	txtFieldDateTimeTwo,
-		err = TextFieldSpecDateTime{}.NewPtrDateTimeField(
+	var txtFieldDateTimeOne TextFieldSpecDateTime
+
+	txtFieldDateTimeOne,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
 		dateTime,
 		fieldLen,
 		dateTimeFormat,
@@ -2125,7 +2120,7 @@ func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("%v\n"+
-			"Error returned by TextFieldSpecDateTime{}.NewPtrDateTimeField()\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
 			"Error:\n'%v'\n",
 			ePrefix.String(),
 			err.Error())
@@ -2133,14 +2128,45 @@ func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 		return
 	}
 
-	if !txtFieldDateTimeTwo.Equal(
-		&txtFieldDateTimeOne) {
+	err = txtFieldDateTimeOne.IsValidInstanceError(
+		ePrefix)
 
+	if err != nil {
 		t.Errorf("%v\n"+
-			"Error:\n"+
-			"Expected 'txtFieldDateTimeOne' to equal to 'txtFieldDateTimeTwo'\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!!\n",
-			ePrefix.String())
+			"Error returned by  txtFieldDateTimeOne.IsValidInstanceError()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	err = txtFieldDateTimeOne.IsValidInstanceError(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne."+
+			"IsValidInstanceError(TextFieldSpecDateTime{})\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtFieldDateTimeOne.fieldLen = 1000001
+
+	err = txtFieldDateTimeOne.IsValidInstanceError(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne."+
+			"IsValidInstanceError(ePrefix)\n"+
+			"because 'txtFieldDateTimeOne.fieldLen' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
@@ -2236,6 +2262,139 @@ func TestTextFieldSpecDateTime_NewDateTimeField_000100(t *testing.T) {
 			"Expected 'txtFieldDateTimeOne' to equal 'txtFieldDateTimeTwo'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!\n",
 			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextFieldSpecDateTime{}."+
+			"NewDateTimeField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecDateTime_NewPtrDateTimeField_000100()",
+		"")
+
+	txtFieldDateTimeOne := TextFieldSpecDateTime{}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	txtFieldDateTimeOne.dateTime = time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	txtFieldDateTimeOne.dateTimeFormat =
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	txtFieldDateTimeOne.fieldLen =
+		len(txtFieldDateTimeOne.dateTimeFormat) + 8
+
+	txtFieldDateTimeOne.textJustification = TxtJustify.Center()
+
+	var txtFieldDateTimeTwo *TextFieldSpecDateTime
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		6,
+		23,
+		55,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	txtFieldDateTimeTwo,
+		err = TextFieldSpecDateTime{}.NewPtrDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewPtrDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if !txtFieldDateTimeTwo.Equal(
+		&txtFieldDateTimeOne) {
+
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected 'txtFieldDateTimeOne' to equal to 'txtFieldDateTimeTwo'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = TextFieldSpecDateTime{}.NewPtrDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextFieldSpecDateTime{}."+
+			"NewPtrDateTimeField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
@@ -2772,7 +2931,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecDateTime_SetDateTimeField_000100(t *testing.T) {
+func TestTextFieldSpecDateTime_SetDateTimeFieldSpec_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextFieldSpecDateTime_SetDateTimeField_000100()",
@@ -2878,6 +3037,25 @@ func TestTextFieldSpecDateTime_SetDateTimeField_000100(t *testing.T) {
 			"Expected 'txtFieldDateTimeOne' to equal to 'txtFieldDateTimeTwo'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!\n",
 			ePrefix.String())
+
+		return
+	}
+
+	err =
+		txtFieldDateTimeTwo.SetDateTimeFieldSpec(
+			dateTime,
+			fieldLen,
+			dateTimeFormat,
+			textJustification,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextFieldSpecDateTime{}."+
+			"NewDateTimeField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
@@ -3243,6 +3421,22 @@ func TestTextFieldSpecDateTime_SetDateTimeFormat_000100(t *testing.T) {
 		return
 	}
 
+	err =
+		txtFieldDateTimeTwo.SetDateTimeFormat(
+			dateTimeFormat,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo{}."+
+			"SetDateTimeFormat()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
@@ -3384,6 +3578,23 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 		return
 	}
 
+	err =
+		txtFieldDateTimeTwo.SetDateTimeValue(
+			dateTimeTwo,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo{}."+
+			"SetDateTimeValue()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
@@ -3508,6 +3719,22 @@ func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
 			ePrefix.String(),
 			expectedFieldLen,
 			actualFieldLen)
+
+		return
+	}
+
+	err =
+		txtFieldDateTimeTwo.SetFieldLength(
+			expectedFieldLen,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo{}."+
+			"SetFieldLength()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
@@ -3642,6 +3869,22 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 			ePrefix.String(),
 			expectedTxtJustification.String(),
 			actualTxtJustification.String())
+
+		return
+	}
+
+	err =
+		txtFieldDateTimeThree.SetTextJustification(
+			expectedTxtJustification,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeThree{}."+
+			"SetTextJustification()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
@@ -3872,6 +4115,22 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	err =
+		txtFieldDateTimeTwo.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo{}."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
