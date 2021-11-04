@@ -1856,8 +1856,49 @@ func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
 	}
 
 	fillerTxtFieldThree := TextFieldSpecFiller{}
+	var err error
 
-	fillerTxtFieldThree.Empty()
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	fillerTxtFieldThree,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		fillerTxtFieldThree.IsValidInstanceError(
+			ePrefix.XCtx(
+				"fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	isEqual =
+		fillerTxtFieldThree.EqualITextField(
+			nil)
+
+	if isEqual == true {
+		t.Errorf("%v - ERROR\n"+
+			"Expected isEqual == 'false' because\n"+
+			"input parameter 'iTextField' is 'nil'.\n"+
+			"HOWEVER, 'isEqual' is 'true'!\n",
+			ePrefix.String())
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
