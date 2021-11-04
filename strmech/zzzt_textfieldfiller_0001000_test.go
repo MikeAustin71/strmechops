@@ -1505,6 +1505,22 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: fillerTxtFieldFour IS NOT EQUAL to fillerTxtFieldOne!\n",
 			ePrefix)
+
+		return
+	}
+
+	_,
+		err = fillerTxtFieldThree.CopyOutPtr(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldThree.CopyOutPtr()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
 	}
 
 	return
