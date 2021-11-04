@@ -1834,7 +1834,7 @@ func TestTextFieldSpecFiller_Equal_000100(t *testing.T) {
 func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecFiller_CopyOut_000100()",
+		"TestTextFieldSpecFiller_EqualITextField()",
 		"")
 
 	var txtFieldLabel *TextFieldSpecLabel
@@ -1862,7 +1862,9 @@ func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
 
 func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecFiller_GetFormattedText_000100()"
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_GetFormattedText_000100()",
+		"")
 
 	fillerChars := "-"
 	fillerRepeatCnt := 5
@@ -1917,6 +1919,45 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 			"because fillerTxtFieldOne.fillerCharacters == nil.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix)
+		return
+	}
+
+	var fillerTxtFieldTwo TextFieldSpecFiller
+
+	fillerTxtFieldTwo,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldTwo.
+		IsValidInstanceError(
+			ePrefix.XCtx("fillerTxtFieldTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = fillerTxtFieldTwo.GetFormattedText(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldTwo.GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
 		return
 	}
 
