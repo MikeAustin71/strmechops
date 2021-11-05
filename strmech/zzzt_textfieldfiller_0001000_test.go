@@ -2571,6 +2571,22 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldTwo.CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
