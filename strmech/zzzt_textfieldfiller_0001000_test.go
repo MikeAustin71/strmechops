@@ -3393,6 +3393,22 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 			fillerTxtFieldTwo.GetFillerCharsRepeatCount())
 	}
 
+	_,
+		err = TextFieldSpecFiller{}.NewPtrTextFillerRune(
+		fillerChar,
+		fillerRepeatCnt,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFillerRune()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	fillerTxtFieldThree := TextFieldSpecFiller{}
 
 	err = fillerTxtFieldThree.SetTextFillerRune(
