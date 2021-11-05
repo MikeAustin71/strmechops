@@ -2103,6 +2103,23 @@ func TestTextFieldSpecFiller_GetFillerRunes_000100(t *testing.T) {
 			ePrefix.String(),
 			string(fillerChars),
 			string(actualFillerRunes))
+
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	runeArray :=
+		fillerTxtFieldTwo.GetFillerRunes()
+
+	if runeArray != nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected 'runeArray' == 'nil'."+
+			"HOWEVER, 'runeArray' != 'nil'!!!\n",
+			ePrefix.XCtx(
+				"runeArray"))
+
+		return
 	}
 
 	return
