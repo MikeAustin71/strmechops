@@ -1941,6 +1941,72 @@ func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_GetFormattedStrLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_GetFormattedText_000100()",
+		"")
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualFillerText string
+
+	actualFillerText,
+		err = fillerTxtFieldOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedFillerTextLen := len(actualFillerText)
+
+	actualFillerTextLen :=
+		fillerTxtFieldOne.GetFormattedStrLength()
+
+	if expectedFillerTextLen != actualFillerTextLen {
+		t.Errorf("%v - ERROR\n"+
+			"Expected 'expectedFillerTextLen' == 'actualFillerTextLen'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	actualFillerTextLen =
+		fillerTxtFieldTwo.GetFormattedStrLength()
+
+	if actualFillerTextLen != -1 {
+		t.Errorf("%v - ERROR\n"+
+			"Expected 'actualFillerTextLen' to equal minus one (-1).\n"+
+			"HOWEVER, THE RETURN VALUE IS NOT MINUS ONE (-1)!\n"+
+			"actualFillerTextLen= '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualFillerTextLen)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -2172,6 +2238,57 @@ func TestTextFieldSpecFiller_isFillerCharsRepeatCountValid_000100(t *testing.T) 
 
 	}
 
+}
+
+func TestTextFieldSpecFiller_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_IsValidInstanceError_000100()",
+		"")
+
+	fillerTxtFieldThree := TextFieldSpecFiller{}
+	var err error
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	fillerTxtFieldThree,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldThree.IsValidInstanceError(
+		ePrefix.XCtx(
+			"fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldThree.IsValidInstanceError(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldThree.IsValidInstanceError()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecFiller_isValidTextFieldSpecFiller_000100(t *testing.T) {
