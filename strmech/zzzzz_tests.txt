@@ -1328,6 +1328,8 @@
 --- PASS: TestTextFieldSpecFiller_copyOut_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_empty_000100
 --- PASS: TestTextFieldSpecFiller_empty_000100 (0.00s)
+=== RUN   TestTextFieldSpecFiller_Empty_000100
+--- PASS: TestTextFieldSpecFiller_Empty_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_equal_000100
 --- PASS: TestTextFieldSpecFiller_equal_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_Equal_000100
@@ -1666,4 +1668,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 54.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.184s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.733s

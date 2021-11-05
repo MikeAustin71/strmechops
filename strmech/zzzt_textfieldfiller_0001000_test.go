@@ -1766,6 +1766,46 @@ func TestTextFieldSpecFiller_empty_000100(t *testing.T) {
 
 }
 
+func TestTextFieldSpecFiller_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_Empty_000100()",
+		"")
+
+	fillerChar := '-'
+	fillerRepeatCnt := 5
+
+	fillerTxtFieldOne,
+		err := TextFieldSpecFiller{}.NewPtrTextFillerRune(
+		fillerChar,
+		fillerRepeatCnt,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	fillerTxtFieldOne.Empty()
+
+	if fillerTxtFieldOne.IsValidInstance() {
+		t.Errorf("%v - ERROR\n"+
+			"Expected fillerTxtFieldOne.IsValidInstance() to"+
+			"return 'false' because 'fillerTxtFieldOne' is empty.\n"+
+			"HOWEVER, THE RETURN VALUE WAS 'true'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	fillerTxtFieldTwo := TextFieldSpecFiller{}
+
+	fillerTxtFieldTwo.Empty()
+
+	return
+}
+
 func TestTextFieldSpecFiller_equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
