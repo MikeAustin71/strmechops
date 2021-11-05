@@ -6157,6 +6157,23 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err = TextFieldSpecFiller{}.NewTextFillerRune(
+		fillerChar,
+		fillerRepeatCnt,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from "+
+			"TextFieldSpecFiller{}.NewTextFillerRune()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	var actualFillerText string
 
 	actualFillerText,
