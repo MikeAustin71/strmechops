@@ -5290,6 +5290,23 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 			fillerTxtFieldTwo.GetFillerCharsRepeatCount())
 	}
 
+	_,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from "+
+			"TextFieldSpecFiller{}.NewTextFiller()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	fillerTxtFieldThree := TextFieldSpecFiller{}
 
 	err = fillerTxtFieldThree.SetTextFiller(
