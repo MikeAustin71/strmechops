@@ -10,7 +10,9 @@ import (
 
 func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecLabel_CopyIn_000100()"
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyIn_000100()",
+		"")
 
 	label := "12345"
 	fieldLen := 13
@@ -25,7 +27,8 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -34,7 +37,8 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 	}
 
 	err = txtFieldLabelOne.IsValidInstanceError(
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -46,7 +50,8 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 
 	err = txtFieldLabelTwo.CopyIn(
 		txtFieldLabelOne,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -80,6 +85,34 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 			ePrefix,
 			expectedTextLabel,
 			actualLabel)
+	}
+
+	txtFieldLabelThree := TextFieldSpecLabel{}
+
+	err = txtFieldLabelThree.CopyIn(
+		txtFieldLabelOne,
+		ePrefix.XCtx(
+			"txtFieldLabelOne->txtFieldLabelThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelThree.CopyIn(
+		&txtFieldLabelTwo,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelThree."+
+			"CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
 	}
 
 	return
