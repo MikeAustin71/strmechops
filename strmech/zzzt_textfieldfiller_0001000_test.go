@@ -10584,10 +10584,10 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	var fillerTxtFieldThree TextFieldSpecFiller
+	var fillerTxtFieldThree *TextFieldSpecFiller
 
 	fillerTxtFieldThree,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix.XCtx(
@@ -10608,8 +10608,30 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from fillerTxtFieldThree.CopyIn()\n"+
+			"Expected an error return from fillerTxtFieldThree."+
+			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sb.Reset()
+
+	fillerTxtFieldThree.fillerCharsRepeatCount = -999
+	fillerTxtFieldThree.fillerCharacters = nil
+
+	err =
+		fillerTxtFieldThree.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldThree."+
+			"TextBuilder()\n"+
+			"because 'fillerCharsRepeatCount' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 

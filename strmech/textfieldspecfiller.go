@@ -3358,7 +3358,8 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 		err = textFieldSpecFillerMolecule{}.ptr().
 		getFormattedText(
 			txtFillerField,
-			ePrefix.XCtx("plainTextLine"))
+			ePrefix.XCtx(
+				"txtFillerField->formattedTxtStr"))
 
 	if err != nil {
 		return err
