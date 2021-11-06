@@ -7374,16 +7374,54 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 		"TestTextFieldSpecFiller_Read_000100()",
 		"")
 
+	var err error
+
+	p := make([]byte, 500)
+
 	fillerChars := "-"
 	fillerRepeatCnt := 5
+	fillerTxtFieldZero := TextFieldSpecFiller{}
+
+	fillerTxtFieldZero,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx("fillerTxtFieldZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var n, readBytesCnt int
+	var actualStr string
+
+	fillerTxtFieldZero.fillerCharacters = nil
+	fillerTxtFieldZero.fillerCharsRepeatCount = -999
+
+	_,
+		err = fillerTxtFieldZero.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldZero.Read(p)\n"+
+			"because fillerTxtFieldZero is invalid!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
 
 	expectedFillerText :=
 		strings.Repeat(fillerChars, fillerRepeatCnt)
 
 	lenExpectedFillerText := len(expectedFillerText)
 
+	var fillerTxtFieldOne *TextFieldSpecFiller
+
 	fillerTxtFieldOne,
-		err := TextFieldSpecFiller{}.NewPtrTextFiller(
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
 		ePrefix)
@@ -7393,11 +7431,6 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 			err.Error())
 		return
 	}
-
-	p := make([]byte, 500)
-
-	var n, readBytesCnt int
-	var actualStr string
 
 	for {
 

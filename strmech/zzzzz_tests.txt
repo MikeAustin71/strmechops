@@ -467,7 +467,7 @@
 === RUN   TestStrMech_BreakTextAtLineLength_04
 --- PASS: TestStrMech_BreakTextAtLineLength_04 (0.00s)
 === RUN   TestStrMech_BreakTextAtLineLength_05
---- PASS: TestStrMech_BreakTextAtLineLength_05 (0.01s)
+--- PASS: TestStrMech_BreakTextAtLineLength_05 (0.00s)
 === RUN   TestStrMech_BreakTextAtLineLength_06
 --- PASS: TestStrMech_BreakTextAtLineLength_06 (0.00s)
 === RUN   TestStrMech_BreakTextAtLineLength_07
@@ -1671,5 +1671,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 54.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.963s
+coverage: 54.8% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.905s
