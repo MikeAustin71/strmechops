@@ -790,6 +790,21 @@ func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
 			txtFieldLabelThree.GetTextLabel())
 	}
 
+	_,
+		err = txtFieldLabelOne.CopyOutPtr(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelOne."+
+			"txtFieldLabelOne()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 
@@ -1238,6 +1253,84 @@ func TestTextFieldSpecLabel_GetFormattedStrLength_000100(t *testing.T) {
 			"Instead, Formatted String Length = %v\n",
 			ePrefix.String(),
 			formattedStrLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecLabel_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOut_000100()",
+		"")
+
+	labelRunes := []rune("12345")
+	fieldLen := 14
+	txtJustify := TxtJustify.Left()
+
+	expectedTextLabel :=
+		string(labelRunes) +
+			strings.Repeat(" ", 9)
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabelRunes(
+		labelRunes,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var formattedText string
+
+	formattedText,
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedTextLabel != formattedText {
+		t.Errorf("%v - ERROR\n"+
+			"Expected Formatted Text Label = '%v'\n"+
+			"Instead, Formatted Text Label = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextLabel,
+			formattedText)
+
+		return
+	}
+
+	formattedText,
+		err = txtFieldLabelOne.GetFormattedText(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelOne."+
+			"GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
 
 		return
 	}

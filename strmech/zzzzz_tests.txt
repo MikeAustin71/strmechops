@@ -1462,6 +1462,8 @@
 --- PASS: TestTextFieldSpecLabel_GetFieldLength_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_GetFormattedStrLength_000100
 --- PASS: TestTextFieldSpecLabel_GetFormattedStrLength_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_GetFormattedText_000100
+--- PASS: TestTextFieldSpecLabel_GetFormattedText_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_GetTextJustification_000100
 --- PASS: TestTextFieldSpecLabel_GetTextJustification_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_GetTextLabel_000100
@@ -1673,5 +1675,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 55.0% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.670s
+coverage: 55.1% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.842s
