@@ -335,7 +335,7 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtFieldLabelThree."+
-			"CopyIn()\n"+
+			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -517,6 +517,114 @@ func TestTextFieldSpecLabel_copyOut_000100(t *testing.T) {
 		return
 	}
 
+}
+
+func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOutITextField_000100()",
+		"")
+
+	txtFieldLabel := TextFieldSpecLabel{}
+
+	_,
+		err := txtFieldLabel.CopyOutITextField(
+		ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtFieldLabel.CopyOutITextField()\n"+
+			"because 'txtFieldLabel' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETUNRED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	labelText := "12345"
+	fieldLen := 14
+	txtJustify := TxtJustify.Right()
+
+	var txtFieldLabelTwo TextFieldSpecLabel
+
+	txtFieldLabelTwo,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		labelText,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtFieldSpec ITextFieldSpecification
+
+	txtFieldSpec,
+		err = txtFieldLabelTwo.CopyOutITextField(
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var ok bool
+	var txtFieldLabelThree *TextFieldSpecLabel
+
+	txtFieldLabelThree, ok =
+		txtFieldSpec.(*TextFieldSpecLabel)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: Could not convert 'txtFieldSpec' to "+
+			"'*TextFieldSpecLabel'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = txtFieldLabelThree.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldLabelThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtFieldLabelThree.CopyOutITextField(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelThree."+
+			"CopyOutITextField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
@@ -707,99 +815,6 @@ func TestTextFieldSpecLabel_CopyOutPtr_000200(t *testing.T) {
 		return
 	}
 
-}
-
-func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecLabel_CopyOutITextField_000100()",
-		"")
-
-	txtFieldLabel := TextFieldSpecLabel{}
-
-	_,
-		err := txtFieldLabel.CopyOutITextField(
-		ePrefix)
-
-	if err == nil {
-		t.Errorf("%v\n"+
-			"Error: Expected error return from txtFieldLabel.CopyOutITextField()\n"+
-			"because 'txtFieldLabel' is empty.\n"+
-			"HOWEVER, NO ERROR WAS RETUNRED!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	labelText := "12345"
-	fieldLen := 14
-	txtJustify := TxtJustify.Right()
-
-	var txtFieldLabelTwo TextFieldSpecLabel
-
-	txtFieldLabelTwo,
-		err = TextFieldSpecLabel{}.NewTextLabel(
-		labelText,
-		fieldLen,
-		txtJustify,
-		ePrefix.XCtx(
-			"txtFieldLabelTwo"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	err = txtFieldLabelTwo.IsValidInstanceError(
-		ePrefix.XCtx(
-			"txtFieldLabelTwo"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var txtFieldSpec ITextFieldSpecification
-
-	txtFieldSpec,
-		err = txtFieldLabelTwo.CopyOutITextField(
-		ePrefix.XCtx(
-			"txtFieldLabelTwo"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var ok bool
-	var txtFieldLabelThree *TextFieldSpecLabel
-
-	txtFieldLabelThree, ok =
-		txtFieldSpec.(*TextFieldSpecLabel)
-
-	if !ok {
-		t.Errorf("%v\n"+
-			"Error: Could not convert 'txtFieldSpec' to "+
-			"'*TextFieldSpecLabel'\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-	err = txtFieldLabelThree.IsValidInstanceError(
-		ePrefix.XCtx(
-			"txtFieldLabelThree"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	return
 }
 
 func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
