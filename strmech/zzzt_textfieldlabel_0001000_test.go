@@ -246,7 +246,9 @@ func TestTextFieldSpecLabel_copyIn_000100(t *testing.T) {
 
 func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecLabel_CopyOut_000100() "
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOut_000100()",
+		"")
 
 	labelRunes := []rune("12345")
 	fieldLen := 14
@@ -260,7 +262,8 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 		labelRunes,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -281,7 +284,8 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 
 	txtFieldLabelTwo,
 		err = txtFieldLabelOne.CopyOut(
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelOne->txtFieldLabelTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -289,23 +293,29 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 		return
 	}
 
+	ePrefix.XCtxEmpty()
+
 	if !txtFieldLabelOne.Equal(&txtFieldLabelTwo) {
 		t.Errorf("%v\n"+
 			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n",
-			ePrefix)
+			ePrefix.String())
 		return
 	}
 
 	var actualLabel string
 
 	actualLabel,
-		err = txtFieldLabelOne.GetFormattedText(ePrefix)
+		err = txtFieldLabelOne.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
 			err.Error())
 		return
 	}
+
+	ePrefix.XCtxEmpty()
 
 	if expectedTextLabel != actualLabel {
 		t.Errorf("%v\n"+
@@ -314,6 +324,23 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 			ePrefix,
 			expectedTextLabel,
 			actualLabel)
+
+		return
+	}
+
+	_,
+		err = txtFieldLabelTwo.CopyOut(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelThree."+
+			"CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
 	}
 
 	return
