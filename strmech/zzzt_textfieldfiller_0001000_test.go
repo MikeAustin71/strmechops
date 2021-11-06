@@ -7531,6 +7531,10 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 		"TestTextFieldSpecFiller_Read_000100()",
 		"")
 
+	fillerTxtFieldZero := TextFieldSpecFiller{}
+
+	fillerTxtFieldZero.ReaderInitialize()
+
 	fillerChars := "-"
 	fillerRepeatCnt := 5
 
