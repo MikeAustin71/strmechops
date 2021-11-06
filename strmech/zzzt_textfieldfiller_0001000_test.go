@@ -10530,6 +10530,8 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
+	sb.Reset()
+
 	err =
 		fillerTxtFieldOne.TextBuilder(
 			&sb,
@@ -10576,6 +10578,38 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldTwo{}."+
 			"TextBuilder()\n"+
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var fillerTxtFieldThree TextFieldSpecFiller
+
+	fillerTxtFieldThree,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		fillerTxtFieldThree.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldThree.CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
