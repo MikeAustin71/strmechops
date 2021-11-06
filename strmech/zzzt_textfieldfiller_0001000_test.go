@@ -9048,6 +9048,22 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	err := fillerTxtFieldOne.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from "+
+			"fillerTxtFieldOne.SetTextFillerRuneArray()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = fillerTxtFieldOne.SetTextFillerRuneArray(
+		fillerCharRuneArray,
+		fillerRepeatCnt,
 		ePrefix)
 
 	if err != nil {
