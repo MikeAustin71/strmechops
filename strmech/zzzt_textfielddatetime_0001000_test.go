@@ -4135,6 +4135,43 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
+	var txtFieldDateTimeThree TextFieldSpecDateTime
+
+	txtFieldDateTimeThree,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeThree"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	err =
+		txtFieldDateTimeThree.TextBuilder(
+			nil,
+			ePrefix.XCtx(
+				"txtFieldDateTimeThree"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeTwo{}."+
+			"TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 

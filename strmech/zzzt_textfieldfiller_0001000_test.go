@@ -10435,6 +10435,156 @@ func TestTextFieldSpecFiller_String_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecFiller_TextBuilder_000100()",
+		"")
+
+	fillerTxtFieldOne := TextFieldSpecFiller{}
+
+	err :=
+		fillerTxtFieldOne.TextBuilder(
+			nil,
+			ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldDateTimeOne.SetFieldLength()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	expectedFormattedText :=
+		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	fillerTxtFieldOne,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = fillerTxtFieldOne.IsValidInstanceError(
+		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb := strings.Builder{}
+
+	err =
+		fillerTxtFieldOne.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"fillerTxtFieldOne->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by fillerTxtFieldOne.TextBuilder()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFormattedText),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr !=
+		printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"fillerTxtFieldOne.TextBuilder()\n"+
+			"Expected Formatted Text = '%v'\n"+
+			"Instead, Formatted Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	err =
+		fillerTxtFieldOne.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldOne{}."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var fillerTxtFieldTwo TextFieldSpecFiller
+
+	fillerTxtFieldTwo,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldOne"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecFiller{}.NewTextFiller()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	err =
+		fillerTxtFieldTwo.TextBuilder(
+			nil,
+			ePrefix.XCtx(
+				"fillerTxtFieldTwo"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldTwo{}."+
+			"TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecFiller_TextFieldName_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecFiller_TextFieldName_000100()"
