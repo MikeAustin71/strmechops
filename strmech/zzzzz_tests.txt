@@ -1672,4 +1672,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 54.8% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.185s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.588s
