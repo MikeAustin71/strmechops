@@ -3778,11 +3778,32 @@ func TestTextFieldSpecLabel_setTextLabel_000100(t *testing.T) {
 
 func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecLabel_TestTextFieldSpecLabel_SetTextLabelRunes_000100() "
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetTextLabelRunes_000100()",
+		"")
 
 	label := "12345"
 	fieldLen := 13
 	txtJustify := TxtJustify.Center()
+
+	txtFieldLabelZero := TextFieldSpecLabel{}.New()
+
+	err := txtFieldLabelZero.SetTextLabelRunes(
+		[]rune(label),
+		fieldLen,
+		txtJustify,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"SetTextLabelRunes()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
 
 	expectedTextLabel :=
 		strings.Repeat(" ", 4) +
@@ -3791,7 +3812,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 
 	txtFieldLabelOne := TextFieldSpecLabel{}.New()
 
-	err := txtFieldLabelOne.SetTextLabelRunes(
+	err = txtFieldLabelOne.SetTextLabelRunes(
 		[]rune(label),
 		fieldLen,
 		txtJustify,
