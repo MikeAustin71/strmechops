@@ -1290,7 +1290,9 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewSpacer(
 		return newTextSpacer, err
 	}
 
-	err = textFieldSpecSpacerNanobot{}.ptr().
+	txtFieldSpacerNanobot := textFieldSpecSpacerNanobot{}
+
+	err = txtFieldSpacerNanobot.
 		setTextFieldSpacer(
 			&newTextSpacer,
 			fieldLen,
