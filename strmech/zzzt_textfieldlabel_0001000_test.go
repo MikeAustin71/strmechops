@@ -4492,12 +4492,48 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 	fieldLen := 13
 	txtJustify := TxtJustify.Center()
 
-	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+	var err error
+	var txtFieldLabelZero *TextFieldSpecLabel
+
+	txtFieldLabelZero,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
 		initialLabel,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtFieldLabelZero.SetTextRunes(
+			[]rune(expectedLabel),
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelThree."+
+			"CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelOne *TextFieldSpecLabel
+
+	txtFieldLabelOne,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		initialLabel,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4521,7 +4557,8 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 	err =
 		txtFieldLabelOne.SetTextRunes(
 			[]rune(expectedLabel),
-			&ePrefix)
+			ePrefix.XCtx(
+				"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
