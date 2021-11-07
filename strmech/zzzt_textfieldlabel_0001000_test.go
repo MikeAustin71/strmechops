@@ -3374,22 +3374,62 @@ func TestTextFieldSpecLabel_SetTextJustification_000200(t *testing.T) {
 
 func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 
-	ePrefix := "TestTextFieldSpecLabel_SetTextLabel_000100() "
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_SetTextLabel_000100()",
+		"")
 
 	label := "12345"
 	fieldLen := 13
 	txtJustify := TxtJustify.Center()
+
 	expectedTextLabel :=
 		strings.Repeat(" ", 4) +
 			label +
 			strings.Repeat(" ", 4)
 
-	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+	var txtFieldLabelZero *TextFieldSpecLabel
+	var err error
+
+	txtFieldLabelZero,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelZero.SetTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"SetTextLabel()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelOne *TextFieldSpecLabel
+
+	txtFieldLabelOne,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3403,7 +3443,8 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3415,7 +3456,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n"+
 			"txtFieldLabelTwo.SetTextLabel() did NOT produce an identical copy!\n",
-			ePrefix)
+			ePrefix.XCtxEmpty().String())
 		return
 	}
 
@@ -3423,7 +3464,8 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 
 	actualLabel,
 		err = txtFieldLabelTwo.GetFormattedText(
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
