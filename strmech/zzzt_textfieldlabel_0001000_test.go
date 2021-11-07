@@ -2639,6 +2639,11 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 	label := "1234567890"
 	fieldLen := 18
 	txtJustify := TxtJustify.Center()
+	var err error
+
+	txtFieldLabelZero := TextFieldSpecLabel{}
+
+	txtFieldLabelZero.ReaderInitialize()
 
 	expectedTextLabel :=
 		strings.Repeat(" ", 4) +
@@ -2648,8 +2653,10 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 	lenExpectedTextLabel :=
 		len(expectedTextLabel)
 
+	var txtFieldLabelOne TextFieldSpecLabel
+
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewTextLabel(
+		err = TextFieldSpecLabel{}.NewTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
