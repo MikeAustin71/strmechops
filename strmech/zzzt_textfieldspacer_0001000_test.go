@@ -505,6 +505,22 @@ func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err =
+		txtFieldSpacerOne.CopyOutITextField(
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerOne."+
+			"CopyOutITextField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	txtFieldSpacerTwo := TextFieldSpecSpacer{}
 
 	_,
