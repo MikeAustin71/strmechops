@@ -1011,7 +1011,8 @@ func (txtFieldSpacer TextFieldSpecSpacer) New() TextFieldSpecSpacer {
 //  *TextFieldSpecSpacer
 //     - This parameter returns a pointer to a new, empty instance
 //       of TextFieldSpecSpacer. Member variable data values are
-//       set to their initial or zero values.
+//       set to their initial or zero values. The returned Text
+//       Field Spacer Specification is therefore invalid.
 //
 func (txtFieldSpacer TextFieldSpecSpacer) NewPtr() *TextFieldSpecSpacer {
 

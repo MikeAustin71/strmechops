@@ -1347,6 +1347,25 @@ func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
 
 }
 
+func TestTextFieldSpecSpacer_NewPtr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_CopyIn_000200()",
+		"")
+
+	txtFieldSpacerOne := TextFieldSpecSpacer{}.NewPtr()
+
+	if txtFieldSpacerOne.textLineReader != nil {
+		t.Errorf("%v - ERROR\n"+
+			"TextFieldSpecSpacer{}.NewPtr()\n"+
+			"'txtFieldSpacerOne.textLineReader' != 'nil' !\n",
+			ePrefix.String())
+
+	}
+
+	return
+}
+
 func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
