@@ -1561,6 +1561,56 @@ func TestTextFieldSpecLabel_isTextLabelValid_000100(t *testing.T) {
 
 }
 
+func TestTextFieldSpecLabel_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_CopyOut_000100()",
+		"")
+
+	labelRunes := []rune("12345")
+	fieldLen := 14
+	txtJustify := TxtJustify.Left()
+
+	txtFieldLabelOne,
+		err := TextFieldSpecLabel{}.NewPtrTextLabelRunes(
+		labelRunes,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelOne."+
+			"IsValidInstanceError()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100() "
