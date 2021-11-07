@@ -4135,6 +4135,8 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
+	sb.Reset()
+
 	var txtFieldDateTimeThree TextFieldSpecDateTime
 
 	txtFieldDateTimeThree,
@@ -4168,6 +4170,81 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldDateTimeFour TextFieldSpecDateTime
+
+	txtFieldDateTimeFour,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx("txtFieldDateTimeFour"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecDateTime{}."+
+			"NewDateTimeField()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldDateTimeFour.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldDateTimeFour-sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtStr := sb.String()
+
+	if expectedFormattedText !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedFormattedText,
+			actualFmtStr)
+
+		return
+	}
+
+	var formattedString string
+
+	formattedString,
+		err = txtFieldDateTimeFour.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldDateTimeFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedString !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldDateTimeFour.GetFormattedText()"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			formattedString,
+			actualFmtStr)
 
 		return
 	}

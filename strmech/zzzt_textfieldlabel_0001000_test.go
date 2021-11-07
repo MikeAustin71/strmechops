@@ -4668,6 +4668,298 @@ func TestTextFieldSpecLabel_String_000100(t *testing.T) {
 	}
 }
 
+func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecLabel_TextBuilder_000100()",
+		"")
+	var err error
+
+	txtFieldLabelZero := TextFieldSpecLabel{}
+
+	err =
+		txtFieldLabelZero.TextBuilder(
+			nil,
+			ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtFieldLabelOne *TextFieldSpecLabel
+
+	label := "12345"
+	fieldLen := 14
+	txtJustify := TxtJustify.Left()
+
+	expectedTextLabel :=
+		label +
+			strings.Repeat(" ", 9)
+
+	txtFieldLabelOne,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb := strings.Builder{}
+
+	err =
+		txtFieldLabelOne.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldLabelOne->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldLabelOne.TextBuilder()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextLabel),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr !=
+		printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"fillerTxtFieldOne.TextBuilder()\n"+
+			"Expected Formatted Text = '%v'\n"+
+			"Instead, Formatted Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldLabelOne.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelOne{}."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelTwo TextFieldSpecLabel
+
+	txtFieldLabelTwo,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldLabelTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtFieldLabelTwo.TextBuilder(
+			nil,
+			ePrefix.XCtx(
+				"txtFieldLabelTwo"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelTwo{}."+
+			"TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelThree TextFieldSpecLabel
+
+	txtFieldLabelThree,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelThree"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldLabelThree.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelThree."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sb.Reset()
+	txtFieldLabelThree.textLabel =
+		[]rune{'H', 'e', 'l', 'l', 0}
+
+	txtFieldLabelThree.fieldLen = -999
+
+	err =
+		txtFieldLabelThree.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelThree."+
+			"TextBuilder()\n"+
+			"because 'txtFieldLabelThree' contains invalid member varialbes.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelFour TextFieldSpecLabel
+
+	txtFieldLabelFour,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldLabelFour.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldLabelFour-sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtStr := sb.String()
+
+	if expectedTextLabel !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextLabel,
+			actualFmtStr)
+
+		return
+	}
+
+	var formattedString string
+
+	formattedString,
+		err = txtFieldLabelFour.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldLabelFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedString !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldLabelFour.GetFormattedText()"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			formattedString,
+			actualFmtStr)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecLabel_TextFieldName_0001000(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_TextFieldName_0001000()"

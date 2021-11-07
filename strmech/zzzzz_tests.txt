@@ -1554,6 +1554,8 @@
 --- PASS: TestTextFieldSpecLabel_SetTextRunes_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_String_000100
 --- PASS: TestTextFieldSpecLabel_String_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_TextBuilder_000100
+--- PASS: TestTextFieldSpecLabel_TextBuilder_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_TextFieldName_0001000
 --- PASS: TestTextFieldSpecLabel_TextFieldName_0001000 (0.00s)
 === RUN   TestTextFieldSpecLabel_TextTypeName_0001000
@@ -1679,5 +1681,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 55.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.621s
+coverage: 55.4% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.687s

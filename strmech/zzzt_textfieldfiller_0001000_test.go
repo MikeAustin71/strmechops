@@ -10450,7 +10450,8 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtFieldDateTimeOne.SetFieldLength()\n"+
+			"Expected an error return from TextFieldSpecFiller."+
+			"TextBuilder()\n"+
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -10634,6 +10635,75 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"because 'fillerCharsRepeatCount' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var fillerTxtFieldFour *TextFieldSpecFiller
+
+	fillerTxtFieldFour,
+		err = TextFieldSpecFiller{}.NewPtrTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix.XCtx(
+			"fillerTxtFieldFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		fillerTxtFieldFour.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"fillerTxtFieldFour->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtStr := sb.String()
+
+	if expectedFormattedText !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedFormattedText,
+			actualFmtStr)
+
+		return
+	}
+
+	var formattedString string
+
+	formattedString,
+		err = fillerTxtFieldFour.GetFormattedText(
+		ePrefix.XCtx(
+			"fillerTxtFieldFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedString !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"fillerTxtFieldFour.GetFormattedText()"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			formattedString,
+			actualFmtStr)
 
 		return
 	}
