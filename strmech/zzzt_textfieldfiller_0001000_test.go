@@ -116,7 +116,8 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from fillerTxtFieldTwo.CopyIn()\n"+
+			"Expected an error return from fillerTxtFieldTwo"+
+			".CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())

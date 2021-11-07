@@ -4866,6 +4866,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	}
 
 	sb.Reset()
+
 	txtFieldLabelThree.textLabel =
 		[]rune{'H', 'e', 'l', 'l', 0}
 

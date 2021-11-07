@@ -187,6 +187,22 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	err =
+		txtFieldSpacerTwo.CopyIn(
+			txtFieldSpacerOne,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerTwo."+
+			"CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
