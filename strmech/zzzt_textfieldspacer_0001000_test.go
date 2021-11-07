@@ -1457,10 +1457,44 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 		"TestTextFieldSpecSpacer_Read_000100()",
 		"")
 
+	p := make([]byte, 500)
+
+	var n, readBytesCnt int
+
 	expectedFieldLen := 14
 
-	txtFieldSpacerOne,
+	txtFieldSpacerZero,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldSpacerZero.fieldLen = -999
+	txtFieldSpacerZero.textLineReader = nil
+
+	_,
+		err = txtFieldSpacerZero.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerZero{}."+
+			"Read()\n"+
+			"because 'txtFieldSpacerZero' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldSpacerOne *TextFieldSpecSpacer
+
+	txtFieldSpacerOne,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
 		ePrefix.XCtx("txtFieldSpacerOne"))
 
@@ -1472,9 +1506,6 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 
 	expectedStr := strings.Repeat(" ", expectedFieldLen)
 
-	p := make([]byte, 500)
-
-	var n, readBytesCnt int
 	var actualStr string
 
 	for {
