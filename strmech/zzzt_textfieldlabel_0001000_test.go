@@ -4875,7 +4875,8 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelThree.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			ePrefix.XCtx(
+				"txtFieldLabelThree is invalid!"))
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+

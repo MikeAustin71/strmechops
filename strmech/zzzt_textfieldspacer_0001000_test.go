@@ -1844,6 +1844,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 
 	return
 }
+
 func TestTextFieldSpecSpacer_SetFieldLen_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1960,6 +1961,282 @@ func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			expectedStr,
 			actualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_CopyOut_000100()",
+		"")
+
+	txtFieldSpacerZero := TextFieldSpecSpacer{}
+
+	err :=
+		txtFieldSpacerZero.TextBuilder(
+			nil,
+			ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerZero."+
+			"TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	expectedFieldLen := 9
+
+	expectedFormattedText := strings.Repeat(" ", expectedFieldLen)
+
+	var txtFieldSpacerOne TextFieldSpecSpacer
+
+	txtFieldSpacerOne,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldSpacerOne.IsValidInstanceError(
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb := strings.Builder{}
+
+	err =
+		txtFieldSpacerOne.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldSpacerOne->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by txtFieldSpacerOne.TextBuilder()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFormattedText),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr !=
+		printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldSpacerOne.TextBuilder()\n"+
+			"Expected Formatted Text = '%v'\n"+
+			"Instead, Formatted Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldSpacerOne.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from fillerTxtFieldOne{}."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldSpacerTwo TextFieldSpecSpacer
+
+	txtFieldSpacerTwo,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecSpacer{}.NewSpacer()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	err =
+		txtFieldSpacerTwo.TextBuilder(
+			nil,
+			ePrefix.XCtx(
+				"txtFieldSpacerTwo"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerTwo."+
+			"TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldSpacerThree *TextFieldSpecSpacer
+
+	txtFieldSpacerThree,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerThree"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecSpacer{}.NewPtrSpacer()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldSpacerThree.TextBuilder(
+			&sb,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerThree."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sb.Reset()
+
+	txtFieldSpacerThree.fieldLen = -9999
+
+	err =
+		txtFieldSpacerThree.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldSpacerThree is invalid!"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerThree."+
+			"TextBuilder()\n"+
+			"because 'txtFieldSpacerThree.fieldLen' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldSpacerFour *TextFieldSpecSpacer
+
+	txtFieldSpacerFour,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerFour"))
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by TextFieldSpecSpacer{}.NewPtrSpacer()\n"+
+			"Error:\n'%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	sb.Reset()
+
+	err =
+		txtFieldSpacerFour.TextBuilder(
+			&sb,
+			ePrefix.XCtx(
+				"txtFieldSpacerFour->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualFmtStr := sb.String()
+
+	if expectedFormattedText !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedFormattedText,
+			actualFmtStr)
+
+		return
+	}
+
+	var formattedString string
+
+	formattedString,
+		err = txtFieldSpacerFour.GetFormattedText(
+		ePrefix.XCtx(
+			"txtFieldSpacerFour"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if formattedString !=
+		actualFmtStr {
+		t.Errorf("%v - ERROR\n"+
+			"txtFieldSpacerFour.GetFormattedText()"+
+			"Expected String Builder Text = '%v'\n"+
+			"Instead, String Builder Text = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			formattedString,
+			actualFmtStr)
 
 		return
 	}
