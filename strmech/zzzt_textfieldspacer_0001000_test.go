@@ -1324,29 +1324,6 @@ func TestTextFieldSpecSpacer_IsValidInstanceError_000100(t *testing.T) {
 	return
 }
 
-func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldSpecSpacer_NewSpacer_000100()",
-		"")
-
-	expectedFieldLen := -2
-
-	_,
-		err := TextFieldSpecSpacer{}.NewSpacer(
-		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
-
-	if err == nil {
-		t.Errorf("%v\n"+
-			"Expected an error return from TextFieldSpecSpacer{}.NewSpacer()\n"+
-			"because Field Length = '-2' and is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-	}
-
-}
-
 func TestTextFieldSpecSpacer_NewPtr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1415,6 +1392,48 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 
 	_,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextFieldSpecSpacer{}."+
+			"NewPtrSpacer()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_NewSpacer_000100()",
+		"")
+
+	expectedFieldLen := -2
+
+	_,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from TextFieldSpecSpacer{}.NewSpacer()\n"+
+			"because Field Length = '-2' and is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+	}
+
+	expectedFieldLen = 4
+
+	_,
+		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
 		TextFieldSpecDateTime{})
 
