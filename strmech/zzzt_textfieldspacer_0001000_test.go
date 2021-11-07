@@ -1844,6 +1844,53 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 
 	return
 }
+func TestTextFieldSpecSpacer_SetFieldLen_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_SetFieldLen_000100()",
+		"")
+
+	expectedFieldLen := 9
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx("txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldSpacerOne.SetFieldLen(
+		24,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldSpacerOne.SetFieldLen(
+		expectedFieldLen,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerOne."+
+			"SetFieldLen()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
 
 func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
 

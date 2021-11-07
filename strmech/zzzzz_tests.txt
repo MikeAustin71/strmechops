@@ -1602,6 +1602,8 @@
 --- PASS: TestTextFieldSpecSpacer_Read_000100 (0.00s)
 === RUN   TestTextFieldSpecSpacer_ReadInitialize_000100
 --- PASS: TestTextFieldSpecSpacer_ReadInitialize_000100 (0.00s)
+=== RUN   TestTextFieldSpecSpacer_SetFieldLen_000100
+--- PASS: TestTextFieldSpecSpacer_SetFieldLen_000100 (0.00s)
 === RUN   TestTextFieldSpecSpacer_String_000100
 --- PASS: TestTextFieldSpecSpacer_String_000100 (0.00s)
 === RUN   TestTextFieldSpecSpacer_TextFieldName_000100
@@ -1688,4 +1690,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 55.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.635s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.702s
