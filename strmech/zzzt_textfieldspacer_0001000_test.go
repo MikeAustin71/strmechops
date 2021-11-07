@@ -1212,6 +1212,22 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err =
+		txtFieldSpacerOne.GetFormattedText(
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerOne."+
+			"GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	txtFieldSpacerTwo := TextFieldSpecSpacer{}
 
 	txtFieldSpacerTwo.fieldLen = -99
