@@ -3043,12 +3043,48 @@ func TestTextFieldSpecLabel_SetText_000100(t *testing.T) {
 	fieldLen := 13
 	txtJustify := TxtJustify.Center()
 
-	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+	var txtFieldLabelZero TextFieldSpecLabel
+	var err error
+
+	txtFieldLabelZero,
+		err = TextFieldSpecLabel{}.NewTextLabel(
 		initialLabel,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtFieldLabelZero.SetText(
+			expectedLabel,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"SetText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelOne *TextFieldSpecLabel
+
+	txtFieldLabelOne,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		initialLabel,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",

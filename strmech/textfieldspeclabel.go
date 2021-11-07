@@ -2532,7 +2532,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 //
 func (txtFieldLabel *TextFieldSpecLabel) SetText(
 	textLabel string,
-	errPrefDto *ePref.ErrPrefixDto) (
+	errorPrefix interface{}) (
 	err error) {
 
 	if txtFieldLabel.lock == nil {
@@ -2549,7 +2549,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errPrefDto,
+		errorPrefix,
 		"TextFieldSpecLabel.SetText()",
 		"")
 
@@ -3233,7 +3233,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 //
 func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 	textLabelChars []rune,
-	errPrefDto *ePref.ErrPrefixDto) (
+	errorPrefix interface{}) (
 	err error) {
 
 	if txtFieldLabel.lock == nil {
@@ -3248,7 +3248,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errPrefDto,
+		errorPrefix,
 		"TextFieldSpecLabel.SetTextRunes()",
 		"")
 
