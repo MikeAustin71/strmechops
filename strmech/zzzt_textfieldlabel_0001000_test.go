@@ -2895,9 +2895,27 @@ func TestTextFieldSpecLabel_SetFieldLength_000100(t *testing.T) {
 
 	newFieldLen := 22
 
+	txtFieldLabelZero := TextFieldSpecLabel{}
+
+	err := txtFieldLabelZero.
+		SetFieldLength(
+			newFieldLen,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"SetFieldLength()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	txtFieldLabelOne := TextFieldSpecLabel{}
 
-	err := txtFieldLabelOne.SetFieldLength(
+	err = txtFieldLabelOne.SetFieldLength(
 		newFieldLen,
 		ePrefix)
 
