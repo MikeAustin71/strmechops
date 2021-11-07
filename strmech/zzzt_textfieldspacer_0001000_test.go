@@ -993,6 +993,76 @@ func TestTextFieldSpecSpacer_EqualITextField_000100(t *testing.T) {
 	return
 }
 
+func TestTextFieldSpecSpacer_GetFormattedStrLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_GetFormattedStrLength_000100()",
+		"")
+
+	fieldLen := 4
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		fieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualFormattedText string
+
+	actualFormattedText,
+		err =
+		txtFieldSpacerOne.GetFormattedText(
+			ePrefix.XCtx(
+				"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStrLen := len(actualFormattedText)
+
+	actualStrLen := txtFieldSpacerOne.
+		GetFormattedStrLength()
+
+	if expectedStrLen !=
+		actualStrLen {
+		t.Errorf("%v - ERROR\n"+
+			"Expected Formatted String Length = '%v'\n"+
+			"Instead, Formatted String Length = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStrLen,
+			actualStrLen)
+
+		return
+	}
+
+	txtFieldSpacerTwo := TextFieldSpecSpacer{}
+
+	actualStrLen =
+		txtFieldSpacerTwo.GetFormattedStrLength()
+
+	if actualStrLen != -1 {
+		t.Errorf("%v - ERROR\n"+
+			"'txtFieldSpacerTwo' is INVALID!\n"+
+			"Expected Formatted String Length = '-1'\n"+
+			"Instead, Formatted String Length = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualStrLen)
+
+		return
+	}
+
+	return
+}
+
 func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
