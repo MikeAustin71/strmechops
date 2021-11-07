@@ -1607,6 +1607,10 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 		"TestTextFieldSpecSpacer_ReadInitialize_000100()",
 		"")
 
+	txtFieldSpacerZero := TextFieldSpecSpacer{}
+
+	txtFieldSpacerZero.ReaderInitialize()
+
 	expectedFieldLen := 14
 
 	txtFieldSpacerOne,
