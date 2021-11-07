@@ -1478,6 +1478,8 @@
 --- PASS: TestTextFieldSpecLabel_isTextLabelValid_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_IsValidInstanceError_000100
 --- PASS: TestTextFieldSpecLabel_IsValidInstanceError_000100 (0.00s)
+=== RUN   TestTextFieldSpecLabel_NewPtrTextLabel_000100
+--- PASS: TestTextFieldSpecLabel_NewPtrTextLabel_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100
 --- PASS: TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100 (0.00s)
 === RUN   TestTextFieldSpecLabel_NewPtrTextLabelRunes_000200
@@ -1678,4 +1680,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 55.1% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.680s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.640s
