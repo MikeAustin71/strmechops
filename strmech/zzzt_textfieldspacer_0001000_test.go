@@ -1354,7 +1354,7 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 	_,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCtx("Invalid Field Length == 1000001"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -1420,7 +1420,7 @@ func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
 	_,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCtx("Field Length invalid!"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -1838,6 +1838,69 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Completed Read Operation but txtFieldSpacerOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextFieldSpecSpacer_setTextFieldSpacer_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_setTextFieldSpacer_000100()",
+		"")
+
+	expectedFieldLen := 14
+
+	txtFieldSpacerOne := TextFieldSpecSpacer{}
+
+	txtFieldSpacerNanobot := textFieldSpecSpacerNanobot{}
+
+	err := txtFieldSpacerNanobot.setTextFieldSpacer(
+		&txtFieldSpacerOne,
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"->txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldSpacerTwo := TextFieldSpecSpacer{}
+
+	err = txtFieldSpacerNanobot.setTextFieldSpacer(
+		&txtFieldSpacerTwo,
+		-999,
+		ePrefix.XCtx(
+			"fieldLen is invalid!"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from  txtFieldSpacerNanobot."+
+			"setTextFieldSpacer()\n"+
+			"because 'fieldLen' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtFieldSpacerNanobot.setTextFieldSpacer(
+		nil,
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacer is nil!"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from  txtFieldSpacerNanobot."+
+			"setTextFieldSpacer()\n"+
+			"because 'txtFieldSpacer' is 'nill' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
 
 		return
 	}

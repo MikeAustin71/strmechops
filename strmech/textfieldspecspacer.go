@@ -1157,7 +1157,7 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewPtrSpacer(
 		setTextFieldSpacer(
 			&newTextSpacer,
 			fieldLen,
-			ePrefix.XCtx("fieldLen invalid"))
+			ePrefix.XCtx("->newTextSpacer"))
 
 	if err != nil {
 
@@ -1290,13 +1290,11 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewSpacer(
 		return newTextSpacer, err
 	}
 
-	txtFieldSpacerNanobot := textFieldSpecSpacerNanobot{}
-
-	err = txtFieldSpacerNanobot.
+	err = textFieldSpecSpacerNanobot{}.ptr().
 		setTextFieldSpacer(
 			&newTextSpacer,
 			fieldLen,
-			ePrefix.XCtx("fieldLen invalid"))
+			ePrefix.XCtx("->newTextSpacer"))
 
 	return newTextSpacer, err
 }
