@@ -18,7 +18,8 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("txtFieldSpacerOne - Error\n"+
@@ -28,7 +29,8 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 	}
 
 	err = txtFieldSpacerOne.IsValidInstanceError(
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -45,7 +47,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 			"txtFieldSpacerOne.GetFieldLength()\n"+
 			"Expected Field Length = '%v'\n"+
 			"Instead, Actual Field Length = '%v'\n",
-			ePrefix.String(),
+			ePrefix.XCtxEmpty().String(),
 			expectedFieldLen,
 			actualFieldLen)
 
@@ -1274,6 +1276,52 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 		return
 	}
 
+}
+
+func TestTextFieldSpecSpacer_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextFieldSpecSpacer_CopyIn_000100()",
+		"")
+
+	expectedFieldLen := 4
+
+	txtFieldSpacerOne,
+		err := TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("txtFieldSpacerOne - Error\n"+
+			"%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldSpacerOne.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldSpacerOne.IsValidInstanceError(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerOne."+
+			"IsValidInstanceError()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
