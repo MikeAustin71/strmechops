@@ -5065,7 +5065,7 @@ func TestTextFieldSpecLabel_TextTypeName_0001000(t *testing.T) {
 		return
 	}
 
-	actualTxtTypeName = txtFieldLabelOne.TextFieldName()
+	actualTxtTypeName = txtFieldLabelOne.TextTypeName()
 
 	if expectedTxtTypeName != actualTxtTypeName {
 		t.Errorf("%v - Test #2\n"+
@@ -5080,7 +5080,7 @@ func TestTextFieldSpecLabel_TextTypeName_0001000(t *testing.T) {
 
 	txtFieldLabelTwo := TextFieldSpecLabel{}
 
-	actualTxtTypeName = txtFieldLabelTwo.TextFieldName()
+	actualTxtTypeName = txtFieldLabelTwo.TextTypeName()
 
 	if expectedTxtTypeName != actualTxtTypeName {
 		t.Errorf("%v - Test #2\n"+
