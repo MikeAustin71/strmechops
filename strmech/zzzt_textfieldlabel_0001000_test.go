@@ -2474,6 +2474,43 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 	fieldLen := 13
 	txtJustify := TxtJustify.Center()
 
+	p := make([]byte, 500)
+	var n, readBytesCnt int
+	var actualStr string
+	var err error
+
+	var txtFieldLabelZero TextFieldSpecLabel
+
+	txtFieldLabelZero,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"txtFieldLabelZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtFieldLabelZero.textLabel = []rune{0}
+
+	_,
+		err = txtFieldLabelZero.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"Read(p)\n"+
+			"because 'txtFieldLabelZero.textLabel' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	expectedTextLabel :=
 		strings.Repeat(" ", 4) +
 			label +
@@ -2482,23 +2519,21 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 	lenExpectedTextLabel :=
 		len(expectedTextLabel)
 
+	var txtFieldLabelOne TextFieldSpecLabel
+
 	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewTextLabel(
+		err = TextFieldSpecLabel{}.NewTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx(
+			"txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
 			err.Error())
 		return
 	}
-
-	p := make([]byte, 500)
-
-	var n, readBytesCnt int
-	var actualStr string
 
 	for {
 
