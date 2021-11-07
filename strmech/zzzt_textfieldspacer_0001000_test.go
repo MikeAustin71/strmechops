@@ -1387,6 +1387,49 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 			ePrefix.String())
 	}
 
+	expectedFieldLen = 4
+	var txtFieldSpacerOne *TextFieldSpecSpacer
+
+	txtFieldSpacerOne,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("txtFieldSpacerOne - Error\n"+
+			"%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldSpacerOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtFieldSpacerOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		expectedFieldLen,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextFieldSpecSpacer{}."+
+			"NewPtrSpacer()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
