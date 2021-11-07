@@ -3199,12 +3199,45 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 			label +
 			strings.Repeat(" ", 4)
 
-	txtFieldLabelOne,
-		err := TextFieldSpecLabel{}.NewPtrTextLabel(
+	var err error
+	var txtFieldLabelZero *TextFieldSpecLabel
+
+	txtFieldLabelZero,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix)
+		ePrefix.XCtx("txtFieldLabelZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtFieldLabelZero.SetTextJustification(
+		TxtJustify.Left(),
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldLabelZero."+
+			"SetTextJustification()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtFieldLabelOne *TextFieldSpecLabel
+
+	txtFieldLabelOne,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx("txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
