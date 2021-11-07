@@ -361,6 +361,12 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 			ePrefix.XCtx(
 				"txtFieldSpacerOne->txtFieldSpacerThree"))
 
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if !txtFieldSpacerThree.Equal(&txtFieldSpacerOne) {
 		t.Errorf("%v\n"+
 			"Error: Expected txtFieldSpacerThree would equal txtFieldSpacerOne.\n"+
@@ -395,6 +401,23 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err =
+		txtFieldSpacerOne.CopyOut(
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtFieldSpacerOne."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextFieldSpecSpacer_CopyOut_000200(t *testing.T) {
