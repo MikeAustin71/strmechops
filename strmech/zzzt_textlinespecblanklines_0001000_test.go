@@ -199,8 +199,8 @@ func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtFieldSpacerOne."+
-			"CopyOut()\n"+
+			"Expected an error return from blankLinesCharlie."+
+			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -309,6 +309,130 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 			"because input parameter 'txtBlankLinesBase' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtx("Missing Error Return"))
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	txtBlankLinesBase,
+		err := TextLineSpecBlankLines{}.NewPtrBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBase.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtBlankLinesOut := TextLineSpecBlankLines{}
+
+	txtBlankLinesOut,
+		err =
+		txtBlankLinesBase.CopyOut(
+			ePrefix.XCtx(
+				"txtBlankLinesBase->txtBlankLinesOut"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOut.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOut"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtBlankLinesOut.Equal(txtBlankLinesBase) {
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtBlankLinesOut==txtBlankLinesBase\n"+
+			"HOWEVER, THESE INSTANCES ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+		return
+	}
+
+	txtBlankLinesBase2 := TextLineSpecBlankLines{}
+
+	_,
+		err = txtBlankLinesBase2.CopyOut(
+		ePrefix.XCtx(
+			"txtBlankLinesBase2 is empty!"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesBase2.CopyOut()\n"+
+			"because input parameter 'txtBlankLinesBase2' is "+
+			"empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	var txtBlankLinesBase3 TextLineSpecBlankLines
+
+	txtBlankLinesBase3,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"->txtBlankLinesBase3"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBase3.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase3"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtBlankLinesBase2.CopyOut(
+		ePrefix.XCtx(
+			"txtBlankLinesBase2 is empty!"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesBase2."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
 		return
 	}
 
