@@ -132,10 +132,10 @@ func (txtBlankLinesAtom *textLineSpecBlankLinesAtom) testValidityOfTextLineSpecB
 		txtBlankLines.newLineChars = []rune{'\n'}
 	}
 
-	if txtBlankLines.numBlankLines == 0 {
+	if txtBlankLines.numBlankLines < 1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: The specified number of blank lines is zero!\n"+
+			"Error: The specified number of blank lines is less than one (1)!\n"+
 			"'TextLineSpecBlankLines.numBlankLines' must be greater than zero.\n",
 			ePrefix.String())
 
@@ -146,17 +146,7 @@ func (txtBlankLinesAtom *textLineSpecBlankLinesAtom) testValidityOfTextLineSpecB
 
 		err = fmt.Errorf("%v\n"+
 			"Error:  The number of specified blank lines is\n"+
-			"greater than 1,000,000!\n",
-			ePrefix.String())
-
-		return isValid, err
-	}
-
-	if txtBlankLines.numBlankLines < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The specified number of blank lines is less than zero!\n"+
-			"'TextLineSpecBlankLines.numBlankLines' must be greater than zero.\n",
+			"greater than one-million (1,000,000)!\n",
 			ePrefix.String())
 
 		return isValid, err

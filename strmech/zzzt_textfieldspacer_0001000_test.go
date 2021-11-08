@@ -1334,7 +1334,7 @@ func TestTextFieldSpecSpacer_NewPtr_000100(t *testing.T) {
 
 	if txtFieldSpacerOne.textLineReader != nil {
 		t.Errorf("%v - ERROR\n"+
-			"TextFieldSpecSpacer{}.NewPtr()\n"+
+			"TextFieldSpecSpacer{}.NewPtrBlankLines()\n"+
 			"'txtFieldSpacerOne.textLineReader' != 'nil' !\n",
 			ePrefix.String())
 

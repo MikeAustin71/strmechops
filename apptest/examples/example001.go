@@ -17,6 +17,80 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) TextLineSpecBlkLines01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecBlkLines01()",
+		"")
+
+	var errText string
+
+	blankLinesAlpha,
+		err := strmech.TextLineSpecBlankLines{}.NewBlankLines(
+		3,
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		errText = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Println(errText)
+
+		return
+	}
+
+	err = blankLinesAlpha.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		errText = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Println(errText)
+
+		return
+	}
+
+	blankLinesBravo := strmech.TextLineSpecBlankLines{}
+
+	err =
+		blankLinesBravo.CopyIn(
+			&blankLinesAlpha,
+			ePrefix.XCtx(
+				"blankLinesAlpha->blankLinesBravo"))
+
+	if err != nil {
+		errText = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Println(errText)
+
+		return
+	}
+
+	err = blankLinesBravo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesBravo"))
+
+	if err != nil {
+		errText = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Println(errText)
+
+		return
+	}
+
+	errText = fmt.Sprintf("%v\nSuccessful Completion\n",
+		ePrefix.XCtxEmpty().String())
+
+	fmt.Println(errText)
+
+	return
+}
+
 func (mt MainTest) DateTimeTextField01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
