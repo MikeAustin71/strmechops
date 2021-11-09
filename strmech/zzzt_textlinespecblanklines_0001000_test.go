@@ -439,6 +439,145 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_Equal_000100()",
+		"")
+
+	blankLinesAlpha,
+		err := TextLineSpecBlankLines{}.NewBlankLines(
+		3,
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesAlpha.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var blankLinesBravo TextLineSpecBlankLines
+
+	blankLinesBravo,
+		err = blankLinesAlpha.CopyOut(
+		ePrefix.XCtx(
+			"blankLinesAlpha->blankLinesBravo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtBlankLinesMolecule := textLineSpecBlankLinesMolecule{}
+
+	areEqual :=
+		txtBlankLinesMolecule.equal(
+			&blankLinesAlpha,
+			nil)
+
+	if areEqual {
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtBlankLinesMolecule.equal() == 'false'\n"+
+			"because input parameter 'txtBlankLinesTwo' is 'nil'.\n"+
+			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	areEqual =
+		txtBlankLinesMolecule.equal(
+			nil,
+			&blankLinesBravo)
+
+	if areEqual {
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtBlankLinesMolecule.equal() == 'false'\n"+
+			"because input parameter 'txtBlankLinesOne' is 'nil'.\n"+
+			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var blankLinesCharlie TextLineSpecBlankLines
+
+	blankLinesCharlie,
+		err = blankLinesAlpha.CopyOut(
+		ePrefix.XCtx(
+			"blankLinesAlpha->blankLinesCharlie"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	blankLinesCharlie.numBlankLines = 95
+
+	areEqual =
+		txtBlankLinesMolecule.equal(
+			&blankLinesAlpha,
+			&blankLinesCharlie)
+
+	if areEqual {
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtBlankLinesMolecule.equal() == 'false' because\n"+
+			"input parameter 'blankLinesCharlie' has a different"+
+			"number of blank lines.\n"+
+			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var blankLinesDelta TextLineSpecBlankLines
+
+	blankLinesDelta,
+		err = blankLinesAlpha.CopyOut(
+		ePrefix.XCtx(
+			"blankLinesAlpha->blankLinesDelta"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	blankLinesDelta.newLineChars =
+		[]rune{'H', 'e', 'l', 'l', 'o'}
+
+	areEqual =
+		txtBlankLinesMolecule.equal(
+			&blankLinesAlpha,
+			&blankLinesDelta)
+
+	if areEqual {
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtBlankLinesMolecule.equal() == 'false' because\n"+
+			"input parameter 'blankLinesDelta' has different"+
+			"new line characters.\n"+
+			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecBlankLines_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
