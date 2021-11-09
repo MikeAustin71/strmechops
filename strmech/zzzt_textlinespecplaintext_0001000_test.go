@@ -346,6 +346,47 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	plainTextLine05 := TextLineSpecPlainText{}
+
+	err = plainTextLine05.SetPlainTextDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		ePrefix.XCtx("plainTextLine05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine05.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine06 := TextLineSpecPlainText{}
+
+	err =
+		plainTextLine06.CopyIn(
+			&plainTextLine05,
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine06."+
+			"CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
@@ -753,6 +794,48 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		return
 	}
 
+	var plainTextLine04 TextLineSpecPlainText
+
+	plainTextLine04,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine04.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err =
+		plainTextLine04.CopyOut(
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine04."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
@@ -854,12 +937,55 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		err =
 		plainTextLine03.CopyOutITextLine(
 			ePrefix.XCtx(
-				"plainTextLine03->iTextLine"))
+				"plainTextLine03->_"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: plainTextLine03.CopyOutITextLine()\n"+
 			"Expected an error return because 'plainTextLine03' is empty!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var plainTextLine04 TextLineSpecPlainText
+
+	plainTextLine04,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine04.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err =
+		plainTextLine04.CopyOutITextLine(
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine04."+
+			"CopyOutITextLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
@@ -964,6 +1090,45 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 			"because 'plainTextLine03' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	var plainTextLine04 TextLineSpecPlainText
+
+	plainTextLine04,
+		err = TextLineSpecPlainText{}.NewDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		ePrefix.XCtx("plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine04.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = plainTextLine04.CopyOutPtr(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine04."+
+			"CopyOutPtr()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}

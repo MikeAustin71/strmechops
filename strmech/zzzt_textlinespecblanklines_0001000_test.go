@@ -437,6 +437,167 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 		return
 	}
 
+	_,
+		err = txtBlankLinesBase3.CopyOut(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesBase3."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_CopyOutITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_copyOut_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	txtBlankLinesBase,
+		err := TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBase.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var iTextLine ITextLineSpecification
+
+	iTextLine,
+		err =
+		txtBlankLinesBase.CopyOutITextLine(
+			ePrefix.XCtx(
+				"txtBlankLinesBase->iTextLine"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtBlankLinesBravo, ok := iTextLine.(*TextLineSpecBlankLines)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: iTextLine.(*TextLineSpecBlankLines)\n"+
+			"Could not convert 'iTextLine' to TextLineSpecBlankLines\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if !txtBlankLinesBase.Equal(txtBlankLinesBravo) {
+		t.Errorf("%v\n"+
+			"Error: Expected txtBlankLinesBase == txtBlankLinesBravo\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if !txtBlankLinesBase.EqualITextLine(iTextLine) {
+		t.Errorf("%v\n"+
+			"Error: txtBlankLinesBase.EqualITextLine(iTextLine)\n"+
+			"Expected txtBlankLinesBase == iTextLine\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if !txtBlankLinesBravo.EqualITextLine(iTextLine) {
+		t.Errorf("%v\n"+
+			"Error: txtBlankLinesBravo.EqualITextLine(iTextLine)\n"+
+			"Expected txtBlankLinesBravo == iTextLine\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtBlankLinesCharlie := TextLineSpecBlankLines{}
+
+	_,
+		err =
+		txtBlankLinesCharlie.CopyOutITextLine(
+			ePrefix.XCtx(
+				"txtBlankLinesCharlie->_"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: txtBlankLinesCharlie.CopyOutITextLine()\n"+
+			"Expected an error return because 'txtBlankLinesCharlie'"+
+			" is empty!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtBlankLinesDelta TextLineSpecBlankLines
+
+	txtBlankLinesDelta,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesDelta.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err =
+		txtBlankLinesCharlie.CopyOutITextLine(
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesCharlie."+
+			"CopyOutITextLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
