@@ -1141,3 +1141,150 @@ func TestTextLineSpecBlankLines_Equal_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_EqualITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_copyOut_000100()",
+		"")
+
+	var err error
+
+	txtBlankLinesBase := TextLineSpecBlankLines{}
+
+	areEqual := txtBlankLinesBase.EqualITextLine(nil)
+
+	if areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtBlankLinesBase.EqualITextLine(nil)\n"+
+			"Expected areEqual == 'false' because\n"+
+			"'txtBlankLinesBase' is empty\n"+
+			"HOWEVER, 'areEqual' == 'true'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	numOfBlankLines := 3
+
+	txtBlankLinesBase,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBase.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	leftMargin := 3
+	rightMargin := 3
+	textString := "How now brown cow!"
+
+	var plainTextLine01 TextLineSpecPlainText
+
+	plainTextLine01,
+		err = TextLineSpecPlainText{}.NewDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual =
+		txtBlankLinesBase.EqualITextLine(&plainTextLine01)
+
+	if areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtBlankLinesBase.EqualITextLine(&plainTextLine01)\n"+
+			"Expected areEqual == 'false' because\n"+
+			"'plainTextLine01' is of type 'TextLineSpecPlainText'.\n"+
+			"HOWEVER, 'areEqual' == 'true'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtBlankLinesBravo TextLineSpecBlankLines
+
+	txtBlankLinesBravo,
+		err = txtBlankLinesBase.CopyOut(
+		ePrefix.XCtx(
+			"txtBlankLinesBase->txtBlankLinesBravo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBravo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBravo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual = txtBlankLinesBase.Equal(
+		&txtBlankLinesBravo)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtBlankLinesBase.Equal(&txtBlankLinesBravo)\n"+
+			"Expected areEqual == 'true' because\n"+
+			"'txtBlankLinesBravo' is a copy of 'txtBlankLinesBase'.\n"+
+			"HOWEVER, 'areEqual' == 'false'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	areEqual = txtBlankLinesBase.EqualITextLine(
+		&txtBlankLinesBravo)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"areEqual = txtBlankLinesBase.EqualITextLine(&txtBlankLinesBravo)\n"+
+			"Expected areEqual == 'true' because\n"+
+			"'txtBlankLinesBravo' is a copy of 'txtBlankLinesBase'.\n"+
+			"HOWEVER, 'areEqual' == 'false'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
