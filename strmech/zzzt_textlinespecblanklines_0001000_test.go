@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 )
 
@@ -498,11 +499,132 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 	if blankLinesAlpha.newLineChars != nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected blankLinesAlpha.newLineChars == nil\n"+
-			"Instead, blankLinesAlpha.numBlankLines = '%v'\n"+
-			" blankLinesAlpha.numBlankLines array = '%v'",
+			"Instead, blankLinesAlpha.newLineChars = '%v'\n"+
+			" blankLinesAlpha.newLineChars array = '%v'",
 			ePrefix.XCtxEmpty().String(),
 			string(blankLinesAlpha.newLineChars),
+			blankLinesAlpha.newLineChars)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_Empty_000100()",
+		"")
+
+	blankLinesAlpha := TextLineSpecBlankLines{}
+
+	blankLinesAlpha.Empty()
+
+	var err error
+
+	blankLinesAlpha,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		3,
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesAlpha.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if blankLinesAlpha.numBlankLines != 3 {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesAlpha.numBlankLines == 3\n"+
+			"Instead, blankLinesAlpha.numBlankLines == %v\n",
+			ePrefix.XCtxEmpty().String(),
 			blankLinesAlpha.numBlankLines)
+
+		return
+	}
+
+	blankLinesAlpha.Empty()
+
+	if blankLinesAlpha.numBlankLines != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"blankLinesAlpha.Empty()\n"+
+			"Expected blankLinesAlpha.numBlankLines == 0\n"+
+			"Instead, blankLinesAlpha.numBlankLines == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			blankLinesAlpha.numBlankLines)
+
+		return
+	}
+
+	if blankLinesAlpha.newLineChars != nil {
+		t.Errorf("%v - ERROR\n"+
+			"blankLinesAlpha.Empty()\n"+
+			"Expected blankLinesAlpha.newLineChars == nil\n"+
+			"Instead, blankLinesAlpha.newLineChars = '%v'\n"+
+			" blankLinesAlpha.newLineChars array = '%v'",
+			ePrefix.XCtxEmpty().String(),
+			string(blankLinesAlpha.newLineChars),
+			blankLinesAlpha.newLineChars)
+
+		return
+	}
+
+	if blankLinesAlpha.lock != nil {
+		t.Errorf("%v - ERROR\n" +
+			"blankLinesAlpha.Empty()\n" +
+			"Expected blankLinesAlpha.lock == nil\n" +
+			"HOWEVER, 'blankLinesAlpha.lock' IS NOT 'nil'!\n" +
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var blankLinesBravo TextLineSpecBlankLines
+
+	blankLinesBravo,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		3,
+		ePrefix.XCtx(
+			"blankLinesBravo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesBravo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesBravo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	blankLinesBravo.textLineReader =
+		strings.NewReader("Hello World!")
+
+	blankLinesBravo.Empty()
+
+	if blankLinesBravo.textLineReader != nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesBravo.textLineReader == nil\n"+
+			"HOWEVER 'blankLinesBravo.textLineReader' IS NOT 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
