@@ -438,3 +438,76 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_Equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_Equal_000100()",
+		"")
+
+	blankLinesAlpha,
+		err := TextLineSpecBlankLines{}.NewBlankLines(
+		3,
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesAlpha.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	blankLinesBravo := TextLineSpecBlankLines{}
+
+	if blankLinesBravo.Equal(&blankLinesAlpha) {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesBravo.Equal(&blankLinesAlpha)== 'false'\n"+
+			"because 'blankLinesBravo' is empty.\n"+
+			"HOWEVER, THE RETURNED VALUE WAS 'true'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if blankLinesAlpha.Equal(nil) {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesAlpha.Equal(nil) == 'false'\n"+
+			"because input parameter is 'nil'.\n"+
+			"HOWEVER, THE METHOD RETURNED 'true'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	blankLinesBravo,
+		err = blankLinesAlpha.CopyOut(
+		ePrefix.XCtx(
+			"blankLinesAlpha->blankLinesBravo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !blankLinesBravo.Equal(&blankLinesAlpha) {
+		t.Errorf("%v - ERROR \n"+
+			"Expected blankLinesAlpha==blankLinesBravo\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

@@ -130,14 +130,6 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 		return err
 	}
 
-	if len(incomingBlkLines.newLineChars) == 0 {
-		incomingBlkLines.newLineChars = []rune{'\n'}
-	}
-
-	if incomingBlkLines.numBlankLines < 0 {
-		incomingBlkLines.numBlankLines = 0
-	}
-
 	targetBlkLines.numBlankLines =
 		incomingBlkLines.numBlankLines
 
@@ -248,14 +240,6 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 
 	if err != nil {
 		return TextLineSpecBlankLines{}, err
-	}
-
-	if len(txtBlankLines.newLineChars) == 0 {
-		txtBlankLines.newLineChars = []rune{'\n'}
-	}
-
-	if txtBlankLines.numBlankLines < 0 {
-		txtBlankLines.numBlankLines = 0
 	}
 
 	newBlankLinesSpec := TextLineSpecBlankLines{}
