@@ -439,10 +439,81 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_empty_000100()",
+		"")
+
+	blankLinesAlpha,
+		err := TextLineSpecBlankLines{}.NewBlankLines(
+		3,
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesAlpha.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if blankLinesAlpha.numBlankLines != 3 {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesAlpha.numBlankLines == 3\n"+
+			"Instead, blankLinesAlpha.numBlankLines == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			blankLinesAlpha.numBlankLines)
+
+		return
+	}
+
+	txtBlankLinesMolecule := textLineSpecBlankLinesMolecule{}
+
+	txtBlankLinesMolecule.empty(
+		nil)
+
+	txtBlankLinesMolecule.empty(
+		&blankLinesAlpha)
+
+	if blankLinesAlpha.numBlankLines != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesAlpha.numBlankLines == 0\n"+
+			"Instead, blankLinesAlpha.numBlankLines == %v\n",
+			ePrefix.XCtxEmpty().String(),
+			blankLinesAlpha.numBlankLines)
+
+		return
+	}
+
+	if blankLinesAlpha.newLineChars != nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected blankLinesAlpha.newLineChars == nil\n"+
+			"Instead, blankLinesAlpha.numBlankLines = '%v'\n"+
+			" blankLinesAlpha.numBlankLines array = '%v'",
+			ePrefix.XCtxEmpty().String(),
+			string(blankLinesAlpha.newLineChars),
+			blankLinesAlpha.numBlankLines)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecBlankLines_Equal_000100()",
+		"TestTextLineSpecBlankLines_equal_000100()",
 		"")
 
 	blankLinesAlpha,
