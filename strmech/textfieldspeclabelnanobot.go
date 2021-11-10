@@ -184,9 +184,7 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 
 	txtLabelElectron := textFieldSpecLabelElectron{}
 
-	var lenTxtRunes int
-
-	lenTxtRunes,
+	_,
 		err = txtLabelElectron.isTextLabelValid(
 		textLabel,
 		ePrefix.XCtx("textLabel"))
@@ -213,24 +211,14 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 		return err
 	}
 
-	textFieldLabel.textLabel =
-		make([]rune, lenTxtRunes)
+	err = strMechPreon{}.ptr().copyRuneArrays(
+		&textFieldLabel.textLabel,
+		&textLabel,
+		true,
+		ePrefix.XCtx(
+			"textLabel->textFieldLabel.textLabel"))
 
-	itemsCopied :=
-		copy(
-			textFieldLabel.textLabel,
-			textLabel)
-
-	if itemsCopied != lenTxtRunes {
-		err = fmt.Errorf("%v\n"+
-			"Error: 'textLabel' copy operation failed!\n"+
-			"Should have copied %v characters to textFieldLabel.textLabel.\n"+
-			"Instead, %v characters were copied to textFieldLabel.textLabel.\n",
-			ePrefix.XCtx(
-				"textLabel->textFieldLabel.textLabel"),
-			lenTxtRunes,
-			itemsCopied)
-
+	if err != nil {
 		return err
 	}
 

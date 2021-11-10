@@ -832,6 +832,11 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecFiller.String()
+//  TextFieldSpecFiller.GetFormattedText()
+//  TextFieldSpecFiller.TextBuilder()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -3198,6 +3203,15 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRuneArray(
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
+// This method also fulfills the requirements of the 'Stringer'
+// interface defined in the Golang package 'fmt'. Reference:
+//   https://pkg.go.dev/fmt#Stringer
+//
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecFiller.String()
+//  TextFieldSpecFiller.GetFormattedText()
+//  TextFieldSpecFiller.TextBuilder()
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -3247,6 +3261,11 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
+//
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecFiller.String()
+//  TextFieldSpecFiller.GetFormattedText()
+//  TextFieldSpecFiller.TextBuilder()
 //
 //
 // ----------------------------------------------------------------

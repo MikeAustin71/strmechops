@@ -719,6 +719,11 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedStrLength() int {
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecLabel.String()
+//  TextFieldSpecLabel.GetFormattedText()
+//  TextFieldSpecLabel.TextBuilder()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -3297,6 +3302,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 // interface defined in the Golang package 'fmt'. Reference:
 //   https://pkg.go.dev/fmt#Stringer
 //
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecLabel.String()
+//  TextFieldSpecLabel.GetFormattedText()
+//  TextFieldSpecLabel.TextBuilder()
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -3362,6 +3372,11 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
+//
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecLabel.String()
+//  TextFieldSpecLabel.GetFormattedText()
+//  TextFieldSpecLabel.TextBuilder()
 //
 //
 // ----------------------------------------------------------------

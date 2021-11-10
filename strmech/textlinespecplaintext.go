@@ -677,6 +677,11 @@ func (plainTextLine *TextLineSpecPlainText) EqualITextLine(
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
+// Methods which return formatted text are listed as follows:
+//  TextLineSpecPlainText.String()
+//  TextLineSpecPlainText.TextBuilder()
+//  TextLineSpecPlainText.GetFormattedText()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -5017,6 +5022,15 @@ func (plainTextLine *TextLineSpecPlainText) SetTextString(
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
+// This method also fulfills the requirements of the 'Stringer'
+// interface defined in the Golang package 'fmt'. Reference:
+//   https://pkg.go.dev/fmt#Stringer
+//
+// Methods which return formatted text are listed as follows:
+//  TextLineSpecPlainText.String()
+//  TextLineSpecPlainText.TextBuilder()
+//  TextLineSpecPlainText.GetFormattedText()
+//
 func (plainTextLine TextLineSpecPlainText) String() string {
 
 	if plainTextLine.lock == nil {
@@ -5051,6 +5065,11 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
+//
+// Methods which return formatted text are listed as follows:
+//  TextLineSpecPlainText.String()
+//  TextLineSpecPlainText.TextBuilder()
+//  TextLineSpecPlainText.GetFormattedText()
 //
 //
 // ----------------------------------------------------------------

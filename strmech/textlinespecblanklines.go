@@ -580,6 +580,11 @@ func (blkLines *TextLineSpecBlankLines) EqualITextLine(
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
+// Methods which return formatted text are listed as follows:
+//  TextLineSpecBlankLines.String()
+//  TextLineSpecBlankLines.TextBuilder()
+//  TextLineSpecBlankLines.GetFormattedText()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -1549,7 +1554,8 @@ func (blkLines *TextLineSpecBlankLines) SetLineTerminationChars(
 // produced by this text line specification.
 //
 func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
-	numOfBlankLines int) {
+	numOfBlankLines int,
+	errorPrefix interface{}) error {
 
 	if blkLines.lock == nil {
 		blkLines.lock = new(sync.Mutex)
@@ -1559,16 +1565,26 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 
 	defer blkLines.lock.Unlock()
 
-	if len(blkLines.newLineChars) == 0 {
-		blkLines.newLineChars = []rune{'\n'}
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecBlankLines.SetNumberOfBlankLines()",
+		"")
+
+	if err != nil {
+		return err
 	}
 
-	if numOfBlankLines < 0 {
-		return
-	}
-
-	blkLines.numBlankLines = numOfBlankLines
-
+	return textLineSpecBlankLinesMolecule{}.ptr().
+		setTextLinesSpecBlankLines(
+			blkLines,
+			numOfBlankLines,
+			[]rune{'\n'},
+			ePrefix.XCtx(
+				"->blkLines"))
 }
 
 // String - Returns the formatted text for output and
@@ -1586,6 +1602,15 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
+//
+// This method also fulfills the requirements of the 'Stringer'
+// interface defined in the Golang package 'fmt'. Reference:
+//   https://pkg.go.dev/fmt#Stringer
+//
+// Methods which return formatted text are listed as follows:
+//  TextLineSpecBlankLines.String()
+//  TextLineSpecBlankLines.TextBuilder()
+//  TextLineSpecBlankLines.GetFormattedText()
 //
 func (blkLines TextLineSpecBlankLines) String() string {
 
@@ -1621,6 +1646,11 @@ func (blkLines TextLineSpecBlankLines) String() string {
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
+//
+// Methods which return formatted text are listed as follows:
+//  TextLineSpecBlankLines.String()
+//  TextLineSpecBlankLines.GetFormattedText()
+//  TextLineSpecBlankLines.TextBuilder()
 //
 //
 // ----------------------------------------------------------------

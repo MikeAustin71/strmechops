@@ -1596,6 +1596,8 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
 	}
 
 	return

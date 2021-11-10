@@ -464,3 +464,90 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) ptr() *textLineSpecB
 		lock: new(sync.Mutex),
 	}
 }
+
+// setTextLinesSpecBlankLines - Receives a pointer to an instance
+// of TextLineSpecBlankLines and proceeds to configure that
+// instance according to the input parameters, 'numOfBlankLines'
+// and 'newLineChars'.
+//
+// Type TextLineSpecBlankLines is used to configure one or more
+// blank lines of text for display, printing for file output.
+//
+//
+func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBlankLines(
+	txtBlankLines *TextLineSpecBlankLines,
+	numOfBlankLines int,
+	newLineChars []rune,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtBlankLinesMolecule.lock == nil {
+		txtBlankLinesMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBlankLinesMolecule.lock.Lock()
+
+	defer txtBlankLinesMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecBlankLinesMolecule."+
+			"setTextLinesSpecBlankLines()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if numOfBlankLines < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numOfBlankLines' is invalid!\n"+
+			"'numOfBlankLines' is less than one (1).\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numOfBlankLines > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numOfBlankLines' is invalid!\n"+
+			"'numOfBlankLines' is greater than one-million (1,000,000).\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if newLineChars == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'newLineChars' is invalid!\n"+
+			"'newLineChars' is 'nil'.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(newLineChars) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'newLineChars' is invalid!\n"+
+			"The length of 'newLineChars' is Zero (0).\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtBlankLines.numBlankLines = numOfBlankLines
+
+	return strMechPreon{}.ptr().copyRuneArrays(
+		&txtBlankLines.newLineChars,
+		&newLineChars,
+		true,
+		ePrefix.XCtx(
+			"newLineChars->txtBlankLines.newLineChars"))
+}

@@ -674,6 +674,11 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedStrLength() int {
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecSpacer.String()
+//  TextFieldSpecSpacer.GetFormattedText()
+//  TextFieldSpecSpacer.TextBuilder()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -1691,6 +1696,15 @@ func (txtFieldSpacer *TextFieldSpecSpacer) SetFieldLen(
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
+// This method also fulfills the requirements of the 'Stringer'
+// interface defined in the Golang package 'fmt'. Reference:
+//   https://pkg.go.dev/fmt#Stringer
+//
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecSpacer.String()
+//  TextFieldSpecSpacer.GetFormattedText()
+//  TextFieldSpecSpacer.TextBuilder()
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -1752,6 +1766,11 @@ func (txtFieldSpacer *TextFieldSpecSpacer) String() string {
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
+//
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecSpacer.String()
+//  TextFieldSpecSpacer.GetFormattedText()
+//  TextFieldSpecSpacer.TextBuilder()
 //
 //
 // ----------------------------------------------------------------

@@ -988,6 +988,11 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedStrLength() int {
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecDateTime.String()
+//  TextFieldSpecDateTime.GetFormattedText()
+//  TextFieldSpecDateTime.TextBuilder()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -3578,6 +3583,11 @@ func (txtDateTimeField *TextFieldSpecDateTime) SetTextJustification(
 // interface defined in the Golang package 'fmt'. Reference:
 //   https://pkg.go.dev/fmt#Stringer
 //
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecDateTime.String()
+//  TextFieldSpecDateTime.GetFormattedText()
+//  TextFieldSpecDateTime.TextBuilder()
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -3659,6 +3669,11 @@ func (txtDateTimeField *TextFieldSpecDateTime) String() string {
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
+//
+// Methods which return formatted text are listed as follows:
+//  TextFieldSpecDateTime.String()
+//  TextFieldSpecDateTime.GetFormattedText()
+//  TextFieldSpecDateTime.TextBuilder()
 //
 //
 // ----------------------------------------------------------------

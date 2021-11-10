@@ -1288,3 +1288,125 @@ func TestTextLineSpecBlankLines_EqualITextLine_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"")
+
+	txtBlankLinesBase := TextLineSpecBlankLines{}
+
+	_,
+		err := txtBlankLinesBase.GetFormattedText(
+		ePrefix.XCtx(
+			"Empty txtBlankLinesBase"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesBase.GetFormattedText()\n"+
+			"because 'txtBlankLinesBase' is "+
+			"empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	numOfBlankLines := 3
+
+	txtBlankLinesBase,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBase.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedFmtStr :=
+		strings.Repeat("\n", 3)
+
+	var actualStr string
+
+	actualStr,
+		err = txtBlankLinesBase.GetFormattedText(
+		ePrefix.XCtx(
+			"valid txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"txtBlankLinesBase.GetFormattedText()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtBlankLinesBaseAlpha := TextLineSpecBlankLines{}
+
+	err = txtBlankLinesBaseAlpha.SetNumberOfBlankLines(
+		3,
+		ePrefix.XCtx(
+			"txtBlankLinesBaseAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtBlankLinesBaseAlpha.GetFormattedText(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesBaseAlpha."+
+			"GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
