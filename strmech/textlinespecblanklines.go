@@ -862,7 +862,6 @@ func (blkLines *TextLineSpecBlankLines) IsValidInstanceError(
 // method will automatically reset the value to zero.
 //
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
@@ -967,27 +966,13 @@ func (blkLines TextLineSpecBlankLines) NewBlankLines(
 		return newBlankLinesSpec, err
 	}
 
-	if numOfBlankLines < 1 {
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numOfBlankLines' is invalid!\n"+
-			"'numOfBlankLines' is less than one (1).\n",
-			ePrefix.String())
-
-		return newBlankLinesSpec, err
-	}
-
-	if numOfBlankLines > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numOfBlankLines' is invalid!\n"+
-			"'numOfBlankLines' is greater than one-million (1,000,000).\n",
-			ePrefix.String())
-
-		return newBlankLinesSpec, err
-	}
-
-	newBlankLinesSpec.numBlankLines = numOfBlankLines
-
-	newBlankLinesSpec.newLineChars = []rune{'\n'}
+	err = textLineSpecBlankLinesMolecule{}.ptr().
+		setTextLinesSpecBlankLines(
+			&newBlankLinesSpec,
+			numOfBlankLines,
+			[]rune{'\n'},
+			ePrefix.XCtx(
+				"->numOfBlankLines"))
 
 	return newBlankLinesSpec, err
 }
@@ -1116,27 +1101,13 @@ func (blkLines TextLineSpecBlankLines) NewPtrBlankLines(
 		return &newBlankLinesSpec, err
 	}
 
-	if numOfBlankLines < 1 {
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numOfBlankLines' is invalid!\n"+
-			"'numOfBlankLines' is less than one (1).\n",
-			ePrefix.String())
-
-		return &newBlankLinesSpec, err
-	}
-
-	if numOfBlankLines > 1000000 {
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'numOfBlankLines' is invalid!\n"+
-			"'numOfBlankLines' is greater than one-million (1,000,000).\n",
-			ePrefix.String())
-
-		return &newBlankLinesSpec, err
-	}
-
-	newBlankLinesSpec.numBlankLines = numOfBlankLines
-
-	newBlankLinesSpec.newLineChars = []rune{'\n'}
+	err = textLineSpecBlankLinesMolecule{}.ptr().
+		setTextLinesSpecBlankLines(
+			&newBlankLinesSpec,
+			numOfBlankLines,
+			[]rune{'\n'},
+			ePrefix.XCtx(
+				"->numOfBlankLines"))
 
 	return &newBlankLinesSpec, err
 }
@@ -1505,17 +1476,13 @@ func (blkLines *TextLineSpecBlankLines) SetLineTerminationChars(
 		return err
 	}
 
-	if len(blkLines.newLineChars) == 0 {
-		blkLines.newLineChars = []rune{'\n'}
-	}
+	err = textLineSpecBlankLinesElectron{}.ptr().
+		testValidityNewLinesChars(
+			[]rune(lineTerminationChars),
+			ePrefix.XCtx(
+				"lineTerminationChars"))
 
-	if len(lineTerminationChars) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'lineTerminationChars' is invalid!\n"+
-			"'lineTerminationChars' is an empty string.",
-			ePrefix.String())
-
+	if err != nil {
 		return err
 	}
 
@@ -1578,13 +1545,19 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 		return err
 	}
 
-	return textLineSpecBlankLinesMolecule{}.ptr().
-		setTextLinesSpecBlankLines(
-			blkLines,
+	err = textLineSpecBlankLinesElectron{}.ptr().
+		testValidityNumOfBlankLines(
 			numOfBlankLines,
-			[]rune{'\n'},
 			ePrefix.XCtx(
-				"->blkLines"))
+				"numOfBlankLines"))
+
+	if err != nil {
+		return err
+	}
+
+	blkLines.numBlankLines = numOfBlankLines
+
+	return err
 }
 
 // String - Returns the formatted text for output and
