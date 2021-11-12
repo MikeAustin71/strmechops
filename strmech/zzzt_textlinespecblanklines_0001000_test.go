@@ -15,7 +15,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	incomingBlankLines,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"incomingBlankLines"))
@@ -138,7 +138,7 @@ func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 		"")
 
 	blankLinesAlpha,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesAlpha"))
@@ -221,7 +221,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	txtBlankLinesBase,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))
@@ -325,7 +325,7 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	txtBlankLinesBase,
-		err := TextLineSpecBlankLines{}.NewPtrBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))
@@ -400,7 +400,7 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 	var txtBlankLinesBase3 TextLineSpecBlankLines
 
 	txtBlankLinesBase3,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"->txtBlankLinesBase3"))
@@ -463,7 +463,7 @@ func TestTextLineSpecBlankLines_CopyOutITextLine_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	txtBlankLinesBase,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))
@@ -560,7 +560,7 @@ func TestTextLineSpecBlankLines_CopyOutITextLine_000100(t *testing.T) {
 	var txtBlankLinesDelta TextLineSpecBlankLines
 
 	txtBlankLinesDelta,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))
@@ -609,7 +609,7 @@ func TestTextLineSpecBlankLines_CopyOutPtr_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	txtBlankLinesBase,
-		err := TextLineSpecBlankLines{}.NewPtrBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))
@@ -684,7 +684,7 @@ func TestTextLineSpecBlankLines_CopyOutPtr_000100(t *testing.T) {
 	var txtBlankLinesBase3 TextLineSpecBlankLines
 
 	txtBlankLinesBase3,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"->txtBlankLinesBase3"))
@@ -745,7 +745,7 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 		"")
 
 	blankLinesAlpha,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesAlpha"))
@@ -822,7 +822,7 @@ func TestTextLineSpecBlankLines_Empty_000100(t *testing.T) {
 	var err error
 
 	blankLinesAlpha,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesAlpha"))
@@ -892,7 +892,7 @@ func TestTextLineSpecBlankLines_Empty_000100(t *testing.T) {
 	var blankLinesBravo TextLineSpecBlankLines
 
 	blankLinesBravo,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesBravo"))
@@ -937,7 +937,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 		"")
 
 	blankLinesAlpha,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesAlpha"))
@@ -1076,7 +1076,7 @@ func TestTextLineSpecBlankLines_Equal_000100(t *testing.T) {
 		"")
 
 	blankLinesAlpha,
-		err := TextLineSpecBlankLines{}.NewBlankLines(
+		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesAlpha"))
@@ -1169,7 +1169,7 @@ func TestTextLineSpecBlankLines_EqualITextLine_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	txtBlankLinesBase,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))
@@ -1317,7 +1317,7 @@ func TestTextLineSpecBlankLines_GetFormattedText_000100(t *testing.T) {
 	numOfBlankLines := 3
 
 	txtBlankLinesBase,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
 		ePrefix.XCtx(
 			"txtBlankLinesBase"))

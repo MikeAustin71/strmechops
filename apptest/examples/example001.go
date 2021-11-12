@@ -26,7 +26,7 @@ func (mt MainTest) TextLineSpecBlkLines01() {
 	var errText string
 
 	blankLinesAlpha,
-		err := strmech.TextLineSpecBlankLines{}.NewBlankLines(
+		err := strmech.TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
 		ePrefix.XCtx(
 			"blankLinesAlpha"))

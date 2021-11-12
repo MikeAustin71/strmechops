@@ -495,11 +495,14 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) ptr() *textLineSpecB
 //       'txtBlankLines'.
 //
 //
-//  newLineChars               []rune
+//  newLineRunes               []rune
 //     - This rune array holds the text character or characters
-//       which will be used as the "new-line" character for input
-//       parameter 'txtBlankLines', an instance of
+//       which will be used as the line termination sequence for
+//       input parameter 'txtBlankLines', an instance of
 //       TextLineSpecBlankLines.
+//
+//       If this parameter is submitted as a 'nil' value or a zero
+//       length rune array, an error will be returned.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
@@ -532,7 +535,7 @@ func (txtBlankLinesMolecule textLineSpecBlankLinesMolecule) ptr() *textLineSpecB
 func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBlankLines(
 	txtBlankLines *TextLineSpecBlankLines,
 	numOfBlankLines int,
-	newLineChars []rune,
+	newLineRunes []rune,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtBlankLinesMolecule.lock == nil {
@@ -572,9 +575,9 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBla
 
 	err = txtBlankLinesElectron.
 		testValidityNewLinesChars(
-			newLineChars,
+			newLineRunes,
 			ePrefix.XCtx(
-				"newLineChars"))
+				"newLineRunes"))
 
 	if err != nil {
 		return err
@@ -584,8 +587,8 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBla
 
 	return strMechPreon{}.ptr().copyRuneArrays(
 		&txtBlankLines.newLineChars,
-		&newLineChars,
+		&newLineRunes,
 		true,
 		ePrefix.XCtx(
-			"newLineChars->txtBlankLines.newLineChars"))
+			"newLineRunes->txtBlankLines.newLineChars"))
 }

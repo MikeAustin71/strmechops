@@ -3506,7 +3506,7 @@ func (stdLine *TextLineSpecStandardLine) SetLineTerminationChars(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"SetLineTerminationChars()",
+			"SetNewLineChars()",
 		"")
 
 	if err != nil {
