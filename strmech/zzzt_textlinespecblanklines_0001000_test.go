@@ -1410,3 +1410,128 @@ func TestTextLineSpecBlankLines_GetFormattedText_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_GetNewLineChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	txtBlankLinesZero := TextLineSpecBlankLines{}
+
+	expectedFmtStr := ""
+
+	actualStr := txtBlankLinesZero.GetNewLineChars()
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected newLineChars = '%v'\n"+
+			"Instead, newLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	actualStr = "!\n"
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		actualStr,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedFmtStr =
+		strings.Repeat(actualStr, numOfBlankLines)
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	actualStr = txtBlankLinesOne.GetNewLineChars()
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"Expected newLineChars = '%v'\n"+
+			"Instead, newLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	var actualFmtStr string
+
+	actualFmtStr,
+		err =
+		txtBlankLinesOne.GetFormattedText(
+			ePrefix.XCtx(
+				"txtBlankLinesOne"))
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected Formatted String = '%v'\n"+
+			"Instead, Formatted String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}

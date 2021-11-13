@@ -708,7 +708,7 @@ func (blkLines *TextLineSpecBlankLines) GetNewLineChars() string {
 	defer blkLines.lock.Unlock()
 
 	if len(blkLines.newLineChars) == 0 {
-		blkLines.newLineChars = []rune{'\n'}
+		return ""
 	}
 
 	return string(blkLines.newLineChars)
