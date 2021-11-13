@@ -2023,3 +2023,50 @@ func TestTextLineSpecBlankLines_IsValidInstanceError_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_NewBlankLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineChars := "!\n"
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		newLineChars,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	_,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		newLineChars,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecBlankLines{}."+
+			"NewBlankLines()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
