@@ -134,7 +134,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecBlankLines_copyIn_000100()",
+		"TestTextLineSpecBlankLines_CopyIn_000100()",
 		"")
 
 	blankLinesAlpha,
@@ -184,10 +184,12 @@ func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 	}
 
 	if !blankLinesBravo.Equal(&blankLinesAlpha) {
+
 		t.Errorf("%v - ERROR\n"+
 			"Expected blankLinesAlpha==blankLinesBravo\n"+
 			"HOWEVER, THESE INSTANCES ARE NOT EQUAL!\n",
 			ePrefix.XCtxEmpty().String())
+
 		return
 	}
 
@@ -205,6 +207,112 @@ func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_CopyIn_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyIn_000200()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	blankLinesOne,
+		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"blankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	blankLinesTwo := TextLineSpecBlankLines{}
+
+	err = blankLinesTwo.CopyIn(
+		&blankLinesOne,
+		ePrefix.XCtx(
+			"blankLinesOne->blankLinesTwo"))
+
+	err = blankLinesTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !blankLinesTwo.Equal(&blankLinesOne) {
+
+		t.Errorf("%v - ERROR\n"+
+			"blankLinesTwo.Equal(&blankLinesOne)\n"+
+			"Expected blankLinesOne==blankLinesTwo\n"+
+			"HOWEVER, THESE INSTANCES ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedFmtStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	var actualFmtStr string
+
+	actualFmtStr,
+		err =
+		blankLinesTwo.GetFormattedText(
+			ePrefix.XCtx(
+				"blankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected Formatted String = '%v'\n"+
+			"Instead, Formatted String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
 
 		return
 	}
@@ -441,12 +549,125 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 		TextFieldSpecDateTime{})
 
 	if err == nil {
+
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtBlankLinesBase3."+
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_CopyOut_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000200()",
+		"")
+
+	numOfBlankLines := 4
+
+	newLineRunes := []rune{'!', '\n'}
+
+	blankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"blankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var blankLinesTwo TextLineSpecBlankLines
+
+	blankLinesTwo,
+		err = blankLinesOne.CopyOut(
+		ePrefix.XCtx(
+			"blankLinesOne->blankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = blankLinesTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"blankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !blankLinesTwo.Equal(blankLinesOne) {
+
+		t.Errorf("%v - ERROR\n"+
+			"blankLinesTwo.Equal(blankLinesOne)\n"+
+			"Expected blankLinesOne==blankLinesTwo\n"+
+			"HOWEVER, THESE INSTANCES ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedFmtStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	var actualFmtStr string
+
+	actualFmtStr,
+		err =
+		blankLinesTwo.GetFormattedText(
+			ePrefix.XCtx(
+				"blankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected Formatted String = '%v'\n"+
+			"Instead, Formatted String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
 
 		return
 	}
@@ -1414,7 +1635,7 @@ func TestTextLineSpecBlankLines_GetFormattedText_000100(t *testing.T) {
 func TestTextLineSpecBlankLines_GetNewLineChars_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"TestTextLineSpecBlankLines_GetNewLineChars_000100()",
 		"")
 
 	numOfBlankLines := 3
@@ -1514,6 +1735,129 @@ func TestTextLineSpecBlankLines_GetNewLineChars_000100(t *testing.T) {
 		txtBlankLinesOne.GetFormattedText(
 			ePrefix.XCtx(
 				"txtBlankLinesOne"))
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected Formatted String = '%v'\n"+
+			"Instead, Formatted String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_GetNewLineRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	txtBlankLinesZero := TextLineSpecBlankLines{}
+
+	expectedFmtStr := ""
+
+	actualRuneArray := txtBlankLinesZero.GetNewLineRunes()
+
+	if actualRuneArray != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesZero.GetNewLineRunes()\n"+
+			"Expected newLineRunes = 'nil'\n"+
+			"Instead, newLineRunes = '%v'\n"+
+			"Runes Value = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(actualRuneArray),
+			actualRuneArray)
+
+		return
+	}
+
+	actualRuneArray = []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
+		numOfBlankLines,
+		actualRuneArray,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedFmtStr =
+		strings.Repeat(string(actualRuneArray), numOfBlankLines)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			actualRuneArray,
+			true)
+
+	actualRuneArray = txtBlankLinesOne.GetNewLineRunes()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			actualRuneArray,
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"Expected newLineRunes = '%v'\n"+
+			"Instead, newLineRunes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	var actualFmtStr string
+
+	actualFmtStr,
+		err =
+		txtBlankLinesOne.GetFormattedText(
+			ePrefix.XCtx(
+				"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	printableActualStr =
 		sMech.ConvertNonPrintableChars(

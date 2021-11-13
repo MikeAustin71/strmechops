@@ -1652,10 +1652,14 @@
 --- PASS: TestTextLineSpecBlankLines_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_CopyIn_000100
 --- PASS: TestTextLineSpecBlankLines_CopyIn_000100 (0.00s)
+=== RUN   TestTextLineSpecBlankLines_CopyIn_000200
+--- PASS: TestTextLineSpecBlankLines_CopyIn_000200 (0.00s)
 === RUN   TestTextLineSpecBlankLines_copyOut_000100
 --- PASS: TestTextLineSpecBlankLines_copyOut_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_CopyOut_000100
 --- PASS: TestTextLineSpecBlankLines_CopyOut_000100 (0.00s)
+=== RUN   TestTextLineSpecBlankLines_CopyOut_000200
+--- PASS: TestTextLineSpecBlankLines_CopyOut_000200 (0.00s)
 === RUN   TestTextLineSpecBlankLines_CopyOutITextLine_000100
 --- PASS: TestTextLineSpecBlankLines_CopyOutITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_CopyOutPtr_000100
@@ -1674,6 +1678,8 @@
 --- PASS: TestTextLineSpecBlankLines_GetFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_GetNewLineChars_000100
 --- PASS: TestTextLineSpecBlankLines_GetNewLineChars_000100 (0.00s)
+=== RUN   TestTextLineSpecBlankLines_GetNewLineRunes_000100
+--- PASS: TestTextLineSpecBlankLines_GetNewLineRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_copyIn_000100
 --- PASS: TestTextLineSpecPlainText_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_CopyIn_000100
@@ -1719,5 +1725,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 58.0% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.701s
+coverage: 58.3% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.646s
