@@ -1760,7 +1760,7 @@ func TestTextLineSpecBlankLines_GetNewLineChars_000100(t *testing.T) {
 func TestTextLineSpecBlankLines_GetNewLineRunes_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"TestTextLineSpecBlankLines_GetNewLineRunes_000100()",
 		"")
 
 	numOfBlankLines := 3
@@ -1873,6 +1873,75 @@ func TestTextLineSpecBlankLines_GetNewLineRunes_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_GetNumberOfBlankLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_GetNumberOfBlankLines_000100()",
+		"")
+
+	expectedNumOfBlankLines := 2
+
+	newLineChars := "!\n"
+
+	txtBlankLinesZero := TextLineSpecBlankLines{}
+
+	actualNumOfBlankLines :=
+		txtBlankLinesZero.GetNumOfBlankLines()
+
+	if actualNumOfBlankLines != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesZero.GetNumOfBlankLines()\n"+
+			"Expected Number of Blank Lines = '0'\n"+
+			"Instead, Number of Blank Lines = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualNumOfBlankLines)
+
+		return
+	}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrBlankLines(
+		expectedNumOfBlankLines,
+		newLineChars,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfBlankLines =
+		txtBlankLinesOne.GetNumOfBlankLines()
+
+	if expectedNumOfBlankLines != actualNumOfBlankLines {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesOne.GetNumOfBlankLines()\n"+
+			"Expected Number of Blank Lines = '%v'\n"+
+			"Instead, Number of Blank Lines = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNumOfBlankLines,
+			actualNumOfBlankLines)
 
 		return
 	}
