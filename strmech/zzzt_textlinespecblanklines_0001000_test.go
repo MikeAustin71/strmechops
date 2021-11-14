@@ -2349,3 +2349,102 @@ func TestTextLineSpecBlankLines_NewPtrDefaultBlankLines_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	_,
+		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecBlankLines{}."+
+			"NewPtrRunesBlankLines()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtBlankLinesTwo *TextLineSpecBlankLines
+
+	txtBlankLinesTwo,
+		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	expectedFmtStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	var actualStr string
+
+	actualStr,
+		err = txtBlankLinesTwo.GetFormattedText(
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"txtBlankLinesTwo.GetFormattedText()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
