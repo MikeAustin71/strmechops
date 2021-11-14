@@ -1989,8 +1989,14 @@ func (blkLines *TextLineSpecBlankLines) ReaderInitialize() {
 // termination characters (TextLineSpecBlankLines.newLineChars')
 // will be modified. All other internal member data variables will
 // remain unchanged. Specifically, the "number of blank of lines"
-// member variable ('TextLineSpecBlankLines.newLineChars') WILL NOT
-// be modified.
+// member variable ('TextLineSpecBlankLines.numBlankLines') WILL
+// NOT be modified.
+//
+// This method is similar to method
+// TextLineSpecBlankLines.SetNewLineRunes() with the sole exception
+// being that this method receives a string as an input parameter
+// while TextLineSpecBlankLines.SetNewLineRunes() receives a rune
+// array as an input parameter.
 //
 // IMPORTANT
 //
@@ -2127,6 +2133,169 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 		true,
 		ePrefix.XCtx(
 			"newLineChars->newLineTermRunes"+
+				"->blkLines.newLineChars"))
+
+	return err
+}
+
+// SetNewLineRunes - By default, the "new line characters"
+// used for the line termination sequence produced by instances of
+// TextLineSpecBlankLines is the standard new line character, '\n'.
+// However, this method allows users the option of substituting
+// another character or series of characters for the line
+// termination sequence.
+//
+// This method will receive a rune array as input and apply the
+// character or characters in that array as the line termination
+// sequence for the current instance of TextLineSpecBlankLines.
+//
+// Only the internal member variable controlling the line
+// termination characters (TextLineSpecBlankLines.newLineChars')
+// will be modified. All other internal member data variables will
+// remain unchanged. Specifically, the "number of blank of lines"
+// member variable ('TextLineSpecBlankLines.numBlankLines') WILL
+// NOT be modified.
+//
+// This method is similar to method
+// TextLineSpecBlankLines.SetNewLineChars() with the sole exception
+// being that this method receives a rune array input parameter
+// while TextLineSpecBlankLines.SetNewLineChars() receives a string
+// as an input parameter.
+//
+// IMPORTANT
+//
+// This method will overwrite and delete the existing "new line
+// characters" value ('TextLineSpecBlankLines.newLineChars') for
+// the current TextLineSpecBlankLines instance (blkLines).
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newLineRunes               []rune
+//     - This rune array holds the line termination character or
+//       characters which will be applied to every blank line
+//       produced by the current instance of TextLineSpecBlankLines.
+//
+//       If this parameter is submitted as a nil value or a zero
+//       length array, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
+	newLineRunes []rune,
+	errorPrefix interface{}) error {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecBlankLines."+
+			"SetNewLineRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecBlankLinesElectron{}.ptr().
+		testValidityNewLinesChars(
+			newLineRunes,
+			ePrefix.XCtx(
+				"newLineRunes"))
+
+	if err != nil {
+		return err
+	}
+
+	sMechPreon := strMechPreon{}
+
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		newLineRunes,
+		ePrefix.XCtx(
+			"newLineRunes"))
+
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
+		&blkLines.newLineChars,
+		&newLineRunes,
+		true,
+		ePrefix.XCtx(
+			"newLineRunes"+
 				"->blkLines.newLineChars"))
 
 	return err

@@ -3281,3 +3281,233 @@ func TestTextLineSpecBlankLines_ReaderInitialize_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_SetNewLineChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_SetNewLineChars_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	expectedNewLineChars := "!\n"
+
+	expectedNewLineRunes := []rune(expectedNewLineChars)
+
+	txtBlankLinesZero := TextLineSpecBlankLines{}
+
+	err :=
+		txtBlankLinesZero.SetNewLineChars(
+			expectedNewLineChars,
+			ePrefix.XCtx(
+				"txtBlankLinesZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtBlankLinesZero.GetFormattedText(
+		ePrefix.XCtx(
+			"Empty txtBlankLinesZero"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesZero.GetFormattedText()\n"+
+			"because 'numOfBlankLines' is "+
+			"zero and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	actualNewLineChars :=
+		txtBlankLinesZero.GetNewLineChars()
+
+	if actualNewLineChars != expectedNewLineChars {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesZero.GetNewLineChars()\n"+
+			"Expected expectedNewLineChars == actualNewLineChars\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedNewLineChars = '%v'\n"+
+			"  actualNewLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNewLineChars,
+			actualNewLineChars)
+
+		return
+	}
+
+	actualNewLineRunes :=
+		txtBlankLinesZero.GetNewLineRunes()
+
+	areEqual := strMechPreon{}.ptr().equalRuneArrays(
+		expectedNewLineRunes,
+		actualNewLineRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesZero.GetNewLineRunes()\n"+
+			"Expected expectedNewLineRunes == actualNewLineRunes\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedNewLineRunes = '%v'\n"+
+			"  actualNewLineRunes = '%v'\n"+
+			"  actualNewLineRunes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedNewLineRunes),
+			string(actualNewLineRunes),
+			actualNewLineRunes)
+
+		return
+	}
+
+	var txtBlankLinesOne TextLineSpecBlankLines
+
+	txtBlankLinesOne,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		expectedNewLineChars,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	actualNewLineChars =
+		txtBlankLinesOne.GetNewLineChars()
+
+	if actualNewLineChars != expectedNewLineChars {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesOne.GetNewLineChars()\n"+
+			"Expected expectedNewLineChars == actualNewLineChars\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedNewLineChars = '%v'\n"+
+			"  actualNewLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNewLineChars,
+			actualNewLineChars)
+
+		return
+	}
+
+	expectedNewLineChars = "**!\n"
+
+	err =
+		txtBlankLinesOne.SetNewLineChars(
+			expectedNewLineChars,
+			ePrefix.XCtx(
+				"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineChars =
+		txtBlankLinesOne.GetNewLineChars()
+
+	if actualNewLineChars != expectedNewLineChars {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test # 2\n"+
+			"txtBlankLinesOne.GetNewLineChars()\n"+
+			"Expected expectedNewLineChars == actualNewLineChars\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedNewLineChars = '%v'\n"+
+			"  actualNewLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNewLineChars,
+			actualNewLineChars)
+
+		return
+	}
+
+	expectedFmtStr :=
+		strings.Repeat(expectedNewLineChars, numOfBlankLines)
+
+	var actualFmtStr string
+
+	actualFmtStr,
+		err =
+		txtBlankLinesOne.GetFormattedText(
+			ePrefix.XCtx(
+				"txtBlankLinesOne-Revised"))
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v - ERROR\n"+
+			"txtBlankLinesOne.GetFormattedText()\n"+
+			"Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	err =
+		txtBlankLinesOne.SetNewLineChars(
+			"xxx\n",
+			TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesOne."+
+			"SetNewLineChars()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	actualNewLineChars =
+		txtBlankLinesOne.GetNewLineChars()
+
+	if actualNewLineChars != expectedNewLineChars {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test # 3\n"+
+			"txtBlankLinesOne.GetNewLineChars()\n"+
+			"Expected expectedNewLineChars == actualNewLineChars\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedNewLineChars = '%v'\n"+
+			"  actualNewLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNewLineChars,
+			actualNewLineChars)
+
+		return
+	}
+
+	return
+}
