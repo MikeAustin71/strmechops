@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"strings"
 	"testing"
 )
@@ -2546,4 +2547,489 @@ func TestTextLineSpecBlankLines_NewRunesBlankLines_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecBlankLines_Read_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_Read_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	expectedTextStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, lenExpectedStr+1)
+
+	var n, readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = txtBlankLinesOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtBlankLinesOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if txtBlankLinesOne.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"txtBlankLinesOne.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtBlankLinesOne.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_Read_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_Read_000200()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	expectedTextStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, 1)
+
+	var actualStr string
+
+	var n, readBytesCnt int
+
+	for {
+
+		n,
+			err = txtBlankLinesOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtBlankLinesOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtBlankLinesOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtBlankLinesOne.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+		return
+	}
+
+	if txtBlankLinesOne.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After a successful series of byte reads,\n"+
+			"txtBlankLinesOne.textLineReader pointer has NOT\n"+
+			"BEEN RESET TO 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+		return
+	}
+
+	p = make([]byte, 100)
+	readBytesCnt = 0
+	actualStr = ""
+
+	for {
+
+		n,
+			err = txtBlankLinesOne.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: Test # 2\n"+
+			"Error Returned From txtBlankLinesOne.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Test # 2\n"+
+			"Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_Read_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_Read_000300()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	expectedTextStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	lenExpectedStr := len(expectedTextStr)
+
+	txtSpecAtom := textSpecificationAtom{}
+
+	var n int
+	p := make([]byte, 100)
+
+	n,
+		err = txtSpecAtom.readBytes(
+		nil,
+		p,
+		ePrefix.XCtx("plainTextLine == 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtSpecAtom.readBytes()"+
+			"because input parameter 'plainTextLine' == 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var formattedTxtStr string
+	blankLinesMolecule := textLineSpecBlankLinesMolecule{}
+
+	formattedTxtStr,
+		err =
+		blankLinesMolecule.getFormattedText(
+			txtBlankLinesOne,
+			ePrefix.XCtx("txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	p = make([]byte, 0)
+
+	txtBlankLinesOne.textLineReader =
+		strings.NewReader(formattedTxtStr)
+
+	n,
+		err = txtSpecAtom.readBytes(
+		txtBlankLinesOne.textLineReader,
+		p,
+		ePrefix.XCtx("p == zero length"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtSpecAtom.readBytes()"+
+			"because input parameter 'p' is a zero length byte array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	p = make([]byte, 100)
+
+	var readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = txtSpecAtom.readBytes(
+			txtBlankLinesOne.textLineReader,
+			p,
+			ePrefix.XCtx("txtBlankLinesOne is valid"))
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSpecAtom.readBytes(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtSpecAtom.readBytes(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+
 }
