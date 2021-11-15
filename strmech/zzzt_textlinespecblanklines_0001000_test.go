@@ -3030,6 +3030,25 @@ func TestTextLineSpecBlankLines_Read_000300(t *testing.T) {
 		return
 	}
 
+	txtBlankLinesTwo := TextLineSpecBlankLines{}
+
+	p = make([]byte, lenExpectedStr+1)
+
+	_,
+		err = txtBlankLinesTwo.Read(p)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesTwo.Read(p)\n"+
+			"because parameter 'txtBlankLinesTwo' is "+
+			"empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
 	return
 }
 
@@ -3279,6 +3298,10 @@ func TestTextLineSpecBlankLines_ReaderInitialize_000100(t *testing.T) {
 		return
 	}
 
+	txtBlankLinesTwo := TextLineSpecBlankLines{}
+
+	txtBlankLinesTwo.ReaderInitialize()
+
 	return
 }
 
@@ -3505,6 +3528,41 @@ func TestTextLineSpecBlankLines_SetNewLineChars_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			expectedNewLineChars,
 			actualNewLineChars)
+
+		return
+	}
+
+	var txtBlankLinesTwo TextLineSpecBlankLines
+
+	txtBlankLinesTwo,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		numOfBlankLines,
+		expectedNewLineChars,
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineChars = ""
+
+	err = txtBlankLinesTwo.SetNewLineChars(
+		actualNewLineChars,
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesTwo.SetNewLineChars()\n"+
+			"because input parameter 'actualNewLineChars' is "+
+			"empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
 
 		return
 	}
