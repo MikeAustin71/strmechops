@@ -3824,5 +3824,25 @@ func TestTextLineSpecBlankLines_SetNewLineRunes_000100(t *testing.T) {
 		return
 	}
 
+	txtBlankLinesTwo := TextLineSpecBlankLines{}
+
+	err = txtBlankLinesTwo.SetNewLineRunes(
+		nil,
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesTwo.SetNewLineRunes()\n"+
+			"because input parameter 'newLineRunes' is "+
+			"'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
 	return
 }
