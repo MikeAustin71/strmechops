@@ -3846,3 +3846,70 @@ func TestTextLineSpecBlankLines_SetNewLineRunes_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_SetNumberOfBlankLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrDefaultBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.SetNumberOfBlankLines(
+		-99,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Expected an error return from "+
+			"txtBlankLinesTwo.SetNumberOfBlankLines()\n"+
+			"because input parameter 'newOfBlankLines' is "+
+			"invalid (-99).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	err = txtBlankLinesOne.SetNumberOfBlankLines(
+		5,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesOne."+
+			"SetNumberOfBlankLines()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
