@@ -4651,3 +4651,201 @@ func TestTextLineSpecBlankLines_String_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_TextLineBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_TextLineBuilder_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineChars := "  \n"
+
+	newLineRunes := []rune(newLineChars)
+
+	expectedTextStr :=
+		strings.Repeat(newLineChars, numOfBlankLines)
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sb := strings.Builder{}
+
+	err = txtBlankLinesOne.TextBuilder(
+		&sb,
+		ePrefix.XCtx("txtBlankLinesOne->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Test #1 - txtBlankLinesOne.TextBuilder()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_TextLineBuilder_000200()",
+		"")
+
+	txtBlankLinesOne := TextLineSpecBlankLines{}
+
+	sb := strings.Builder{}
+
+	err := txtBlankLinesOne.TextBuilder(
+		&sb,
+		ePrefix.XCtx("empty txtBlankLinesOne->sb"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected error return from txtBlankLinesOne.TextBuilder()\n"+
+			"because 'txtBlankLinesOne' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+	numOfBlankLines := 3
+
+	newLineChars := "!!\n"
+
+	newLineRunes := []rune(newLineChars)
+
+	expectedTextStr :=
+		strings.Repeat(newLineChars, numOfBlankLines)
+
+	var txtBlankLinesTwo TextLineSpecBlankLines
+
+	txtBlankLinesTwo,
+		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesTwo.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesTwo.TextBuilder(
+		nil,
+		ePrefix.XCtx("txtBlankLinesTwo->nil sb"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error:\n"+
+			"Expected error return from txtBlankLinesTwo.TextBuilder()\n"+
+			"because strings.Builder pointer is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtBlankLinesThree := TextLineSpecBlankLines{}
+
+	err = txtBlankLinesThree.CopyIn(
+		&txtBlankLinesTwo,
+		ePrefix.XCtx(
+			"txtBlankLinesThree<-txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesThree.TextBuilder(
+		&sb,
+		ePrefix.XCtx("valid txtBlankLinesThree->sb"))
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"txtBlankLinesThree.TextBuilder()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
