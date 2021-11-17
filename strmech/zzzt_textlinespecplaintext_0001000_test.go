@@ -1609,6 +1609,87 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetRightMarginStr_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedRightMarginStr :=
+		string(expectedRightMarginRunes)
+
+	actualRightMarginStr :=
+		plainTextLine01.GetRightMarginStr()
+
+	if expectedRightMarginStr != actualRightMarginStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1 - plainTextLine01.GetRightMarginStr()\n"+
+			"Expected Right Margin String DOES NOT match\n"+
+			"Actual Right Margin String.\n"+
+			"Expected Right Margin String = '%v'\n"+
+			"Instead, Right Margin String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedRightMarginStr,
+			actualRightMarginStr)
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	expectedRightMarginStr = ""
+
+	actualRightMarginStr =
+		plainTextLine02.GetRightMarginStr()
+
+	if expectedRightMarginStr != actualRightMarginStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - plainTextLine02.GetRightMarginStr()\n"+
+			"Expected Right Margin String DOES NOT match\n"+
+			"Actual Right Margin String.\n"+
+			"Expected Right Margin String = '%v'\n"+
+			"Instead, Right Margin String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedRightMarginStr,
+			actualRightMarginStr)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

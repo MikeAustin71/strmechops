@@ -1758,6 +1758,8 @@
 --- PASS: TestTextLineSpecPlainText_GetLineTerminationChars_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_GetLineTerminationRunes_000100
 --- PASS: TestTextLineSpecPlainText_GetLineTerminationRunes_000100 (0.00s)
+=== RUN   TestTextLineSpecPlainText_GetRightMarginStr_000100
+--- PASS: TestTextLineSpecPlainText_GetRightMarginStr_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_Read_000100
 --- PASS: TestTextLineSpecPlainText_Read_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_Read_000200
@@ -1789,5 +1791,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 60.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.681s
+coverage: 60.3% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.644s
