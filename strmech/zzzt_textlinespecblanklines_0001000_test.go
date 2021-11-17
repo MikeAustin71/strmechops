@@ -1514,7 +1514,7 @@ func TestTextLineSpecBlankLines_EqualITextLine_000100(t *testing.T) {
 func TestTextLineSpecBlankLines_GetFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecBlankLines_CopyOut_000100()",
+		"TestTextLineSpecBlankLines_GetFormattedText_000100()",
 		"")
 
 	txtBlankLinesBase := TextLineSpecBlankLines{}
@@ -4496,6 +4496,155 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_String_000100()",
+		"")
+
+	txtBlankLinesBase := TextLineSpecBlankLines{}
+
+	outPutStr := txtBlankLinesBase.String()
+
+	if !strings.Contains(outPutStr, "Error") {
+
+		t.Errorf("%v\n"+
+			"Test #1 \n"+
+			"Expected an error return from "+
+			"txtBlankLinesBase.String()\n"+
+			"because 'txtBlankLinesBase' is "+
+			"empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtx("Missing Error Return"))
+
+		return
+	}
+
+	numOfBlankLines := 3
+	newLineChars := "\n"
+
+	var err error
+
+	txtBlankLinesBase,
+		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
+		numOfBlankLines,
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesBase.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesBase"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedFmtStr :=
+		strings.Repeat(newLineChars, 3)
+
+	outPutStr = txtBlankLinesBase.String()
+
+	if strings.Contains(outPutStr, "Error") {
+
+		t.Errorf("%v\n"+
+			"Test #2 \n"+
+			"Did NOT expect an error return from "+
+			"txtBlankLinesBase.String()\n"+
+			"because 'txtBlankLinesBase' is "+
+			"valid.\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(outPutStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Test #3\n"+
+			"txtBlankLinesBase.String()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtBlankLinesBaseAlpha := TextLineSpecBlankLines{}
+
+	numOfBlankLines = 4
+
+	newLineChars = "!!\n"
+
+	err = txtBlankLinesBaseAlpha.SetSpecBlankLines(
+		3,
+		newLineChars,
+		ePrefix.XCtx(
+			"txtBlankLinesBaseAlpha"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	outPutStr =
+		txtBlankLinesBaseAlpha.String()
+
+	expectedFmtStr =
+		strings.Repeat(newLineChars, 3)
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(outPutStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Test #4\n"+
+			"txtBlankLinesBaseAlpha.String()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
 
 		return
 	}

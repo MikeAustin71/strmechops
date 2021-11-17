@@ -1716,6 +1716,8 @@
 --- PASS: TestTextLineSpecBlankLines_SetSpecDefaultBlankLines_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100
 --- PASS: TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100 (0.00s)
+=== RUN   TestTextLineSpecBlankLines_String_000100
+--- PASS: TestTextLineSpecBlankLines_String_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_copyIn_000100
 --- PASS: TestTextLineSpecPlainText_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_CopyIn_000100
@@ -1761,5 +1763,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 59.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.659s
+coverage: 59.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.658s
