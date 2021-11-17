@@ -516,3 +516,88 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 
 	return
 }
+
+func TestTextLineSpecBlankLines_testValidityNewLinesChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_testValidityNewLinesChars_000100()",
+		"")
+
+	txtBlankLinesElectron := textLineSpecBlankLinesElectron{}
+
+	newLineRunes := []rune{'\n'}
+
+	err := txtBlankLinesElectron.testValidityNewLinesChars(
+		newLineRunes,
+		ePrefix.XCtx(
+			"newLineRunes := []rune{'\\n'}"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_getFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_getFormattedText_000100()",
+		"")
+
+	txtBlankLinesMolecule := textLineSpecBlankLinesMolecule{}
+
+	_,
+		err := txtBlankLinesMolecule.getFormattedText(
+		nil,
+		ePrefix.XCtx(
+			"txtBlankLines ='nil'"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from textLineSpecBlankLinesMolecule."+
+			"getFormattedText()\n"+
+			"because 'txtBlankLines' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_setTextLinesSpecBlankLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_setTextLinesSpecBlankLines_000100()",
+		"")
+
+	txtBlankLinesMolecule := textLineSpecBlankLinesMolecule{}
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'\n'}
+
+	err := txtBlankLinesMolecule.setTextLinesSpecBlankLines(
+		nil,
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLines ='nil'"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from textLineSpecBlankLinesMolecule."+
+			"setTextLinesSpecBlankLines()\n"+
+			"because 'txtBlankLines' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

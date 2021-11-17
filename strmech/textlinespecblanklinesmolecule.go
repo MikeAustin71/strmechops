@@ -560,6 +560,14 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBla
 		return err
 	}
 
+	if txtBlankLines == nil {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'txtBlankLines' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	txtBlankLinesElectron :=
 		textLineSpecBlankLinesElectron{}
 
