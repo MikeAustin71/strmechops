@@ -4818,10 +4818,25 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 			err.Error())
 		return
 	}
+	err = txtBlankLinesThree.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	err = txtBlankLinesThree.TextBuilder(
 		&sb,
 		ePrefix.XCtx("valid txtBlankLinesThree->sb"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	sMech := StrMech{}
 
@@ -4845,6 +4860,22 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	err = txtBlankLinesThree.TextBuilder(
+		&sb,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtBlankLinesThree."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
