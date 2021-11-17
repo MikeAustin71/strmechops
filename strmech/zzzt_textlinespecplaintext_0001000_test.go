@@ -1209,7 +1209,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"TestTextLineSpecPlainText_GetLeftMarginStr_000100()",
 		"")
 
 	expectedLeftMarginChars := []rune{' ', ' ', ' '}
@@ -1290,7 +1290,7 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"TestTextLineSpecPlainText_GetLeftMarginRunes_000100()",
 		"")
 
 	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
@@ -1460,6 +1460,148 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetLineTerminationRunes_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRune := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRune,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLineTerminationRunes :=
+		plainTextLine01.GetLineTerminationRunes()
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			expectedNewLineRunes,
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			actualLineTerminationRunes,
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Test #1 - plainTextLine01.GetLineTerminationRunes()\n"+
+			"Expected Line Termination String DOES NOT match\n"+
+			"Actual Line Termination String.\n"+
+			"Expected Line Termination String = '%v'\n"+
+			"Instead, Line Termination String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	areEqual :=
+		strMechPreon{}.ptr().equalRuneArrays(
+			expectedNewLineRunes,
+			actualLineTerminationRunes)
+
+	if !areEqual {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Test #2 - plainTextLine01.GetLineTerminationRunes()\n"+
+			"Rune Array Comparison\n"+
+			"Expected Line Termination String DOES NOT match\n"+
+			"Actual Line Termination String.\n"+
+			"Expected Line Termination String = '%v'\n"+
+			"Instead, Line Termination String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedNewLineRunes),
+			string(actualLineTerminationRunes))
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	actualLineTerminationRunes =
+		plainTextLine02.GetLineTerminationRunes()
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			actualLineTerminationRunes,
+			true)
+
+	expectedNewLineRunes = nil
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			expectedNewLineRunes,
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Test #3 - plainTextLine02.GetLineTerminationRunes()\n"+
+			"Expected Line Termination String DOES NOT match\n"+
+			"Actual Line Termination String.\n"+
+			"Expected Line Termination String = '%v'\n"+
+			"Instead, Line Termination String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	areEqual =
+		strMechPreon{}.ptr().equalRuneArrays(
+			expectedNewLineRunes,
+			actualLineTerminationRunes)
+
+	if !areEqual {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Test #4 - plainTextLine02.GetLineTerminationRunes()\n"+
+			"Rune Array Comparison\n"+
+			"Expected Line Termination String DOES NOT match\n"+
+			"Actual Line Termination String.\n"+
+			"Expected Line Termination String = '%v'\n"+
+			"Instead, Line Termination String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedNewLineRunes),
+			string(actualLineTerminationRunes))
 
 		return
 	}
