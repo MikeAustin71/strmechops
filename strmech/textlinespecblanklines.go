@@ -2096,7 +2096,8 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecBlankLines.SetNewLineChars()",
+		"TextLineSpecBlankLines."+
+			"SetNewLineChars()",
 		"")
 
 	if err != nil {
@@ -2423,7 +2424,8 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecBlankLines.SetNumberOfBlankLines()",
+		"TextLineSpecBlankLines."+
+			"SetNumberOfBlankLines()",
 		"")
 
 	if err != nil {
