@@ -1156,6 +1156,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 			true)
 
 	if printableExpectedStr != printableActualStr {
+
 		t.Errorf("%v - ERROR\n"+
 			"Expected Formatted Text String DOES NOT match\n"+
 			"Actual Formatted Text String.\n"+
@@ -1198,6 +1199,169 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 			"because 'plainTextLine02' is empty and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLeftMarginStr :=
+		string(expectedLeftMarginChars)
+
+	actualLeftMarginStr :=
+		plainTextLine01.GetLeftMarginStr()
+
+	if expectedLeftMarginStr != actualLeftMarginStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1 - plainTextLine01.GetLeftMarginStr()\n"+
+			"Expected Left Margin String DOES NOT match\n"+
+			"Actual Left Margin String.\n"+
+			"Expected Left Margin String = '%v'\n"+
+			"Instead, Left Margin String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLeftMarginStr,
+			actualLeftMarginStr)
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	expectedLeftMarginStr = ""
+
+	actualLeftMarginStr =
+		plainTextLine02.GetLeftMarginStr()
+
+	if expectedLeftMarginStr != actualLeftMarginStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - plainTextLine02.GetLeftMarginStr()\n"+
+			"Expected Left Margin String DOES NOT match\n"+
+			"Actual Left Margin String.\n"+
+			"Expected Left Margin String = '%v'\n"+
+			"Instead, Left Margin String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLeftMarginStr,
+			actualLeftMarginStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainTextRunes(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		[]rune(expectedTextString),
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLeftMarginRunes :=
+		plainTextLine01.GetLeftMarginRunes()
+
+	areEqual :=
+		strMechPreon{}.ptr().equalRuneArrays(
+			expectedLeftMarginRunes,
+			actualLeftMarginRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1 - plainTextLine01.GetLeftMarginRunes()\n"+
+			"Expected Left Margin Runes DO NOT match\n"+
+			"Actual Left Margin Runes.\n"+
+			"Expected Left Margin Runes = '%v'\n"+
+			"Instead, Left Margin Runes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedLeftMarginRunes),
+			string(actualLeftMarginRunes))
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	actualLeftMarginRunes =
+		plainTextLine02.GetLeftMarginRunes()
+
+	if actualLeftMarginRunes != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - plainTextLine02.GetLeftMarginRunes()\n"+
+			"Expected Left Margin Runes to equal 'nil'\n"+
+			"because 'plainTextLine02' is empty.\n"+
+			"HOWEVER, actualLeftMarginRunes != 'nil'!!\n"+
+			"Instead, Actual Left Margin Runes = '%v'\n"+
+			"Actual Left Margin Rune Array = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(actualLeftMarginRunes),
+			actualLeftMarginRunes)
 
 		return
 	}
