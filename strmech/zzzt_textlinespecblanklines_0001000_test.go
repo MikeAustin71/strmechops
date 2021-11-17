@@ -4483,16 +4483,18 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 
 	newLineChars = "   \n"
 
+	newLineRunes = []rune(newLineChars)
+
 	err =
-		txtBlankLinesSix.SetSpecBlankLines(
+		txtBlankLinesSix.SetSpecRunesBlankLines(
 			numOfBlankLines,
-			newLineChars,
+			newLineRunes,
 			TextFieldSpecDateTime{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtBlankLinesThree."+
-			"SetSpecBlankLines()\n"+
+			"SetSpecRunesBlankLines()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
