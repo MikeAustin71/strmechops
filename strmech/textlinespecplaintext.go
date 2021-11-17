@@ -883,6 +883,10 @@ func (plainTextLine *TextLineSpecPlainText) GetLineTerminationChars() string {
 
 	defer plainTextLine.lock.Unlock()
 
+	if len(plainTextLine.newLineChars) == 0 {
+		return ""
+	}
+
 	return string(plainTextLine.newLineChars)
 }
 
