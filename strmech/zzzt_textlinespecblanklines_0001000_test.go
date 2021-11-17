@@ -4849,3 +4849,65 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecBlankLines_TextLineSpecName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_TextLineSpecName_000100()",
+		"")
+
+	txtBlankLinesOne := TextLineSpecBlankLines{}
+
+	textLineSpecName :=
+		txtBlankLinesOne.TextLineSpecName()
+
+	expectedTextLineSpecName := "TextLineSpecBlankLines"
+
+	if textLineSpecName != expectedTextLineSpecName {
+
+		t.Errorf("%v\n"+
+			"txtBlankLinesOne.TextLineSpecName()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text Line Spec Name = '%v'\n"+
+			"Instead, Text Line Spec Name = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextLineSpecName,
+			textLineSpecName)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_TextTypeName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_TextTypeName_000100()",
+		"")
+
+	txtBlankLinesOne := TextLineSpecBlankLines{}
+
+	textTypeName :=
+		txtBlankLinesOne.TextTypeName()
+
+	expectedTextTypeName := "TextLineSpecBlankLines"
+
+	if textTypeName != expectedTextTypeName {
+
+		t.Errorf("%v\n"+
+			"txtBlankLinesOne.TextLineSpecName()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text Type Name = '%v'\n"+
+			"Instead, Text Type Name = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextTypeName,
+			textTypeName)
+
+		return
+	}
+
+	return
+}
