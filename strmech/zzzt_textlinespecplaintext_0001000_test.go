@@ -1690,6 +1690,88 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetRightMarginRunes_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainTextRunes(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		[]rune(expectedTextString),
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualRightMarginRunes :=
+		plainTextLine01.GetRightMarginRunes()
+
+	areEqual :=
+		strMechPreon{}.ptr().equalRuneArrays(
+			expectedRightMarginRunes,
+			actualRightMarginRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1 - plainTextLine01.GetRightMarginRunes()\n"+
+			"Expected Right Margin Runes DO NOT match\n"+
+			"Actual Right Margin Runes.\n"+
+			"Expected Right Margin Runes = '%v'\n"+
+			"Instead, Right Margin Runes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedRightMarginRunes),
+			string(actualRightMarginRunes))
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	actualRightMarginRunes =
+		plainTextLine02.GetRightMarginRunes()
+
+	if actualRightMarginRunes != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - plainTextLine02.GetRightMarginRunes()\n"+
+			"Expected Right Margin Runes to equal 'nil'\n"+
+			"because 'plainTextLine02' is empty.\n"+
+			"HOWEVER, actualRightMarginRunes != 'nil'!!\n"+
+			"Instead, Actual Right Margin Runes = '%v'\n"+
+			"Actual Right Margin Rune Array = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			string(actualRightMarginRunes),
+			actualRightMarginRunes)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
