@@ -1094,17 +1094,17 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 		"TestTextLineSpecPlainText_GetFormattedText_000100()",
 		"")
 
-	expectedLeftMarginChars := []rune{' ', ' ', ' '}
-	expectedRightMarginChars := []rune{' ', ' ', ' '}
-	expectedNewLineChars := []rune{'\n', '\n'}
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
 		err := TextLineSpecPlainText{}.NewPlainText(
-		expectedLeftMarginChars,
-		expectedRightMarginChars,
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
 		expectedTextString,
-		expectedNewLineChars,
+		expectedNewLineRunes,
 		false,
 		ePrefix.XCtx("plainTextLine01"))
 
@@ -1124,10 +1124,10 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 	}
 
 	expectedFmtTextStr :=
-		string(expectedLeftMarginChars) +
+		string(expectedLeftMarginRunes) +
 			expectedTextString +
-			string(expectedRightMarginChars) +
-			string(expectedNewLineChars)
+			string(expectedRightMarginRunes) +
+			string(expectedNewLineRunes)
 
 	sMech := StrMech{}
 
@@ -2179,6 +2179,77 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		return
 	}
 
+	plainTextLine02.newLineChars = expectedNewLineRunes
+
+	plainTextLine02.textString =
+		strings.Repeat("x", 1000001)
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"IsValidInstanceError()\n"+
+			"because plainTextLine02.textString has\n"+
+			"over 1-million characters (1,000,001).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02.textString = expectedTextString
+
+	plainTextLine02.leftMarginChars =
+		[]rune(strings.Repeat("x", 1000001))
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"IsValidInstanceError()\n"+
+			"because plainTextLine02.leftMarginChars has\n"+
+			"over 1-million characters (1,000,001)\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02.leftMarginChars =
+		make([]rune, 0)
+
+	plainTextLine02.leftMarginChars = expectedLeftMarginRunes
+
+	plainTextLine02.rightMarginChars =
+		[]rune(strings.Repeat("x", 1000001))
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"IsValidInstanceError()\n"+
+			"because plainTextLine02.rightMarginChars has\n"+
+			"over 1-million characters (1,000,001)\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02.rightMarginChars =
+		make([]rune, 0)
+
+	plainTextLine02.rightMarginChars = expectedRightMarginRunes
+
 	var plainTextLine03 TextLineSpecPlainText
 
 	plainTextLine03,
@@ -2203,6 +2274,251 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine04."+
 			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"")
+
+	leftMarginSpaces := 3
+	rightMarginSpaces := 3
+	textString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewDefault(
+		leftMarginSpaces,
+		rightMarginSpaces,
+		textString,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewDefault(
+		leftMarginSpaces,
+		rightMarginSpaces,
+		textString,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewDefault()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewDefault(
+		1000001,
+		rightMarginSpaces,
+		textString,
+		ePrefix.XCtx(
+			"Invalid Left Margin Spaces"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewDefault()\n"+
+			"because 'leftMarginSpaces' is '1,000,001'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewDefault(
+		3,
+		1000001,
+		textString,
+		ePrefix.XCtx(
+			"Invalid Right Margin Spaces"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewDefault()\n"+
+			"because 'rightMarginSpaces' is '1,000,001'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString = strings.Repeat(
+		"x", 1000001)
+	_,
+		err = TextLineSpecPlainText{}.NewDefault(
+		3,
+		3,
+		textString,
+		ePrefix.XCtx(
+			"Invalid Right Margin Spaces"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewDefault()\n"+
+			"because 'textString' has '1,000,001' characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString = ""
+
+	return
+}
+
+func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewPlainText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_NewPlainTextRunes_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+	expectedTextChars := []rune(expectedTextString)
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainTextRunes(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextChars,
+		expectedNewLineChars,
+		true,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	turnLineTerminatorOff :=
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == false {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"plainTextLine01.GetTurnLineTerminatorOff()\n"+
+			"Expected turnLineTerminatorOff == 'true'\n"+
+			"Instead, turnLineTerminatorOff == 'false'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewPlainTextRunes(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextChars,
+		expectedNewLineChars,
+		true,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewPlainTextRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())

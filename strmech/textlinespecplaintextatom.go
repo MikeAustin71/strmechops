@@ -215,10 +215,24 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 		return err
 	}
 
-	if len(textString) == 0 {
+	lenTextStr := len(textString)
+
+	if lenTextStr == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textString' is an empty or zero length string!\n",
 			ePrefix.String())
+
+		return err
+	}
+
+	if lenTextStr > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textString' is invalid!\n"+
+			"'textString' contains over 1-million (1,000,000) characters.\n"+
+			"Length of 'textString' = '%v'\n",
+			ePrefix.String(),
+			lenTextStr)
 
 		return err
 	}
@@ -245,6 +259,19 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			"Length of 'rightMarginChars' = '%v'\n",
 			ePrefix.String(),
 			lenRightMargin)
+
+		return err
+	}
+
+	lenNewLineChars := len(newLineChars)
+
+	if lenNewLineChars > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The 'newLineChars' rune array exceeds\n"+
+			"one-million (1,000,000) characters in length.\n"+
+			"Length of 'rightMarginChars' = '%v'\n",
+			ePrefix.String(),
+			lenNewLineChars)
 
 		return err
 	}
@@ -455,7 +482,9 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 		return isValid, err
 	}
 
-	if len(plainTextLine.textString) == 0 {
+	lenTextStr := len(plainTextLine.textString)
+
+	if lenTextStr == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: plainTextLine.textString is an empty string!\n"+
 			"No Text String have been configured for\n"+
@@ -465,7 +494,20 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 		return isValid, err
 	}
 
-	if len(plainTextLine.newLineChars) == 0 {
+	if lenTextStr > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: plainTextLine.textString is invalid!\n"+
+			"The Length Of 'plainTextLine.textString' is greater than "+
+			"1-million (1,000,000) characters\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	lenNewLineChars := len(plainTextLine.newLineChars)
+
+	if lenNewLineChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: plainTextLine.newLineChars is empty!\n"+
@@ -476,9 +518,33 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 		return isValid, err
 	}
 
+	if lenNewLineChars > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: plainTextLine.newLineChars is invalid!\n"+
+			"The number of new line characters is greater than\n"+
+			"1-million (1,000,000) characters!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
 	sMechPreon := strMechPreon{}
 
-	if len(plainTextLine.leftMarginChars) > 0 {
+	lenLeftMarginChars := len(plainTextLine.leftMarginChars)
+
+	if lenLeftMarginChars > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: plainTextLine.leftMarginChars is invalid!\n"+
+			"The number of left margin characters is greater than\n"+
+			"1-million (1,000,000) characters!\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
+	if lenLeftMarginChars > 0 {
 		_,
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
@@ -490,6 +556,19 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 			return isValid, err
 		}
 
+	}
+
+	lenRightMarginChars := len(plainTextLine.rightMarginChars)
+
+	if lenRightMarginChars > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: plainTextLine.rightMarginChars is invalid!\n"+
+			"The number of right margin characters is greater than\n"+
+			"1-million (1,000,000) characters!\n",
+			ePrefix.String())
+
+		return isValid, err
 	}
 
 	if len(plainTextLine.rightMarginChars) > 0 {

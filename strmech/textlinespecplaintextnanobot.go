@@ -928,6 +928,15 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 
 	lenTextRunes := len(textRunes)
 
+	if lenTextRunes == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textRunes' is empty and\n"+
+			"contains zero characters.\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	if lenTextRunes > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textRunes' string exceeds\n"+
@@ -939,18 +948,48 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 		return err
 	}
 
-	if lenTextRunes == 0 {
+	lenLeftMarginChars := len(leftMarginChars)
+
+	if lenLeftMarginChars > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textRunes' is empty and\n"+
-			"contains zero characters.\n",
-			ePrefix.String())
+			"Error: Input parameter 'leftMarginChars' rune array exceeds\n"+
+			"one-million (1,000,000) characters in length.\n"+
+			"Length of 'leftMarginChars' = '%v'\n",
+			ePrefix.String(),
+			lenLeftMarginChars)
+
+		return err
+	}
+
+	lenRightMarginChars := len(rightMarginChars)
+
+	if lenRightMarginChars > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'rightMarginChars' rune array exceeds\n"+
+			"one-million (1,000,000) characters in length.\n"+
+			"Length of 'rightMarginChars' = '%v'\n",
+			ePrefix.String(),
+			lenRightMarginChars)
+
+		return err
+	}
+
+	lenNewMarginChars := len(newLineChars)
+
+	if lenNewMarginChars > 1000000 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'newLineChars' rune array exceeds\n"+
+			"one-million (1,000,000) characters in length.\n"+
+			"Length of 'newLineChars' = '%v'\n",
+			ePrefix.String(),
+			lenNewMarginChars)
 
 		return err
 	}
 
 	sMechPreon := strMechPreon{}
 
-	if len(leftMarginChars) > 0 {
+	if lenLeftMarginChars > 0 {
 		_,
 			err = sMechPreon.
 			testValidityOfRuneCharArray(
@@ -964,13 +1003,27 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 
 	}
 
-	if len(rightMarginChars) > 0 {
+	if lenRightMarginChars > 0 {
 		_,
 			err = sMechPreon.
 			testValidityOfRuneCharArray(
 				rightMarginChars,
 				ePrefix.XCtx(
 					"rightMarginChars invalid!"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if lenNewMarginChars > 0 {
+		_,
+			err = sMechPreon.
+			testValidityOfRuneCharArray(
+				newLineChars,
+				ePrefix.XCtx(
+					"newLineChars invalid!"))
 
 		if err != nil {
 			return err

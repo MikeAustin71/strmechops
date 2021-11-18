@@ -1767,7 +1767,13 @@
 === RUN   TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100
 --- PASS: TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_IsValidInstanceError_000100
---- PASS: TestTextLineSpecPlainText_IsValidInstanceError_000100 (0.00s)
+--- PASS: TestTextLineSpecPlainText_IsValidInstanceError_000100 (0.01s)
+=== RUN   TestTextLineSpecPlainText_NewDefault_000100
+--- PASS: TestTextLineSpecPlainText_NewDefault_000100 (0.00s)
+=== RUN   TestTextLineSpecPlainText_NewPlainText_000100
+--- PASS: TestTextLineSpecPlainText_NewPlainText_000100 (0.00s)
+=== RUN   TestTextLineSpecPlainText_NewPlainTextRunes_000100
+--- PASS: TestTextLineSpecPlainText_NewPlainTextRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_Read_000100
 --- PASS: TestTextLineSpecPlainText_Read_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_Read_000200
@@ -1800,4 +1806,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 60.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.747s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.669s
