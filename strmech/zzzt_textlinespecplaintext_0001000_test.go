@@ -1772,6 +1772,84 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"\nTestTextLineSpecPlainText_GetRightMarginStr_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTextStr :=
+		plainTextLine01.GetTextString()
+
+	if expectedTextString != actualTextStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1 - plainTextLine01.GetTextString()\n"+
+			"Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextString,
+			actualTextStr)
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	expectedTextString = ""
+
+	actualTextStr =
+		plainTextLine02.GetTextString()
+
+	if expectedTextString != actualTextStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - plainTextLine02.GetTextString()\n"+
+			"Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextString,
+			actualTextStr)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
