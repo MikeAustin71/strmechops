@@ -1372,7 +1372,7 @@ func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"TestTextLineSpecPlainText_GetLineTerminationChars_000100()",
 		"")
 
 	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
@@ -1775,7 +1775,7 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"\nTestTextLineSpecPlainText_GetRightMarginStr_000100()",
+		"\nTestTextLineSpecPlainText_GetTextString_000100()",
 		"")
 
 	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
@@ -1848,6 +1848,242 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"\nTestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTurnLineTerminatorOff :=
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if actualTurnLineTerminatorOff == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"TurnLineTerminatorOff value is INVALID!\n"+
+			"Expected TurnLineTerminatorOff = 'true'\n"+
+			"Instead, TurnLineTerminatorOff = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualTurnLineTerminatorOff)
+
+		return
+	}
+
+	expectedFmtTextStr :=
+		string(expectedLeftMarginChars) +
+			expectedTextString +
+			string(expectedRightMarginChars) +
+			string(expectedNewLineChars)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtTextStr),
+			true)
+
+	var actualFmtTextStr string
+
+	actualFmtTextStr,
+		err = plainTextLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"Test#1 plainTextLine01->actualFmtTextStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtTextStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	expectedFmtTextStr =
+		string(expectedLeftMarginChars) +
+			expectedTextString +
+			string(expectedRightMarginChars)
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtTextStr),
+			true)
+
+	plainTextLine01.TurnAutoLineTerminationOff()
+
+	actualFmtTextStr,
+		err = plainTextLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"Test#2 plainTextLine01->actualFmtTextStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtTextStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	actualTurnLineTerminatorOff =
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if actualTurnLineTerminatorOff == false {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"TurnLineTerminatorOff value is INVALID!\n"+
+			"Expected TurnLineTerminatorOff = 'false'\n"+
+			"Instead, TurnLineTerminatorOff = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualTurnLineTerminatorOff)
+
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOn()
+
+	actualTurnLineTerminatorOff =
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if actualTurnLineTerminatorOff == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"TurnLineTerminatorOff value is INVALID!\n"+
+			"Expected TurnLineTerminatorOff = 'true'\n"+
+			"Instead, TurnLineTerminatorOff = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualTurnLineTerminatorOff)
+
+		return
+	}
+
+	expectedFmtTextStr =
+		string(expectedLeftMarginChars) +
+			expectedTextString +
+			string(expectedRightMarginChars) +
+			string(expectedNewLineChars)
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtTextStr),
+			true)
+
+	actualFmtTextStr,
+		err = plainTextLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"Test#2 plainTextLine01->actualFmtTextStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtTextStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	actualTurnLineTerminatorOff =
+		plainTextLine02.GetTurnLineTerminatorOff()
+
+	if actualTurnLineTerminatorOff == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #4 - plainTextLine02.GetTurnLineTerminatorOff()\n"+
+			"TurnLineTerminatorOff value is INVALID!\n"+
+			"Expected TurnLineTerminatorOff = 'false'\n"+
+			"Instead, TurnLineTerminatorOff = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualTurnLineTerminatorOff)
+
+		return
+	}
+
 }
 
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
