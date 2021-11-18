@@ -2529,6 +2529,65 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_NewPlainTextStrings_000100()",
+		"")
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewPlainTextStrings()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
