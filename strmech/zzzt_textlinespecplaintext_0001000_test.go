@@ -2588,6 +2588,96 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_NewPtrDefault_000100()",
+		"")
+
+	leftMargin := 3
+	rightMargin := 3
+	textString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n'}
+
+	expectedTextString := "How now brown cow!"
+	expectedTextChars := []rune(expectedTextString)
+
+	var plainTextLine02 TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPlainTextRunes(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextChars,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !plainTextLine02.Equal(
+		plainTextLine01) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected plainTextLine01 == plainTextLine02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = TextLineSpecPlainText{}.NewPtrDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecPlainText{}."+
+			"NewPtrDefault()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
