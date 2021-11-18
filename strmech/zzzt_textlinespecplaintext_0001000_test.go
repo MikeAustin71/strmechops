@@ -1175,6 +1175,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 			TextFieldSpecDateTime{})
 
 	if err == nil {
+
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine01."+
 			"GetFormattedText()\n"+
@@ -2084,6 +2085,132 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 		return
 	}
 
+}
+
+func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_IsValidInstanceError_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err :=
+		plainTextLine01.IsValidInstanceError(
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"IsValidInstanceError()\n"+
+			"because 'plainTextLine01' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	var plainTextLine02 TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine02.textString = ""
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"IsValidInstanceError()\n"+
+			"because plainTextLine02.textString = \"\".\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02.textString = expectedTextString
+
+	plainTextLine02.newLineChars = nil
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"IsValidInstanceError()\n"+
+			"because plainTextLine02.newLineChars = nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var plainTextLine03 TextLineSpecPlainText
+
+	plainTextLine03,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine03.IsValidInstanceError(
+		TextFieldSpecDateTime{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine04."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
 
 func TestTextLineSpecPlainText_Read_000100(t *testing.T) {

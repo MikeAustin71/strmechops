@@ -467,17 +467,13 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 
 	if len(plainTextLine.newLineChars) == 0 {
 
-		err =
-			textSpecificationMolecule{}.ptr().
-				setDefaultNewLineChars(
-					&plainTextLine.newLineChars,
-					ePrefix.XCtx(
-						"plainTextLine.newLineChars"))
+		err = fmt.Errorf("%v\n"+
+			"Error: plainTextLine.newLineChars is empty!\n"+
+			"New Line Characters have NOT been configured for\n"+
+			"this Plain Text Line Specification!\n",
+			ePrefix.String())
 
-		if err != nil {
-			return isValid, err
-		}
-
+		return isValid, err
 	}
 
 	sMechPreon := strMechPreon{}
