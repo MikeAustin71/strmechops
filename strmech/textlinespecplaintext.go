@@ -3232,6 +3232,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginChars(
 	lenLeftMargin := len(leftMarginChars)
 
 	if lenLeftMargin > 1000000 {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: The 'leftMarginsChars' string exceeds\n"+
 			"one-million (1,000,000) characters in length.\n"+

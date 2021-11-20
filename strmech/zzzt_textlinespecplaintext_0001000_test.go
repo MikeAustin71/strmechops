@@ -3486,6 +3486,67 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_Read_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_Read_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 2
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+	newLineTerminator := "\n"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainTextStrings(
+		leftMargin,
+		rightMargin,
+		textString,
+		newLineTerminator,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine01.textString = ""
+	plainTextLine01.rightMarginChars = nil
+	plainTextLine01.leftMarginChars = nil
+	plainTextLine01.newLineChars = nil
+
+	p := make([]byte, 15)
+
+	_,
+		err = plainTextLine01.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01.Read(p)\n"+
+			"because 'plainTextLine01' contains invalid data.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -3733,6 +3794,239 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 
 		return
 	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	plainTextLine02.ReaderInitialize()
+
+	return
+}
+
+func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_GetFormattedText_000100()",
+		"")
+
+	expectedLeftMarginStr := "   "
+	expectedRightMarginStr := "   "
+	expectedNewLineStr := "\n\n"
+	expectedTextString := "How now brown cow!"
+
+	plainTextLineZero := TextLineSpecPlainText{}
+
+	err :=
+		plainTextLineZero.SetLeftMarginChars(
+			expectedLeftMarginStr,
+			ePrefix.XCtx(
+				"plainTextLineZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLeftMarginStr :=
+		plainTextLineZero.GetLeftMarginStr()
+
+	if expectedLeftMarginStr !=
+		actualLeftMarginStr {
+
+		t.Errorf("%v Test #1\n"+
+			"plainTextLineZero.GetLeftMarginStr()\n"+
+			"Error: Expected 'expectedLeftMarginStr' == 'actualLeftMarginStr'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLeftMarginStr,
+			actualLeftMarginStr)
+
+		return
+	}
+
+	var plainTextLine01 TextLineSpecPlainText
+
+	plainTextLine01,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginStr,
+		expectedRightMarginStr,
+		expectedTextString,
+		expectedNewLineStr,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLeftMarginStr = "!!!!"
+
+	err =
+		plainTextLine01.SetLeftMarginChars(
+			expectedLeftMarginStr,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLeftMarginStr =
+		plainTextLine01.GetLeftMarginStr()
+
+	if expectedLeftMarginStr !=
+		actualLeftMarginStr {
+
+		t.Errorf("%v Test #2\n"+
+			"plainTextLine01.GetLeftMarginStr()\n"+
+			"Error: Expected 'expectedLeftMarginStr' == 'actualLeftMarginStr'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLeftMarginStr,
+			actualLeftMarginStr)
+
+		return
+	}
+
+	err =
+		plainTextLine01.SetLeftMarginChars(
+			expectedLeftMarginStr,
+			StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetLeftMarginChars()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var plainTextLine02 TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginStr,
+		expectedRightMarginStr,
+		expectedTextString,
+		expectedNewLineStr,
+		false,
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLeftMarginStr = ""
+
+	err =
+		plainTextLine02.SetLeftMarginChars(
+			expectedLeftMarginStr,
+			ePrefix.XCtx(
+				"plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualLeftMarginStr =
+		plainTextLine02.GetLeftMarginStr()
+
+	if expectedLeftMarginStr !=
+		actualLeftMarginStr {
+
+		t.Errorf("%v Test #3\n"+
+			"plainTextLine02.GetLeftMarginStr()\n"+
+			"Error: Expected 'expectedLeftMarginStr' == 'actualLeftMarginStr'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLeftMarginStr,
+			actualLeftMarginStr)
+
+		return
+	}
+
+	expectedLeftMarginStr = "   "
+
+	var plainTextLine03 TextLineSpecPlainText
+
+	plainTextLine03,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginStr,
+		expectedRightMarginStr,
+		expectedTextString,
+		expectedNewLineStr,
+		false,
+		ePrefix.XCtx("plainTextLine03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine03.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLeftMarginStr =
+		strings.Repeat("X", 1000001)
+
+	err =
+		plainTextLine03.SetLeftMarginChars(
+			expectedLeftMarginStr,
+			ePrefix.XCtx(
+				"plainTextLine03"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine03."+
+			"SetLeftMarginChars()\n"+
+			"because 'expectedLeftMarginStr'has 1,000,001 characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+	}
+
+	expectedLeftMarginStr = ""
 
 	return
 }
