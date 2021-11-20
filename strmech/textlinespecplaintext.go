@@ -3484,6 +3484,13 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginRunes(
 //       If this parameter is submitted as a zero length or empty
 //       string, an error will be returned.
 //
+//       To eliminate or cancel the Line Termination Sequence,
+//       reference method:
+//          TextLineSpecPlainText.TurnAutoLineTerminationOff()
+//
+//       If this string contains more than 1-million (1,000,000)
+//       characters, an error will be returned.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -3564,14 +3571,17 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"SetNewLineChars()",
+			"SetLineTerminationChars()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if len(lineTerminationChars) == 0 {
+	lenLineTerminationChars :=
+		len(lineTerminationChars)
+
+	if lenLineTerminationChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'lineTerminationChars'\n"+
@@ -3581,11 +3591,45 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 		return err
 	}
 
+	if lenLineTerminationChars > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineTerminationChars'\n"+
+			"is invalid!\n"+
+			"'lineTerminationChars' contains more than 1-million "+
+			"(1,000,000) characters\n"+
+			"Length of 'lineTerminationChars' = %v\n",
+			ePrefix.String(),
+			lenLineTerminationChars)
+
+		return err
+	}
+
 	plainTextLine.newLineChars = nil
 
-	plainTextLine.newLineChars = []rune(lineTerminationChars)
+	sMechPreon := strMechPreon{}
 
-	return err
+	lineTerminationRunes :=
+		[]rune(lineTerminationChars)
+
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		lineTerminationRunes,
+		ePrefix.XCtx(
+			"lineTerminationRunes invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	return sMechPreon.
+		copyRuneArrays(
+			&plainTextLine.newLineChars,
+			&lineTerminationRunes,
+			true,
+			ePrefix.XCtx(
+				"lineTerminationRunes->"+
+					"plainTextLine.newLineChars"))
 }
 
 // SetLineTerminationRunes - By default, the line termination
