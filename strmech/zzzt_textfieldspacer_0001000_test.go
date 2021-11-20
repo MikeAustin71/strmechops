@@ -192,7 +192,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 	err =
 		txtFieldSpacerTwo.CopyIn(
 			txtFieldSpacerOne,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -406,7 +406,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 	_,
 		err =
 		txtFieldSpacerOne.CopyOut(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -510,7 +510,7 @@ func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
 	_,
 		err =
 		txtFieldSpacerOne.CopyOutITextField(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -627,7 +627,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtFieldSpacerOne.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1217,7 +1217,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 	_,
 		err =
 		txtFieldSpacerOne.GetFormattedText(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1308,7 +1308,7 @@ func TestTextFieldSpecSpacer_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = txtFieldSpacerOne.IsValidInstanceError(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1393,7 +1393,7 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 	_,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1435,7 +1435,7 @@ func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
 	_,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1942,7 +1942,7 @@ func TestTextFieldSpecSpacer_SetFieldLen_000100(t *testing.T) {
 
 	err = txtFieldSpacerOne.SetFieldLen(
 		expectedFieldLen,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2132,7 +2132,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldSpacerOne.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2201,7 +2201,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldSpacerThree.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+

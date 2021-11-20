@@ -222,7 +222,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 	err =
 		plainTextLine06.CopyIn(
 			&plainTextLine05,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -472,7 +472,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	_,
 		err =
 		plainTextLine04.CopyOut(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -628,7 +628,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 	_,
 		err =
 		plainTextLine04.CopyOutITextLine(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -769,7 +769,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = plainTextLine04.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1172,7 +1172,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 	_,
 		err =
 		plainTextLine01.GetFormattedText(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 
@@ -2268,7 +2268,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = plainTextLine03.IsValidInstanceError(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2322,7 +2322,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		leftMarginSpaces,
 		rightMarginSpaces,
 		textString,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -2445,7 +2445,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -2512,7 +2512,7 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 		expectedTextChars,
 		expectedNewLineChars,
 		true,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -2572,7 +2572,7 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2661,7 +2661,7 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -2721,7 +2721,7 @@ func TestTextLineSpecPlainText_NewPtrPlainText_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -2780,7 +2780,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextRunes_000100(t *testing.T) {
 		[]rune(expectedTextString),
 		expectedNewLineRunes,
 		false,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 

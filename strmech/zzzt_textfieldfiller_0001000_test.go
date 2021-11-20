@@ -112,7 +112,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 
 	err = fillerTxtFieldTwo.CopyIn(
 		fillerTxtFieldOne,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -873,7 +873,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = fillerTxtFieldOne.CopyOut(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1293,7 +1293,7 @@ func TestTextFieldSpecFiller_CopyOutITextField_000100(t *testing.T) {
 
 	_,
 		err = fillerTxtFieldThree.CopyOutITextField(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1512,7 +1512,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = fillerTxtFieldThree.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2097,7 +2097,7 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 
 	_,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2277,7 +2277,7 @@ func TestTextFieldSpecFiller_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2576,7 +2576,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3398,7 +3398,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4222,7 +4222,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -5295,7 +5295,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -6162,7 +6162,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -6454,7 +6454,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -8005,7 +8005,7 @@ func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100(t *testing.T) {
 
 	err = fillerTxtFieldOne.SetFillerCharsRepeatCount(
 		newFillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -8138,7 +8138,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldOne.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -9049,7 +9049,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	err := fillerTxtFieldOne.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -10275,7 +10275,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -10537,7 +10537,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	err =
 		fillerTxtFieldOne.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -10606,7 +10606,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	err =
 		fillerTxtFieldThree.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+

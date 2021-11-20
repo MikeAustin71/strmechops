@@ -70,7 +70,7 @@ func TestTextFieldSpecDateTimeEdge_CopyIn_000100(t *testing.T) {
 
 	err = targetTxtFieldDateTime.CopyIn(
 		&incomingTxtFieldDateTime,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -147,7 +147,7 @@ func TestTextFieldSpecDateTimeEdge_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = txtFieldDateTime.CopyOut(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -224,7 +224,7 @@ func TestTextFieldSpecDateTimeEdge_CopyOutITextField_000100(t *testing.T) {
 
 	_,
 		err = txtFieldDateTime.CopyOutITextField(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -302,7 +302,7 @@ func TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtFieldDateTime.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+

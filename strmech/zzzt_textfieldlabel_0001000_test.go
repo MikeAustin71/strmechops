@@ -102,7 +102,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 
 	err = txtFieldLabelThree.CopyIn(
 		&txtFieldLabelTwo,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -332,7 +332,7 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = txtFieldLabelTwo.CopyOut(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -613,7 +613,7 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 
 	_,
 		err = txtFieldLabelThree.CopyOutITextField(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -794,7 +794,7 @@ func TestTextFieldSpecLabel_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtFieldLabelOne.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1324,7 +1324,7 @@ func TestTextFieldSpecLabel_GetFormattedText_000100(t *testing.T) {
 
 	formattedText,
 		err = txtFieldLabelOne.GetFormattedText(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1597,7 +1597,7 @@ func TestTextFieldSpecLabel_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = txtFieldLabelOne.IsValidInstanceError(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1652,7 +1652,7 @@ func TestTextFieldSpecLabel_NewPtrTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1711,7 +1711,7 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
 		[]rune(label),
 		fieldLen,
 		txtJustify,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2024,7 +2024,7 @@ func TestTextFieldSpecLabel_NewTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2258,7 +2258,7 @@ func TestTextFieldSpecLabel_NewTextTextLabelRunes_000100(t *testing.T) {
 		labelTextRunes,
 		fieldLen,
 		TxtJustify.Right(),
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2900,7 +2900,7 @@ func TestTextFieldSpecLabel_SetFieldLength_000100(t *testing.T) {
 	err := txtFieldLabelZero.
 		SetFieldLength(
 			newFieldLen,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3063,7 +3063,7 @@ func TestTextFieldSpecLabel_SetText_000100(t *testing.T) {
 	err =
 		txtFieldLabelZero.SetText(
 			expectedLabel,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3217,7 +3217,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 
 	err = txtFieldLabelZero.SetTextJustification(
 		TxtJustify.Left(),
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3408,7 +3408,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3792,7 +3792,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 		[]rune(label),
 		fieldLen,
 		txtJustify,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4512,7 +4512,7 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 	err =
 		txtFieldLabelZero.SetTextRunes(
 			[]rune(expectedLabel),
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4775,7 +4775,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelOne.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4852,7 +4852,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelThree.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+

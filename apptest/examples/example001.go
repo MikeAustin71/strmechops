@@ -17,6 +17,45 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) TextLineSpecPlainText01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecBlkLines01()",
+		"")
+
+	leftMarginChars := "  "
+	rightMarginChars := "  "
+	textString := "The cow jumped over the moon!"
+	newLineChars := "\n"
+	outStr := ""
+
+	_,
+		err := strmech.TextLineSpecPlainText{}.NewPtrPlainTextStrings(
+		leftMarginChars,
+		rightMarginChars,
+		textString,
+		newLineChars,
+		false,
+		strmech.StrMech{})
+
+	if err != nil {
+		outStr = fmt.Sprintf("%v\n"+
+			"Error returned from: NewPtrPlainTextStrings()\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+	} else {
+		outStr = fmt.Sprintf("%v\n"+
+			"TEST FAILED!! No Error was returned from\n"+
+			"NewPtrPlainTextStrings()\n",
+			ePrefix.String())
+	}
+
+	fmt.Printf(outStr)
+
+	return
+}
+
 func (mt MainTest) TextLineSpecBlkLines01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

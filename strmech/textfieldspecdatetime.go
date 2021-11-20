@@ -3634,7 +3634,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) SetTextJustification(
 //
 //  Result = "  2021-10-10 20:13:34.000000000 -0700 PDT  "
 //
-func (txtDateTimeField *TextFieldSpecDateTime) String() string {
+func (txtDateTimeField TextFieldSpecDateTime) String() string {
 
 	if txtDateTimeField.lock == nil {
 		txtDateTimeField.lock = new(sync.Mutex)
@@ -3651,7 +3651,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) String() string {
 	result,
 		err := textFieldSpecDateTimeNanobot{}.ptr().
 		getFormattedText(
-			txtDateTimeField,
+			&txtDateTimeField,
 			ePrefix.XCtx(
 				"txtDateTimeField"))
 

@@ -74,7 +74,7 @@ func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 	err =
 		blankLinesCharlie.CopyIn(
 			&blankLinesAlpha,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -303,7 +303,7 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = txtBlankLinesBase2.CopyOut(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -318,7 +318,7 @@ func TestTextLineSpecBlankLines_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = txtBlankLinesBase3.CopyOut(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -577,7 +577,7 @@ func TestTextLineSpecBlankLines_CopyOutITextLine_000100(t *testing.T) {
 	_,
 		err =
 		txtBlankLinesCharlie.CopyOutITextLine(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -700,7 +700,7 @@ func TestTextLineSpecBlankLines_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtBlankLinesBase2.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -715,7 +715,7 @@ func TestTextLineSpecBlankLines_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtBlankLinesBase3.CopyOutPtr(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1178,7 +1178,7 @@ func TestTextLineSpecBlankLines_GetFormattedText_000100(t *testing.T) {
 
 	_,
 		err = txtBlankLinesBaseAlpha.GetFormattedText(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -1569,7 +1569,7 @@ func TestTextLineSpecBlankLines_IsValidInstanceError_000100(t *testing.T) {
 
 	err =
 		txtBlankLinesOne.IsValidInstanceError(
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 
@@ -1658,7 +1658,7 @@ func TestTextLineSpecBlankLines_NewBlankLines_000100(t *testing.T) {
 		err = TextLineSpecBlankLines{}.NewBlankLines(
 		expectedNumOfBlankLines,
 		newLineChars,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -1702,7 +1702,7 @@ func TestTextLineSpecBlankLines_NewDefaultBlankLines_000100(t *testing.T) {
 	_,
 		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -1750,7 +1750,7 @@ func TestTextLineSpecBlankLines_NewPtrBlankLines_000100(t *testing.T) {
 		err = TextLineSpecBlankLines{}.NewPtrBlankLines(
 		numOfBlankLines,
 		newLineChars,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -1845,7 +1845,7 @@ func TestTextLineSpecBlankLines_NewPtrDefaultBlankLines_000100(t *testing.T) {
 	_,
 		err = TextLineSpecBlankLines{}.NewPtrDefaultBlankLines(
 		numOfBlankLines,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -1943,7 +1943,7 @@ func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
 		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
 		numOfBlankLines,
 		newLineRunes,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -2042,7 +2042,7 @@ func TestTextLineSpecBlankLines_NewRunesBlankLines_000100(t *testing.T) {
 		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
 		numOfBlankLines,
 		newLineRunes,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -3061,7 +3061,7 @@ func TestTextLineSpecBlankLines_SetNewLineChars_000100(t *testing.T) {
 	err =
 		txtBlankLinesOne.SetNewLineChars(
 			"xxx\n",
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3329,7 +3329,7 @@ func TestTextLineSpecBlankLines_SetNewLineRunes_000100(t *testing.T) {
 	err =
 		txtBlankLinesOne.SetNewLineRunes(
 			[]rune("xxx\n"),
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3458,7 +3458,7 @@ func TestTextLineSpecBlankLines_SetNumberOfBlankLines_000100(t *testing.T) {
 
 	err = txtBlankLinesOne.SetNumberOfBlankLines(
 		5,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 
@@ -3665,7 +3665,7 @@ func TestTextLineSpecBlankLines_SetSpecBlankLines_000100(t *testing.T) {
 		txtBlankLinesFive.SetSpecBlankLines(
 			numOfBlankLines,
 			newLineChars,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3838,7 +3838,7 @@ func TestTextLineSpecBlankLines_SetSpecDefaultBlankLines_000100(t *testing.T) {
 	err =
 		txtBlankLinesFive.SetSpecDefaultBlankLines(
 			numOfBlankLines,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4050,7 +4050,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 		txtBlankLinesSix.SetSpecRunesBlankLines(
 			numOfBlankLines,
 			newLineRunes,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4427,7 +4427,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 
 	err = txtBlankLinesThree.TextBuilder(
 		&sb,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 

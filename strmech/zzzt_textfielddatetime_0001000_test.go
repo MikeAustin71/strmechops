@@ -1860,7 +1860,7 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 
 	_,
 		err = txtFieldDateTimeTwo.GetFormattedText(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2142,7 +2142,7 @@ func TestTextFieldSpecDateTime_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = txtFieldDateTimeOne.IsValidInstanceError(
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2272,7 +2272,7 @@ func TestTextFieldSpecDateTime_NewDateTimeField_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -2386,7 +2386,7 @@ func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		TextFieldSpecDateTime{})
+		StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3047,7 +3047,7 @@ func TestTextFieldSpecDateTime_SetDateTimeFieldSpec_000100(t *testing.T) {
 			fieldLen,
 			dateTimeFormat,
 			textJustification,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3424,7 +3424,7 @@ func TestTextFieldSpecDateTime_SetDateTimeFormat_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetDateTimeFormat(
 			dateTimeFormat,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3581,7 +3581,7 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetDateTimeValue(
 			dateTimeTwo,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3726,7 +3726,7 @@ func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetFieldLength(
 			expectedFieldLen,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -3876,7 +3876,7 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeThree.SetTextJustification(
 			expectedTxtJustification,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
@@ -4122,7 +4122,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.TextBuilder(
 			&sb,
-			TextFieldSpecDateTime{})
+			StrMech{})
 
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
