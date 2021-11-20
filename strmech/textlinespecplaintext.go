@@ -3387,7 +3387,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"SetLeftMarginChars()",
+			"SetLeftMarginRunes()",
 		"")
 
 	if err != nil {
@@ -3431,7 +3431,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginRunes(
 			&leftMarginRunes,
 			true,
 			ePrefix.XCtx(
-				"leftMarginRunes ->"+
+				"leftMarginRunes->"+
 					"plainTextLine.leftMarginChars"))
 
 	return err
