@@ -3674,6 +3674,13 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 //       rune array, or if the rune array contains invalid zero
 //       rune values, an error will be returned.
 //
+//       To eliminate or cancel the Line Termination Sequence,
+//       reference method:
+//          TextLineSpecPlainText.TurnAutoLineTerminationOff()
+//
+//       If this rune array contains more than 1-million
+//       (1,000,000) characters, an error will be returned.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -3736,7 +3743,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 //       the beginning of the error message.
 //
 func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
-	lineTerminationChars []rune,
+	lineTerminationRunes []rune,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -3761,14 +3768,43 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 		return err
 	}
 
+	lenLineTerminationRunes :=
+		len(lineTerminationRunes)
+
+	if lenLineTerminationRunes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lenLineTerminationRunes'\n"+
+			"is invalid!\n"+
+			"'lenLineTerminationRunes' is a zero length rune array.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if lenLineTerminationRunes > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineTerminationRunes'\n"+
+			"is invalid!\n"+
+			"'lineTerminationRunes' contains more than 1-million "+
+			"(1,000,000) characters\n"+
+			"Length of 'lineTerminationRunes' = %v\n",
+			ePrefix.String(),
+			lenLineTerminationRunes)
+
+		return err
+
+	}
+
 	sMechPreon := strMechPreon{}
 
 	_,
 		err =
 		sMechPreon.testValidityOfRuneCharArray(
-			lineTerminationChars,
+			lineTerminationRunes,
 			ePrefix.XCtx(
-				"lineTerminationChars Error"))
+				"lineTerminationRunes Error"))
 
 	if err != nil {
 		return err
@@ -3777,10 +3813,10 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 	err =
 		sMechPreon.copyRuneArrays(
 			&plainTextLine.newLineChars,
-			&lineTerminationChars,
+			&lineTerminationRunes,
 			true,
 			ePrefix.XCtx(
-				"lineTerminationChars->"+
+				"lineTerminationRunes->"+
 					"plainTextLine.newLineChars"))
 
 	return err

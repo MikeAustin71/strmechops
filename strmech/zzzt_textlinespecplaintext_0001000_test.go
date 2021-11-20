@@ -4485,6 +4485,257 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_SetLineTerminationRunes_000100()",
+		"")
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLineZero := TextLineSpecPlainText{}
+
+	err := plainTextLineZero.SetLineTerminationRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"plainTextLineZero"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineRunes :=
+		plainTextLineZero.GetLineTerminationRunes()
+
+	sMech := StrMech{}
+
+	printableExpectedNewLineStr :=
+		sMech.ConvertNonPrintableChars(
+			expectedNewLineRunes,
+			true)
+
+	printableActualNewLineStr :=
+		sMech.ConvertNonPrintableChars(
+			actualNewLineRunes,
+			true)
+
+	if printableExpectedNewLineStr !=
+		printableActualNewLineStr {
+
+		t.Errorf("%v Test #1\n"+
+			"plainTextLineZero.GetLineTerminationRunes()\n"+
+			"Error: Expected 'expectedNewLineRunes' == 'actualNewLineRunes'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"Expected Line Termination String = '%v'\n"+
+			"Instead, Line Termination String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedNewLineStr,
+			printableActualNewLineStr)
+
+		return
+	}
+
+	var plainTextLine01 TextLineSpecPlainText
+
+	plainTextLine01,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNewLineRunes = []rune("!!!!")
+
+	err = plainTextLine01.SetLineTerminationRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineRunes =
+		plainTextLine01.GetLineTerminationRunes()
+
+	printableExpectedNewLineStr =
+		sMech.ConvertNonPrintableChars(
+			expectedNewLineRunes,
+			true)
+
+	printableActualNewLineStr =
+		sMech.ConvertNonPrintableChars(
+			actualNewLineRunes,
+			true)
+
+	if printableExpectedNewLineStr !=
+		printableActualNewLineStr {
+
+		t.Errorf("%v Test #2\n"+
+			"plainTextLine01.GetLineTerminationRunes()\n"+
+			"Error: Expected 'expectedNewLineRunes' == 'actualNewLineRunes'\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"Expected Line Termination String = '%v'\n"+
+			"Instead, Line Termination String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedNewLineStr,
+			printableActualNewLineStr)
+
+		return
+	}
+
+	err = plainTextLine01.SetLineTerminationRunes(
+		expectedNewLineRunes,
+		StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetLineTerminationRunes()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var plainTextLine02 TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine02.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNewLineRunes = nil
+
+	err = plainTextLine02.SetLineTerminationRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"plainTextLine02"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Test #4\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetLineTerminationRunes()\n"+
+			"because 'expectedNewLineRunes' is invalid.\n"+
+			"'expectedNewLineRunes' is a zero length array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedNewLineRunes = []rune("   ")
+
+	var plainTextLine03 TextLineSpecPlainText
+
+	plainTextLine03,
+		err = TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine03.IsValidInstanceError(
+		ePrefix.XCtx("plainTextLine03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNewLineRunes = nil
+
+	expectedNewLineRunes,
+		err = strMechPreon{}.ptr().getRepeatRuneChar(
+		1000001,
+		'X',
+		ePrefix.XCtx(
+			"Repeat Count = 1000001"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine03.SetLineTerminationRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"plainTextLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #5\n"+
+			"Expected an error return from plainTextLine03."+
+			"SetLineTerminationRunes()\n"+
+			"because 'expectedNewLineRunes' is invalid.\n"+
+			"'expectedNewLineRunes' has an array length greater\n"+
+			"than 1-million (1,000,000) characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedNewLineRunes = nil
+}
+
 func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
