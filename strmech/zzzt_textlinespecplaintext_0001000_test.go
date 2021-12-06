@@ -5108,8 +5108,8 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine01."+
-			"SetRightMarginRunes()\n"+
-			"because 'SetRightMarginRunes' has an array length > 1,000,000.\n"+
+			"SetTextRunes()\n"+
+			"because 'textRunes' has an array length > 1,000,000.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
@@ -5202,6 +5202,143 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine01."+
 			"SetTextRunes()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_SetTextString_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	textStr := "How now brown cow!"
+
+	err :=
+		plainTextLine01.SetTextString(
+			textStr,
+			ePrefix.XCtx(
+				"plainTextLine01<-textStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	textStr =
+		strings.Repeat(" ", 1000001)
+
+	err =
+		plainTextLine01.SetTextString(
+			textStr,
+			ePrefix.XCtx(
+				"plainTextLine01<-textStr-invalid"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetTextString()\n"+
+			"because 'textStr' has an array length > 1,000,000.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textStr = ""
+
+	err =
+		plainTextLine01.SetTextString(
+			textStr,
+			ePrefix.XCtx(
+				"plainTextLine01<-textStr-zero-length-string"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetTextRunes()\n"+
+			"because 'textStr' is an empty string.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	var plainTextLine02 TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	textStr = "XXXXXX"
+
+	err =
+		plainTextLine02.SetTextString(
+			textStr,
+			ePrefix.XCtx(
+				"plainTextLine02<-textStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualTextStr :=
+		plainTextLine02.GetTextString()
+
+	expectedTextStr := textStr
+
+	if actualTextStr !=
+		expectedTextStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected Text String does NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Actual Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextStr,
+			actualTextStr)
+
+		return
+	}
+
+	err =
+		plainTextLine01.SetTextString(
+			textStr,
+			StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetTextString()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())

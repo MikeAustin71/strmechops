@@ -5060,7 +5060,7 @@ func (plainTextLine *TextLineSpecPlainText) SetTextString(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"SetRightMarginChars()",
+			"SetTextString()",
 		"")
 
 	if err != nil {
