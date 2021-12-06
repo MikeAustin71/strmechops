@@ -5683,3 +5683,161 @@ func TestTextLineSpecPlainText_TextLineSpecName_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	turnLineTerminatorOff :=
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == true {
+
+		t.Errorf("%v\n"+
+			"Error: Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
+			"would return a value of 'false'."+
+			"INSTEAD, THE RETURNED VALUE IS 'true' !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOff()
+
+	turnLineTerminatorOff =
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == false {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
+			"would return a value of 'true'."+
+			"INSTEAD, THE RETURNED VALUE IS 'false' !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	plainTextLine02.TurnAutoLineTerminationOff()
+
+	turnLineTerminatorOff =
+		plainTextLine02.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == false {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected plainTextLine02.GetTurnLineTerminatorOff()\n"+
+			"would return a value of 'true'."+
+			"INSTEAD, THE RETURNED VALUE IS 'false' !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOff()
+
+	turnLineTerminatorOff :=
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == false {
+
+		t.Errorf("%v\n"+
+			"Error: Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
+			"would return a value of 'true'."+
+			"INSTEAD, THE RETURNED VALUE IS 'false' !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine01.TurnAutoLineTerminationOn()
+
+	turnLineTerminatorOff =
+		plainTextLine01.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
+			"would return a value of 'false'."+
+			"INSTEAD, THE RETURNED VALUE IS 'true' !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	plainTextLine02.TurnAutoLineTerminationOn()
+
+	turnLineTerminatorOff =
+		plainTextLine02.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected plainTextLine02.GetTurnLineTerminatorOff()\n"+
+			"would return a value of 'false'."+
+			"INSTEAD, THE RETURNED VALUE IS 'true' !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
