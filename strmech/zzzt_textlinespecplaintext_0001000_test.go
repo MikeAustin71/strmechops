@@ -4734,6 +4734,79 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	}
 
 	expectedNewLineRunes = nil
+
+	return
+}
+
+func TestTextLineSpecPlainText_SetPlainTextSpec_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_SetPlainTextSpec_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 2
+	textString := "How now brown cow"
+
+	err :=
+		plainTextLine01.SetPlainTextSpec(
+			[]rune(strings.Repeat(" ", leftMarginSpaces)),
+			[]rune(strings.Repeat(" ", rightMarginSpaces)),
+			textString,
+			[]rune{'\n'},
+			false,
+			StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetPlainTextSpec()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_SetPlainTextSpecRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_SetPlainTextSpecRunes_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err :=
+		plainTextLine01.SetPlainTextSpecRunes(
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			[]rune(textString),
+			[]rune{'\n'},
+			false,
+			StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetPlainTextSpecRunes()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+	}
+
 }
 
 func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
