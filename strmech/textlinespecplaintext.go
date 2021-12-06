@@ -4732,7 +4732,7 @@ func (plainTextLine *TextLineSpecPlainText) SetRightMarginRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"SetRightMarginChars()",
+			"SetRightMarginRunes()",
 		"")
 
 	if err != nil {

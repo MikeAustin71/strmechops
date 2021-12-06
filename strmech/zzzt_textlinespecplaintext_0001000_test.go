@@ -4807,12 +4807,13 @@ func TestTextLineSpecPlainText_SetPlainTextSpecRunes_000100(t *testing.T) {
 
 	}
 
+	return
 }
 
 func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_TextLineBuilder_000100()",
+		"TestTextLineSpecPlainText_SetRightMarginChars_000100()",
 		"")
 
 	plainTextLine01 := TextLineSpecPlainText{}
@@ -4916,9 +4917,127 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 			rightMarginStr,
 			actualRightMarginStr)
 
+	}
+
+	return
+}
+
+func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_SetRightMarginRunes_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	rightMarginRunes :=
+		[]rune(strings.Repeat(" ", 2))
+
+	err :=
+		plainTextLine01.SetRightMarginRunes(
+			rightMarginRunes,
+			ePrefix.XCtx(
+				"plainTextLine01<-rightMarginRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
 		return
 	}
 
+	rightMarginRunes =
+		[]rune(strings.Repeat(" ", 1000001))
+
+	err =
+		plainTextLine01.SetRightMarginRunes(
+			rightMarginRunes,
+			ePrefix.XCtx(
+				"plainTextLine01<-rightMarginRunes-invalid"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetRightMarginRunes()\n"+
+			"because 'SetRightMarginRunes' has an array length > 1,000,000.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	rightMarginRunes = nil
+
+	err =
+		plainTextLine01.SetRightMarginRunes(
+			rightMarginRunes,
+			ePrefix.XCtx(
+				"plainTextLine01<-rightMarginRunes-zero-length-string"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedTextString := "The cow jumped over the moon!"
+	expectedNewLineChars := "\n"
+
+	var plainTextLine02 TextLineSpecPlainText
+
+	plainTextLine02,
+		err = TextLineSpecPlainText{}.NewPlainTextStrings(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx(
+			"plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	rightMarginRunes = []rune("XXXXXX")
+
+	err =
+		plainTextLine02.SetRightMarginRunes(
+			rightMarginRunes,
+			ePrefix.XCtx(
+				"plainTextLine02<-rightMarginRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualRightMarginStr :=
+		plainTextLine02.GetRightMarginStr()
+
+	expectedRightMarginStr :=
+		string(rightMarginRunes)
+
+	if actualRightMarginStr !=
+		expectedRightMarginStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected Right Margin String does NOT match\n"+
+			"Actual Right Margin String.\n"+
+			"Expected Right Margin String = '%v'\n"+
+			"Actual Right Margin String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedRightMarginStr,
+			actualRightMarginStr)
+
+		return
+	}
+
+	return
 }
 
 func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
