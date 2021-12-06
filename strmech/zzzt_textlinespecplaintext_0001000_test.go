@@ -5349,6 +5349,89 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_TextLineBuilder_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	expectedTextStr :=
+		leftMargin +
+			textString +
+			rightMargin +
+			"\n"
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err :=
+		plainTextLine01.SetPlainTextSpecRunes(
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			[]rune(textString),
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(plainTextLine01.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	actualStr :=
+		plainTextLine02.String()
+
+	if !strings.Contains(actualStr, "Error") {
+		t.Errorf("%v - Error\n"+
+			"Expected plainTextLine02.String() TO return a\n"+
+			"string containing the word \"Error\".\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n"+
+			"Actual Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			actualStr)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
