@@ -5581,6 +5581,12 @@ func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
 		&sb,
 		ePrefix.XCtx("valid plainTextLine01->sb"))
 
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	sMech := StrMech{}
 
 	printableExpectedStr :=
@@ -5602,6 +5608,23 @@ func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	err = plainTextLine01.TextBuilder(
+		&sb,
+		StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
 	}
 
 	return
