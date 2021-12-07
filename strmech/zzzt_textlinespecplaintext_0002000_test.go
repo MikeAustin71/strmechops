@@ -1630,6 +1630,8 @@ func TestTextLineSpecPlainText_setPlainTextSpecRunes_000100(t *testing.T) {
 		return
 	}
 
+	marginRunes = nil
+
 	err =
 		txtLinePlainTextNanobot.setPlainTextSpecRunes(
 			&plainTextLine01,
@@ -1650,6 +1652,236 @@ func TestTextLineSpecPlainText_setPlainTextSpecRunes_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
+		return
+	}
+
+}
+
+func TestTextLineSpecPlainText_setPlainTextSpecStrings_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_setPlainTextSpecStrings_000100()",
+		"")
+
+	expectedLeftMarginChars := "   "
+	expectedRightMarginChars := "   "
+	expectedNewLineChars := "\n\n"
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	txtLinePlainTextNanobot := textLineSpecPlainTextNanobot{}
+
+	err :=
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			expectedTextString,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			nil,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			expectedTextString,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecStrings()\n"+
+			"because 'plainTextLine01' has a valueof 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	invalidCharLen :=
+		strings.Repeat("X", 1000001)
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine01,
+			invalidCharLen,
+			expectedRightMarginChars,
+			expectedTextString,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01->Left Margin Error"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecStrings()\n"+
+			"because 'leftMarginChars' has a length of 1,000,001 characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			invalidCharLen,
+			expectedTextString,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01->Left Margin Error"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecStrings()\n"+
+			"because 'rightMarginChars' has a length of 1,000,001 characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			expectedTextString,
+			invalidCharLen,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01->Left Margin Error"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecStrings()\n"+
+			"because 'newLineChars' has a length of 1,000,001 characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			invalidCharLen,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01->Left Margin Error"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecStrings()\n"+
+			"because 'textString' has a length of 1,000,001 characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	invalidCharLen = ""
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine01,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			"",
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01->Left Margin Error"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecStrings()\n"+
+			"because 'textString' an empty string.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine02,
+			"",
+			expectedRightMarginChars,
+			expectedTextString,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine02,
+			expectedLeftMarginChars,
+			"",
+			expectedTextString,
+			expectedNewLineChars,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecStrings(
+			&plainTextLine02,
+			expectedLeftMarginChars,
+			expectedRightMarginChars,
+			expectedTextString,
+			"",
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
 		return
 	}
 

@@ -1250,8 +1250,9 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecStr
 		newLineChars = "\n"
 	}
 
-	var leftMarginRunes, rightMarginRunes,
-		newLineRunes []rune
+	newLineRunes := []rune(newLineChars)
+
+	var leftMarginRunes, rightMarginRunes []rune
 
 	if len(leftMarginChars) == 0 {
 		leftMarginRunes = nil
@@ -1263,12 +1264,6 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecStr
 		rightMarginRunes = nil
 	} else {
 		rightMarginRunes = []rune(rightMarginChars)
-	}
-
-	if len(newLineChars) == 0 {
-		newLineRunes = nil
-	} else {
-		newLineRunes = []rune(newLineChars)
 	}
 
 	return textLineSpecPlainTextAtom{}.ptr().
