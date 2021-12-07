@@ -475,6 +475,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 			StrMech{})
 
 	if err == nil {
+
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine04."+
 			"CopyOut()\n"+
@@ -4734,6 +4735,39 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	}
 
 	expectedNewLineRunes = nil
+
+	return
+}
+
+func TestTextLineSpecPlainText_SetPlainTextDefault_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_SetPlainTextDefault_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 2
+	textString := "How now brown cow"
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	err := plainTextLine01.SetPlainTextDefault(
+		leftMarginSpaces,
+		rightMarginSpaces,
+		textString,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from plainTextLine01."+
+			"SetPlainTextDefault()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
 
 	return
 }
