@@ -5503,6 +5503,8 @@ func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
 	}
 
 	return
@@ -5522,6 +5524,7 @@ func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
 		ePrefix.XCtx("empty plainTextLine01->sb"))
 
 	if err == nil {
+
 		t.Errorf("%v\n"+
 			"Error:\n"+
 			"Expected error return from plainTextLine01.TextBuilder()\n"+
