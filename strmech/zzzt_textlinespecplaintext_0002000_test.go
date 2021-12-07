@@ -1009,3 +1009,241 @@ func TestTextLineSpecPlainText_setDefaultPlainTextSpec_000100(t *testing.T) {
 	textString = ""
 
 }
+
+func TestTextLineSpecPlainText_setPlainTextSpec_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_setPlainTextSpec_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	txtLinePlainTextAtom := textLineSpecPlainTextAtom{}
+
+	err :=
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			nil,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'plainTxtLine' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			"",
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'textString' is an empty string.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString =
+		strings.Repeat("X", 1000001)
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'textString' has a charcter length of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textString = "How now brown cow!"
+
+	var marginRunes []rune
+
+	marginRunes,
+		err =
+		strMechPreon{}.ptr().getRepeatRuneChar(
+			1000001,
+			'X',
+			ePrefix.XCtx(
+				"leftMarginRunes"))
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			marginRunes,
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'leftMarginRunes' has an array length of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			marginRunes,
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'rightMarginRunes' has an array length of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			marginRunes,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'newLineChars' has an array length of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	marginRunes = nil
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			nil,
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			nil,
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			nil,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
