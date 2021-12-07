@@ -974,15 +974,15 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 		return err
 	}
 
-	lenNewMarginChars := len(newLineChars)
+	lenNewLineChars := len(newLineChars)
 
-	if lenNewMarginChars > 1000000 {
+	if lenNewLineChars > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'newLineChars' rune array exceeds\n"+
 			"one-million (1,000,000) characters in length.\n"+
 			"Length of 'newLineChars' = '%v'\n",
 			ePrefix.String(),
-			lenNewMarginChars)
+			lenNewLineChars)
 
 		return err
 	}
@@ -1017,7 +1017,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 
 	}
 
-	if lenNewMarginChars > 0 {
+	if lenNewLineChars > 0 {
 		_,
 			err = sMechPreon.
 			testValidityOfRuneCharArray(
