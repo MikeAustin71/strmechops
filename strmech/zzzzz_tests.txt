@@ -1852,8 +1852,10 @@
 --- PASS: TestTextLineSpecPlainText_setPlainTextSpecRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecStrings_000100
 --- PASS: TestTextLineSpecPlainText_setPlainTextSpecStrings_000100 (0.01s)
+=== RUN   TestTextLineSpecSolidLine_CopyIn_000100
+--- PASS: TestTextLineSpecSolidLine_CopyIn_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 62.5% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.767s
+coverage: 63.9% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.232s
