@@ -232,6 +232,15 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 
 	sMechPreon := strMechPreon{}
 
+	if len(txtSolidLine.solidLineChars) == 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"'solidLineChars' is empty. Zero array length.\n",
+			ePrefix.String())
+
+		return isValid, err
+	}
+
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		txtSolidLine.solidLineChars,

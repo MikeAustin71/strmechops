@@ -17,6 +17,36 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) TextLineSpecSolidLine01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecSolidLine01()",
+		"")
+
+	txtSolidLine03 := strmech.TextLineSpecSolidLine{}
+
+	_,
+		err :=
+		txtSolidLine03.CopyOutITextLine(
+			ePrefix.XCtx(
+				"txtSolidLine03->_"))
+
+	if err == nil {
+
+		errorStr := fmt.Sprintf("%v\n"+
+			"Error: txtSolidLine03.CopyOutITextLine()\n"+
+			"Expected an error return because 'txtSolidLine03' is empty!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		fmt.Printf(errorStr + "\n")
+
+	}
+
+	return
+
+}
+
 func (mt MainTest) TextLineSpecPlainText01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

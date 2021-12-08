@@ -401,7 +401,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutITextLine(
 			txtSpecSolidLine,
 			ePrefix)
 
-	return ITextLineSpecification(&newTxtSolidLine), nil
+	return ITextLineSpecification(&newTxtSolidLine), err
 }
 
 // CopyOutPtr - Returns a pointer to a deep copy of the current
