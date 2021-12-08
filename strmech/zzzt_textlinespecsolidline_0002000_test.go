@@ -374,3 +374,128 @@ func TestTextLineSpecSolidLine_copyOut_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_getFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_copyOut_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.
+		NewPtrFullSolidLineRunesConfig(
+			leftMargin,
+			rightMargin,
+			[]rune(solidLineChars),
+			solidLineCharsRepeatCount,
+			[]rune(newLineChars),
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtSolidLine01FmtText string
+
+	txtSolidLineMolecule := textLineSpecSolidLineMolecule{}
+
+	txtSolidLine01FmtText,
+		err = txtSolidLineMolecule.getFormattedText(
+		txtSolidLine01,
+		ePrefix.XCtx(
+			"txtSolidLine01->txtSolidLine01FmtText"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtSolidLineMolecule2 := textLineSpecSolidLineMolecule{}
+
+	_,
+		err =
+		txtSolidLineMolecule2.getFormattedText(
+			nil,
+			ePrefix.XCtx(
+				"txtSolidLine=='nil'"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLineMolecule2."+
+			"getFormattedText()\n"+
+			"because 'txtSolidLine' has a 'nil' value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLine01.rightMargin = 1000001
+
+	_,
+		err =
+		txtSolidLineMolecule2.getFormattedText(
+			txtSolidLine01,
+			ePrefix.XCtx(
+				"txtSolidLine01 is invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLineMolecule2."+
+			"getFormattedText()\n"+
+			"because 'txtSolidLine01.rightMargin = 1000001'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
