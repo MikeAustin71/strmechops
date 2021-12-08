@@ -284,14 +284,31 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
-	_,
-		err = sMechPreon.testValidityOfRuneCharArray(
-		txtSolidLine.newLineChars,
-		nil)
+	if len(txtSolidLine.newLineChars) == 0 {
 
-	if err != nil {
 		txtSolidLine.newLineChars = []rune{'\n'}
-		err = nil
+
+	} else {
+
+		var err2 error
+		_,
+			err2 = sMechPreon.testValidityOfRuneCharArray(
+			txtSolidLine.newLineChars,
+			nil)
+
+		if err != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: 'txtSolidLine.newLineChars' is invalid!\n"+
+				"txtSolidLine.newLineChars='%v'\n"+
+				"Error Msg: %v\n",
+				ePrefix.String(),
+				txtSolidLine.rightMargin,
+				err2.Error())
+
+			return isValid, err
+		}
+
 	}
 
 	isValid = true

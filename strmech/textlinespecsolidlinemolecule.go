@@ -285,6 +285,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 		ePrefix.XCtx(
 			"txtSolidLine.newLineChars->"+
 				"newTxtSolidLine.newLineChars"))
+
 	return newTxtSolidLine, err
 }
 
@@ -689,7 +690,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 
 	txtSolidLine.leftMargin = leftMargin
 
-	txtSolidLine.leftMargin = rightMargin
+	txtSolidLine.rightMargin = rightMargin
 
 	txtSolidLine.solidLineCharsRepeatCount =
 		solidLineCharsRepeatCount
