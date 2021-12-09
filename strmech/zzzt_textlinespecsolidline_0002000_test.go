@@ -384,10 +384,116 @@ func TestTextLineSpecSolidLine_empty_000100(t *testing.T) {
 
 }
 
+func TestTextLineSpecSolidLine_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_equal_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n-\n"
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetFullSolidLineConfig(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtSolidLine02 TextLineSpecSolidLine
+
+	txtSolidLine02,
+		err = txtSolidLine01.CopyOut(
+		ePrefix.XCtx(
+			"txtSolidLine01->txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLineAtom := textLineSpecSolidLineAtom{}
+
+	areEqual :=
+		txtSolidLineAtom.equal(
+			&txtSolidLine01,
+			&txtSolidLine02)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected txtSolidLine01==txtSolidLine02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	areEqual =
+		txtSolidLineAtom.equal(
+			nil,
+			&txtSolidLine02)
+
+	if areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"Expected areEqual WOULD BE 'false'\n"+
+			"because 'txtSolidLineOne' has a 'nil' value.\n"+
+			"HOWEVER, 'areEqual' is 'true!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	areEqual =
+		txtSolidLineAtom.equal(
+			&txtSolidLine01,
+			nil)
+
+	if areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected areEqual WOULD BE 'false'\n"+
+			"because 'txtSolidLineTwo' has a 'nil' value.\n"+
+			"HOWEVER, 'areEqual' is 'true!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
 func TestTextLineSpecSolidLine_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_copyOut_000100()",
+		"TestTextLineSpecSolidLine_getFormattedText_000100()",
 		"")
 
 	leftMargin := 2

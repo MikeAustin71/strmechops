@@ -862,3 +862,260 @@ func TestTextLineSpecSolidLine_Empty_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_Equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_CopyOut_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n-\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetFullSolidLineConfig(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtSolidLine02 TextLineSpecSolidLine
+
+	txtSolidLine02,
+		err = TextLineSpecSolidLine{}.NewFullSolidLineConfig(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		newLineChars,
+		ePrefix.XCtx(
+			"txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine02.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtSolidLine01==txtSolidLine02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtSolidLine02FmtText string
+
+	txtSolidLine02FmtText,
+		err = txtSolidLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine02FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtSolidLine01.solidLineChars[0] =
+		'X'
+
+	if txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected txtSolidLine01 WOULD NOT EQUAL txtSolidLine02\n"+
+			"because solidLineChars are different.\n"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtSolidLine01.CopyIn(
+		&txtSolidLine02,
+		ePrefix.XCtx(
+			"txtSolidLine01<-txtSolidLine02 #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine01.leftMargin = 0
+
+	if txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2\n"+
+			"Expected txtSolidLine01 WOULD NOT EQUAL txtSolidLine02\n"+
+			"because leftMargin is different.\n"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtSolidLine01.CopyIn(
+		&txtSolidLine02,
+		ePrefix.XCtx(
+			"txtSolidLine01<-txtSolidLine02 #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine01.rightMargin = 0
+
+	if txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #3\n"+
+			"Expected txtSolidLine01 WOULD NOT EQUAL txtSolidLine02\n"+
+			"because rightMargin is different.\n"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtSolidLine01.CopyIn(
+		&txtSolidLine02,
+		ePrefix.XCtx(
+			"txtSolidLine01<-txtSolidLine02 #3"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine01.solidLineCharsRepeatCount = 0
+
+	if txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #4\n"+
+			"Expected txtSolidLine01 WOULD NOT EQUAL txtSolidLine02\n"+
+			"because solidLineCharsRepeatCount is different.\n"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtSolidLine01.CopyIn(
+		&txtSolidLine02,
+		ePrefix.XCtx(
+			"txtSolidLine01<-txtSolidLine02 #3"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine01.newLineChars = []rune{'X', '-', '\n'}
+
+	if txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #5\n"+
+			"Expected txtSolidLine01 WOULD NOT EQUAL txtSolidLine02\n"+
+			"because newLineChars are different.\n"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtSolidLine03 := TextLineSpecSolidLine{}
+
+	txtSolidLine04 := TextLineSpecSolidLine{}
+
+	if !txtSolidLine03.Equal(&txtSolidLine04) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtSolidLine03==txtSolidLine04"+
+			"because they are both empty.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
