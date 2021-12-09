@@ -33,6 +33,10 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) empty(
 
 	defer txtSolidLineAtom.lock.Unlock()
 
+	if txtSolidLine == nil {
+		return
+	}
+
 	txtSolidLine.leftMargin = 0
 	txtSolidLine.rightMargin = 0
 	txtSolidLine.solidLineChars = nil

@@ -753,3 +753,112 @@ func TestTextLineSpecSolidLine_CopyOutPtr_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_CopyOut_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewPtrSolidLine(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine01.Empty()
+
+	if txtSolidLine01.leftMargin != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.Empty() should have set all\n"+
+			"member variables to their zero values.\n"+
+			"However 'txtSolidLine01.leftMargin' is NOT equal to zero!\n"+
+			"txtSolidLine01.leftMargin= '%v'\n",
+			ePrefix.String(),
+			txtSolidLine01.leftMargin)
+
+		return
+	}
+
+	if txtSolidLine01.rightMargin != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.Empty() should have set all\n"+
+			"member variables to their zero values.\n"+
+			"However 'txtSolidLine01.rightMargin' is NOT equal to zero!\n"+
+			"txtSolidLine01.rightMargin= '%v'\n",
+			ePrefix.String(),
+			txtSolidLine01.rightMargin)
+
+		return
+	}
+
+	if txtSolidLine01.solidLineChars != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.Empty() should have set all\n"+
+			"member variables to their zero values.\n"+
+			"However 'txtSolidLine01.solidLineChars' is NOT equal to 'nil'!\n"+
+			"txtSolidLine01.solidLineChars= '%v'\n",
+			ePrefix.String(),
+			txtSolidLine01.solidLineChars)
+
+		return
+	}
+
+	if txtSolidLine01.solidLineCharsRepeatCount != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.Empty() should have set all\n"+
+			"member variables to their zero values.\n"+
+			"However 'txtSolidLine01.solidLineCharsRepeatCount' is NOT equal to zero!\n"+
+			"txtSolidLine01.solidLineCharsRepeatCount= '%v'\n",
+			ePrefix.String(),
+			txtSolidLine01.solidLineCharsRepeatCount)
+
+		return
+	}
+
+	if txtSolidLine01.newLineChars != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.Empty() should have set all\n"+
+			"member variables to their zero values.\n"+
+			"However 'txtSolidLine01.newLineChars' is NOT equal to 'nil'!\n"+
+			"txtSolidLine01.newLineChars= '%v'\n",
+			ePrefix.String(),
+			txtSolidLine01.newLineChars)
+
+		return
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	txtSolidLine02.Empty()
+
+	return
+}

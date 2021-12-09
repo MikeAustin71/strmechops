@@ -375,6 +375,15 @@ func TestTextLineSpecSolidLine_copyOut_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecSolidLine_empty_000100(t *testing.T) {
+
+	txtSolidLineAtom := textLineSpecSolidLineAtom{}
+
+	txtSolidLineAtom.empty(
+		nil)
+
+}
+
 func TestTextLineSpecSolidLine_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
