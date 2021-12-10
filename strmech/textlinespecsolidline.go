@@ -741,6 +741,62 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) GetFormattedText(
 			ePrefix)
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecSolidLine
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid, this method
+// returns a boolean value of 'true'.
+//
+// This method is functionally equivalent to
+// TextLineSpecSolidLine.IsValidInstanceError() with the sole
+// exceptions being that this method takes no input parameters and
+// returns a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If any of the internal member data variables contained in
+//       the current instance of TextLineSpecSolidLine are found
+//       to be invalid, this method will return a boolean value of
+//       'false'.
+//
+//       If all internal member data variables contained in the
+//       current instance of TextLineSpecSolidLine are found to be
+//       valid, this method returns a boolean value of 'true'.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstance() bool {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	isValid,
+		_ := textLineSpecSolidLineAtom{}.ptr().
+		testValidityOfTextSpecSolidLine(
+			txtSpecSolidLine,
+			nil)
+
+	return isValid
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecSolidLine
 // instance to determine if they are valid.
@@ -832,7 +888,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecSolidLine.IsValidInstanceError()",
+		"TextLineSpecSolidLine."+
+			"IsValidInstanceError()",
 		"")
 
 	if err != nil {

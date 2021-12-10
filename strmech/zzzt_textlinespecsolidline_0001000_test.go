@@ -901,8 +901,14 @@ func TestTextLineSpecSolidLine_Equal_000100(t *testing.T) {
 		return
 	}
 
-	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+	if !txtSolidLine01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n" +
+			"Initial creation of instance 'txtSolidLine01' is invalid!!!\n" +
+			ePrefix.String())
+
+		return
+	}
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1402,6 +1408,99 @@ func TestTextLineSpecSolidLine_GetFormattedText_000100(t *testing.T) {
 			"Expected an error return from txtSolidLine02."+
 			"CopyOut()\n"+
 			"because 'txtSolidLine02' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_IsValidInstance_000100()",
+		"")
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	if txtSolidLine01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.IsValidInstance() returned a \n"+
+			"value of 'true'. It should have returned a\n"+
+			"value of 'false' because 'txtSolidLine01' is invalid!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_EqualITextLine_000100()",
+		"")
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.IsValidInstanceError(
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"IsValidInstanceError()\n"+
+			"because 'txtSolidLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+
+	var txtSolidLine02 TextLineSpecSolidLine
+
+	txtSolidLine02,
+		err =
+		txtSolidLine02.NewDefaultSolidLine(
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine02.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"IsValidInstanceError()\n"+
+			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
