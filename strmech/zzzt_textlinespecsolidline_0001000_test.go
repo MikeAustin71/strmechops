@@ -1119,3 +1119,150 @@ func TestTextLineSpecSolidLine_Equal_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_EqualITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_EqualITextLine_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetFullSolidLineRunesConfig(
+			leftMargin,
+			rightMargin,
+			[]rune(solidLineChars),
+			solidLineCharsRepeatCount,
+			[]rune(newLineChars),
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	standardLineSpec := TextLineSpecStandardLine{}.NewPtr()
+
+	areEqual :=
+		txtSolidLine01.EqualITextLine(
+			standardLineSpec)
+
+	if areEqual == true {
+
+		t.Errorf("%v\n"+
+			"Error: txtSolidLine01.EqualITextLine()\n"+
+			"Expected areEqual == 'false' because input\n"+
+			"parameter 'standardLineSpec is the wrong type.\n"+
+			"HOWEVER, areEqual == 'true'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtSolidLine02 TextLineSpecSolidLine
+
+	txtSolidLine02,
+		err = txtSolidLine01.CopyOut(
+		ePrefix.XCtx(
+			"txtSolidLine01->txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtSolidLine01.Equal(&txtSolidLine02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected txtSolidLine01 == txtSolidLine02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	var actualFmtTxtStr02 string
+
+	actualFmtTxtStr02,
+		err =
+		txtSolidLine02.GetFormattedText(
+			ePrefix.XCtx(
+				"txtSolidLine02->actualFmtTxtStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtTxtStr02),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	areEqual =
+		txtSolidLine01.EqualITextLine(
+			&txtSolidLine02)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.EqualITextLine(&txtSolidLine02)"+
+			"Expected areEqual == 'true' because the two"+
+			"instances are identical.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
