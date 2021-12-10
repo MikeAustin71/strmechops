@@ -1178,8 +1178,8 @@ func TestTextLineSpecSolidLine_EqualITextLine_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: txtSolidLine01.EqualITextLine()\n"+
 			"Expected areEqual == 'false' because input\n"+
-			"parameter 'standardLineSpec is the wrong type.\n"+
-			"HOWEVER, areEqual == 'true'\n",
+			"parameter 'standardLineSpec' is the wrong type.\n"+
+			"HOWEVER, areEqual == 'true'!!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
@@ -1259,6 +1259,150 @@ func TestTextLineSpecSolidLine_EqualITextLine_000100(t *testing.T) {
 			"Expected areEqual == 'true' because the two"+
 			"instances are identical.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLine03 := TextLineSpecSolidLine{}
+
+	areEqual =
+		txtSolidLine03.EqualITextLine(
+			&txtSolidLine02)
+
+	if areEqual == true {
+
+		t.Errorf("%v\n"+
+			"Error: txtSolidLine03.EqualITextLine(&txtSolidLine02)\n"+
+			"Expected areEqual == 'false' because instance\n"+
+			"'txtSolidLine03' is empty.\n"+
+			"HOWEVER, areEqual == 'true'!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_EqualITextLine_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetSolidLine(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	var actualFmtTxtStr01 string
+
+	actualFmtTxtStr01,
+		err =
+		txtSolidLine01.GetFormattedText(
+			ePrefix.XCtx(
+				"txtSolidLine02->actualFmtTxtStr"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualFmtTxtStr01),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.GetFormattedText()\n"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	_,
+		err =
+		txtSolidLine01.GetFormattedText(
+			StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	_,
+		err = txtSolidLine02.GetFormattedText(
+		ePrefix.XCtx(
+			"txtSolidLine02==empty"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine02."+
+			"CopyOut()\n"+
+			"because 'txtSolidLine02' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
