@@ -1509,3 +1509,33 @@ func TestTextLineSpecSolidLine_IsValidInstanceError_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_NewDefaultSolidLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_CopyIn_000100()",
+		"")
+
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+
+	_,
+		err := TextLineSpecSolidLine{}.NewDefaultSolidLine(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecSolidLine{}."+
+			"NewDefaultSolidLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
