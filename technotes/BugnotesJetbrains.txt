@@ -22,3 +22,4 @@ Registry:
     run.processes.with.pty=false
     ide.completion.variant.limit=500
 
+GO-12126 Code Inspection and Spell Checker Take Too Long
