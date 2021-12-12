@@ -1,3 +1,24 @@
 git clone --single-branch --branch dev https://github.com/MikeAustin71/strmechops.git
 
 /strmechops/strmech/textlinespecsolidline.go
+
+1:55
+2:15 - 20-minutes and no resolution
+Resolved after 26-minutes.
+
+
+GoLand 2021.3
+Build #GO-213.5744.269, built on December 1, 2021
+Licensed to Richard RAPP
+Subscription is active until February 20, 2022.
+Runtime version: 11.0.13+7-b1751.19 amd64
+VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
+Windows 10 10.0
+GC: G1 Young Generation, G1 Old Generation
+Memory: 750M
+Cores: 8
+Registry:
+    suggest.all.run.configurations.from.context=true
+    run.processes.with.pty=false
+    ide.completion.variant.limit=500
+
