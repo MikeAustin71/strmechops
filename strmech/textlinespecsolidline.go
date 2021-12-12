@@ -46,6 +46,7 @@ type TextLineSpecSolidLine struct {
 	solidLineChars            []rune
 	solidLineCharsRepeatCount int
 	newLineChars              []rune
+	turnLineTerminatorOff     bool
 	textLineReader            *strings.Reader
 	lock                      *sync.Mutex
 }
@@ -1327,6 +1328,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return txtSolidLine, err
@@ -1544,6 +1546,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return txtSolidLine, err
@@ -1772,6 +1775,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return txtSolidLine, err
@@ -1984,6 +1988,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return txtSolidLine, err
@@ -2179,6 +2184,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return &txtSolidLine, err
@@ -2402,6 +2408,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return &txtSolidLine, err
@@ -2635,6 +2642,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return &txtSolidLine, err
@@ -2853,6 +2861,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
+			false,
 			ePrefix.XCtx("txtSolidLine"))
 
 	return &txtSolidLine, err
@@ -3320,6 +3329,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
+			false,
 			ePrefix.XCtx("txtSpecSolidLine"))
 
 	return err
@@ -3533,6 +3543,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
+			false,
 			ePrefix.XCtx("txtSpecSolidLine"))
 
 	return err
@@ -4335,6 +4346,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
+			false,
 			ePrefix.XCtx("txtSpecSolidLine"))
 
 	return err

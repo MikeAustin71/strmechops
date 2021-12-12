@@ -150,6 +150,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 	targetTxtSolidLine.solidLineCharsRepeatCount =
 		incomingTxtSolidLine.solidLineCharsRepeatCount
 
+	targetTxtSolidLine.turnLineTerminatorOff =
+		incomingTxtSolidLine.turnLineTerminatorOff
+
 	targetTxtSolidLine.textLineReader = nil
 
 	err = sMechPreon.copyRuneArrays(
@@ -278,6 +281,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 	newTxtSolidLine.solidLineCharsRepeatCount =
 		txtSolidLine.solidLineCharsRepeatCount
 
+	newTxtSolidLine.turnLineTerminatorOff =
+		txtSolidLine.turnLineTerminatorOff
+
 	err = sMechPreon.copyRuneArrays(
 		&newTxtSolidLine.newLineChars,
 		&txtSolidLine.newLineChars,
@@ -405,7 +411,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 		sb.WriteString(" ")
 	}
 
-	sb.WriteString(string(txtSolidLine.newLineChars))
+	if !txtSolidLine.turnLineTerminatorOff {
+		sb.WriteString(string(txtSolidLine.newLineChars))
+	}
 
 	formattedText = sb.String()
 
@@ -572,6 +580,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	solidLineChars []rune,
 	solidLineCharsRepeatCount int,
 	newLineChars []rune,
+	turnLineTerminatorOff bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -694,6 +703,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 
 	txtSolidLine.solidLineCharsRepeatCount =
 		solidLineCharsRepeatCount
+
+	txtSolidLine.turnLineTerminatorOff =
+		turnLineTerminatorOff
 
 	err = sMechPreon.copyRuneArrays(
 		&txtSolidLine.newLineChars,

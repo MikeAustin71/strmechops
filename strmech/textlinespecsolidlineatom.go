@@ -42,6 +42,7 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) empty(
 	txtSolidLine.solidLineChars = nil
 	txtSolidLine.solidLineCharsRepeatCount = 0
 	txtSolidLine.newLineChars = nil
+	txtSolidLine.turnLineTerminatorOff = false
 	txtSolidLine.textLineReader = nil
 
 	return
@@ -80,6 +81,11 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) equal(
 
 	if txtSolidLineOne.rightMargin !=
 		txtSolidLineTwo.rightMargin {
+		return false
+	}
+
+	if txtSolidLineOne.turnLineTerminatorOff !=
+		txtSolidLineTwo.turnLineTerminatorOff {
 		return false
 	}
 
