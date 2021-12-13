@@ -23,3 +23,6 @@ Registry:
     ide.completion.variant.limit=500
 
 GO-12126 Code Inspection and Spell Checker Take Too Long
+https://youtrack.jetbrains.com/issue/GO-12126
+
+1:11:23
