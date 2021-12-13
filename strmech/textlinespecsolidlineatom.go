@@ -251,13 +251,24 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
+	var err2 error
+
 	_,
-		err = sMechPreon.testValidityOfRuneCharArray(
+		err2 = sMechPreon.testValidityOfRuneCharArray(
 		txtSolidLine.solidLineChars,
 		ePrefix.XCtx(
 			"txtSolidLine.solidLineChars is invalid!"))
 
-	if err != nil {
+	if err2 != nil {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"txtSolidLine.solidLineChars contains invalid runes!\n"+
+			"%v\n"+
+			"txtSolidLine.solidLineChars='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			err2.Error(),
+			txtSolidLine.solidLineChars)
+
 		return isValid, err
 	}
 
@@ -308,14 +319,12 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		txtSolidLine.newLineChars = []rune{'\n'}
 
 	} else {
-
-		var err2 error
 		_,
 			err2 = sMechPreon.testValidityOfRuneCharArray(
 			txtSolidLine.newLineChars,
 			nil)
 
-		if err != nil {
+		if err2 != nil {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: 'txtSolidLine.newLineChars' is invalid!\n"+
