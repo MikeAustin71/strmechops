@@ -675,14 +675,21 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
+	lenNewLineChars := len(newLineChars)
+
+	if lenNewLineChars == 0 ||
+		lenNewLineChars > 1000000 {
+		newLineChars = []rune{'\n'}
+	}
+
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineChars,
-		nil)
+		ePrefix.XCtx(
+			"Testing Validity of 'newLineChars'"))
 
 	if err != nil {
-		newLineChars = []rune{'\n'}
-		err = nil
+		return err
 	}
 
 	err = sMechPreon.copyRuneArrays(

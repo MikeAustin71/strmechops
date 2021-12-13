@@ -1094,3 +1094,294 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 	}
 
 }
+
+func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_setTxtSolidLine_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := []rune{'-'}
+	solidLineCharsRepeatCount := 35
+	newLineChars := []rune{'\n', '\n'}
+	var turnLineTerminatorOff bool
+
+	txtSolidLineMolecule := textLineSpecSolidLineMolecule{}
+
+	turnLineTerminatorOff = false
+
+	err := txtSolidLineMolecule.setTxtSolidLine(
+		nil,
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		newLineChars,
+		turnLineTerminatorOff,
+		ePrefix.XCtx(
+			"txtSolidLine is 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'txtSolidLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	solidLineChars = nil
+	turnLineTerminatorOff = true
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because the length of 'solidLineChars' is zero.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineChars = []rune{'-', '*', 0, '-', 0, '*'}
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'solidLineChars' contains invalid runes.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineChars = []rune{'-', '-'}
+
+	solidLineCharsRepeatCount = -1
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'solidLineCharsRepeatCount' is less than one (1).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineCharsRepeatCount = 5
+
+	leftMargin = -35
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err != nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected no errors from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'leftMargin' is less than zero (0).\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	leftMargin = 1000001
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'leftMargin' is greater than 1-million (1,000,000).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	leftMargin = 3
+
+	rightMargin = -102
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err != nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected no errors from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'rightMargin' is less than zero.\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	rightMargin = 1000001
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'rightMargin' is greater than one-million (1,000,000).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	rightMargin = 3
+
+	sMechPreon := strMechPreon{}
+
+	err = sMechPreon.setRepeatRuneChar(
+		&newLineChars,
+		1000001,
+		'X',
+		ePrefix.XCtx(
+			"newLineChars x 1,000,001"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"newLineChars length == 1,000,001"))
+
+	if err != nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected no errors from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'newLineChars' is greater than one-million (1,000,000).\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	newLineChars = []rune{'\n', 0, '\n', 0, '\n'}
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"solidLineChars length == 0"))
+
+	if err == nil {
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'newLineChars'contains invalid runes.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

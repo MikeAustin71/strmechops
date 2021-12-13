@@ -1438,6 +1438,10 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //       array, 'newLineChars' will be set to the default new
 //       line character ('\n').
 //
+//       If this parameter is submitted with a string length
+//       greater than one-million (1,000,000), 'newLineChars' will
+//       be set to the default new line character ('\n').
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -1666,6 +1670,10 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       If this parameter is submitted as a zero length rune
 //       array, 'newLineChars' will be set to the default new
 //       line character ('\n').
+//
+//       If this parameter is submitted with an array length
+//       greater than one-million (1,000,000), 'newLineChars' will
+//       be set to the default new line character ('\n').
 //
 //
 //  errorPrefix                interface{}
@@ -2295,6 +2303,10 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 //       array, 'newLineChars' will be set to the default new
 //       line character ('\n').
 //
+//       If this parameter is submitted with a string length
+//       greater than one-million (1,000,000), 'newLineChars' will
+//       be set to the default new line character ('\n').
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -2529,6 +2541,10 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 //       If this parameter is submitted as a zero length rune
 //       array, 'newLineChars' will be set to the default new
 //       line character ('\n').
+//
+//       If this parameter is submitted with an array length
+//       greater than one-million (1,000,000), 'newLineChars' will
+//       be set to the default new line character ('\n').
 //
 //
 //  errorPrefix                interface{}
