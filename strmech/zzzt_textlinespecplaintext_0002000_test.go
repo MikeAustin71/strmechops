@@ -1385,6 +1385,105 @@ func TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100(t *tes
 	return
 }
 
+func TestTextLineSpecPlainText_setPlainTextSpec_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_setPlainTextSpec_000200()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	txtLinePlainTextAtom := textLineSpecPlainTextAtom{}
+
+	err :=
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !plainTextLine01.IsValidInstance() {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"isValid := plainTextLine01.IsValidInstance()\n"+
+			"Expected isValid == 'true' beause\n"+
+			"'plainTextLine01' is a valid instance.\n"+
+			"HOWEVER, isValid == 'false' !!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	leftMarginBadChars := []rune{' ', 0, ' ', 0, '-'}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			leftMarginBadChars,
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01 + leftMarginBadChars"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"txtLinePlainTextAtom.setPlainTextSpec()\n"+
+			"Expected an error return beause\n"+
+			"'leftMarginBadChars' is an invalid rune array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	rightMarginBadChars := []rune{' ', 0, ' ', 0, '-'}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			rightMarginBadChars,
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01 + rightMarginBadChars"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"txtLinePlainTextAtom.setPlainTextSpec()\n"+
+			"Expected an error return beause\n"+
+			"'rightMarginBadChars' is an invalid rune array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
 func TestTextLineSpecPlainText_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
