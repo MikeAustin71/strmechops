@@ -1779,6 +1779,86 @@ func TestTextLineSpecSolidLine_GetSolidLineChars_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecSolidLine_GetSolidLineRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_GetSolidLineRunes_000100()",
+		"")
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	var expectedSolidLineRunes []rune
+
+	expectedSolidLineRunes = txtSolidLine01.GetSolidLineRunes()
+
+	if len(expectedSolidLineRunes) != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.GetSolidLineRunes()\n"+
+			"Expected Solid Line Runes length == Zero"+
+			"because 'txtSolidLine01' is empty.\n"+
+			"HOWEVER, Solid Line Runes length = '%v'\n"+
+			"Solid Line Runes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			len(expectedSolidLineRunes),
+			expectedSolidLineRunes)
+
+		return
+	}
+
+	leftMargin := 2
+	rightMargin := 2
+	expectedSolidLineRunes = []rune{'-', '*'}
+	solidLineCharsRepeatCount := 35
+	expectedNewLineRunes := []rune{'\n', '-', '\n'}
+
+	txtSolidLine02,
+		err := TextLineSpecSolidLine{}.
+		NewFullSolidLineRunesConfig(
+			leftMargin,
+			rightMargin,
+			expectedSolidLineRunes,
+			solidLineCharsRepeatCount,
+			expectedNewLineRunes,
+			ePrefix.XCtx(
+				"txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualSolidLineRunes :=
+		txtSolidLine02.GetSolidLineRunes()
+
+	sMechPreon := strMechPreon{}
+
+	areEqual :=
+		sMechPreon.equalRuneArrays(
+			expectedSolidLineRunes,
+			actualSolidLineRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine02.GetNewLineRunes()\n"+
+			"Expected Solid Line Runes = '%v'\n"+
+			"Instead, Solid Line Runes = '%v'\n"+
+			"Expected Solid Line Runs Length = %v\n"+
+			" Actual Solid Line Runes Length = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedSolidLineRunes),
+			string(actualSolidLineRunes),
+			len(expectedSolidLineRunes),
+			len(actualSolidLineRunes))
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecSolidLine_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
