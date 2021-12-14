@@ -1630,6 +1630,86 @@ func TestTextLineSpecSolidLine_GetNewLineChars_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecSolidLine_GetNewLineRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_GetNewLineRunes_000100()",
+		"")
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	var newLineRunes []rune
+
+	newLineRunes = txtSolidLine01.GetNewLineRunes()
+
+	if len(newLineRunes) != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.GetNewLineRunes()\n"+
+			"Expected New Line Runes length == Zero"+
+			"because 'txtSolidLine01' is empty.\n"+
+			"HOWEVER, New Line Runes length = '%v'\n"+
+			"New Line Runes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			len(newLineRunes),
+			newLineRunes)
+
+		return
+	}
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	expectedNewLineRunes := []rune{'\n', '-', '\n'}
+
+	txtSolidLine02,
+		err := TextLineSpecSolidLine{}.
+		NewFullSolidLineRunesConfig(
+			leftMargin,
+			rightMargin,
+			[]rune(solidLineChars),
+			solidLineCharsRepeatCount,
+			expectedNewLineRunes,
+			ePrefix.XCtx(
+				"txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineRunes :=
+		txtSolidLine02.GetNewLineRunes()
+
+	sMechPreon := strMechPreon{}
+
+	areEqual :=
+		sMechPreon.equalRuneArrays(
+			expectedNewLineRunes,
+			actualNewLineRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine02.GetNewLineRunes()\n"+
+			"Expected New Line Runes = '%v'\n"+
+			"Instead, New Line Runes = '%v'\n"+
+			"Expected New Line Runs Length = %v\n"+
+			" Actual New Line Runes Length = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			string(expectedNewLineRunes),
+			string(actualNewLineRunes),
+			len(expectedNewLineRunes),
+			len(actualNewLineRunes))
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecSolidLine_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
