@@ -1561,6 +1561,75 @@ func TestTextLineSpecSolidLine_GetFormattedText_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecSolidLine_GetNewLineChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_GetNewLineChars_000100()",
+		"")
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	var newLineChars string
+
+	newLineChars = txtSolidLine01.GetNewLineChars()
+
+	if len(newLineChars) != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.GetNewLineChars()\n"+
+			"Expected New Line Characters length == Zero"+
+			"because 'txtSolidLine01' is empty.\n"+
+			"HOWEVER, New Line Characters length = '%v'\n"+
+			"New Line Characters = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			len(newLineChars),
+			newLineChars)
+
+		return
+	}
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	expectedNewLineChars := "\n-\n"
+
+	txtSolidLine02,
+		err := TextLineSpecSolidLine{}.
+		NewFullSolidLineRunesConfig(
+			leftMargin,
+			rightMargin,
+			[]rune(solidLineChars),
+			solidLineCharsRepeatCount,
+			[]rune(expectedNewLineChars),
+			ePrefix.XCtx(
+				"txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineChars :=
+		txtSolidLine02.GetNewLineChars()
+
+	if expectedNewLineChars != actualNewLineChars {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine02.GetNewLineChars()\n"+
+			"Expected New Line Characters = '%v'\n"+
+			"Instead, New Line Characters = '%v'\n"+
+			ePrefix.XCtxEmpty().String(),
+			expectedNewLineChars,
+			actualNewLineChars)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecSolidLine_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
