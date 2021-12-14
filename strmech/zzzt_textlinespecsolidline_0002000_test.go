@@ -1385,3 +1385,69 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_setTxtSolidLine_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_setTxtSolidLine_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := []rune{'-'}
+	solidLineCharsRepeatCount := 35
+	newLineChars := []rune{'\n', '\n'}
+	var turnLineTerminatorOff bool
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	txtSolidLineMolecule := textLineSpecSolidLineMolecule{}
+
+	err :=
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine01,
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	badSolidLineChars := []rune{'-', 0, '*', 0, '?'}
+
+	err =
+		txtSolidLineMolecule.setTxtSolidLine(
+			&txtSolidLine02,
+			leftMargin,
+			rightMargin,
+			badSolidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnLineTerminatorOff,
+			ePrefix.XCtx(
+				"txtSolidLine01 + badSolidLineChars"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR \n"+
+			"Expected an error return from txtSolidLineMolecule."+
+			"setTxtSolidLine()\n"+
+			"because 'badSolidLineChars' is an invalid rune array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

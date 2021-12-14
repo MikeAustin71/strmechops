@@ -1894,8 +1894,10 @@
 --- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_setTxtSolidLine_000100 (0.00s)
+=== RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000200
+--- PASS: TestTextLineSpecSolidLine_setTxtSolidLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 65.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.792s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.713s
