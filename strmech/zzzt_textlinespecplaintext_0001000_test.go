@@ -2088,6 +2088,66 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 
 }
 
+func TestTextLineSpecPlainText_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_IsValidInstanceError_000100()",
+		"")
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	isValid :=
+		plainTextLine01.IsValidInstance()
+
+	if isValid {
+
+		t.Errorf("%v - ERROR\n"+
+			"isValid := plainTextLine01.IsValidInstance()\n"+
+			"Expected isValid == 'false' because \n"+
+			"plainTextLine01 is empty and invalid.\n"+
+			"HOWEVER, isValid == 'true'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedLeftMarginRunes := []rune{' ', ' ', ' '}
+	expectedRightMarginRunes := []rune{' ', ' ', ' '}
+	expectedNewLineRunes := []rune{'\n', '\n'}
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine02,
+		err := TextLineSpecPlainText{}.NewPlainText(
+		expectedLeftMarginRunes,
+		expectedRightMarginRunes,
+		expectedTextString,
+		expectedNewLineRunes,
+		false,
+		ePrefix.XCtx("plainTextLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	isValid = plainTextLine02.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("%v - ERROR\n"+
+			"isValid := plainTextLine02.IsValidInstance()\n"+
+			"Expected isValid == 'true' because \n"+
+			"plainTextLine02 is a valid instance.\n"+
+			"HOWEVER, isValid == 'false'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
