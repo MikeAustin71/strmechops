@@ -1872,6 +1872,8 @@
 --- PASS: TestTextLineSpecSolidLine_Equal_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_EqualITextLine_000100
 --- PASS: TestTextLineSpecSolidLine_EqualITextLine_000100 (0.00s)
+=== RUN   TestTextLineSpecSolidLine_GetLeftMarginLength_000100
+--- PASS: TestTextLineSpecSolidLine_GetLeftMarginLength_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_GetFormattedText_000100
 --- PASS: TestTextLineSpecSolidLine_GetFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_IsValidInstance_000100
@@ -1900,4 +1902,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 65.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.713s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.828s
