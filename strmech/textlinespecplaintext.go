@@ -1067,6 +1067,62 @@ func (plainTextLine *TextLineSpecPlainText) GetTurnLineTerminatorOff() bool {
 	return plainTextLine.turnLineTerminatorOff
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecPlainText
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid, this method
+// returns a boolean value of 'true'.
+//
+// This method is functionally equivalent to
+// TextLineSpecPlainText.IsValidInstanceError() with the sole
+// exception being that this method takes no input parameters and
+// returns a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If any of the internal member data variables contained in
+//       the current instance of TextLineSpecPlainText are found
+//       to be invalid, this method will return a boolean value of
+//       'false'.
+//
+//       If all internal member data variables contained in the
+//       current instance of TextLineSpecPlainText are found to be
+//       valid, this method returns a boolean value of 'true'.
+//
+func (plainTextLine *TextLineSpecPlainText) IsValidInstance() bool {
+
+	if plainTextLine.lock == nil {
+		plainTextLine.lock = new(sync.Mutex)
+	}
+
+	plainTextLine.lock.Lock()
+
+	defer plainTextLine.lock.Unlock()
+
+	isValid,
+		_ := textLineSpecPlainTextAtom{}.ptr().
+		testValidityOfTextLineSpecPlainText(
+			plainTextLine,
+			nil)
+
+	return isValid
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecPlainText
 // instance to determine if they are valid.

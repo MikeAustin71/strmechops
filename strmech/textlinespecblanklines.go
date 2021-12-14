@@ -760,6 +760,63 @@ func (blkLines *TextLineSpecBlankLines) GetNumOfBlankLines() int {
 	return blkLines.numBlankLines
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecBlankLines
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid, this method
+// returns a boolean value of 'true'.
+//
+// This method is functionally equivalent to
+// TextLineSpecBlankLines.IsValidInstanceError() with the sole
+// exceptions being that this method takes no input parameters and
+// returns a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If any of the internal member data variables contained in
+//       the current instance of TextLineSpecBlankLines are found
+//       to be invalid, this method will return a boolean value of
+//       'false'.
+//
+//       Conversely, if all internal member data variables
+//       contained in the current instance of
+//       TextLineSpecBlankLines are found to be valid, this method
+//       returns a boolean value of 'true'.
+//
+func (blkLines *TextLineSpecBlankLines) IsValidInstance() bool {
+
+	if blkLines.lock == nil {
+		blkLines.lock = new(sync.Mutex)
+	}
+
+	blkLines.lock.Lock()
+
+	defer blkLines.lock.Unlock()
+
+	isValid,
+		_ := textLineSpecBlankLinesAtom{}.ptr().
+		testValidityOfTextLineSpecBlankLines(
+			blkLines,
+			nil)
+
+	return isValid
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecStandardLine
 // instance to determine if they are valid.
