@@ -1294,7 +1294,7 @@ func TestTextLineSpecSolidLine_EqualITextLine_000100(t *testing.T) {
 func TestTextLineSpecSolidLine_GetLeftMarginLength_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_EqualITextLine_000100()",
+		"TestTextLineSpecSolidLine_GetLeftMarginLength_000100()",
 		"")
 
 	expectedLeftMarginLength := 2
@@ -1363,10 +1363,82 @@ func TestTextLineSpecSolidLine_GetLeftMarginLength_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecSolidLine_GetRightMarginLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_GetRightMarginLength_000100()",
+		"")
+
+	leftMarginLength := 2
+	expectedRightMarginLength := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetSolidLine(
+			leftMarginLength,
+			expectedRightMarginLength,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualRightMarginLength :=
+		txtSolidLine01.GetRightMarginLength()
+
+	if expectedRightMarginLength != actualRightMarginLength {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.GetLeftMarginLength()\n"+
+			"Expected Right Margin Length DOES NOT match\n"+
+			"Actual Right Margin Length.\n"+
+			"Expected Right Margin Length = '%v'\n"+
+			"Instead, Right Margin Length = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedRightMarginLength,
+			actualRightMarginLength)
+
+		return
+	}
+
+	expectedRightMarginLength = 0
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	actualRightMarginLength =
+		txtSolidLine02.GetRightMarginLength()
+
+	if expectedRightMarginLength != actualRightMarginLength {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine02.GetLeftMarginLength()\n"+
+			"Note: 'txtSolidLine02' is empty!\n"+
+			"Expected Right Margin Length DOES NOT match\n"+
+			"Actual Right Margin Length.\n"+
+			"Expected Right Margin Length = '%v'\n"+
+			"Instead, Right Margin Length = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedRightMarginLength,
+			actualRightMarginLength)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecSolidLine_GetFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_EqualITextLine_000100()",
+		"TestTextLineSpecSolidLine_GetFormattedText_000100()",
 		"")
 
 	leftMargin := 2
@@ -1514,7 +1586,7 @@ func TestTextLineSpecSolidLine_IsValidInstance_000100(t *testing.T) {
 func TestTextLineSpecSolidLine_IsValidInstanceError_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_EqualITextLine_000100()",
+		"TestTextLineSpecSolidLine_IsValidInstanceError_000100()",
 		"")
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
@@ -1585,7 +1657,7 @@ func TestTextLineSpecSolidLine_IsValidInstanceError_000100(t *testing.T) {
 func TestTextLineSpecSolidLine_NewDefaultSolidLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_CopyIn_000100()",
+		"TestTextLineSpecSolidLine_NewDefaultSolidLine_000100()",
 		"")
 
 	solidLineChars := "-"
