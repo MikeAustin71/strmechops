@@ -1511,6 +1511,63 @@ func TestTextLineSpecBlankLines_GetNumberOfBlankLines_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecBlankLines_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_IsValidInstanceError_000100()",
+		"")
+
+	txtBlankLinesZero := TextLineSpecBlankLines{}
+
+	isValid :=
+		txtBlankLinesZero.IsValidInstance()
+
+	if isValid {
+
+		t.Errorf("%v - ERROR\n"+
+			"isValid := txtBlankLinesZero.IsValidInstance()\n"+
+			"Expected isValid == 'false' because \n"+
+			"'txtBlankLinesZero' is empty.\n"+
+			"HOWEVER, isValid=='true'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedNumOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		expectedNumOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	isValid = txtBlankLinesOne.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("%v - ERROR\n"+
+			"isValid := txtBlankLinesOne.IsValidInstance()\n"+
+			"Expected isValid == 'true' because \n"+
+			"'txtBlankLinesOne' is a valid instance.\n"+
+			"HOWEVER, isValid=='false'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecBlankLines_IsValidInstanceError_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
