@@ -1981,7 +1981,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecSolidLine.NewSolidLine()",
+		"TextLineSpecSolidLine."+
+			"NewSolidLine()",
 		"")
 
 	if err != nil {
