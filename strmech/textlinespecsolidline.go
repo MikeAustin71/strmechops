@@ -2178,7 +2178,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecSolidLine.NewPtrDefaultSolidLine()",
+		"TextLineSpecSolidLine."+
+			"NewPtrDefaultSolidLine()",
 		"")
 
 	if err != nil {

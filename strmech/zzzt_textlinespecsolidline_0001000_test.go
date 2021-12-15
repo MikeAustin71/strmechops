@@ -2254,7 +2254,7 @@ func TestTextLineSpecSolidLine_NewFullSolidLineRunesConfig_000100(t *testing.T) 
 func TestTextLineSpecSolidLine_NewSolidLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_NewFullSolidLineRunesConfig_000100()",
+		"TestTextLineSpecSolidLine_NewSolidLine_000100()",
 		"")
 
 	leftMargin := 2
@@ -2338,6 +2338,93 @@ func TestTextLineSpecSolidLine_NewSolidLine_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from TextLineSpecSolidLine{}."+
 			"NewSolidLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_NewPtrDefaultSolidLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_NewSolidLine_000100()",
+		"")
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+
+	expectedSolidLineStr :=
+		strings.Repeat(
+			solidLineChars,
+			solidLineCharsRepeatCount) +
+			"\n"
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewPtrDefaultSolidLine(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText :=
+		txtSolidLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	_,
+		err = TextLineSpecSolidLine{}.NewPtrDefaultSolidLine(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecSolidLine{}."+
+			"NewPtrDefaultSolidLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
