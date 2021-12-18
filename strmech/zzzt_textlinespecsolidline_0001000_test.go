@@ -2935,3 +2935,194 @@ func TestTextLineSpecSolidLine_NewPtrSolidLine_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n\n\n"
+	var turnAutoLineTerminationOff bool
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	turnAutoLineTerminationOff = false
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewSolidLineAllParms(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		newLineChars,
+		turnAutoLineTerminationOff,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if txtSolidLine01.turnLineTerminatorOff == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.turnLineTerminatorOff == 'true'\n"+
+			"Expected turnLineTerminatorOff == 'false'\n"+
+			"Instead, turnLineTerminatorOff == 'true'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText :=
+		txtSolidLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	var txtSolidLine02 TextLineSpecSolidLine
+
+	turnAutoLineTerminationOff = true
+
+	expectedSolidLineStr =
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin)
+
+	txtSolidLine02,
+		err = TextLineSpecSolidLine{}.NewSolidLineAllParms(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		newLineChars,
+		turnAutoLineTerminationOff,
+		ePrefix.XCtx(
+			"txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine02.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if txtSolidLine02.turnLineTerminatorOff == false {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine02.turnLineTerminatorOff == 'false'\n"+
+			"Expected turnLineTerminatorOff == 'true'\n"+
+			"Instead, turnLineTerminatorOff == 'false'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine02FmtText :=
+		txtSolidLine02.String()
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine02FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - txtSolidLine02.String()\n"+
+			"Expected Formatted Text String 02 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	_,
+		err = TextLineSpecSolidLine{}.NewSolidLineAllParms(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		newLineChars,
+		turnAutoLineTerminationOff,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecSolidLine{}."+
+			"NewSolidLineAllParms()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
