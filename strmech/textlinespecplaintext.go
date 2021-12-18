@@ -1534,7 +1534,7 @@ func (plainTextLine TextLineSpecPlainText) NewDefault(
 //
 //       When this boolean value is set to 'true', it turns off or
 //       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//       each line of text produced by TextLineSpecPlainText.
 //
 //
 //  errorPrefix                interface{}
