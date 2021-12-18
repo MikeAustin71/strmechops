@@ -1789,7 +1789,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 	return txtSolidLine, err
 }
 
-// NewFullSolidLineTermination - Creates and returns a new instance of
+// NewFullSolidLineAllParms - Creates and returns a new instance of
 // TextLineSpecSolidLine. This method requires more input
 // parameters than other similar methods, but in return, it allows
 // the user to exercise control over all facets of the
@@ -1981,7 +1981,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineTermination(
+func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineAllParms(
 	leftMargin int,
 	rightMargin int,
 	solidLineChars string,
@@ -2006,7 +2006,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineTermination(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecSolidLine."+
-			"NewFullSolidLineTermination()",
+			"NewFullSolidLineAllParms()",
 		"")
 
 	if err != nil {
@@ -2904,7 +2904,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 	return &txtSolidLine, err
 }
 
-// NewPtrFullSolidLineTermination - Creates and returns a new instance of
+// NewPtrFullSolidLineAllParms - Creates and returns a new instance of
 // TextLineSpecSolidLine. This method requires more input
 // parameters than other similar methods, but in return, it allows
 // the user to exercise control over all facets of the
@@ -3097,7 +3097,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineTermination(
+func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineAllParms(
 	leftMargin int,
 	rightMargin int,
 	solidLineChars string,
@@ -3472,7 +3472,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 //
 //  if err != nil &&
 //    err != io.EOF {
-//     return fmt.Errorf(
+//     return fmt.Error(
 //      "Error Returned From txtSpecSolidLine01.Read(p)\n"+
 //      "Error = \n%v\n",
 //       err.Error())
@@ -3506,7 +3506,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 //
 //  if err != nil &&
 //    err != io.EOF {
-//     return fmt.Errorf(
+//     return fmt.Error(
 //      "Error Returned From txtSpecSolidLine01.Read(p)\n"+
 //      "Error = \n%v\n",
 //       err.Error())
