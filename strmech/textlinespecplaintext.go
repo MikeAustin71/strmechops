@@ -1043,7 +1043,7 @@ func (plainTextLine *TextLineSpecPlainText) GetTextString() string {
 // line terminators as defined by member variable 'newLineChars'
 // WILL BE applied as a line termination sequence for the line of
 // text produced by TextLineSpecPlainText. The default value for
-// for 'turnLineTerminatorOff' is 'false'.
+// 'turnLineTerminatorOff' is 'false'.
 //
 // When this boolean value is set to 'true', it turns off or
 // cancels the automatic generation of line terminators for each
