@@ -2993,7 +2993,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //
 //  if err != nil &&
 //    err != io.EOF {
-//     return fmt.Errorf(
+//     return fmt.Error(
 //      "Error Returned From stdLine01.Read(p)\n"+
 //      "Error = \n%v\n",
 //       err.Error())
@@ -3027,7 +3027,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //
 //  if err != nil &&
 //    err != io.EOF {
-//     return fmt.Errorf(
+//     return fmt.Error(
 //      "Error Returned From stdLine01.Read(p)\n"+
 //      "Error = \n%v\n",
 //       err.Error())
