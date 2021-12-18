@@ -1447,7 +1447,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 // line terminators as defined by member variable 'newLineChars'
 // WILL BE applied as a line termination sequence for each line of
 // text produced by TextLineSpecStandardLine. The default value for
-// for 'turnLineTerminatorOff' is 'false'.
+// 'turnLineTerminatorOff' is 'false'.
 //
 // When this boolean value is set to 'true', it turns off or
 // cancels the automatic generation of line terminators for each
@@ -1676,8 +1676,8 @@ func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -1914,8 +1914,8 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -2188,8 +2188,8 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -2423,8 +2423,8 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -2693,8 +2693,8 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -3787,8 +3787,8 @@ func (stdLine *TextLineSpecStandardLine) SetLineTerminationRunes(
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -3986,8 +3986,8 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
@@ -4164,8 +4164,8 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 //       ITextLineSpecification interface. These text fields are
 //       assembled by the TextLineSpecStandardLine type and formatted
 //       as a single line of text. This single line of text is
-//       is output one or more times as specified by input
-//       parameter, 'numOfStdLines'.
+//       output one or more times as specified by input parameter,
+//       'numOfStdLines'.
 //
 //       Text fields are the building blocks used to assemble a
 //       standard line of text.
