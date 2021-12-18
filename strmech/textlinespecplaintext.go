@@ -1435,7 +1435,7 @@ func (plainTextLine TextLineSpecPlainText) NewDefault(
 	return newPlainTxtLine, err
 }
 
-// NewPlainText - Creates and returns a new instance of
+// NewPlainTextAllParms - Creates and returns a new instance of
 // TextLineSpecPlainText using the values passed through
 // input parameters.
 //
@@ -1601,7 +1601,7 @@ func (plainTextLine TextLineSpecPlainText) NewDefault(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (plainTextLine TextLineSpecPlainText) NewPlainText(
+func (plainTextLine TextLineSpecPlainText) NewPlainTextAllParms(
 	leftMarginChars []rune,
 	rightMarginChars []rune,
 	textString string,
@@ -1628,7 +1628,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainText(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"NewPlainText()",
+			"NewPlainTextAllParms()",
 		"")
 
 	if err != nil {
@@ -1665,7 +1665,7 @@ func (plainTextLine TextLineSpecPlainText) NewPlainText(
 // customized and provided by the calling function.
 //
 // This method is similar to
-// TextLineSpecPlainText.NewPlainText() with the sole exception
+// TextLineSpecPlainText.NewPlainTextAllParms() with the sole exception
 // being that this method receives input parameter 'textRunes' as
 // an array of runes instead of a string.
 //
@@ -3012,7 +3012,7 @@ func (plainTextLine TextLineSpecPlainText) NewPtrPlainTextStrings(
 //
 //  if err != nil &&
 //    err != io.EOF {
-//     return fmt.Errorf(
+//     return fmt.Error(
 //      "Error Returned From plainTextLine01.Read(p)\n"+
 //      "Error = \n%v\n",
 //       err.Error())
@@ -3046,7 +3046,7 @@ func (plainTextLine TextLineSpecPlainText) NewPtrPlainTextStrings(
 //
 //  if err != nil &&
 //    err != io.EOF {
-//     return fmt.Errorf(
+//     return fmt.Error(
 //      "Error Returned From plainTextLine01.Read(p)\n"+
 //      "Error = \n%v\n",
 //       err.Error())

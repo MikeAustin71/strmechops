@@ -251,7 +251,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
@@ -446,7 +446,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	var plainTextLine04 TextLineSpecPlainText
 
 	plainTextLine04,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
@@ -1101,7 +1101,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -1220,7 +1220,7 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
@@ -1383,7 +1383,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRune,
 		expectedTextString,
@@ -1481,7 +1481,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRune,
 		expectedTextString,
@@ -1623,7 +1623,7 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -1786,7 +1786,7 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -1864,7 +1864,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
@@ -2117,7 +2117,7 @@ func TestTextLineSpecPlainText_IsValidInstance_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine02,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -2181,7 +2181,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 	var plainTextLine02 TextLineSpecPlainText
 
 	plainTextLine02,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -2314,7 +2314,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 	var plainTextLine03 TextLineSpecPlainText
 
 	plainTextLine03,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -2476,7 +2476,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -2500,7 +2500,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 	}
 
 	_,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -2512,7 +2512,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from TextLineSpecPlainText{}."+
-			"NewPlainText()\n"+
+			"NewPlainTextAllParms()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -4141,7 +4141,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 	var plainTextLine01 TextLineSpecPlainText
 
 	plainTextLine01,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -4217,7 +4217,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 	var plainTextLine02 TextLineSpecPlainText
 
 	plainTextLine02,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -4280,7 +4280,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 	var plainTextLine03 TextLineSpecPlainText
 
 	plainTextLine03,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -4604,7 +4604,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	var plainTextLine01 TextLineSpecPlainText
 
 	plainTextLine01,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -4688,7 +4688,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	var plainTextLine02 TextLineSpecPlainText
 
 	plainTextLine02,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -4736,7 +4736,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	var plainTextLine03 TextLineSpecPlainText
 
 	plainTextLine03,
-		err = TextLineSpecPlainText{}.NewPlainText(
+		err = TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginRunes,
 		expectedRightMarginRunes,
 		expectedTextString,
@@ -5794,7 +5794,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
@@ -5872,7 +5872,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
 	expectedTextString := "How now brown cow!"
 
 	plainTextLine01,
-		err := TextLineSpecPlainText{}.NewPlainText(
+		err := TextLineSpecPlainText{}.NewPlainTextAllParms(
 		expectedLeftMarginChars,
 		expectedRightMarginChars,
 		expectedTextString,
