@@ -2960,7 +2960,7 @@ func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
 	turnAutoLineTerminationOff = false
 
 	txtSolidLine01,
-		err := TextLineSpecSolidLine{}.NewSolidLineAllParms(
+		err := TextLineSpecSolidLine{}.NewPtrSolidLineAllParms(
 		leftMargin,
 		rightMargin,
 		solidLineChars,
@@ -3026,7 +3026,7 @@ func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
 		return
 	}
 
-	var txtSolidLine02 TextLineSpecSolidLine
+	var txtSolidLine02 *TextLineSpecSolidLine
 
 	turnAutoLineTerminationOff = true
 
@@ -3038,7 +3038,7 @@ func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
 			strings.Repeat(" ", rightMargin)
 
 	txtSolidLine02,
-		err = TextLineSpecSolidLine{}.NewSolidLineAllParms(
+		err = TextLineSpecSolidLine{}.NewPtrSolidLineAllParms(
 		leftMargin,
 		rightMargin,
 		solidLineChars,
@@ -3103,7 +3103,7 @@ func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
 	}
 
 	_,
-		err = TextLineSpecSolidLine{}.NewSolidLineAllParms(
+		err = TextLineSpecSolidLine{}.NewPtrSolidLineAllParms(
 		leftMargin,
 		rightMargin,
 		solidLineChars,
@@ -3116,7 +3116,7 @@ func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from TextLineSpecSolidLine{}."+
-			"NewSolidLineAllParms()\n"+
+			"NewPtrSolidLineAllParms()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())

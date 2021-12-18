@@ -3336,6 +3336,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLineAllParms(
 
 	defer txtSpecSolidLine.lock.Unlock()
 
+	txtSolidLine = &TextLineSpecSolidLine{}
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
