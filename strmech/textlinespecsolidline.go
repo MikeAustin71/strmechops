@@ -781,7 +781,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) GetFormattedText(
 }
 
 // GetNewLineChars - Returns the solid line termination sequence
-// as a string.
+// as a string. New line characters ('newLineChars') are also known
+// as line termination characters.
 //
 // By default, solid line text produced by an instance of
 // TextLineSpecSolidLine will be terminated by a single new line
@@ -824,7 +825,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) GetNewLineChars() string {
 }
 
 // GetNewLineRunes - Returns the solid line termination sequence
-// as an array of runes.
+// as an array of runes. New line runes or characters
+// ('newLineChars') are also known as line termination characters.
 //
 // By default, solid line text produced by an instance of
 // TextLineSpecSolidLine will be terminated by a single new line
@@ -973,6 +975,44 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) GetSolidLineRunes() []rune {
 	}
 
 	return txtSpecSolidLine.solidLineChars
+}
+
+// GetTurnLineTerminatorOff - Returns the internal member variable
+// 'turnLineTerminatorOff' as a boolean value.
+//
+// The 'turnLineTerminatorOff' flag controls whether a line
+// termination character or characters will be automatically
+// appended to each line of text produced by
+// TextLineSpecSolidLine.
+//
+// When the boolean flag 'turnLineTerminatorOff' is set to 'false',
+// line terminators as defined by member variable 'newLineChars'
+// WILL BE applied as a line termination sequence for the line of
+// text produced by TextLineSpecSolidLine. The default value for
+// 'turnLineTerminatorOff' is 'false'.
+//
+// When this boolean value is set to 'true', it turns off or
+// cancels the automatic generation of line terminators for each
+// line of text produced by TextLineSpecSolidLine.
+//
+// The default line terminator is the new line character ('\n')
+// which is defined by member variable 'newLineChars'. However,
+// this value is subject to user control and may be overridden
+// by one or more characters.
+//
+// Again, the default value for 'turnLineTerminatorOff' is false.
+//
+func (txtSpecSolidLine *TextLineSpecSolidLine) GetTurnLineTerminatorOff() bool {
+
+	if txtSpecSolidLine.lock == nil {
+		txtSpecSolidLine.lock = new(sync.Mutex)
+	}
+
+	txtSpecSolidLine.lock.Lock()
+
+	defer txtSpecSolidLine.lock.Unlock()
+
+	return txtSpecSolidLine.turnLineTerminatorOff
 }
 
 // IsValidInstance - Performs a diagnostic review of the data

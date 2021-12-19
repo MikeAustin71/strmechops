@@ -1054,6 +1054,8 @@ func (plainTextLine *TextLineSpecPlainText) GetTextString() string {
 // this value is subject to user control and may be overridden
 // by one or more characters.
 //
+// Again, the default value for 'turnLineTerminatorOff' is false.
+//
 func (plainTextLine *TextLineSpecPlainText) GetTurnLineTerminatorOff() bool {
 
 	if plainTextLine.lock == nil {
