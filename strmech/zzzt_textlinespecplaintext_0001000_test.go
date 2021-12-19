@@ -3289,12 +3289,12 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 		err = txtSpecAtom.readBytes(
 		nil,
 		p,
-		ePrefix.XCtx("plainTextLine == 'nil'"))
+		ePrefix.XCtx("textReader == 'nil'"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: Expected error return from txtSpecAtom.readBytes()"+
-			"because input parameter 'plainTextLine' == 'nil'.\n"+
+			"because input parameter 'textReader' == 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 

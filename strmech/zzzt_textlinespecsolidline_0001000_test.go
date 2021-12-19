@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"strings"
 	"testing"
 )
@@ -3254,6 +3255,747 @@ func TestTextLineSpecSolidLine_NewPtrSolidLineAllParms_000100(t *testing.T) {
 			"Expected an error return from TextLineSpecSolidLine{}."+
 			"NewPtrSolidLineAllParms()\n"+
 			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_Read_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n-\n"
+
+	expectedTextStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetFullSolidLineConfig(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtSolidLine01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n" +
+			"Initial creation of instance 'txtSolidLine01' is invalid!!!\n" +
+			ePrefix.String())
+
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, lenExpectedStr+1)
+
+	var n, readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = txtSolidLine01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSolidLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if txtSolidLine01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"txtSolidLine01.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtSolidLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_Read_000200()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n-\n"
+	var turnAutoLineTerminationOff bool
+	turnAutoLineTerminationOff = true
+
+	expectedTextStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin)
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetSolidLineAllParms(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnAutoLineTerminationOff,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtSolidLine01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n" +
+			"Initial creation of instance 'txtSolidLine01' is invalid!!!\n" +
+			ePrefix.String())
+
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, 1)
+
+	var actualStr string
+
+	var n, readBytesCnt int
+
+	for {
+
+		n,
+			err = txtSolidLine01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSolidLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSolidLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtSolidLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+		return
+	}
+
+	if txtSolidLine01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After a successful series of byte reads,\n"+
+			"txtSolidLine01.textLineReader pointer has NOT\n"+
+			"BEEN RESET TO 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+		return
+	}
+
+	p = make([]byte, 100)
+	readBytesCnt = 0
+	actualStr = ""
+
+	for {
+
+		n,
+			err = txtSolidLine01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: Test # 2\n"+
+			"Error Returned From txtSolidLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Test # 2\n"+
+			"Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_Read_000300()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n-\n"
+
+	expectedTextStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetFullSolidLineRunesConfig(
+			leftMargin,
+			rightMargin,
+			[]rune(solidLineChars),
+			solidLineCharsRepeatCount,
+			[]rune(newLineChars),
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtSolidLine01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n" +
+			"Initial creation of instance 'txtSolidLine01' is invalid!!!\n" +
+			ePrefix.String())
+
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	txtSpecAtom := textSpecificationAtom{}
+
+	var n int
+	p := make([]byte, 100)
+
+	n,
+		err = txtSpecAtom.readBytes(
+		nil,
+		p,
+		ePrefix.XCtx("textReader == 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtSpecAtom.readBytes()"+
+			"because input parameter 'textReader' == 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var formattedTxtStr string
+	txtSolidLineMolecule := textLineSpecSolidLineMolecule{}
+
+	formattedTxtStr,
+		err =
+		txtSolidLineMolecule.getFormattedText(
+			&txtSolidLine01,
+			ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	p = make([]byte, 0)
+
+	txtSolidLine01.textLineReader =
+		strings.NewReader(formattedTxtStr)
+
+	n,
+		err = txtSpecAtom.readBytes(
+		txtSolidLine01.textLineReader,
+		p,
+		ePrefix.XCtx("p == zero length"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtSpecAtom.readBytes()"+
+			"because input parameter 'p' is a zero length byte array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	p = make([]byte, 100)
+
+	var readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = txtSpecAtom.readBytes(
+			txtSolidLine01.textLineReader,
+			p,
+			ePrefix.XCtx("txtSolidLine01 is valid"))
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSpecAtom.readBytes(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtSpecAtom.readBytes(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_Read_000400()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n"
+
+	expectedTextStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetSolidLine(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	p := make([]byte, 15)
+
+	var n, readBytesCnt int
+	sb := strings.Builder{}
+	sb.Grow(128)
+
+	for {
+
+		n,
+			err = txtSolidLine01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		sb.Write(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSolidLine01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if txtSolidLine01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"txtSolidLine01.textLineReader != 'nil'\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: plainTextLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_CopyIn_000100()",
+		"")
+
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewDefaultSolidLine(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtSolidLine01.solidLineChars = nil
+	txtSolidLine01.newLineChars = nil
+	txtSolidLine01.leftMargin = -1
+	txtSolidLine01.rightMargin = -1
+	txtSolidLine01.solidLineCharsRepeatCount = -1
+
+	p := make([]byte, 15)
+
+	_,
+		err = txtSolidLine01.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01.Read(p)\n"+
+			"because 'txtSolidLine01' contains invalid data.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
