@@ -2123,6 +2123,32 @@ func TestTextLineSpecPlainText_setPlainTextSpecRunes_000200(t *testing.T) {
 		return
 	}
 
+	textRunes :=
+		[]rune{'H', 0, 'e', 0, 'l', 'l', 'o'}
+
+	err =
+		txtLinePlainTextNanobot.setPlainTextSpecRunes(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textRunes,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextNanobot."+
+			"setPlainTextSpecRunes()\n"+
+			"because 'textRunes' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
