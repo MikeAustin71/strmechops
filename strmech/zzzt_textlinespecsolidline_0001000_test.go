@@ -4002,5 +4002,21 @@ func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
 		return
 	}
 
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	_,
+		err = txtSolidLine02.Read(p)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine02.Read(p)\n"+
+			"because 'txtSolidLine02' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
