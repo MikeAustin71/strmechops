@@ -1226,7 +1226,7 @@ func (blkLines TextLineSpecBlankLines) NewBlankLineRunes(
 //  TextLineSpecBlankLines.NewPtrBlankLines()
 //  TextLineSpecBlankLines.NewRunesBlankLines()
 //  TextLineSpecBlankLines.SetSpecBlankLines()
-//  TextLineSpecBlankLines.SetSpecRunesBlankLines()
+//  TextLineSpecBlankLines.SetSpecBlankLineRunes()
 //  TextLineSpecBlankLines.SetNewLineChars()
 //
 //
@@ -1507,7 +1507,7 @@ func (blkLines TextLineSpecBlankLines) NewPtrBlankLines(
 //  TextLineSpecBlankLines.NewPtrBlankLines()
 //  TextLineSpecBlankLines.NewRunesBlankLines()
 //  TextLineSpecBlankLines.SetSpecBlankLines()
-//  TextLineSpecBlankLines.SetSpecRunesBlankLines()
+//  TextLineSpecBlankLines.SetSpecBlankLineRunes()
 //  TextLineSpecBlankLines.SetNewLineChars()
 //
 //
@@ -2655,7 +2655,7 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 // of TextLineSpecBlankLines.
 //
 // This method differs from
-// TextLineSpecBlankLines.SetSpecRunesBlankLines() in that the
+// TextLineSpecBlankLines.SetSpecBlankLineRunes() in that the
 // "new line characters" parameter is submitted as string.
 //
 // IMPORTANT
@@ -2804,7 +2804,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecBlankLines(
 //  TextLineSpecBlankLines.NewPtrBlankLines()
 //  TextLineSpecBlankLines.NewRunesBlankLines()
 //  TextLineSpecBlankLines.SetSpecBlankLines()
-//  TextLineSpecBlankLines.SetSpecRunesBlankLines()
+//  TextLineSpecBlankLines.SetSpecBlankLineRunes()
 //  TextLineSpecBlankLines.SetNewLineChars()
 //
 // IMPORTANT
@@ -2915,7 +2915,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecDefaultBlankLines(
 				"->blkLines"))
 }
 
-// SetSpecRunesBlankLines - Reconfigures the current instance of
+// SetSpecBlankLineRunes - Reconfigures the current instance of
 // TextLineSpecBlankLines using the input parameters,
 // 'numOfBlankLines' and 'newLineRunes'.
 //
@@ -3021,7 +3021,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecDefaultBlankLines(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (blkLines *TextLineSpecBlankLines) SetSpecRunesBlankLines(
+func (blkLines *TextLineSpecBlankLines) SetSpecBlankLineRunes(
 	numOfBlankLines int,
 	newLineRunes []rune,
 	errorPrefix interface{}) error {
@@ -3041,7 +3041,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecRunesBlankLines(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecBlankLines."+
-			"SetSpecRunesBlankLines()",
+			"SetSpecBlankLineRunes()",
 		"")
 
 	if err != nil {

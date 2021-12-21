@@ -4182,7 +4182,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	txtBlankLinesOne := TextLineSpecBlankLines{}
 
 	err :=
-		txtBlankLinesOne.SetSpecRunesBlankLines(
+		txtBlankLinesOne.SetSpecBlankLineRunes(
 			numOfBlankLines,
 			newLineRunes,
 			ePrefix.XCtx("txtBlankLinesOne"))
@@ -4284,7 +4284,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	newLineRunes = []rune(newLineChars)
 
 	err =
-		txtBlankLinesThree.SetSpecRunesBlankLines(
+		txtBlankLinesThree.SetSpecBlankLineRunes(
 			numOfBlankLines,
 			newLineRunes,
 			ePrefix.XCtx("txtBlankLinesThree"))
@@ -4292,7 +4292,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtBlankLinesThree."+
-			"SetSpecRunesBlankLines()\n"+
+			"SetSpecBlankLineRunes()\n"+
 			"because 'numOfBlankLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -4309,7 +4309,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	newLineRunes = nil
 
 	err =
-		txtBlankLinesFour.SetSpecRunesBlankLines(
+		txtBlankLinesFour.SetSpecBlankLineRunes(
 			numOfBlankLines,
 			newLineRunes,
 			ePrefix.XCtx("txtBlankLinesFour"))
@@ -4318,7 +4318,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Test # 1 - newLineRunes = nil\n"+
 			"Expected an error return from txtBlankLinesFour."+
-			"SetSpecRunesBlankLines()\n"+
+			"SetSpecBlankLineRunes()\n"+
 			"because 'newLineRunes' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -4331,7 +4331,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	newLineRunes = make([]rune, 0)
 
 	err =
-		txtBlankLinesFive.SetSpecRunesBlankLines(
+		txtBlankLinesFive.SetSpecBlankLineRunes(
 			numOfBlankLines,
 			newLineRunes,
 			ePrefix.XCtx("txtBlankLinesFour"))
@@ -4357,7 +4357,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	newLineRunes = []rune(newLineChars)
 
 	err =
-		txtBlankLinesSix.SetSpecRunesBlankLines(
+		txtBlankLinesSix.SetSpecBlankLineRunes(
 			numOfBlankLines,
 			newLineRunes,
 			StrMech{})
@@ -4365,7 +4365,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtBlankLinesThree."+
-			"SetSpecRunesBlankLines()\n"+
+			"SetSpecBlankLineRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
