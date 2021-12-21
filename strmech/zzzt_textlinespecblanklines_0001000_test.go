@@ -346,7 +346,7 @@ func TestTextLineSpecBlankLines_CopyOut_000200(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	blankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -1539,7 +1539,7 @@ func TestTextLineSpecBlankLines_IsValidInstance_000100(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		expectedNumOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -1601,7 +1601,7 @@ func TestTextLineSpecBlankLines_IsValidInstanceError_000100(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err = TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		expectedNumOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -2338,7 +2338,7 @@ func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -2355,7 +2355,7 @@ func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
 			"txtBlankLinesOne"))
 
 	_,
-		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err = TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		StrMech{})
@@ -2364,7 +2364,7 @@ func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from TextLineSpecBlankLines{}."+
-			"NewPtrRunesBlankLines()\n"+
+			"NewPtrBlankLineRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -2375,7 +2375,7 @@ func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
 	var txtBlankLinesTwo *TextLineSpecBlankLines
 
 	txtBlankLinesTwo,
-		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err = TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -2437,7 +2437,7 @@ func TestTextLineSpecBlankLines_Read_000100(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -2567,7 +2567,7 @@ func TestTextLineSpecBlankLines_Read_000200(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -2758,7 +2758,7 @@ func TestTextLineSpecBlankLines_Read_000300(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -2940,7 +2940,7 @@ func TestTextLineSpecBlankLines_ReaderInitialize_000100(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewPtrBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
