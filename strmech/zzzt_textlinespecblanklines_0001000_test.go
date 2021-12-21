@@ -101,7 +101,7 @@ func TestTextLineSpecBlankLines_CopyIn_000200(t *testing.T) {
 	newLineRunes := []rune{'!', '\n'}
 
 	blankLinesOne,
-		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -1350,7 +1350,7 @@ func TestTextLineSpecBlankLines_GetNewLineRunes_000100(t *testing.T) {
 	actualRuneArray = []rune{'!', '\n'}
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewBlankLineRunes(
 		numOfBlankLines,
 		actualRuneArray,
 		ePrefix.XCtx(
@@ -1756,6 +1756,111 @@ func TestTextLineSpecBlankLines_NewBlankLines_000100(t *testing.T) {
 }
 
 func TestTextLineSpecBlankLines_NewBlankLineRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecBlankLines_NewBlankLineRunes_000100()",
+		"")
+
+	numOfBlankLines := 3
+
+	newLineRunes := []rune{'!', '\n'}
+
+	txtBlankLinesOne,
+		err := TextLineSpecBlankLines{}.NewBlankLineRunes(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtBlankLinesOne.IsValidInstanceError(
+		ePrefix.XCtx(
+			"txtBlankLinesOne"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = TextLineSpecBlankLines{}.NewBlankLineRunes(
+		numOfBlankLines,
+		newLineRunes,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecBlankLines{}."+
+			"NewBlankLineRunes()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var txtBlankLinesTwo TextLineSpecBlankLines
+
+	txtBlankLinesTwo,
+		err = TextLineSpecBlankLines{}.NewBlankLineRunes(
+		numOfBlankLines,
+		newLineRunes,
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	expectedFmtStr :=
+		strings.Repeat(string(newLineRunes), numOfBlankLines)
+
+	var actualStr string
+
+	actualStr,
+		err = txtBlankLinesTwo.GetFormattedText(
+		ePrefix.XCtx(
+			"txtBlankLinesTwo"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedFmtStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"txtBlankLinesTwo.GetFormattedText()\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecBlankLines_NewBlankLineRunes_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextLineSpecBlankLines_NewBlankLines_000100()",
@@ -2271,105 +2376,6 @@ func TestTextLineSpecBlankLines_NewPtrRunesBlankLines_000100(t *testing.T) {
 
 	txtBlankLinesTwo,
 		err = TextLineSpecBlankLines{}.NewPtrRunesBlankLines(
-		numOfBlankLines,
-		newLineRunes,
-		ePrefix.XCtx(
-			"txtBlankLinesTwo"))
-
-	expectedFmtStr :=
-		strings.Repeat(string(newLineRunes), numOfBlankLines)
-
-	var actualStr string
-
-	actualStr,
-		err = txtBlankLinesTwo.GetFormattedText(
-		ePrefix.XCtx(
-			"txtBlankLinesTwo"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	sMech := StrMech{}
-
-	printableExpectedStr :=
-		sMech.ConvertNonPrintableChars(
-			[]rune(expectedFmtStr),
-			true)
-
-	printableActualStr :=
-		sMech.ConvertNonPrintableChars(
-			[]rune(actualStr),
-			true)
-
-	if printableExpectedStr != printableActualStr {
-		t.Errorf("%v\n"+
-			"txtBlankLinesTwo.GetFormattedText()\n"+
-			"Error: Expected Text String DOES NOT match\n"+
-			"Actual Text String.\n"+
-			"Expected Text String = '%v'\n"+
-			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			printableExpectedStr,
-			printableActualStr)
-
-		return
-	}
-
-	return
-}
-
-func TestTextLineSpecBlankLines_NewRunesBlankLines_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecBlankLines_NewRunesBlankLines_000100()",
-		"")
-
-	numOfBlankLines := 3
-
-	newLineRunes := []rune{'!', '\n'}
-
-	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
-		numOfBlankLines,
-		newLineRunes,
-		ePrefix.XCtx(
-			"txtBlankLinesOne"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	err = txtBlankLinesOne.IsValidInstanceError(
-		ePrefix.XCtx(
-			"txtBlankLinesOne"))
-
-	_,
-		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
-		numOfBlankLines,
-		newLineRunes,
-		StrMech{})
-
-	if err == nil {
-
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from TextLineSpecBlankLines{}."+
-			"NewRunesBlankLines()\n"+
-			"because 'errorPrefix' is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-	var txtBlankLinesTwo TextLineSpecBlankLines
-
-	txtBlankLinesTwo,
-		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -3531,7 +3537,7 @@ func TestTextLineSpecBlankLines_SetNewLineRunes_000100(t *testing.T) {
 	var txtBlankLinesOne TextLineSpecBlankLines
 
 	txtBlankLinesOne,
-		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
+		err = TextLineSpecBlankLines{}.NewBlankLineRunes(
 		numOfBlankLines,
 		expectedNewLineRunes,
 		ePrefix.XCtx(
@@ -4206,7 +4212,7 @@ func TestTextLineSpecBlankLines_SetSpecRunesBlankLines_000100(t *testing.T) {
 	var txtBlankLinesTwo TextLineSpecBlankLines
 
 	txtBlankLinesTwo,
-		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
+		err = TextLineSpecBlankLines{}.NewBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -4541,7 +4547,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000100(t *testing.T) {
 		strings.Repeat(newLineChars, numOfBlankLines)
 
 	txtBlankLinesOne,
-		err := TextLineSpecBlankLines{}.NewRunesBlankLines(
+		err := TextLineSpecBlankLines{}.NewBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
@@ -4640,7 +4646,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 	var txtBlankLinesTwo TextLineSpecBlankLines
 
 	txtBlankLinesTwo,
-		err = TextLineSpecBlankLines{}.NewRunesBlankLines(
+		err = TextLineSpecBlankLines{}.NewBlankLineRunes(
 		numOfBlankLines,
 		newLineRunes,
 		ePrefix.XCtx(
