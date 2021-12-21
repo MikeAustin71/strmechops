@@ -1255,6 +1255,126 @@ func TestTextLineSpecPlainText_setPlainTextSpec_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecPlainText_setDefaultPlainTextSpec_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_setPlainTextSpec_000100()",
+		"")
+
+	leftMarginSpaces := 2
+	rightMarginSpaces := 3
+	textString := "How now brown cow"
+
+	leftMargin := strings.Repeat(" ", leftMarginSpaces)
+
+	rightMargin := strings.Repeat(" ", rightMarginSpaces)
+
+	plainTextLine01 := TextLineSpecPlainText{}
+
+	txtLinePlainTextAtom := textLineSpecPlainTextAtom{}
+
+	err :=
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = plainTextLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	leftMarginRunes := []rune{' ', 0, ' ', 0, ' '}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			leftMarginRunes,
+			[]rune(rightMargin),
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'leftMarginRunes' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	rightMarginRunes := []rune{' ', 0, ' ', 0, ' '}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			rightMarginRunes,
+			textString,
+			[]rune{'\n'},
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'rightMarginRunes' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	newLineRunes := []rune{'\n', 0, '\n', 0, '\n'}
+
+	err =
+		txtLinePlainTextAtom.setPlainTextSpec(
+			&plainTextLine01,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
+			textString,
+			newLineRunes,
+			false,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err == nil {
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinePlainTextAtom."+
+			"setPlainTextSpec()\n"+
+			"because 'newLineRunes' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1383,6 +1503,70 @@ func TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100(t *tes
 	}
 
 	return
+}
+
+func TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100()",
+		"")
+
+	expectedLeftMarginChars := []rune{' ', ' ', ' '}
+	expectedRightMarginChars := []rune{' ', ' ', ' '}
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	expectedTextString := "How now brown cow!"
+
+	plainTextLine01,
+		err := TextLineSpecPlainText{}.NewPtrPlainText(
+		expectedLeftMarginChars,
+		expectedRightMarginChars,
+		expectedTextString,
+		expectedNewLineChars,
+		false,
+		ePrefix.XCtx("plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinePlainTextAtom := textLineSpecPlainTextAtom{}
+
+	var isValid bool
+
+	isValid,
+		err =
+		txtLinePlainTextAtom.testValidityOfTextLineSpecPlainText(
+			plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !isValid {
+		t.Errorf("%v - ERROR\n"+
+			"txtLinePlainTextAtom.testValidityOfTextLineSpecPlainText()\n"+
+			"Expected a return 'isValid' value of 'true'.\n"+
+			"HOWEVER, 'isValid' == 'false'!\n",
+			ePrefix.XCtxEmpty().String())
+	}
+
+	plainTextLine01.leftMarginChars =
+		[]rune{' ', 0, ' ', 0, ' '}
+
+	isValid,
+		err =
+		txtLinePlainTextAtom.testValidityOfTextLineSpecPlainText(
+			plainTextLine01,
+			ePrefix.XCtx(
+				"plainTextLine01"))
+
 }
 
 func TestTextLineSpecPlainText_setPlainTextSpec_000200(t *testing.T) {
