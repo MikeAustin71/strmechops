@@ -1932,6 +1932,8 @@
 --- PASS: TestTextLineSpecSolidLine_Read_000400 (0.00s)
 === RUN   TestTextLineSpecSolidLine_Read_000500
 --- PASS: TestTextLineSpecSolidLine_Read_000500 (0.00s)
+=== RUN   TestTextLineSpecSolidLine_ReaderInitialize_000100
+--- PASS: TestTextLineSpecSolidLine_ReaderInitialize_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyIn_000100
 --- PASS: TestTextLineSpecSolidLine_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyOut_000100
@@ -1951,5 +1953,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 66.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.902s
+coverage: 66.7% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.801s
