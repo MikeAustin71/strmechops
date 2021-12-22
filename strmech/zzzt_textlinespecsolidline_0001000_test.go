@@ -4492,3 +4492,162 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 
 	return
 }
+
+func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_NewPtrSolidLine_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewPtrSolidLine(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText :=
+		txtSolidLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	expectedNewLeftMargin := 5
+
+	err = txtSolidLine01.SetLeftMargin(
+		expectedNewLeftMargin,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	newLeftMargin :=
+		txtSolidLine01.GetLeftMarginLength()
+
+	if expectedNewLeftMargin != newLeftMargin {
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.SetLeftMargin() set left margin = 5\n"+
+			"Expected Left Margin = '%v'\n"+
+			"Instead, Left Margin = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNewLeftMargin,
+			newLeftMargin)
+
+		return
+	}
+
+	expectedSolidLineStr =
+		strings.Repeat(" ", expectedNewLeftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText =
+		txtSolidLine01.String()
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 02 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	err = txtSolidLine02.SetLeftMargin(
+		3,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine02."+
+			"SetLeftMargin()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
