@@ -4238,6 +4238,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
 // The new line character or characters may be customized by
 // calling this method.
 //
+// If 'newLineChars' is submitted with a string length greater
+// than one-million (1,000,000), an error will be returned.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -4260,18 +4263,73 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
 //       line character ('\n').
 //
 //       If this parameter is submitted as a string length greater
-//       than one-million (1,000,000), 'newLineChars' will be set
-//       to the default new line character ('\n').
+//       than one-million (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  --- NONE ---
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
-	newLineChars string) {
+	newLineChars string,
+	errorPrefix interface{}) (
+	err error) {
 
 	if txtSpecSolidLine.lock == nil {
 		txtSpecSolidLine.lock = new(sync.Mutex)
@@ -4281,10 +4339,33 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
 
 	defer txtSpecSolidLine.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine.SetNewLineChars()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	lenNewLineChars := len(newLineChars)
 
-	if lenNewLineChars == 0 ||
-		lenNewLineChars > 1000000 {
+	if lenNewLineChars > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Parameter 'newLineChars' is invalid!\n"+
+			"The length of 'newLineChars' is greater than one-million (1,000,000).\n"+
+			"txtSolidLine.newLineChars length ='%v'\n",
+			ePrefix.String(),
+			lenNewLineChars)
+
+		return err
+	}
+
+	if lenNewLineChars == 0 {
 		newLineChars = "\n"
 	}
 
@@ -4292,11 +4373,13 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
 
 	newLineRunes := []rune(newLineChars)
 
-	_ = sMechPreon.copyRuneArrays(
+	err = sMechPreon.copyRuneArrays(
 		&txtSpecSolidLine.newLineChars,
 		&newLineRunes,
 		true,
-		nil)
+		ePrefix.XCtx("newLineRunes->txtSpecSolidLine.newLineChars"))
+
+	return err
 }
 
 // SetNewLineRunes - Sets the new line character, or characters,
@@ -4316,7 +4399,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
 //
 // Input Parameters
 //
-//  newLineChars               []rune
+//  newLineRunes               []rune
 //     - This rune array contains one or more characters which will
 //       be used to terminate the solid text line.
 //
@@ -4332,6 +4415,10 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
 //       array, 'newLineChars' will be set to the default new
 //       line character ('\n').
 //
+//       If this parameter is submitted with an array length
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -4340,7 +4427,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
 //  --- NONE ---
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
-	newLineRunes []rune) {
+	newLineRunes []rune,
+	errorPrefix interface{}) (
+	err error) {
 
 	if txtSpecSolidLine.lock == nil {
 		txtSpecSolidLine.lock = new(sync.Mutex)
@@ -4350,29 +4439,59 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
 
 	defer txtSpecSolidLine.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecSolidLine."+
+			"SetNewLineRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	lenNewLineRunes := len(newLineRunes)
 
-	if lenNewLineRunes < 1 ||
-		lenNewLineRunes > 1000000 {
+	if lenNewLineRunes < 1 {
 
 		txtSpecSolidLine.newLineChars = []rune{'\n'}
 
-		return
+		return err
+	}
+
+	if lenNewLineRunes > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Parameter 'newLineRunes' is invalid!\n"+
+			"The length of 'newLineRunes' is greater than one-million (1,000,000).\n"+
+			"newLineRunes length ='%v'\n",
+			ePrefix.String(),
+			lenNewLineRunes)
+
+		return err
 	}
 
 	sMechPreon := strMechPreon{}
 
-	err := sMechPreon.copyRuneArrays(
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		newLineRunes,
+		ePrefix.XCtx(
+			"newLineRunes invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
 		&txtSpecSolidLine.newLineChars,
 		&newLineRunes,
 		true,
 		nil)
 
-	if err != nil {
-		txtSpecSolidLine.newLineChars = []rune{'\n'}
-	}
-
-	return
+	return err
 }
 
 // SetSolidLineAllParms - This method configures the current

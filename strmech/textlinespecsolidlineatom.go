@@ -314,9 +314,22 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
-	if len(txtSolidLine.newLineChars) == 0 {
+	lenNewLineChars := len(txtSolidLine.newLineChars)
+
+	if lenNewLineChars == 0 {
 
 		txtSolidLine.newLineChars = []rune{'\n'}
+
+	} else if lenNewLineChars > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'txtSolidLine.newLineChars' is invalid!\n"+
+			"The length of 'txtSolidLine.newLineChars' is greater than one-million (1,000,000).\n"+
+			"txtSolidLine.newLineChars length ='%v'\n",
+			ePrefix.String(),
+			lenNewLineChars)
+
+		return isValid, err
 
 	} else {
 		_,
