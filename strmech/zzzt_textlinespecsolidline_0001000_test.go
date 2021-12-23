@@ -4826,7 +4826,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtSolidLine02."+
+			"Expected an error return from txtSolidLine02.\n"+
 			"SetNewLineChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
@@ -5022,6 +5022,285 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 	if printableExpectedStr != printableActualStr {
 
 		t.Errorf("%v - ERROR\n"+
+			"Test #1\n"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	newLineChars = "\n\n\n\n"
+
+	err = txtSolidLine01.SetNewLineRunes(
+		[]rune(newLineChars),
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedSolidLineStr =
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01FmtText,
+		err = txtSolidLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"txtSolidLine01-New newLineRunes"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - New newLineRunes\n"+
+			"newLineChars = \"\\n\\n\\n\\n\"\n"+
+			"Expected Formatted Text String 02 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	expectedNewLineChars := ""
+
+	err = txtSolidLine01.SetNewLineRunes(
+		[]rune(expectedNewLineChars),
+		ePrefix.XCtx(
+			"txtSolidLine01 expectedNewLineChars = \"\""))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNewLineChars = "\n"
+
+	actualNewLineChars := txtSolidLine01.GetNewLineChars()
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedNewLineChars),
+			true)
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualNewLineChars),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v - ERROR\n"+
+			"expectedNewLineChars != actualNewLineChars\n"+
+			"Expected actualNewLineChars to equal '\\n'\n"+
+			"because submitted newLineChars was an empty rune array.\n"+
+			"HOWEVER, actualNewLineChars to equal '\\n'\n"+
+			"expectedNewLineChars = '%v'\n"+
+			"  actualNewLineChars = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	var expectedNewLineRunes []rune
+
+	expectedNewLineRunes,
+		err =
+		sMechPreon.getRepeatRuneChar(
+			1000001,
+			'\n',
+			ePrefix.XCtx(
+				"1,000,001 new-lines"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.SetNewLineRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"txtSolidLine01 one-million new-lines"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetNewLineRunes(expectedNewLineRunes)\n"+
+			"because 'expectedNewLineRunes' is invalid."+
+			"expectedNewLineRunes has an array length of 1,000,001\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedNewLineRunes = []rune{'\n', 0, '\n', 0, '\n'}
+
+	err = txtSolidLine01.SetNewLineRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"txtSolidLine01 one-million new-lines"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetNewLineRunes(expectedNewLineRunes)\n"+
+			"because 'expectedNewLineRunes' is invalid.\n"+
+			"expectedNewLineRunes contains invalid rune characters\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	expectedNewLineRunes = []rune{'\n'}
+
+	err = txtSolidLine01.SetNewLineRunes(
+		expectedNewLineRunes,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetNewLineRunes(expectedNewLineRunes)\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	err = txtSolidLine02.SetNewLineRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"txtSolidLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_SetNewLineRunes_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n-\n"
+	var turnAutoLineTerminationOff bool
+	turnAutoLineTerminationOff = true
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin)
+
+	txtSolidLine01 := TextLineSpecSolidLine{}
+
+	err :=
+		txtSolidLine01.SetSolidLineAllParms(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnAutoLineTerminationOff,
+			ePrefix.XCtx(
+				"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtSolidLine01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n" +
+			"Initial creation of instance 'txtSolidLine01' is invalid!!!\n" +
+			ePrefix.String())
+
+		return
+	}
+
+	var txtSolidLine01FmtText string
+
+	txtSolidLine01FmtText,
+		err = txtSolidLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
 			"Test #1"+
 			"Expected Formatted Text String 01 DOES NOT match\n"+
 			"Actual Formatted Text String 01.\n"+
@@ -5034,24 +5313,27 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 		return
 	}
 
-	printableExpectedStr =
-		sMech.ConvertNonPrintableChars(
-			[]rune(expectedSolidLineStr),
-			true)
+	err =
+		txtSolidLine01.SetSolidLineAllParms(
+			leftMargin,
+			rightMargin,
+			solidLineChars,
+			solidLineCharsRepeatCount,
+			newLineChars,
+			turnAutoLineTerminationOff,
+			StrMech{})
 
-	if printableExpectedStr != printableActualStr {
+	if err == nil {
 
 		t.Errorf("%v - ERROR\n"+
-			"Test #2"+
-			"Expected Formatted Text String DOES NOT match\n"+
-			"Actual Formatted Text String 02.\n"+
-			"Expected Formatted Text String = '%v'\n"+
-			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			printableExpectedStr,
-			printableActualStr)
+			"Expected an error return from txtSolidLine01.\n"+
+			"SetSolidLineAllParms()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
 
+	return
 }
