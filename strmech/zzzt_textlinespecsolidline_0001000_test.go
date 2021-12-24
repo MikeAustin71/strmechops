@@ -5494,3 +5494,194 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 
 	return
 }
+
+func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_SetRightMargin_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewPtrSolidLine(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText :=
+		txtSolidLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	expectedNewRightMargin := 5
+
+	err = txtSolidLine01.SetRightMargin(
+		expectedNewRightMargin,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	newRightMargin :=
+		txtSolidLine01.GetRightMarginLength()
+
+	if expectedNewRightMargin != newRightMargin {
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.SetRightMargin() set right margin = 5\n"+
+			"Expected Right Margin = '%v'\n"+
+			"Instead, Right Margin = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNewRightMargin,
+			newRightMargin)
+
+		return
+	}
+
+	expectedSolidLineStr =
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", expectedNewRightMargin) +
+			newLineChars
+
+	printableExpectedStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText =
+		txtSolidLine01.String()
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2"+
+			"Expected Formatted Text String 02 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	err = txtSolidLine02.SetRightMargin(
+		3,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine02."+
+			"SetRightMargin()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLine03 := TextLineSpecSolidLine{}
+
+	err = txtSolidLine03.SetRightMargin(
+		1000001,
+		ePrefix.XCtx(
+			"txtSolidLine03:rightMargin==1000001"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine03."+
+			"SetRightMargin()\n"+
+			"because rightMargin==1000001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	txtSolidLIne04 := TextLineSpecSolidLine{}
+
+	err = txtSolidLIne04.SetRightMargin(
+		-1,
+		ePrefix.XCtx(
+			"rightMargin==-1 should be valid!"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
