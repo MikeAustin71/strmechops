@@ -4496,7 +4496,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecSolidLine_NewPtrSolidLine_000100()",
+		"TestTextLineSpecSolidLine_SetLeftMargin_000100()",
 		"")
 
 	leftMargin := 2
@@ -5782,4 +5782,197 @@ func TestTextLineSpecSolidLine_SetSolidLine_000100(t *testing.T) {
 		return
 	}
 
+	return
+}
+
+func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_NewSolidLine_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n"
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewSolidLine(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	solidLineChars = "*"
+	solidLineCharsRepeatCount = 20
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	err = txtSolidLine01.SetSolidLineStrChars(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"solidLineChars = \"*\""))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	txtSolidLine01FmtText :=
+		txtSolidLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	solidLineChars = ""
+
+	err = txtSolidLine01.SetSolidLineStrChars(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"solidLineChars = \"*\""))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetSolidLineStrChars()\n"+
+			"because 'solidLineChars' is an empty string.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineChars = strings.Repeat("=", 1000001)
+
+	err = txtSolidLine01.SetSolidLineStrChars(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"solidLineChars = \"*\""))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetSolidLineStrChars()\n"+
+			"because 'solidLineChars' has a string length of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineChars = "*"
+	solidLineCharsRepeatCount = 0
+
+	err = txtSolidLine01.SetSolidLineStrChars(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"solidLineChars = \"*\""))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetSolidLineStrChars()\n"+
+			"because 'solidLineCharsRepeatCount' has a value of zero (0).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineCharsRepeatCount = 1000001
+
+	err = txtSolidLine01.SetSolidLineStrChars(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		ePrefix.XCtx(
+			"solidLineChars has a length of 1,000,001"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetSolidLineStrChars()\n"+
+			"because 'solidLineCharsRepeatCount' has a value of 1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineCharsRepeatCount = 21
+
+	err = txtSolidLine01.SetSolidLineStrChars(
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetSolidLineStrChars()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
