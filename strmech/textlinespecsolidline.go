@@ -5413,10 +5413,19 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineStrChars(
 		return err
 	}
 
-	if solidLineCharsRepeatCount < 1 {
+	if solidLineCharsRepeatCount == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'solidLineCharsRepeatCount' is invalid!\n"+
-			"'solidLineCharsRepeatCount' has a value less than one (1).\n"+
+			"'solidLineCharsRepeatCount' has a value less of zero (0).\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if solidLineCharsRepeatCount < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineCharsRepeatCount' is invalid!\n"+
+			"'solidLineCharsRepeatCount' has a value less than zero (0).\n"+
 			"solidLineCharsRepeatCount = '%v'\n",
 			ePrefix.String(),
 			solidLineCharsRepeatCount)
@@ -5631,10 +5640,21 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineRuneChars(
 		return err
 	}
 
-	if solidLineCharsRepeatCount < 1 {
+	if solidLineCharsRepeatCount == 0 {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'solidLineCharsRepeatCount' is invalid!\n"+
-			"'solidLineCharsRepeatCount' has a value less than one (1).\n"+
+			"'solidLineCharsRepeatCount' has a value of zero (0).\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if solidLineCharsRepeatCount < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineCharsRepeatCount' is invalid!\n"+
+			"'solidLineCharsRepeatCount' has a value less than zero (0).\n"+
 			"solidLineCharsRepeatCount = '%v'\n",
 			ePrefix.String(),
 			solidLineCharsRepeatCount)
@@ -5653,7 +5673,19 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineRuneChars(
 		return err
 	}
 
-	err = strMechPreon{}.ptr().copyRuneArrays(
+	sMechPreon := strMechPreon{}
+
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		solidLineChars,
+		ePrefix.XCtx(
+			"solidLineChars is Invalid!"))
+
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
 		&txtSpecSolidLine.solidLineChars,
 		&solidLineChars,
 		true,

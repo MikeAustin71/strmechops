@@ -1954,6 +1954,8 @@
 --- PASS: TestTextLineSpecSolidLine_SetSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineStrChars_000100
 --- PASS: TestTextLineSpecSolidLine_SetSolidLineStrChars_000100 (0.00s)
+=== RUN   TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100
+--- PASS: TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyIn_000100
 --- PASS: TestTextLineSpecSolidLine_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyOut_000100
@@ -1973,5 +1975,5 @@
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 67.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.798s
+coverage: 68.0% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.895s
