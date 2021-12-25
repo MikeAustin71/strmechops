@@ -1968,6 +1968,8 @@
 --- PASS: TestTextLineSpecSolidLine_TextLineSpecName_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100
 --- PASS: TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100 (0.00s)
+=== RUN   TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100
+--- PASS: TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyIn_000100
 --- PASS: TestTextLineSpecSolidLine_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyOut_000100
@@ -1988,4 +1990,4 @@
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
 coverage: 68.3% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.855s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.791s
