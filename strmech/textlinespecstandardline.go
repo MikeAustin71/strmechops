@@ -265,18 +265,18 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 }
 
 // AddTextFieldFiller - This method will append a Filler text field
-// to the end of the current array of text field objects maintained
-// by the current instance of TextLineSpecStandardLine.
+// object to the end of the current array of text field objects
+// maintained by the current instance of TextLineSpecStandardLine.
 //
 // This operation will create a new TextFieldSpecFiller object
 // based on the input parameters passed by the calling function.
 // This TextFieldSpecFiller object will then be added to the text
-// field objects collection for the current TextFieldSpecFiller
-// instance.
+// field objects collection for the current
+// TextLineSpecStandardLine instance.
 //
-// Finally, a pointer to a deep copy of the newly created
-// TextFieldSpecFiller object will be returned to the calling
-// function.
+// If the method completes successfully, the internal array index
+// of the new Text Field Filler Object will be returned to the
+// calling function.
 //
 //
 // ----------------------------------------------------------------
@@ -368,17 +368,18 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //
 // Return Values
 //
-//  *TextFieldSpecFiller
-//     - If this method completes successfully, this parameter will
-//       return a pointer to a new, valid and fully populated Text
-//       Filler Field object. This Text Filler Field is a deep copy
-//       of the one added to the text fields collection of the
-//       current TextLineSpecStandardLine instance.
+//  indexId                    int
+//     - If this method completes successfully, the internal array
+//       index of the new text filler object will be returned as an
+//       integer value.
+//
+//       In the event of an error, 'indexId' will be set to a value
+//       of minus one (-1).
 //
 //
-//  error
+//  err                        error
 //     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
+//       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
 //       an appropriate error message.
 //
@@ -390,8 +391,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	errorPrefix interface{}) (
-	*TextFieldSpecFiller,
-	error) {
+	indexId int,
+	err error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -402,7 +403,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 	defer stdLine.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	indexId = -1
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -411,7 +413,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 		"")
 
 	if err != nil {
-		return &TextFieldSpecFiller{}, err
+		return indexId, err
 	}
 
 	var newFillerField *TextFieldSpecFiller
@@ -423,13 +425,225 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 		ePrefix)
 
 	if err != nil {
-		return &TextFieldSpecFiller{}, err
+		return indexId, err
 	}
 
 	stdLine.textFields = append(stdLine.textFields,
 		newFillerField)
 
-	return newFillerField, err
+	indexId = len(stdLine.textFields) - 1
+
+	if indexId < 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"An unspecified error occurred.\n"+
+			"'indexId' has a value less than zero!\n"+
+			"indexId = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+	}
+
+	return indexId, err
+}
+
+// AddTextFieldLabel - This method will append a Label text field
+// object to the end of the current array of text field objects
+// maintained by the current instance of TextLineSpecStandardLine.
+//
+// This operation will create a new TextFieldSpecLabel object
+// based on the input parameters passed by the calling function.
+// This TextFieldSpecLabel object will then be added to the text
+// field objects collection for the current
+// TextLineSpecStandardLine instance.
+//
+// If the method completes successfully, the internal array index
+// of the new Text Field Filler Object will be returned to the
+// calling function.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLabel                  string
+//     - String content to be displayed within the text label.
+//
+//       If this parameter is submitted as a zero length string,
+//       an error will be returned.
+//
+//
+//  fieldLen                   int
+//     - The length of the text field in which the 'textLabel' will
+//       be displayed. If 'fieldLen' is less than the length of the
+//       'textLabel' string, it will be automatically set equal to
+//       the 'textLabel' string length.
+//
+//       To automatically set the value of 'fieldLen' to the length
+//       of 'textLabel', set this parameter to a value of minus one
+//       (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
+//
+//
+//  textJustification          TextJustify
+//     - An enumeration which specifies the justification of the
+//       'textLabel' within the field specified by 'fieldLen'.
+//
+//       Text justification can only be evaluated in the context of
+//       a text label, field length and a 'textJustification'
+//       object of type TextJustify. This is because text labels
+//       with a field length equal to or less than the length of
+//       the text label never use text justification. In these
+//       cases, text justification is completely ignored.
+//
+//       If the field length is greater than the length of the text
+//       label, text justification must be equal to one of these
+//       three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       You can also use the abbreviated text justification
+//       enumeration syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  indexId                    int
+//     - If this method completes successfully, the internal array
+//       index of the new text label object will be returned as an
+//       integer value.
+//
+//       In the event of an error, 'indexId' will be set to a value
+//       of minus one (-1).
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
+	textLabel string,
+	fieldLen int,
+	textJustification TextJustify,
+	errorPrefix interface{}) (
+	indexId int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	indexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.AddTextFieldLabel()",
+		"")
+
+	if err != nil {
+		return indexId, err
+	}
+
+	var newLabelField *TextFieldSpecLabel
+
+	newLabelField,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		textLabel,
+		fieldLen,
+		textJustification,
+		ePrefix.XCtx(
+			"newLabelField"))
+
+	if err != nil {
+		return indexId, err
+	}
+
+	stdLine.textFields = append(stdLine.textFields,
+		newLabelField)
+
+	indexId = len(stdLine.textFields) - 1
+
+	if indexId < 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"An unspecified error occurred.\n"+
+			"'indexId' has a value less than zero!\n"+
+			"indexId = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+	}
+
+	return indexId, err
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
