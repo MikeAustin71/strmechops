@@ -5900,7 +5900,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 		solidLineChars,
 		solidLineCharsRepeatCount,
 		ePrefix.XCtx(
-			"solidLineChars has a lenght of 1,000,001"))
+			"solidLineChars has a length of 1,000,001"))
 
 	if err == nil {
 
@@ -6112,7 +6112,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtSolidLine01."+
-			"SetSolidLineStrChars()\n"+
+			"SetSolidLineRuneChars()\n"+
 			"because 'solidLineChars' is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -6227,13 +6227,36 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtSolidLine01."+
-			"SetSolidLineStrChars()\n"+
+			"SetSolidLineRuneChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
 	}
+
+	solidLineRunes = []rune{'-', 0, '*'}
+
+	err = txtSolidLine01.SetSolidLineRuneChars(
+		solidLineRunes,
+		solidLineCharsRepeatCount,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01."+
+			"SetSolidLineStrChars()\n"+
+			"because 'solidLineRunes' is invalid.\n"+
+			"'solidLineRunes' contains invalid rune characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	solidLineRunes = []rune{'*'}
+	solidLineCharsRepeatCount = 40
 
 	var txtSolidLine02 TextLineSpecSolidLine
 
@@ -6247,6 +6270,129 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 		t.Errorf("%v\n",
 			err.Error())
 		return
+	}
+
+	return
+}
+
+func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecSolidLine_String_000100()",
+		"")
+
+	leftMargin := 2
+	rightMargin := 2
+	solidLineChars := "-"
+	solidLineCharsRepeatCount := 35
+	newLineChars := "\n"
+
+	expectedSolidLineStr :=
+		strings.Repeat(" ", leftMargin) +
+			strings.Repeat(
+				solidLineChars,
+				solidLineCharsRepeatCount) +
+			strings.Repeat(" ", rightMargin) +
+			newLineChars
+
+	txtSolidLine01,
+		err := TextLineSpecSolidLine{}.NewFullSolidLineConfig(
+		leftMargin,
+		rightMargin,
+		solidLineChars,
+		solidLineCharsRepeatCount,
+		newLineChars,
+		ePrefix.XCtx(
+			"txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtSolidLine01.IsValidInstanceError(
+		ePrefix.XCtx("txtSolidLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtSolidLine01FmtText string
+
+	txtSolidLine01FmtText = txtSolidLine01.String()
+
+	if strings.Contains(txtSolidLine01FmtText, "Error") {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtSolidLine01.String() returned an error\n"+
+			"Error=\n%v\n",
+			ePrefix.XCtxEmpty().String(),
+			txtSolidLine01FmtText)
+
+		return
+
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedSolidLineStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(txtSolidLine01FmtText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	txtSolidLine01.solidLineChars = []rune{'-', 0, '*', 0}
+
+	txtSolidLine01FmtText = txtSolidLine01.String()
+
+	if !strings.Contains(strings.ToLower(txtSolidLine01FmtText), "error") {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine01.String()\n"+
+			"because txtSolidLine01.solidLineChars contains invalid rune characters."+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	txtSolidLine02 := TextLineSpecSolidLine{}
+
+	txtSolidLine01FmtText = txtSolidLine02.String()
+
+	if !strings.Contains(strings.ToLower(txtSolidLine01FmtText), "error") {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtSolidLine02.String()\n"+
+			"because txtSolidLine02 is empty."+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
 	}
 
 	return
