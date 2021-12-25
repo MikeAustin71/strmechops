@@ -5526,10 +5526,10 @@ func TestTextLineSpecPlainText_String_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
+func TestTextLineSpecPlainText_TextBuilder_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_TextLineBuilder_000100()",
+		"TestTextLineSpecPlainText_TextBuilder_000100()",
 		"")
 
 	leftMarginSpaces := 2
@@ -5604,10 +5604,10 @@ func TestTextLineSpecPlainText_TextLineBuilder_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecPlainText_TextLineBuilder_000200(t *testing.T) {
+func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecPlainText_TextLineBuilder_000100()",
+		"TestTextLineSpecPlainText_TextBuilder_000200()",
 		"")
 
 	plainTextLine01 := TextLineSpecPlainText{}

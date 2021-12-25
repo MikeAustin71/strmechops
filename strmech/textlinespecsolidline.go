@@ -5937,7 +5937,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) TextLineSpecName() string {
 
 	defer txtSpecSolidLine.lock.Unlock()
 
-	return "TextLineSpecStandardLine"
+	return "TextLineSpecSolidLine"
 }
 
 // TurnAutoLineTerminationOff - Turns off or cancels the automatic
