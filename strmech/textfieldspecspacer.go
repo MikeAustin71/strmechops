@@ -831,6 +831,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstance() (
 	txtFieldSpacer.lock.Lock()
 
 	defer txtFieldSpacer.lock.Unlock()
+
 	isValid,
 		_ = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(

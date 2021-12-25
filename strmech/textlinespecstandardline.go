@@ -1848,6 +1848,52 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 	return stdLine.turnLineTerminatorOff
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecStandardLine
+// instance to determine if they are valid.
+//
+// If all data element evaluate as valid, this method returns
+// 'true'. If any data element is invalid, this method returns
+// 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If all data elements encapsulated by the current instance
+//       of TextLineSpecStandardLine are valid, this returned
+//       boolean value is set to 'true'. If any data values are
+//       invalid, this return parameter is set to 'false'.
+//
+func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
+	isValid bool) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	isValid,
+		_ = textLineSpecStandardLineAtom{}.ptr().
+		testValidityOfTextLineSpecStdLine(
+			stdLine,
+			nil)
+
+	return isValid
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecStandardLine
 // instance to determine if they are valid.
