@@ -646,6 +646,65 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 	return indexId, err
 }
 
+func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
+	fieldLen int,
+	errorPrefix interface{}) (
+	indexId int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	indexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.AddTextFieldLabel()",
+		"")
+
+	if err != nil {
+		return indexId, err
+	}
+
+	var newSpacerField *TextFieldSpecSpacer
+
+	newSpacerField,
+		err = TextFieldSpecSpacer{}.NewPtrSpacer(
+		fieldLen,
+		ePrefix.XCtx(
+			"newSpacerField"))
+
+	if err != nil {
+		return indexId, err
+	}
+
+	stdLine.textFields = append(stdLine.textFields,
+		newSpacerField)
+
+	indexId = len(stdLine.textFields) - 1
+
+	if indexId < 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"An unspecified error occurred.\n"+
+			"'indexId' has a value less than zero!\n"+
+			"indexId = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+	}
+
+	return indexId, err
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // TextLineSpecStandardLine ('incomingStdLine') to the data fields
 // of the current TextLineSpecStandardLine instance ('stdLine').
