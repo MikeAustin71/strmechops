@@ -1557,6 +1557,177 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	return &newStdLine, err
 }
 
+// DeleteAtIndex - Deletes a member Text Field array element from
+// the Text Field Collection at the index specified by input
+// parameter 'indexId'.
+//
+// If successful, at the completion of this method, the Text
+// Field Collection array will have a length which is one
+// less than the starting array length.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  indexId                    int
+//     - The index of the Text Field Collection array element
+//       which will be deleted from the Collection for this
+//       instance of TextLineSpecStandardLine.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
+	indexId int,
+	errorPrefix interface{}) (err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.DeleteAtIndex()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if stdLine.textFields == nil {
+		stdLine.textFields = make([]ITextFieldSpecification, 0, 50)
+	}
+
+	if indexId < 0 {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input Parameter 'indexId' is less than zero.\n"+
+			"Index is Out-Of-Range!\n"+
+			"indexId='%v'",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return err
+	}
+
+	arrayLen := len(stdLine.textFields)
+
+	if arrayLen == 0 {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The Text Fields Collection, 'stdLine.textFields', is EMPTY!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return err
+	}
+
+	maxIdx := arrayLen - 1
+
+	if indexId >= arrayLen {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input Parameter 'indexId' is greater than the "+
+			"maximum index for the Text Fields collection.\n"+
+			"Index is Out-Of-Range!\n"+
+			"indexId='%v'\n"+
+			"Maximum 'stdLine.textFields' array index is '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId,
+			maxIdx)
+
+		return err
+	}
+
+	if arrayLen == 1 {
+
+		stdLine.textFields = make([]ITextFieldSpecification, 0, 100)
+
+	} else if indexId == 0 {
+
+		// arrayLen > 1 and requested indexId = 0
+		stdLine.textFields = stdLine.textFields[1:]
+
+	} else if indexId == maxIdx {
+
+		// arrayLen > 1 and requested indexId = last element index
+		stdLine.textFields = stdLine.textFields[0 : arrayLen-1]
+
+	} else {
+
+		// arrayLen > 1 and indexId is in between
+		// first and last elements
+		stdLine.textFields =
+			append(stdLine.textFields[0:indexId], stdLine.textFields[indexId+1:]...)
+
+	}
+
+	return nil
+}
+
 // Empty - Deletes all the text fields stored as an array of
 // ITextFieldSpecification pointers within the current
 // TextLineSpecStandardLine instance. In addition, this method
