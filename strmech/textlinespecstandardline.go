@@ -2641,7 +2641,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 			"The Text Field Collection is empty!\n",
 			ePrefix.String())
 
-		return
+		return iTxtFieldSpec, err
 	}
 
 	iTxtFieldSpec,
@@ -2790,7 +2790,9 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 			indexId,
 			false,
 			ePrefix.XCtx(
-				"stdLine"))
+				fmt.Sprintf(
+					"stdLine.textFields[%v]",
+					indexId)))
 
 	return iTxtFieldSpec, err
 }
@@ -2810,9 +2812,9 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 //
 // IMPORTANT
 //
-// After completion of this method, the Text Field Collection array
-// will have a length which is one less than the starting array
-// length.
+// After successful completion of this method, the Text Field
+// Collection array will have a length which is one less than the
+// starting array length.
 //
 //
 // ------------------------------------------------------------------------
@@ -2940,6 +2942,163 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 	return iTxtFieldSpec, remainingNumOfTxtFields, err
 }
 
+// PopLastTextField - Returns a deep copy of the last Text Field
+// ('ITextFieldSpecification') object in the Text Field Collection
+// ('stdLine.textFields[lastIdx]').
+//
+// As a 'Pop' method, the last Text Field object will be deleted
+// from the Text Field Collection encapsulated by this instance of
+// TextLineSpecStandardLine. Parameter 'remainingNumOfTxtFields'
+// will be returned to the calling function containing the number
+// of array elements still remaining in the Text Field Collection
+// after deletion of the last array element.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// After successful completion of this method, the Text Field
+// Collection array will have a length which is one less than the
+// starting array length.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  iTxtFieldSpec              ITextFieldSpecification
+//     - If this method completes successfully, a deep copy of
+//       if the designated member of the Text Fields Collection
+//       will be returned to the calling function. The returned
+//       object will implement the ITextFieldSpecification
+//       interface.
+//
+//
+//  remainingNumOfTxtFields    int
+//     - If this method completes successfully, the first array
+//       element in the Text Fields Collection will be deleted.
+//       After deleting that element, this parameter will return
+//       the number of array elements still remaining in the
+//       Text Fields Collection.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) PopLastTextField(
+	errorPrefix interface{}) (
+	iTxtFieldSpec ITextFieldSpecification,
+	remainingNumOfTxtFields int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	iTxtFieldSpec = nil
+
+	remainingNumOfTxtFields = -1
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"PopLastTextField()",
+		"")
+
+	if err != nil {
+		return iTxtFieldSpec, remainingNumOfTxtFields, err
+	}
+
+	lastIdx := len(stdLine.textFields) - 1
+
+	if lastIdx < 0 {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The Text Field Collection is empty!\n",
+			ePrefix.String())
+
+		return iTxtFieldSpec, remainingNumOfTxtFields, err
+	}
+
+	iTxtFieldSpec,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		peekPopTextField(
+			stdLine,
+			lastIdx,
+			true,
+			ePrefix.XCtx(
+				fmt.Sprintf(
+					"stdLine.textFields[%v]",
+					lastIdx)))
+
+	remainingNumOfTxtFields = len(stdLine.textFields)
+
+	return iTxtFieldSpec, remainingNumOfTxtFields, err
+}
+
 // PopTextFieldAtIndex - Returns a deep copy of the Text Field
 // ('ITextFieldSpecification') object located at index, 'indexId',
 // in the Text Field Collection ('stdLine.textFields').
@@ -2956,9 +3115,9 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //
 // IMPORTANT
 //
-// After completion of this method, the Text Field Collection array
-// will have a length which is one less than the starting array
-// length.
+// After successful completion of this method, the Text Field
+// Collection array will have a length which is one less than the
+// starting array length.
 //
 //
 // ------------------------------------------------------------------------
@@ -3091,7 +3250,9 @@ func (stdLine *TextLineSpecStandardLine) PopTextFieldAtIndex(
 			indexId,
 			true,
 			ePrefix.XCtx(
-				"stdLine"))
+				fmt.Sprintf(
+					"stdLine.textFields[%v]",
+					indexId)))
 
 	remainingNumOfTxtFields = len(stdLine.textFields)
 
