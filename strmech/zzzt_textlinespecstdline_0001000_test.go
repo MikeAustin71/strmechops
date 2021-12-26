@@ -134,7 +134,8 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		leftMargin,
 		ePrefix)
 
@@ -148,7 +149,8 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		centerLabel,
 		ePrefix)
 
@@ -162,7 +164,8 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		rightMargin,
 		ePrefix)
 

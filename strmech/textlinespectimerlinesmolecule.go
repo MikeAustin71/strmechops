@@ -145,7 +145,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			return "", err
 		}
 
-		err = stdLine.AddTextField(
+		_,
+			err = stdLine.AddTextField(
 			txtLabelLeftFiller,
 			ePrefix.XCtx(
 				"First Line: txtLabelLeftFiller"))
@@ -168,7 +169,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		txtDescLabel,
 		ePrefix.XCtx(
 			"First Line: txtDescLabel"+
@@ -189,7 +191,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		txtLabelRightFiller,
 		ePrefix.XCtx(
 			"First Line: txtLabelRightFiller"))
@@ -213,7 +216,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		txtOutputLabel,
 		ePrefix.XCtx(
 			"First Line - startTimeStr: "+
@@ -248,7 +252,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	if len(txtTimerLines.labelLeftMarginChars) > 0 {
 
-		err = stdLine.AddTextField(
+		_,
+			err = stdLine.AddTextField(
 			txtLabelLeftFiller,
 			ePrefix.XCtx(
 				"Second Line - txtLabelLeftFiller"))
@@ -269,7 +274,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		txtDescLabel,
 		ePrefix.XCtx(
 			"Second Line - txtDescLabel: "+
@@ -279,7 +285,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	err =
+	_,
+		err =
 		stdLine.AddTextField(
 			txtLabelRightFiller,
 			ePrefix.XCtx(
@@ -302,7 +309,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return "", err
 	}
 
-	err = stdLine.AddTextField(
+	_,
+		err = stdLine.AddTextField(
 		txtOutputLabel,
 		ePrefix.XCtx(
 			"Second - endTimeStr: "+
@@ -384,7 +392,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				return "", err
 			}
 
-			err = stdLine.AddTextField(
+			_,
+				err = stdLine.AddTextField(
 				txtDescLabel,
 				ePrefix.XCtx(
 					fmt.Sprintf(
@@ -396,7 +405,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				return "", err
 			}
 
-			err =
+			_,
+				err =
 				stdLine.AddTextField(
 					txtLabelRightFiller,
 					ePrefix.XCtx(
@@ -424,7 +434,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				return "", err
 			}
 
-			err =
+			_,
+				err =
 				stdLine.AddTextField(
 					txtOutputLabel,
 					ePrefix.XCtx(
@@ -439,7 +450,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 		} else {
 
-			err =
+			_,
+				err =
 				stdLine.AddTextField(
 					txtFillerSumLeftMar,
 					ePrefix.XCtx(
@@ -467,7 +479,8 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				return "", err
 			}
 
-			err = stdLine.AddTextField(
+			_,
+				err = stdLine.AddTextField(
 				txtOutputLabel,
 				ePrefix.XCtx(
 					fmt.Sprintf(

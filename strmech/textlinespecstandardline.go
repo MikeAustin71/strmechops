@@ -141,6 +141,10 @@ type TextLineSpecStandardLine struct {
 // actually appended to the array is a deep copy of the input
 // parameter, 'textField'.
 //
+// If the method completes successfully, the internal array index
+// of the new Text Field DateTime Object will be returned to the
+// calling function.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -207,6 +211,15 @@ type TextLineSpecStandardLine struct {
 //
 // Return Values
 //
+//  indexId                    int
+//     - If this method completes successfully, the internal array
+//       index of the new text field object will be returned as an
+//       integer value.
+//
+//       In the event of an error, 'indexId' will be set to a value
+//       of minus one (-1).
+//
+//
 //  err                        error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -220,6 +233,7 @@ type TextLineSpecStandardLine struct {
 func (stdLine *TextLineSpecStandardLine) AddTextField(
 	textField ITextFieldSpecification,
 	errorPrefix interface{}) (
+	indexId int,
 	err error) {
 
 	if stdLine.lock == nil {
@@ -232,6 +246,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	indexId = -1
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -239,14 +255,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		"")
 
 	if err != nil {
-		return err
+		return indexId, err
 	}
 
 	err = textField.IsValidInstanceError(
 		ePrefix.XCtx("textField"))
 
 	if err != nil {
-		return err
+		return indexId, err
 	}
 
 	var newTextField ITextFieldSpecification
@@ -256,13 +272,26 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		ePrefix.XCtx("textField->newTextField"))
 
 	if err != nil {
-		return err
+		return indexId, err
 	}
 
 	stdLine.textFields = append(stdLine.textFields,
 		newTextField)
 
-	return err
+	indexId = len(stdLine.textFields) - 1
+
+	if indexId < 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"An unspecified error occurred.\n"+
+			"'indexId' has a value less than zero!\n"+
+			"indexId = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+	}
+
+	return indexId, err
 }
 
 // AddTextFieldDateTime - This method will append a DateTime text
