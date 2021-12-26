@@ -75,18 +75,29 @@ import (
 //       The following examples illustrate the use of
 //       'numOfStdLines':
 //         Example #1:
-//          Standard Line Text = "Hello World"
+//          Configured Standard Line Text = "Hello World"
 //          numOfStdLines = 1
 //          Text Output:
 //            "Hello World"
 //
 //         Example #2:
-//          Standard Line Text = "Hello World"
+//          Configured Standard Line Text = "Hello World"
 //          numOfStdLines = 3
 //          Text Output:
 //            "Hello World"
 //            "Hello World"
 //            "Hello World"
+//
+//         Example #3:
+//          Configured Standard Line Text = "How Now Brown Cow!"
+//          numOfStdLines = 5
+//          Text Output:
+//            "How Now Brown Cow!"
+//            "How Now Brown Cow!"
+//            "How Now Brown Cow!"
+//            "How Now Brown Cow!"
+//            "How Now Brown Cow!"
+//
 //
 //  turnLineTerminatorOff      bool
 //     - The 'turnLineTerminatorOff' flag controls whether a line
@@ -1654,7 +1665,8 @@ func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecStandardLine.DeleteAtIndex()",
+		"TextLineSpecStandardLine."+
+			"DeleteAtIndex()",
 		"")
 
 	if err != nil {
@@ -1666,7 +1678,9 @@ func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 			stdLine,
 			indexId,
 			ePrefix.XCtx(
-				"stdLine"))
+				fmt.Sprintf(
+					"stdLine.textFields[%v]",
+					indexId)))
 }
 
 // Empty - Deletes all the text fields stored as an array of
