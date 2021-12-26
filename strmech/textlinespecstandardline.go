@@ -61,8 +61,8 @@ import (
 //
 //  numOfStdLines              int
 //     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//       the configured standard line text formatted for text
+//       display, file output or printing.
 //
 //       A 'numOfStdLines' value of 1 means the line will be output
 //       once, a value of 2 signals the line will be repeated or
@@ -2396,13 +2396,150 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	return err
 }
 
+// PeekTextFieldAtIndex - Returns a deep copy of the Text Field
+// ('ITextFieldSpecification') object located at index, 'indexId',
+// in the Text Field Collection ('stdLine.textFields').
+//
+// As a 'Peek' method, the original Text Field object WILL NOT be
+// deleted from the Text Field Collection encapsulated by this
+// instance of TextLineSpecStandardLine.
+//
+// After completion of this method, the Text Field Collection array
+// will remain unchanged.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  indexId                    int
+//     - This index number designates the array element in the Text
+//       Fields Collection on which the "Peek" operation will be
+//       performed.
+//
+//       This method will return a deep copy of the Text Field
+//       designated by 'indexId' to the calling function.
+//
+//       The original Text Fields Collection will remain unchanged
+//       by this method.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  iTxtFieldSpec              ITextFieldSpecification
+//     - If this method completes successfully, a deep copy of
+//       the designated member of the Text Fields Collection
+//       will be returned to the calling function. The returned
+//       object will implement the ITextFieldSpecification
+//       interface.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) PeekTextFieldAtIndex(
+	indexId int,
+	errorPrefix interface{}) (
+	iTxtFieldSpec ITextFieldSpecification,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	iTxtFieldSpec = nil
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"PeekTextFieldAtIndex()",
+		"")
+
+	if err != nil {
+		return iTxtFieldSpec, err
+	}
+
+	iTxtFieldSpec,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		peekPopTextField(
+			stdLine,
+			indexId,
+			false,
+			ePrefix.XCtx(
+				"stdLine"))
+
+	return iTxtFieldSpec, err
+}
+
 // PopTextFieldAtIndex - Returns a deep copy of the Text Field
 // ('ITextFieldSpecification') object located at index, 'indexId',
 // in the Text Field Collection ('stdLine.textFields').
 //
-// As a 'Pop' method, the original Text Field object will deleted
-// from the Text Field Collection encapsulated by this instance of
-// TextLineSpecStandardLine.
+// As a 'Pop' method, the original Text Field object will be
+// deleted from the Text Field Collection encapsulated by this
+// instance of TextLineSpecStandardLine.
 //
 // After completion of this method, the Text Field Collection array
 // will have a length which is one less than the starting array
@@ -4245,16 +4382,16 @@ func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
 			replaceAtIndex)
 	}
 
-	lenOfTextFieldsCol--
+	lastIdx := lenOfTextFieldsCol - 1
 
-	if replaceAtIndex > lenOfTextFieldsCol {
+	if replaceAtIndex > lastIdx {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'replaceAtIndex' is out of range and invalid!\n"+
 			"'replaceAtIndex' is greater than the maximum collection index.\n"+
 			"The last element in the text fields collection is index '%v'.\n"+
 			"Input parameter 'replaceAtIndex' = '%v'\n",
 			ePrefix.String(),
-			lenOfTextFieldsCol,
+			lastIdx,
 			replaceAtIndex)
 
 		return err
