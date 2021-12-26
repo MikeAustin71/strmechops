@@ -1626,7 +1626,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 //
 // Return Values
 //
-//  err                        error
+//  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -1638,7 +1638,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 //
 func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 	indexId int,
-	errorPrefix interface{}) (err error) {
+	errorPrefix interface{}) error {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -1649,6 +1649,7 @@ func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 	defer stdLine.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1660,72 +1661,12 @@ func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 		return err
 	}
 
-	if stdLine.textFields == nil {
-		stdLine.textFields = make([]ITextFieldSpecification, 0, 50)
-	}
-
-	if indexId < 0 {
-		err = fmt.Errorf("%v - ERROR\n"+
-			"Input Parameter 'indexId' is less than zero.\n"+
-			"Index is Out-Of-Range!\n"+
-			"indexId='%v'",
-			ePrefix.XCtxEmpty().String(),
-			indexId)
-
-		return err
-	}
-
-	arrayLen := len(stdLine.textFields)
-
-	if arrayLen == 0 {
-		err = fmt.Errorf("%v - ERROR\n"+
-			"The Text Fields Collection, 'stdLine.textFields', is EMPTY!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return err
-	}
-
-	maxIdx := arrayLen - 1
-
-	if indexId >= arrayLen {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"Input Parameter 'indexId' is greater than the "+
-			"maximum index for the Text Fields collection.\n"+
-			"Index is Out-Of-Range!\n"+
-			"indexId='%v'\n"+
-			"Maximum 'stdLine.textFields' array index is '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+	return textLineSpecStandardLineElectron{}.ptr().
+		deleteTextField(
+			stdLine,
 			indexId,
-			maxIdx)
-
-		return err
-	}
-
-	if arrayLen == 1 {
-
-		stdLine.textFields = make([]ITextFieldSpecification, 0, 100)
-
-	} else if indexId == 0 {
-
-		// arrayLen > 1 and requested indexId = 0
-		stdLine.textFields = stdLine.textFields[1:]
-
-	} else if indexId == maxIdx {
-
-		// arrayLen > 1 and requested indexId = last element index
-		stdLine.textFields = stdLine.textFields[0 : arrayLen-1]
-
-	} else {
-
-		// arrayLen > 1 and indexId is in between
-		// first and last elements
-		stdLine.textFields =
-			append(stdLine.textFields[0:indexId], stdLine.textFields[indexId+1:]...)
-
-	}
-
-	return nil
+			ePrefix.XCtx(
+				"stdLine"))
 }
 
 // Empty - Deletes all the text fields stored as an array of
