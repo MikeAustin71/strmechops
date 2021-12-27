@@ -3,6 +3,7 @@ package strmech
 import (
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
+	"time"
 )
 
 func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
@@ -27,7 +28,9 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 		return
 	}
 
-	_,
+	var indexId int
+
+	indexId,
 		err = stdLine01.AddTextField(
 		&labelTxt,
 		ePrefix.XCtx(
@@ -36,6 +39,17 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 	if err != nil {
 		t.Errorf("%v\n",
 			err.Error())
+		return
+	}
+
+	if indexId != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.AddTextField() should have\n"+
+			"returned 'indexId' = 0\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
 		return
 	}
 
@@ -115,6 +129,96 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_CopyIn_000100()",
+		"")
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err := time.LoadLocation(timeZoneName)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err.Error())
+
+		return
+
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(12),
+		27,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen := len(dateTimeFormat) + 8
+
+	textJustification := TxtJustify.Center()
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	var indexId int
+
+	indexId,
+		err = stdLine01.AddTextFieldDateTime(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if indexId != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.AddTextFieldDateTime() should have\n"+
+			"returned 'indexId' = 0\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine02.AddTextFieldDateTime(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
 		return
 	}
 

@@ -68,17 +68,28 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	err = incomingTxtFieldDateTime.IsValidInstanceError(
+		ePrefix.XCtx(
+			"incomingTxtFieldDateTime"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	targetTxtFieldDateTime := TextFieldSpecDateTime{}.NewPtr()
 
 	err = targetTxtFieldDateTime.CopyIn(
 		&incomingTxtFieldDateTime,
-		ePrefix)
+		ePrefix.XCtx(
+			"targetTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by targetTxtFieldDateTime.CopyIn()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.String(),
+			ePrefix.XCtxEmpty().String(),
 			err.Error())
 
 		return
