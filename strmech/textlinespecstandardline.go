@@ -156,6 +156,17 @@ type TextLineSpecStandardLine struct {
 // of the new Text Field DateTime Object will be returned to the
 // calling function.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that that no text will be generated. The
+// number of statndard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -166,6 +177,9 @@ type TextLineSpecStandardLine struct {
 //       ITextFieldSpecification interface. A deep copy of this
 //       object will be added to the text field collection
 //       maintained by this instance of TextLineSpecStandardLine.
+//
+//       NOTE: You will need to pass the concrete instance of
+//       'textField' as a pointer to 'textField' (&textField).
 //
 //       If member variable data values contained in this
 //       'textField' parameter are found to be invalid, an error
