@@ -207,7 +207,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 
 	stdLine02 := TextLineSpecStandardLine{}
 
-	_,
+	indexId,
 		err = stdLine02.AddTextFieldDateTime(
 		dateTime,
 		fieldLen,
@@ -219,6 +219,17 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 	if err != nil {
 		t.Errorf("%v\n",
 			err.Error())
+		return
+	}
+
+	if indexId != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"stdLine02.AddTextFieldDateTime() should have\n"+
+			"returned 'indexId' = 0\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
 		return
 	}
 
