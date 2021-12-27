@@ -162,7 +162,7 @@ type TextLineSpecStandardLine struct {
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that that no text will be generated. The
-// number of statndard line repetitions must be set to a number
+// number of standard line repetitions must be set to a number
 // greater than zero. See methods:
 //     TextLineSpecStandardLine.GetNumOfStdLines()
 //     TextLineSpecStandardLine.SetNumOfStdLines()
@@ -281,6 +281,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	if err != nil {
 		return indexId, err
+	}
+
+	if textField == nil {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'textField' is 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
 	}
 
 	err = textField.IsValidInstanceError(

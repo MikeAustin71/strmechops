@@ -98,6 +98,26 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 		return
 	}
 
+	stdLine05 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine05.AddTextField(
+		nil,
+		ePrefix.XCtx(
+			"stdLine05<-labelTxt"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine05{}."+
+			"AddTextField()\n"+
+			"because 'textField' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	return
 }
 
