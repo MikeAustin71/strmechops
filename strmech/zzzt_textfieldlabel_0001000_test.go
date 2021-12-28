@@ -17,6 +17,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 	label := "12345"
 	fieldLen := 13
 	txtJustify := TxtJustify.Center()
+
 	expectedTextLabel :=
 		strings.Repeat(" ", 4) +
 			label +

@@ -1990,8 +1990,12 @@
 --- PASS: TestTextLineSpecStandardLine_AddTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldDateTime_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextFieldDateTime_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_AddTextFieldFiller_000100
+--- PASS: TestTextLineSpecStandardLine_AddTextFieldFiller_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_AddTextFieldLabel_000100
+--- PASS: TestTextLineSpecStandardLine_AddTextFieldLabel_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
 --- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
 PASS
-coverage: 67.2% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.780s
+coverage: 67.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.641s

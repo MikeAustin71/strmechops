@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 	"time"
 )
@@ -194,6 +195,16 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 		return
 	}
 
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if indexId != 0 {
 		t.Errorf("%v - ERROR\n"+
 			"stdLine01.AddTextFieldDateTime() should have\n"+
@@ -303,6 +314,282 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"Expected an error return from stdLine04{}."+
 			"AddTextFieldDateTime()\n"+
 			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddTextFieldFiller_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	fillerCharacters := " "
+	fillerCharsRepeatCount := 5
+
+	indexId,
+		err := stdLine01.AddTextFieldFiller(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if indexId != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.AddTextFieldFiller() should have\n"+
+			"returned 'indexId' = 0\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return
+	}
+
+	// Add a second Text Filler Field
+	indexId,
+		err = stdLine01.AddTextFieldFiller(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if indexId != 1 {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.AddTextFieldFiller() should have\n"+
+			"returned 'indexId' = 1\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine02.AddTextFieldFiller(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	badFillerChars := ""
+
+	_,
+		err = stdLine02.AddTextFieldFiller(
+		badFillerChars,
+		fillerCharsRepeatCount,
+		ePrefix.XCtx(
+			"stdLine02 - badFillerChars"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldDateTime()\n"+
+			"because 'badFillerChars' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+	_,
+		err = stdLine02.AddTextFieldFiller(
+		badFillerChars,
+		fillerCharsRepeatCount,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldDateTime()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddTextFieldLabel_000100()",
+		"")
+
+	label := "12345"
+	fieldLen := 13
+	txtJustify := TxtJustify.Center()
+
+	expectedStdLineText :=
+		strings.Repeat(" ", 4) +
+			label +
+			strings.Repeat(" ", 4) +
+			"\n"
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	indexId,
+		err := stdLine01.AddTextFieldLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"stdLine01 - valid label"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if indexId != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.AddTextFieldDateTime() should have\n"+
+			"returned 'indexId' = 0\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedStdLineText),
+			true)
+
+	var actualStdLineText string
+
+	actualStdLineText,
+		err = stdLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStdLineText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine02.AddTextFieldLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"stdLine02 is empty."))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}.NewPtr()
+
+	_,
+		err = stdLine03.AddTextFieldLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldDateTime()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	badFieldLen := -97
+
+	_,
+		err = stdLine03.AddTextFieldLabel(
+		label,
+		badFieldLen,
+		txtJustify,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldDateTime()\n"+
+			"because 'badFieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
