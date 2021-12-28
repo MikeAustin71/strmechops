@@ -485,7 +485,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 
 	if indexId != 0 {
 		t.Errorf("%v - ERROR\n"+
-			"stdLine01.AddTextFieldDateTime() should have\n"+
+			"stdLine01.AddTextFieldLabel() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
 			ePrefix.XCtxEmpty().String(),
@@ -588,7 +588,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from stdLine03{}."+
-			"AddTextFieldDateTime()\n"+
+			"AddTextFieldLabel()\n"+
 			"because 'badFieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())

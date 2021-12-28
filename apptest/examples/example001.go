@@ -17,6 +17,44 @@ type MainTest struct {
 	input string
 }
 
+func (mt MainTest) TextLineSpecStandardLine01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecStandardLine01()",
+		"")
+
+	label := "12345"
+	fieldLen := -37
+	txtJustify := strmech.TxtJustify.Center()
+	var output string
+	var err error
+
+	stdLine02 := strmech.TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine02.AddTextFieldLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"stdLine02 - fieldLen invalid."))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Println(output)
+		return
+	}
+
+	output =
+		fmt.Sprintf("%v\n"+
+			"SUCCESSFUL COMPLETION!!!\n\n",
+			ePrefix.XCtxEmpty().String())
+
+	fmt.Println(output)
+}
+
 func (mt MainTest) TextLineSpecSolidLine01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -2635,7 +2673,7 @@ func (mt MainTest) ExampleRead01() {
 	n := 0
 	var err error
 	err = nil
-	cntr := uint64(0)
+	center := uint64(0)
 
 	b := strings.Builder{}
 	b.Grow(len(originalStr) + 150)
@@ -2657,7 +2695,7 @@ func (mt MainTest) ExampleRead01() {
 			p[i] = byte(0)
 		}
 
-		cntr++
+		center++
 
 	}
 
@@ -2667,7 +2705,7 @@ func (mt MainTest) ExampleRead01() {
 	fmt.Println("  Original Str Length: ", len(originalStr))
 	fmt.Println("         sops1.StrOut: ", sops1.GetStringData())
 	fmt.Println("  sops1.StrOut Length: ", len(sops1.GetStringData()))
-	fmt.Println("              Counter: ", cntr)
+	fmt.Println("              Counter: ", center)
 	fmt.Println("Counter History Array: ", counterArray)
 	fmt.Println("       String Builder: ", strBuilderStr)
 	fmt.Println("String Builder Length: ", len(strBuilderStr))
