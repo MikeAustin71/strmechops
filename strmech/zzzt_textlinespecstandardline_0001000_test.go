@@ -567,7 +567,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from stdLine03{}."+
-			"AddTextFieldDateTime()\n"+
+			"AddTextFieldLabel()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -589,6 +589,143 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from stdLine03{}."+
 			"AddTextFieldLabel()\n"+
+			"because 'badFieldLen' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddTextFieldSpacer_000100()",
+		"")
+
+	expectedFieldLen := 4
+
+	expectedStdLineText :=
+		strings.Repeat(" ", expectedFieldLen) +
+			"\n"
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	indexId,
+		err := stdLine01.AddTextFieldSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"stdLine01 - valid Spacer"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if indexId != 0 {
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.AddTextFieldSpacer() should have\n"+
+			"returned 'indexId' = 0\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedStdLineText),
+			true)
+
+	var actualStdLineText string
+
+	actualStdLineText,
+		err = stdLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStdLineText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine02.AddTextFieldSpacer(
+		expectedFieldLen,
+		ePrefix.XCtx(
+			"stdLine02 is empty."))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}.NewPtr()
+
+	_,
+		err = stdLine03.AddTextFieldSpacer(
+		expectedFieldLen,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldSpacer()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	badFieldLen := -97
+
+	_,
+		err = stdLine03.AddTextFieldSpacer(
+		badFieldLen,
+		ePrefix.XCtx(
+			"stdLine03 - badFieldLen invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldSpacer()\n"+
 			"because 'badFieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
