@@ -9,7 +9,7 @@ import (
 func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_CopyIn_000100()",
+		"TestTextLineSpecStandardLine_AddTextField_000100()",
 		"")
 
 	stdLine01 := TextLineSpecStandardLine{}.New()
@@ -138,7 +138,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_CopyIn_000100()",
+		"TestTextLineSpecStandardLine_AddTextFieldDateTime_000100()",
 		"")
 
 	timeZoneName := "America/Chicago"
@@ -205,6 +205,34 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 		return
 	}
 
+	// Add a second Date Time Field
+	indexId,
+		err = stdLine01.AddTextFieldDateTime(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if indexId != 1 {
+		t.Errorf("%v - ERROR\n"+
+			"Test # 2\n"+
+			"stdLine01.AddTextFieldDateTime() should have\n"+
+			"returned 'indexId' = 1\n"+
+			"HOWEVER, indexId = %v\n",
+			ePrefix.XCtxEmpty().String(),
+			indexId)
+
+		return
+	}
+
 	stdLine02 := TextLineSpecStandardLine{}
 
 	indexId,
@@ -229,6 +257,54 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"HOWEVER, indexId = %v\n",
 			ePrefix.XCtxEmpty().String(),
 			indexId)
+
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}
+
+	dateTimeBad := time.Time{}
+	fieldLenBad := -97
+
+	_,
+		err = stdLine03.AddTextFieldDateTime(
+		dateTimeBad,
+		fieldLenBad,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"AddTextFieldDateTime()\n"+
+			"because 'dateTimeBad' and 'fieldLenBad' are invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine04 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine04.AddTextFieldDateTime(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine04{}."+
+			"AddTextFieldDateTime()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
