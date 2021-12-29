@@ -1612,8 +1612,8 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from TextLineSpecStandardLine{}."+
-			"CopyIn()\n"+
+			"Expected an error return from stdLine02{}."+
+			"CopyOutITextLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
