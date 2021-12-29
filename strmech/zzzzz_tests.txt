@@ -2005,5 +2005,5 @@
 === RUN   TestTextLineSpecStandardLine_copyIn_000100
 --- PASS: TestTextLineSpecStandardLine_copyIn_000100 (0.00s)
 PASS
-coverage: 68.4% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.339s
+coverage: 68.5% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	0.820s

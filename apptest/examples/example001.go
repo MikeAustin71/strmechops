@@ -55,6 +55,157 @@ func (mt MainTest) TextLineSpecStandardLine01() {
 	fmt.Println(output)
 }
 
+func (mt MainTest) TextLineSpecStandardLine02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecStandardLine02()",
+		"")
+
+	var output string
+
+	stdLine01 := strmech.TextLineSpecStandardLine{}.NewPtr()
+
+	rightMarginLen := 5
+
+	rightMarginSpec,
+		err := strmech.TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"rightMarginSpec"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	var leftMarginSpec strmech.TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = strmech.TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"leftMarginSpec"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	label := "How Now Brown Cow!"
+	fieldLen := len(label) + 4
+	txtJustify := strmech.TxtJustify.Center()
+
+	var labelSpec strmech.TextFieldSpecLabel
+
+	labelSpec,
+		err = strmech.TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"labelSpec"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	stdLine02 := strmech.TextLineSpecStandardLine{}
+
+	err =
+		stdLine02.CopyIn(
+			stdLine01,
+			ePrefix.XCtx(
+				"stdLine02<-stdLine01 invalid newLinesChars"))
+
+	if err != nil {
+		output = fmt.Sprintf("%v\n",
+			err.Error())
+
+		fmt.Print(output)
+
+		return
+	}
+
+	output = fmt.Sprintf("\n%v\n"+
+		"SUCCESSFUL COMPLETION\n",
+		ePrefix.XCtxEmpty().String())
+
+	fmt.Println(output)
+}
+
 func (mt MainTest) TextLineSpecSolidLine01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

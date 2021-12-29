@@ -3629,7 +3629,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"SetLineTerminationChars()",
+			"SetNewLineChars()",
 		"")
 
 	if err != nil {
@@ -3819,7 +3819,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecPlainText."+
-			"SetLineTerminationRunes()",
+			"SetNewLineRunes()",
 		"")
 
 	if err != nil {

@@ -780,7 +780,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	newLineChars := stdLine.GetLineTerminationChars()
+	newLineChars := stdLine.GetNewLineChars()
 
 	if newLineChars != "\n" {
 		t.Errorf("%v\n"+
@@ -792,7 +792,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	newLineRunes := stdLine.GetLineTerminationRunes()
+	newLineRunes := stdLine.GetNewLineRunes()
 	expectedNewLineRunes := "\n"
 
 	if string(newLineRunes) != expectedNewLineRunes {

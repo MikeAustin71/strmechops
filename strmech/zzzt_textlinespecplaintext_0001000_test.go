@@ -411,7 +411,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		expectedNewLineChars) {
 
 		t.Errorf("%v\n"+
-			"Error: plainTextLine02.GetLineTerminationRunes()\n"+
+			"Error: plainTextLine02.GetNewLineRunes()\n"+
 			"Expected New Line Chars = '%v'\n"+
 			"Instead, New Line Chars = '%v'\n",
 			ePrefix.String(),
@@ -1424,7 +1424,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 	if printableExpectedStr != printableActualStr {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Test #1 - plainTextLine01.GetLineTerminationChars()\n"+
+			"Test #1 - plainTextLine01.GetNewLineChars()\n"+
 			"Expected Line Termination String DOES NOT match\n"+
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -1454,7 +1454,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 	if printableExpectedStr != printableActualStr {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Test #2 - plainTextLine02.GetLineTerminationChars()\n"+
+			"Test #2 - plainTextLine02.GetNewLineChars()\n"+
 			"Expected Line Termination String DOES NOT match\n"+
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -1522,7 +1522,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	if printableExpectedStr != printableActualStr {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Test #1 - plainTextLine01.GetLineTerminationRunes()\n"+
+			"Test #1 - plainTextLine01.GetNewLineRunes()\n"+
 			"Expected Line Termination String DOES NOT match\n"+
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -1542,7 +1542,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	if !areEqual {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Test #2 - plainTextLine01.GetLineTerminationRunes()\n"+
+			"Test #2 - plainTextLine01.GetNewLineRunes()\n"+
 			"Rune Array Comparison\n"+
 			"Expected Line Termination String DOES NOT match\n"+
 			"Actual Line Termination String.\n"+
@@ -1575,7 +1575,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	if printableExpectedStr != printableActualStr {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Test #3 - plainTextLine02.GetLineTerminationRunes()\n"+
+			"Test #3 - plainTextLine02.GetNewLineRunes()\n"+
 			"Expected Line Termination String DOES NOT match\n"+
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -1595,7 +1595,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	if !areEqual {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Test #4 - plainTextLine02.GetLineTerminationRunes()\n"+
+			"Test #4 - plainTextLine02.GetNewLineRunes()\n"+
 			"Rune Array Comparison\n"+
 			"Expected Line Termination String DOES NOT match\n"+
 			"Actual Line Termination String.\n"+
@@ -4381,7 +4381,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 		printableActualNewLineStr {
 
 		t.Errorf("%v Test #1\n"+
-			"plainTextLineZero.GetLineTerminationChars()\n"+
+			"plainTextLineZero.GetNewLineChars()\n"+
 			"Error: Expected 'expectedNewLineStr' == 'actualNewLineStr'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -4450,7 +4450,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 		printableActualNewLineStr {
 
 		t.Errorf("%v Test #2\n"+
-			"plainTextLine01.GetLineTerminationChars()\n"+
+			"plainTextLine01.GetNewLineChars()\n"+
 			"Error: Expected 'expectedNewLineStr' == 'actualNewLineStr'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -4515,7 +4515,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine02."+
-			"SetLineTerminationChars()\n"+
+			"SetNewLineChars()\n"+
 			"because 'expectedNewLineStr' is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -4535,7 +4535,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	if err == nil {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from plainTextLine03."+
-			"SetLineTerminationChars()\n"+
+			"SetNewLineChars()\n"+
 			"because 'expectedNewLineStr' has 1,000,001 characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -4589,7 +4589,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		printableActualNewLineStr {
 
 		t.Errorf("%v Test #1\n"+
-			"plainTextLineZero.GetLineTerminationRunes()\n"+
+			"plainTextLineZero.GetNewLineRunes()\n"+
 			"Error: Expected 'expectedNewLineRunes' == 'actualNewLineRunes'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -4657,7 +4657,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		printableActualNewLineStr {
 
 		t.Errorf("%v Test #2\n"+
-			"plainTextLine01.GetLineTerminationRunes()\n"+
+			"plainTextLine01.GetNewLineRunes()\n"+
 			"Error: Expected 'expectedNewLineRunes' == 'actualNewLineRunes'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
@@ -4677,7 +4677,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Test #3\n"+
 			"Expected an error return from plainTextLine01."+
-			"SetLineTerminationRunes()\n"+
+			"SetNewLineRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
@@ -4722,7 +4722,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Test #4\n"+
 			"Expected an error return from plainTextLine01."+
-			"SetLineTerminationRunes()\n"+
+			"SetNewLineRunes()\n"+
 			"because 'expectedNewLineRunes' is invalid.\n"+
 			"'expectedNewLineRunes' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
@@ -4784,7 +4784,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Test #5\n"+
 			"Expected an error return from plainTextLine03."+
-			"SetLineTerminationRunes()\n"+
+			"SetNewLineRunes()\n"+
 			"because 'expectedNewLineRunes' is invalid.\n"+
 			"'expectedNewLineRunes' has an array length greater\n"+
 			"than 1-million (1,000,000) characters.\n"+

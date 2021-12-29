@@ -560,6 +560,20 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 			return isValid, err
 		}
 
+	} else {
+
+		sMechPreon := strMechPreon{}
+
+		_,
+			err =
+			sMechPreon.testValidityOfRuneCharArray(
+				txtStdLine.newLineChars,
+				ePrefix.XCtx(
+					"txtStdLine.newLineChars invalid"))
+
+		if err != nil {
+			return isValid, err
+		}
 	}
 
 	isValid = true

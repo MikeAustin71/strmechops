@@ -7,6 +7,6 @@ import (
 func main() {
 	mt := examples.MainTest{}
 
-	mt.TextLineSpecStandardLine01()
+	mt.TextLineSpecStandardLine02()
 
 }

@@ -204,4 +204,43 @@ func TestTextLineSpecStandardLine_copyIn_000100(t *testing.T) {
 		return
 	}
 
+	stdLine01.numOfStdLines = 1
+
+	stdLine01.newLineChars = nil
+
+	err =
+		txtStdLineNanobot.copyIn(
+			&stdLine02,
+			stdLine01,
+			ePrefix.XCtx(
+				"stdLine02<-stdLine01 newLineChars==nil"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine01.newLineChars = []rune{'\n', 0, '\n', 0}
+
+	err =
+		txtStdLineNanobot.copyIn(
+			&stdLine02,
+			stdLine01,
+			ePrefix.XCtx(
+				"stdLine02<-stdLine01 newLineChars invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtStdLineNanobot{}."+
+			"copyIn()\n"+
+			"because 'stdLine01.newLineChars' contains invalid characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
 }
