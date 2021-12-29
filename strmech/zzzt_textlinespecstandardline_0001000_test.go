@@ -1257,6 +1257,12 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			[]rune(actualStdLineText),
 			true)
 
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if printableExpectedStr != printableActualStr {
 
 		t.Errorf("%v - ERROR\n"+
@@ -1364,6 +1370,269 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from stdLine03{}."+
 			"CopyOut()\n"+
+			"because 'stdLine03' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_CopyOutITextLine_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
+
+	rightMarginLen := 5
+
+	rightMarginSpec,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var leftMarginSpec TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	label := "How Now Brown Cow!"
+	fieldLen := len(label) + 4
+	txtJustify := TxtJustify.Center()
+
+	var labelSpec TextFieldSpecLabel
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStdLineText :=
+		strings.Repeat(" ", leftMarginLen) +
+			"  " + label + "  " +
+			strings.Repeat(" ", rightMarginLen) +
+			"\n"
+
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var iTextLine ITextLineSpecification
+
+	iTextLine, err =
+		stdLine01.CopyOutITextLine(
+			ePrefix.XCtx(
+				"stdLine01->iTextLine"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02, ok := iTextLine.(*TextLineSpecStandardLine)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: iTextLine.(*TextLineSpecStandardLine)\n"+
+			"Could not convert 'iTextLine' to TextLineSpecStandardLine\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = stdLine02.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !stdLine02.Equal(stdLine01) {
+		t.Errorf("%v\n"+
+			"Error: Expected stdLine02 == stdLine01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedStdLineText),
+			true)
+
+	var actualStdLineText string
+
+	actualStdLineText,
+		err = stdLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStdLineText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1 - stdLine01"+
+			"Expected Formatted Text String 01 DOES NOT match\n"+
+			"Actual Formatted Text String 01.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	actualStdLineText,
+		err = stdLine02.GetFormattedText(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStdLineText),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2 - stdLine02"+
+			"Expected Formatted Text String 02 DOES NOT match\n"+
+			"Actual Formatted Text String 02.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	_,
+		err =
+		stdLine02.CopyOutITextLine(
+			StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecStandardLine{}."+
+			"CopyIn()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine03.CopyOutITextLine(
+		ePrefix.XCtx(
+			"stdLine03 is empty"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03{}."+
+			"CopyOutITextLine()\n"+
 			"because 'stdLine03' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())

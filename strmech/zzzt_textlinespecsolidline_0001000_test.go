@@ -424,8 +424,8 @@ func TestTextLineSpecSolidLine_CopyOutITextLine_000100(t *testing.T) {
 
 	if !ok {
 		t.Errorf("%v\n"+
-			"Error: iTextLine.(*TextLineSpecPlainText)\n"+
-			"Could not convert 'iTextLine' to TextLineSpecPlainText\n",
+			"Error: iTextLine.(*TextLineSpecSolidLine)\n"+
+			"Could not convert 'iTextLine' to TextLineSpecSolidLine\n",
 			ePrefix.XCtxEmpty().String())
 
 		return

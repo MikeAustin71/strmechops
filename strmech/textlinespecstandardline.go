@@ -167,6 +167,10 @@ type TextLineSpecStandardLine struct {
 //     TextLineSpecStandardLine.GetNumOfStdLines()
 //     TextLineSpecStandardLine.SetNumOfStdLines()
 //
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -341,6 +345,22 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 // If the method completes successfully, the internal array index
 // of the new Text Field DateTime Object will be returned to the
 // calling function.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that that no text will be generated. The
+// number of standard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
 //
 //
 // ----------------------------------------------------------------
@@ -592,6 +612,22 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 //
 // ----------------------------------------------------------------
 //
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that that no text will be generated. The
+// number of standard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
+//
+//
+// ----------------------------------------------------------------
+//
 // Input Parameters
 //
 //  fillerCharacters    string
@@ -772,6 +808,21 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 // of the new Text Field Filler Object will be returned to the
 // calling function.
 //
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that that no text will be generated. The
+// number of standard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
 //
 // ----------------------------------------------------------------
 //
@@ -970,6 +1021,22 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 // If the method completes successfully, the internal array index
 // of the new Text Field Filler Object will be returned to the
 // calling function.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that that no text will be generated. The
+// number of standard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
 //
 //
 // ----------------------------------------------------------------
