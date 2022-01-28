@@ -164,7 +164,7 @@ type TextLineSpecStandardLine struct {
 // IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
-// repetitions, means that that no text will be generated. The
+// repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
 //     TextLineSpecStandardLine.GetNumOfStdLines()
