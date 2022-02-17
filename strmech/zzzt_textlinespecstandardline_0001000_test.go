@@ -1029,7 +1029,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 
 	err = stdLineThree.CopyIn(
 		&stdLineTwo,
-		StrMech{})
+		textLineSpecStandardLineElectron{})
 
 	if err == nil {
 
@@ -2294,6 +2294,59 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_DeleteAtIndex_000200()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	err := stdLine01.DeleteAtIndex(
+		5,
+		ePrefix.XCtx(
+			"Empty Object, Invalid Index"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected error return from stdLine01.DeleteAtIndex()\n"+
+			"because stdLine01 is empty and index is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine02.DeleteAtIndex(
+		2,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine02.DeleteAtIndex()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}

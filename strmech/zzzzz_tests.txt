@@ -2010,6 +2010,8 @@
 --- PASS: TestTextLineSpecStandardLine_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_DeleteAtIndex_000100
 --- PASS: TestTextLineSpecStandardLine_DeleteAtIndex_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_DeleteAtIndex_000200
+--- PASS: TestTextLineSpecStandardLine_DeleteAtIndex_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_copyIn_000100
 --- PASS: TestTextLineSpecStandardLine_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_copyOut_000100
@@ -2020,4 +2022,4 @@
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.00s)
 PASS
 coverage: 68.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.108s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.015s

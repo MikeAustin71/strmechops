@@ -649,15 +649,9 @@ func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
 		"TestTextLineSpecStandardLineElectron_deleteTextField_000200()",
 		"")
 
-	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
-
-	rightMarginLen := 5
-
-	rightMarginSpec,
-		err := TextFieldSpecSpacer{}.NewSpacer(
-		rightMarginLen,
-		ePrefix.XCtx(
-			"rightMarginSpec"))
+	stdLine01,
+		err := createTestTextLineSpecStandardLine02(
+		ePrefix)
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -665,15 +659,12 @@ func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
 		return
 	}
 
-	var leftMarginSpec TextFieldSpecSpacer
-
-	leftMarginLen := 6
-
-	leftMarginSpec,
-		err = TextFieldSpecSpacer{}.NewSpacer(
-		leftMarginLen,
-		ePrefix.XCtx(
-			"leftMarginSpec"))
+	err =
+		textLineSpecStandardLineElectron{}.ptr().deleteTextField(
+			&stdLine01,
+			1,
+			ePrefix.XCtx(
+				"stdLine01 delete index 1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -681,70 +672,5 @@ func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
 		return
 	}
 
-	label := "How Now Brown Cow!"
-	fieldLen := len(label) + 4
-	txtJustify := TxtJustify.Center()
-
-	var labelSpec TextFieldSpecLabel
-
-	labelSpec,
-		err = TextFieldSpecLabel{}.NewTextLabel(
-		label,
-		fieldLen,
-		txtJustify,
-		ePrefix.XCtx(
-			"labelSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = stdLine01.AddTextField(
-		&leftMarginSpec,
-		ePrefix.XCtx(
-			"stdLine01<-leftMarginSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = stdLine01.AddTextField(
-		&labelSpec,
-		ePrefix.XCtx(
-			"stdLine01<-labelSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = stdLine01.AddTextField(
-		&rightMarginSpec,
-		ePrefix.XCtx(
-			"stdLine01<-rightMarginSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
-			"stdLine01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
+	return
 }
