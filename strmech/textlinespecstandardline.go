@@ -487,17 +487,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	lastIndexId = len(stdLine.textFields) - 1
 
-	if lastIndexId < 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"An unspecified error occurred.\n"+
-			"'lastIndexId' has a value less than zero!\n"+
-			"lastIndexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			lastIndexId)
-
-	}
-
 	return lastIndexId, err
 }
 
@@ -900,17 +889,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 
 	indexId = len(stdLine.textFields) - 1
 
-	if indexId < 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"An unspecified error occurred.\n"+
-			"'indexId' has a value less than zero!\n"+
-			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			indexId)
-
-	}
-
 	return indexId, err
 }
 
@@ -1098,17 +1076,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 		newFillerField)
 
 	indexId = len(stdLine.textFields) - 1
-
-	if indexId < 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"An unspecified error occurred.\n"+
-			"'indexId' has a value less than zero!\n"+
-			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			indexId)
-
-	}
 
 	return indexId, err
 }
@@ -1313,17 +1280,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 
 	indexId = len(stdLine.textFields) - 1
 
-	if indexId < 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"An unspecified error occurred.\n"+
-			"'indexId' has a value less than zero!\n"+
-			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			indexId)
-
-	}
-
 	return indexId, err
 }
 
@@ -1491,17 +1447,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 		newSpacerField)
 
 	indexId = len(stdLine.textFields) - 1
-
-	if indexId < 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"An unspecified error occurred.\n"+
-			"'indexId' has a value less than zero!\n"+
-			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			indexId)
-
-	}
 
 	return indexId, err
 }

@@ -7,6 +7,85 @@ import (
 	"time"
 )
 
+func TestTextLineSpecStandardLine_AddStandardLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddStandardLine_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}
+	lastIndex := 0
+
+	lastIndex,
+		err = stdLine03.AddStandardLine(
+		&stdLine01,
+		ePrefix.XCtx(
+			"stdLine03<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03.SetNumOfStdLines(1)
+
+	expectedLastIndex := stdLine01.GetNumOfTextFields() - 1
+
+	if lastIndex != expectedLastIndex {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected Last Index is NOT EQUAL to Actual Last Index!\n"+
+			"Expected Last Index = '%v'\n"+
+			"  Actual Last Index = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLastIndex,
+			lastIndex)
+
+		return
+
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine03.AddStandardLine(
+		&stdLine02,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine02.DeleteAtIndex()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
 func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -134,6 +213,178 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TextLineSpecStandardLine_AddTextFields_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}.New()
+	lastIndex := 0
+
+	lastIndex,
+		err = stdLine03.AddTextFields(
+		&textFields,
+		ePrefix.XCtx(
+			"stdLine03<-stdLine01.textFields"))
+
+	expectedLastIndex := stdLine01.GetNumOfTextFields() - 1
+
+	if lastIndex != expectedLastIndex {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"stdLine01 vs stdLine03\n"+
+			"Expected Last Index is NOT EQUAL to Actual Last Index!\n"+
+			"Expected Last Index = '%v'\n"+
+			"  Actual Last Index = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLastIndex,
+			lastIndex)
+
+		return
+
+	}
+
+	if !stdLine01.Equal(&stdLine03) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine01==stdLine03\n"+
+			"HOWEVER THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine03.AddTextFields(
+		&textFields,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine03.AddTextFields()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLine_AddTextFields_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddTextFields_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine02.AddTextFields(
+		&textFields,
+		ePrefix.XCtx(
+			"stdLine02 <- textFields"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02.SetNumOfStdLines(1)
+
+	textFields = nil
+
+	_,
+		err = stdLine02.AddTextFields(
+		&textFields,
+		ePrefix.XCtx(
+			"Series-2: stdLine02 <- textFields"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine02.AddTextFields()\n"+
+			"because 'textFields' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
 }
 
 func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {

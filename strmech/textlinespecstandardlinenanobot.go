@@ -164,19 +164,6 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 
 	lastIndexId = len(txtStdLine.textFields) - 1
 
-	if lastIndexId < 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"An unspecified error occurred.\n"+
-			"'indexId' has a value less than zero!\n"+
-			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
-			lastIndexId)
-
-		lastIndexId = -1
-
-	}
-
 	return lastIndexId, err
 }
 
