@@ -107,6 +107,15 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 
 	lenTextFieldCollection := len(txtStdLine.textFields)
 
+	if lenTextFieldCollection == 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The Text Field Collection, 'txtStdLine.textFields' is EMPTY!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return err
+	}
+
 	lastIdx := lenTextFieldCollection - 1
 
 	if indexId > lastIdx {
@@ -123,15 +132,6 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 
 		return err
 
-	}
-
-	if lenTextFieldCollection == 0 {
-
-		err = fmt.Errorf("%v - ERROR\n"+
-			"The Text Field Collection, 'txtStdLine.textFields' is EMPTY!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return err
 	}
 
 	if indexId == 0 {

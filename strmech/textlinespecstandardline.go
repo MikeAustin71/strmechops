@@ -149,11 +149,11 @@ type TextLineSpecStandardLine struct {
 	lock                  *sync.Mutex
 }
 
-// AddTextField - This method will append a text field object to
-// the end of the current array of text field objects maintained by
-// the current instance of TextLineSpecStandardLine. The object
-// actually appended to the array is a deep copy of the input
-// parameter, 'textField'.
+// AddTextField - This method will append a single text field
+// object to the end of the current array of text field objects
+// maintained by the current instance of TextLineSpecStandardLine.
+// The object actually appended to the array is a deep copy of the
+// input parameter, 'textField'.
 //
 // If the method completes successfully, the internal array index
 // of the new Text Field DateTime Object will be returned to the
@@ -254,7 +254,7 @@ type TextLineSpecStandardLine struct {
 //
 //  err                        error
 //     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
+//       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
 //       an appropriate error message.
 //
@@ -334,6 +334,154 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 	return indexId, err
 }
 
+// AddTextFields - This method will append multiple text field
+// objects to the end of the current array of text field objects
+// maintained by the current instance of TextLineSpecStandardLine.
+// The objects actually appended to the current array are deep
+// copies of the text field objects contained in input parameter,
+// 'textFields'.
+//
+// If the method completes successfully, the internal array index
+// of the new Text Field DateTime Object will be returned to the
+// calling function.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that no text will be generated. The
+// number of standard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textFields                 *[]ITextFieldSpecification
+//     - A pointer to a text field collection whose objects
+//       implement the ITextFieldSpecification interface. A deep
+//       copy of each object in this collection will be added to
+//       the text field collection maintained by the current
+//       instance of TextLineSpecStandardLine.
+//
+//       If member variable data values contained in this
+//       'textFields' parameter are found to be invalid, an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  indexId                    int
+//     - If this method completes successfully, the internal array
+//       index of the last text field object will be returned as an
+//       integer value.
+//
+//       In the event of an error, 'indexId' will be set to a value
+//       of minus one (-1).
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) AddTextFields(
+	textFields *[]ITextFieldSpecification,
+	errorPrefix interface{}) (
+	indexId int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	indexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.AddTextFields()",
+		"")
+
+	if err != nil {
+		return indexId, err
+	}
+
+	txtStdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	return txtStdLineNanobot.addTextFields(
+		stdLine,
+		textFields,
+		ePrefix)
+}
+
 // AddTextFieldDateTime - This method will append a DateTime text
 // field object to the end of the current array of text field
 // objects maintained by the current instance of
@@ -355,7 +503,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 // IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
-// repetitions, means that that no text will be generated. The
+// repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
 //     TextLineSpecStandardLine.GetNumOfStdLines()
@@ -413,7 +561,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //
 //       The date/time format is documented in the Golang time.Time
 //       package, https://pkg.go.dev/time. The format operations are
-//       are documented at https://pkg.go.dev/time#Time.Format .
+//       documented at https://pkg.go.dev/time#Time.Format .
 //
 //       If this parameter is submitted as an empty string,
 //       parameter 'dateTimeFormat' will be assigned a default
@@ -618,7 +766,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 // IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
-// repetitions, means that that no text will be generated. The
+// repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
 //     TextLineSpecStandardLine.GetNumOfStdLines()
@@ -817,9 +965,9 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 // IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
-// repetitions, means that that no text will be generated. The
-// number of standard line repetitions must be set to a number
-// greater than zero. See methods:
+// repetitions, means that no text will be generated. The number
+// of standard line repetitions must be set to a number greater
+// than zero. See methods:
 //     TextLineSpecStandardLine.GetNumOfStdLines()
 //     TextLineSpecStandardLine.SetNumOfStdLines()
 //
@@ -1031,9 +1179,9 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 // IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
-// repetitions, means that that no text will be generated. The
-// number of standard line repetitions must be set to a number
-// greater than zero. See methods:
+// repetitions, means that no text will be generated. The number
+// of standard line repetitions must be set to a number greater
+// than zero. See methods:
 //     TextLineSpecStandardLine.GetNumOfStdLines()
 //     TextLineSpecStandardLine.SetNumOfStdLines()
 //
@@ -1552,7 +1700,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 // member variables, this method will return an error.
 //
 //
-// ----------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Input Parameters
 //

@@ -462,3 +462,289 @@ func TestTextLineSpecStandardLine_copyOut_000100(t *testing.T) {
 	}
 
 }
+
+func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TesttextLineSpecStandardLineElectron_deleteTextField_000100()",
+		"")
+
+	indexId := 2
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	err := txtStdLineElectron.deleteTextField(
+		nil,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron.deleteTextField()\n"+
+			"because txtStdLine is a 'nil' pointer!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
+
+	rightMarginLen := 5
+
+	rightMarginSpec,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var leftMarginSpec TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	label := "How Now Brown Cow!"
+	fieldLen := len(label) + 4
+	txtJustify := TxtJustify.Center()
+
+	var labelSpec TextFieldSpecLabel
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineElectron02 := textLineSpecStandardLineElectron{}
+
+	indexId = 18
+
+	err = txtStdLineElectron02.deleteTextField(
+		stdLine01,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
+			"because indexId is invalid!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	indexId = -2
+
+	err = txtStdLineElectron02.deleteTextField(
+		stdLine01,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
+			"because indexId is less than zero!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	indexId = 0
+
+	stdLine01.textFields = nil
+
+	err = txtStdLineElectron02.deleteTextField(
+		stdLine01,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
+			"because stdLine01.textFields = nil!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_deleteTextField_000200()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
+
+	rightMarginLen := 5
+
+	rightMarginSpec,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var leftMarginSpec TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	label := "How Now Brown Cow!"
+	fieldLen := len(label) + 4
+	txtJustify := TxtJustify.Center()
+
+	var labelSpec TextFieldSpecLabel
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+}

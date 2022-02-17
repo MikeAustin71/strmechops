@@ -10,6 +10,176 @@ type textLineSpecStandardLineNanobot struct {
 	lock *sync.Mutex
 }
 
+// addTextFields - STOP@COL68
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtStdLine                 *TextLineSpecStandardLine
+//     - A pointer to an instance of TextLineSpecStandardLine which
+//       encapsulates the Text Fields Collection. Deep copies of
+//       text fields contained in input parameter 'textFields' will
+//       be added to the Text Fields Collection for this object.
+//
+//
+//  textFields                 []ITextFieldSpecification
+//     - An array of text field objects which implement the
+//       ITextFieldSpecification interface. A deep copy of each
+//       Text Field object will be added to the text field
+//       collection maintained by input parameter,
+//       'txtStdLine'.
+//
+//       NOTE: You will need to pass the concrete instance of
+//       'textField' as a pointer to 'textField' (&textField).
+//
+//       If member variable data values contained in this
+//       'textField' parameter are found to be invalid, an error
+//       will be returned.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  lastIndexId                int
+//     - If this method completes successfully, the internal array
+//       index of the last text field object in the Text Field
+//       array maintained by parameter 'txtStdLine' will be
+//       returned as an integer value.
+//
+//       In the event of an error, 'lastIndexId' will be set to a
+//       value of minus one (-1).
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
+	txtStdLine *TextLineSpecStandardLine,
+	textFields *[]ITextFieldSpecification,
+	errPrefDto *ePref.ErrPrefixDto) (
+	lastIndexId int,
+	err error) {
+
+	if txtStdLineNanobot.lock == nil {
+		txtStdLineNanobot.lock = new(sync.Mutex)
+	}
+
+	txtStdLineNanobot.lock.Lock()
+
+	defer txtStdLineNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	lastIndexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineNanobot.addTextFields()",
+		"")
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	if textFields == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is a nil pointer!\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	copyCnt := 0
+
+	for idx, val := range *textFields {
+
+		err = val.IsValidInstanceError(
+			ePrefix.XCtx(
+				fmt.Sprintf("textFields[%v]",
+					idx)))
+
+		if err != nil {
+			return lastIndexId, err
+		}
+
+		var newTextField ITextFieldSpecification
+
+		newTextField,
+			err = val.CopyOutITextField(
+			ePrefix.XCtx(fmt.Sprintf(
+				"textFields[%v]->newTextField",
+				idx)))
+
+		if err != nil {
+			return lastIndexId, err
+		}
+
+		txtStdLine.textFields =
+			append(txtStdLine.textFields,
+				newTextField)
+
+		copyCnt++
+	}
+
+	if copyCnt == 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'textFields' is empty!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return lastIndexId, err
+	}
+
+	lastIndexId = len(txtStdLine.textFields) - 1
+
+	if lastIndexId < 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"An unspecified error occurred.\n"+
+			"'indexId' has a value less than zero!\n"+
+			"indexId = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lastIndexId)
+
+		lastIndexId = -1
+
+	}
+
+	return lastIndexId, err
+}
+
 // copyIn - Copies all data from input parameter 'incomingStdLine'
 // to input parameter 'targetStdLine'.
 //
@@ -188,7 +358,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 // 'txtStdLine'.
 //
 //
-// ------------------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Input Parameters
 //
