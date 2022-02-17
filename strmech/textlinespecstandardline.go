@@ -149,6 +149,172 @@ type TextLineSpecStandardLine struct {
 	lock                  *sync.Mutex
 }
 
+// AddStandardLine - This method receives an input parameter
+// consisting of TextLineSpecStandardLine type ('incomingStdLine').
+// It then proceeds to add the array of text field objects
+// encapsulated by parameter 'incomingStdLine' to the text field
+// array maintained by the current instance of
+// TextLineSpecStandardLine.
+//
+// When this method completes successfully, the current
+// TextLineSpecStandardLine object will encapsulate an array
+// containing both the original text field objects plus those
+// provided by parameter, 'incomingStdLine'.
+//
+// If the method completes successfully, the internal array index
+// of the last Text Field Object will be returned to the calling
+// function.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Adding TextFields without setting the number of standard line
+// repetitions, means that no formatted text will be generated. The
+// number of standard line repetitions must be set to a number
+// greater than zero. See methods:
+//     TextLineSpecStandardLine.GetNumOfStdLines()
+//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+// Instances of TextLineSpecStandardLine created with one of the
+// 'New' methods are automatically defaulted with the Number of
+// Standard Lines set to a value of one (1).
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingStdLine            TextLineSpecStandardLine
+//     - A valid instance of TextLineSpecStandardLine. The Text
+//       Field array contained by this parameter will be added to
+//       the text field array of the current
+//       TextLineSpecStandardLine instance.
+//
+//       All valid Text Field objects implement the
+//       ITextFieldSpecification interface. A deep copy of each
+//       object in the 'incomingStdLine' collection will be added
+//       to the Text Field collection maintained by the current
+//       instance of TextLineSpecStandardLine.
+//
+//       If parameter 'incomingStdLine' is determined to be
+//       invalid, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  LastIndexId                int
+//     - If this method completes successfully, the internal array
+//       index of the last text field object for the current
+//       TextLineSpecStandardLine instance will be returned as an
+//       integer value.
+//
+//       In the event of an error, 'LastIndexId' will be set to a
+//       value of minus one (-1).
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) AddStandardLine(
+	incomingStdLine *TextLineSpecStandardLine,
+	errorPrefix interface{}) (
+	lastIndexId int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	lastIndexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine.AddStandardLine()",
+		"")
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	if incomingStdLine == nil {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'incomingStdLine' is a 'nil' pointer!\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	txtStdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	return txtStdLineNanobot.addTextFields(
+		stdLine,
+		&incomingStdLine.textFields,
+		ePrefix)
+}
+
 // AddTextField - This method will append a single text field
 // object to the end of the current array of text field objects
 // maintained by the current instance of TextLineSpecStandardLine.
@@ -156,8 +322,8 @@ type TextLineSpecStandardLine struct {
 // input parameter, 'textField'.
 //
 // If the method completes successfully, the internal array index
-// of the new Text Field DateTime Object will be returned to the
-// calling function.
+// of the new Text Field object will be returned to the calling
+// function.
 //
 // ----------------------------------------------------------------
 //
@@ -243,13 +409,14 @@ type TextLineSpecStandardLine struct {
 //
 // Return Values
 //
-//  indexId                    int
+//  lastIndexId                int
 //     - If this method completes successfully, the internal array
-//       index of the new text field object will be returned as an
+//       index of the last text field object for the current
+//       TextLineSpecStandardLine instance will be returned as an
 //       integer value.
 //
-//       In the event of an error, 'indexId' will be set to a value
-//       of minus one (-1).
+//       In the event of an error, 'lastIndexId' will be set to a
+//       value of minus one (-1).
 //
 //
 //  err                        error
@@ -265,7 +432,7 @@ type TextLineSpecStandardLine struct {
 func (stdLine *TextLineSpecStandardLine) AddTextField(
 	textField ITextFieldSpecification,
 	errorPrefix interface{}) (
-	indexId int,
+	lastIndexId int,
 	err error) {
 
 	if stdLine.lock == nil {
@@ -278,7 +445,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	indexId = -1
+	lastIndexId = -1
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -287,7 +454,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		"")
 
 	if err != nil {
-		return indexId, err
+		return lastIndexId, err
 	}
 
 	if textField == nil {
@@ -302,7 +469,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		ePrefix.XCtx("textField"))
 
 	if err != nil {
-		return indexId, err
+		return lastIndexId, err
 	}
 
 	var newTextField ITextFieldSpecification
@@ -312,26 +479,26 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		ePrefix.XCtx("textField->newTextField"))
 
 	if err != nil {
-		return indexId, err
+		return lastIndexId, err
 	}
 
 	stdLine.textFields = append(stdLine.textFields,
 		newTextField)
 
-	indexId = len(stdLine.textFields) - 1
+	lastIndexId = len(stdLine.textFields) - 1
 
-	if indexId < 0 {
+	if lastIndexId < 0 {
 
 		err = fmt.Errorf("%v - ERROR\n"+
 			"An unspecified error occurred.\n"+
-			"'indexId' has a value less than zero!\n"+
-			"indexId = '%v'\n",
+			"'lastIndexId' has a value less than zero!\n"+
+			"lastIndexId = '%v'\n",
 			ePrefix.XCtxEmpty().String(),
-			indexId)
+			lastIndexId)
 
 	}
 
-	return indexId, err
+	return lastIndexId, err
 }
 
 // AddTextFields - This method will append multiple text field
@@ -342,8 +509,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 // 'textFields'.
 //
 // If the method completes successfully, the internal array index
-// of the new Text Field DateTime Object will be returned to the
-// calling function.
+// of the last Text Field object will be returned to the calling
+// function.
 //
 // ----------------------------------------------------------------
 //
@@ -427,13 +594,14 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //
 // Return Values
 //
-//  indexId                    int
+//  lastIndexId                int
 //     - If this method completes successfully, the internal array
-//       index of the last text field object will be returned as an
+//       index of the last text field object for the current
+//       TextLineSpecStandardLine instance will be returned as an
 //       integer value.
 //
-//       In the event of an error, 'indexId' will be set to a value
-//       of minus one (-1).
+//       In the event of an error, 'lastIndexId' will be set to a
+//       value of minus one (-1).
 //
 //
 //  err                        error
@@ -449,7 +617,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 func (stdLine *TextLineSpecStandardLine) AddTextFields(
 	textFields *[]ITextFieldSpecification,
 	errorPrefix interface{}) (
-	indexId int,
+	lastIndexId int,
 	err error) {
 
 	if stdLine.lock == nil {
@@ -462,7 +630,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFields(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	indexId = -1
+	lastIndexId = -1
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -471,7 +639,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFields(
 		"")
 
 	if err != nil {
-		return indexId, err
+		return lastIndexId, err
 	}
 
 	txtStdLineNanobot := textLineSpecStandardLineNanobot{}
