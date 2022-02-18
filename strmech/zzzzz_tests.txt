@@ -1203,7 +1203,7 @@
 === RUN   TestDataFieldTrailingDelimiterType_Value_01
 --- PASS: TestDataFieldTrailingDelimiterType_Value_01 (0.00s)
 === RUN   TestTextFieldSpecDateTime_CopyIn_000100
---- PASS: TestTextFieldSpecDateTime_CopyIn_000100 (0.02s)
+--- PASS: TestTextFieldSpecDateTime_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_CopyIn_000200
 --- PASS: TestTextFieldSpecDateTime_CopyIn_000200 (0.00s)
 === RUN   TestTextFieldSpecDateTime_CopyOut_000100
@@ -2032,6 +2032,10 @@
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_deleteTextField_000200
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.00s)
+=== RUN   TestTextLineSpecStandardLineElectron_emptyStandardLine_000100
+--- PASS: TestTextLineSpecStandardLineElectron_emptyStandardLine_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100
+--- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100 (0.00s)
 PASS
-coverage: 69.5% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.173s
+coverage: 69.6% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.080s

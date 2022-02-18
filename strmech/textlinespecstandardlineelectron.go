@@ -202,7 +202,7 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (txtStdLineElectron textLineSpecStandardLineElectron) emptyStandardLine(
+func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyStandardLine(
 	txtStdLine *TextLineSpecStandardLine,
 	errPrefDto *ePref.ErrPrefixDto) error {
 

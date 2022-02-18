@@ -466,7 +466,7 @@ func TestTextLineSpecStandardLine_copyOut_000100(t *testing.T) {
 func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TesttextLineSpecStandardLineElectron_deleteTextField_000100()",
+		"TestTextLineSpecStandardLineElectron_deleteTextField_000100()",
 		"")
 
 	indexId := 2
@@ -673,4 +673,57 @@ func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecStandardLineElectron_emptyStandardLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_emptyStandardLine_000100()",
+		"")
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	err := txtStdLineElectron.emptyStandardLine(
+		nil,
+		ePrefix.XCtx(
+			"txtStdLine is 'nil'"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtStdLine' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100()",
+		"")
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	_,
+		err := txtStdLineElectron.testValidityOfTextFields(
+		nil,
+		ePrefix.XCtx(
+			"txtFields is empty"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtFields' is  'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 }
