@@ -153,6 +153,118 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 	return err
 }
 
+// emptyStandardLine - This method receives an instance of
+// TextLineSpecStandardLine and proceeds to set all the internal
+// member variables to their zero values.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all existing data values contained in
+// input parameter 'txtStdLine'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtStdLine                 *TextLineSpecStandardLine
+//     - All the internal member variables contained in input
+//       parameter 'txtStdLine' will be set to their initial or
+//       zero values.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtStdLineElectron textLineSpecStandardLineElectron) emptyStandardLine(
+	txtStdLine *TextLineSpecStandardLine,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtStdLineElectron.lock == nil {
+		txtStdLineElectron.lock = new(sync.Mutex)
+	}
+
+	txtStdLineElectron.lock.Lock()
+
+	defer txtStdLineElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineElectron."+
+			"emptyStandardLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtStdLine.numOfStdLines = 0
+	txtStdLine.turnLineTerminatorOff = false
+	txtStdLine.newLineChars = nil
+	txtStdLine.textLineReader = nil
+
+	lenTextFields := len(txtStdLine.textFields)
+
+	if lenTextFields == 0 {
+		txtStdLine.textFields = nil
+		return nil
+	}
+
+	for i := 0; i < lenTextFields; i++ {
+
+		if txtStdLine.textFields[i] == nil {
+			continue
+		}
+
+		txtStdLine.textFields[i].Empty()
+
+		txtStdLine.textFields[i] = nil
+
+	}
+
+	txtStdLine.textFields = nil
+
+	return nil
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecStandardLineElectron.
 //

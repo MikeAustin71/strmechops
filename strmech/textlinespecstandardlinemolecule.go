@@ -37,10 +37,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStdLineTextFiel
 		return
 	}
 
-	if txtStdLine.textFields == nil {
-		return
-	}
-
 	lenTextFields := len(txtStdLine.textFields)
 
 	if lenTextFields == 0 {

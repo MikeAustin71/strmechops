@@ -2060,9 +2060,10 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 
 	stdLine.lock.Lock()
 
-	textLineSpecStandardLineMolecule{}.ptr().
-		emptyStdLineTextFields(
-			stdLine)
+	_ = textLineSpecStandardLineElectron{}.ptr().
+		emptyStandardLine(
+			stdLine,
+			nil)
 
 	stdLine.lock.Unlock()
 

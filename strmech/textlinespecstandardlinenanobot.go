@@ -589,9 +589,11 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		return err
 	}
 
+	specStdLineElectron := textLineSpecStandardLineElectron{}
+
 	_,
 		err =
-		textLineSpecStandardLineElectron{}.ptr().
+		specStdLineElectron.
 			testValidityOfTextFields(
 				textFields,
 				ePrefix.XCtx("Input parameter textFields is invalid!"))
@@ -612,8 +614,16 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		return err
 	}
 
-	textLineSpecStandardLineMolecule{}.ptr().
-		emptyStdLineTextFields(txtStdLine)
+	err =
+		specStdLineElectron.
+			emptyStandardLine(
+				txtStdLine,
+				ePrefix.XCtx(
+					"empty->txtStdLine"))
+
+	if err != nil {
+		return err
+	}
 
 	err = textLineSpecStandardLineAtom{}.ptr().
 		copyTextFields(
