@@ -2028,4 +2028,4 @@
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.00s)
 PASS
 coverage: 69.3% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.045s
+ok  	github.com/MikeAustin71/strmechops/strmech	0.654s

@@ -86,6 +86,41 @@ func TestTextLineSpecStandardLine_AddStandardLine_000100(t *testing.T) {
 
 }
 
+func TestTextLineSpecStandardLine_AddStandardLine_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddStandardLine_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddStandardLine(
+		nil,
+		ePrefix.XCtx(
+			"incomingStdLine==nil"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine01.AddStandardLine()\n"+
+			"because 'incomingStdLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
 func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -847,6 +882,48 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 			"Expected an error return from stdLine03{}."+
 			"AddTextFieldLabel()\n"+
 			"because 'badFieldLen' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_AddTextFieldLabel_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_AddTextFieldLabel_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	label := ""
+	fieldLen := -99
+	txtJustify := TxtJustify.None()
+
+	_,
+		err = stdLine01.AddTextFieldLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"stdLine01 - invalid label input parms"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from  stdLine01.AddTextFieldLabel()\n"+
+			"because all input parameters are invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
@@ -2598,6 +2675,45 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLine_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_Empty_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	stdLine01.Empty()
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02.Empty()
+
+	numOfTxtFields :=
+		stdLine02.GetNumOfTextFields()
+
+	if numOfTxtFields != 0 {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine02.GetNumOfTextFields() to return zero.\n"+
+			"However, Number of Text Fields = '%v'\n"+
+			"This value persisted after a call to stdLine02.Empty()\n",
+			ePrefix.XCtxEmpty().String(),
+			numOfTxtFields)
 
 		return
 	}
