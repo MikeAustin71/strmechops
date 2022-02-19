@@ -2036,18 +2036,24 @@
 --- PASS: TestTextLineSpecStandardLineNanobot_copyIn_000200 (0.00s)
 === RUN   TestTestTextLineSpecStandardLineNanobot_copyOut_000100
 --- PASS: TestTestTextLineSpecStandardLineNanobot_copyOut_000100 (0.00s)
+=== RUN   TestTestTextLineSpecStandardLineNanobot_copyOut_000200
+--- PASS: TestTestTextLineSpecStandardLineNanobot_copyOut_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
+--- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_deleteTextField_000100
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_deleteTextField_000200
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_emptyStandardLine_000100
 --- PASS: TestTextLineSpecStandardLineElectron_emptyStandardLine_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLineElectron_emptyStandardLine_000200
+--- PASS: TestTextLineSpecStandardLineElectron_emptyStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100
 --- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200
 --- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200 (0.00s)
 PASS
 coverage: 70.3% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.186s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.194s
