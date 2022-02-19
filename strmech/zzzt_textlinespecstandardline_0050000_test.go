@@ -959,3 +959,87 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100(t *tes
 	}
 
 }
+
+func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err =
+		stdLine01.GetTextFields(
+			ePrefix.XCtx(
+				"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	textFields[1] = nil
+
+	_,
+		err = txtStdLineElectron.testValidityOfTextFields(
+		textFields,
+		ePrefix.XCtx(
+			"textFields[1] = nil"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtFields[1]' is  'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields,
+		err =
+		stdLine01.GetTextFields(
+			ePrefix.XCtx(
+				"#2 textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields[1].Empty()
+
+	_,
+		err = txtStdLineElectron.testValidityOfTextFields(
+		textFields,
+		ePrefix.XCtx(
+			"txtFields[1] is invalid"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtFields[1]' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}

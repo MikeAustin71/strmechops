@@ -388,20 +388,11 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFi
 		return isValid, err
 	}
 
-	if textFields == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is invalid!\n"+
-			"The value of 'textFields' is 'nil'.\n",
-			ePrefix.String())
-
-		return isValid, err
-	}
-
 	lenTxtFields := len(textFields)
 
 	if lenTxtFields == 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is invalid!\n"+
+			"Error: Input parameter 'textFields' is empty!\n"+
 			"'textFields' is a zero length array.\n",
 			ePrefix.String())
 
