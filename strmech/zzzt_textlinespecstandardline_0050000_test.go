@@ -5,6 +5,127 @@ import (
 	"testing"
 )
 
+func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTestTextLineSpecStandardLineNanobot_addTextFields_000100()",
+		"")
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine02"))
+
+	stdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	_,
+		err =
+		stdLineNanobot.addTextFields(
+			nil,
+			&textFields,
+			ePrefix.XCtx(
+				"txtStdLine is nil pointer"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLineNanobot.addTextFields()\n"+
+			"because 'txtStdLine' input parameter is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	_,
+		err =
+		stdLineNanobot.addTextFields(
+			&stdLine01,
+			nil,
+			ePrefix.XCtx(
+				"textFields is nil pointer"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLineNanobot.addTextFields()\n"+
+			"because 'textFields' input parameter is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+}
+
+func TestTestTextLineSpecStandardLineNanobot_addTextFields_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTestTextLineSpecStandardLineNanobot_addTextFields_000200()",
+		"")
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine02"))
+
+	stdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	textFields[1].Empty()
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	_,
+		err =
+		stdLineNanobot.addTextFields(
+			&stdLine01,
+			&textFields,
+			ePrefix.XCtx(
+				"textFields[1] is invalid"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLineNanobot.addTextFields()\n"+
+			"because 'textFields[1]' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLineNanobot_copyIn_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -236,6 +357,50 @@ func TestTextLineSpecStandardLineNanobot_copyIn_000100(t *testing.T) {
 			"Expected an error return from txtStdLineNanobot{}."+
 			"copyIn()\n"+
 			"because 'stdLine01.newLineChars' contains invalid characters.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLineNanobot_copyIn_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineNanobot_copyIn_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}.New()
+
+	stdLine01.newLineChars = []rune{'\n', 0, '\n', 0}
+
+	txtStdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	err =
+		txtStdLineNanobot.copyIn(
+			&stdLine02,
+			&stdLine01,
+			ePrefix.XCtx(
+				"stdLine02<-stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtStdLineNanobot{}."+
+			"copyIn()\n"+
+			"because 'stdLine01.newLineChars' are invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
@@ -622,75 +787,6 @@ func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testin
 			ePrefix.XCtxEmpty().String())
 
 		return
-	}
-
-}
-
-func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTestTextLineSpecStandardLineNanobot_addTextFields_000100()",
-		"")
-
-	stdLine02,
-		err := createTestTextLineSpecStandardLine01(
-		ePrefix)
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var textFields []ITextFieldSpecification
-
-	textFields,
-		err = stdLine02.GetTextFields(
-		ePrefix.XCtx(
-			"textFields<-stdLine02"))
-
-	stdLineNanobot := textLineSpecStandardLineNanobot{}
-
-	_,
-		err =
-		stdLineNanobot.addTextFields(
-			nil,
-			&textFields,
-			ePrefix.XCtx(
-				"txtStdLine is nil pointer"))
-
-	if err == nil {
-
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from stdLineNanobot.addTextFields()\n"+
-			"because 'txtStdLine' input parameter is 'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-
-	}
-
-	stdLine01 := TextLineSpecStandardLine{}.New()
-
-	_,
-		err =
-		stdLineNanobot.addTextFields(
-			&stdLine01,
-			nil,
-			ePrefix.XCtx(
-				"textFields is nil pointer"))
-
-	if err == nil {
-
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from stdLineNanobot.addTextFields()\n"+
-			"because 'textFields' input parameter is 'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-
 	}
 
 }
