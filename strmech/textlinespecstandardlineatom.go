@@ -140,33 +140,61 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		return err
 	}
 
-	if *sourceTextFields == nil {
+	fieldCnt := 0
 
-		*targetTextFields = nil
+	for idx, val := range *sourceTextFields {
 
-		return err
+		if val == nil {
+			continue
+		}
+
+		err2 := val.IsValidInstanceError(
+			ePrefix)
+
+		if err2 != nil {
+			err = fmt.Errorf("\n%v - ERROR\n"+
+				"'sourceTextFields[%v]' is invalid!\n"+
+				"Invalid Error=\n%v\n",
+				ePrefix.XCtxEmpty().String(),
+				idx,
+				err2.Error())
+
+			return err
+		}
+
+		fieldCnt++
 	}
 
-	lenSourceTxtFields := len(*sourceTextFields)
+	if fieldCnt == 0 {
 
-	if lenSourceTxtFields == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'sourceTextFields' is a zero length\n"+
 			"empty array!\n",
 			ePrefix.String())
 
 		return err
+
+	}
+
+	for _, val := range *targetTextFields {
+
+		if val == nil {
+			continue
+		}
+
+		val.Empty()
+
 	}
 
 	*targetTextFields =
 		make(
 			[]ITextFieldSpecification,
-			lenSourceTxtFields)
+			fieldCnt)
 
 	itemsCopied :=
 		copy(*targetTextFields, *sourceTextFields)
 
-	if itemsCopied != lenSourceTxtFields {
+	if itemsCopied != fieldCnt {
 		err = fmt.Errorf("%v\n"+
 			"Error: Copy Operation Failed!\n"+
 			"Number of elements copied from 'sourceTextFields' to 'targetTextFields'\n"+
@@ -175,7 +203,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 			"     Number of elements in 'sourceTextFields' = '%v'\n",
 			ePrefix.String(),
 			itemsCopied,
-			lenSourceTxtFields)
+			fieldCnt)
 	}
 
 	return err

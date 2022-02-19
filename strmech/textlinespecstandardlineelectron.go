@@ -265,6 +265,110 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyStandardLine(
 	return nil
 }
 
+// equalTextFieldArrays - Compares two text fields arrays and
+// returns a boolean value of 'true' if the two arrays are equal
+// in all respects.
+//
+// To qualify as equivalent arrays of Text Fields, both arrays must
+// be equal in length and contain Text Fields of equal values.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textFields01               *[]ITextFieldSpecification
+//     - If parameter 'textFields01' is equivalent, in all
+//       respects, to parameter 'textFields02', this method will
+//       return a boolean value of 'true'.
+//
+//       If this pointer to an array of ITextFieldSpecification's
+//       is nil, a value of 'false' will be returned.
+//
+//
+//  textFields02               *[]ITextFieldSpecification
+//     - If parameter 'textFields02' is equivalent, in all
+//       respects, to parameter 'textFields01', this method will
+//       return a boolean value of 'true'.
+//
+//       If this pointer to an array of ITextFieldSpecification's
+//       is nil, a value of 'false' will be returned.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  areEqual                   bool
+//     - If Text Field Arrays 'textFields01' and 'textFields02' are
+//       equal in all respects, a boolean value of 'true' is
+//       returned. Otherwise, the return value is 'false'.
+//
+func (txtStdLineElectron *textLineSpecStandardLineElectron) equalTextFieldArrays(
+	textFields01 *[]ITextFieldSpecification,
+	textFields02 *[]ITextFieldSpecification) (
+	areEqual bool) {
+
+	if txtStdLineElectron.lock == nil {
+		txtStdLineElectron.lock = new(sync.Mutex)
+	}
+
+	txtStdLineElectron.lock.Lock()
+
+	defer txtStdLineElectron.lock.Unlock()
+
+	if textFields01 == nil ||
+		textFields02 == nil {
+		return false
+	}
+
+	txtF01 := *textFields01
+
+	txtF02 := *textFields02
+
+	lenTxtFields01 := len(txtF01)
+
+	if lenTxtFields01 != len(txtF02) {
+		return false
+	}
+
+	if lenTxtFields01 == 0 {
+		return true
+	}
+
+	for i := 0; i < lenTxtFields01; i++ {
+
+		if txtF01[i] == nil &&
+			txtF02[i] != nil {
+
+			return false
+
+		} else if txtF02[i] == nil &&
+			txtF01[i] != nil {
+
+			return false
+
+		} else if txtF01 == nil &&
+			txtF02 == nil {
+
+			continue
+
+		} else {
+			// txtF01 and txtF02 are both
+			// != nil
+			if !txtF01[i].EqualITextField(
+				txtF02[i]) {
+
+				return false
+
+			}
+
+		}
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecStandardLineElectron.
 //
