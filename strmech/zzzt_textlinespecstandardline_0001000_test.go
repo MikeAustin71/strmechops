@@ -2718,4 +2718,104 @@ func TestTextLineSpecStandardLine_Empty_000100(t *testing.T) {
 		return
 	}
 
+	stdLineRepetitions :=
+		stdLine02.GetNumOfStdLines()
+
+	if stdLineRepetitions != 0 {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine02.GetNumOfStdLines() to return zero.\n"+
+			"However, Number of Standard Line Repetions is '%v'\n"+
+			"This value persisted after a call to stdLine02.Empty()\n",
+			ePrefix.XCtxEmpty().String(),
+			stdLineRepetitions)
+
+		return
+	}
+
+	newLineChars :=
+		stdLine02.GetNewLineRunes()
+
+	if newLineChars != nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine02.GetNewLineChars() to return 'nil'.\n"+
+			"However, the length of new line characters is '%v'\n"+
+			"This value persisted after a call to stdLine02.Empty()\n",
+			ePrefix.XCtxEmpty().String(),
+			len(newLineChars))
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_EmptyTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_EmptyTextFields_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	stdLine01.EmptyTextFields()
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02.EmptyTextFields()
+
+	numOfTxtFields :=
+		stdLine02.GetNumOfTextFields()
+
+	if numOfTxtFields != 0 {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine02.GetNumOfTextFields() to return zero.\n"+
+			"However, Number of Text Fields = '%v'\n"+
+			"This value persisted after a call to stdLine02.EmptyTextFields()\n",
+			ePrefix.XCtxEmpty().String(),
+			numOfTxtFields)
+
+		return
+	}
+
+	stdLineRepetitions :=
+		stdLine02.GetNumOfStdLines()
+
+	if stdLineRepetitions != 1 {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine02.GetNumOfStdLines() to return '1'.\n"+
+			"However, Number of Standard Line Repetions is '%v'.\n"+
+			"This value persisted after a call to stdLine02.EmptyTextFields()\n",
+			ePrefix.XCtxEmpty().String(),
+			stdLineRepetitions)
+
+		return
+	}
+
+	lenNewLineRunes := len(stdLine02.GetNewLineRunes())
+
+	if lenNewLineRunes != 1 {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine02.GetNewLineRunes() to return an array length of '1'.\n"+
+			"However, the length of new line characters is '%v'.\n"+
+			"This value persisted after a call to stdLine02.EmptyTextFields()\n",
+			ePrefix.XCtxEmpty().String(),
+			lenNewLineRunes)
+
+		return
+	}
+
+	return
 }

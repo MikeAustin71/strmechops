@@ -2358,6 +2358,10 @@ func (stdLine *TextLineSpecStandardLine) GetNewLineRunes() []rune {
 
 	defer stdLine.lock.Unlock()
 
+	if len(stdLine.newLineChars) == 0 {
+		return nil
+	}
+
 	var newLineChars []rune
 
 	_ = strMechPreon{}.ptr().

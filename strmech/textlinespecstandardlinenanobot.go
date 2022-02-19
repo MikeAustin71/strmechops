@@ -614,16 +614,12 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		return err
 	}
 
-	err =
+	_ =
 		specStdLineElectron.
 			emptyStandardLine(
 				txtStdLine,
 				ePrefix.XCtx(
 					"empty->txtStdLine"))
-
-	if err != nil {
-		return err
-	}
 
 	err = textLineSpecStandardLineAtom{}.ptr().
 		copyTextFields(
