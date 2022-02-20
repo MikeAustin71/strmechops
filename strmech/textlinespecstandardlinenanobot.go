@@ -332,13 +332,16 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 
 	targetStdLine.textLineReader = nil
 
-	return txtStdLineAtom.
+	_,
+		err = txtStdLineAtom.
 		copyTextFields(
 			&targetStdLine.textFields,
 			&incomingStdLine.textFields,
 			ePrefix.XCtx(
 				"incomingStdLine.textFields->"+
 					"targetStdLine.textFields"))
+
+	return err
 }
 
 // copyOut - Returns a deep copy of the input parameter
@@ -460,15 +463,14 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 
 	newStdLine.textLineReader = nil
 
-	sMechPreon := strMechPreon{}
-
-	err = sMechPreon.copyRuneArrays(
-		&newStdLine.newLineChars,
-		&txtStdLine.newLineChars,
-		true,
-		ePrefix.XCtx(
-			"txtStdLine.newLineChars->"+
-				"newStdLine.newLineChars"))
+	err = strMechPreon{}.ptr().
+		copyRuneArrays(
+			&newStdLine.newLineChars,
+			&txtStdLine.newLineChars,
+			true,
+			ePrefix.XCtx(
+				"txtStdLine.newLineChars->"+
+					"newStdLine.newLineChars"))
 
 	if err != nil {
 		return TextLineSpecStandardLine{}, err
@@ -479,7 +481,8 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 
 	newStdLine.numOfStdLines = txtStdLine.numOfStdLines
 
-	err = txtStdLineAtom.
+	_,
+		err = txtStdLineAtom.
 		copyTextFields(
 			&newStdLine.textFields,
 			&txtStdLine.textFields,
@@ -589,13 +592,11 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		return err
 	}
 
-	specStdLineElectron := textLineSpecStandardLineElectron{}
-
 	_,
 		err =
-		specStdLineElectron.
+		textLineSpecStandardLineElectron{}.ptr().
 			testValidityOfTextFields(
-				textFields,
+				&textFields,
 				ePrefix.XCtx("Input parameter textFields is invalid!"))
 
 	if err != nil {
@@ -615,13 +616,14 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 	}
 
 	_ =
-		specStdLineElectron.
+		textLineSpecStandardLineMolecule{}.ptr().
 			emptyStandardLine(
 				txtStdLine,
 				ePrefix.XCtx(
 					"empty->txtStdLine"))
 
-	err = textLineSpecStandardLineAtom{}.ptr().
+	_,
+		err = textLineSpecStandardLineAtom{}.ptr().
 		copyTextFields(
 			&txtStdLine.textFields,
 			&textFields,

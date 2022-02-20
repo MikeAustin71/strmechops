@@ -1277,6 +1277,18 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	lenTxtFields := stdLineTwo.GetNumOfTextFields()
+
+	if lenTxtFields == 0 {
+		t.Errorf("%v - ERROR\n"+
+			"stdLineTwo.CopyIn(stdLine) Failed To Copy Text Fields!\n"+
+			"Length Of Text Fields is Zero!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
 	err = stdLineTwo.IsValidInstanceError(
 		ePrefix)
 

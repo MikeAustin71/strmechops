@@ -83,9 +83,15 @@ type textLineSpecStandardLineAtom struct {
 //       package, "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ------------------------------------------------------------------
 //
 // Return Values
+//
+//  lengthTargetTxtFields      int
+//     - If this method completes successfully,
+//       'lengthTargetTxtFields' will contain the number of array
+//       elements copied to Text Fields array, 'targetTextFields'.
+//
 //
 //  error
 //     - If this method completes successfully, this returned error
@@ -101,6 +107,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 	targetTextFields *[]ITextFieldSpecification,
 	sourceTextFields *[]ITextFieldSpecification,
 	errPrefDto *ePref.ErrPrefixDto) (
+	lengthTargetTxtFields int,
 	err error) {
 
 	if txtStdLineAtom.lock == nil {
@@ -121,7 +128,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		"")
 
 	if err != nil {
-		return err
+		return lengthTargetTxtFields, err
 	}
 
 	if targetTextFields == nil {
@@ -129,7 +136,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 			"Error: Input parameter 'targetTextFields' is a nil pointer!\n",
 			ePrefix.String())
 
-		return err
+		return lengthTargetTxtFields, err
 	}
 
 	if sourceTextFields == nil {
@@ -137,76 +144,102 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 			"Error: Input parameter 'sourceTextFields' is a nil pointer!\n",
 			ePrefix.String())
 
-		return err
+		return lengthTargetTxtFields, err
 	}
 
-	fieldCnt := 0
+	lengthTargetTxtFields,
+		err = textLineSpecStandardLineElectron{}.ptr().
+		testValidityOfTextFields(
+			sourceTextFields,
+			ePrefix.XCtx(
+				"testing validity of sourceTextFields"))
 
-	for idx, val := range *sourceTextFields {
+	if err != nil {
 
-		if val == nil {
-			continue
-		}
-
-		err2 := val.IsValidInstanceError(
-			ePrefix)
-
-		if err2 != nil {
-			err = fmt.Errorf("\n%v - ERROR\n"+
-				"'sourceTextFields[%v]' is invalid!\n"+
-				"Invalid Error=\n%v\n",
-				ePrefix.XCtxEmpty().String(),
-				idx,
-				err2.Error())
-
-			return err
-		}
-
-		fieldCnt++
-	}
-
-	if fieldCnt == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'sourceTextFields' is a zero length\n"+
-			"empty array!\n",
-			ePrefix.String())
-
-		return err
+		return lengthTargetTxtFields, err
 
 	}
 
-	for _, val := range *targetTextFields {
+	err = textLineSpecStandardLineElectron{}.ptr().
+		emptyTextFields(
+			targetTextFields,
+			ePrefix.XCtx(
+				"Emptying targetTextFields"))
 
-		if val == nil {
-			continue
-		}
+	if err != nil {
 
-		val.Empty()
+		return lengthTargetTxtFields, err
 
 	}
 
 	*targetTextFields =
 		make(
 			[]ITextFieldSpecification,
-			fieldCnt)
+			lengthTargetTxtFields)
 
-	itemsCopied :=
-		copy(*targetTextFields, *sourceTextFields)
+	var concreteSourceFields = *sourceTextFields
+	var concreteTargetFields = *targetTextFields
 
-	if itemsCopied != fieldCnt {
-		err = fmt.Errorf("%v\n"+
-			"Error: Copy Operation Failed!\n"+
-			"Number of elements copied from 'sourceTextFields' to 'targetTextFields'\n"+
-			"DOES NOT MATCH the number of elements in 'sourceTextFields'\n"+
-			"Number of elements copied to targetTextFields = '%v'\n"+
-			"     Number of elements in 'sourceTextFields' = '%v'\n",
-			ePrefix.String(),
-			itemsCopied,
-			fieldCnt)
+	testLenTargetTextFields := len(*targetTextFields)
+
+	if testLenTargetTextFields != lengthTargetTxtFields {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"After 'make' Operation, new length of target\n"+
+			"text fields is NOT equal to length of source\n"+
+			"text fields.\n"+
+			"  lengthTargetTxtFields = '%v'\n"+
+			"testLenTargetTextFields = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lengthTargetTxtFields,
+			testLenTargetTextFields)
+
+		return lengthTargetTxtFields, err
 	}
 
-	return err
+	for i := 0; i < lengthTargetTxtFields; i++ {
+
+		newTextField,
+			err2 :=
+			concreteSourceFields[i].CopyOutITextField(
+				ePrefix.XCtx(
+					fmt.Sprintf(
+						"newTextField<-"+
+							"concreteSourceFields[%v]", i)))
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"An error occurred while copying\n"+
+				"concreteSourceFields[%v] to newTextField\n"+
+				"Error=\n%v\n",
+				ePrefix.XCtxEmpty().String(),
+				i,
+				err2.Error())
+
+			return lengthTargetTxtFields, err
+		}
+
+		concreteTargetFields[i] = newTextField
+	}
+
+	areEqual := textLineSpecStandardLineElectron{}.ptr().
+		equalTextFieldArrays(
+			targetTextFields,
+			sourceTextFields)
+
+	if !areEqual {
+		err = fmt.Errorf("%v\n"+
+			"After Copy Operation, 'targetTextFields'\n"+
+			"array and 'sourceTextFields' array"+
+			"ARE NOT EQUAL!\n"+
+			"    Length sourceTextFields = '%v'\n"+
+			"    Length targetTextFields = '%v'\n"+
+			"Expected Text Fields Length = '%v' \n",
+			ePrefix.XCtxEmpty().String(),
+			len(*sourceTextFields),
+			len(*targetTextFields),
+			lengthTargetTxtFields)
+	}
+
+	return lengthTargetTxtFields, err
 }
 
 // peekPopTextField - Performs either a 'Peek' or 'Pop' operation
@@ -537,45 +570,6 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 		return isValid, err
 	}
 
-	lenTextFields := len(txtStdLine.textFields)
-
-	if lenTextFields == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: No Text Fields have been configured for\n"+
-			"this standard line specification!\n",
-			ePrefix.String())
-
-		return isValid, err
-	}
-
-	var err2 error
-
-	for i := 0; i < lenTextFields; i++ {
-
-		if txtStdLine.textFields[i] == nil {
-			err = fmt.Errorf("%v\n"+
-				"Collection Element Error: A Starndard Line Text Field is invalid!\n"+
-				" txtStdLine.textFields[%v] has a 'nil' value.\n",
-				ePrefix.XCtx("txtStdLine"),
-				i)
-
-			return isValid, err
-		}
-
-		err2 = txtStdLine.textFields[i].IsValidInstanceError(ePrefix)
-
-		if err2 != nil {
-			err = fmt.Errorf("%v\n"+
-				"Error: Text Field Element [%v] is invalid!\n"+
-				"Text Field Element Error = \n%v\n",
-				ePrefix.String(),
-				i,
-				err2.Error())
-
-			return isValid, err
-		}
-	}
-
 	if len(txtStdLine.newLineChars) == 0 {
 
 		err =
@@ -602,6 +596,17 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 		if err != nil {
 			return isValid, err
 		}
+	}
+
+	_,
+		err = textLineSpecStandardLineElectron{}.ptr().
+		testValidityOfTextFields(
+			&txtStdLine.textFields,
+			ePrefix.XCtx(
+				"txtStdLine.textFields validity check"))
+
+	if err != nil {
+		return isValid, err
 	}
 
 	isValid = true

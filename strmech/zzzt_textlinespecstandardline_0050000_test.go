@@ -5,6 +5,717 @@ import (
 	"testing"
 )
 
+func TestTextLineSpecStandardLineAtom_copyTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineAtom_copyTextFields_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields01, textFields02 []ITextFieldSpecification
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields02<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLineAtom := textLineSpecStandardLineAtom{}
+
+	var lenSourceTxtFieldArray, lenTargetTxtFieldArray int
+
+	lenSourceTxtFieldArray = len(textFields01)
+
+	lenTargetTxtFieldArray,
+		err = stdLineAtom.copyTextFields(
+		&textFields02,
+		&textFields01,
+		ePrefix.XCtx(
+			"textFields02<-textFields01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if lenSourceTxtFieldArray != lenTargetTxtFieldArray {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected length of source array == "+
+			"length of target array\n"+
+			"after stdLineAtom.copyTextFields()"+
+			"HOWEVER, THE ARRAY LENGTHS ARE NOT EQUAL!\n"+
+			"Source Text Field Array Length = '%v'\n"+
+			"Target Text Field Array Length = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			lenSourceTxtFieldArray,
+			lenTargetTxtFieldArray)
+
+		return
+	}
+
+	stdLine02.EmptyTextFields()
+
+	_,
+		err = stdLine02.AddTextFields(
+		&textFields02,
+		ePrefix.XCtx(
+			"stdLine02<-textFields02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	areEqual := stdLineMolecule.equal(
+		&stdLine01,
+		&stdLine02)
+
+	if !areEqual {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine01 == stdLine02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineAtom_copyTextFields_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields01, textFields02 []ITextFieldSpecification
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields02<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLineAtom := textLineSpecStandardLineAtom{}
+
+	_,
+		err = stdLineAtom.copyTextFields(
+		nil,
+		&textFields01,
+		ePrefix.XCtx(
+			"targetTextFields = nil pointer"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLineAtom.copyTextFields()\n"+
+			"because 'targetTextFields' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = stdLineAtom.copyTextFields(
+		&textFields02,
+		nil,
+		ePrefix.XCtx(
+			"sourceTextFields = nil pointer"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLineAtom.copyTextFields()\n"+
+			"because 'sourceTextFields' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields01 = nil
+
+	_,
+		err = stdLineAtom.copyTextFields(
+		&textFields02,
+		&textFields01,
+		ePrefix.XCtx(
+			"sourceTextFields array is nil"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLineAtom.copyTextFields()\n"+
+			"because 'sourceTextFields' array is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine02.EmptyTextFields()
+
+	_,
+		err = stdLine02.AddTextFields(
+		&textFields02,
+		ePrefix.XCtx(
+			"stdLine02<-textFields02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	areEqual := stdLineMolecule.equal(
+		&stdLine01,
+		&stdLine02)
+
+	if !areEqual {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected stdLine01 == stdLine02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_deleteTextField_000100()",
+		"")
+
+	indexId := 2
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	err := txtStdLineElectron.deleteTextField(
+		nil,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron.deleteTextField()\n"+
+			"because txtStdLine is a 'nil' pointer!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
+
+	rightMarginLen := 5
+
+	rightMarginSpec,
+		err := TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var leftMarginSpec TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	label := "How Now Brown Cow!"
+	fieldLen := len(label) + 4
+	txtJustify := TxtJustify.Center()
+
+	var labelSpec TextFieldSpecLabel
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineElectron02 := textLineSpecStandardLineElectron{}
+
+	indexId = 18
+
+	err = txtStdLineElectron02.deleteTextField(
+		stdLine01,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
+			"because indexId is invalid!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	indexId = -2
+
+	err = txtStdLineElectron02.deleteTextField(
+		stdLine01,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
+			"because indexId is less than zero!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	indexId = 0
+
+	stdLine01.textFields = nil
+
+	err = txtStdLineElectron02.deleteTextField(
+		stdLine01,
+		indexId,
+		&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
+			"because stdLine01.textFields = nil!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_deleteTextField_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine02(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		textLineSpecStandardLineElectron{}.ptr().deleteTextField(
+			&stdLine01,
+			1,
+			ePrefix.XCtx(
+				"stdLine01 delete index 1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100()",
+		"")
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	_,
+		err := txtStdLineElectron.testValidityOfTextFields(
+		nil,
+		ePrefix.XCtx(
+			"txtFields is empty"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtFields' is  'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err =
+		stdLine01.GetTextFields(
+			ePrefix.XCtx(
+				"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	textFields[1] = nil
+
+	_,
+		err = txtStdLineElectron.testValidityOfTextFields(
+		&textFields,
+		ePrefix.XCtx(
+			"textFields[1] = nil"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtFields[1]' is  'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields,
+		err =
+		stdLine01.GetTextFields(
+			ePrefix.XCtx(
+				"#2 textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields[1].Empty()
+
+	_,
+		err = txtStdLineElectron.testValidityOfTextFields(
+		&textFields,
+		ePrefix.XCtx(
+			"txtFields[1] is invalid"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
+			"because 'txtFields[1]' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000300()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err =
+		stdLine01.GetTextFields(
+			ePrefix.XCtx(
+				"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var expectedTextFieldsLength = len(textFields)
+
+	var actualTextFieldsLength int
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	actualTextFieldsLength,
+		err = txtStdLineElectron.testValidityOfTextFields(
+		&textFields,
+		ePrefix.XCtx(
+			"textFields[1] = nil"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedTextFieldsLength != actualTextFieldsLength {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"expectedTextFieldsLength != actualTextFieldsLength\n"+
+			"txtStdLineElectron.emptyStandardLine() returned\n"+
+			"an invalid Text Fields Array Length.\n"+
+			"expectedTextFieldsLength = '%v'\n"+
+			"  actualTextFieldsLength = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTextFieldsLength,
+			actualTextFieldsLength)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLineMolecule_emptyStandardLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineMolecule_emptyStandardLine_000100()",
+		"")
+
+	txtStdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	err := txtStdLineMolecule.emptyStandardLine(
+		nil,
+		ePrefix.XCtx(
+			"txtStdLine is 'nil'"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtStdLineMolecule.emptyStandardLine()\n"+
+			"because 'txtStdLine' is a nil pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecStandardLineMolecule_emptyStandardLine_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineMolecule_emptyStandardLine_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	stdLine01.textFields[1] = nil
+
+	err = txtStdLineMolecule.emptyStandardLine(
+		&stdLine01,
+		ePrefix.XCtx(
+			"stdLine01.textFields[1] = nil"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
 func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -628,6 +1339,47 @@ func TestTestTextLineSpecStandardLineNanobot_copyOut_000100(t *testing.T) {
 
 }
 
+func TestTestTextLineSpecStandardLineNanobot_copyOut_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTestTextLineSpecStandardLineNanobot_copyOut_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	stdLine01.newLineChars = []rune{'\n', 0, '\n'}
+
+	_,
+		err = txtStdLineNanobot.copyOut(
+		&stdLine01,
+		ePrefix.XCtx(
+			"stdLine02<-stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtStdLineNanobot{}."+
+			"copyOut()\n"+
+			"because 'stdLine01.newLineChars' are invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -654,6 +1406,12 @@ func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testin
 		err = stdLine02.GetTextFields(
 		ePrefix.XCtx(
 			"textFields<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
 
 	stdLineNanobot := textLineSpecStandardLineNanobot{}
 
@@ -692,7 +1450,7 @@ func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testin
 
 		t.Errorf("\n%v - ERROR\n"+
 			"Expected an error return from stdLineNanobot.setTxtSpecStandardLine()\n"+
-			"because 'textFields' is  'nil'.\n"+
+			"because 'textFields' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
@@ -791,283 +1549,18 @@ func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testin
 
 }
 
-func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
+func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLineElectron_deleteTextField_000100()",
+		"TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200()",
 		"")
 
-	indexId := 2
-
-	txtStdLineElectron := textLineSpecStandardLineElectron{}
-
-	err := txtStdLineElectron.deleteTextField(
-		nil,
-		indexId,
-		&ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error from txtStdLineElectron.deleteTextField()\n"+
-			"because txtStdLine is a 'nil' pointer!\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
-
-	rightMarginLen := 5
-
-	rightMarginSpec,
-		err := TextFieldSpecSpacer{}.NewSpacer(
-		rightMarginLen,
-		ePrefix.XCtx(
-			"rightMarginSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var leftMarginSpec TextFieldSpecSpacer
-
-	leftMarginLen := 6
-
-	leftMarginSpec,
-		err = TextFieldSpecSpacer{}.NewSpacer(
-		leftMarginLen,
-		ePrefix.XCtx(
-			"leftMarginSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	label := "How Now Brown Cow!"
-	fieldLen := len(label) + 4
-	txtJustify := TxtJustify.Center()
-
-	var labelSpec TextFieldSpecLabel
-
-	labelSpec,
-		err = TextFieldSpecLabel{}.NewTextLabel(
-		label,
-		fieldLen,
-		txtJustify,
-		ePrefix.XCtx(
-			"labelSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = stdLine01.AddTextField(
-		&leftMarginSpec,
-		ePrefix.XCtx(
-			"stdLine01<-leftMarginSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = stdLine01.AddTextField(
-		&labelSpec,
-		ePrefix.XCtx(
-			"stdLine01<-labelSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = stdLine01.AddTextField(
-		&rightMarginSpec,
-		ePrefix.XCtx(
-			"stdLine01<-rightMarginSpec"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
-			"stdLine01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	txtStdLineElectron02 := textLineSpecStandardLineElectron{}
-
-	indexId = 18
-
-	err = txtStdLineElectron02.deleteTextField(
-		stdLine01,
-		indexId,
-		&ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
-			"because indexId is invalid!\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-	indexId = -2
-
-	err = txtStdLineElectron02.deleteTextField(
-		stdLine01,
-		indexId,
-		&ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
-			"because indexId is less than zero!\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-	indexId = 0
-
-	stdLine01.textFields = nil
-
-	err = txtStdLineElectron02.deleteTextField(
-		stdLine01,
-		indexId,
-		&ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error from txtStdLineElectron02.deleteTextField()\n"+
-			"because stdLine01.textFields = nil!\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-}
-
-func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLineElectron_deleteTextField_000200()",
-		"")
-
-	stdLine01,
-		err := createTestTextLineSpecStandardLine02(
-		ePrefix)
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	err =
-		textLineSpecStandardLineElectron{}.ptr().deleteTextField(
-			&stdLine01,
-			1,
-			ePrefix.XCtx(
-				"stdLine01 delete index 1"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	return
-}
-
-func TestTextLineSpecStandardLineElectron_emptyStandardLine_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLineElectron_emptyStandardLine_000100()",
-		"")
-
-	txtStdLineElectron := textLineSpecStandardLineElectron{}
-
-	err := txtStdLineElectron.emptyStandardLine(
-		nil,
-		ePrefix.XCtx(
-			"txtStdLine is 'nil'"))
-
-	if err == nil {
-
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
-			"because 'txtStdLine' is a nil pointer.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-}
-
-func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100()",
-		"")
-
-	txtStdLineElectron := textLineSpecStandardLineElectron{}
-
-	_,
-		err := txtStdLineElectron.testValidityOfTextFields(
-		nil,
-		ePrefix.XCtx(
-			"txtFields is empty"))
-
-	if err == nil {
-
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
-			"because 'txtFields' is  'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-}
-
-func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200()",
-		"")
-
-	stdLine01,
+	stdLine02,
 		err := createTestTextLineSpecStandardLine01(
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("\n%v\n",
+		t.Errorf("%v\n",
 			err.Error())
 		return
 	}
@@ -1075,67 +1568,45 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *tes
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err =
-		stdLine01.GetTextFields(
-			ePrefix.XCtx(
-				"textFields<-stdLine01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	txtStdLineElectron := textLineSpecStandardLineElectron{}
-
-	textFields[1] = nil
-
-	_,
-		err = txtStdLineElectron.testValidityOfTextFields(
-		textFields,
+		err = stdLine02.GetTextFields(
 		ePrefix.XCtx(
-			"textFields[1] = nil"))
-
-	if err == nil {
-
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
-			"because 'txtFields[1]' is  'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
-
-		return
-	}
-
-	textFields,
-		err =
-		stdLine01.GetTextFields(
-			ePrefix.XCtx(
-				"#2 textFields<-stdLine01"))
+			"textFields<-stdLine02"))
 
 	if err != nil {
-		t.Errorf("\n%v\n",
+		t.Errorf("%v\n",
 			err.Error())
 		return
 	}
+
+	numOfStdLines := 1
+
+	newLineChars := []rune{'\n'}
 
 	textFields[1].Empty()
 
-	_,
-		err = txtStdLineElectron.testValidityOfTextFields(
+	stdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	err = stdLineNanobot.setTxtSpecStandardLine(
+		&stdLine01,
+		numOfStdLines,
 		textFields,
+		newLineChars,
+		false,
 		ePrefix.XCtx(
-			"txtFields[1] is invalid"))
+			"textFields[1] invalid"))
 
 	if err == nil {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from txtStdLineElectron.emptyStandardLine()\n"+
-			"because 'txtFields[1]' is empty and invalid.\n"+
+			"Expected an error return from stdLineNanobot.setTxtSpecStandardLine()\n"+
+			"because 'textFields[1]' is invalid'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
 	}
 
+	return
 }

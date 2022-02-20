@@ -2060,7 +2060,7 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 
 	stdLine.lock.Lock()
 
-	_ = textLineSpecStandardLineElectron{}.ptr().
+	_ = textLineSpecStandardLineMolecule{}.ptr().
 		emptyStandardLine(
 			stdLine,
 			nil)
@@ -6338,13 +6338,18 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 		err =
 		textLineSpecStandardLineElectron{}.ptr().
 			testValidityOfTextFields(
-				textFields,
+				&textFields,
 				ePrefix.XCtx("Input parameter textFields is invalid!"))
+
+	if err != nil {
+		return err
+	}
 
 	textLineSpecStandardLineMolecule{}.ptr().
 		emptyStdLineTextFields(stdLine)
 
-	err =
+	_,
+		err =
 		textLineSpecStandardLineAtom{}.ptr().
 			copyTextFields(
 				&stdLine.textFields,

@@ -153,26 +153,40 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 	return err
 }
 
-// emptyStandardLine - This method receives an instance of
-// TextLineSpecStandardLine and proceeds to set all the internal
-// member variables to their zero values.
+// emptyTextFields - Receives a pointer to an array of Text Fields
+// and proceeds to empty or delete the elements contained in that
+// array.
 //
-// ----------------------------------------------------------------
+// Text Fields is an array of the ITextFieldSpecification objects.
+//
+// The ITextFieldSpecification interface defines a text field used
+// in conjunction with the type, TextLineSpecStandardLine. This
+// type contains an array of text field or ITextFieldSpecification
+// objects. Text fields are the building blocks of lines of text
+// which are formatted by TextLineSpecStandardLine for text
+// displays, file output or printing.
+//
+// This method will call method 'Empty()' on each of the elements
+// contained in the Text Field array passed as input parameter,
+// 'textFields'. Upon completion the concrete 'textFields' array
+// will be set to 'nil'.
 //
 // IMPORTANT
 //
-// This method will delete all existing data values contained in
-// input parameter 'txtStdLine'.
+// ----------------------------------------------------------------
+//
+// This method deletes and overwrites all the member elements, and
+// their data values, contained in input parameter,
+// 'textFields'. Upon completion, the concrete instance of the
+// 'textFields' array is also set to 'nil'.
 //
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtStdLine                 *TextLineSpecStandardLine
-//     - All the internal member variables contained in input
-//       parameter 'txtStdLine' will be set to their initial or
-//       zero values.
+//  textFields                 *[]ITextFieldSpecification
+//     - A pointer to an array of text fields.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
@@ -192,7 +206,7 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 //
 // Return Values
 //
-//  error
+//  err                        error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
 //       processing, the returned error Type will encapsulate an error
@@ -202,9 +216,9 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyStandardLine(
-	txtStdLine *TextLineSpecStandardLine,
-	errPrefDto *ePref.ErrPrefixDto) error {
+func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyTextFields(
+	textFields *[]ITextFieldSpecification,
+	errPrefDto *ePref.ErrPrefixDto) (err error) {
 
 	if txtStdLineElectron.lock == nil {
 		txtStdLineElectron.lock = new(sync.Mutex)
@@ -215,54 +229,48 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyStandardLine(
 	defer txtStdLineElectron.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textLineSpecStandardLineElectron."+
-			"emptyStandardLine()",
+			"emptyTextFields()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if txtStdLine == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+	if textFields == nil {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter textFields is a 'nil' pointer!\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	txtStdLine.numOfStdLines = 0
-	txtStdLine.turnLineTerminatorOff = false
-	txtStdLine.newLineChars = nil
-	txtStdLine.textLineReader = nil
+	concreteTxtFields := *textFields
 
-	lenTextFields := len(txtStdLine.textFields)
+	lenTextFields := len(concreteTxtFields)
 
 	if lenTextFields == 0 {
-		txtStdLine.textFields = nil
-		return nil
+		return err
 	}
 
 	for i := 0; i < lenTextFields; i++ {
 
-		if txtStdLine.textFields[i] == nil {
+		if concreteTxtFields[i] == nil {
 			continue
 		}
 
-		txtStdLine.textFields[i].Empty()
+		concreteTxtFields[i].Empty()
 
-		txtStdLine.textFields[i] = nil
-
+		concreteTxtFields[i] = nil
 	}
 
-	txtStdLine.textFields = nil
+	concreteTxtFields = nil
 
-	return nil
+	return err
 }
 
 // equalTextFieldArrays - Compares two text fields arrays and
@@ -404,17 +412,19 @@ func (txtStdLineElectron textLineSpecStandardLineElectron) ptr() *textLineSpecSt
 // as the building blocks for a standard line of text.
 //
 //
-// ------------------------------------------------------------------------
+// ------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and
-//       formatted as a single line of text. Text fields are the
-//       building blocks for a standard line of text characters
-//       produced by type TextLineSpecStandardLine.
+//  textFields                 *[]ITextFieldSpecification
+//     - 'textFields' is a pointer to a collection of objects
+//       implementing the ITextLineSpecification interface. These
+//       text fields are assembled by the TextLineSpecStandardLine
+//       type and formatted as a single line of text. Text fields
+//       are the building blocks for a standard line of text
+//       characters produced by type TextLineSpecStandardLine.
+//
+//       If this pointer is nil, an error will be returned.
 //
 //       If this array is 'nil' or has a zero length, an error will
 //       be returned.
@@ -439,13 +449,14 @@ func (txtStdLineElectron textLineSpecStandardLineElectron) ptr() *textLineSpecSt
 //       package, "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid                    bool
+//  lengthTextFields           int
 //     - If input parameter 'textFields' is judged to be valid in
-//       all respects, this return parameter will be set to 'true'.
+//       all respects, this return parameter will be set to the
+//       array length of 'textFields'.
 //
 //     - If input parameter 'textFields' is found to be invalid,
 //       this return parameter will be set to 'false'.
@@ -464,9 +475,9 @@ func (txtStdLineElectron textLineSpecStandardLineElectron) ptr() *textLineSpecSt
 //       attached at the beginning of the error message.
 //
 func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFields(
-	textFields []ITextFieldSpecification,
+	textFields *[]ITextFieldSpecification,
 	errPrefDto *ePref.ErrPrefixDto) (
-	isValid bool,
+	lengthTextFields int,
 	err error) {
 
 	if txtStdLineElectron.lock == nil {
@@ -479,8 +490,6 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFi
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	isValid = false
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -489,37 +498,35 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFi
 		"")
 
 	if err != nil {
-		return isValid, err
+		return lengthTextFields, err
 	}
 
-	lenTxtFields := len(textFields)
-
-	if lenTxtFields == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFields' is empty!\n"+
-			"'textFields' is a zero length array.\n",
+	if textFields == nil {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'textFields' is a 'nil' pointer!\n",
 			ePrefix.String())
 
-		return isValid, err
+		return lengthTextFields, err
+
 	}
+
+	lengthTextFields = 0
 
 	var err2 error
 
-	for i := 0; i < lenTxtFields; i++ {
+	for idx, val := range *textFields {
 
-		if textFields[i] == nil {
-			err = fmt.Errorf("%v\n"+
-				"Error: 'textFields' element is invalid!\n"+
-				"textFields[%v] is 'nil'.\n",
-				ePrefix.String(),
-				i)
+		if val == nil {
+			err = fmt.Errorf("%v - ERROR\n"+
+				"textFields[%v] is 'nil'!\n",
+				idx,
+				ePrefix.String())
 
-			return isValid, err
+			return lengthTextFields, err
 		}
 
-		err2 = textFields[i].
-			IsValidInstanceError(
-				ePrefix)
+		err2 = val.IsValidInstanceError(
+			ePrefix)
 
 		if err2 != nil {
 			err = fmt.Errorf("%v\n"+
@@ -527,14 +534,23 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFi
 				"textFields[%v] failed validity test.\n"+
 				"Validity Error:\n%v\n",
 				ePrefix.String(),
-				i,
+				idx,
 				err2.Error())
 
-			return isValid, err
+			return lengthTextFields, err
 		}
+
+		lengthTextFields++
 	}
 
-	isValid = true
+	if lengthTextFields == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFields' is empty!\n"+
+			"'textFields' is a zero length array.\n",
+			ePrefix.String())
 
-	return isValid, err
+		return lengthTextFields, err
+	}
+
+	return lengthTextFields, err
 }
