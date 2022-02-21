@@ -268,7 +268,22 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) emptyTextFields(
 		concreteTxtFields[i] = nil
 	}
 
-	concreteTxtFields = nil
+	*textFields = nil
+
+	endingLenTextFields := len(*textFields)
+
+	if endingLenTextFields != 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Empty Text Fields Array Operation Failed!\n"+
+			"'textFields' has an array length greater than zero.\n"+
+			"Begining Length 'textFields' = '%v'\n"+
+			"  Ending Length 'textFields' = '%v'\n",
+			ePrefix.String(),
+			lenTextFields,
+			endingLenTextFields)
+
+	}
 
 	return err
 }

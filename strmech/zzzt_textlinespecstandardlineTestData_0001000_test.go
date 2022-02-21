@@ -300,7 +300,7 @@ func createTestTextLineSpecStandardLine02(
 	return stdLine02, err
 }
 
-// createTestTextLineSpecStandardLine02 - Generates a
+// createTestTextLineSpecStandardLine03 - Generates a
 // TextLineSpecStandardLine object used for test operations.
 //
 //
@@ -441,6 +441,222 @@ func createTestTextLineSpecStandardLine03(
 			"stdLine03"))
 
 	return stdLine03, err
+}
+
+// createTestTextLineSpecStandardLine04 - Generates a
+// TextLineSpecStandardLine object used for test operations.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecStandardLine
+//     - If this method completes successfully, it will create and
+//       return a new, populated concrete instance of
+//       TextLineSpecStandardLine which is fully configured with all
+//       the parameters necessary to format one or more standard lines
+//       of text for text display, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func createTestTextLineSpecStandardLine04(
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	stdLine02 := TextLineSpecStandardLine{}.New()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDataGeneration - "+
+			"createTestTextLineSpecStandardLine04()",
+		"")
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	rightMarginLen := 2
+	var rightMarginSpec TextFieldSpecSpacer
+
+	rightMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"rightMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	var leftMarginSpec TextFieldSpecSpacer
+
+	leftMarginLen := 3
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"leftMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	label := "Good Morning Sunshine!"
+	fieldLen := len(label) + 4
+	txtJustify := TxtJustify.Center()
+
+	var labelSpec TextFieldSpecLabel
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"labelSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	_,
+		err = stdLine02.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine02<-leftMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	_,
+		err = stdLine02.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine02<-labelSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	_,
+		err = stdLine02.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine02<-rightMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	// Starting Series-2 Fields
+	rightMarginLen = 3
+
+	rightMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCtx(
+			"Series-2 rightMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	leftMarginLen = 4
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCtx(
+			"Series-2 leftMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	label = "Ain't gonna make war no more!"
+	fieldLen = len(label) + 6
+	txtJustify = TxtJustify.Left()
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCtx(
+			"Series-2 labelSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	_,
+		err = stdLine02.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCtx(
+			"stdLine02<-leftMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	_,
+		err = stdLine02.AddTextField(
+		&labelSpec,
+		ePrefix.XCtx(
+			"stdLine02<-labelSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	_,
+		err = stdLine02.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCtx(
+			"stdLine02<-rightMarginSpec"))
+
+	if err != nil {
+		return stdLine02, err
+	}
+
+	err = stdLine02.IsValidInstanceError(
+		ePrefix.XCtx(
+			"Series-2 stdLine02"))
+
+	return stdLine02, err
 }
 
 func TestTextLineSpecStandardLine_AddTextFields_000010(t *testing.T) {

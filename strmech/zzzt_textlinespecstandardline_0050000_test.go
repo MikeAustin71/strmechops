@@ -21,6 +21,16 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000100(t *testing.T) {
 		return
 	}
 
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	var textFields01, textFields02 []ITextFieldSpecification
 
 	textFields01,
@@ -157,7 +167,8 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine02(
-		ePrefix)
+		ePrefix.XCtx(
+			"->stdLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -171,7 +182,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 			"textFields02<-stdLine02"))
 
 	if err != nil {
-		t.Errorf("%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -234,13 +245,122 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 		return
 	}
 
+	return
+}
+
+func TestTextLineSpecStandardLineAtom_copyTextFields_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineAtom_copyTextFields_000300()",
+		"")
+
+	var stdLine01, stdLine02 TextLineSpecStandardLine
+	var err error
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+	var textFields01, textFields02 []ITextFieldSpecification
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine02<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields02<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if len(textFields01) == len(textFields02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"len(textFields01) == len(textFields02)\n"+
+			"The length of these Text Fields should be different.\n"+
+			"HOWEVER, THE LENGTHS ARE EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	stdLineAtom := textLineSpecStandardLineAtom{}
+
+	_,
+		err = stdLineAtom.copyTextFields(
+		&textFields02,
+		&textFields01,
+		ePrefix.XCtx(
+			"textFields01 -> textFields02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual := textLineSpecStandardLineElectron{}.ptr().
+		equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if !areEqual {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"stdLineAtom.copyTextFields() Failed!\n"+
+			"textFields01 is NOT EQUAL to textFields02.\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
 	stdLine02.EmptyTextFields()
 
 	_,
 		err = stdLine02.AddTextFields(
-		&textFields02,
+		&textFields01,
 		ePrefix.XCtx(
-			"stdLine02<-textFields02"))
+			"stdLine02<-textFields01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -250,7 +370,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 
 	stdLineMolecule := textLineSpecStandardLineMolecule{}
 
-	areEqual := stdLineMolecule.equal(
+	areEqual = stdLineMolecule.equal(
 		&stdLine01,
 		&stdLine02)
 
@@ -264,6 +384,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 		return
 	}
 
+	return
 }
 
 func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
