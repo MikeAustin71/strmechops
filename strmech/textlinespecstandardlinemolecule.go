@@ -187,13 +187,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 		return false
 	}
 
-	lenOneTextFields := len(stdLineOne.textFields)
-
-	if lenOneTextFields !=
-		len(stdLineTwo.textFields) {
-		return false
-	}
-
 	return textLineSpecStandardLineElectron{}.ptr().
 		equalTextFieldArrays(
 			&stdLineOne.textFields,

@@ -851,6 +851,71 @@ func TestTextLineSpecStandardLineMolecule_emptyStandardLine_000200(t *testing.T)
 	return
 }
 
+func TestTextLineSpecStandardLineMolecule_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineMolecule_equal_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	areEqual := txtStdLineMolecule.equal(
+		&stdLine01,
+		nil)
+
+	if areEqual == true {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected txtStdLineMolecule.equal() return false.\n"+
+			"because 'stdLine02' is a 'nil' pointer.\n"+
+			"HOWEVER, THE RETURN VALUE IS 'true'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual = txtStdLineMolecule.equal(
+		nil,
+		&stdLine02)
+
+	if areEqual == true {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected txtStdLineMolecule.equal() return false.\n"+
+			"because 'stdLine01' is a 'nil' pointer.\n"+
+			"HOWEVER, THE RETURN VALUE IS 'true'!!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
+}
+
 func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
