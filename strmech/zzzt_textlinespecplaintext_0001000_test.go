@@ -1037,7 +1037,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: plainTextLine02.EqualITextLine()\n"+
 			"Expected areEqual == false because input\n"+
-			"parameter 'standardLineSpec is the wrong type.\n"+
+			"parameter 'standardLineSpec' is the wrong type.\n"+
 			"HOWEVER, areEqual == true\n",
 			ePrefix.XCtxEmpty().String())
 

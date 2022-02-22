@@ -851,6 +851,33 @@ func TestTextLineSpecStandardLineMolecule_emptyStandardLine_000200(t *testing.T)
 	return
 }
 
+func TestTextLineSpecStandardLineMolecule_emptyStdLineTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineMolecule_emptyStdLineTextFields_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	txtStdLineMolecule.emptyStdLineTextFields(
+		nil)
+
+	txtStdLineMolecule.emptyStdLineTextFields(
+		&stdLine01)
+
+}
+
 func TestTextLineSpecStandardLineMolecule_equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -859,7 +886,8 @@ func TestTextLineSpecStandardLineMolecule_equal_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix)
+		ePrefix.XCtx(
+			"stdLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
