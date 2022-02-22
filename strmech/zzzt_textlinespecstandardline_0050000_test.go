@@ -384,6 +384,20 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000300(t *testing.T) {
 		return
 	}
 
+	numOfTextFields := stdLine02.GetNumOfTextFields()
+
+	if numOfTextFields != 6 {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"'stdLine02' should contain 6 Text Fields\n"+
+			"Instead, it contains '%v' Text Fields!\n",
+			ePrefix.XCtxEmpty().String(),
+			numOfTextFields)
+
+		return
+
+	}
+
 	return
 }
 
