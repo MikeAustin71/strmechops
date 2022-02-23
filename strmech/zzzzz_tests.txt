@@ -1865,7 +1865,7 @@
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecRunes_000200
 --- PASS: TestTextLineSpecPlainText_setPlainTextSpecRunes_000200 (0.00s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecStrings_000100
---- PASS: TestTextLineSpecPlainText_setPlainTextSpecStrings_000100 (0.01s)
+--- PASS: TestTextLineSpecPlainText_setPlainTextSpecStrings_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_CopyIn_000100
 --- PASS: TestTextLineSpecSolidLine_CopyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_CopyOut_000100
@@ -2042,6 +2042,8 @@
 --- PASS: TestTextLineSpecStandardLine_EqualITextLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetFormattedText_000100
 --- PASS: TestTextLineSpecStandardLine_GetFormattedText_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_GetFormattedText_000200
+--- PASS: TestTextLineSpecStandardLine_GetFormattedText_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
@@ -2086,4 +2088,4 @@
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
 coverage: 70.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.286s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.097s

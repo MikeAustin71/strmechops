@@ -468,3 +468,39 @@ func TestTextLineSpecStandardLine_GetFormattedText_000100(t *testing.T) {
 	}
 
 }
+
+func TestTextLineSpecStandardLine_GetFormattedText_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetFormattedText_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.GetFormattedText(
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from\n"+
+			"TextLineSpecStandardLine{}.GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
