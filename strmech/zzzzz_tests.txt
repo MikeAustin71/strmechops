@@ -2040,6 +2040,8 @@
 --- PASS: TestTextLineSpecStandardLine_EqualITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_EqualITextLine_000200
 --- PASS: TestTextLineSpecStandardLine_EqualITextLine_000200 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_GetFormattedText_000100
+--- PASS: TestTextLineSpecStandardLine_GetFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
@@ -2064,6 +2066,8 @@
 --- PASS: TestTextLineSpecStandardLineMolecule_emptyStdLineTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineMolecule_equal_000100
 --- PASS: TestTextLineSpecStandardLineMolecule_equal_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLineMolecule_getFormattedText_000100
+--- PASS: TestTextLineSpecStandardLineMolecule_getFormattedText_000100 (0.00s)
 === RUN   TestTestTextLineSpecStandardLineNanobot_addTextFields_000100
 --- PASS: TestTestTextLineSpecStandardLineNanobot_addTextFields_000100 (0.00s)
 === RUN   TestTestTextLineSpecStandardLineNanobot_addTextFields_000200
@@ -2081,5 +2085,5 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
-coverage: 70.5% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.715s
+coverage: 70.6% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.286s

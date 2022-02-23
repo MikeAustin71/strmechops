@@ -2149,10 +2149,6 @@ func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 
 	defer stdLine.lock.Unlock()
 
-	if stdLine.numOfStdLines < 0 {
-		stdLine.numOfStdLines = 0
-	}
-
 	stdLineTwo, ok := iTextLine.(*TextLineSpecStandardLine)
 
 	if !ok {

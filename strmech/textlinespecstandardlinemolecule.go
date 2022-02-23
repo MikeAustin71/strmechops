@@ -266,7 +266,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecStandardLineMolecule.getFormattedText()",
+		"textLineSpecStandardLineMolecule."+
+			"getFormattedText()",
 		"")
 
 	if err != nil {
@@ -289,10 +290,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 
 	if err != nil {
 		return formattedText, err
-	}
-
-	if len(txtStdLine.newLineChars) == 0 {
-		txtStdLine.newLineChars = []rune{'\n'}
 	}
 
 	lenTextFields := len(txtStdLine.textFields)

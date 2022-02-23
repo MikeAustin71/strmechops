@@ -441,3 +441,30 @@ func TestTextLineSpecStandardLine_EqualITextLine_000200(t *testing.T) {
 
 	}
 }
+
+func TestTextLineSpecStandardLine_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetFormattedText_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		err := stdLine01.GetFormattedText(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: stdLine01.GetFormattedText()\n"+
+			"Expected an error return because parameter\n"+
+			"'stdLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+}

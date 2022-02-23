@@ -944,6 +944,68 @@ func TestTextLineSpecStandardLineMolecule_equal_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_FUNCNAME_000100()",
+		"")
+
+	stdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	_,
+		err := stdLineMolecule.getFormattedText(
+		nil,
+		ePrefix.XCtx(
+			"txtStdLine is 'nil'"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLineMolecule.getFormattedText()\n"+
+			"Expected an error return because parameter\n"+
+			"'txtStdLine' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	var stdLine01 TextLineSpecStandardLine
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine01.numOfStdLines = -5
+
+	_,
+		err = stdLineMolecule.getFormattedText(
+		&stdLine01,
+		ePrefix.XCtx(
+			"txtStdLine is 'nil'"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLineMolecule.getFormattedText()\n"+
+			"Expected an error return because parameter\n"+
+			"'stdLine01.numOfStdLines' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+}
+
 func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
