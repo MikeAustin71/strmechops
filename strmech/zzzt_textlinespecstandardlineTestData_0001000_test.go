@@ -656,6 +656,10 @@ func createTestTextLineSpecStandardLine04(
 		ePrefix.XCtx(
 			"Series-2 stdLine02"))
 
+	if err != nil {
+		return stdLine02, err
+	}
+
 	return stdLine02, err
 }
 

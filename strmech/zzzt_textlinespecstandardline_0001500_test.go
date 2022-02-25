@@ -664,3 +664,93 @@ func TestTextLineSpecStandardLine_GetNumOfStdLines_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetTextFields_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		err := stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textLines []ITextFieldSpecification
+
+	textLines,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textLines<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03 := TextLineSpecStandardLine{}.New()
+
+	err = stdLine03.SetTextFields(
+		textLines,
+		ePrefix.XCtx(
+			"textLines->stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual := stdLine02.Equal(&stdLine03)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.Equal(&stdLine03)\n"+
+			"Expected stdLine02==stdLine03\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = stdLine03.GetTextFields(
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecStandardLine{}."+
+			"GetTextFields()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

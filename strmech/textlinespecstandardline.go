@@ -2525,52 +2525,31 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 		return nil, err
 	}
 
-	lenTxtFields := len(stdLine.textFields)
-
-	if lenTxtFields == 0 {
+	if len(stdLine.textFields) == 0 {
 
 		return nil, err
 	}
 
-	newTextFields :=
-		make([]ITextFieldSpecification, lenTxtFields)
-
-	for i := 0; i < lenTxtFields; i++ {
-
-		if stdLine.textFields[i] == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Text Field element stdLine.textFields[%v]\n"+
-				"has a 'nil' value!\n",
-				ePrefix.String(),
-				i)
-
-			return nil, err
-		}
-
-		err = stdLine.textFields[i].IsValidInstanceError(
+	_,
+		err = textLineSpecStandardLineElectron{}.ptr().
+		testValidityOfTextFields(
+			&stdLine.textFields,
 			ePrefix.XCtx(
-				fmt.Sprintf(
-					"stdLine.newTextFields[%v] invalid",
-					i)))
+				"stdLine.textFields"))
 
-		if err != nil {
-			return nil, err
-		}
-
-		newTextField,
-			err2 := stdLine.textFields[i].CopyOutITextField(
-			ePrefix.XCtx(
-				fmt.Sprintf(
-					"stdLine.newTextFields[%v] copy error",
-					i)))
-
-		if err2 != nil {
-			return nil, err2
-		}
-
-		newTextFields[i] = newTextField
+	if err != nil {
+		return nil, err
 	}
+
+	newTextFields := make([]ITextFieldSpecification, 0)
+
+	_,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		copyTextFields(
+			&newTextFields,
+			&stdLine.textFields,
+			ePrefix.XCtx(
+				"newTextFields<-stdLine.textFields"))
 
 	return newTextFields, err
 }
