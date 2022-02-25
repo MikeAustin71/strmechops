@@ -527,9 +527,9 @@ func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 		return
 	}
 
-	expectedNewLineChars := []rune{'\n', '\n'}
+	expectedNewLineChars := "\n\n"
 
-	err = stdLine02.SetNewLineRunes(
+	err = stdLine02.SetNewLineChars(
 		expectedNewLineChars,
 		ePrefix.XCtx(
 			"stdLine02"))
@@ -540,21 +540,16 @@ func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 		return
 	}
 
-	actualNewLineRunes :=
-		stdLine02.GetNewLineRunes()
+	actualNewLineChars :=
+		stdLine02.GetNewLineChars()
 
-	strMech := StrMech{}
-
-	areEqual :=
-		strMech.EqualRuneArrays(
-			expectedNewLineChars,
-			actualNewLineRunes)
+	areEqual := expectedNewLineChars == actualNewLineChars
 
 	if !areEqual {
 
 		t.Errorf("%v\n"+
-			"Error: stdLine02.EqualRuneArrays()\n"+
-			"expectedNewLineChars != actualNewLineRunes\n"+
+			"Error: stdLine02.GetNewLineChars()\n"+
+			"expectedNewLineChars != actualNewLineChars\n"+
 			"Expected areEqual == true\n"+
 			"HOWEVER, areEqual == false\n",
 			ePrefix.XCtxEmpty().String())
