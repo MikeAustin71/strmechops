@@ -2046,6 +2046,10 @@
 --- PASS: TestTextLineSpecStandardLine_GetFormattedText_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetNewLineChars_000100
 --- PASS: TestTextLineSpecStandardLine_GetNewLineChars_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_GetNewLineRunes_000100
+--- PASS: TestTextLineSpecStandardLine_GetNewLineRunes_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_GetNumOfStdLines_000100
+--- PASS: TestTextLineSpecStandardLine_GetNumOfStdLines_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
@@ -2089,5 +2093,5 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
-coverage: 70.7% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.838s
+coverage: 70.8% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.184s

@@ -559,3 +559,108 @@ func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_GetNewLineRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetNewLineRunes_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_ =
+		stdLine01.GetNewLineRunes()
+
+	expectedNewLineRunes := []rune{'\n', '\n'}
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine02.SetNewLineRunes(
+		expectedNewLineRunes,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineRunes :=
+		stdLine02.GetNewLineRunes()
+
+	areEqual := StrMech{}.Ptr().
+		EqualRuneArrays(
+			expectedNewLineRunes,
+			actualNewLineRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetNewLineRunes()\n"+
+			"expectedNewLineRunes != actualNewLineRunes\n"+
+			"Expected areEqual == true\n"+
+			"HOWEVER, areEqual == false\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_GetNumOfStdLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetNumOfStdLines_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_ =
+		stdLine01.GetNumOfStdLines()
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumOfStdLines := 3
+
+	stdLine02.SetNumOfStdLines(expectedNumOfStdLines)
+
+	actualNumOfStdLines :=
+		stdLine02.GetNumOfStdLines()
+
+	if actualNumOfStdLines != expectedNumOfStdLines {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetNumOfStdLines()\n"+
+			"Expected expectedNumOfStdLines == actualNumOfStdLines\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n"+
+			"Expected Number of Stdandard Lines = '%v'\n"+
+			"  Actual Number of Stdandard Lines = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNumOfStdLines,
+			actualNumOfStdLines)
+
+		return
+	}
+
+	return
+}
