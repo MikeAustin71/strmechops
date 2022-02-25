@@ -504,3 +504,63 @@ func TestTextLineSpecStandardLine_GetFormattedText_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetNewLineChars_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_ =
+		stdLine01.GetNewLineChars()
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNewLineChars := []rune{'\n', '\n'}
+
+	err = stdLine02.SetNewLineRunes(
+		expectedNewLineChars,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNewLineRunes :=
+		stdLine02.GetNewLineRunes()
+
+	strMech := StrMech{}
+
+	areEqual :=
+		strMech.EqualRuneArrays(
+			expectedNewLineChars,
+			actualNewLineRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.EqualRuneArrays()\n"+
+			"expectedNewLineChars != actualNewLineRunes\n"+
+			"Expected areEqual == true\n"+
+			"HOWEVER, areEqual == false\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
