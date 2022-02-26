@@ -754,3 +754,51 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetTextFields_000200()",
+		"")
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02.textFields[2] = nil
+
+	_,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textLines<-stdLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetTextFields()\n"+
+			"Expected an error return.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+//func TestTESTSERIES_TESTMETHOD_000100(t *testing.T) {
+//
+//	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+//		"TestTESTSERIES_TESTMETHOD_000100()",
+//		"")
+//
+//
+//
+//}
