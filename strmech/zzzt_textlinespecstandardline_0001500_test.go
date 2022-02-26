@@ -783,7 +783,8 @@ func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
 
 		t.Errorf("%v\n"+
 			"Error: stdLine02.GetTextFields()\n"+
-			"Expected an error return.\n"+
+			"Expected an error return because\n"+
+			"stdLine02.textFields[2] = nil .\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
 			ePrefix.XCtxEmpty().String())
 
@@ -940,6 +941,153 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_NewStandardLine_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = TextLineSpecStandardLine{}.
+		NewStandardLine(
+			1,
+			textFields,
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine02.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewStandardLine(
+			1,
+			nil,
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetTextFields()\n"+
+			"Expected an error return because\n"+
+			"'textFields' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields02 := make([]ITextFieldSpecification, 0)
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewStandardLine(
+			1,
+			textFields02,
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetTextFields()\n"+
+			"Expected an error return because\n"+
+			"'textFields' is a zero length array.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewStandardLine(
+			0,
+			textFields02,
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetTextFields()\n"+
+			"Expected an error return because\n"+
+			"'numOfStdLines' is zero.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewStandardLine(
+			-5,
+			textFields,
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine03.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 
