@@ -3183,7 +3183,8 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecStandardLine.NewPtrStandardLine()",
+		"TextLineSpecStandardLine."+
+			"NewPtrStandardLine()",
 		"")
 
 	if err != nil {
@@ -3457,7 +3458,8 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecStandardLine.NewPtrStandardLine()",
+		"TextLineSpecStandardLine."+
+			"NewPtrStandardLine()",
 		"")
 
 	if err != nil {
