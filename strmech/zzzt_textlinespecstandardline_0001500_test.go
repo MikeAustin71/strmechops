@@ -793,12 +793,155 @@ func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
 	return
 }
 
-//func TestTESTSERIES_TESTMETHOD_000100(t *testing.T) {
-//
-//	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-//		"TestTESTSERIES_TESTMETHOD_000100()",
-//		"")
-//
-//
-//
-//}
+func TestTextLineSpecStandardLine_GetTurnLineTerminatorOff_000100(t *testing.T) {
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	stdLine01.GetTurnLineTerminatorOff()
+
+}
+
+func TestTextLineSpecStandardLine_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_IsValidInstance_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	isValid :=
+		stdLine01.IsValidInstance()
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	isValid = stdLine02.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("%v\n"+
+			"Error: isValid = stdLine02.IsValidInstance()\n"+
+			"Expected 'isValid' == true.\n"+
+			"HOWEVER, 'isValid' == false !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	stdLine02.textFields[2] = nil
+
+	isValid = stdLine02.IsValidInstance()
+
+	if isValid {
+
+		t.Errorf("%v\n"+
+			"Error: isValid = stdLine02.IsValidInstance()\n"+
+			"Expected 'isValid' == false because \n"+
+			"stdLine02.textFields[2] = nil .\n"+
+			"HOWEVER, 'isValid' == true !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_IsValidInstanceError_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	err :=
+		stdLine01.IsValidInstanceError(
+			ePrefix.XCtx(
+				"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine01.IsValidInstanceError()\n"+
+			"Expected an error return because \n"+
+			"stdLine01 is empty.\n"+
+			"HOWEVER, 'isValid' == true !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		stdLine02.IsValidInstanceError(
+			textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.IsValidInstanceError()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err =
+		stdLine02.IsValidInstanceError(
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	stdLine02.textFields[3] = nil
+
+	err =
+		stdLine02.IsValidInstanceError(
+			ePrefix.XCtx(
+				"stdLine02.textFields[3]=nil"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.IsValidInstanceError()\n"+
+			"Expected an error return because\n"+
+			"'stdLine02' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
