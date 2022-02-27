@@ -1997,7 +1997,7 @@
 === RUN   TestTextLineSpecStandardLine_AddTextField_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000100
---- PASS: TestTextLineSpecStandardLine_AddTextFields_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_AddTextFields_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000200
 --- PASS: TestTextLineSpecStandardLine_AddTextFields_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldDateTime_000100
@@ -2068,6 +2068,10 @@
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000200 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000100
+--- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000100 (0.01s)
+=== RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000200
+--- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
@@ -2111,5 +2115,5 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
-coverage: 71.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	0.898s
+coverage: 71.8% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.279s
