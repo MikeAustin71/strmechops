@@ -1487,7 +1487,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - ERROR\n"+
-			"TextLineSpecStandardLine{}.NewPtrStandardLine()\n"+
+			"TextLineSpecStandardLine{}.NewStandardLineAllParms()\n"+
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
@@ -1537,7 +1537,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - ERROR\n"+
-			"TextLineSpecStandardLine{}.NewPtrStandardLine()\n"+
+			"TextLineSpecStandardLine{}.NewStandardLineAllParms()\n"+
 			"Expected an error return because\n"+
 			"'newLineChars' is an empty array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
@@ -1638,6 +1638,311 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000200(t *testing.T) {
 
 		t.Errorf("%v - Error\n"+
 			"TextLineSpecStandardLine{}.NewStandardLineAllParms()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 *TextLineSpecStandardLine
+
+	newLineChars := []rune{'\n'}
+
+	stdLine02,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			1,
+			textFields,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine02.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine03 *TextLineSpecStandardLine
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			1,
+			nil,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
+			"Expected an error return because\n"+
+			"'textFields' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			0,
+			textFields,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
+			"Expected an error return because\n"+
+			"'numOfStdLines' is zero.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields02 := make([]ITextFieldSpecification, 0)
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			1,
+			textFields02,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
+			"Expected an error return because\n"+
+			"'textFields02' is a zero length array.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			0,
+			textFields,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
+			"Expected an error return because\n"+
+			"'numOfStdLines' is zero.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			-5,
+			textFields,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine03.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newLineChars = []rune{}
+
+	stdLine03,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			1,
+			textFields,
+			newLineChars,
+			false,
+			ePrefix.XCtx(
+				"newLineChars is empty"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
+			"Expected an error return because\n"+
+			"'newLineChars' is an empty array.\n"+
+			"HOWEVER, NO ERROR WAS RETURN!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine04 *TextLineSpecStandardLine
+
+	newLineChars = []rune{'\n'}
+
+	stdLine04,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			1,
+			textFields,
+			newLineChars,
+			true,
+			ePrefix.XCtx(
+				"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine04.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	turnLineTerminatorOff :=
+		stdLine04.GetTurnLineTerminatorOff()
+
+	if turnLineTerminatorOff == false {
+		t.Errorf("%v - ERROR\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
+			"Expected 'turnLineTerminatorOff' == 'true'\n"+
+			"HOWEVER, THE RETURN VALUE WAS 'false'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newLineChars := []rune{'\n'}
+
+	_,
+		err = TextLineSpecStandardLine{}.
+		NewPtrStandardLineAllParms(
+			1,
+			textFields,
+			newLineChars,
+			false,
+			textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
