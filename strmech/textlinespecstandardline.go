@@ -4050,7 +4050,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 	return &newStdLine, err
 }
 
-// PeekAtFirstIndex - Returns a deep copy of the first Text Field
+// PeekAtFirstTextField - Returns a deep copy of the first Text Field
 // ('ITextFieldSpecification') object in the Text Field Collection
 // ('stdLine.textFields[0]').
 //
@@ -4135,7 +4135,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (stdLine *TextLineSpecStandardLine) PeekAtFirstIndex(
+func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
 	err error) {
@@ -4156,7 +4156,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstIndex(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"PeekAtFirstIndex()",
+			"PeekAtFirstTextField()",
 		"")
 
 	if err != nil {

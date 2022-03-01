@@ -955,8 +955,8 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 // means that the returned TextFieldSpecSpacer instance is
 // invalid. Therefore, in order to use this TextFieldSpecSpacer
 // instance, users must later call the setter methods on this type
-// in order to configure valid and meaningful meaningful member
-// variable data values.
+// in order to configure valid and meaningful member variable data
+// values.
 //
 //
 // ------------------------------------------------------------------------
