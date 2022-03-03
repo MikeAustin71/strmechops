@@ -1978,6 +1978,12 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 		ePrefix.XCtx(
 			"stdLine01"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)
 
 	if !ok {
@@ -2005,6 +2011,8 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 
 		return
 	}
+
+	return
 }
 
 func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
@@ -2052,6 +2060,123 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
 
 		t.Errorf("%v - Error\n"+
 			"stdLine02.PeekAtFirstTextField()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_PeekAtLastTextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PeekAtLastTextField_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTxtFieldSpec ITextFieldSpecification
+
+	iTxtFieldSpec,
+		err = stdLine01.PeekAtLastTextField(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	spacerLen := spacerField.GetFieldLength()
+
+	if spacerLen != 3 {
+
+		t.Errorf("%v - Error\n"+
+			"Expected the last index to be a type\n"+
+			"TextFieldSpecSpacer with a length of '3' characters.\n"+
+			"HOWEVER, A DIFFERENT LENGTH WAS RETURNED!\n"+
+			"spacerLen='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			spacerLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PeekAtLastTextField_000200()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		err := stdLine01.PeekAtLastTextField(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.PeekAtLastTextField()\n"+
+			"because 'stdLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine02.PeekAtLastTextField(
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine02.PeekAtLastTextField()\n"+
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",

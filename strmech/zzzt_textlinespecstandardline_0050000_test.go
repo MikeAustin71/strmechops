@@ -401,6 +401,119 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000300(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLineAtom_peekPopTextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineAtom_peekPopTextField_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLineAtom := textLineSpecStandardLineAtom{}
+
+	_,
+		err = txtLineAtom.peekPopTextField(
+		nil,
+		5,
+		false,
+		ePrefix.XCtx(
+			"txtStdLine is 'nil'"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLineAtom.peekPopTextField()\n"+
+			"because 'txtStdLine' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	_,
+		err = txtLineAtom.peekPopTextField(
+		&stdLine01,
+		6,
+		false,
+		ePrefix.XCtx(
+			"indexId is 6. Last Index is 5."))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLineAtom.peekPopTextField()\n"+
+			"because 'indexId' is exceeds last index of array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	_,
+		err = txtLineAtom.peekPopTextField(
+		&stdLine01,
+		-1,
+		false,
+		ePrefix.XCtx(
+			"indexId is -1"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLineAtom.peekPopTextField()\n"+
+			"because 'indexId' is less than zero.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	stdLine01.textFields = make([]ITextFieldSpecification, 0)
+
+	_,
+		err = txtLineAtom.peekPopTextField(
+		&stdLine01,
+		1,
+		false,
+		ePrefix.XCtx(
+			"txtStdLine is 'nil'"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLineAtom.peekPopTextField()\n"+
+			"because 'stdLine01.textFields' has a length of zero.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
