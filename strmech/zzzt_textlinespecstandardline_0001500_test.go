@@ -2187,3 +2187,137 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// var labelSpec TextFieldSpecSpacer
+	var iTxtFieldSpec ITextFieldSpecification
+
+	iTxtFieldSpec,
+		err = stdLine01.PeekAtTextFieldAtIndex(
+		4,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelText := "Ain't gonna make war no more!"
+
+	labelField, ok := iTxtFieldSpec.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = labelField.IsValidInstanceError(
+		ePrefix.XCtx(
+			"labelField"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelText := labelField.GetTextLabel()
+
+	if expectedLabelText != actualLabelText {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedLabelText==actualLabelText\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLabelText,
+			actualLabelText)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		err := stdLine01.PeekAtTextFieldAtIndex(
+		0,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.PeekAtTextFieldAtIndex()\n"+
+			"because 'stdLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine02.PeekAtTextFieldAtIndex(
+		2,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine02.PeekAtTextFieldAtIndex()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
