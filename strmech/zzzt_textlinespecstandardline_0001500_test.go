@@ -2321,3 +2321,147 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_PopFirstTextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PopFirstTextField_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumOfTxtFields :=
+		stdLine01.GetNumOfTextFields()
+
+	expectedNumOfTxtFields--
+
+	var iTxtFieldSpec ITextFieldSpecification
+	var remainingNumOfTxtFields int
+
+	iTxtFieldSpec,
+		remainingNumOfTxtFields,
+		err = stdLine01.PopFirstTextField(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedNumOfTxtFields != remainingNumOfTxtFields {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.PopFirstTextField()\n"+
+			"Expected Number of Remaining Text Fields is\n"+
+			"NOT Equal to the Actual Number of Remaining\n"+
+			"Text Fields!\n"+
+			"Expected Number of Remaining Text Fields = '%v'\n"+
+			"  Actual Number of Remaining Text Fields = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNumOfTxtFields,
+			remainingNumOfTxtFields)
+
+		return
+	}
+
+	spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.PopFirstTextField()\n"+
+			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	spacerLen := spacerField.GetFieldLength()
+
+	if spacerLen != 6 {
+
+		t.Errorf("%v - Error\n"+
+			"Expected the first index to be a type\n"+
+			"TextFieldSpecSpacer with a length of '6' characters.\n"+
+			"HOWEVER, A DIFFERENT LENGTH WAS RETURNED!\n"+
+			"spacerLen='%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			spacerLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_PopFirstTextField_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PopFirstTextField_000200()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		_,
+		err := stdLine01.PopFirstTextField(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.PopFirstTextField()\n"+
+			"because 'stdLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		_,
+		err = stdLine02.PopFirstTextField(
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine02.PopFirstTextField()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+
+}
