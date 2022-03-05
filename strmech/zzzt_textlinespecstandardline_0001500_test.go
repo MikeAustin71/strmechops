@@ -2607,3 +2607,104 @@ func TestTextLineSpecStandardLine_PopLastTextField_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// var labelSpec TextFieldSpecSpacer
+	var iTxtFieldSpec ITextFieldSpecification
+	var expectedNumOfTextFields,
+		remainingNumOfTxtFields int
+
+	expectedNumOfTextFields =
+		stdLine01.GetNumOfTextFields()
+
+	expectedNumOfTextFields--
+
+	iTxtFieldSpec,
+		remainingNumOfTxtFields,
+		err = stdLine01.PopTextFieldAtIndex(
+		4,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelText := "Ain't gonna make war no more!"
+
+	labelField, ok := iTxtFieldSpec.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = labelField.IsValidInstanceError(
+		ePrefix.XCtx(
+			"labelField"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelText := labelField.GetTextLabel()
+
+	if expectedLabelText != actualLabelText {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.PopTextFieldAtIndex()\n"+
+			"Expected expectedLabelText==actualLabelText\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLabelText,
+			actualLabelText)
+
+		return
+	}
+
+	if expectedNumOfTextFields != remainingNumOfTxtFields {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.PopFirstTextField()\n"+
+			"Expected Number of Remaining Text Fields is\n"+
+			"NOT Equal to the Actual Number of Remaining\n"+
+			"Text Fields!\n"+
+			"Expected Number of Remaining Text Fields = '%v'\n"+
+			"  Actual Number of Remaining Text Fields = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNumOfTextFields,
+			remainingNumOfTxtFields)
+
+		return
+	}
+
+	return
+}
