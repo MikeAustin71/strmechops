@@ -621,23 +621,9 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 		return lengthTextFields, err
 	}
 
-	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
-		testValidityOfTextLineSpecStdLine(
-			txtStdLine,
-			ePrefix.XCtx(
-				"txtStdLine"))
-
-	if err != nil {
-		return lengthTextFields, err
-	}
-
-	lengthTextFields,
-		err = textLineSpecStandardLineElectron{}.ptr().
-		testValidityOfTextFields(
-			&txtStdLine.textFields,
-			ePrefix.XCtx(
-				"txtStdLine.textFields array is invalid"))
+	err = iTextField.IsValidInstanceError(
+		ePrefix.XCtx(
+			"iTextField is invalid!"))
 
 	if err != nil {
 		return lengthTextFields, err
@@ -650,6 +636,37 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 		ePrefix.XCtx("iTextField->newTextField"))
 
 	if err != nil {
+		return lengthTextFields, err
+	}
+
+	lengthTextFields = len(txtStdLine.textFields)
+
+	foundIndexId := false
+
+	if lengthTextFields == 0 {
+
+		foundIndexId = true
+
+		txtStdLine.textFields = append(
+			txtStdLine.textFields,
+			newTextField)
+	}
+
+	_,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		testValidityOfTextLineSpecStdLine(
+			txtStdLine,
+			ePrefix.XCtx(
+				"txtStdLine"))
+
+	if err != nil {
+		return lengthTextFields, err
+	}
+
+	if foundIndexId {
+
+		lengthTextFields++
+
 		return lengthTextFields, err
 	}
 
@@ -669,8 +686,6 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	// arr[2:])        [3,4,5]
 
 	var oldTextField ITextFieldSpecification
-
-	foundIndexId := false
 
 	for i := 0; i < lengthTextFields; i++ {
 
