@@ -2708,3 +2708,63 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		_,
+		err := stdLine01.PopTextFieldAtIndex(
+		0,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.PopTextFieldAtIndex()\n"+
+			"because 'stdLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		_,
+		err = stdLine02.PopTextFieldAtIndex(
+		2,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine02.PopTextFieldAtIndex()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}

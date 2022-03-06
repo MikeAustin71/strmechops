@@ -345,18 +345,17 @@ func (stdLine *TextLineSpecStandardLine) AddStandardLine(
 //
 // Input Parameters
 //
-//  textField                  ITextFieldSpecification
+//  iTextField                 ITextFieldSpecification
 //     - A text field object which implements the
 //       ITextFieldSpecification interface. A deep copy of this
 //       object will be added to the text field collection
 //       maintained by this instance of TextLineSpecStandardLine.
 //
 //       NOTE: You will need to pass the concrete instance of
-//       'textField' as a pointer to 'textField' (&textField).
+//       'iTextField' as a pointer to the Text Field (&textField).
 //
-//       If member variable data values contained in this
-//       'textField' parameter are found to be invalid, an error
-//       will be returned.
+//       If the 'iTextField' parameter are found to be invalid, an
+//       error will be returned.
 //
 //
 //  errorPrefix                interface{}
@@ -430,7 +429,7 @@ func (stdLine *TextLineSpecStandardLine) AddStandardLine(
 //       the beginning of the error message.
 //
 func (stdLine *TextLineSpecStandardLine) AddTextField(
-	textField ITextFieldSpecification,
+	iTextField ITextFieldSpecification,
 	errorPrefix interface{}) (
 	lastIndexId int,
 	err error) {
@@ -457,16 +456,16 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 		return lastIndexId, err
 	}
 
-	if textField == nil {
+	if iTextField == nil {
 		err = fmt.Errorf("%v - ERROR\n"+
-			"Input parameter 'textField' is 'nil'!\n",
+			"Input parameter 'iTextField' is 'nil'!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
 	}
 
-	err = textField.IsValidInstanceError(
-		ePrefix.XCtx("textField"))
+	err = iTextField.IsValidInstanceError(
+		ePrefix.XCtx("iTextField"))
 
 	if err != nil {
 		return lastIndexId, err
@@ -475,8 +474,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 	var newTextField ITextFieldSpecification
 
 	newTextField,
-		err = textField.CopyOutITextField(
-		ePrefix.XCtx("textField->newTextField"))
+		err = iTextField.CopyOutITextField(
+		ePrefix.XCtx("iTextField->newTextField"))
 
 	if err != nil {
 		return lastIndexId, err
@@ -2588,6 +2587,155 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 	defer stdLine.lock.Unlock()
 
 	return stdLine.turnLineTerminatorOff
+}
+
+// InsertTextFieldAtIndex - Receives a Text Field in the form of a
+// type ITextFieldSpecification. This Text Field is then inserted
+// into Text Fields Collection maintained by the current instance
+// of TextLineSpecStandardLine.
+//
+// The Text Field input parameter, 'iTextField', is inserted into
+// the internal Text Fields array at the array element index
+// position indicated by input parameter, 'indexId'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  iTextField                 ITextFieldSpecification
+//     - A Text Field object which implements the
+//       ITextFieldSpecification interface. A deep copy of this
+//       text field will be inserted into the Text Field Collection
+//       maintained by the current instance of
+//       TextLineSpecStandardLine.
+//
+//       NOTE: You will need to pass the concrete instance of
+//       'iTextField' as a pointer to the Text Field (&textField).
+//
+//       If the 'iTextField' parameter are found to be invalid, an
+//       error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  lastIndexId                int
+//     - If this method completes successfully, the internal array
+//       index of the last text field object for the Text Field
+//       Collection maintained by the current
+//       TextLineSpecStandardLine instance will be returned as an
+//       integer value.
+//
+//       In the event of an error, 'lastIndexId' will be set to a
+//       value of minus one (-1).
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+func (stdLine *TextLineSpecStandardLine) InsertTextFieldAtIndex(
+	iTextField ITextFieldSpecification,
+	indexId int,
+	errorPrefix interface{}) (
+	lastIndexId int,
+	err error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	lastIndexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"InsertTextFieldAtIndex()",
+		"")
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	lastIndexId,
+		err = textLineSpecStandardLineNanobot{}.ptr().
+		insertTextFieldAtIndex(
+			stdLine,
+			iTextField,
+			indexId,
+			ePrefix.XCtx(
+				fmt.Sprintf("stdLine.textFields[%v]<-iTextField",
+					indexId)))
+
+	if err != nil {
+		lastIndexId = -1
+	} else {
+		lastIndexId--
+	}
+
+	return lastIndexId, err
 }
 
 // IsValidInstance - Performs a diagnostic review of the data

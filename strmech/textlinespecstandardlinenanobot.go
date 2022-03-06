@@ -414,7 +414,8 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecStandardLineNanobot.copyOut()",
+		"textLineSpecStandardLineNanobot."+
+			"copyOut()",
 		"")
 
 	if err != nil {
@@ -491,6 +492,238 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 					"newStdLine.textFields"))
 
 	return newStdLine, err
+}
+
+// insertTextFieldAtIndex - STOP@COL68
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtStdLine                 *TextLineSpecStandardLine
+//     - A pointer to an instance of type TextLineSpecStandardLine.
+//       The Text Field provided by input parameter 'iTextField'
+//       will be inserted at the array element index position
+//       indicated by input parameter 'indexId'.
+//
+//
+//  iTextField                 ITextFieldSpecification
+//     - A text field object which implements the
+//       ITextFieldSpecification interface. A deep copy of this
+//       object will be inserted into the Text Field collection
+//       maintained by the instance of TextLineSpecStandardLine
+//       pointed to by input parameter 'txtStdLine'.
+//
+//       NOTE: You will need to pass the concrete instance of
+//       'iTextField' as a pointer to the Text Field (&textField).
+//
+//       If the 'iTextField' parameter are found to be invalid, an
+//       error will be returned.
+//
+//
+//  indexId                    int
+//     - This index number designates the array element index in
+//       the Text Fields Collection of the 'txtStdLine' instance at
+//       which the Text Fields parameter, 'iTextField' will be
+//       inserted.
+//
+//       If the value of 'indexId' is less than zero, it will be
+//       reset to zero. This means that the 'iTextField' object
+//       will be inserted in the first array element position of
+//       the Text Fields Collection maintained by parameter,
+//       'txtStdLine'.
+//
+//       If the value of 'indexId' is greater the the last array
+//       element index in the 'txtStdLine' Text Fields Collection,
+//       the 'iTextField' object will be appended to the end of
+//       that Text Fields Collection.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  lengthTextFields           int
+//     - If this method completes successfully, 'lengthTextFields'
+//       will be set to the length of the Text Fields collections
+//       contained in input parameter, 'txtStdLine'. This means
+//       that the value of 'lengthTextFields' will be one greater
+//       than the original length of the 'txtStdLine' Text Fields
+//       Collection.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex(
+	txtStdLine *TextLineSpecStandardLine,
+	iTextField ITextFieldSpecification,
+	indexId int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	lengthTextFields int,
+	err error) {
+
+	if txtStdLineNanobot.lock == nil {
+		txtStdLineNanobot.lock = new(sync.Mutex)
+	}
+
+	txtStdLineNanobot.lock.Lock()
+
+	defer txtStdLineNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecStandardLineNanobot."+
+			"insertTextFieldAtIndex()",
+		"")
+
+	if err != nil {
+		return lengthTextFields, err
+	}
+
+	if txtStdLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
+			ePrefix.String())
+
+		return lengthTextFields, err
+	}
+
+	if iTextField == nil {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'iTextField' is 'nil'!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return lengthTextFields, err
+	}
+
+	_,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		testValidityOfTextLineSpecStdLine(
+			txtStdLine,
+			ePrefix.XCtx(
+				"txtStdLine"))
+
+	if err != nil {
+		return lengthTextFields, err
+	}
+
+	lengthTextFields,
+		err = textLineSpecStandardLineElectron{}.ptr().
+		testValidityOfTextFields(
+			&txtStdLine.textFields,
+			ePrefix.XCtx(
+				"txtStdLine.textFields array is invalid"))
+
+	if err != nil {
+		return lengthTextFields, err
+	}
+
+	var newTextField ITextFieldSpecification
+
+	newTextField,
+		err = iTextField.CopyOutITextField(
+		ePrefix.XCtx("iTextField->newTextField"))
+
+	if err != nil {
+		return lengthTextFields, err
+	}
+
+	if indexId > lengthTextFields {
+
+		indexId = lengthTextFields
+	}
+
+	newTextFieldsArray := make([]ITextFieldSpecification, 0)
+
+	if indexId < 0 {
+		indexId = 0
+	}
+
+	// arr := []int{1,2,3,4,5}
+	// arr[:2]         [1,2]
+	// arr[2:])        [3,4,5]
+
+	var oldTextField ITextFieldSpecification
+
+	foundIndexId := false
+
+	for i := 0; i < lengthTextFields; i++ {
+
+		oldTextField,
+			err = txtStdLine.textFields[i].CopyOutITextField(
+			ePrefix.XCtx(fmt.Sprintf(
+				"txtStdLine.textFields[%v]->oldTextField",
+				i)))
+
+		if err != nil {
+			return lengthTextFields, err
+		}
+
+		if i == indexId {
+
+			newTextFieldsArray = append(
+				newTextFieldsArray, newTextField)
+
+			foundIndexId = true
+
+			newTextFieldsArray = append(
+				newTextFieldsArray,
+				oldTextField)
+		} else {
+
+			newTextFieldsArray = append(
+				newTextFieldsArray, oldTextField)
+
+		}
+
+		txtStdLine.textFields[i].Empty()
+	}
+
+	if !foundIndexId {
+
+		newTextFieldsArray = append(
+			newTextFieldsArray, newTextField)
+
+	}
+
+	txtStdLine.textFields = nil
+
+	txtStdLine.textFields = newTextFieldsArray
+
+	lengthTextFields++
+
+	//newDirMgrs = append(newDirMgrs, dMgrs.dirMgrs[index:]...)
+	//
+	//dMgrs.dirMgrs = append(dMgrs.dirMgrs[:index])
+	//dMgrs.dirMgrs = append(dMgrs.dirMgrs, dMgr.CopyOut())
+	//dMgrs.dirMgrs = append(dMgrs.dirMgrs, newDirMgrs...)
+
+	return lengthTextFields, err
 }
 
 // ptr - Returns a pointer to a new instance of

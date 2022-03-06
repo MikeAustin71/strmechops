@@ -546,7 +546,8 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textLineSpecStandardLineAtom.testValidityOfTextLineSpecStdLine()",
+		"textLineSpecStandardLineAtom."+
+			"testValidityOfTextLineSpecStdLine()",
 		"")
 
 	if err != nil {
