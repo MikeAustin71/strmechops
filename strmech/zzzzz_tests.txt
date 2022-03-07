@@ -2145,5 +2145,5 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
-coverage: 73.0% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.078s
+coverage: 72.6% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.184s

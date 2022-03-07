@@ -136,13 +136,19 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 
 	if indexId == 0 {
 
+		txtStdLine.textFields[0].Empty()
+
 		txtStdLine.textFields = txtStdLine.textFields[1:]
 
 	} else if indexId == lastIdx {
 
+		txtStdLine.textFields[lastIdx].Empty()
+
 		txtStdLine.textFields = txtStdLine.textFields[0:lastIdx]
 
 	} else {
+
+		txtStdLine.textFields[indexId].Empty()
 
 		txtStdLine.textFields = append(
 			txtStdLine.textFields[0:indexId],
@@ -452,7 +458,7 @@ func (txtStdLineElectron textLineSpecStandardLineElectron) ptr() *textLineSpecSt
 //
 //
 //  allowZeroLengthTextFieldsArray  bool
-//     - When set to 'true', no error will be be generated if the
+//     - When set to 'true', no error will be generated if the
 //       input parameter 'textFields' contains a zero length array.
 //
 //       Conversely, if 'allowZeroLengthTextFieldsArray' is set to
