@@ -303,6 +303,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 		err = txtStdLineAtom.
 		testValidityOfTextLineSpecStdLine(
 			incomingStdLine,
+			false, // allowZeroLengthTextFieldsArray
 			ePrefix.XCtx(
 				"incomingStdLine"))
 
@@ -451,6 +452,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 		err = txtStdLineAtom.
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
+			false, // allowZeroLengthTextFieldsArray
 			ePrefix.XCtx(
 				"txtStdLine"))
 
@@ -526,7 +528,9 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 //     - This index number designates the array element index in
 //       the Text Fields Collection of the 'txtStdLine' instance at
 //       which the Text Fields parameter, 'iTextField' will be
-//       inserted.
+//       inserted. This means that 'iTextField' will be inserted
+//       immediately BEFORE the array element specified by
+//       'indexId' in the final Text Fields Array.
 //
 //       If the value of 'indexId' is less than zero, it will be
 //       reset to zero. This means that the 'iTextField' object
@@ -534,7 +538,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 //       the Text Fields Collection maintained by parameter,
 //       'txtStdLine'.
 //
-//       If the value of 'indexId' is greater the the last array
+//       If the value of 'indexId' is greater the last array
 //       element index in the 'txtStdLine' Text Fields Collection,
 //       the 'iTextField' object will be appended to the end of
 //       that Text Fields Collection.
@@ -613,6 +617,18 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 		return lengthTextFields, err
 	}
 
+	_,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		testValidityOfTextLineSpecStdLine(
+			txtStdLine,
+			true, // allowZeroLengthTextFieldsArray
+			ePrefix.XCtx(
+				"txtStdLine"))
+
+	if err != nil {
+		return lengthTextFields, err
+	}
+
 	if iTextField == nil {
 		err = fmt.Errorf("%v - ERROR\n"+
 			"Input parameter 'iTextField' is 'nil'!\n",
@@ -641,89 +657,70 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 
 	lengthTextFields = len(txtStdLine.textFields)
 
-	foundIndexId := false
-
-	if lengthTextFields == 0 {
-
-		foundIndexId = true
+	if lengthTextFields == 0 ||
+		indexId > lengthTextFields {
 
 		txtStdLine.textFields = append(
 			txtStdLine.textFields,
 			newTextField)
-	}
-
-	_,
-		err = textLineSpecStandardLineAtom{}.ptr().
-		testValidityOfTextLineSpecStdLine(
-			txtStdLine,
-			ePrefix.XCtx(
-				"txtStdLine"))
-
-	if err != nil {
-		return lengthTextFields, err
-	}
-
-	if foundIndexId {
 
 		lengthTextFields++
 
 		return lengthTextFields, err
 	}
 
-	if indexId > lengthTextFields {
+	if indexId <= 0 {
 
-		indexId = lengthTextFields
-	}
+		txtStdLine.textFields = append(
+			[]ITextFieldSpecification{newTextField},
+			txtStdLine.textFields...)
 
-	newTextFieldsArray := make([]ITextFieldSpecification, 0)
+		lengthTextFields++
 
-	if indexId < 0 {
-		indexId = 0
+		return lengthTextFields, err
 	}
 
 	// arr := []int{1,2,3,4,5}
 	// arr[:2]         [1,2]
 	// arr[2:])        [3,4,5]
 
-	var oldTextField ITextFieldSpecification
+	newTextFieldsArray := make([]ITextFieldSpecification,
+		lengthTextFields+1)
+
+	j := 0
 
 	for i := 0; i < lengthTextFields; i++ {
 
-		oldTextField,
+		if i == indexId {
+			newTextFieldsArray[j] =
+				newTextField
+			j++
+		}
+
+		newTextFieldsArray[j],
 			err = txtStdLine.textFields[i].CopyOutITextField(
 			ePrefix.XCtx(fmt.Sprintf(
-				"txtStdLine.textFields[%v]->oldTextField",
-				i)))
+				"txtStdLine.textFields[%v]->newTextFieldsArray[%v]",
+				i,
+				j)))
 
 		if err != nil {
 			return lengthTextFields, err
 		}
 
-		if i == indexId {
+		// Should new field be appended
+		// to end of array?
+		if i == lengthTextFields-1 &&
+			j == i {
 
-			newTextFieldsArray = append(
-				newTextFieldsArray, newTextField)
-
-			foundIndexId = true
-
-			newTextFieldsArray = append(
-				newTextFieldsArray,
-				oldTextField)
-		} else {
-
-			newTextFieldsArray = append(
-				newTextFieldsArray, oldTextField)
+			newTextFieldsArray[j] =
+				newTextField
 
 		}
 
+		j++
+
 		txtStdLine.textFields[i].Empty()
-	}
-
-	if !foundIndexId {
-
-		newTextFieldsArray = append(
-			newTextFieldsArray, newTextField)
-
 	}
 
 	txtStdLine.textFields = nil
@@ -731,12 +728,6 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	txtStdLine.textFields = newTextFieldsArray
 
 	lengthTextFields++
-
-	//newDirMgrs = append(newDirMgrs, dMgrs.dirMgrs[index:]...)
-	//
-	//dMgrs.dirMgrs = append(dMgrs.dirMgrs[:index])
-	//dMgrs.dirMgrs = append(dMgrs.dirMgrs, dMgr.CopyOut())
-	//dMgrs.dirMgrs = append(dMgrs.dirMgrs, newDirMgrs...)
 
 	return lengthTextFields, err
 }
@@ -845,6 +836,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		textLineSpecStandardLineElectron{}.ptr().
 			testValidityOfTextFields(
 				&textFields,
+				false, // allowZeroLengthTextFieldsArray
 				ePrefix.XCtx("Input parameter textFields is invalid!"))
 
 	if err != nil {

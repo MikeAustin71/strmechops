@@ -451,6 +451,15 @@ func (txtStdLineElectron textLineSpecStandardLineElectron) ptr() *textLineSpecSt
 //       'nil' value, an error will be returned.
 //
 //
+//  allowZeroLengthTextFieldsArray  bool
+//     - When set to 'true', no error will be be generated if the
+//       input parameter 'textFields' contains a zero length array.
+//
+//       Conversely, if 'allowZeroLengthTextFieldsArray' is set to
+//       'false', an error WILL be returned if 'textFields' is a
+//       zero length array.
+//
+//
 //  errPrefDto          *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
@@ -491,6 +500,7 @@ func (txtStdLineElectron textLineSpecStandardLineElectron) ptr() *textLineSpecSt
 //
 func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFields(
 	textFields *[]ITextFieldSpecification,
+	allowZeroLengthTextFieldsArray bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	lengthTextFields int,
 	err error) {
@@ -558,7 +568,9 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFi
 		lengthTextFields++
 	}
 
-	if lengthTextFields == 0 {
+	if lengthTextFields == 0 &&
+		!allowZeroLengthTextFieldsArray {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textFields' is empty!\n"+
 			"'textFields' is a zero length array.\n",

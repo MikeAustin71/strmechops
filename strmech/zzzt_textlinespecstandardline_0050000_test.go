@@ -737,6 +737,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100(t *tes
 	_,
 		err := txtStdLineElectron.testValidityOfTextFields(
 		nil,
+		false, // allowZeroLengthTextFieldsArray
 		ePrefix.XCtx(
 			"txtFields is empty"))
 
@@ -790,6 +791,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *tes
 	_,
 		err = txtStdLineElectron.testValidityOfTextFields(
 		&textFields,
+		false, // allowZeroLengthTextFieldsArray
 		ePrefix.XCtx(
 			"textFields[1] = nil"))
 
@@ -821,6 +823,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *tes
 	_,
 		err = txtStdLineElectron.testValidityOfTextFields(
 		&textFields,
+		false, // allowZeroLengthTextFieldsArray
 		ePrefix.XCtx(
 			"txtFields[1] is invalid"))
 
@@ -876,6 +879,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000300(t *tes
 	actualTextFieldsLength,
 		err = txtStdLineElectron.testValidityOfTextFields(
 		&textFields,
+		false, // allowZeroLengthTextFieldsArray
 		ePrefix.XCtx(
 			"textFields[1] = nil"))
 

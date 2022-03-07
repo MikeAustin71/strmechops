@@ -286,6 +286,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		err = textLineSpecStandardLineAtom{}.ptr().
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
+			false, // allowZeroLengthTextFieldsArray
 			ePrefix.XCtx("txtStdLine"))
 
 	if err != nil {

@@ -151,6 +151,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		err = textLineSpecStandardLineElectron{}.ptr().
 		testValidityOfTextFields(
 			sourceTextFields,
+			false, // allowZeroLengthTextFieldArray
 			ePrefix.XCtx(
 				"testing validity of sourceTextFields"))
 
@@ -488,6 +489,16 @@ func (txtStdLineAtom textLineSpecStandardLineAtom) ptr() *textLineSpecStandardLi
 //       values.
 //
 //
+//  allowZeroLengthTextFieldsArray  bool
+//     - When set to 'true', no error will be generated if the
+//       input parameter 'txtStdLine.textFields' contains a zero
+//       length Text Fields array.
+//
+//       Conversely, if 'allowZeroLengthTextFieldsArray' is set to
+//       'false', an error WILL BE returned if
+//       'txtStdLine.textFields' is a zero length array.
+//
+//
 //  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
@@ -527,6 +538,7 @@ func (txtStdLineAtom textLineSpecStandardLineAtom) ptr() *textLineSpecStandardLi
 //
 func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecStdLine(
 	txtStdLine *TextLineSpecStandardLine,
+	allowZeroLengthTextFieldsArray bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
 	err error) {
@@ -603,6 +615,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 		err = textLineSpecStandardLineElectron{}.ptr().
 		testValidityOfTextFields(
 			&txtStdLine.textFields,
+			allowZeroLengthTextFieldsArray,
 			ePrefix.XCtx(
 				"txtStdLine.textFields validity check"))
 

@@ -2533,6 +2533,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 		err = textLineSpecStandardLineElectron{}.ptr().
 		testValidityOfTextFields(
 			&stdLine.textFields,
+			false, // allowZeroLengthTextFields
 			ePrefix.XCtx(
 				"stdLine.textFields"))
 
@@ -2779,6 +2780,7 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
 		_ = textLineSpecStandardLineAtom{}.ptr().
 		testValidityOfTextLineSpecStdLine(
 			stdLine,
+			false, // allowZeroLengthTextFieldsArray
 			nil)
 
 	return isValid
@@ -2880,7 +2882,8 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecStandardLine.IsValidInstanceError()",
+		"TextLineSpecStandardLine."+
+			"IsValidInstanceError()",
 		"")
 
 	if err != nil {
@@ -2891,6 +2894,7 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 		err = textLineSpecStandardLineAtom{}.ptr().
 		testValidityOfTextLineSpecStdLine(
 			stdLine,
+			false, // allowZeroLengthTextFieldsArray
 			ePrefix.XCtx("stdLine"))
 
 	return err
@@ -6464,6 +6468,7 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 		textLineSpecStandardLineElectron{}.ptr().
 			testValidityOfTextFields(
 				&textFields,
+				false, // allowZeroLengthTextFieldsArray
 				ePrefix.XCtx("Input parameter textFields is invalid!"))
 
 	if err != nil {
