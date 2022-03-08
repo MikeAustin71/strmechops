@@ -1984,7 +1984,11 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 		return
 	}
 
-	spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)
+	var spacerField *TextFieldSpecSpacer
+
+	var ok bool
+
+	spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 
 	if !ok {
 

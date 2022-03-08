@@ -2146,4 +2146,4 @@
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
 coverage: 72.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.184s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.266s
