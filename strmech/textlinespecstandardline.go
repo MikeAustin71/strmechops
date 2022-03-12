@@ -4680,6 +4680,55 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  When casting ITextFieldSpecification returned from this method,
+//  use the following syntax to cast the interface object to a
+//  concrete type.
+//
+//  It is necessary to cast the concrete object ('spacerField') as
+//  a pointer to the concrete type. This is because the concrete
+//  type uses methods with pointer receivers.
+//
+//  ------------------------------------------------------------
+//     var iTxtFieldSpec ITextFieldSpecification
+//
+//     iTxtFieldSpec,
+//     err = stdLine01.PeekAtTextFieldAtIndex(
+//           indexId,
+//           ePrefix.XCtx(
+//           "stdLine01"))
+//
+//     if err != nil {
+//       t.Errorf("\n%v\n",
+//       err.Error())
+//       return
+//     }
+//
+//     var spacerField *TextFieldSpecSpacer
+//
+//     var ok bool
+//
+//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//
+//     if !ok {
+//
+//       t.Errorf("%v - Error\n"+
+//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//       ePrefix.XCtxEmpty().String())
+//
+//       return
+//     }
+//
+//     // 'spacerField' is now available for use
+//     spacerLen := spacerField.GetFieldLength()
+//
+//
 func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 	indexId int,
 	errorPrefix interface{}) (
@@ -4822,6 +4871,54 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  When casting ITextFieldSpecification returned from this method,
+//  use the following syntax to cast the interface object to a
+//  concrete type.
+//
+//  It is necessary to cast the concrete object ('spacerField') as
+//  a pointer to the concrete type. This is because the concrete
+//  type uses methods with pointer receivers.
+//
+//  ------------------------------------------------------------
+//     var iTxtFieldSpec ITextFieldSpecification
+//
+//     iTxtFieldSpec,
+//     err = stdLine01.PopFirstTextField(
+//           ePrefix.XCtx(
+//           "stdLine01"))
+//
+//     if err != nil {
+//       t.Errorf("\n%v\n",
+//       err.Error())
+//       return
+//     }
+//
+//     var spacerField *TextFieldSpecSpacer
+//
+//     var ok bool
+//
+//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//
+//     if !ok {
+//
+//       t.Errorf("%v - Error\n"+
+//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//       ePrefix.XCtxEmpty().String())
+//
+//       return
+//     }
+//
+//     // 'spacerField' is now available for use
+//     spacerLen := spacerField.GetFieldLength()
+//
 //
 func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 	errorPrefix interface{}) (
@@ -4967,6 +5064,54 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  When casting ITextFieldSpecification returned from this method,
+//  use the following syntax to cast the interface object to a
+//  concrete type.
+//
+//  It is necessary to cast the concrete object ('spacerField') as
+//  a pointer to the concrete type. This is because the concrete
+//  type uses methods with pointer receivers.
+//
+//  ------------------------------------------------------------
+//     var iTxtFieldSpec ITextFieldSpecification
+//
+//     iTxtFieldSpec,
+//     err = stdLine01.PopLastTextField(
+//           ePrefix.XCtx(
+//           "stdLine01"))
+//
+//     if err != nil {
+//       t.Errorf("\n%v\n",
+//       err.Error())
+//       return
+//     }
+//
+//     var spacerField *TextFieldSpecSpacer
+//
+//     var ok bool
+//
+//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//
+//     if !ok {
+//
+//       t.Errorf("%v - Error\n"+
+//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//       ePrefix.XCtxEmpty().String())
+//
+//       return
+//     }
+//
+//     // 'spacerField' is now available for use
+//     spacerLen := spacerField.GetFieldLength()
+//
 //
 func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 	errorPrefix interface{}) (
@@ -5136,6 +5281,55 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  When casting ITextFieldSpecification returned from this method,
+//  use the following syntax to cast the interface object to a
+//  concrete type.
+//
+//  It is necessary to cast the concrete object ('spacerField') as
+//  a pointer to the concrete type. This is because the concrete
+//  type uses methods with pointer receivers.
+//
+//  ------------------------------------------------------------
+//     var iTxtFieldSpec ITextFieldSpecification
+//
+//     iTxtFieldSpec,
+//     err = stdLine01.PopTextFieldAtIndex(
+//           indexId,
+//           ePrefix.XCtx(
+//           "stdLine01"))
+//
+//     if err != nil {
+//       t.Errorf("\n%v\n",
+//       err.Error())
+//       return
+//     }
+//
+//     var spacerField *TextFieldSpecSpacer
+//
+//     var ok bool
+//
+//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//
+//     if !ok {
+//
+//       t.Errorf("%v - Error\n"+
+//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//       ePrefix.XCtxEmpty().String())
+//
+//       return
+//     }
+//
+//     // 'spacerField' is now available for use
+//     spacerLen := spacerField.GetFieldLength()
+//
 //
 func (stdLine *TextLineSpecStandardLine) PopTextFieldAtIndex(
 	indexId int,
