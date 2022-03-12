@@ -802,6 +802,231 @@ func TestTextLineSpecStandardLine_GetTurnLineTerminatorOff_000100(t *testing.T) 
 
 }
 
+func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelText := "Xray7 where are?"
+
+	var labelTxt TextFieldSpecLabel
+
+	labelTxt,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLastIndex :=
+		stdLine01.GetNumOfTextFields()
+
+	var lastIndexId int
+
+	lastIndexId,
+		err = stdLine01.InsertTextFieldAtIndex(
+		&labelTxt,
+		2,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedLastIndex != lastIndexId {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.InsertTextFieldAtIndex()\n"+
+			"Expected Last Index Id did NOT match\n"+
+			"Actual Last Index Id.\n"+
+			"Expected Last Index Id = '%v'\n"+
+			"  Actual Last Index Id = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLastIndex,
+			lastIndexId)
+
+		return
+	}
+
+	// var labelSpec TextFieldSpecSpacer
+	var iTxtFieldSpec ITextFieldSpecification
+
+	iTxtFieldSpec,
+		err = stdLine01.PeekAtTextFieldAtIndex(
+		2,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelField,
+		ok := iTxtFieldSpec.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = actualLabelField.IsValidInstanceError(
+		ePrefix.XCtx(
+			"labelField"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelText := actualLabelField.GetTextLabel()
+
+	if expectedLabelText != actualLabelText {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedLabelText==actualLabelText\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLabelText,
+			actualLabelText)
+
+		return
+	}
+
+	expectedLastIndex++
+
+	expectedTxtFieldLen := expectedLastIndex
+
+	actualTxtFieldLen :=
+		stdLine01.GetNumOfTextFields()
+
+	if expectedTxtFieldLen != actualTxtFieldLen {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedTxtFieldLen==actualTxtFieldLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedTxtFieldLen= '%v'\n"+
+			"  actualTxtFieldLen= '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedTxtFieldLen,
+			actualTxtFieldLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200()",
+		"")
+
+	expectedLabelText := "Xray7 where are?"
+
+	var labelTxt TextFieldSpecLabel
+
+	labelTxt,
+		err := TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		err = stdLine01.InsertTextFieldAtIndex(
+		&labelTxt,
+		2,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.InsertTextFieldAtIndex()\n"+
+			"because 'stdLine01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine02.InsertTextFieldAtIndex(
+		&labelTxt,
+		2,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine02.InsertTextFieldAtIndex()\n"+
+			"Expected an error return because\n"+
+			"'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLine_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
