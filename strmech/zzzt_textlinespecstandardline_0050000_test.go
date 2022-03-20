@@ -1787,6 +1787,163 @@ func TestTestTextLineSpecStandardLineNanobot_copyOut_000200(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLineNanobot_insertTextFieldAtIndex_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineNanobot_insertTextFieldAtIndex_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+	var iTxtFieldSpec ITextFieldSpecification
+
+	iTxtFieldSpec,
+		err = stdLine01.PeekAtTextFieldAtIndex(
+		2,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineNanobot := textLineSpecStandardLineNanobot{}
+
+	_,
+		err = txtStdLineNanobot.insertTextFieldAtIndex(
+		nil,
+		iTxtFieldSpec,
+		2,
+		ePrefix.XCtx(
+			"txtStdLine==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"txtStdLineNanobot.insertTextFieldAtIndex()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'txtStdLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	_,
+		err = txtStdLineNanobot.insertTextFieldAtIndex(
+		&stdLine01,
+		nil,
+		2,
+		ePrefix.XCtx(
+			"iTextField==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"txtStdLineNanobot.insertTextFieldAtIndex()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'iTextField' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var labelTxt TextFieldSpecLabel
+
+	labelTxt,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		"Xray7 where are?",
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	labelTxt.textLabel = nil
+
+	labelTxt.fieldLen = -542
+
+	_,
+		err = txtStdLineNanobot.insertTextFieldAtIndex(
+		&stdLine01,
+		&labelTxt,
+		2,
+		ePrefix.XCtx(
+			"labelTxt is invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"txtStdLineNanobot.insertTextFieldAtIndex()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'labelTxt' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	labelTxt,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		"Xray7 where are?",
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtStdLineNanobot.insertTextFieldAtIndex(
+		&stdLine01,
+		&labelTxt,
+		972,
+		ePrefix.XCtx(
+			"indexId is out of range"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtStdLineNanobot.insertTextFieldAtIndex(
+		&stdLine01,
+		&labelTxt,
+		-92,
+		ePrefix.XCtx(
+			"labelTxt is invalid"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
