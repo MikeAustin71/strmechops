@@ -724,6 +724,34 @@ func TestTextLineSpecStandardLine_Read_000500(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLine_Read_000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_Read_000600()",
+		"")
+
+	stdLine01 := TextLineSpecPlainText{}
+
+	p := make([]byte, 5)
+
+	_,
+		err :=
+		stdLine01.Read(p)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: stdLine01.Read(p)\n"+
+			"Expected an error return from Read operation.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLine_ReaderInitialize_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
