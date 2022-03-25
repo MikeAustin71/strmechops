@@ -1016,3 +1016,167 @@ func TestTextLineSpecStandardLine_ReaderInitialize_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_ReplaceTextField_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_ReplaceTextField_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelText := "Xray97 where are?"
+
+	var labelTxt TextFieldSpecLabel
+
+	labelTxt,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.ReplaceTextField(
+		&labelTxt,
+		1,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	// var labelTxt TextFieldSpecLabel
+	var iTxtFieldSpec ITextFieldSpecification
+
+	iTxtFieldSpec,
+		err = stdLine01.PeekAtTextFieldAtIndex(
+		1,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	labelField, ok := iTxtFieldSpec.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	err = labelField.IsValidInstanceError(
+		ePrefix.XCtx(
+			"labelField"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelText := labelField.GetTextLabel()
+
+	if expectedLabelText != actualLabelText {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedLabelText==actualLabelText\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedLabelText,
+			actualLabelText)
+
+		return
+	}
+
+	expectedNumTextFields := 3
+
+	actualNumTextFields :=
+		stdLine01.GetNumOfTextFields()
+
+	if expectedNumTextFields != actualNumTextFields {
+
+		t.Errorf("%v - Error\n"+
+			"Expected stdLine01 to contain %v text fields.\n"+
+			"Instead, stdLine01 contains %v text fields!\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedNumTextFields,
+			actualNumTextFields)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_ReplaceTextField_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_ReplaceTextField_000200()",
+		"")
+
+	labelTxt,
+		err := TextFieldSpecLabel{}.NewTextLabel(
+		"Xray97 where are?",
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	err =
+		stdLine01.ReplaceTextField(
+			&labelTxt,
+			-5,
+			ePrefix.XCtx(
+				"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.ReplaceTextField()\n"+
+			"because input parameter 'replaceAtIndex' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
