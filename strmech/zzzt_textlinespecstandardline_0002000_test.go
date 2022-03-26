@@ -730,7 +730,7 @@ func TestTextLineSpecStandardLine_Read_000600(t *testing.T) {
 		"TestTextLineSpecStandardLine_Read_000600()",
 		"")
 
-	stdLine01 := TextLineSpecPlainText{}
+	stdLine01 := TextLineSpecStandardLine{}
 
 	p := make([]byte, 5)
 
@@ -1142,6 +1142,61 @@ func TestTextLineSpecStandardLine_ReplaceTextField_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextLineSpecStandardLine_ReplaceTextField_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelText := "Xray97 where are?"
+
+	var labelTxt TextFieldSpecLabel
+
+	labelTxt,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.ReplaceTextField(
+		&labelTxt,
+		304,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine01.ReplaceTextField()\n"+
+			"because input parameter 'replaceAtIndex' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+}
+
+func TestTextLineSpecStandardLine_ReplaceTextField_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_ReplaceTextField_000300()",
 		"")
 
 	labelTxt,
