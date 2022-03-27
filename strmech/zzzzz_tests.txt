@@ -1227,13 +1227,13 @@
 === RUN   TestTextFieldSpecDateTime_GetFieldLength_000100
 --- PASS: TestTextFieldSpecDateTime_GetFieldLength_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_GetFormattedStrLength_000100
---- PASS: TestTextFieldSpecDateTime_GetFormattedStrLength_000100 (0.00s)
+--- PASS: TestTextFieldSpecDateTime_GetFormattedStrLength_000100 (0.01s)
 === RUN   TestTextFieldSpecDateTime_GetFormattedText_000100
 --- PASS: TestTextFieldSpecDateTime_GetFormattedText_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_GetTextJustification_000100
 --- PASS: TestTextFieldSpecDateTime_GetTextJustification_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_IsValidInstance_000100
---- PASS: TestTextFieldSpecDateTime_IsValidInstance_000100 (0.01s)
+--- PASS: TestTextFieldSpecDateTime_IsValidInstance_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_IsValidInstanceError_000100
 --- PASS: TestTextFieldSpecDateTime_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTime_NewDateTimeField_000100
@@ -1285,7 +1285,7 @@
 === RUN   TestTextFieldSpecDateTimeNanobot_copyIn_000100
 --- PASS: TestTextFieldSpecDateTimeNanobot_copyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTimeNanobot_copyOut_000100
---- PASS: TestTextFieldSpecDateTimeNanobot_copyOut_000100 (0.00s)
+--- PASS: TestTextFieldSpecDateTimeNanobot_copyOut_000100 (0.01s)
 === RUN   TestTextFieldSpecDateTimeNanobot_getFormattedText_000100
 --- PASS: TestTextFieldSpecDateTimeNanobot_getFormattedText_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTimeNanobot_getFormattedText_000200
@@ -1299,7 +1299,7 @@
 === RUN   TestTextFieldSpecDateTimeEdge_CopyOutITextField_000100
 --- PASS: TestTextFieldSpecDateTimeEdge_CopyOutITextField_000100 (0.00s)
 === RUN   TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100
---- PASS: TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100 (0.01s)
+--- PASS: TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyIn_000100
 --- PASS: TestTextFieldSpecFiller_CopyIn_000100 (0.00s)
 === RUN   TestTextFieldSpecFiller_CopyIn_000200
@@ -1411,7 +1411,7 @@
 === RUN   TestTextFieldSpecFiller_SetTextFillerRune_000300
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRune_000300 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000100
---- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000100 (0.00s)
+--- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000100 (0.01s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000200
 --- PASS: TestTextFieldSpecFiller_SetTextFillerRuneArray_000200 (0.00s)
 === RUN   TestTextFieldSpecFiller_SetTextFillerRuneArray_000300
@@ -1521,7 +1521,7 @@
 === RUN   TestTextFieldSpecLabel_SetText_000200
 --- PASS: TestTextFieldSpecLabel_SetText_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextJustification_000100
---- PASS: TestTextFieldSpecLabel_SetTextJustification_000100 (0.00s)
+--- PASS: TestTextFieldSpecLabel_SetTextJustification_000100 (0.01s)
 === RUN   TestTextFieldSpecLabel_SetTextJustification_000200
 --- PASS: TestTextFieldSpecLabel_SetTextJustification_000200 (0.00s)
 === RUN   TestTextFieldSpecLabel_SetTextLabel_000100
@@ -1671,7 +1671,7 @@
 === RUN   TestTextLineSpecBlankLines_GetNewLineChars_000100
 --- PASS: TestTextLineSpecBlankLines_GetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_GetNewLineRunes_000100
---- PASS: TestTextLineSpecBlankLines_GetNewLineRunes_000100 (0.00s)
+--- PASS: TestTextLineSpecBlankLines_GetNewLineRunes_000100 (0.01s)
 === RUN   TestTextLineSpecBlankLines_GetNumberOfBlankLines_000100
 --- PASS: TestTextLineSpecBlankLines_GetNumberOfBlankLines_000100 (0.00s)
 === RUN   TestTextLineSpecBlankLines_IsValidInstance_000100
@@ -1803,7 +1803,7 @@
 === RUN   TestTextLineSpecPlainText_ReaderInitialize_000100
 --- PASS: TestTextLineSpecPlainText_ReaderInitialize_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_SetLeftMarginChars_000100
---- PASS: TestTextLineSpecPlainText_SetLeftMarginChars_000100 (0.00s)
+--- PASS: TestTextLineSpecPlainText_SetLeftMarginChars_000100 (0.01s)
 === RUN   TestTextLineSpecPlainText_SetLeftMarginRunes_000100
 --- PASS: TestTextLineSpecPlainText_SetLeftMarginRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_SetLineTerminationChars_000100
@@ -1823,7 +1823,7 @@
 === RUN   TestTextLineSpecPlainText_SetTextRunes_000100
 --- PASS: TestTextLineSpecPlainText_SetTextRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_SetTextString_000100
---- PASS: TestTextLineSpecPlainText_SetTextString_000100 (0.00s)
+--- PASS: TestTextLineSpecPlainText_SetTextString_000100 (0.01s)
 === RUN   TestTextLineSpecPlainText_String_000100
 --- PASS: TestTextLineSpecPlainText_String_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_TextBuilder_000100
@@ -1861,7 +1861,7 @@
 === RUN   TestTextLineSpecPlainText_getFormattedText_000100
 --- PASS: TestTextLineSpecPlainText_getFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecRunes_000100
---- PASS: TestTextLineSpecPlainText_setPlainTextSpecRunes_000100 (0.00s)
+--- PASS: TestTextLineSpecPlainText_setPlainTextSpecRunes_000100 (0.01s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecRunes_000200
 --- PASS: TestTextLineSpecPlainText_setPlainTextSpecRunes_000200 (0.00s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecStrings_000100
@@ -1877,7 +1877,7 @@
 === RUN   TestTextLineSpecSolidLine_Empty_000100
 --- PASS: TestTextLineSpecSolidLine_Empty_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_Equal_000100
---- PASS: TestTextLineSpecSolidLine_Equal_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_Equal_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_EqualITextLine_000100
 --- PASS: TestTextLineSpecSolidLine_EqualITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_GetLeftMarginLength_000100
@@ -1941,7 +1941,7 @@
 === RUN   TestTextLineSpecSolidLine_SetLeftMargin_000100
 --- PASS: TestTextLineSpecSolidLine_SetLeftMargin_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetNewLineChars_000100
---- PASS: TestTextLineSpecSolidLine_SetNewLineChars_000100 (0.01s)
+--- PASS: TestTextLineSpecSolidLine_SetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetNewLineRunes_000100
 --- PASS: TestTextLineSpecSolidLine_SetNewLineRunes_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineAllParms_000100
@@ -1955,7 +1955,7 @@
 === RUN   TestTextLineSpecSolidLine_SetSolidLineStrChars_000100
 --- PASS: TestTextLineSpecSolidLine_SetSolidLineStrChars_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100
---- PASS: TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_String_000100
 --- PASS: TestTextLineSpecSolidLine_String_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_TextBuilder_000100
@@ -1979,7 +1979,7 @@
 === RUN   TestTextLineSpecSolidLine_equal_000100
 --- PASS: TestTextLineSpecSolidLine_equal_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_getFormattedText_000100
---- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.01s)
+--- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000100
@@ -1997,13 +1997,13 @@
 === RUN   TestTextLineSpecStandardLine_AddTextField_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000100
---- PASS: TestTextLineSpecStandardLine_AddTextFields_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_AddTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000200
 --- PASS: TestTextLineSpecStandardLine_AddTextFields_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldDateTime_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextFieldDateTime_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldFiller_000100
---- PASS: TestTextLineSpecStandardLine_AddTextFieldFiller_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_AddTextFieldFiller_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldLabel_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextFieldLabel_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldLabel_000200
@@ -2017,7 +2017,7 @@
 === RUN   TestTextLineSpecStandardLine_CopyOutITextLine_000100
 --- PASS: TestTextLineSpecStandardLine_CopyOutITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyOutPtr_000100
---- PASS: TestTextLineSpecStandardLine_CopyOutPtr_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_DeleteAtIndex_000100
 --- PASS: TestTextLineSpecStandardLine_DeleteAtIndex_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_DeleteAtIndex_000200
@@ -2025,7 +2025,7 @@
 === RUN   TestTextLineSpecStandardLine_Empty_000100
 --- PASS: TestTextLineSpecStandardLine_Empty_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_EmptyTextFields_000100
---- PASS: TestTextLineSpecStandardLine_EmptyTextFields_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_EmptyTextFields_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_Equal_000100
 --- PASS: TestTextLineSpecStandardLine_Equal_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Equal_000200
@@ -2037,13 +2037,13 @@
 === RUN   TestTextLineSpecStandardLine_Equal_000500
 --- PASS: TestTextLineSpecStandardLine_Equal_000500 (0.00s)
 === RUN   TestTextLineSpecStandardLine_EqualITextLine_000100
---- PASS: TestTextLineSpecStandardLine_EqualITextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_EqualITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_EqualITextLine_000200
 --- PASS: TestTextLineSpecStandardLine_EqualITextLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetFormattedText_000100
 --- PASS: TestTextLineSpecStandardLine_GetFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetFormattedText_000200
---- PASS: TestTextLineSpecStandardLine_GetFormattedText_000200 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_GetFormattedText_000200 (0.01s)
 === RUN   TestTextLineSpecStandardLine_GetNewLineChars_000100
 --- PASS: TestTextLineSpecStandardLine_GetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetNewLineRunes_000100
@@ -2061,11 +2061,11 @@
 === RUN   TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200
 --- PASS: TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstance_000100
---- PASS: TestTextLineSpecStandardLine_IsValidInstance_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstanceError_000100
 --- PASS: TestTextLineSpecStandardLine_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLine_000100
---- PASS: TestTextLineSpecStandardLine_NewStandardLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewStandardLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLine_000200
 --- PASS: TestTextLineSpecStandardLine_NewStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000100
@@ -2105,9 +2105,9 @@
 === RUN   TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200
 --- PASS: TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000100
---- PASS: TestTextLineSpecStandardLine_Read_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_Read_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_Read_000200
---- PASS: TestTextLineSpecStandardLine_Read_000200 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_Read_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000300
 --- PASS: TestTextLineSpecStandardLine_Read_000300 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000400
@@ -2118,12 +2118,16 @@
 --- PASS: TestTextLineSpecStandardLine_Read_000600 (0.00s)
 === RUN   TestTextLineSpecStandardLine_ReaderInitialize_000100
 --- PASS: TestTextLineSpecStandardLine_ReaderInitialize_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_ReaderInitialize_000200
+--- PASS: TestTextLineSpecStandardLine_ReaderInitialize_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_ReplaceTextField_000100
---- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_ReplaceTextField_000200
---- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000200 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_ReplaceTextField_000300
 --- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000300 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_SetNumOfStdLines_000100
+--- PASS: TestTextLineSpecStandardLine_SetNumOfStdLines_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
@@ -2135,11 +2139,11 @@
 === RUN   TestTextLineSpecStandardLineElectron_deleteTextField_000100
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_deleteTextField_000200
---- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.00s)
+--- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.01s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100
 --- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200
---- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200 (0.01s)
+--- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000300
 --- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000300 (0.00s)
 === RUN   TestTextLineSpecStandardLineMolecule_emptyStandardLine_000100
@@ -2159,11 +2163,11 @@
 === RUN   TestTextLineSpecStandardLineNanobot_copyIn_000100
 --- PASS: TestTextLineSpecStandardLineNanobot_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineNanobot_copyIn_000200
---- PASS: TestTextLineSpecStandardLineNanobot_copyIn_000200 (0.00s)
+--- PASS: TestTextLineSpecStandardLineNanobot_copyIn_000200 (0.01s)
 === RUN   TestTestTextLineSpecStandardLineNanobot_copyOut_000100
 --- PASS: TestTestTextLineSpecStandardLineNanobot_copyOut_000100 (0.00s)
 === RUN   TestTestTextLineSpecStandardLineNanobot_copyOut_000200
---- PASS: TestTestTextLineSpecStandardLineNanobot_copyOut_000200 (0.01s)
+--- PASS: TestTestTextLineSpecStandardLineNanobot_copyOut_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineNanobot_insertTextFieldAtIndex_000100
 --- PASS: TestTextLineSpecStandardLineNanobot_insertTextFieldAtIndex_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100
@@ -2172,4 +2176,4 @@
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
 coverage: 73.6% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.243s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.092s

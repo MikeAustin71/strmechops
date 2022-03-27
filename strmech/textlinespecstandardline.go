@@ -5789,6 +5789,8 @@ func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
 			"replaceAtIndex = '%v'\n",
 			ePrefix.String(),
 			replaceAtIndex)
+
+		return err
 	}
 
 	lastIdx := lenOfTextFieldsCol - 1

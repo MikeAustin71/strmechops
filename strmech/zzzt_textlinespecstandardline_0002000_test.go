@@ -1017,6 +1017,15 @@ func TestTextLineSpecStandardLine_ReaderInitialize_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLine_ReaderInitialize_000200(t *testing.T) {
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	stdLine01.ReaderInitialize()
+
+	return
+}
+
 func TestTextLineSpecStandardLine_ReplaceTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1213,7 +1222,18 @@ func TestTextLineSpecStandardLine_ReplaceTextField_000300(t *testing.T) {
 		return
 	}
 
-	stdLine01 := TextLineSpecStandardLine{}
+	var stdLine01 TextLineSpecStandardLine
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	err =
 		stdLine01.ReplaceTextField(
@@ -1234,4 +1254,12 @@ func TestTextLineSpecStandardLine_ReplaceTextField_000300(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecStandardLine_SetNumOfStdLines_000100(t *testing.T) {
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	stdLine01.SetNumOfStdLines(-5)
+
 }
