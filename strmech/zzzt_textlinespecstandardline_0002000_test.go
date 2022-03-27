@@ -1256,6 +1256,105 @@ func TestTextLineSpecStandardLine_ReplaceTextField_000300(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLine_ReplaceTextField_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_ReplaceTextField_000400()",
+		"")
+
+	labelTxt,
+		err := TextFieldSpecLabel{}.NewTextLabel(
+		"Xray97 where are?",
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	err =
+		stdLine01.ReplaceTextField(
+			&labelTxt,
+			-5,
+			ePrefix.XCtx(
+				"stdLine01"))
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02.textFields = nil
+
+	err =
+		stdLine02.ReplaceTextField(
+			&labelTxt,
+			2,
+			ePrefix.XCtx(
+				"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine02.ReplaceTextField()\n"+
+			"because input parameter 'stdLine02.textFields == nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	labelTxt.textLabel = nil
+	labelTxt.fieldLen = -99
+
+	err =
+		stdLine03.ReplaceTextField(
+			&labelTxt,
+			2,
+			ePrefix.XCtx(
+				"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine03.ReplaceTextField()\n"+
+			"because input parameter 'labelTxt' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLine_SetNumOfStdLines_000100(t *testing.T) {
 
 	stdLine01 := TextLineSpecStandardLine{}
