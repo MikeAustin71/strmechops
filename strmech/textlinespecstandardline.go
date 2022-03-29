@@ -6194,6 +6194,9 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 // SetStandardLine - Reconfigures the current instance of
 // TextLineSpecStandardLine with new data values.
 //
+// If 'newLineChars' is currently empty, it will be defaulted to a
+// value of '\n'.
+//
 // ----------------------------------------------------------------
 //
 // IMPORTANT
