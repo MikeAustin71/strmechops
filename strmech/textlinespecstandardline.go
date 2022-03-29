@@ -6446,6 +6446,10 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 // allowing the caller to control and configure all member variables
 // for the current instance of TextLineSpecStandardLine.
 //
+// If input parameter 'newLineChars' is empty or 'nil', this method
+// will default the 'newLineChars' value to a single new line
+// character ('\n').
+//
 // ----------------------------------------------------------------
 //
 // IMPORTANT

@@ -1645,7 +1645,7 @@ func TestTextLineSpecStandardLine_SetStandardLine_000100(t *testing.T) {
 	var stdLine03 TextLineSpecStandardLine
 
 	stdLine03,
-		err = createTestTextLineSpecStandardLine01(
+		err = createTestTextLineSpecStandardLine02(
 		ePrefix.XCtx(
 			"stdLine03"))
 
@@ -1726,6 +1726,211 @@ func TestTextLineSpecStandardLine_SetStandardLine_000100(t *testing.T) {
 
 		t.Errorf("%v - Error\n"+
 			"Expected an error return from stdLine05.SetNewLineRunes()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_SetStandardLineAllParms_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_SetStandardLineAllParms_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields []ITextFieldSpecification
+
+	textFields,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newLineRunes := []rune{'\n'}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	err = stdLine02.SetStandardLineAllParms(
+		1,
+		textFields,
+		newLineRunes,
+		false,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine03.SetStandardLineAllParms(
+		-1,
+		textFields,
+		newLineRunes,
+		false,
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine02.SetStandardLineAllParms()\n"+
+			"because input parameter 'numOfStdLines' is '-2' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine04 TextLineSpecStandardLine
+
+	stdLine04,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine04.SetStandardLineAllParms(
+		1,
+		nil,
+		newLineRunes,
+		false,
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine04.SetStandardLineAllParms()\n"+
+			"because input parameter 'textFields' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine05 TextLineSpecStandardLine
+
+	stdLine05,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine05.SetStandardLineAllParms(
+		1,
+		textFields,
+		[]rune{0, 'x', 0, 'y', 0, 'z', 0, '\n'},
+		false,
+		ePrefix.XCtx(
+			"stdLine05"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine05.SetStandardLineAllParms()\n"+
+			"because input parameter 'newLineChars' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine06 TextLineSpecStandardLine
+
+	stdLine06,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine06.SetStandardLineAllParms(
+		1,
+		textFields,
+		nil,
+		false,
+		ePrefix.XCtx(
+			"stdLine06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine07 TextLineSpecStandardLine
+
+	stdLine07,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine07.SetStandardLineAllParms(
+		1,
+		textFields,
+		newLineRunes,
+		false,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine07.SetNewLineRunes()\n"+
 			"because input parameter 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
