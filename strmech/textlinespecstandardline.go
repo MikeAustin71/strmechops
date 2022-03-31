@@ -6405,7 +6405,8 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&newLineChars,
-					ePrefix)
+					ePrefix.XCtx(
+						"stdLine.newLineChars = default"))
 
 		if err != nil {
 			return err
@@ -6665,8 +6666,44 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 // SetTextFields - Replaces the existing array of text fields for
 // the current TextLineSpecStandardLine instance.
 //
-// If input parameter 'textFields' is nil or zero length, the internal
-// array of text fields will be emptied and set to nil.
+// If input parameter 'textFields' is nil or zero length, the
+// internal array of text fields will be emptied and set to nil.
+//
+// If the values of internal member variables 'numOfStdLines' and
+// 'newLineChars' are found to be invalid, they will be set to
+// default values. See the section on 'Default Values' below.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Default Values
+//
+// Under specified conditions, this method will automatically set
+// the following default values:
+//
+//  numOfStdLines              int
+//     - If the value of "Number of Standard Lines" for the current
+//       instance of TextLineSpecStandardLine is less than one
+//       ('1'), it will be defaulted to a value of one ('1'),
+//
+//       To override, change or control the behavior of
+//       'newLineChars', see the following method:
+//         TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//
+//  newLineChars               []rune{'\n'}
+//     - If the value of New Line Characters (newLineChars) for the
+//       current instance of TextLineSpecStandardLine is empty or
+//       has a zero length, it will be defaulted to the value
+//       of a single new line characters ('\n').
+//
+//       To override, change or control the behavior of
+//       'newLineChars', see the following methods:
+//         TextLineSpecStandardLine.GetNewLineRunes()
+//         TextLineSpecStandardLine.SetNewLineChars()
+//         TextLineSpecStandardLine.SetNewLineRunes()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 //
 // ------------------------------------------------------------------------
@@ -6776,9 +6813,26 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 		return err
 	}
 
-	lenTextFields := len(textFields)
+	if stdLine.numOfStdLines < 1 {
+		stdLine.numOfStdLines = 1
+	}
 
-	if lenTextFields == 0 {
+	if len(stdLine.newLineChars) == 0 {
+
+		err =
+			textSpecificationMolecule{}.ptr().
+				setDefaultNewLineChars(
+					&stdLine.newLineChars,
+					ePrefix.XCtx(
+						"stdLine.newLineChars = default"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if len(textFields) == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'textFields' is an empty array!\n",
 			ePrefix.String())
