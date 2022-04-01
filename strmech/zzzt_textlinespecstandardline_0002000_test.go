@@ -2078,12 +2078,14 @@ func TestTextLineSpecStandardLine_SetTextFields_000100(t *testing.T) {
 
 		t.Errorf("%v - Error\n"+
 			"Expected an error return from stdLine04.SetTextFields()\n"+
-			"because input parameter 'textFields' is invalid.\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.XCtxEmpty().String())
 
 		return
 	}
+
+	return
 }
 
 func TestTextLineSpecStandardLine_String_000100(t *testing.T) {
@@ -2135,6 +2137,138 @@ func TestTextLineSpecStandardLine_String_000100(t *testing.T) {
 			ePrefix.XCtxEmpty().String(),
 			printableExpectedStr,
 			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_TextBuilder_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	sb0 := strings.Builder{}
+
+	_ = stdLine01.TextBuilder(
+		&sb0,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	expectedString := "        How Now Brown Cow!       " +
+		"\n"
+
+	stdLine02,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedString),
+			true)
+
+	sb := strings.Builder{}
+
+	err = stdLine02.TextBuilder(
+		&sb,
+		ePrefix.XCtx(
+			""))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine03.TextBuilder(
+		nil,
+		ePrefix.XCtx(
+			"stdLine03 - sb is nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2"+
+			"Expected an error return from stdLine03.TextBuilder()\n"+
+			"because input parameter 'sBuilder' is 'nil' an invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	var stdLine04 TextLineSpecStandardLine
+
+	sb2 := strings.Builder{}
+
+	stdLine04,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine04.TextBuilder(
+		&sb2,
+		textLineSpecStandardLineElectron{})
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"Expected an error return from stdLine04.TextBuilder()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
 
 		return
 	}
