@@ -2303,4 +2303,35 @@ func TestTextLineSpecStandardLine_TextTypeName_000100(t *testing.T) {
 		return
 	}
 
+	return
+}
+
+func TestTextLineSpecStandardLine_TextLineSpecName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_TextLineSpecName_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	expectedStr := "TextLineSpecStandardLine"
+
+	actualStr := stdLine01.TextLineSpecName()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected string does NOT match \n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	return
 }
