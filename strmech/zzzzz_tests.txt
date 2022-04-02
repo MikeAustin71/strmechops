@@ -1979,7 +1979,7 @@
 === RUN   TestTextLineSpecSolidLine_equal_000100
 --- PASS: TestTextLineSpecSolidLine_equal_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_getFormattedText_000100
---- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000100
@@ -2150,6 +2150,8 @@
 --- PASS: TestTextLineSpecStandardLine_TextLineSpecName_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_TurnAutoLineTerminationOff_000100
 --- PASS: TestTextLineSpecStandardLine_TurnAutoLineTerminationOff_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLine_TurnAutoLineTerminationOn_000100
+--- PASS: TestTextLineSpecStandardLine_TurnAutoLineTerminationOn_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
@@ -2198,4 +2200,4 @@
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
 coverage: 74.5% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.371s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.252s

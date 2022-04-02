@@ -2345,7 +2345,7 @@ func TestTextLineSpecStandardLine_TurnAutoLineTerminationOff_000100(t *testing.T
 	stdLine01,
 		err := createTestTextLineSpecStandardLine01(
 		ePrefix.XCtx(
-			"stdLine02"))
+			"stdLine01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -2398,6 +2398,83 @@ func TestTextLineSpecStandardLine_TurnAutoLineTerminationOff_000100(t *testing.T
 
 		return
 	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	stdLine02.TurnAutoLineTerminationOff()
+
+	return
+}
+
+func TestTextLineSpecStandardLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_TurnAutoLineTerminationOn_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedString := "        How Now Brown Cow!       " +
+		"\n"
+
+	stdLine01.turnLineTerminatorOff = true
+
+	stdLine01.TurnAutoLineTerminationOn()
+
+	lineTerminatorStatus := stdLine01.GetTurnLineTerminatorOff()
+
+	if lineTerminatorStatus == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected lineTerminatorStatus == 'false'\n"+
+			"HOWEVER, 'lineTerminatorStatus' == 'true' \n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedString),
+			true)
+
+	actualString := stdLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualString),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	stdLine02.TurnAutoLineTerminationOn()
 
 	return
 }
