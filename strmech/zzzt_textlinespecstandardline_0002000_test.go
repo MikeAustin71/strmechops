@@ -2335,3 +2335,69 @@ func TestTextLineSpecStandardLine_TextLineSpecName_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecStandardLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_TurnAutoLineTerminationOff_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedString := "        How Now Brown Cow!       "
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedString),
+			true)
+
+	stdLine01.TurnAutoLineTerminationOff()
+
+	lineTerminatorStatus := stdLine01.GetTurnLineTerminatorOff()
+
+	if lineTerminatorStatus == false {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #1"+
+			"Expected lineTerminatorStatus == 'true'\n"+
+			"HOWEVER, 'lineTerminatorStatus' == 'false' \n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	actualString := stdLine01.String()
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualString),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"Test #2"+
+			"Expected Formatted Text String DOES NOT match\n"+
+			"Actual Formatted Text String.\n"+
+			"Expected Formatted Text String = '%v'\n"+
+			"Instead, Formatted Text String = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
