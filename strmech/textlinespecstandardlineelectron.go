@@ -355,6 +355,12 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) equalTextFieldArrays
 
 	txtF02 := *textFields02
 
+	if txtF01 == nil &&
+		txtF02 == nil {
+
+		return true
+	}
+
 	lenTxtFields01 := len(txtF01)
 
 	if lenTxtFields01 != len(txtF02) {
@@ -377,8 +383,8 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) equalTextFieldArrays
 
 			return false
 
-		} else if txtF01 == nil &&
-			txtF02 == nil {
+		} else if txtF02[i] == nil &&
+			txtF01[i] == nil {
 
 			continue
 

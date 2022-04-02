@@ -726,6 +726,436 @@ func TestTextLineSpecStandardLineElectron_deleteTextField_000200(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLineElectron_emptyTextFields_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_emptyTextFields_000100()",
+		"")
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	var nilPtr *[]ITextFieldSpecification
+
+	_ = txtStdLineElectron.emptyTextFields(
+		nilPtr,
+		ePrefix.XCtx(
+			""))
+
+}
+
+func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100()",
+		"")
+
+	txtStdLineElectron := textLineSpecStandardLineElectron{}
+
+	var nilPtr01, nilPtr02 []ITextFieldSpecification
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			&nilPtr01,
+			&nilPtr02)
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textFields01, textFields02 []ITextFieldSpecification
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields02<-stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02[2] = nil
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	textFields01[2] = nil
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCtx(
+			"stdLine02 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine02 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	textFields01 = nil
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			nil,
+			&textFields02)
+
+	textFields02 = nil
+
+	_ =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01 #3"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine02 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields02<-stdLine02 #3"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newLabelText := "Xray97 where are?"
+
+	var labelTxt TextFieldSpecLabel
+
+	labelTxt,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		newLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCtx(
+			"labelTxt"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine02.ReplaceTextField(
+		&labelTxt,
+		1,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine02 #4"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	compareResult :=
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if compareResult == true {
+
+		t.Errorf("%v - Error\n"+
+			"Test #1 \n"+
+			"compareResult = txtStdLineElectron.equalTextFieldArrays()\n "+
+			"Expected compareResult = false\n"+
+			"HOWEVER, compareResult = true!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	textFields01 = make([]ITextFieldSpecification, 0)
+
+	compareResult =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if compareResult == true {
+
+		t.Errorf("%v - Error\n"+
+			"Test #2 \n"+
+			"compareResult = txtStdLineElectron.equalTextFieldArrays()\n "+
+			"Expected compareResult = false\n"+
+			"HOWEVER, compareResult = true!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01 #4"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02 = make([]ITextFieldSpecification, 0)
+
+	compareResult =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if compareResult == true {
+
+		t.Errorf("%v - Error\n"+
+			"Test #3 \n"+
+			"compareResult = txtStdLineElectron.equalTextFieldArrays()\n "+
+			"Expected compareResult = false\n"+
+			"HOWEVER, compareResult = true!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields01 = make([]ITextFieldSpecification, 0)
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine02 #4"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	compareResult =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if compareResult == true {
+
+		t.Errorf("%v - Error\n"+
+			"Test #4 \n"+
+			"compareResult = txtStdLineElectron.equalTextFieldArrays()\n "+
+			"Expected compareResult = false\n"+
+			"HOWEVER, compareResult = true!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	textFields02 = make([]ITextFieldSpecification, 0)
+
+	compareResult =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if compareResult == false {
+
+		t.Errorf("%v - Error\n"+
+			"Test #5 \n"+
+			"compareResult = txtStdLineElectron.equalTextFieldArrays()\n "+
+			"Expected compareResult = true\n"+
+			"HOWEVER, compareResult = false!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01 #5"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields01,
+		err = stdLine01.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine01 #5"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine02 #5"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields02,
+		err = stdLine02.GetTextFields(
+		ePrefix.XCtx(
+			"textFields01<-stdLine02 #5"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	textFields01[1] = nil
+
+	compareResult =
+		txtStdLineElectron.equalTextFieldArrays(
+			&textFields01,
+			&textFields02)
+
+	if compareResult == true {
+
+		t.Errorf("%v - Error\n"+
+			"Test #6 \n"+
+			"compareResult = txtStdLineElectron.equalTextFieldArrays()\n "+
+			"Expected compareResult = false\n"+
+			"HOWEVER, compareResult = true!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

@@ -1979,7 +1979,7 @@
 === RUN   TestTextLineSpecSolidLine_equal_000100
 --- PASS: TestTextLineSpecSolidLine_equal_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_getFormattedText_000100
---- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.01s)
+--- PASS: TestTextLineSpecSolidLine_getFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000100
@@ -2137,7 +2137,7 @@
 === RUN   TestTextLineSpecStandardLine_SetStandardLine_000100
 --- PASS: TestTextLineSpecStandardLine_SetStandardLine_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_SetStandardLineAllParms_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_SetStandardLineAllParms_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetTextFields_000100
 --- PASS: TestTextLineSpecStandardLine_SetTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_String_000100
@@ -2164,6 +2164,10 @@
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_deleteTextField_000200
 --- PASS: TestTextLineSpecStandardLineElectron_deleteTextField_000200 (0.00s)
+=== RUN   TestTextLineSpecStandardLineElectron_emptyTextFields_000100
+--- PASS: TestTextLineSpecStandardLineElectron_emptyTextFields_000100 (0.00s)
+=== RUN   TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100
+--- PASS: TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100
 --- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200
@@ -2199,5 +2203,5 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 PASS
-coverage: 74.5% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.252s
+coverage: 74.6% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.223s
