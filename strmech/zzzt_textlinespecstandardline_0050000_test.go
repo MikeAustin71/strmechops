@@ -514,6 +514,70 @@ func TestTextLineSpecStandardLineAtom_peekPopTextField_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLineAtom_testValidityOfTextLineSpecStdLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineAtom_testValidityOfTextLineSpecStdLine_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtStdLineAtom := textLineSpecStandardLineAtom{}
+
+	_,
+		_ = txtStdLineAtom.testValidityOfTextLineSpecStdLine(
+		&stdLine01,
+		true,
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	var isValid bool
+
+	var stdLine02 *TextLineSpecStandardLine
+
+	isValid,
+		err = txtStdLineAtom.testValidityOfTextLineSpecStdLine(
+		stdLine02,
+		true,
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if isValid {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"isValid = stdLine02.testValidityOfTextLineSpecStdLine()\n"+
+			"Expected 'isValid' equal 'false' \n"+
+			"because input parameter 'txtStdLine' is 'nil'.\n"+
+			"HOWEVER, 'isValid' == true !\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine02.testValidityOfTextLineSpecStdLine()\n"+
+			"because input parameter 'txtStdLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLineElectron_deleteTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
