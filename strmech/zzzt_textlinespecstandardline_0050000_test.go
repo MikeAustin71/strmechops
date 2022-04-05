@@ -1615,7 +1615,7 @@ func TestTextLineSpecStandardLineMolecule_equal_000100(t *testing.T) {
 func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTESTSERIES_FUNCNAME_000100()",
+		"TestTextLineSpecStandardLineMolecule_getFormattedText_000100()",
 		"")
 
 	stdLineMolecule := textLineSpecStandardLineMolecule{}
@@ -1672,6 +1672,84 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) 
 
 	}
 
+	return
+}
+
+func TestTextLineSpecStandardLineMolecule_getFormattedText_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLineMolecule_getFormattedText_000200()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLineMolecule := textLineSpecStandardLineMolecule{}
+
+	stdLine01.textFields = nil
+
+	_,
+		err = stdLineMolecule.getFormattedText(
+		&stdLine01,
+		ePrefix.XCtx(
+			"stdLine01 is invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLineMolecule.getFormattedText()\n"+
+			"Expected an error return because parameter\n"+
+			"stdLine01.textFields = nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCtx(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine02.textFields[1] = nil
+
+	_,
+		err = stdLineMolecule.getFormattedText(
+		&stdLine01,
+		ePrefix.XCtx(
+			"stdLine02 is invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v\n"+
+			"Error: stdLineMolecule.getFormattedText()\n"+
+			"Expected an error return because parameter\n"+
+			"stdLine02.textFields[1] = nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+
+	}
+
+	return
 }
 
 func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) {
