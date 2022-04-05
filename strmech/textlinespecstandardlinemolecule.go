@@ -289,20 +289,13 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 			false, // allowZeroLengthTextFieldsArray
 			ePrefix.XCtx("txtStdLine"))
 
+	// If Text Fields Array Length has a zero length,
+	// an error is returned.
 	if err != nil {
 		return formattedText, err
 	}
 
 	lenTextFields := len(txtStdLine.textFields)
-
-	if lenTextFields == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: txtStdLine.textFields are invalid!\n"+
-			"Length of txtStdLine.textFields is zero.",
-			ePrefix.String())
-
-		return formattedText, err
-	}
 
 	var lineStr, tempStr string
 
