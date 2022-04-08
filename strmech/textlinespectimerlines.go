@@ -9,7 +9,9 @@ import (
 	"time"
 )
 
-// TextLineSpecTimerLines - Implements a time which produces three
+// TextLineSpecTimerLines - Records, computes and formats an elapsed time.
+// The format process requires a
+// which produces three
 // or more text lines of output for text display, file output or
 // printing.
 //

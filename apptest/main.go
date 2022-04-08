@@ -7,6 +7,6 @@ import (
 func main() {
 	mt := examples.MainTest{}
 
-	mt.TextLineSpecStandardLine02()
+	mt.TimerEventText01()
 
 }
