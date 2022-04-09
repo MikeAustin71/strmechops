@@ -101,6 +101,115 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesNanobot_copyOut_000100()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCtx(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	txtTimerLinesNanobot := textLineSpecTimerLinesNanobot{}
+
+	timerLines02,
+		err = txtTimerLinesNanobot.copyOut(
+		timerLines01,
+		ePrefix.XCtx(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualStr string
+
+	actualStr,
+		err = timerLines02.GetFormattedText(
+		ePrefix.XCtx(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines02.GetFormattedText()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.XCtxEmpty().String(),
+			outputStr,
+			printableActualStr)
+
+		return
+	}
+
+	_,
+		err = txtTimerLinesNanobot.copyOut(
+		nil,
+		ePrefix.XCtx(
+			"txtTimerLines is nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesNanobot."+
+			"copyOut()\n"+
+			"because 'txtTimerLines' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	_,
+		err = txtTimerLinesNanobot.copyOut(
+		&timerLines03,
+		ePrefix.XCtx(
+			"timerLines03 is invalid"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesNanobot."+
+			"copyOut()\n"+
+			"because 'txtTimerLines' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.XCtxEmpty().String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
