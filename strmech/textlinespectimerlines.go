@@ -9,22 +9,25 @@ import (
 	"time"
 )
 
-// TextLineSpecTimerLines - Records, computes and formats an elapsed time.
-// The format process requires a
-// which produces three
-// or more text lines of output for text display, file output or
+// TextLineSpecTimerLines - Records, computes and formats an
+// elapsed time. This format process requires user input specifying
+// a start time and ending time.
+//
+// The final formatted output string is comprised of four lines of
+// of text for output as text display, file output or
 // printing.
 //
 // The first line of text shows the Starting Time. The second line
-// shows the Ending Time and the third line displays the time
-// duration or the difference between starting time and ending
-// time.
+// shows the Ending Time. The third line displays the time duration
+// or the difference between starting time and ending
+// time. The fourth line displays the total elapsed time in
+// nanoseconds.
 //
-// The remaining lines display time duration information. Time
-// duration, or elapsed time, will break down the duration into
-// days, hours, minutes, seconds, microseconds, milliseconds and
-// nanoseconds. The display will begin with the first category
-// containing valid time duration data.
+// The third line contains Time duration , or elapsed time, and is
+// broken down by days, hours, minutes, seconds, microseconds,
+// milliseconds and nanoseconds. The display has a variable line
+// length and will begin with the first category containing valid
+// time duration data.
 //
 // Sample Output
 //
