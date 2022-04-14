@@ -357,7 +357,7 @@ func TestTextFieldSpecDateTimeAtom_isValidTextFieldDateTime_000100(t *testing.T)
 	isValid,
 		err := txtFieldDateTimeAtom.isValidTextFieldDateTime(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"dateTimeTxtField is 'nil'!"))
 
 	if isValid == true {
@@ -485,7 +485,7 @@ func TestTextFieldSpecDateTimeAtom_isValidTextFieldDateTime_000200(t *testing.T)
 	isValid,
 		err = txtFieldDateTimeAtom.isValidTextFieldDateTime(
 		&txtFieldDateTimeOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeOne"))
 
 	if isValid == false {
@@ -617,7 +617,7 @@ func TestTextFieldSpecDateTimeAtom_isValidTextFieldDateTime_000300(t *testing.T)
 	isValid,
 		err = txtFieldDateTimeAtom.isValidTextFieldDateTime(
 		&txtFieldDateTimeOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeOne"))
 
 	if isValid == true {
@@ -648,7 +648,7 @@ func TestTextFieldSpecDateTimeAtom_isValidTextFieldDateTime_000300(t *testing.T)
 	isValid,
 		err = txtFieldDateTimeAtom.isValidTextFieldDateTime(
 		&txtFieldDateTimeOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeOne"))
 
 	if isValid == true {
@@ -680,7 +680,7 @@ func TestTextFieldSpecDateTimeAtom_isValidTextFieldDateTime_000300(t *testing.T)
 	isValid,
 		err = txtFieldDateTimeAtom.isValidTextFieldDateTime(
 		&txtFieldDateTimeOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeOne"))
 
 	if isValid == true {
@@ -712,7 +712,7 @@ func TestTextFieldSpecDateTimeAtom_isValidTextFieldDateTime_000300(t *testing.T)
 	isValid,
 		err = txtFieldDateTimeAtom.isValidTextFieldDateTime(
 		&txtFieldDateTimeOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeOne"))
 
 	if isValid == true {
@@ -1050,7 +1050,7 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000200(t *testing.T
 			fieldLen,
 			dateTimeFormat,
 			textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeOne"))
 
 	if err != nil {
@@ -1074,7 +1074,7 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000200(t *testing.T
 			fieldLen,
 			dateTimeFormat,
 			textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -1092,7 +1092,7 @@ func TestTextFieldSpecDateTimeMechanics_setTextFieldDateTime_000200(t *testing.T
 		t.Errorf("%v\n"+
 			"Error: Expected txtFieldDateTimeOne==txtFieldDateTimeTwo.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 	}
 
 	return
@@ -1146,7 +1146,7 @@ func TestTextFieldSpecDateTimeNanobot_copyIn_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("incomingTxtFieldDateTime"))
+		ePrefix.XCpy("incomingTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1293,7 +1293,7 @@ func TestTextFieldSpecDateTimeNanobot_copyOut_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("oldTxtFieldDateTime"))
+		ePrefix.XCpy("oldTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1312,13 +1312,13 @@ func TestTextFieldSpecDateTimeNanobot_copyOut_000100(t *testing.T) {
 	newTxtFieldDateTime,
 		err = txtFieldDateTimeNanobot.copyOut(
 		&oldTxtFieldDateTime,
-		ePrefix.XCtx("oldTxtFieldDateTime"))
+		ePrefix.XCpy("oldTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeNanobot.copyOut()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtx("newTxtFieldDateTime").String(),
+			ePrefix.XCpy("newTxtFieldDateTime").String(),
 			err.Error())
 
 		return
@@ -1445,7 +1445,7 @@ func TestTextFieldSpecDateTimeNanobot_getFormattedText_000100(t *testing.T) {
 		err =
 		txtFieldDateTimeNanobotOne.getFormattedText(
 			&txtFieldDateTimeOne,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeOne"))
 
 	if err != nil {
@@ -1464,7 +1464,7 @@ func TestTextFieldSpecDateTimeNanobot_getFormattedText_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedDateTimeStr        = '%v'\n"+
 			"actualFormattedDateTimeStr = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedDateTimeStr,
 			actualFormattedDateTimeStr)
 	}
@@ -1539,7 +1539,7 @@ func TestTextFieldSpecDateTimeNanobot_getFormattedText_000200(t *testing.T) {
 		err =
 		txtFieldDateTimeNanobotOne.getFormattedText(
 			&txtFieldDateTimeOne,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeOne"))
 
 	if err == nil {
@@ -1567,7 +1567,7 @@ func TestTextFieldSpecDateTimeNanobot_getFormattedText_000300(t *testing.T) {
 		err :=
 		txtFieldDateTimeNanobotOne.getFormattedText(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"dateTimeTxtField==nil"))
 
 	if err == nil {

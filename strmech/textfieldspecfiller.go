@@ -799,7 +799,7 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 		err := textFieldSpecFillerMolecule{}.ptr().
 		getFormattedText(
 			txtFillerField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFillerField"))
 
 	if err != nil {
@@ -953,7 +953,7 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedText(
 	return textFieldSpecFillerMolecule{}.ptr().
 		getFormattedText(
 			txtFillerField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFillerField"))
 }
 
@@ -1117,8 +1117,7 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 // means that the returned TextFieldSpecFiller instance is invalid.
 // Therefore, in order to use this TextFieldSpecFiller instance,
 // users must later call the setter methods on this type in order
-// to configure valid and meaningful meaningful member variable
-// data values.
+// to configure valid and meaningful member variable data values.
 //
 //
 // ------------------------------------------------------------------------
@@ -2435,7 +2434,7 @@ func (txtFillerField *TextFieldSpecFiller) Read(
 			err = textFieldSpecFillerMolecule{}.ptr().
 			getFormattedText(
 				txtFillerField,
-				ePrefix.XCtx("txtFillerField"))
+				ePrefix.XCpy("txtFillerField"))
 
 		if err != nil {
 			return n, err
@@ -2449,7 +2448,7 @@ func (txtFillerField *TextFieldSpecFiller) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"txtFillerField.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -2460,7 +2459,7 @@ func (txtFillerField *TextFieldSpecFiller) Read(
 		readBytes(
 			txtFillerField.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> txtFillerField.textLineReader"))
 
 	if err == io.EOF {
@@ -2660,7 +2659,7 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 	err = textFieldSpecFillerElectron{}.ptr().
 		isFillerCharsRepeatCountValid(
 			fillerCharsRepeatCount,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Input parameter 'fillerCharsRepeatCount' invalid!"))
 
 	if err != nil {
@@ -3377,7 +3376,7 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 		err = textFieldSpecFillerMolecule{}.ptr().
 		getFormattedText(
 			txtFillerField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFillerField->formattedTxtStr"))
 
 	if err != nil {
@@ -3393,7 +3392,7 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

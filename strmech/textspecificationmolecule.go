@@ -148,7 +148,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 	_,
 		err = txtLabelElectron.isTextLabelValid(
 		textRunes,
-		ePrefix.XCtx("textRunes"))
+		ePrefix.XCpy("textRunes"))
 
 	if err != nil {
 		return formattedText, err
@@ -156,7 +156,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 
 	err = txtLabelElectron.isFieldLengthValid(
 		fieldLen,
-		ePrefix.XCtx("fieldLen"))
+		ePrefix.XCpy("fieldLen"))
 
 	if err != nil {
 		return formattedText, err
@@ -166,7 +166,7 @@ func (txtSpecMolecule *textSpecificationMolecule) getFormattedText(
 		textRunes,
 		fieldLen,
 		textJustify,
-		ePrefix.XCtx("textJustify"))
+		ePrefix.XCpy("textJustify"))
 
 	if err != nil {
 		return formattedText, err

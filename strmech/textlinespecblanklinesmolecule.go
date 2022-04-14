@@ -124,7 +124,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 		err = textLineSpecBlankLinesAtom{}.ptr().
 		testValidityOfTextLineSpecBlankLines(
 			incomingBlkLines,
-			ePrefix.XCtx("incomingBlkLines"))
+			ePrefix.XCpy("incomingBlkLines"))
 
 	if err != nil {
 		return err
@@ -139,7 +139,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyIn(
 		&targetBlkLines.newLineChars,
 		&incomingBlkLines.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingBlkLines.newLineChars->"+
 				"targetBlkLines.newLineChars"))
 
@@ -236,7 +236,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 		err = textLineSpecBlankLinesAtom{}.ptr().
 		testValidityOfTextLineSpecBlankLines(
 			txtBlankLines,
-			ePrefix.XCtx("txtBlankLines"))
+			ePrefix.XCpy("txtBlankLines"))
 
 	if err != nil {
 		return TextLineSpecBlankLines{}, err
@@ -254,7 +254,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) copyOut(
 		&newBlankLinesSpec.newLineChars,
 		&txtBlankLines.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLines.newLineChars->"+
 				"newBlankLinesSpec.newLineChars"))
 
@@ -432,7 +432,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) getFormattedText(
 		err = textLineSpecBlankLinesAtom{}.ptr().
 		testValidityOfTextLineSpecBlankLines(
 			txtBlankLines,
-			ePrefix.XCtx("txtBlankLines"))
+			ePrefix.XCpy("txtBlankLines"))
 
 	if err != nil {
 		return formattedText, err
@@ -574,7 +574,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBla
 	err = txtBlankLinesElectron.
 		testValidityNumOfBlankLines(
 			numOfBlankLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"numOfBlankLines"))
 
 	if err != nil {
@@ -584,7 +584,7 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBla
 	err = txtBlankLinesElectron.
 		testValidityNewLinesChars(
 			newLineRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineRunes"))
 
 	if err != nil {
@@ -597,6 +597,6 @@ func (txtBlankLinesMolecule *textLineSpecBlankLinesMolecule) setTextLinesSpecBla
 		&txtBlankLines.newLineChars,
 		&newLineRunes,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineRunes->txtBlankLines.newLineChars"))
 }

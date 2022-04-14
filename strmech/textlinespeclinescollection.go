@@ -123,7 +123,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 	}
 
 	err = textLine.IsValidInstanceError(
-		ePrefix.XCtx("textLine"))
+		ePrefix.XCpy("textLine"))
 
 	if err != nil {
 		return err
@@ -133,7 +133,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 
 	newTextLine,
 		err = textLine.CopyOutITextLine(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLine->newTextLine"))
 
 	if err != nil {
@@ -272,7 +272,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyIn(
 		copyIn(
 			txtLinesCol,
 			incomingTxtLinesCol,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingTxtLinesCol->"+
 					"txtLinesCol"))
 }
@@ -383,7 +383,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyOut(
 	return textLineSpecLinesCollectionNanobot{}.ptr().
 		copyOut(
 			txtLinesCol,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtLinesCol->"))
 }
 
@@ -604,7 +604,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
 		}
 
 		err = txtLinesCol.textLines[i].IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"txtLinesCol.textLines[%v] invalid",
 					i)))
@@ -615,7 +615,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
 
 		newTextLine,
 			err2 := txtLinesCol.textLines[i].CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"txtLinesCol.textLines[%v] copy error",
 					i)))
@@ -771,7 +771,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 	}
 
 	err = textLine.IsValidInstanceError(
-		ePrefix.XCtx("Input Parameter: textLine"))
+		ePrefix.XCpy("Input Parameter: textLine"))
 
 	if err != nil {
 		return err
@@ -805,7 +805,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 
 	newTextLine,
 		err = textLine.CopyOutITextLine(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newTextLine"))
 
 	if err != nil {

@@ -47,7 +47,7 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) ptr() *textFieldSpecLabelN
 //  textFieldLabel             *TextFieldSpecLabel
 //     - A pointer to an instance of TextFieldSpecLabel. All the
 //       internal member variable data values will be deleted and
-//       and reset based on the following input parameters.
+//       reset based on the following input parameters.
 //
 //
 //  textLabel                  []rune
@@ -187,7 +187,7 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 	_,
 		err = txtLabelElectron.isTextLabelValid(
 		textLabel,
-		ePrefix.XCtx("textLabel"))
+		ePrefix.XCpy("textLabel"))
 
 	if err != nil {
 		return err
@@ -195,7 +195,7 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 
 	err = txtLabelElectron.isFieldLengthValid(
 		fieldLen,
-		ePrefix.XCtx("fieldLen"))
+		ePrefix.XCpy("fieldLen"))
 
 	if err != nil {
 		return err
@@ -205,7 +205,7 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 		textLabel,
 		fieldLen,
 		textJustification,
-		ePrefix.XCtx("textJustification"))
+		ePrefix.XCpy("textJustification"))
 
 	if err != nil {
 		return err
@@ -215,7 +215,7 @@ func (txtFieldLabelNanobot textFieldSpecLabelNanobot) setTextFieldLabel(
 		&textFieldLabel.textLabel,
 		&textLabel,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLabel->textFieldLabel.textLabel"))
 
 	if err != nil {

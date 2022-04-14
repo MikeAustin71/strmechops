@@ -1105,7 +1105,7 @@ func (sMechQuark *strMechQuark) findRegExIndex(
 //
 //  int
 //     - This returned integer value will be set to the number of
-//       of 'runes' counted in 'targetStr'.
+//       'runes' counted in 'targetStr'.
 //
 func (sMechQuark *strMechQuark) getCharCountInStr(
 	targetStr string) int {
@@ -1450,7 +1450,6 @@ func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 		}
 
 		if runeStr[i] >= 'A' &&
-
 			runeStr[i] <= 'Z' {
 
 			runeStr[i] += 32
@@ -1458,7 +1457,6 @@ func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 			break
 
 		} else if runeStr[i] >= 'a' &&
-
 			runeStr[i] <= 'z' {
 
 			break

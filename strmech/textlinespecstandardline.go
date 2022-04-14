@@ -459,13 +459,13 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 	if iTextField == nil {
 		err = fmt.Errorf("%v - ERROR\n"+
 			"Input parameter 'iTextField' is 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = iTextField.IsValidInstanceError(
-		ePrefix.XCtx("iTextField"))
+		ePrefix.XCpy("iTextField"))
 
 	if err != nil {
 		return lastIndexId, err
@@ -475,7 +475,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 
 	newTextField,
 		err = iTextField.CopyOutITextField(
-		ePrefix.XCtx("iTextField->newTextField"))
+		ePrefix.XCpy("iTextField->newTextField"))
 
 	if err != nil {
 		return lastIndexId, err
@@ -876,7 +876,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newDateTimeField"))
 
 	if err != nil {
@@ -1267,7 +1267,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 		textLabel,
 		fieldLen,
 		textJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLabelField"))
 
 	if err != nil {
@@ -1435,7 +1435,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 	newSpacerField,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		fieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newSpacerField"))
 
 	if err != nil {
@@ -1684,7 +1684,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 		err = textLineSpecStandardLineNanobot{}.ptr().
 		copyOut(
 			stdLine,
-			ePrefix.XCtx("stdLine"))
+			ePrefix.XCpy("stdLine"))
 
 	return newStdLine, err
 }
@@ -1800,7 +1800,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 		err = textLineSpecStandardLineNanobot{}.ptr().
 		copyOut(
 			stdLine,
-			ePrefix.XCtx("stdLine"))
+			ePrefix.XCpy("stdLine"))
 
 	return ITextLineSpecification(&newStdLine), err
 }
@@ -1915,7 +1915,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 		err = textLineSpecStandardLineNanobot{}.ptr().
 		copyOut(
 			stdLine,
-			ePrefix.XCtx("stdLine"))
+			ePrefix.XCpy("stdLine"))
 
 	return &newStdLine, err
 }
@@ -2029,7 +2029,7 @@ func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 		deleteTextField(
 			stdLine,
 			indexId,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"stdLine.textFields[%v]",
 					indexId)))
@@ -2534,7 +2534,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 		testValidityOfTextFields(
 			&stdLine.textFields,
 			false, // allowZeroLengthTextFields
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine.textFields"))
 
 	if err != nil {
@@ -2548,7 +2548,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 		copyTextFields(
 			&newTextFields,
 			&stdLine.textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newTextFields<-stdLine.textFields"))
 
 	return newTextFields, err
@@ -2751,7 +2751,7 @@ func (stdLine *TextLineSpecStandardLine) InsertTextFieldAtIndex(
 			stdLine,
 			iTextField,
 			indexId,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf("stdLine.textFields[%v]<-iTextField",
 					indexId)))
 
@@ -2920,7 +2920,7 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 		testValidityOfTextLineSpecStdLine(
 			stdLine,
 			false, // allowZeroLengthTextFieldsArray
-			ePrefix.XCtx("stdLine"))
+			ePrefix.XCpy("stdLine"))
 
 	return err
 }
@@ -4330,7 +4330,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //
 //     iTxtFieldSpec,
 //     err = stdLine01.PeekAtFirstTextField(
-//             ePrefix.XCtx(
+//             ePrefix.XCpy(
 //             "stdLine01"))
 //
 //     if err != nil {
@@ -4351,7 +4351,7 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 //       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 //       "Expected return of type 'TextFieldSpecSpacer'.\n"+
 //       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.XCtxEmpty().String())
+//       ePrefix.String())
 //
 //       return
 //     }
@@ -4393,7 +4393,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 			stdLine,
 			0,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine.textFields[0]"))
 
 	return iTxtFieldSpec, err
@@ -4502,7 +4502,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 //
 //     iTxtFieldSpec,
 //     err = stdLine01.PeekAtLastTextField(
-//           ePrefix.XCtx(
+//           ePrefix.XCpy(
 //           "stdLine01"))
 //
 //     if err != nil {
@@ -4523,7 +4523,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 //       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 //       "Expected return of type 'TextFieldSpecSpacer'.\n"+
 //       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.XCtxEmpty().String())
+//       ePrefix.String())
 //
 //       return
 //     }
@@ -4576,7 +4576,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 			stdLine,
 			lastIdx,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"stdLine.textFields[%v]",
 					lastIdx)))
@@ -4699,7 +4699,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //     iTxtFieldSpec,
 //     err = stdLine01.PeekAtTextFieldAtIndex(
 //           indexId,
-//           ePrefix.XCtx(
+//           ePrefix.XCpy(
 //           "stdLine01"))
 //
 //     if err != nil {
@@ -4720,7 +4720,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 //       "Expected return of type 'TextFieldSpecSpacer'.\n"+
 //       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.XCtxEmpty().String())
+//       ePrefix.String())
 //
 //       return
 //     }
@@ -4764,7 +4764,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 			stdLine,
 			indexId,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"stdLine.textFields[%v]",
 					indexId)))
@@ -4890,7 +4890,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 //
 //     iTxtFieldSpec,
 //     err = stdLine01.PopFirstTextField(
-//           ePrefix.XCtx(
+//           ePrefix.XCpy(
 //           "stdLine01"))
 //
 //     if err != nil {
@@ -4911,7 +4911,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 //       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 //       "Expected return of type 'TextFieldSpecSpacer'.\n"+
 //       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.XCtxEmpty().String())
+//       ePrefix.String())
 //
 //       return
 //     }
@@ -4957,7 +4957,7 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 			stdLine,
 			0,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine.textFields[0]"))
 
 	remainingNumOfTxtFields = len(stdLine.textFields)
@@ -5083,7 +5083,7 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //
 //     iTxtFieldSpec,
 //     err = stdLine01.PopLastTextField(
-//           ePrefix.XCtx(
+//           ePrefix.XCpy(
 //           "stdLine01"))
 //
 //     if err != nil {
@@ -5104,7 +5104,7 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 //       "Expected return of type 'TextFieldSpecSpacer'.\n"+
 //       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.XCtxEmpty().String())
+//       ePrefix.String())
 //
 //       return
 //     }
@@ -5160,7 +5160,7 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 			stdLine,
 			lastIdx,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"stdLine.textFields[%v]",
 					lastIdx)))
@@ -5301,7 +5301,7 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 //     iTxtFieldSpec,
 //     err = stdLine01.PopTextFieldAtIndex(
 //           indexId,
-//           ePrefix.XCtx(
+//           ePrefix.XCpy(
 //           "stdLine01"))
 //
 //     if err != nil {
@@ -5322,7 +5322,7 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 //       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 //       "Expected return of type 'TextFieldSpecSpacer'.\n"+
 //       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.XCtxEmpty().String())
+//       ePrefix.String())
 //
 //       return
 //     }
@@ -5369,7 +5369,7 @@ func (stdLine *TextLineSpecStandardLine) PopTextFieldAtIndex(
 			stdLine,
 			indexId,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"stdLine.textFields[%v]",
 					indexId)))
@@ -5560,7 +5560,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 			err = textLineSpecStandardLineMolecule{}.ptr().
 			getFormattedText(
 				stdLine,
-				ePrefix.XCtx("stdLine"))
+				ePrefix.XCpy("stdLine"))
 
 		if err != nil {
 			return n, err
@@ -5574,7 +5574,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"plainTextLine.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -5585,7 +5585,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 		readBytes(
 			stdLine.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> stdLine.textLineReader"))
 
 	if err == io.EOF {
@@ -5776,7 +5776,7 @@ func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
 	}
 
 	err = textField.IsValidInstanceError(
-		ePrefix.XCtx("Input Parameter: 'textField' is invalid"))
+		ePrefix.XCpy("Input Parameter: 'textField' is invalid"))
 
 	if err != nil {
 		return err
@@ -5812,7 +5812,7 @@ func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
 
 	newTextField,
 		err = textField.CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newTextField"))
 
 	if err != nil {
@@ -6172,7 +6172,7 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 		err =
 		sMechPreon.testValidityOfRuneCharArray(
 			newLineRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineRunes Error"))
 
 	if err != nil {
@@ -6184,7 +6184,7 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 			&stdLine.newLineChars,
 			&newLineRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineRunes->"+
 					"stdLine.newLineChars"))
 
@@ -6405,7 +6405,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&newLineChars,
-					ePrefix.XCtx(
+					ePrefix.XCpy(
 						"stdLine.newLineChars = default"))
 
 		if err != nil {
@@ -6419,7 +6419,7 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 				&newLineChars,
 				&stdLine.newLineChars,
 				true,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"stdLine.newLineChars->"+
 						"newLineChars"))
 
@@ -6823,7 +6823,7 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 			textSpecificationMolecule{}.ptr().
 				setDefaultNewLineChars(
 					&stdLine.newLineChars,
-					ePrefix.XCtx(
+					ePrefix.XCpy(
 						"stdLine.newLineChars = default"))
 
 		if err != nil {
@@ -6846,7 +6846,7 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 			testValidityOfTextFields(
 				&textFields,
 				false, // allowZeroLengthTextFieldsArray
-				ePrefix.XCtx("Input parameter textFields is invalid!"))
+				ePrefix.XCpy("Input parameter textFields is invalid!"))
 
 	if err != nil {
 		return err
@@ -6861,7 +6861,7 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 			copyTextFields(
 				&stdLine.textFields,
 				&textFields,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"textFields->"+
 						"stdLine.textFields"))
 
@@ -6906,7 +6906,7 @@ func (stdLine TextLineSpecStandardLine) String() string {
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
 			&stdLine,
-			ePrefix.XCtx("stdLine"))
+			ePrefix.XCpy("stdLine"))
 
 	if err != nil {
 		formattedText = fmt.Sprintf("%v\n",
@@ -7033,7 +7033,7 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
 			stdLine,
-			ePrefix.XCtx("stdLine"))
+			ePrefix.XCpy("stdLine"))
 
 	if err != nil {
 		return err
@@ -7048,7 +7048,7 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

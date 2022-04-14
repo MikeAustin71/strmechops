@@ -151,7 +151,7 @@ func (txtFieldDateTimeAtom *textFieldSpecDateTimeAtom) isValidTextFieldDateTime(
 
 	err = txtLabelElectron.isFieldLengthValid(
 		dateTimeTxtField.fieldLen,
-		ePrefix.XCtx("dateTimeTxtField.fieldLen"))
+		ePrefix.XCpy("dateTimeTxtField.fieldLen"))
 
 	if err != nil {
 		return isValid, err
@@ -172,7 +172,7 @@ func (txtFieldDateTimeAtom *textFieldSpecDateTimeAtom) isValidTextFieldDateTime(
 		[]rune(tempTxtLabel),
 		dateTimeTxtField.fieldLen,
 		dateTimeTxtField.textJustification,
-		ePrefix.XCtx("dateTimeTxtField.textJustification"))
+		ePrefix.XCpy("dateTimeTxtField.textJustification"))
 
 	if err != nil {
 		return isValid, err

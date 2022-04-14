@@ -250,8 +250,8 @@ func (nStrValSpec NumStrFormatTypeCode) Binary() NumStrFormatTypeCode {
 //         Positive Values          Negative Values
 //          +132 = $132              -123 = ($123)
 //
-// Note: Placement and formatting formatting characters
-// such as  plus ('+'), minus ('-') parentheses ('()') and
+// Note: Placement and formatting characters such as
+// plus ('+'), minus ('-') parentheses ('()') and
 // currency ('$') is controlled by type,
 // 'FormatterCurrency'.
 //

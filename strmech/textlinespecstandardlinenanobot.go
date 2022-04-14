@@ -126,7 +126,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 	for idx, val := range *textFields {
 
 		err = val.IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf("textFields[%v]",
 					idx)))
 
@@ -138,7 +138,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 
 		newTextField,
 			err = val.CopyOutITextField(
-			ePrefix.XCtx(fmt.Sprintf(
+			ePrefix.XCpy(fmt.Sprintf(
 				"textFields[%v]->newTextField",
 				idx)))
 
@@ -157,7 +157,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) addTextFields(
 
 		err = fmt.Errorf("%v - ERROR\n"+
 			"Input parameter 'textFields' is empty!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return lastIndexId, err
 	}
@@ -304,7 +304,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 		testValidityOfTextLineSpecStdLine(
 			incomingStdLine,
 			false, // allowZeroLengthTextFieldsArray
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingStdLine"))
 
 	if err != nil {
@@ -317,7 +317,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 		&targetStdLine.newLineChars,
 		&incomingStdLine.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingStdLine.newLineChars->"+
 				"targetStdLine.newLineChars"))
 
@@ -338,7 +338,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyIn(
 		copyTextFields(
 			&targetStdLine.textFields,
 			&incomingStdLine.textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingStdLine.textFields->"+
 					"targetStdLine.textFields"))
 
@@ -453,7 +453,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			false, // allowZeroLengthTextFieldsArray
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtStdLine"))
 
 	if err != nil {
@@ -471,7 +471,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 			&newStdLine.newLineChars,
 			&txtStdLine.newLineChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtStdLine.newLineChars->"+
 					"newStdLine.newLineChars"))
 
@@ -489,7 +489,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 		copyTextFields(
 			&newStdLine.textFields,
 			&txtStdLine.textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtStdLine.textFields->"+
 					"newStdLine.textFields"))
 
@@ -622,7 +622,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			true, // allowZeroLengthTextFieldsArray
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtStdLine"))
 
 	if err != nil {
@@ -632,13 +632,13 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	if iTextField == nil {
 		err = fmt.Errorf("%v - ERROR\n"+
 			"Input parameter 'iTextField' is 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return lengthTextFields, err
 	}
 
 	err = iTextField.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"iTextField is invalid!"))
 
 	if err != nil {
@@ -649,7 +649,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 
 	newTextField,
 		err = iTextField.CopyOutITextField(
-		ePrefix.XCtx("iTextField->newTextField"))
+		ePrefix.XCpy("iTextField->newTextField"))
 
 	if err != nil {
 		return lengthTextFields, err
@@ -699,7 +699,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 
 		newTextFieldsArray[j],
 			err = txtStdLine.textFields[i].CopyOutITextField(
-			ePrefix.XCtx(fmt.Sprintf(
+			ePrefix.XCpy(fmt.Sprintf(
 				"txtStdLine.textFields[%v]->newTextFieldsArray[%v]",
 				i,
 				j)))
@@ -837,7 +837,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 			testValidityOfTextFields(
 				&textFields,
 				false, // allowZeroLengthTextFieldsArray
-				ePrefix.XCtx("Input parameter textFields is invalid!"))
+				ePrefix.XCpy("Input parameter textFields is invalid!"))
 
 	if err != nil {
 		return err
@@ -848,7 +848,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineChars"))
 
 	if err != nil {
@@ -859,7 +859,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		textLineSpecStandardLineMolecule{}.ptr().
 			emptyStandardLine(
 				txtStdLine,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"empty->txtStdLine"))
 
 	_,
@@ -867,7 +867,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		copyTextFields(
 			&txtStdLine.textFields,
 			&textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"textFields->"+
 					"txtStdLine.textFields"))
 
@@ -885,7 +885,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) setTxtSpecStandardLine
 		&txtStdLine.newLineChars,
 		&newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineChars->txtStdLine.newLineChars"))
 
 	return err

@@ -29,7 +29,7 @@ func TestTextLineSpecStandardLine_AddStandardLine_000100(t *testing.T) {
 	lastIndex,
 		err = stdLine03.AddStandardLine(
 		&stdLine01,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03<-stdLine01"))
 
 	if err != nil {
@@ -48,7 +48,7 @@ func TestTextLineSpecStandardLine_AddStandardLine_000100(t *testing.T) {
 			"Expected Last Index is NOT EQUAL to Actual Last Index!\n"+
 			"Expected Last Index = '%v'\n"+
 			"  Actual Last Index = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLastIndex,
 			lastIndex)
 
@@ -79,7 +79,7 @@ func TestTextLineSpecStandardLine_AddStandardLine_000100(t *testing.T) {
 			"Expected an error return from stdLine02.DeleteAtIndex()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -105,7 +105,7 @@ func TestTextLineSpecStandardLine_AddStandardLine_000200(t *testing.T) {
 	_,
 		err = stdLine01.AddStandardLine(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingStdLine==nil"))
 
 	if err == nil {
@@ -114,7 +114,7 @@ func TestTextLineSpecStandardLine_AddStandardLine_000200(t *testing.T) {
 			"Expected an error return from stdLine01.AddStandardLine()\n"+
 			"because 'incomingStdLine' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -134,7 +134,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 		"Hello World",
 		-1,
 		TxtJustify.Left(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelTxt"))
 
 	if err != nil {
@@ -148,7 +148,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&labelTxt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelTxt"))
 
 	if err != nil {
@@ -162,7 +162,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -182,7 +182,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 			"AddTextField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -195,7 +195,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 	_,
 		err = stdLine03.AddTextField(
 		&labelTxt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03<-labelTxt"))
 
 	if err == nil {
@@ -205,7 +205,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 			"AddTextField()\n"+
 			"because 'labelTxt' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -218,7 +218,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 	_,
 		err = stdLine04.AddTextField(
 		&labelTxt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine04<-labelTxt"))
 
 	if err != nil {
@@ -232,7 +232,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 	_,
 		err = stdLine05.AddTextField(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine05<-labelTxt"))
 
 	if err == nil {
@@ -242,7 +242,7 @@ func TestTextLineSpecStandardLine_AddTextField_000100(t *testing.T) {
 			"AddTextField()\n"+
 			"because 'textField' is nil.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -270,7 +270,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -285,7 +285,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 	lastIndex,
 		err = stdLine03.AddTextFields(
 		&textFields,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03<-stdLine01.textFields"))
 
 	expectedLastIndex := stdLine01.GetNumOfTextFields() - 1
@@ -297,7 +297,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 			"Expected Last Index is NOT EQUAL to Actual Last Index!\n"+
 			"Expected Last Index = '%v'\n"+
 			"  Actual Last Index = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLastIndex,
 			lastIndex)
 
@@ -310,7 +310,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 		t.Errorf("\n%v - ERROR\n"+
 			"Expected stdLine01==stdLine03\n"+
 			"HOWEVER THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -330,7 +330,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 
 	textFields,
 		err = stdLine02.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine02"))
 
 	if err != nil {
@@ -350,7 +350,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 			"Expected an error return from stdLine03.AddTextFields()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -377,7 +377,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000200(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -391,7 +391,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000200(t *testing.T) {
 	_,
 		err = stdLine02.AddTextFields(
 		&textFields,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02 <- textFields"))
 
 	if err != nil {
@@ -407,7 +407,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000200(t *testing.T) {
 	_,
 		err = stdLine02.AddTextFields(
 		&textFields,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Series-2: stdLine02 <- textFields"))
 
 	if err == nil {
@@ -416,7 +416,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000200(t *testing.T) {
 			"Expected an error return from stdLine02.AddTextFields()\n"+
 			"because 'textFields' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -472,7 +472,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -482,7 +482,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -496,7 +496,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"stdLine01.AddTextFieldDateTime() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -509,7 +509,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -524,7 +524,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"stdLine01.AddTextFieldDateTime() should have\n"+
 			"returned 'indexId' = 1\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -538,7 +538,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -552,7 +552,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"stdLine02.AddTextFieldDateTime() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -569,7 +569,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 		fieldLenBad,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03"))
 
 	if err == nil {
@@ -579,7 +579,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"AddTextFieldDateTime()\n"+
 			"because 'dateTimeBad' and 'fieldLenBad' are invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -601,7 +601,7 @@ func TestTextLineSpecStandardLine_AddTextFieldDateTime_000100(t *testing.T) {
 			"AddTextFieldDateTime()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -624,7 +624,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 		err := stdLine01.AddTextFieldFiller(
 		fillerCharacters,
 		fillerCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -639,7 +639,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 			"stdLine01.AddTextFieldFiller() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -650,7 +650,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 		err = stdLine01.AddTextFieldFiller(
 		fillerCharacters,
 		fillerCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -660,7 +660,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -675,7 +675,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 			"stdLine01.AddTextFieldFiller() should have\n"+
 			"returned 'indexId' = 1\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -687,7 +687,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 		err = stdLine02.AddTextFieldFiller(
 		fillerCharacters,
 		fillerCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -702,7 +702,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 		err = stdLine02.AddTextFieldFiller(
 		badFillerChars,
 		fillerCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02 - badFillerChars"))
 
 	if err == nil {
@@ -712,7 +712,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 			"AddTextFieldDateTime()\n"+
 			"because 'badFillerChars' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -729,7 +729,7 @@ func TestTextLineSpecStandardLine_AddTextFieldFiller_000100(t *testing.T) {
 			"AddTextFieldDateTime()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -760,7 +760,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01 - valid label"))
 
 	if err != nil {
@@ -774,14 +774,14 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 			"stdLine01.AddTextFieldLabel() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -801,7 +801,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -823,7 +823,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -837,7 +837,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02 is empty."))
 
 	if err != nil {
@@ -862,7 +862,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 			"AddTextFieldLabel()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -883,7 +883,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000100(t *testing.T) {
 			"AddTextFieldLabel()\n"+
 			"because 'badFieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -916,7 +916,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000200(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01 - invalid label input parms"))
 
 	if err == nil {
@@ -925,7 +925,7 @@ func TestTextLineSpecStandardLine_AddTextFieldLabel_000200(t *testing.T) {
 			"Expected an error return from  stdLine01.AddTextFieldLabel()\n"+
 			"because all input parameters are invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -950,7 +950,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 	indexId,
 		err := stdLine01.AddTextFieldSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01 - valid Spacer"))
 
 	if err != nil {
@@ -964,14 +964,14 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 			"stdLine01.AddTextFieldSpacer() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -991,7 +991,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1013,7 +1013,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1025,7 +1025,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 	_,
 		err = stdLine02.AddTextFieldSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02 is empty."))
 
 	if err != nil {
@@ -1048,7 +1048,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 			"AddTextFieldSpacer()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1058,7 +1058,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 	_,
 		err = stdLine03.AddTextFieldSpacer(
 		badFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03 - badFieldLen invalid"))
 
 	if err == nil {
@@ -1068,7 +1068,7 @@ func TestTextLineSpecStandardLine_AddTextFieldSpacer_000100(t *testing.T) {
 			"AddTextFieldSpacer()\n"+
 			"because 'badFieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1090,7 +1090,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected Number of Standard Lines = '1'.\n"+
 			"Instead, Number of Standard Lines = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			numOfStdLines)
 
 		return
@@ -1102,7 +1102,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected Number of Standard Lines = '0'.\n"+
 			"Instead, Number of Standard Lines = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			numOfTextFields)
 
 		return
@@ -1114,7 +1114,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected newLineChars = \"\\n\".\n"+
 			"Instead, newLineChars = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			[]rune(newLineChars))
 
 		return
@@ -1127,7 +1127,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected newLineRunes = \"\\n\".\n"+
 			"Instead, newLineRunes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			[]rune(newLineChars))
 
 		return
@@ -1141,7 +1141,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected turnLineTerminatorOff = 'false'.\n"+
 			"Instead, turnLineTerminatorOff = 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1156,7 +1156,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by leftMargin := TextFieldSpecFiller{}.NewTextFiller().\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1174,7 +1174,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by rightMargin = TextFieldSpecFiller{}.NewTextFiller().\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1197,7 +1197,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by centerLabel = TextFieldSpecLabel{}.NewTextLabel().\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1212,7 +1212,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by stdLine.AddTextField(leftMargin).\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1227,7 +1227,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by stdLine.AddTextField(centerLabel).\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1242,7 +1242,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by stdLine.AddTextField(rightMargin).\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1255,7 +1255,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by stdLine.IsValidInstanceError().\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1271,7 +1271,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by stdLineTwo.CopyIn(stdLine).\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1283,7 +1283,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"stdLineTwo.CopyIn(stdLine) Failed To Copy Text Fields!\n"+
 			"Length Of Text Fields is Zero!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -1296,7 +1296,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by stdLineTwo.IsValidInstanceError().\n"+
 			"Error =\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1306,7 +1306,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected stdLineTwo.Equal(stdLine) == 'true'.\n"+
 			"Instead, stdLineTwo.Equal(stdLine) == 'false'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1315,7 +1315,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 
 	rawOutput,
 		err = stdLine.GetFormattedText(
-		ePrefix.XCtx("stdLine->rawOutput"))
+		ePrefix.XCpy("stdLine->rawOutput"))
 
 	if err != nil {
 		t.Errorf("%v",
@@ -1334,7 +1334,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected stdLine final text output = '%v'.\n"+
 			"Instead, stdLine final text output        = '%v'!\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFinalTxt,
 			actualStr)
 
@@ -1358,7 +1358,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected stdLineTwo final text output = '%v'.\n"+
 			"Instead, stdLineTwo final text output        = '%v'!\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFinalTxt,
 			actualStr)
 
@@ -1378,7 +1378,7 @@ func TestTextLineSpecStandardLine_CopyIn_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1399,7 +1399,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 	rightMarginSpec,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		rightMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMarginSpec"))
 
 	if err != nil {
@@ -1415,7 +1415,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 	leftMarginSpec,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		leftMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMarginSpec"))
 
 	if err != nil {
@@ -1435,7 +1435,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelSpec"))
 
 	if err != nil {
@@ -1455,7 +1455,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&leftMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-leftMarginSpec"))
 
 	if err != nil {
@@ -1469,7 +1469,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -1484,7 +1484,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 1\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
@@ -1493,7 +1493,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&labelSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-labelSpec"))
 
 	if err != nil {
@@ -1508,7 +1508,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 1\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -1523,7 +1523,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 2\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
@@ -1532,7 +1532,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&rightMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-rightMarginSpec"))
 
 	if err != nil {
@@ -1547,7 +1547,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 2\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -1562,14 +1562,14 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 3\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1589,7 +1589,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1617,7 +1617,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1628,7 +1628,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 
 	stdLine02,
 		err = stdLine01.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01->stdLine02"))
 
 	if err != nil {
@@ -1638,7 +1638,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1652,14 +1652,14 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"stdLine02.Equal(stdLine01)\n"+
 			"Expected that stdLine02 == stdLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	actualStdLineText,
 		err = stdLine02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1681,7 +1681,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1699,7 +1699,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1708,7 +1708,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = stdLine03.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03 is empty"))
 
 	if err == nil {
@@ -1718,7 +1718,7 @@ func TestTextLineSpecStandardLine_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'stdLine03' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1739,7 +1739,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	rightMarginSpec,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		rightMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMarginSpec"))
 
 	if err != nil {
@@ -1755,7 +1755,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	leftMarginSpec,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		leftMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMarginSpec"))
 
 	if err != nil {
@@ -1775,7 +1775,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelSpec"))
 
 	if err != nil {
@@ -1793,7 +1793,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	_,
 		err = stdLine01.AddTextField(
 		&leftMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-leftMarginSpec"))
 
 	if err != nil {
@@ -1805,7 +1805,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	_,
 		err = stdLine01.AddTextField(
 		&labelSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-labelSpec"))
 
 	if err != nil {
@@ -1817,7 +1817,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	_,
 		err = stdLine01.AddTextField(
 		&rightMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-rightMarginSpec"))
 
 	if err != nil {
@@ -1827,7 +1827,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1840,7 +1840,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 
 	iTextLine, err =
 		stdLine01.CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine01->iTextLine"))
 
 	if err != nil {
@@ -1855,13 +1855,13 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: iTextLine.(*TextLineSpecStandardLine)\n"+
 			"Could not convert 'iTextLine' to TextLineSpecStandardLine\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1874,7 +1874,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected stdLine02 == stdLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1890,7 +1890,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1912,7 +1912,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1921,7 +1921,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1943,7 +1943,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 			"Actual Formatted Text String 02.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1962,7 +1962,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 			"CopyOutITextLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1971,7 +1971,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 
 	_,
 		err = stdLine03.CopyOutITextLine(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03 is empty"))
 
 	if err == nil {
@@ -1981,7 +1981,7 @@ func TestTextLineSpecStandardLine_CopyOutITextLine_000100(t *testing.T) {
 			"CopyOutITextLine()\n"+
 			"because 'stdLine03' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2002,7 +2002,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 	rightMarginSpec,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		rightMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMarginSpec"))
 
 	if err != nil {
@@ -2018,7 +2018,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 	leftMarginSpec,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		leftMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMarginSpec"))
 
 	if err != nil {
@@ -2038,7 +2038,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelSpec"))
 
 	if err != nil {
@@ -2058,7 +2058,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&leftMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-leftMarginSpec"))
 
 	if err != nil {
@@ -2072,7 +2072,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -2087,7 +2087,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 1\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
@@ -2096,7 +2096,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&labelSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-labelSpec"))
 
 	if err != nil {
@@ -2111,7 +2111,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 1\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -2126,7 +2126,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 2\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
@@ -2135,7 +2135,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&rightMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-rightMarginSpec"))
 
 	if err != nil {
@@ -2150,7 +2150,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 2\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -2165,14 +2165,14 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 3\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2192,7 +2192,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2220,7 +2220,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2231,7 +2231,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 
 	stdLine02,
 		err = stdLine01.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01->stdLine02"))
 
 	if err != nil {
@@ -2241,7 +2241,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2255,14 +2255,14 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"stdLine02.Equal(stdLine01)\n"+
 			"Expected that stdLine02 == stdLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	actualStdLineText,
 		err = stdLine02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2284,7 +2284,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2302,7 +2302,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"CopyOutPtr()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2311,7 +2311,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = stdLine03.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03 is empty"))
 
 	if err == nil {
@@ -2321,7 +2321,7 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 			"CopyOutPtr()\n"+
 			"because 'stdLine03' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2343,7 +2343,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	rightMarginSpec,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		rightMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMarginSpec"))
 
 	if err != nil {
@@ -2359,7 +2359,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	leftMarginSpec,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		leftMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMarginSpec"))
 
 	if err != nil {
@@ -2379,7 +2379,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelSpec"))
 
 	if err != nil {
@@ -2399,7 +2399,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&leftMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-leftMarginSpec"))
 
 	if err != nil {
@@ -2413,7 +2413,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 0\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -2428,7 +2428,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 1\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
@@ -2437,7 +2437,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&labelSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-labelSpec"))
 
 	if err != nil {
@@ -2452,7 +2452,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 1\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -2467,7 +2467,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 2\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
@@ -2476,7 +2476,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	indexId,
 		err = stdLine01.AddTextField(
 		&rightMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-rightMarginSpec"))
 
 	if err != nil {
@@ -2491,7 +2491,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"stdLine01.AddTextField() should have\n"+
 			"returned 'indexId' = 2\n"+
 			"HOWEVER, indexId = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return
@@ -2506,14 +2506,14 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"stdLine01.GetNumOfTextFields() should have\n"+
 			"returned 'collectionCount' = 3\n"+
 			"HOWEVER, 'collectionCount' = %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			collectionCount)
 
 		return
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2533,7 +2533,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2561,7 +2561,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2571,7 +2571,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	err =
 		stdLine01.DeleteAtIndex(
 			2,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Delete Index 2"))
 
 	if err != nil {
@@ -2583,7 +2583,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	err =
 		stdLine01.DeleteAtIndex(
 			0,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Delete Index 0"))
 
 	if err != nil {
@@ -2603,7 +2603,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 
 	actualStdLineText,
 		err = stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2631,7 +2631,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2650,7 +2650,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
 
 	err := stdLine01.DeleteAtIndex(
 		5,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Empty Object, Invalid Index"))
 
 	if err == nil {
@@ -2659,7 +2659,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
 			"Expected error return from stdLine01.DeleteAtIndex()\n"+
 			"because stdLine01 is empty and index is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2686,7 +2686,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
 			"Expected an error return from stdLine02.DeleteAtIndex()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2724,7 +2724,7 @@ func TestTextLineSpecStandardLine_Empty_000100(t *testing.T) {
 			"Expected stdLine02.GetNumOfTextFields() to return zero.\n"+
 			"However, Number of Text Fields = '%v'\n"+
 			"This value persisted after a call to stdLine02.Empty()\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			numOfTxtFields)
 
 		return
@@ -2739,7 +2739,7 @@ func TestTextLineSpecStandardLine_Empty_000100(t *testing.T) {
 			"Expected stdLine02.GetNumOfStdLines() to return zero.\n"+
 			"However, Number of Standard Line Repetions is '%v'\n"+
 			"This value persisted after a call to stdLine02.Empty()\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			stdLineRepetitions)
 
 		return
@@ -2754,7 +2754,7 @@ func TestTextLineSpecStandardLine_Empty_000100(t *testing.T) {
 			"Expected stdLine02.GetNewLineChars() to return 'nil'.\n"+
 			"However, the length of new line characters is '%v'\n"+
 			"This value persisted after a call to stdLine02.Empty()\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			len(newLineChars))
 
 		return
@@ -2794,7 +2794,7 @@ func TestTextLineSpecStandardLine_EmptyTextFields_000100(t *testing.T) {
 			"Expected stdLine02.GetNumOfTextFields() to return zero.\n"+
 			"However, Number of Text Fields = '%v'\n"+
 			"This value persisted after a call to stdLine02.EmptyTextFields()\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			numOfTxtFields)
 
 		return
@@ -2809,7 +2809,7 @@ func TestTextLineSpecStandardLine_EmptyTextFields_000100(t *testing.T) {
 			"Expected stdLine02.GetNumOfStdLines() to return '1'.\n"+
 			"However, Number of Standard Line Repetions is '%v'.\n"+
 			"This value persisted after a call to stdLine02.EmptyTextFields()\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			stdLineRepetitions)
 
 		return
@@ -2823,7 +2823,7 @@ func TestTextLineSpecStandardLine_EmptyTextFields_000100(t *testing.T) {
 			"Expected stdLine02.GetNewLineRunes() to return an array length of '1'.\n"+
 			"However, the length of new line characters is '%v'.\n"+
 			"This value persisted after a call to stdLine02.EmptyTextFields()\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenNewLineRunes)
 
 		return

@@ -101,7 +101,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) emptyStandardLine(
 	err = textLineSpecStandardLineElectron{}.ptr().
 		emptyTextFields(
 			&txtStdLine.textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Empty txtStdLine.textFields"))
 
 	return err
@@ -287,7 +287,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		testValidityOfTextLineSpecStdLine(
 			txtStdLine,
 			false, // allowZeroLengthTextFieldsArray
-			ePrefix.XCtx("txtStdLine"))
+			ePrefix.XCpy("txtStdLine"))
 
 	// If Text Fields Array Length has a zero length,
 	// an error is returned.
@@ -305,7 +305,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 			err = fmt.Errorf("%v\n"+
 				"Error: 'txtStdLine.textFields' is an invalid array!\n"+
 				"txtStdLine.textFields[%v] is a 'nil'value.\n",
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"txtStdLine.textFields[i] == nil"),
 				i)
 
@@ -314,7 +314,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 
 		tempStr,
 			err = txtStdLine.textFields[i].GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"txtStdLine.textFields[%v]",
 					i)))

@@ -18,7 +18,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -29,7 +29,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 	}
 
 	err = txtFieldSpacerOne.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -47,7 +47,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 			"txtFieldSpacerOne.GetFieldLength()\n"+
 			"Expected Field Length = '%v'\n"+
 			"Instead, Actual Field Length = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFieldLen,
 			actualFieldLen)
 
@@ -171,7 +171,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 	err =
 		txtFieldSpacerTwo.CopyIn(
 			txtFieldSpacerOne,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne->txtFieldSpacerTwo"))
 
 	if err != nil {
@@ -200,7 +200,7 @@ func TestTextFieldSpecSpacer_CopyIn_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -222,7 +222,7 @@ func TestTextFieldSpecSpacer_CopyIn_000200(t *testing.T) {
 	err :=
 		txtFieldSpacerTwo.SetFieldLen(
 			expectedFieldLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"expectedFieldLen=4"))
 
 	if err != nil {
@@ -234,7 +234,7 @@ func TestTextFieldSpecSpacer_CopyIn_000200(t *testing.T) {
 	err =
 		txtFieldSpacerOne.CopyIn(
 			&txtFieldSpacerTwo,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerTwo->txtFieldSpacerOne"))
 
 	if err != nil {
@@ -259,7 +259,7 @@ func TestTextFieldSpecSpacer_CopyIn_000200(t *testing.T) {
 		txtSpacerNanobot2.copyIn(
 			nil,
 			&txtFieldSpacerOne,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne->nil"))
 
 	if err == nil {
@@ -277,7 +277,7 @@ func TestTextFieldSpecSpacer_CopyIn_000200(t *testing.T) {
 		txtSpacerNanobot3.copyIn(
 			&txtFieldSpacerOne,
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nil->txtFieldSpacerOne"))
 
 	if err == nil {
@@ -303,7 +303,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -315,7 +315,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 
 	txtFieldSpacerTwo,
 		err = txtFieldSpacerOne.CopyOut(
-		ePrefix.XCtx("txtFieldSpacerOne->txtFieldSpacerTwo"))
+		ePrefix.XCpy("txtFieldSpacerOne->txtFieldSpacerTwo"))
 
 	var txtFieldSpacerThree TextFieldSpecSpacer
 
@@ -326,7 +326,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 		err =
 		txtFieldSpacerNanobot.copyOut(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nil -> txtFieldSpacerThree"))
 
 	if err == nil {
@@ -344,7 +344,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 		err =
 		txtFieldSpacerNanobot.copyOut(
 			&txtFieldSpacerTwo,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerTwo->txtFieldSpacerThree"))
 
 	if err == nil {
@@ -360,7 +360,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 	txtFieldSpacerThree,
 		err =
 		txtFieldSpacerOne.CopyOut(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne->txtFieldSpacerThree"))
 
 	if err != nil {
@@ -390,7 +390,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 	_,
 		err =
 		txtFieldSpacerTwo.CopyOut(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerTwo->"))
 
 	if err == nil {
@@ -414,7 +414,7 @@ func TestTextFieldSpecSpacer_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -433,7 +433,7 @@ func TestTextFieldSpecSpacer_CopyOut_000200(t *testing.T) {
 	_,
 		err :=
 		txtFieldSpacerOne.CopyOut(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne"))
 
 	if err == nil {
@@ -460,7 +460,7 @@ func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -473,7 +473,7 @@ func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
 	iTextField,
 		err =
 		txtFieldSpacerOne.CopyOutITextField(
-			ePrefix.XCtx("iTextField"))
+			ePrefix.XCpy("iTextField"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -518,7 +518,7 @@ func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
 			"CopyOutITextField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -528,7 +528,7 @@ func TestTextFieldSpecSpacer_CopyOutITextField_000100(t *testing.T) {
 	_,
 		err =
 		txtFieldSpacerTwo.CopyOutITextField(
-			ePrefix.XCtx("Empty txtFieldSpacerTwo"))
+			ePrefix.XCpy("Empty txtFieldSpacerTwo"))
 
 	if err == nil {
 
@@ -555,7 +555,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -568,7 +568,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 
 	txtFieldSpacerTwo,
 		err = txtFieldSpacerOne.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne->" +
 				"txtFieldSpacerTwo"))
 
@@ -591,7 +591,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtFieldSpacerTwo.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerTwo is INVALID!"))
 
 	if err == nil {
@@ -600,7 +600,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 			"Error: Expected an error return from txtFieldSpacerTwo.CopyOutPtr()\n"+
 			"because txtFieldSpacerTwo.fieldLen = -99\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -610,7 +610,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = txtFieldSpacerThree.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerThree is INVALID!"))
 
 	if err == nil {
@@ -619,7 +619,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 			"Error: Expected an error return from txtFieldSpacerTwo.CopyOutPtr()\n"+
 			"because txtFieldSpacerThree.fieldLen = 0\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -635,7 +635,7 @@ func TestTextFieldSpecSpacer_CopyOutPtr_000100(t *testing.T) {
 			"CopyOutPtr()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -654,7 +654,7 @@ func TestTextFieldSpecSpacer_empty_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -697,7 +697,7 @@ func TestTextFieldSpecSpacer_Empty_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -748,7 +748,7 @@ func TestTextFieldSpecSpacer_equal_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -797,7 +797,7 @@ func TestTextFieldSpecSpacer_equal_000100(t *testing.T) {
 	txtFieldSpacerThree,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerThree"))
 
 	if err != nil {
@@ -826,7 +826,7 @@ func TestTextFieldSpecSpacer_equal_000100(t *testing.T) {
 
 	txtFieldSpacerFour,
 		err = txtFieldSpacerOne.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne->txtFieldSpacerFour"))
 
 	if err != nil {
@@ -867,7 +867,7 @@ func TestTextFieldSpecSpacer_Equal_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -913,7 +913,7 @@ func TestTextFieldSpecSpacer_EqualITextField_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -955,7 +955,7 @@ func TestTextFieldSpecSpacer_EqualITextField_000100(t *testing.T) {
 	txtFieldSpacerTwo,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerTwo"))
 
 	if err != nil {
@@ -1006,7 +1006,7 @@ func TestTextFieldSpecSpacer_GetFormattedStrLength_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		fieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1020,7 +1020,7 @@ func TestTextFieldSpecSpacer_GetFormattedStrLength_000100(t *testing.T) {
 	actualFormattedText,
 		err =
 		txtFieldSpacerOne.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1039,7 +1039,7 @@ func TestTextFieldSpecSpacer_GetFormattedStrLength_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected Formatted String Length = '%v'\n"+
 			"Instead, Formatted String Length = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedStrLen,
 			actualStrLen)
 
@@ -1056,7 +1056,7 @@ func TestTextFieldSpecSpacer_GetFormattedStrLength_000100(t *testing.T) {
 			"'txtFieldSpacerTwo' is INVALID!\n"+
 			"Expected Formatted String Length = '-1'\n"+
 			"Instead, Formatted String Length = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualStrLen)
 
 		return
@@ -1078,7 +1078,7 @@ func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1100,7 +1100,7 @@ func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 			"Expected an error return from txtFieldSpacerNanobot.getFormattedText()\n"+
 			"because input parameter 'txtFieldSpacer' is a 'nil' pointer.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("txtFieldSpacer = nil"))
+			ePrefix.XCpy("txtFieldSpacer = nil"))
 
 		return
 	}
@@ -1113,7 +1113,7 @@ func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 		err =
 		txtFieldSpacerNanobot2.getFormattedText(
 			&txtFieldSpacerOne,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1126,7 +1126,7 @@ func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected formtted string = '%v'\n"+
 			"Instead,       formatted string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedStr,
 			actualStr)
 
@@ -1138,7 +1138,7 @@ func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 	txtFieldSpacerTwo,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerTwo"))
 
 	if err != nil {
@@ -1153,7 +1153,7 @@ func TestTextFieldSpecSpacer_getFormattedText_000100(t *testing.T) {
 		err =
 		txtFieldSpacerNanobot.getFormattedText(
 			&txtFieldSpacerTwo,
-			ePrefix.XCtx("txtFieldSpacerTwo.fieldLen = -99"))
+			ePrefix.XCpy("txtFieldSpacerTwo.fieldLen = -99"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -1179,7 +1179,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1194,7 +1194,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 	actualStr,
 		err =
 		txtFieldSpacerOne.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1207,7 +1207,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected formtted string = '%v'\n"+
 			"Instead,       formatted string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedStr,
 			actualStr)
 
@@ -1225,7 +1225,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 			"GetFormattedText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1237,7 +1237,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 	actualStr,
 		err =
 		txtFieldSpacerTwo.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerTwo"))
 
 	if err == nil {
@@ -1256,7 +1256,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 
 	actualStr,
 		err = txtFieldSpacerThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerThree"))
 
 	if err != nil {
@@ -1269,7 +1269,7 @@ func TestTextFieldSpecSpacer_GetFormattedText_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Error: Expected formtted string = '%v'\n"+
 			"Instead,       formatted string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedStr,
 			actualStr)
 
@@ -1316,7 +1316,7 @@ func TestTextFieldSpecSpacer_IsValidInstanceError_000100(t *testing.T) {
 			"IsValidInstanceError()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1354,7 +1354,7 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 	_,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("Invalid Field Length == 1000001"))
+		ePrefix.XCpy("Invalid Field Length == 1000001"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -1370,7 +1370,7 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1381,7 +1381,7 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 	}
 
 	err = txtFieldSpacerOne.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1401,7 +1401,7 @@ func TestTextFieldSpecSpacer_NewPtrSpacer_000100(t *testing.T) {
 			"NewPtrSpacer()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1420,7 +1420,7 @@ func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
 	_,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("Field Length invalid!"))
+		ePrefix.XCpy("Field Length invalid!"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -1443,7 +1443,7 @@ func TestTextFieldSpecSpacer_NewSpacer_000100(t *testing.T) {
 			"NewPtrSpacer()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1466,7 +1466,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 	txtFieldSpacerZero,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1486,7 +1486,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 			"Read()\n"+
 			"because 'txtFieldSpacerZero' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1496,7 +1496,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1526,7 +1526,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtFieldSpacerOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1537,7 +1537,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1547,7 +1547,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1556,7 +1556,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"fillerTxtFieldOne.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1568,7 +1568,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFieldLen,
 			readBytesCnt)
 
@@ -1593,7 +1593,7 @@ func TestTextFieldSpecSpacer_Read_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1618,7 +1618,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1639,7 +1639,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldSpacerOne.Read(p)\n"+
 			"Error:\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1650,7 +1650,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Error: txtFieldSpacerOne.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			n)
 
 		return
@@ -1682,7 +1682,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtFieldSpacerOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1693,7 +1693,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1703,7 +1703,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1712,7 +1712,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"fillerTxtFieldOne.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1724,7 +1724,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read Length = '%v'\n"+
 			"       Actual Bytes Length = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFieldLen,
 			readBytesCnt)
 
@@ -1749,7 +1749,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1760,7 +1760,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #1\n"+
 			"Completed Read Operation but txtFieldSpacerOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1789,7 +1789,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Test # 2"+
 			"Error Returned From txtFieldSpacerOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1801,7 +1801,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1812,7 +1812,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1828,7 +1828,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1839,7 +1839,7 @@ func TestTextFieldSpecSpacer_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Completed Read Operation but txtFieldSpacerOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1862,7 +1862,7 @@ func TestTextFieldSpecSpacer_setTextFieldSpacer_000100(t *testing.T) {
 	err := txtFieldSpacerNanobot.setTextFieldSpacer(
 		&txtFieldSpacerOne,
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"->txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1876,7 +1876,7 @@ func TestTextFieldSpecSpacer_setTextFieldSpacer_000100(t *testing.T) {
 	err = txtFieldSpacerNanobot.setTextFieldSpacer(
 		&txtFieldSpacerTwo,
 		-999,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fieldLen is invalid!"))
 
 	if err == nil {
@@ -1893,7 +1893,7 @@ func TestTextFieldSpecSpacer_setTextFieldSpacer_000100(t *testing.T) {
 	err = txtFieldSpacerNanobot.setTextFieldSpacer(
 		nil,
 		expectedFieldLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacer is nil!"))
 
 	if err == nil {
@@ -1921,7 +1921,7 @@ func TestTextFieldSpecSpacer_SetFieldLen_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1931,7 +1931,7 @@ func TestTextFieldSpecSpacer_SetFieldLen_000100(t *testing.T) {
 
 	err = txtFieldSpacerOne.SetFieldLen(
 		24,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerOne"))
 
 	if err != nil {
@@ -1950,7 +1950,7 @@ func TestTextFieldSpecSpacer_SetFieldLen_000100(t *testing.T) {
 			"SetFieldLen()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1969,7 +1969,7 @@ func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err := TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1986,7 +1986,7 @@ func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected formtted string = '%v'\n"+
 			"Instead,       formatted string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedStr,
 			actualStr)
 
@@ -2007,7 +2007,7 @@ func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
 			"HOWEVER, the returned 'actualStr' did NOT contain the "+
 			"word 'Error'\n"+
 			"'actualStr' = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualStr)
 
 		return
@@ -2023,7 +2023,7 @@ func TestTextFieldSpecSpacer_String_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Error: Expected formtted string = '%v'\n"+
 			"Instead,       formatted string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedStr,
 			actualStr)
 
@@ -2066,7 +2066,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	txtFieldSpacerOne,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2075,7 +2075,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	}
 
 	err = txtFieldSpacerOne.IsValidInstanceError(
-		ePrefix.XCtx("txtFieldSpacerOne"))
+		ePrefix.XCpy("txtFieldSpacerOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2088,7 +2088,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldSpacerOne.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerOne->sb"))
 
 	if err != nil {
@@ -2120,7 +2120,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 			"txtFieldSpacerOne.TextBuilder()\n"+
 			"Expected Formatted Text = '%v'\n"+
 			"Instead, Formatted Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2140,7 +2140,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2150,13 +2150,13 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	txtFieldSpacerTwo,
 		err = TextFieldSpecSpacer{}.NewSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerTwo"))
+		ePrefix.XCpy("txtFieldSpacerTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecSpacer{}.NewSpacer()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2165,7 +2165,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldSpacerTwo.TextBuilder(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerTwo"))
 
 	if err == nil {
@@ -2174,7 +2174,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2184,13 +2184,13 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	txtFieldSpacerThree,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerThree"))
+		ePrefix.XCpy("txtFieldSpacerThree"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecSpacer{}.NewPtrSpacer()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2209,7 +2209,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2221,7 +2221,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldSpacerThree.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerThree is invalid!"))
 
 	if err == nil {
@@ -2230,7 +2230,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'txtFieldSpacerThree.fieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2240,13 +2240,13 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	txtFieldSpacerFour,
 		err = TextFieldSpecSpacer{}.NewPtrSpacer(
 		expectedFieldLen,
-		ePrefix.XCtx("txtFieldSpacerFour"))
+		ePrefix.XCpy("txtFieldSpacerFour"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecSpacer{}.NewPtrSpacer()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2257,7 +2257,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldSpacerFour.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacerFour->sb"))
 
 	if err != nil {
@@ -2273,7 +2273,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFormattedText,
 			actualFmtStr)
 
@@ -2284,7 +2284,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 
 	formattedString,
 		err = txtFieldSpacerFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldSpacerFour"))
 
 	if err != nil {
@@ -2299,7 +2299,7 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 			"txtFieldSpacerFour.GetFormattedText()"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			formattedString,
 			actualFmtStr)
 

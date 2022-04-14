@@ -283,7 +283,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
 				leftMarginChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"input parameter leftMarginChars invalid!"))
 
 		if err != nil {
@@ -294,7 +294,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			&plainTxtLine.leftMarginChars,
 			&leftMarginChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"leftMarginChars->"+
 					"plainTxtLine.leftMarginChars"))
 
@@ -313,7 +313,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
 				rightMarginChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"input parameter rightMarginChars invalid!"))
 
 		if err != nil {
@@ -324,7 +324,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			&plainTxtLine.rightMarginChars,
 			&rightMarginChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"rightMarginChars->"+
 					"plainTxtLine.rightMarginChars"))
 
@@ -345,7 +345,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
 				newLineChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"input parameter newLineChars invalid!"))
 
 		if err != nil {
@@ -356,7 +356,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) setPlainTextSpec(
 			&plainTxtLine.newLineChars,
 			&newLineChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineChars->"+
 					"plainTxtLine.newLineChars"))
 
@@ -549,7 +549,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
 				plainTextLine.leftMarginChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"plainTextLine.leftMarginChars invalid!"))
 
 		if err != nil {
@@ -576,7 +576,7 @@ func (txtLinePlainTextAtom *textLineSpecPlainTextAtom) testValidityOfTextLineSpe
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
 				plainTextLine.rightMarginChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"plainTextLine.rightMarginChars invalid!"))
 
 		if err != nil {

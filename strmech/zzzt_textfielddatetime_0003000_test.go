@@ -54,7 +54,7 @@ func TestTextFieldSpecDateTimeEdge_CopyIn_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("incomingTxtFieldDateTime"))
+		ePrefix.XCpy("incomingTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -133,7 +133,7 @@ func TestTextFieldSpecDateTimeEdge_CopyOut_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTime"))
+		ePrefix.XCpy("txtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -210,7 +210,7 @@ func TestTextFieldSpecDateTimeEdge_CopyOutITextField_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTime"))
+		ePrefix.XCpy("txtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -288,7 +288,7 @@ func TestTextFieldSpecDateTimeEdge_CopyOutPtr_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTime"))
+		ePrefix.XCpy("txtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+

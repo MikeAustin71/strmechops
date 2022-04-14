@@ -61,7 +61,7 @@ func createTestTextLineSpecTimerLines01(
 	}
 
 	err = timerLines01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -145,7 +145,7 @@ func createTestTextLineSpecTimerLines02(
 	}
 
 	err = timerLines01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {

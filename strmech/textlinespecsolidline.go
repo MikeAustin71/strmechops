@@ -1369,7 +1369,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return txtSolidLine, err
 }
@@ -1591,7 +1591,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return txtSolidLine, err
 }
@@ -1824,7 +1824,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 			solidLineCharsRepeatCount,
 			newLineChars,
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return txtSolidLine, err
 }
@@ -2038,7 +2038,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return txtSolidLine, err
 }
@@ -2276,7 +2276,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLineAllParms(
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
 			turnAutoLineTerminationOff,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return txtSolidLine, err
 }
@@ -2473,7 +2473,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return &txtSolidLine, err
 }
@@ -2701,7 +2701,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return &txtSolidLine, err
 }
@@ -2939,7 +2939,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 			solidLineCharsRepeatCount,
 			newLineChars,
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return &txtSolidLine, err
 }
@@ -3158,7 +3158,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return &txtSolidLine, err
 }
@@ -3400,7 +3400,7 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLineAllParms(
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
 			turnAutoLineTerminationOff,
-			ePrefix.XCtx("txtSolidLine"))
+			ePrefix.XCpy("txtSolidLine"))
 
 	return txtSolidLine, err
 }
@@ -3586,7 +3586,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) Read(
 			err = textLineSpecSolidLineMolecule{}.ptr().
 			getFormattedText(
 				txtSpecSolidLine,
-				ePrefix.XCtx("txtSpecSolidLine->formattedText"))
+				ePrefix.XCpy("txtSpecSolidLine->formattedText"))
 
 		if err != nil {
 			return n, err
@@ -3600,7 +3600,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"txtSpecSolidLine.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -3611,7 +3611,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) Read(
 		readBytes(
 			txtSpecSolidLine.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> txtSpecSolidLine.textLineReader"))
 
 	if err == io.EOF {
@@ -3868,7 +3868,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
 			false,
-			ePrefix.XCtx("txtSpecSolidLine"))
+			ePrefix.XCpy("txtSpecSolidLine"))
 
 	return err
 }
@@ -4082,7 +4082,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 			solidLineCharsRepeatCount,
 			newLineChars,
 			false,
-			ePrefix.XCtx("txtSpecSolidLine"))
+			ePrefix.XCpy("txtSpecSolidLine"))
 
 	return err
 }
@@ -4377,7 +4377,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineChars(
 		&txtSpecSolidLine.newLineChars,
 		&newLineRunes,
 		true,
-		ePrefix.XCtx("newLineRunes->txtSpecSolidLine.newLineChars"))
+		ePrefix.XCpy("newLineRunes->txtSpecSolidLine.newLineChars"))
 
 	return err
 }
@@ -4478,7 +4478,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineRunes invalid!"))
 
 	if err != nil {
@@ -4719,7 +4719,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineAllParms(
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
 			turnAutoLineTerminationOff,
-			ePrefix.XCtx("txtSpecSolidLine"))
+			ePrefix.XCpy("txtSpecSolidLine"))
 
 	return err
 }
@@ -5235,7 +5235,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx("txtSpecSolidLine"))
+			ePrefix.XCpy("txtSpecSolidLine"))
 
 	return err
 }
@@ -5450,7 +5450,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineStrChars(
 		&txtSpecSolidLine.solidLineChars,
 		&solidLineRunes,
 		true,
-		ePrefix.XCtx("solidLineChars->"+
+		ePrefix.XCpy("solidLineChars->"+
 			"txtSpecSolidLine.solidLineChars"))
 
 	if err != nil {
@@ -5678,7 +5678,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineRuneChars(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		solidLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars is Invalid!"))
 
 	if err != nil {
@@ -5689,7 +5689,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineRuneChars(
 		&txtSpecSolidLine.solidLineChars,
 		&solidLineChars,
 		true,
-		ePrefix.XCtx("solidLineChars->"+
+		ePrefix.XCpy("solidLineChars->"+
 			"txtSpecSolidLine.solidLineChars"))
 
 	if err != nil {
@@ -5880,7 +5880,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) TextBuilder(
 		err = textLineSpecSolidLineMolecule{}.ptr().
 		getFormattedText(
 			txtSpecSolidLine,
-			ePrefix.XCtx("txtSpecSolidLine"))
+			ePrefix.XCpy("txtSpecSolidLine"))
 
 	if err != nil {
 		return err
@@ -5895,7 +5895,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

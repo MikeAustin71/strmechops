@@ -14,7 +14,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 	outputStr,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -28,7 +28,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 	_,
 		timerLines02,
 		err = createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02"))
 
 	if err != nil {
@@ -39,7 +39,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 
 	err = timerLines02.CopyIn(
 		timerLines01,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02<-timerLines01"))
 
 	if err != nil {
@@ -52,7 +52,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 
 	actualStr,
 		err = timerLines02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02"))
 
 	if err != nil {
@@ -75,7 +75,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -88,7 +88,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 	_,
 		timerLines03,
 		err = createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03"))
 
 	if err != nil {
@@ -99,7 +99,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 
 	err = timerLines03.CopyIn(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03<-nil"))
 
 	if err == nil {
@@ -109,7 +109,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'incomingTimerLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -125,7 +125,7 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -142,7 +142,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 	outputStr,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -155,7 +155,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 
 	timerLines02,
 		err = timerLines01.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02<-timerLines01"))
 
 	if err != nil {
@@ -168,7 +168,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 
 	actualStr,
 		err = timerLines02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02"))
 
 	if err != nil {
@@ -191,7 +191,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -203,7 +203,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 	_,
 		timerLines03,
 		err = createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03"))
 
 	if err != nil {
@@ -214,12 +214,12 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 
 	*timerLines03,
 		err = timerLines02.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03<-timerLines02"))
 
 	actualStr,
 		err = timerLines03.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03"))
 
 	if err != nil {
@@ -240,7 +240,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -252,7 +252,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 
 	_,
 		err = timerLines04.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines04"))
 
 	if err == nil {
@@ -262,14 +262,14 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'timerLines04' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	_,
 		err = timerLines04.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines04"))
 
 	if err == nil {
@@ -279,7 +279,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'timerLines04' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -295,7 +295,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -312,7 +312,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 	outputStr,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -325,7 +325,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 
 	timerLines02,
 		err = timerLines01.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02<-timerLines01"))
 
 	if err != nil {
@@ -338,7 +338,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 
 	actualStr,
 		err = timerLines02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02"))
 
 	if err != nil {
@@ -361,7 +361,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -373,7 +373,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 	_,
 		timerLines03,
 		err = createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03"))
 
 	if err != nil {
@@ -384,12 +384,12 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 
 	timerLines03,
 		err = timerLines02.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03<-timerLines02"))
 
 	actualStr,
 		err = timerLines03.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03"))
 
 	if err != nil {
@@ -410,7 +410,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -422,7 +422,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 
 	_,
 		err = timerLines04.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines04"))
 
 	if err == nil {
@@ -432,14 +432,14 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 			"CopyOutPtr()\n"+
 			"because 'timerLines04' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	_,
 		err = timerLines04.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines04"))
 
 	if err == nil {
@@ -449,7 +449,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'timerLines04' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -465,7 +465,7 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 			"CopyOutPtr()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -482,7 +482,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000100(t *testing.T) {
 	outputStr,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -495,7 +495,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000100(t *testing.T) {
 
 	actualStr,
 		err = timerLines01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -518,7 +518,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -538,7 +538,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000200(t *testing.T) {
 	outputStr,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -551,7 +551,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000200(t *testing.T) {
 
 	actualStr,
 		err = timerLines01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -574,7 +574,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000200(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -594,7 +594,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000300(t *testing.T) {
 	_,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -614,7 +614,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000300(t *testing.T) {
 			"GetFormattedText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}

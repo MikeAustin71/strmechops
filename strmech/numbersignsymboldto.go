@@ -20,7 +20,7 @@ import (
 // Number Sign Symbols are usually positioned before the numeric
 // value ('USA Example: +25') or after the numeric value ('EU
 // Example 25-). However, there are cases where the number sign
-// is positioned before and after the negative value. As as shown
+// is positioned before and after the negative value. As shown
 // above, the USA uses opening and closing parentheses to designate
 // a negative number "(55)".
 //

@@ -478,7 +478,7 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 		equal(
 			nStrIntSep,
 			&nStrIntSepTwo,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nStrIntSep vs nStrIntSepTwo"))
 }
 
@@ -979,7 +979,7 @@ func (nStrIntSep IntegerSeparatorDto) NewBasic(
 			setBasic(
 				&newIntSep,
 				integerDigitsSeparators,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"newIntSep"))
 
 	return newIntSep, err
@@ -1134,7 +1134,7 @@ func (nStrIntSep IntegerSeparatorDto) NewBasicRunes(
 			setBasicRunes(
 				&newIntSep,
 				integerDigitsSeparators,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"newIntSep"))
 
 	return newIntSep, err
@@ -1333,7 +1333,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 				[]rune(intSeparatorChars),
 				intSeparatorGrouping,
 				restartIntGroupingSequence,
-				ePrefix.XCtx("newIntSep"))
+				ePrefix.XCpy("newIntSep"))
 
 	return newIntSep, err
 }
@@ -1530,7 +1530,7 @@ func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 				intSeparatorChars,
 				intSeparatorGrouping,
 				restartIntGroupingSequence,
-				ePrefix.XCtx("newIntSep"))
+				ePrefix.XCpy("newIntSep"))
 
 	return newIntSep, err
 }
@@ -1645,7 +1645,7 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 	err = integerSeparatorDtoMechanics{}.ptr().
 		setToUSADefaults(
 			&newIntSep,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newIntSep"))
 
 	return newIntSep, err
@@ -1833,7 +1833,7 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 				intSeparatorChars,
 				intSeparatorGrouping,
 				restartIntGroupingSequence,
-				ePrefix.XCtx("newIntSep"))
+				ePrefix.XCpy("newIntSep"))
 
 	return newIntSep, err
 }
@@ -1983,7 +1983,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasic(
 		setBasic(
 			nStrIntSep,
 			integerDigitsSeparators,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nStrIntSep"))
 }
 
@@ -2137,7 +2137,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetBasicRunes(
 		setBasicRunes(
 			nStrIntSep,
 			intSeparatorChars,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nStrIntSep"))
 }
 
@@ -2324,7 +2324,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 			[]rune(intSeparatorChars),
 			intGroupingSequence,
 			restartIntGroupingSequence,
-			ePrefix.XCtx("nStrIntSep"))
+			ePrefix.XCpy("nStrIntSep"))
 }
 
 // SetDetailRunes - This method will overwrite and reset the
@@ -2515,7 +2515,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 			intSeparatorChars,
 			intGroupingSequence,
 			restartIntGroupingSequence,
-			ePrefix.XCtx("nStrIntSep"))
+			ePrefix.XCpy("nStrIntSep"))
 }
 
 // SetIntSeparatorChars - Sets the 'intSeparatorChars' member
@@ -2645,7 +2645,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 			&nStrIntSep.intSeparatorChars,
 			&intSeparatorChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"intSeparatorChars->"+
 					"nStrIntSep.intSeparatorChars"))
 
@@ -3132,7 +3132,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetToUSADefaultsIfEmpty(
 	return integerSeparatorDtoUtility{}.ptr().
 		setToUSADefaultsIfEmpty(
 			nStrIntSep,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nStrIntSep"))
 }
 
@@ -3347,5 +3347,5 @@ func (nStrIntSep *IntegerSeparatorDto) SetWithComponents(
 			intSeparatorChars,
 			intGroupingSequence,
 			restartIntGroupingSequence,
-			ePrefix.XCtx("nStrIntSep"))
+			ePrefix.XCpy("nStrIntSep"))
 }

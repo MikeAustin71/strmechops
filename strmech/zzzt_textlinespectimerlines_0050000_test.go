@@ -14,7 +14,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 	_,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -28,7 +28,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 	_,
 		timerLines02,
 		err = createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02"))
 
 	if err != nil {
@@ -43,7 +43,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 		txtTimerLinesNanobot.copyIn(
 			timerLines02,
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"timerLines02<-nil"))
 
 	if err == nil {
@@ -53,7 +53,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 			"copyIn()\n"+
 			"because 'incomingTimerLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -62,7 +62,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 		txtTimerLinesNanobot.copyIn(
 			nil,
 			timerLines01,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"nil<-timerLines01"))
 
 	if err == nil {
@@ -72,7 +72,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 			"copyIn()\n"+
 			"because 'targetTimerLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -83,7 +83,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 		txtTimerLinesNanobot.copyIn(
 			timerLines02,
 			&timerLines03,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"timerLines02<-timerLines03 (invalid)"))
 
 	if err == nil {
@@ -93,7 +93,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 			"copyIn()\n"+
 			"because 'incomingTimerLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -110,7 +110,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 	outputStr,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -126,7 +126,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 	timerLines02,
 		err = txtTimerLinesNanobot.copyOut(
 		timerLines01,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02<-timerLines01"))
 
 	if err != nil {
@@ -139,7 +139,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 
 	actualStr,
 		err = timerLines02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02"))
 
 	if err != nil {
@@ -162,7 +162,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			outputStr,
 			printableActualStr)
 
@@ -172,7 +172,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 	_,
 		err = txtTimerLinesNanobot.copyOut(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtTimerLines is nil"))
 
 	if err == nil {
@@ -182,7 +182,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 			"copyOut()\n"+
 			"because 'txtTimerLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -192,7 +192,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 	_,
 		err = txtTimerLinesNanobot.copyOut(
 		&timerLines03,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines03 is invalid"))
 
 	if err == nil {
@@ -202,7 +202,7 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 			"copyOut()\n"+
 			"because 'txtTimerLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -219,7 +219,7 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	_,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -233,7 +233,7 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	_,
 		err = txtTimerLinesMolecule.getFormattedText(
 		timerLines01,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01"))
 
 	if err != nil {
@@ -245,7 +245,7 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	_,
 		err = txtTimerLinesMolecule.getFormattedText(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines01-Test#2"))
 
 	if err == nil {
@@ -255,7 +255,7 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 			"getFormattedText()\n"+
 			"because 'txtTimerLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -265,7 +265,7 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	_,
 		err = txtTimerLinesMolecule.getFormattedText(
 		&timerLines02,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"timerLines02-Test#1"))
 
 	if err == nil {
@@ -275,7 +275,7 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 			"getFormattedText()\n"+
 			"because 'txtTimerLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}

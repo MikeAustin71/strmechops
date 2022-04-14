@@ -121,7 +121,7 @@ func (txtFieldDateTimeNanobot *textFieldSpecDateTimeNanobot) copyIn(
 	_,
 		err = textFieldSpecDateTimeAtom{}.ptr().isValidTextFieldDateTime(
 		incomingDateTimeTxtField,
-		ePrefix.XCtx("testing incomingDateTimeTxtField"))
+		ePrefix.XCpy("testing incomingDateTimeTxtField"))
 
 	if err != nil {
 		return err
@@ -234,7 +234,7 @@ func (txtFieldDateTimeNanobot *textFieldSpecDateTimeNanobot) copyOut(
 	_,
 		err = textFieldSpecDateTimeAtom{}.ptr().isValidTextFieldDateTime(
 		dateTimeTxtField,
-		ePrefix.XCtx("testing validity of dateTimeTxtField"))
+		ePrefix.XCpy("testing validity of dateTimeTxtField"))
 
 	if err != nil {
 		return newDateTimeTxtField, err
@@ -302,7 +302,7 @@ func (txtFieldDateTimeNanobot *textFieldSpecDateTimeNanobot) getFormattedText(
 		err = textFieldSpecDateTimeAtom{}.ptr().
 		isValidTextFieldDateTime(
 			dateTimeTxtField,
-			ePrefix.XCtx("testing validity of dateTimeTxtField"))
+			ePrefix.XCpy("testing validity of dateTimeTxtField"))
 
 	if err != nil {
 		return "", err
@@ -316,7 +316,7 @@ func (txtFieldDateTimeNanobot *textFieldSpecDateTimeNanobot) getFormattedText(
 			[]rune(textLabel),
 			dateTimeTxtField.fieldLen,
 			dateTimeTxtField.textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"dateTimeTxtField"))
 }
 

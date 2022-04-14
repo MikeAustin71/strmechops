@@ -692,7 +692,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedStrLength() int {
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
 			txtFieldLabel.textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabel"))
 
 	if err != nil {
@@ -856,7 +856,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
 			txtFieldLabel.textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabel"))
 }
 
@@ -1117,8 +1117,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 // means that the returned TextFieldSpecLabel instance is invalid.
 // Therefore, in order to use this TextFieldSpecLabel instance,
 // users must later call the setter methods on this type in order
-// to configure valid and meaningful meaningful member variable
-// data values.
+// to configure valid and meaningful member variable data values.
 //
 //
 // ------------------------------------------------------------------------
@@ -2216,7 +2215,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 				txtFieldLabel.textLabel,
 				txtFieldLabel.fieldLen,
 				txtFieldLabel.textJustification,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"txtFieldLabel"))
 
 		if err != nil {
@@ -2231,7 +2230,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"txtFieldLabel.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -2242,7 +2241,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 		readBytes(
 			txtFieldLabel.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> txtFieldLabel.textLineReader"))
 
 	if err == io.EOF {
@@ -2438,7 +2437,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 		textFieldSpecLabelElectron{}.ptr().
 			isFieldLengthValid(
 				fieldLen,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"'fieldLen' Invalid!"))
 
 	if err != nil {
@@ -2577,7 +2576,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		textLabelRunes,
-		ePrefix.XCtx("textLabel->"+
+		ePrefix.XCpy("textLabel->"+
 			"textLabelRunes"))
 
 	if err != nil {
@@ -2588,7 +2587,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 		&txtFieldLabel.textLabel,
 		&textLabelRunes,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLabel->textLabelRunes->"+
 				"txtFieldLabel.textLabel"))
 
@@ -3265,7 +3264,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		textLabelChars,
-		ePrefix.XCtx("textLabelChars"))
+		ePrefix.XCpy("textLabelChars"))
 
 	if err != nil {
 		return err
@@ -3275,7 +3274,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 		&txtFieldLabel.textLabel,
 		&textLabelChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLabelChars->txtFieldLabel.textLabel"))
 
 	return err
@@ -3490,7 +3489,7 @@ func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
 			txtFieldLabel.textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabel"))
 
 	if err != nil {
@@ -3506,7 +3505,7 @@ func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

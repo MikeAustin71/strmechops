@@ -256,7 +256,7 @@ func (blkLines *TextLineSpecBlankLines) CopyOut(
 		err = textLineSpecBlankLinesMolecule{}.ptr().
 		copyOut(
 			blkLines,
-			ePrefix.XCtx("blkLines"))
+			ePrefix.XCpy("blkLines"))
 
 	return newBlankLinesSpec, err
 }
@@ -484,7 +484,7 @@ func (blkLines *TextLineSpecBlankLines) CopyOutPtr(
 		err = textLineSpecBlankLinesMolecule{}.ptr().
 		copyOut(
 			blkLines,
-			ePrefix.XCtx("blkLines"))
+			ePrefix.XCpy("blkLines"))
 
 	return &newBlankLinesSpec, err
 }
@@ -924,7 +924,7 @@ func (blkLines *TextLineSpecBlankLines) IsValidInstanceError(
 		err = textLineSpecBlankLinesAtom{}.ptr().
 		testValidityOfTextLineSpecBlankLines(
 			blkLines,
-			ePrefix.XCtx("blkLines"))
+			ePrefix.XCpy("blkLines"))
 
 	return err
 }
@@ -1065,7 +1065,7 @@ func (blkLines TextLineSpecBlankLines) NewBlankLines(
 			&newBlankLinesSpec,
 			numOfBlankLines,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->newBlankLinesSpec"))
 
 	return newBlankLinesSpec, err
@@ -1208,7 +1208,7 @@ func (blkLines TextLineSpecBlankLines) NewBlankLineRunes(
 			&newBlankLinesSpec,
 			numOfBlankLines,
 			newLineRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->newBlankLinesSpec"))
 
 	return newBlankLinesSpec, err
@@ -1347,7 +1347,7 @@ func (blkLines TextLineSpecBlankLines) NewDefaultBlankLines(
 			&newBlankLinesSpec,
 			numOfBlankLines,
 			[]rune{'\n'},
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->newBlankLinesSpec"))
 
 	return newBlankLinesSpec, err
@@ -1489,7 +1489,7 @@ func (blkLines TextLineSpecBlankLines) NewPtrBlankLines(
 			&newBlankLinesSpec,
 			numOfBlankLines,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->newBlankLinesSpec"))
 
 	return &newBlankLinesSpec, err
@@ -1632,7 +1632,7 @@ func (blkLines TextLineSpecBlankLines) NewPtrBlankLineRunes(
 			&newBlankLinesSpec,
 			numOfBlankLines,
 			newLineRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->newBlankLinesSpec"))
 
 	return &newBlankLinesSpec, err
@@ -1771,7 +1771,7 @@ func (blkLines TextLineSpecBlankLines) NewPtrDefaultBlankLines(
 			&newBlankLinesSpec,
 			numOfBlankLines,
 			[]rune{'\n'},
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->newBlankLinesSpec"))
 
 	return &newBlankLinesSpec, err
@@ -1958,7 +1958,7 @@ func (blkLines *TextLineSpecBlankLines) Read(
 			err = textLineSpecBlankLinesMolecule{}.ptr().
 			getFormattedText(
 				blkLines,
-				ePrefix.XCtx("blkLines"))
+				ePrefix.XCpy("blkLines"))
 
 		if err != nil {
 			return n, err
@@ -1972,7 +1972,7 @@ func (blkLines *TextLineSpecBlankLines) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"blkLines.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -1983,7 +1983,7 @@ func (blkLines *TextLineSpecBlankLines) Read(
 		readBytes(
 			blkLines.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> blkLines.textLineReader"))
 
 	if err == io.EOF {
@@ -2166,7 +2166,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 	err = textLineSpecBlankLinesElectron{}.ptr().
 		testValidityNewLinesChars(
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineChars"))
 
 	if err != nil {
@@ -2178,7 +2178,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineTermRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineChars->newLineTermRunes"))
 
 	if err != nil {
@@ -2189,7 +2189,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineChars(
 		&blkLines.newLineChars,
 		&newLineTermRunes,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineChars->newLineTermRunes"+
 				"->blkLines.newLineChars"))
 
@@ -2329,7 +2329,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
 	err = textLineSpecBlankLinesElectron{}.ptr().
 		testValidityNewLinesChars(
 			newLineRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineRunes"))
 
 	if err != nil {
@@ -2341,7 +2341,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineRunes"))
 
 	if err != nil {
@@ -2352,7 +2352,7 @@ func (blkLines *TextLineSpecBlankLines) SetNewLineRunes(
 		&blkLines.newLineChars,
 		&newLineRunes,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineRunes"+
 				"->blkLines.newLineChars"))
 
@@ -2492,7 +2492,7 @@ func (blkLines *TextLineSpecBlankLines) SetNumberOfBlankLines(
 	err = textLineSpecBlankLinesElectron{}.ptr().
 		testValidityNumOfBlankLines(
 			numOfBlankLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"numOfBlankLines"))
 
 	if err != nil {
@@ -2640,7 +2640,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecBlankLines(
 			blkLines,
 			numOfBlankLines,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->blkLines"))
 }
 
@@ -2769,7 +2769,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecDefaultBlankLines(
 			blkLines,
 			numOfBlankLines,
 			[]rune{'\n'},
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->blkLines"))
 }
 
@@ -2911,7 +2911,7 @@ func (blkLines *TextLineSpecBlankLines) SetSpecBlankLineRunes(
 			blkLines,
 			numOfBlankLines,
 			newLineRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"->blkLines"))
 }
 
@@ -3090,7 +3090,7 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 		err = textLineSpecBlankLinesMolecule{}.ptr().
 		getFormattedText(
 			blkLines,
-			ePrefix.XCtx("blkLines"))
+			ePrefix.XCpy("blkLines"))
 
 	if err != nil {
 		return err
@@ -3105,7 +3105,7 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

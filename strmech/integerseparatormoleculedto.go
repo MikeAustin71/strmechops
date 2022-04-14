@@ -186,7 +186,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		err = strMechPreon{}.ptr().
 		testValidityOfRuneIntArray(
 			pureNumRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"pureNumRunes"))
 
 	if err != nil {
@@ -201,7 +201,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 		err = integerSeparatorDtoQuark{}.ptr().
 		testValidityOfNumStrIntSeparator(
 			nStrIntSeparator,
-			ePrefix.XCtx("nStrIntSeparator->"))
+			ePrefix.XCpy("nStrIntSeparator->"))
 
 	if err != nil {
 		return numStrWithIntSeps, err
@@ -392,7 +392,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 		integerSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				incomingNStrIntSeparator,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"Testing validity of 'incomingNStrIntSeparator'."))
 
 	if err != nil {
@@ -405,7 +405,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 		&targetNStrIntSeparator.intSeparatorChars,
 		&incomingNStrIntSeparator.intSeparatorChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingNStrIntSeparator.intSeparatorChars->"+
 				"targetNStrIntSeparator.intSeparatorChars"))
 
@@ -417,7 +417,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyIn(
 		&targetNStrIntSeparator.intGroupingSequence,
 		&incomingNStrIntSeparator.intGroupingSequence,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingNStrIntSeparator.intGroupingSequence->"+
 				"targetNStrIntSeparator.intGroupingSequence"))
 
@@ -479,7 +479,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 		integerSeparatorDtoQuark{}.ptr().
 			testValidityOfNumStrIntSeparator(
 				numStrIntSeparator,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"Testing validity of 'numStrIntSeparator'."))
 
 	if err != nil {
@@ -495,7 +495,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 			"is invalid!\n"+
 			"'numStrIntSeparator.intSeparatorChars' is a zero "+
 			"length array.\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return newNumSrIntSeparator, err
 	}
@@ -506,7 +506,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 		&newNumSrIntSeparator.intSeparatorChars,
 		&numStrIntSeparator.intSeparatorChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"numStrIntSeparator.intSeparatorChars->"+
 				"newNumSrIntSeparator.intSeparatorChars"))
 
@@ -518,7 +518,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) copyOut(
 		&newNumSrIntSeparator.intGroupingSequence,
 		&numStrIntSeparator.intGroupingSequence,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"numStrIntSeparator.intGroupingSequence->"+
 				"newNumSrIntSeparator.intGroupingSequence"))
 

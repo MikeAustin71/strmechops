@@ -133,7 +133,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 			targetStr,
 			begIdx,
 			targetLen-1,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"\ntargetStr='%v'\n"+
 						"begIdx='%v'\n"+
@@ -175,7 +175,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 				targetStr,
 				begIdx,
 				actualLastIdx,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"\ntargetStr='%v'\n"+
 							"begIdx='%v'\n"+
@@ -254,7 +254,7 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 						targetStr,
 						begIdx,
 						beginWrdIdx-1,
-						ePrefix.XCtx(
+						ePrefix.XCpy(
 							fmt.Sprintf(
 								"\ntargetStr='%v'\n"+
 									"begIdx='%v'\n"+

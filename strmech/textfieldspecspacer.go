@@ -649,7 +649,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedStrLength() int {
 		err := textFieldSpecSpacerNanobot{}.ptr().
 		getFormattedText(
 			txtFieldSpacer,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacer"))
 
 	if err != nil {
@@ -791,7 +791,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedText(
 	return textFieldSpecSpacerNanobot{}.ptr().
 		getFormattedText(
 			txtFieldSpacer,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacer"))
 }
 
@@ -940,7 +940,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) IsValidInstanceError(
 		err = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(
 			txtFieldSpacer.fieldLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacer.fieldLen invalid!"))
 
 	return err
@@ -1163,7 +1163,7 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewPtrSpacer(
 		setTextFieldSpacer(
 			&newTextSpacer,
 			fieldLen,
-			ePrefix.XCtx("->newTextSpacer"))
+			ePrefix.XCpy("->newTextSpacer"))
 
 	if err != nil {
 
@@ -1300,7 +1300,7 @@ func (txtFieldSpacer TextFieldSpecSpacer) NewSpacer(
 		setTextFieldSpacer(
 			&newTextSpacer,
 			fieldLen,
-			ePrefix.XCtx("->newTextSpacer"))
+			ePrefix.XCpy("->newTextSpacer"))
 
 	return newTextSpacer, err
 }
@@ -1485,7 +1485,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Read(
 			err = textFieldSpecSpacerNanobot{}.ptr().
 			getFormattedText(
 				txtFieldSpacer,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"txtFieldSpacer"))
 
 		if err != nil {
@@ -1500,7 +1500,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"txtFillerField.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -1511,7 +1511,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Read(
 		readBytes(
 			txtFieldSpacer.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> txtFieldSpacer.textLineReader"))
 
 	if err == io.EOF {
@@ -1883,7 +1883,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 		err = textFieldSpecSpacerNanobot{}.ptr().
 		getFormattedText(
 			txtFieldSpacer,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacer"))
 
 	if err != nil {
@@ -1899,7 +1899,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

@@ -426,7 +426,7 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setToUSADefaultsIfEmpty(
 	err = integerSeparatorDtoMechanics{}.ptr().
 		setToUSADefaults(
 			intSep,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"intSep"))
 
 	return err

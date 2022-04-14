@@ -112,7 +112,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		err = txtTimerLinesAtom.
 		testValidityOfTxtSpecTimerLines(
 			txtTimerLines,
-			ePrefix.XCtx("txtTimerLines"))
+			ePrefix.XCpy("txtTimerLines"))
 
 	if err != nil {
 		return "", err
@@ -137,7 +137,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 			txtTimerLines.labelLeftMarginChars,
 			1,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"First Line: "+
 					"txtTimerLines.labelLeftMarginChars"))
 
@@ -148,7 +148,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		_,
 			err = stdLine.AddTextField(
 			txtLabelLeftFiller,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"First Line: txtLabelLeftFiller"))
 
 		if err != nil {
@@ -162,7 +162,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		txtTimerLines.startTimeLabel,
 		txtTimerLines.textLabelFieldLen,
 		txtTimerLines.textLabelJustification,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtDescLabel: txtTimerLines.startTimeLabel"))
 
 	if err != nil {
@@ -172,7 +172,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	_,
 		err = stdLine.AddTextField(
 		txtDescLabel,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"First Line: txtDescLabel"+
 				" - txtTimerLines.startTimeLabel"))
 
@@ -184,7 +184,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		txtTimerLines.labelRightMarginChars,
 		1,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"First Line: txtTimerLines.labelRightMarginChars"))
 
 	if err != nil {
@@ -194,7 +194,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	_,
 		err = stdLine.AddTextField(
 		txtLabelRightFiller,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"First Line: txtLabelRightFiller"))
 
 	if err != nil {
@@ -209,7 +209,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		startTimeStr,
 		-1,
 		TxtJustify.Left(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"startTimeStr: txtOutputLabel"))
 
 	if err != nil {
@@ -219,7 +219,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	_,
 		err = stdLine.AddTextField(
 		txtOutputLabel,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"First Line - startTimeStr: "+
 				"txtOutputLabel"))
 
@@ -255,7 +255,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		_,
 			err = stdLine.AddTextField(
 			txtLabelLeftFiller,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Second Line - txtLabelLeftFiller"))
 
 		if err != nil {
@@ -266,7 +266,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	err = txtDescLabel.SetTextRunes(
 		txtTimerLines.endTimeLabel,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Second Line - txtDescLabel: "+
 				"txtTimerLines.endTimeLabel"))
 
@@ -277,7 +277,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	_,
 		err = stdLine.AddTextField(
 		txtDescLabel,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Second Line - txtDescLabel: "+
 				"Add txtDescLabel"))
 
@@ -289,7 +289,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		err =
 		stdLine.AddTextField(
 			txtLabelRightFiller,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Second Line: txtLabelRightFiller"))
 
 	if err != nil {
@@ -301,7 +301,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 	err = txtOutputLabel.SetText(
 		endTimeStr,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Second Line - txtOutputLabel: "+
 				"endTimeStr"))
 
@@ -312,7 +312,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	_,
 		err = stdLine.AddTextField(
 		txtOutputLabel,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Second - endTimeStr: "+
 				"txtOutputLabel"))
 
@@ -352,7 +352,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		err = TextFieldSpecFiller{}.NewPtrTextFillerRuneArray(
 		[]rune{' '},
 		totalLabelLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Summary Line Left Margin"))
 
 	if err != nil {
@@ -367,7 +367,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			txtTimerLines.startTime,
 			txtTimerLines.endTime,
 			totalLabelLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Timer Summary Line Calculation"))
 
 	if err != nil {
@@ -385,7 +385,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				txtTimerLines.timeDurationLabel,
 				txtTimerLines.textLabelFieldLen,
 				txtTimerLines.textLabelJustification,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"txtTimerLines.timeDurationLabel"))
 
 			if err != nil {
@@ -395,7 +395,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			_,
 				err = stdLine.AddTextField(
 				txtDescLabel,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"Time Summary Line #%v : "+
 							"txtTimerLines.timeDurationLabel->"+
@@ -409,7 +409,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				err =
 				stdLine.AddTextField(
 					txtLabelRightFiller,
-					ePrefix.XCtx(
+					ePrefix.XCpy(
 						fmt.Sprintf(
 							"Time Summary Line #%v : "+
 								"txtLabelRightFiller->"+
@@ -424,7 +424,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				timeDurationStrs[i],
 				-1,
 				TxtJustify.Left(),
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"Time Summary Line #%v : "+
 							"txtLabelRightFiller->"+
@@ -438,7 +438,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				err =
 				stdLine.AddTextField(
 					txtOutputLabel,
-					ePrefix.XCtx(
+					ePrefix.XCpy(
 						fmt.Sprintf(
 							"Time Summary Line #%v : "+
 								"txtOutputLabel->"+
@@ -454,7 +454,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				err =
 				stdLine.AddTextField(
 					txtFillerSumLeftMar,
-					ePrefix.XCtx(
+					ePrefix.XCpy(
 						fmt.Sprintf(
 							"Time Summary Line #%v : "+
 								"txtOutputLabel->"+
@@ -469,7 +469,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				timeDurationStrs[i],
 				-1,
 				TxtJustify.Left(),
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"Time Summary Line #%v : "+
 							"timeDurationStrs[%v]->"+
@@ -482,7 +482,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			_,
 				err = stdLine.AddTextField(
 				txtOutputLabel,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"Time Summary Line #%v : "+
 							"timeDurationStrs[%v]->"+
@@ -881,7 +881,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		&txtTimerLines.labelLeftMarginChars,
 		&labelLeftMarginChars,
 		true,
-		ePrefix.XCtx("labelLeftMarginChars->"+
+		ePrefix.XCpy("labelLeftMarginChars->"+
 			"txtTimerLines.labelLeftMarginChars,"))
 
 	if err != nil {
@@ -892,7 +892,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		&txtTimerLines.startTimeLabel,
 		&startTimeLabel,
 		true,
-		ePrefix.XCtx("startTimeLabel->"+
+		ePrefix.XCpy("startTimeLabel->"+
 			"txtTimerLines.startTimeLabel"))
 
 	if err != nil {
@@ -905,7 +905,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		&txtTimerLines.endTimeLabel,
 		&endTimeLabel,
 		true,
-		ePrefix.XCtx("endTimeLabel"))
+		ePrefix.XCpy("endTimeLabel"))
 
 	if err != nil {
 		return err
@@ -919,7 +919,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		&txtTimerLines.timeDurationLabel,
 		&timeDurationLabel,
 		true,
-		ePrefix.XCtx("timeDurationLabel"))
+		ePrefix.XCpy("timeDurationLabel"))
 
 	if err != nil {
 		return err
@@ -935,7 +935,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 		&txtTimerLines.labelRightMarginChars,
 		&labelRightMarginChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelRightMarginChars"))
 
 	return err

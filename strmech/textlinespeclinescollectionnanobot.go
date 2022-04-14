@@ -131,7 +131,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyIn(
 		err = txtLinesColAtom.
 		testValidityOfTextLinesCollection(
 			incomingTextLineCol,
-			ePrefix.XCtx("incomingTextLineCol"))
+			ePrefix.XCpy("incomingTextLineCol"))
 
 	if err != nil {
 		return err
@@ -147,7 +147,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyIn(
 			"Error: Input parameter 'incomingTextLineCol' is invalid!\n"+
 			"The 'incomingTextLineCol' text lines collection is empty.\n"+
 			"There is nothing to copy.\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return err
 	}
@@ -172,7 +172,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyIn(
 
 		newTextLine,
 			err = incomingTextLineCol.textLines[i].CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"incomingTextLineCol.textLines[%v] copy error",
 					i)))
@@ -282,7 +282,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 		err = txtLinesColAtom.
 		testValidityOfTextLinesCollection(
 			textLineCol,
-			ePrefix.XCtx("incomingTextLineCol"))
+			ePrefix.XCpy("incomingTextLineCol"))
 
 	if err != nil {
 		return newTxtLinesCol, err
@@ -295,7 +295,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 			"Error: Input parameter 'textLineCol' is invalid!\n"+
 			"The 'textLineCol' text lines collection is empty.\n"+
 			"There is nothing to copy.\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return TextLineSpecLinesCollection{}, err
 	}
@@ -320,7 +320,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 
 		newTextLine,
 			err = newTxtLinesCol.textLines[i].CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"incomingTextLineCol.textLines[%v] copy error",
 					i)))

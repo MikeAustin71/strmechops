@@ -125,7 +125,7 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyIn(
 		err = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(
 			incomingTxtFieldSpacer.fieldLen,
-			ePrefix.XCtx("incomingTxtFieldSpacer.fieldLen is invalid!"))
+			ePrefix.XCpy("incomingTxtFieldSpacer.fieldLen is invalid!"))
 
 	if err != nil {
 
@@ -231,7 +231,7 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) copyOut(
 		err = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(
 			txtFieldSpacer.fieldLen,
-			ePrefix.XCtx("txtFieldSpacer.fieldLen is invalid!"))
+			ePrefix.XCpy("txtFieldSpacer.fieldLen is invalid!"))
 
 	if err != nil {
 
@@ -371,7 +371,7 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) getFormattedText(
 		err = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(
 			txtFieldSpacer.fieldLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldSpacer.fieldLen invalid!"))
 
 	if err != nil {
@@ -505,7 +505,7 @@ func (txtFieldSpacerNanobot *textFieldSpecSpacerNanobot) setTextFieldSpacer(
 		err = textFieldSpecSpacerElectron{}.ptr().
 		isFieldLenValidError(
 			fieldLen,
-			ePrefix.XCtx("fieldLen is invalid!"))
+			ePrefix.XCpy("fieldLen is invalid!"))
 
 	if err != nil {
 

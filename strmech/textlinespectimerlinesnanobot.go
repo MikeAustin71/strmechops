@@ -124,7 +124,7 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 		err = textLineSpecTimerLinesAtom{}.ptr().
 		testValidityOfTxtSpecTimerLines(
 			incomingTimerLines,
-			ePrefix.XCtx("incomingTimerLines"))
+			ePrefix.XCpy("incomingTimerLines"))
 
 	if err != nil {
 		return err
@@ -143,7 +143,7 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 			incomingTimerLines.textLabelFieldLen,
 			incomingTimerLines.textLabelJustification,
 			incomingTimerLines.labelRightMarginChars,
-			ePrefix.XCtx("incomingTimerLines->targetTimerLines"))
+			ePrefix.XCpy("incomingTimerLines->targetTimerLines"))
 
 	return err
 }
@@ -237,7 +237,7 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 		err = textLineSpecTimerLinesAtom{}.ptr().
 		testValidityOfTxtSpecTimerLines(
 			txtTimerLines,
-			ePrefix.XCtx("txtTimerLines"))
+			ePrefix.XCpy("txtTimerLines"))
 
 	if err != nil {
 		return TextLineSpecTimerLines{}, err
@@ -258,7 +258,7 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 			txtTimerLines.textLabelFieldLen,
 			txtTimerLines.textLabelJustification,
 			txtTimerLines.labelRightMarginChars,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtTimerLines->newTxtTimerLines"))
 
 	if err != nil {

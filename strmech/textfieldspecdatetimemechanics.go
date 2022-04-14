@@ -60,7 +60,7 @@ func (txtFieldDateTimeMechanics textFieldSpecDateTimeMechanics) ptr() *textField
 //  dateTimeTxtField           *TextFieldSpecDateTime
 //     - A pointer to an instance of TextFieldSpecDateTime. All the
 //       internal member variable data values will be deleted and
-//       and reset based on the following input parameters.
+//       reset based on the following input parameters.
 //
 //
 //  dateTime                   time.Time
@@ -224,7 +224,7 @@ func (txtFieldDateTimeMechanics *textFieldSpecDateTimeMechanics) setTextFieldDat
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'dateTimeFormat' is a "+
 			"zero length or empty string!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return err
 	}
@@ -239,7 +239,7 @@ func (txtFieldDateTimeMechanics *textFieldSpecDateTimeMechanics) setTextFieldDat
 
 	err = txtLabelElectron.isFieldLengthValid(
 		fieldLen,
-		ePrefix.XCtx("fieldLen"))
+		ePrefix.XCpy("fieldLen"))
 
 	if err != nil {
 		return err
@@ -249,7 +249,7 @@ func (txtFieldDateTimeMechanics *textFieldSpecDateTimeMechanics) setTextFieldDat
 		[]rune(dateTimeStr),
 		fieldLen,
 		textJustification,
-		ePrefix.XCtx("textJustification"))
+		ePrefix.XCpy("textJustification"))
 
 	if err != nil {
 		return err

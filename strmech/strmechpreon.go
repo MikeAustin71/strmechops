@@ -46,8 +46,8 @@ type strMechPreon struct {
 //       be returned.
 //
 //       If the concrete rune array pointed to by this pointer is
-//       is nil, 'targetRuneArray' concrete rune array is set to
-//       'nil' and NO error is returned.
+//       nil, 'targetRuneArray' concrete rune array is set to 'nil'
+//       and NO error is returned.
 //
 //
 //  setZeroLenArrayToNil       bool
@@ -1222,7 +1222,7 @@ func (sMechPreon *strMechPreon) setRepeatRuneChar(
 // Input Parameters
 //
 //  charArray                  []rune
-//     - An array of runes consisting entirely of alpha-numeric
+//     - An array of runes consisting entirely of alphanumeric
 //       characters. This method will evaluate this array to
 //       determine whether it is valid.
 //

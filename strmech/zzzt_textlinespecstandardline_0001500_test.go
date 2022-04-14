@@ -31,7 +31,7 @@ func TestTextLineSpecStandardLine_Equal_000100(t *testing.T) {
 		t.Errorf("\n%v - ERROR\n"+
 			"Expected stdLine01 != stdLine02.\n"+
 			"HOWEVER, THEY ARE EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -47,7 +47,7 @@ func TestTextLineSpecStandardLine_Equal_000200(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -60,7 +60,7 @@ func TestTextLineSpecStandardLine_Equal_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -78,7 +78,7 @@ func TestTextLineSpecStandardLine_Equal_000200(t *testing.T) {
 			"Test #1 \n"+
 			"Expected stdLine01 == stdLine02.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -96,7 +96,7 @@ func TestTextLineSpecStandardLine_Equal_000200(t *testing.T) {
 			"Expected stdLine01 != stdLine02\n"+
 			"because 'newLineChars' are different.\n"+
 			"HOWEVER, THEY ARE EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -111,7 +111,7 @@ func TestTextLineSpecStandardLine_Equal_000300(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -124,7 +124,7 @@ func TestTextLineSpecStandardLine_Equal_000300(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -142,7 +142,7 @@ func TestTextLineSpecStandardLine_Equal_000300(t *testing.T) {
 			"Test #1 \n"+
 			"Expected stdLine01 == stdLine02.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -160,7 +160,7 @@ func TestTextLineSpecStandardLine_Equal_000300(t *testing.T) {
 			"Expected stdLine01 != stdLine02\n"+
 			"because 'numOfStdLines' are different.\n"+
 			"HOWEVER, THEY ARE EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -175,7 +175,7 @@ func TestTextLineSpecStandardLine_Equal_000400(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -188,7 +188,7 @@ func TestTextLineSpecStandardLine_Equal_000400(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -206,7 +206,7 @@ func TestTextLineSpecStandardLine_Equal_000400(t *testing.T) {
 			"Test #1 \n"+
 			"Expected stdLine01 == stdLine02.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -225,7 +225,7 @@ func TestTextLineSpecStandardLine_Equal_000400(t *testing.T) {
 			"because 'turnLineTerminatorOff' \n"+
 			"values are different.\n"+
 			"HOWEVER, THEY ARE EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -240,7 +240,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -253,7 +253,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -271,7 +271,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 			"Test #1 \n"+
 			"Expected stdLine01 == stdLine02.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -279,7 +279,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 
 	err = stdLine02.DeleteAtIndex(
 		2,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if areEqual != true {
@@ -288,7 +288,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 			"Test #1 \n"+
 			"Expected stdLine01 == stdLine02.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -305,7 +305,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 			"because 'Text Field Arrays' \n"+
 			"are different.\n"+
 			"HOWEVER, THEY ARE EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -331,7 +331,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -340,7 +340,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -352,7 +352,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 
 	stdLine01,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -362,7 +362,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -381,7 +381,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 			"Expected areEqual == false because input\n"+
 			"parameter 'plainTextLine01' is the wrong type.\n"+
 			"HOWEVER, areEqual == true\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -390,7 +390,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -409,7 +409,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000100(t *testing.T) {
 			"Expected areEqual == true because input parameter\n"+
 			"'stdLine02' is identical to 'stdLine01'.\n"+
 			"HOWEVER, areEqual == false\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -435,7 +435,7 @@ func TestTextLineSpecStandardLine_EqualITextLine_000200(t *testing.T) {
 			"Expected areEqual == false because input\n"+
 			"parameter 'iTextLine' is nil.\n"+
 			"HOWEVER, areEqual == true\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -452,7 +452,7 @@ func TestTextLineSpecStandardLine_GetFormattedText_000100(t *testing.T) {
 
 	_,
 		err := stdLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -461,7 +461,7 @@ func TestTextLineSpecStandardLine_GetFormattedText_000100(t *testing.T) {
 			"Expected an error return because parameter\n"+
 			"'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -477,7 +477,7 @@ func TestTextLineSpecStandardLine_GetFormattedText_000200(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -497,7 +497,7 @@ func TestTextLineSpecStandardLine_GetFormattedText_000200(t *testing.T) {
 			"TextLineSpecStandardLine{}.GetFormattedText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -518,7 +518,7 @@ func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 
 	stdLine02,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -531,7 +531,7 @@ func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 
 	err = stdLine02.SetNewLineChars(
 		expectedNewLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -552,7 +552,7 @@ func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 			"expectedNewLineChars != actualNewLineChars\n"+
 			"Expected areEqual == true\n"+
 			"HOWEVER, areEqual == false\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -575,7 +575,7 @@ func TestTextLineSpecStandardLine_GetNewLineRunes_000100(t *testing.T) {
 
 	stdLine02,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -586,7 +586,7 @@ func TestTextLineSpecStandardLine_GetNewLineRunes_000100(t *testing.T) {
 
 	err = stdLine02.SetNewLineRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -610,7 +610,7 @@ func TestTextLineSpecStandardLine_GetNewLineRunes_000100(t *testing.T) {
 			"expectedNewLineRunes != actualNewLineRunes\n"+
 			"Expected areEqual == true\n"+
 			"HOWEVER, areEqual == false\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -631,7 +631,7 @@ func TestTextLineSpecStandardLine_GetNumOfStdLines_000100(t *testing.T) {
 
 	stdLine02,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -655,7 +655,7 @@ func TestTextLineSpecStandardLine_GetNumOfStdLines_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!\n"+
 			"Expected Number of Stdandard Lines = '%v'\n"+
 			"  Actual Number of Stdandard Lines = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedNumOfStdLines,
 			actualNumOfStdLines)
 
@@ -675,7 +675,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 
 	_,
 		err := stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -688,7 +688,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -701,7 +701,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 
 	textLines,
 		err = stdLine02.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLines<-stdLine02"))
 
 	if err != nil {
@@ -714,7 +714,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 
 	err = stdLine03.SetTextFields(
 		textLines,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLines->stdLine03"))
 
 	if err != nil {
@@ -731,7 +731,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 			"Error: stdLine02.Equal(&stdLine03)\n"+
 			"Expected stdLine02==stdLine03\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -747,7 +747,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 			"GetTextFields()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -763,7 +763,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
 
 	stdLine02,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -776,7 +776,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
 
 	_,
 		err = stdLine02.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textLines<-stdLine02"))
 
 	if err == nil {
@@ -786,7 +786,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"stdLine02.textFields[2] = nil .\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -810,7 +810,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -828,7 +828,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 		expectedLabelText,
 		-1,
 		TxtJustify.Left(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelTxt"))
 
 	if err != nil {
@@ -846,7 +846,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 		err = stdLine01.InsertTextFieldAtIndex(
 		&labelTxt,
 		2,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -863,7 +863,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 			"Actual Last Index Id.\n"+
 			"Expected Last Index Id = '%v'\n"+
 			"  Actual Last Index Id = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLastIndex,
 			lastIndexId)
 
@@ -876,7 +876,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 	iTxtFieldSpec,
 		err = stdLine01.PeekAtTextFieldAtIndex(
 		2,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -894,13 +894,13 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = actualLabelField.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelField"))
 
 	if err != nil {
@@ -918,7 +918,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedLabelText= '%v'\n"+
 			"  actualLabelText= '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLabelText,
 			actualLabelText)
 
@@ -939,7 +939,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedTxtFieldLen= '%v'\n"+
 			"  actualTxtFieldLen= '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTxtFieldLen,
 			actualTxtFieldLen)
 
@@ -964,7 +964,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 		expectedLabelText,
 		-1,
 		TxtJustify.Left(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelTxt"))
 
 	if err != nil {
@@ -979,7 +979,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 		err = stdLine01.InsertTextFieldAtIndex(
 		&labelTxt,
 		2,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -988,7 +988,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 			"Expected an error return from stdLine01.InsertTextFieldAtIndex()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -997,7 +997,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1019,7 +1019,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1040,7 +1040,7 @@ func TestTextLineSpecStandardLine_IsValidInstance_000100(t *testing.T) {
 
 	stdLine02,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1057,7 +1057,7 @@ func TestTextLineSpecStandardLine_IsValidInstance_000100(t *testing.T) {
 			"Error: isValid = stdLine02.IsValidInstance()\n"+
 			"Expected 'isValid' == true.\n"+
 			"HOWEVER, 'isValid' == false !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -1074,7 +1074,7 @@ func TestTextLineSpecStandardLine_IsValidInstance_000100(t *testing.T) {
 			"Expected 'isValid' == false because \n"+
 			"stdLine02.textFields[2] = nil .\n"+
 			"HOWEVER, 'isValid' == true !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -1093,7 +1093,7 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 
 	err :=
 		stdLine01.IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine01"))
 
 	if err == nil {
@@ -1103,7 +1103,7 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 			"Expected an error return because \n"+
 			"stdLine01 is empty.\n"+
 			"HOWEVER, 'isValid' == true !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -1113,7 +1113,7 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1133,14 +1133,14 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err =
 		stdLine02.IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02"))
 
 	if err != nil {
@@ -1154,7 +1154,7 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 
 	err =
 		stdLine02.IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02.textFields[3]=nil"))
 
 	if err == nil {
@@ -1164,7 +1164,7 @@ func TestTextLineSpecStandardLine_IsValidInstanceError_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'stdLine02' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1180,7 +1180,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1193,7 +1193,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1209,7 +1209,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 		NewStandardLine(
 			1,
 			textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02"))
 
 	if err != nil {
@@ -1219,7 +1219,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1235,7 +1235,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 		NewStandardLine(
 			1,
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1245,7 +1245,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'textFields' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1257,7 +1257,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 		NewStandardLine(
 			1,
 			textFields02,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1267,7 +1267,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'textFields' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1277,7 +1277,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 		NewStandardLine(
 			0,
 			textFields02,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1287,7 +1287,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1297,7 +1297,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 		NewStandardLine(
 			-5,
 			textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err != nil {
@@ -1307,7 +1307,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 	}
 
 	err = stdLine03.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03"))
 
 	if err != nil {
@@ -1327,7 +1327,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000200(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1340,7 +1340,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000200(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1363,7 +1363,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1379,7 +1379,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1392,7 +1392,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1408,7 +1408,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 		NewPtrStandardLine(
 			1,
 			textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02"))
 
 	if err != nil {
@@ -1418,7 +1418,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1434,7 +1434,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 		NewPtrStandardLine(
 			1,
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1444,7 +1444,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'textFields' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1456,7 +1456,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 		NewPtrStandardLine(
 			1,
 			textFields02,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1466,7 +1466,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'textFields02' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1476,7 +1476,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 		NewPtrStandardLine(
 			0,
 			textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1486,7 +1486,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1496,7 +1496,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 		NewPtrStandardLine(
 			-5,
 			textFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err != nil {
@@ -1506,7 +1506,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 	}
 
 	err = stdLine03.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03"))
 
 	if err != nil {
@@ -1526,7 +1526,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000200(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1539,7 +1539,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000200(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1561,7 +1561,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1577,7 +1577,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1590,7 +1590,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1610,7 +1610,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02"))
 
 	if err != nil {
@@ -1620,7 +1620,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1638,7 +1638,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			nil,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1648,7 +1648,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'textFields' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1660,7 +1660,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1670,7 +1670,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1684,7 +1684,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields02,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1694,7 +1694,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'textFields02' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1706,7 +1706,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1716,7 +1716,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1728,7 +1728,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err != nil {
@@ -1738,7 +1738,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 	}
 
 	err = stdLine03.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03"))
 
 	if err != nil {
@@ -1756,7 +1756,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineChars is empty"))
 
 	if err == nil {
@@ -1766,7 +1766,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			"Expected an error return because\n"+
 			"'newLineChars' is an empty array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1782,7 +1782,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			textFields,
 			newLineChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine04"))
 
 	if err != nil {
@@ -1792,7 +1792,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 	}
 
 	err = stdLine04.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine04"))
 
 	if err != nil {
@@ -1809,7 +1809,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 			"TextLineSpecStandardLine{}.NewStandardLineAllParms()\n"+
 			"Expected 'turnLineTerminatorOff' == 'true'\n"+
 			"HOWEVER, THE RETURN VALUE WAS 'false'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -1826,7 +1826,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000200(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1839,7 +1839,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000200(t *testing.T) {
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1866,7 +1866,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1882,7 +1882,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -1895,7 +1895,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -1915,7 +1915,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02"))
 
 	if err != nil {
@@ -1925,7 +1925,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 	}
 
 	err = stdLine02.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -1943,7 +1943,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			nil,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1953,7 +1953,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			"Expected an error return because\n"+
 			"'textFields' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1965,7 +1965,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1975,7 +1975,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1989,7 +1989,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields02,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -1999,7 +1999,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			"Expected an error return because\n"+
 			"'textFields02' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2011,7 +2011,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err == nil {
@@ -2021,7 +2021,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			"Expected an error return because\n"+
 			"'numOfStdLines' is zero.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2033,7 +2033,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine03"))
 
 	if err != nil {
@@ -2043,7 +2043,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 	}
 
 	err = stdLine03.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine03"))
 
 	if err != nil {
@@ -2061,7 +2061,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields,
 			newLineChars,
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"newLineChars is empty"))
 
 	if err == nil {
@@ -2071,7 +2071,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			"Expected an error return because\n"+
 			"'newLineChars' is an empty array.\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2087,7 +2087,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			textFields,
 			newLineChars,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine04"))
 
 	if err != nil {
@@ -2097,7 +2097,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 	}
 
 	err = stdLine04.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine04"))
 
 	if err != nil {
@@ -2114,7 +2114,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 			"TextLineSpecStandardLine{}.NewPtrStandardLineAllParms()\n"+
 			"Expected 'turnLineTerminatorOff' == 'true'\n"+
 			"HOWEVER, THE RETURN VALUE WAS 'false'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -2131,7 +2131,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200(t *testing.T
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2144,7 +2144,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200(t *testing.T
 
 	textFields,
 		err = stdLine01.GetTextFields(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
 	if err != nil {
@@ -2171,7 +2171,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200(t *testing.T
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2187,7 +2187,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2200,7 +2200,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 
 	iTxtFieldSpec,
 		err = stdLine01.PeekAtFirstTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2221,7 +2221,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2235,7 +2235,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000100(t *testing.T) {
 			"TextFieldSpecSpacer with a length of '6' characters.\n"+
 			"HOWEVER, A DIFFERENT LENGTH WAS RETURNED!\n"+
 			"spacerLen='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			spacerLen)
 
 		return
@@ -2254,7 +2254,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
 
 	_,
 		err := stdLine01.PeekAtFirstTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -2263,7 +2263,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
 			"Expected an error return from stdLine01.PeekAtFirstTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2272,7 +2272,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2292,7 +2292,7 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2308,7 +2308,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2321,7 +2321,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000100(t *testing.T) {
 
 	iTxtFieldSpec,
 		err = stdLine01.PeekAtLastTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2338,7 +2338,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2352,7 +2352,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000100(t *testing.T) {
 			"TextFieldSpecSpacer with a length of '3' characters.\n"+
 			"HOWEVER, A DIFFERENT LENGTH WAS RETURNED!\n"+
 			"spacerLen='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			spacerLen)
 
 		return
@@ -2371,7 +2371,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
 
 	_,
 		err := stdLine01.PeekAtLastTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -2380,7 +2380,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
 			"Expected an error return from stdLine01.PeekAtLastTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2389,7 +2389,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2409,7 +2409,7 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2425,7 +2425,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2440,7 +2440,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
 	iTxtFieldSpec,
 		err = stdLine01.PeekAtTextFieldAtIndex(
 		4,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2459,13 +2459,13 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = labelField.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelField"))
 
 	if err != nil {
@@ -2483,7 +2483,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedLabelText= '%v'\n"+
 			"  actualLabelText= '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLabelText,
 			actualLabelText)
 
@@ -2504,7 +2504,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 	_,
 		err := stdLine01.PeekAtTextFieldAtIndex(
 		0,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -2513,7 +2513,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 			"Expected an error return from stdLine01.PeekAtTextFieldAtIndex()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2522,7 +2522,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2543,7 +2543,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2559,7 +2559,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine01(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2579,7 +2579,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000100(t *testing.T) {
 	iTxtFieldSpec,
 		remainingNumOfTxtFields,
 		err = stdLine01.PopFirstTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2597,7 +2597,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000100(t *testing.T) {
 			"Text Fields!\n"+
 			"Expected Number of Remaining Text Fields = '%v'\n"+
 			"  Actual Number of Remaining Text Fields = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedNumOfTxtFields,
 			remainingNumOfTxtFields)
 
@@ -2613,7 +2613,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2627,7 +2627,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000100(t *testing.T) {
 			"TextFieldSpecSpacer with a length of '6' characters.\n"+
 			"HOWEVER, A DIFFERENT LENGTH WAS RETURNED!\n"+
 			"spacerLen='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			spacerLen)
 
 		return
@@ -2647,7 +2647,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000200(t *testing.T) {
 	_,
 		_,
 		err := stdLine01.PopFirstTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -2656,7 +2656,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000200(t *testing.T) {
 			"Expected an error return from stdLine01.PopFirstTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2665,7 +2665,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2686,7 +2686,7 @@ func TestTextLineSpecStandardLine_PopFirstTextField_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2702,7 +2702,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2722,7 +2722,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000100(t *testing.T) {
 	iTxtFieldSpec,
 		remainingNumOfTxtFields,
 		err = stdLine01.PopLastTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2740,7 +2740,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000100(t *testing.T) {
 			"Text Fields!\n"+
 			"Expected Number of Remaining Text Fields = '%v'\n"+
 			"  Actual Number of Remaining Text Fields = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedNumOfTxtFields,
 			remainingNumOfTxtFields)
 
@@ -2756,7 +2756,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2770,7 +2770,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000100(t *testing.T) {
 			"TextFieldSpecSpacer with a length of '3' characters.\n"+
 			"HOWEVER, A DIFFERENT LENGTH WAS RETURNED!\n"+
 			"spacerLen='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			spacerLen)
 
 		return
@@ -2790,7 +2790,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000200(t *testing.T) {
 	_,
 		_,
 		err := stdLine01.PopLastTextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -2799,7 +2799,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000200(t *testing.T) {
 			"Expected an error return from stdLine01.PopLastTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2808,7 +2808,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2829,7 +2829,7 @@ func TestTextLineSpecStandardLine_PopLastTextField_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2845,7 +2845,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 
 	stdLine01,
 		err := createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2868,7 +2868,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 		remainingNumOfTxtFields,
 		err = stdLine01.PopTextFieldAtIndex(
 		4,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -2887,13 +2887,13 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
 			"Expected return of type 'TextFieldSpecSpacer'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = labelField.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelField"))
 
 	if err != nil {
@@ -2912,7 +2912,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedLabelText= '%v'\n"+
 			"  actualLabelText= '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLabelText,
 			actualLabelText)
 
@@ -2928,7 +2928,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 			"Text Fields!\n"+
 			"Expected Number of Remaining Text Fields = '%v'\n"+
 			"  Actual Number of Remaining Text Fields = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedNumOfTextFields,
 			remainingNumOfTxtFields)
 
@@ -2950,7 +2950,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
 		_,
 		err := stdLine01.PopTextFieldAtIndex(
 		0,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err == nil {
@@ -2959,7 +2959,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
 			"Expected an error return from stdLine01.PopTextFieldAtIndex()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2968,7 +2968,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
 
 	stdLine02,
 		err = createTestTextLineSpecStandardLine04(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02"))
 
 	if err != nil {
@@ -2990,7 +2990,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}

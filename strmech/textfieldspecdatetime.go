@@ -337,7 +337,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyIn(
 		copyIn(
 			txtDateTimeField,
 			incomingDateTimeTxtField,
-			ePrefix.XCtx("incomingDateTimeTxtField"))
+			ePrefix.XCpy("incomingDateTimeTxtField"))
 }
 
 // CopyOut - Returns a deep copy of the current
@@ -445,7 +445,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOut(
 	return textFieldSpecDateTimeNanobot{}.ptr().
 		copyOut(
 			txtDateTimeField,
-			ePrefix.XCtx("txtDateTimeField"))
+			ePrefix.XCpy("txtDateTimeField"))
 }
 
 // CopyOutITextField - Returns a deep copy of the current
@@ -564,7 +564,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOutITextField(
 		err = textFieldSpecDateTimeNanobot{}.ptr().
 		copyOut(
 			txtDateTimeField,
-			ePrefix.XCtx("txtDateTimeField"))
+			ePrefix.XCpy("txtDateTimeField"))
 
 	if err != nil {
 		return iTxtFieldSpec, err
@@ -683,7 +683,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOutPtr(
 		textFieldSpecDateTimeNanobot{}.ptr().
 			copyOut(
 				txtDateTimeField,
-				ePrefix.XCtx("txtDateTimeField"))
+				ePrefix.XCpy("txtDateTimeField"))
 
 	return &newTxtDateTimeField, err
 }
@@ -820,7 +820,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetDateTime() time.Time {
 //
 // The Date/Time format parameter is documented in the Golang
 // time.Time package, https://pkg.go.dev/time. The format
-// operations are are further documented at
+// operations are further documented at
 // https://pkg.go.dev/time#Time.Format.
 //
 // If the user configures this parameter as an empty string,
@@ -958,7 +958,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) GetFormattedStrLength() int {
 		err := textFieldSpecDateTimeNanobot{}.ptr().
 		getFormattedText(
 			txtDateTimeField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtDateTimeField"))
 
 	if err != nil {
@@ -1436,7 +1436,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) IsValidInstanceError(
 		err = textFieldSpecDateTimeAtom{}.ptr().
 		isValidTextFieldDateTime(
 			txtDateTimeField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtDateTimeField"))
 
 	return err
@@ -1463,7 +1463,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) IsValidInstanceError(
 // the returned instance is invalid. Therefore, in order to use
 // this TextFieldSpecDateTime instance, users must later call the
 // setter methods on this type in order to configure valid and
-// meaningful meaningful member variable data values.
+// meaningful member variable data values.
 //
 //
 // ------------------------------------------------------------------------
@@ -2409,7 +2409,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) Read(
 			textFieldSpecDateTimeNanobot{}.ptr().
 				getFormattedText(
 					txtDateTimeField,
-					ePrefix.XCtx(
+					ePrefix.XCpy(
 						"txtDateTimeField"))
 
 		if err != nil {
@@ -2424,7 +2424,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"txtDateTimeField.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -2435,7 +2435,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) Read(
 		readBytes(
 			txtDateTimeField.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> txtDateTimeField.textLineReader"))
 
 	if err == io.EOF {
@@ -3360,7 +3360,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) SetFieldLength(
 		textFieldSpecLabelElectron{}.ptr().
 			isFieldLengthValid(
 				fieldLen,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"'fieldLen' Invalid!"))
 
 	if err != nil {
@@ -3652,7 +3652,7 @@ func (txtDateTimeField TextFieldSpecDateTime) String() string {
 		err := textFieldSpecDateTimeNanobot{}.ptr().
 		getFormattedText(
 			&txtDateTimeField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtDateTimeField"))
 
 	if err != nil {
@@ -3785,7 +3785,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
 		err = textFieldSpecDateTimeNanobot{}.ptr().
 		getFormattedText(
 			txtDateTimeField,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtDateTimeField"))
 
 	if err != nil {
@@ -3801,7 +3801,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

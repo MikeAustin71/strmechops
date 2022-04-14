@@ -256,7 +256,7 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 	_,
 		err2 = sMechPreon.testValidityOfRuneCharArray(
 		txtSolidLine.solidLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine.solidLineChars is invalid!"))
 
 	if err2 != nil {
@@ -265,7 +265,7 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 			"txtSolidLine.solidLineChars contains invalid runes!\n"+
 			"%v\n"+
 			"txtSolidLine.solidLineChars='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error(),
 			txtSolidLine.solidLineChars)
 
@@ -278,7 +278,7 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 			"The value of 'txtSolidLine.solidLineCharsRepeatCount' is "+
 			"less than one ('1').\n"+
 			"txtSolidLine.solidLineCharsRepeatCount = '%v'.\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			txtSolidLine.solidLineCharsRepeatCount)
 
 		return isValid, err

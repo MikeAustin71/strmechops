@@ -2615,7 +2615,7 @@ func (sMech *StrMech) GetValidString(
 //
 // The complexity inherent in the IntegerSeparatorDto type, used as
 // an input parameter, is necessary in order to provide support for
-// multi-national and multi-cultural integer separation algorithms.
+// multinational and multicultural integer separation algorithms.
 // For more information on integer grouping sequence, reference the
 // source documentation for type, IntegerSeparatorDto.
 //
@@ -2652,8 +2652,8 @@ func (sMech *StrMech) GetValidString(
 //       multiple characters to separate integers.
 //
 //       The complexity inherent in the IntegerSeparatorDto type is
-//       necessary in order to provide support for multi-national
-//       and multi-cultural integer separation algorithms. For
+//       necessary in order to provide support for multinational
+//       and multicultural integer separation algorithms. For
 //       additional details, reference the source code
 //       documentation for type  IntegerSeparatorDto.
 //
@@ -2865,7 +2865,7 @@ func (sMech *StrMech) IsTargetRunesIndex(
 // Input Parameters
 //
 //  charArray                  []rune
-//     - An array of runes consisting entirely of alpha-numeric
+//     - An array of runes consisting entirely of alphanumeric
 //       characters. This method will evaluate this array to
 //       determine whether it is valid.
 //
@@ -3192,7 +3192,7 @@ func (sMech *StrMech) IsValidRuneIntArray(
 //                          Example: "      TextString"
 //
 //       3. Center - Signals that the text justification format is
-//                   is set to 'Centered'. Strings will be positioned
+//                   set to 'Centered'. Strings will be positioned
 //                   in the center of the text field equidistant
 //                   from the left and right margins.
 //                           Example: "   TextString   "

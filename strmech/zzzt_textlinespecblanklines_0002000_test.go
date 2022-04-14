@@ -16,7 +16,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 	incomingBlankLines,
 		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingBlankLines"))
 
 	if err != nil {
@@ -26,7 +26,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 	}
 
 	err = incomingBlankLines.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingBlankLines"))
 
 	if err != nil {
@@ -43,7 +43,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 		txtBlankLinesMolecule.copyIn(
 			&targetBlankLines,
 			&incomingBlankLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingBlankLines->targetBlankLines"))
 
 	if err != nil {
@@ -53,7 +53,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 	}
 
 	err = targetBlankLines.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingBlankLines"))
 
 	if err != nil {
@@ -66,7 +66,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected targetBlankLines==incomingBlankLines\n"+
 			"HOWEVER, THESE INSTANCES ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 		return
 	}
 
@@ -76,7 +76,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 		txtBlankLinesMolecule.copyIn(
 			&targetBlankLinesTwo,
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"'nil'->targetBlankLinesTwo"))
 
 	if err == nil {
@@ -85,7 +85,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 			"txtBlankLinesMolecule.copyIn()\n"+
 			"because input parameter 'incomingBlkLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 		return
 	}
 
@@ -95,7 +95,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 		txtBlankLinesMolecule2.copyIn(
 			nil,
 			&incomingBlankLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"'nil'->targetBlankLinesTwo"))
 
 	if err == nil {
@@ -104,7 +104,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 			"txtBlankLinesMolecule.copyIn()\n"+
 			"because input parameter 'targetBlkLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 		return
 	}
 
@@ -114,7 +114,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 		copyIn(
 			&targetBlankLinesTwo,
 			&incomingBlankLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingBlankLines is invalid!"))
 
 	if err == nil {
@@ -123,7 +123,7 @@ func TestTextLineSpecBlankLines_copyIn_000100(t *testing.T) {
 			"txtBlankLinesMolecule.copyIn()\n"+
 			"because input parameter 'incomingBlankLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 		return
 	}
 
@@ -141,7 +141,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 	txtBlankLinesBase,
 		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLinesBase"))
 
 	if err != nil {
@@ -151,7 +151,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 	}
 
 	err = txtBlankLinesBase.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLinesBase"))
 
 	if err != nil {
@@ -168,7 +168,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 		err =
 		txtBlankLinesMolecule.copyOut(
 			&txtBlankLinesBase,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtBlankLinesBase->txtBlankLinesOut"))
 
 	if err != nil {
@@ -178,7 +178,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 	}
 
 	err = txtBlankLinesOut.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLinesOut"))
 
 	if err != nil {
@@ -191,7 +191,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected txtBlankLinesOut==txtBlankLinesBase\n"+
 			"HOWEVER, THESE INSTANCES ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 		return
 	}
 
@@ -199,7 +199,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 		err =
 		txtBlankLinesMolecule.copyOut(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"'nil'->txtBlankLinesOutTwo"))
 
 	if err == nil {
@@ -208,7 +208,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 			"txtBlankLinesMolecule.copyOut()\n"+
 			"because input parameter 'txtBlankLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 		return
 	}
 
@@ -218,7 +218,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 		err = textLineSpecBlankLinesMolecule{}.ptr().
 		copyOut(
 			&txtBlankLinesBase,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtBlankLinesBase is invalid!"))
 
 	if err == nil {
@@ -227,7 +227,7 @@ func TestTextLineSpecBlankLines_copyOut_000100(t *testing.T) {
 			"txtBlankLinesMolecule.copyOut()\n"+
 			"because input parameter 'txtBlankLinesBase' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 		return
 	}
 
@@ -243,7 +243,7 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 	blankLinesAlpha,
 		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha"))
 
 	if err != nil {
@@ -253,7 +253,7 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 	}
 
 	err = blankLinesAlpha.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha"))
 
 	if err != nil {
@@ -266,7 +266,7 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected blankLinesAlpha.numBlankLines == 3\n"+
 			"Instead, blankLinesAlpha.numBlankLines == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			blankLinesAlpha.numBlankLines)
 
 		return
@@ -284,7 +284,7 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected blankLinesAlpha.numBlankLines == 0\n"+
 			"Instead, blankLinesAlpha.numBlankLines == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			blankLinesAlpha.numBlankLines)
 
 		return
@@ -295,7 +295,7 @@ func TestTextLineSpecBlankLines_empty_000100(t *testing.T) {
 			"Expected blankLinesAlpha.newLineChars == nil\n"+
 			"Instead, blankLinesAlpha.newLineChars = '%v'\n"+
 			" blankLinesAlpha.newLineChars array = '%v'",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(blankLinesAlpha.newLineChars),
 			blankLinesAlpha.newLineChars)
 
@@ -314,7 +314,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 	blankLinesAlpha,
 		err := TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha"))
 
 	if err != nil {
@@ -324,7 +324,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 	}
 
 	err = blankLinesAlpha.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha"))
 
 	if err != nil {
@@ -337,7 +337,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 
 	blankLinesBravo,
 		err = blankLinesAlpha.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha->blankLinesBravo"))
 
 	if err != nil {
@@ -358,7 +358,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 			"Expected txtBlankLinesMolecule.equal() == 'false'\n"+
 			"because input parameter 'txtBlankLinesTwo' is 'nil'.\n"+
 			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -373,7 +373,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 			"Expected txtBlankLinesMolecule.equal() == 'false'\n"+
 			"because input parameter 'txtBlankLinesOne' is 'nil'.\n"+
 			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -382,7 +382,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 
 	blankLinesCharlie,
 		err = blankLinesAlpha.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha->blankLinesCharlie"))
 
 	if err != nil {
@@ -404,7 +404,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 			"input parameter 'blankLinesCharlie' has a different"+
 			"number of blank lines.\n"+
 			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -413,7 +413,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 
 	blankLinesDelta,
 		err = blankLinesAlpha.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha->blankLinesDelta"))
 
 	if err != nil {
@@ -436,7 +436,7 @@ func TestTextLineSpecBlankLines_equal_000100(t *testing.T) {
 			"input parameter 'blankLinesDelta' has different"+
 			"new line characters.\n"+
 			"HOWEVER, THE METHOD RETURNED 'true'!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -455,7 +455,7 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 	_,
 		err := txtBlankLinesAtom.testValidityOfTextLineSpecBlankLines(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLines== 'nil'"))
 
 	if err == nil {
@@ -464,7 +464,7 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 			"testValidityOfTextLineSpecBlankLines()\n"+
 			"because 'txtBlankLines' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -476,7 +476,7 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 	txtBlankLinesOne,
 		err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		numOfBlankLines,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLinesOne"))
 
 	if err != nil {
@@ -486,7 +486,7 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 	}
 
 	err = txtBlankLinesOne.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLinesOne"))
 
 	if err != nil {
@@ -500,7 +500,7 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 	_,
 		err = txtBlankLinesAtom.testValidityOfTextLineSpecBlankLines(
 		&txtBlankLinesOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLinesOne.numBlankLines = 1000001"))
 
 	if err == nil {
@@ -509,7 +509,7 @@ func TestTextLineSpecBlankLines_testValidityOfTextLineSpecBlankLines_000100(t *t
 			"testValidityOfTextLineSpecBlankLines()\n"+
 			"because 'numBlankLines' is '1000001' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -529,7 +529,7 @@ func TestTextLineSpecBlankLines_testValidityNewLinesChars_000100(t *testing.T) {
 
 	err := txtBlankLinesElectron.testValidityNewLinesChars(
 		newLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineRunes := []rune{'\\n'}"))
 
 	if err != nil {
@@ -552,7 +552,7 @@ func TestTextLineSpecBlankLines_getFormattedText_000100(t *testing.T) {
 	_,
 		err := txtBlankLinesMolecule.getFormattedText(
 		nil,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLines ='nil'"))
 
 	if err == nil {
@@ -561,7 +561,7 @@ func TestTextLineSpecBlankLines_getFormattedText_000100(t *testing.T) {
 			"getFormattedText()\n"+
 			"because 'txtBlankLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -585,7 +585,7 @@ func TestTextLineSpecBlankLines_setTextLinesSpecBlankLines_000100(t *testing.T) 
 		nil,
 		numOfBlankLines,
 		newLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtBlankLines ='nil'"))
 
 	if err == nil {
@@ -594,7 +594,7 @@ func TestTextLineSpecBlankLines_setTextLinesSpecBlankLines_000100(t *testing.T) 
 			"setTextLinesSpecBlankLines()\n"+
 			"because 'txtBlankLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}

@@ -36,7 +36,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -79,7 +79,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -90,7 +90,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -100,7 +100,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -109,7 +109,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtSolidLine01.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -121,7 +121,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -146,7 +146,7 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -187,7 +187,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			solidLineCharsRepeatCount,
 			newLineChars,
 			turnAutoLineTerminationOff,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -232,7 +232,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -243,7 +243,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -254,7 +254,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -264,7 +264,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -276,7 +276,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -301,7 +301,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 		return
@@ -312,7 +312,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"Error: After a successful series of byte reads,\n"+
 			"txtSolidLine01.textLineReader pointer has NOT\n"+
 			"BEEN RESET TO 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 		return
 	}
 
@@ -339,7 +339,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"Error: Test # 2\n"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -357,7 +357,7 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 		return
@@ -395,7 +395,7 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -424,14 +424,14 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 		err = txtSpecAtom.readBytes(
 		nil,
 		p,
-		ePrefix.XCtx("textReader == 'nil'"))
+		ePrefix.XCpy("textReader == 'nil'"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: Expected error return from txtSpecAtom.readBytes()"+
 			"because input parameter 'textReader' == 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -443,7 +443,7 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 		err =
 		txtSolidLineMolecule.getFormattedText(
 			&txtSolidLine01,
-			ePrefix.XCtx("txtSolidLine01"))
+			ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -460,14 +460,14 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 		err = txtSpecAtom.readBytes(
 		txtSolidLine01.textLineReader,
 		p,
-		ePrefix.XCtx("p == zero length"))
+		ePrefix.XCpy("p == zero length"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: Expected error return from txtSpecAtom.readBytes()"+
 			"because input parameter 'p' is a zero length byte array.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -483,7 +483,7 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 			err = txtSpecAtom.readBytes(
 			txtSolidLine01.textLineReader,
 			p,
-			ePrefix.XCtx("txtSolidLine01 is valid"))
+			ePrefix.XCpy("txtSolidLine01 is valid"))
 
 		if n == 0 {
 			break
@@ -498,7 +498,7 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSpecAtom.readBytes(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -511,7 +511,7 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -536,7 +536,7 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -574,7 +574,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 			rightMargin,
 			solidLineChars,
 			solidLineCharsRepeatCount,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -584,7 +584,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -625,7 +625,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -636,7 +636,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -646,7 +646,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -655,7 +655,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtSolidLine01.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -667,7 +667,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -685,7 +685,7 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 	}
@@ -706,7 +706,7 @@ func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
 		err := TextLineSpecSolidLine{}.NewDefaultSolidLine(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -716,7 +716,7 @@ func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -740,7 +740,7 @@ func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
 			"Expected an error return from txtSolidLine01.Read(p)\n"+
 			"because 'txtSolidLine01' contains invalid data.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -756,7 +756,7 @@ func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
 			"Expected an error return from txtSolidLine02.Read(p)\n"+
 			"because 'txtSolidLine02' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -796,7 +796,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 		rightMargin,
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -806,7 +806,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -825,7 +825,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by txtSolidLine01.Read(p)\n"+
 			"Error:\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -836,7 +836,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Error: txtSolidLine01.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			n)
 
 		return
@@ -867,7 +867,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -878,7 +878,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -888,7 +888,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -897,7 +897,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtSolidLine01.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -909,7 +909,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -934,7 +934,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -945,7 +945,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #1\n"+
 			"Completed Read Operation but txtSolidLine01.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -973,7 +973,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Test # 2"+
 			"Error Returned From txtSolidLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -985,7 +985,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -996,7 +996,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1012,7 +1012,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1023,7 +1023,7 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Completed Read Operation but txtSolidLine01.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1060,7 +1060,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100(t *testing.T) {
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -1070,7 +1070,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1101,7 +1101,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1125,7 +1125,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100(t *testing.T) {
 			"SetFullSolidLineConfig()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1162,7 +1162,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -1203,7 +1203,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1228,7 +1228,7 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 			"SetFullSolidLineRunesConfig()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1262,7 +1262,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 		rightMargin,
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1272,7 +1272,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1303,7 +1303,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1314,7 +1314,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetLeftMargin(
 		expectedNewLeftMargin,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1331,7 +1331,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			"txtSolidLine01.SetLeftMargin() set left margin = 5\n"+
 			"Expected Left Margin = '%v'\n"+
 			"Instead, Left Margin = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedNewLeftMargin,
 			newLeftMargin)
 
@@ -1367,7 +1367,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			"Actual Formatted Text String 02.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1387,7 +1387,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			"SetLeftMargin()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1396,7 +1396,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 
 	err = txtSolidLine03.SetLeftMargin(
 		1000001,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine03:leftMargin==1000001"))
 
 	if err == nil {
@@ -1406,7 +1406,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			"SetLeftMargin()\n"+
 			"because leftMargin==1000001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1415,7 +1415,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 
 	err = txtSolidLIne04.SetLeftMargin(
 		-1,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMargin==-1 should be valid!"))
 
 	if err != nil {
@@ -1447,7 +1447,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 		err := TextLineSpecSolidLine{}.NewDefaultSolidLine(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1457,7 +1457,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1469,7 +1469,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 
 	txtSolidLine01FmtText,
 		err = txtSolidLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1498,7 +1498,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1515,7 +1515,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetNewLineChars(
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1526,7 +1526,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 
 	txtSolidLine01FmtText,
 		err = txtSolidLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1553,7 +1553,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 			"Actual Formatted Text String 02.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1573,7 +1573,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 			"SetNewLineChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1588,7 +1588,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetNewLineChars(
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1603,7 +1603,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 		err = TextLineSpecSolidLine{}.NewDefaultSolidLine(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine03"))
 
 	if err != nil {
@@ -1613,7 +1613,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine03.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine03"))
+		ePrefix.XCpy("txtSolidLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1626,7 +1626,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 
 	err = txtSolidLine03.SetNewLineChars(
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err == nil {
@@ -1636,7 +1636,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 			"SetNewLineChars()\n"+
 			"because 'newLineChars' has a string length of 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1649,7 +1649,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 		err = TextLineSpecSolidLine{}.NewDefaultSolidLine(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine04"))
 
 	if err != nil {
@@ -1659,7 +1659,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine04.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine04"))
+		ePrefix.XCpy("txtSolidLine04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1671,7 +1671,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 
 	err = txtSolidLine04.SetNewLineChars(
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1681,7 +1681,7 @@ func TestTextLineSpecSolidLine_SetNewLineChars_000100(t *testing.T) {
 			"is an empty string and that should not cause an error.\n"+
 			"HOWEVER, AN ERROR WAS RETURNED!\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -1719,7 +1719,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -1729,7 +1729,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1741,7 +1741,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	txtSolidLine01FmtText,
 		err = txtSolidLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1770,7 +1770,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1781,7 +1781,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetNewLineRunes(
 		[]rune(newLineChars),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -1800,7 +1800,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	txtSolidLine01FmtText,
 		err = txtSolidLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01-New newLineRunes"))
 
 	if err != nil {
@@ -1828,7 +1828,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			"Actual Formatted Text String 02.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1839,7 +1839,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetNewLineRunes(
 		[]rune(expectedNewLineChars),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01 expectedNewLineChars = \"\""))
 
 	if err != nil {
@@ -1870,7 +1870,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			"HOWEVER, actualNewLineChars to equal '\\n'\n"+
 			"expectedNewLineChars = '%v'\n"+
 			"  actualNewLineChars = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1886,7 +1886,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 		sMechPreon.getRepeatRuneChar(
 			1000001,
 			'\n',
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"1,000,001 new-lines"))
 
 	if err != nil {
@@ -1897,7 +1897,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetNewLineRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01 one-million new-lines"))
 
 	if err == nil {
@@ -1908,7 +1908,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			"because 'expectedNewLineRunes' is invalid."+
 			"expectedNewLineRunes has an array length of 1,000,001\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1917,7 +1917,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetNewLineRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01 one-million new-lines"))
 
 	if err == nil {
@@ -1928,7 +1928,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			"because 'expectedNewLineRunes' is invalid.\n"+
 			"expectedNewLineRunes contains invalid rune characters\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1946,7 +1946,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 			"SetNewLineRunes(expectedNewLineRunes)\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1955,7 +1955,7 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 
 	err = txtSolidLine02.SetNewLineRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine02"))
 
 	if err != nil {
@@ -1998,7 +1998,7 @@ func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
 			solidLineCharsRepeatCount,
 			newLineChars,
 			turnAutoLineTerminationOff,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -2020,7 +2020,7 @@ func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
 
 	txtSolidLine01FmtText,
 		err = txtSolidLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2049,7 +2049,7 @@ func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2073,7 +2073,7 @@ func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
 			"SetSolidLineAllParms()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2095,7 +2095,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 		err := TextLineSpecSolidLine{}.NewDefaultSolidLine(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2105,7 +2105,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2123,7 +2123,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 
 	err = txtSolidLine01.SetSolidLineCharsRepeatCount(
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2136,7 +2136,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 
 	txtSolidLine01FmtText,
 		err = txtSolidLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2165,7 +2165,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2174,7 +2174,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 
 	err = txtSolidLine01.SetSolidLineCharsRepeatCount(
 		0,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err == nil {
@@ -2184,14 +2184,14 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 			"SetSolidLineCharsRepeatCount()\n"+
 			"because 'solidLineCharsRepeatCount' is less than one (1).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = txtSolidLine01.SetSolidLineCharsRepeatCount(
 		1000001,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err == nil {
@@ -2201,7 +2201,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 			"SetSolidLineCharsRepeatCount()\n"+
 			"because 'solidLineCharsRepeatCount' is greater than one-million.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2217,7 +2217,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 			"SetSolidLineCharsRepeatCount()\n"+
 			"because 'errorPrefix' is greater than one-million.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2226,7 +2226,7 @@ func TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100(t *testing.T)
 
 	err = txtSolidLine02.SetSolidLineCharsRepeatCount(
 		5,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine02"))
 
 	if err != nil {
@@ -2264,7 +2264,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 		rightMargin,
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2274,7 +2274,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2305,7 +2305,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2316,7 +2316,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 
 	err = txtSolidLine01.SetRightMargin(
 		expectedNewRightMargin,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2333,7 +2333,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 			"txtSolidLine01.SetRightMargin() set right margin = 5\n"+
 			"Expected Right Margin = '%v'\n"+
 			"Instead, Right Margin = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedNewRightMargin,
 			newRightMargin)
 
@@ -2369,7 +2369,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 			"Actual Formatted Text String 02.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2389,7 +2389,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 			"SetRightMargin()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2398,7 +2398,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 
 	err = txtSolidLine03.SetRightMargin(
 		1000001,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine03:rightMargin==1000001"))
 
 	if err == nil {
@@ -2408,7 +2408,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 			"SetRightMargin()\n"+
 			"because rightMargin==1000001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2417,7 +2417,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 
 	err = txtSolidLIne04.SetRightMargin(
 		-1,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMargin==-1 should be valid!"))
 
 	if err != nil {
@@ -2457,7 +2457,7 @@ func TestTextLineSpecSolidLine_SetSolidLine_000100(t *testing.T) {
 			rightMargin,
 			solidLineChars,
 			solidLineCharsRepeatCount,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -2467,7 +2467,7 @@ func TestTextLineSpecSolidLine_SetSolidLine_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2498,7 +2498,7 @@ func TestTextLineSpecSolidLine_SetSolidLine_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2520,7 +2520,7 @@ func TestTextLineSpecSolidLine_SetSolidLine_000100(t *testing.T) {
 			"SetSolidLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2546,7 +2546,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 		rightMargin,
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2556,7 +2556,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2578,7 +2578,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars = \"*\""))
 
 	if err != nil {
@@ -2610,7 +2610,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2622,7 +2622,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars is empty!"))
 
 	if err == nil {
@@ -2632,7 +2632,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"SetSolidLineStrChars()\n"+
 			"because 'solidLineChars' is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2642,7 +2642,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars has a length of 1,000,001"))
 
 	if err == nil {
@@ -2652,7 +2652,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"SetSolidLineStrChars()\n"+
 			"because 'solidLineChars' has a string length of 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2663,7 +2663,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineCharsRepeatCount = zero!"))
 
 	if err == nil {
@@ -2673,7 +2673,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"SetSolidLineStrChars()\n"+
 			"because 'solidLineCharsRepeatCount' has a value of zero (0).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2683,7 +2683,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineCharsRepeatCount = -1 !"))
 
 	if err == nil {
@@ -2693,7 +2693,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"SetSolidLineStrChars()\n"+
 			"because 'solidLineCharsRepeatCount' has a value of minus one (-1).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2703,7 +2703,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars has a length of 1,000,001"))
 
 	if err == nil {
@@ -2713,7 +2713,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"SetSolidLineStrChars()\n"+
 			"because 'solidLineCharsRepeatCount' has a value of 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2732,7 +2732,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 			"SetSolidLineStrChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2742,7 +2742,7 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	err = txtSolidLine02.SetSolidLineStrChars(
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine02"))
 
 	if err != nil {
@@ -2772,7 +2772,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 		rightMargin,
 		solidLineChars,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -2782,7 +2782,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2804,7 +2804,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineRuneChars(
 		[]rune(solidLineChars),
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars = \"*\""))
 
 	if err != nil {
@@ -2836,7 +2836,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2848,7 +2848,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineRuneChars(
 		[]rune(solidLineChars),
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars is empty!"))
 
 	if err == nil {
@@ -2858,7 +2858,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"SetSolidLineRuneChars()\n"+
 			"because 'solidLineChars' is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2871,7 +2871,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 		err = sMechPreon.getRepeatRuneChar(
 		1000001,
 		'=',
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Repeat '=' 1000001 times!"))
 
 	if err != nil {
@@ -2883,7 +2883,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineRuneChars(
 		solidLineRunes,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineRunes length = 1,000,001"))
 
 	if err == nil {
@@ -2893,7 +2893,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"SetSolidLineRuneChars()\n"+
 			"because 'solidLineRunes' has a string length of 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2904,7 +2904,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineRuneChars(
 		solidLineRunes,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineCharsRepeatCount = Zero"))
 
 	if err == nil {
@@ -2914,7 +2914,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"SetSolidLineRuneChars()\n"+
 			"because 'solidLineCharsRepeatCount' has a value of zero (0).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2924,7 +2924,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineRuneChars(
 		solidLineRunes,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineCharsRepeatCount = -1"))
 
 	if err == nil {
@@ -2934,7 +2934,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"SetSolidLineRuneChars()\n"+
 			"because 'SetSolidLineRuneChars' has a value of minus one (-1).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2944,7 +2944,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine01.SetSolidLineRuneChars(
 		solidLineRunes,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineCharsRepeatCount has a value of 1,000,001"))
 
 	if err == nil {
@@ -2954,7 +2954,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"SetSolidLineRuneChars()\n"+
 			"because 'solidLineCharsRepeatCount' has a value of 1,000,001.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2973,7 +2973,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"SetSolidLineRuneChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2993,7 +2993,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 			"because 'solidLineRunes' is invalid.\n"+
 			"'solidLineRunes' contains invalid rune characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3006,7 +3006,7 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	err = txtSolidLine02.SetSolidLineRuneChars(
 		solidLineRunes,
 		solidLineCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine02"))
 
 	if err != nil {
@@ -3045,7 +3045,7 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 		solidLineChars,
 		solidLineCharsRepeatCount,
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -3055,7 +3055,7 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3072,7 +3072,7 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"txtSolidLine01.String() returned an error\n"+
 			"Error=\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			txtSolidLine01FmtText)
 
 		return
@@ -3099,7 +3099,7 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3116,7 +3116,7 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 			"Expected an error return from txtSolidLine01.String()\n"+
 			"because txtSolidLine01.solidLineChars contains invalid rune characters."+
 			"HOWEVER, NO ERROR WAS RETURNED!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -3132,7 +3132,7 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 			"Expected an error return from txtSolidLine02.String()\n"+
 			"because txtSolidLine02 is empty."+
 			"HOWEVER, NO ERROR WAS RETURNED!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 
@@ -3169,7 +3169,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000100(t *testing.T) {
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine01"))
 
 	if err != nil {
@@ -3179,7 +3179,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3191,7 +3191,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000100(t *testing.T) {
 
 	err = txtSolidLine01.TextBuilder(
 		&sb,
-		ePrefix.XCtx("txtSolidLine01->sb"))
+		ePrefix.XCpy("txtSolidLine01->sb"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3217,7 +3217,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3239,7 +3239,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 
 	err := txtSolidLine01.TextBuilder(
 		&sb,
-		ePrefix.XCtx("empty txtSolidLine01->sb"))
+		ePrefix.XCpy("empty txtSolidLine01->sb"))
 
 	if err == nil {
 
@@ -3248,7 +3248,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 			"Expected error return from txtSolidLine01.TextBuilder()\n"+
 			"because 'txtSolidLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3276,7 +3276,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine02"))
 
 	if err != nil {
@@ -3286,7 +3286,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 	}
 
 	err = txtSolidLine02.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine02"))
+		ePrefix.XCpy("txtSolidLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3296,7 +3296,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 
 	err = txtSolidLine02.TextBuilder(
 		nil,
-		ePrefix.XCtx("txtSolidLine02->nil sb"))
+		ePrefix.XCpy("txtSolidLine02->nil sb"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -3304,14 +3304,14 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 			"Expected error return from txtSolidLine02.TextBuilder()\n"+
 			"because strings.Builder pointer is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = txtSolidLine02.TextBuilder(
 		&sb,
-		ePrefix.XCtx("valid txtSolidLine02->sb"))
+		ePrefix.XCpy("valid txtSolidLine02->sb"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3337,7 +3337,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3354,7 +3354,7 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3439,7 +3439,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 		solidLineCharsRepeatCount,
 		newLineChars,
 		turnAutoLineTerminationOff,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -3449,7 +3449,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3463,7 +3463,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"txtSolidLine01.GetTurnLineTerminatorOff() == 'true'\n"+
 			"Expected turnLineTerminatorOff == 'false'\n"+
 			"Instead, turnLineTerminatorOff == 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3477,7 +3477,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"txtSolidLine01.GetTurnLineTerminatorOff() == 'false'\n"+
 			"Expected turnLineTerminatorOff == 'true'\n"+
 			"Instead, turnLineTerminatorOff == 'false'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3512,7 +3512,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3530,7 +3530,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"txtSolidLine02.GetTurnLineTerminatorOff() == 'false'\n"+
 			"Expected turnLineTerminatorOff == 'true'\n"+
 			"Instead, turnLineTerminatorOff == 'false'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3561,7 +3561,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 		solidLineCharsRepeatCount,
 		newLineChars,
 		turnAutoLineTerminationOff,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine01"))
 
 	if err != nil {
@@ -3571,7 +3571,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 	}
 
 	err = txtSolidLine01.IsValidInstanceError(
-		ePrefix.XCtx("txtSolidLine01"))
+		ePrefix.XCpy("txtSolidLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3585,7 +3585,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"txtSolidLine01.GetTurnLineTerminatorOff() == 'false'\n"+
 			"Expected turnLineTerminatorOff == 'true'\n"+
 			"Instead, turnLineTerminatorOff == 'false'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3599,7 +3599,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"txtSolidLine01.GetTurnLineTerminatorOff() == 'true'\n"+
 			"Expected turnLineTerminatorOff == 'false'\n"+
 			"Instead, turnLineTerminatorOff == 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3635,7 +3635,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"Actual Formatted Text String 01.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3655,7 +3655,7 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"txtSolidLine02.GetTurnLineTerminatorOff() == 'true'\n"+
 			"Expected turnLineTerminatorOff == 'false'\n"+
 			"Instead, turnLineTerminatorOff == 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}

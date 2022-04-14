@@ -27,7 +27,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -36,7 +36,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -120,7 +120,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 
 	err = plainTextLine02.CopyIn(
 		nil,
-		ePrefix.XCtx("incomingPlainTxtLine='nil'"))
+		ePrefix.XCpy("incomingPlainTxtLine='nil'"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -128,7 +128,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"textLineSpecPlainTextNanobot{}.copyIn()\n"+
 			"because input parameter 'incomingPlainTxtLine' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("incomingPlainTxtLine - Missing Error Return"))
+			ePrefix.XCpy("incomingPlainTxtLine - Missing Error Return"))
 		return
 	}
 
@@ -136,7 +136,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 
 	err = plainTextLine03.CopyIn(
 		&plainTextLine01,
-		ePrefix.XCtx("incomingPlainTxtLine='plainTextLine01'"))
+		ePrefix.XCpy("incomingPlainTxtLine='plainTextLine01'"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -145,7 +145,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 	}
 
 	err = plainTextLine03.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -157,7 +157,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected plainTextLine03 == plainTextLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -180,7 +180,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 
 	err = plainTextLine04.CopyIn(
 		&badTextLinePlainTxt99,
-		ePrefix.XCtx("incomingPlainTxtLine='badTextLinePlainTxt99'"))
+		ePrefix.XCpy("incomingPlainTxtLine='badTextLinePlainTxt99'"))
 
 	if err == nil {
 
@@ -189,7 +189,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"plainTextLine04.CopyIn()\n"+
 			"because input parameter 'incomingPlainTextLine' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 
 		return
 	}
@@ -200,7 +200,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
-		ePrefix.XCtx("plainTextLine05"))
+		ePrefix.XCpy("plainTextLine05"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -209,7 +209,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 	}
 
 	err = plainTextLine05.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine05"))
+		ePrefix.XCpy("plainTextLine05"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -230,7 +230,7 @@ func TestTextLineSpecPlainText_CopyIn_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -257,7 +257,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -266,7 +266,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -278,7 +278,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 
 	plainTextLine02,
 		err = plainTextLine01.CopyOut(
-		ePrefix.XCtx("plainTextLine01->" +
+		ePrefix.XCpy("plainTextLine01->" +
 			"plainTextLine02"))
 
 	if err != nil {
@@ -288,7 +288,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -300,7 +300,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected plainTextLine02 == plainTextLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -313,7 +313,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 			"Error:\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextString,
 			actualTextStr)
 
@@ -452,7 +452,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine04"))
+		ePrefix.XCpy("plainTextLine04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -461,7 +461,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 	}
 
 	err = plainTextLine04.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine04"))
+		ePrefix.XCpy("plainTextLine04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -481,7 +481,7 @@ func TestTextLineSpecPlainText_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -507,7 +507,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -517,7 +517,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -533,7 +533,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 			"Error: plainTextLine01.GetTurnLineTerminatorOff()"+
 			"Expected TurnLineTerminatorOff == 'false'\n"+
 			"Instead, TurnLineTerminatorOff == 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -542,7 +542,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 
 	iTextLine, err =
 		plainTextLine01.CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01->iTextLine"))
 
 	if err != nil {
@@ -557,7 +557,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: iTextLine.(*TextLineSpecPlainText)\n"+
 			"Could not convert 'iTextLine' to TextLineSpecPlainText\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -566,7 +566,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected plainTextLine02 == plainTextLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -576,7 +576,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 			"Error: plainTextLine01.EqualITextLine(iTextLine)\n"+
 			"Expected plainTextLine01 == iTextLine\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -586,7 +586,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 	_,
 		err =
 		plainTextLine03.CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine03->_"))
 
 	if err == nil {
@@ -594,7 +594,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 			"Error: plainTextLine03.CopyOutITextLine()\n"+
 			"Expected an error return because 'plainTextLine03' is empty!\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -608,7 +608,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine04"))
 
 	if err != nil {
@@ -618,7 +618,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 	}
 
 	err = plainTextLine04.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine04"))
+		ePrefix.XCpy("plainTextLine04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -637,7 +637,7 @@ func TestTextLineSpecPlainText_CopyOutITextLine_000100(t *testing.T) {
 			"CopyOutITextLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -660,7 +660,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -669,7 +669,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -681,7 +681,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 
 	plainTextLine02,
 		err = plainTextLine01.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01->plainTextLine02"))
 
 	if err != nil {
@@ -691,7 +691,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -703,7 +703,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected plainTextLine02 == plainTextLine01\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -714,7 +714,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 
 	plainTextLine03,
 		err = plainTextLine02.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02->plainTextLine03"))
 
 	if err == nil {
@@ -724,13 +724,13 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 			"plainTextLine02.CopyOutPtr()\n"+
 			"because 'plainTextLine02' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 
 		return
 	}
 
 	err = plainTextLine03.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err == nil {
 
@@ -739,7 +739,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 			"plainTextLine03.IsValidInstanceError()\n"+
 			"because 'plainTextLine03' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtx("Missing Error Return"))
+			ePrefix.XCpy("Missing Error Return"))
 
 		return
 	}
@@ -751,7 +751,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
-		ePrefix.XCtx("plainTextLine04"))
+		ePrefix.XCpy("plainTextLine04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -760,7 +760,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = plainTextLine04.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine04"))
+		ePrefix.XCpy("plainTextLine04"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -778,7 +778,7 @@ func TestTextLineSpecPlainText_CopyOutPtr_000100(t *testing.T) {
 			"CopyOutPtr()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -804,7 +804,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -814,7 +814,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -831,7 +831,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 			"Error: plainTextLine01.textString\n"+
 			"Expected length of textString == 0\n"+
 			"Instead, length of textString == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			len(plainTextLine01.textString))
 
 		return
@@ -842,7 +842,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 			"Error: plainTextLine01.leftMarginChars\n"+
 			"Expected leftMarginChars == 'nil'\n"+
 			"Instead, leftMarginChars == '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(plainTextLine01.leftMarginChars))
 
 		return
@@ -853,7 +853,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 			"Error: plainTextLine01.rightMarginChars\n"+
 			"Expected rightMarginChars == 'nil'\n"+
 			"Instead, rightMarginChars == '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(plainTextLine01.rightMarginChars))
 
 		return
@@ -864,7 +864,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 			"Error: plainTextLine01.newLineChars\n"+
 			"Expected newLineChars == 'nil'\n"+
 			"Instead, newLineChars == '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(plainTextLine01.newLineChars))
 
 		return
@@ -875,7 +875,7 @@ func TestTextLineSpecPlainText_Empty_000100(t *testing.T) {
 			"Error: plainTextLine01.turnLineTerminatorOff\n"+
 			"Expected turnLineTerminatorOff == 'false'\n"+
 			"Instead, turnLineTerminatorOff == 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -908,7 +908,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -918,7 +918,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -935,7 +935,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 			"Error: plainTextLine01.textString\n"+
 			"Expected length of textString == 0\n"+
 			"Instead, length of textString == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			len(plainTextLine01.textString))
 
 		return
@@ -946,7 +946,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 			"Error: plainTextLine01.leftMarginChars\n"+
 			"Expected leftMarginChars == 'nil'\n"+
 			"Instead, leftMarginChars == '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(plainTextLine01.leftMarginChars))
 
 		return
@@ -957,7 +957,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 			"Error: plainTextLine01.rightMarginChars\n"+
 			"Expected rightMarginChars == 'nil'\n"+
 			"Instead, rightMarginChars == '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(plainTextLine01.rightMarginChars))
 
 		return
@@ -968,7 +968,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 			"Error: plainTextLine01.newLineChars\n"+
 			"Expected newLineChars == 'nil'\n"+
 			"Instead, newLineChars == '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(plainTextLine01.newLineChars))
 
 		return
@@ -979,7 +979,7 @@ func TestTextLineSpecPlainText_Empty_000200(t *testing.T) {
 			"Error: plainTextLine01.turnLineTerminatorOff\n"+
 			"Expected turnLineTerminatorOff == 'false'\n"+
 			"Instead, turnLineTerminatorOff == 'true'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1006,7 +1006,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1015,7 +1015,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1039,7 +1039,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 			"Expected areEqual == false because input\n"+
 			"parameter 'standardLineSpec' is the wrong type.\n"+
 			"HOWEVER, areEqual == true\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1054,7 +1054,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 			"Expected areEqual == false because input\n"+
 			"parameter 'standardLineSpec is the wrong type.\n"+
 			"HOWEVER, areEqual == true\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1062,7 +1062,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 	err =
 		plainTextLine02.CopyIn(
 			plainTextLine01,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01->plainTextLine02"))
 
 	if err != nil {
@@ -1081,7 +1081,7 @@ func TestTextLineSpecPlainText_EqualITextLine_000100(t *testing.T) {
 			"Expected areEqual == true because \n"+
 			"'plainTextLine01' == 'plainTextLine02'\n"+
 			"HOWEVER, areEqual == false\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1107,7 +1107,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1116,7 +1116,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1142,7 +1142,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 	actualFmtTxtStr,
 		err =
 		plainTextLine01.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01->actualFmtTxtStr"))
 
 	if err != nil {
@@ -1163,7 +1163,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 			"Actual Formatted Text String.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1182,7 +1182,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 			"GetFormattedText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1191,7 +1191,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 
 	_,
 		err = plainTextLine02.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err == nil {
@@ -1200,7 +1200,7 @@ func TestTextLineSpecPlainText_GetFormattedText_000100(t *testing.T) {
 			"GetFormattedText()\n"+
 			"because 'plainTextLine02' is empty and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1226,7 +1226,7 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1235,7 +1235,7 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1257,7 +1257,7 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 			"Actual Left Margin String.\n"+
 			"Expected Left Margin String = '%v'\n"+
 			"Instead, Left Margin String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -1279,7 +1279,7 @@ func TestTextLineSpecPlainText_GetLeftMarginStr_000100(t *testing.T) {
 			"Actual Left Margin String.\n"+
 			"Expected Left Margin String = '%v'\n"+
 			"Instead, Left Margin String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -1307,7 +1307,7 @@ func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 		[]rune(expectedTextString),
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1316,7 +1316,7 @@ func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1340,7 +1340,7 @@ func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 			"Actual Left Margin Runes.\n"+
 			"Expected Left Margin Runes = '%v'\n"+
 			"Instead, Left Margin Runes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(expectedLeftMarginRunes),
 			string(actualLeftMarginRunes))
 
@@ -1361,7 +1361,7 @@ func TestTextLineSpecPlainText_GetLeftMarginRunes_000100(t *testing.T) {
 			"HOWEVER, actualLeftMarginRunes != 'nil'!!\n"+
 			"Instead, Actual Left Margin Runes = '%v'\n"+
 			"Actual Left Margin Rune Array = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(actualLeftMarginRunes),
 			actualLeftMarginRunes)
 
@@ -1389,7 +1389,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1398,7 +1398,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1429,7 +1429,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1459,7 +1459,7 @@ func TestTextLineSpecPlainText_GetLineTerminationChars_000100(t *testing.T) {
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1487,7 +1487,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1496,7 +1496,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1527,7 +1527,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1548,7 +1548,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(expectedNewLineRunes),
 			string(actualLineTerminationRunes))
 
@@ -1580,7 +1580,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1601,7 +1601,7 @@ func TestTextLineSpecPlainText_GetLineTerminationRunes_000100(t *testing.T) {
 			"Actual Line Termination String.\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(expectedNewLineRunes),
 			string(actualLineTerminationRunes))
 
@@ -1629,7 +1629,7 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1638,7 +1638,7 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1660,7 +1660,7 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 			"Actual Right Margin String.\n"+
 			"Expected Right Margin String = '%v'\n"+
 			"Instead, Right Margin String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedRightMarginStr,
 			actualRightMarginStr)
 
@@ -1682,7 +1682,7 @@ func TestTextLineSpecPlainText_GetRightMarginStr_000100(t *testing.T) {
 			"Actual Right Margin String.\n"+
 			"Expected Right Margin String = '%v'\n"+
 			"Instead, Right Margin String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedRightMarginStr,
 			actualRightMarginStr)
 
@@ -1710,7 +1710,7 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 		[]rune(expectedTextString),
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1719,7 +1719,7 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1743,7 +1743,7 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 			"Actual Right Margin Runes.\n"+
 			"Expected Right Margin Runes = '%v'\n"+
 			"Instead, Right Margin Runes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(expectedRightMarginRunes),
 			string(actualRightMarginRunes))
 
@@ -1764,7 +1764,7 @@ func TestTextLineSpecPlainText_GetRightMarginRunes_000100(t *testing.T) {
 			"HOWEVER, actualRightMarginRunes != 'nil'!!\n"+
 			"Instead, Actual Right Margin Runes = '%v'\n"+
 			"Actual Right Margin Rune Array = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			string(actualRightMarginRunes),
 			actualRightMarginRunes)
 
@@ -1792,7 +1792,7 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1801,7 +1801,7 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1820,7 +1820,7 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextString,
 			actualTextStr)
 
@@ -1842,7 +1842,7 @@ func TestTextLineSpecPlainText_GetTextString_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextString,
 			actualTextStr)
 
@@ -1870,7 +1870,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1879,7 +1879,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1897,7 +1897,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"TurnLineTerminatorOff value is INVALID!\n"+
 			"Expected TurnLineTerminatorOff = 'true'\n"+
 			"Instead, TurnLineTerminatorOff = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualTurnLineTerminatorOff)
 
 		return
@@ -1920,7 +1920,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 
 	actualFmtTextStr,
 		err = plainTextLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Test#1 plainTextLine01->actualFmtTextStr"))
 
 	if err != nil {
@@ -1942,7 +1942,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"Actual Formatted Text String.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -1963,7 +1963,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 
 	actualFmtTextStr,
 		err = plainTextLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Test#2 plainTextLine01->actualFmtTextStr"))
 
 	if err != nil {
@@ -1985,7 +1985,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"Actual Formatted Text String.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2002,7 +2002,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"TurnLineTerminatorOff value is INVALID!\n"+
 			"Expected TurnLineTerminatorOff = 'false'\n"+
 			"Instead, TurnLineTerminatorOff = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualTurnLineTerminatorOff)
 
 		return
@@ -2020,7 +2020,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"TurnLineTerminatorOff value is INVALID!\n"+
 			"Expected TurnLineTerminatorOff = 'true'\n"+
 			"Instead, TurnLineTerminatorOff = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualTurnLineTerminatorOff)
 
 		return
@@ -2039,7 +2039,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 
 	actualFmtTextStr,
 		err = plainTextLine01.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Test#2 plainTextLine01->actualFmtTextStr"))
 
 	if err != nil {
@@ -2061,7 +2061,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"Actual Formatted Text String.\n"+
 			"Expected Formatted Text String = '%v'\n"+
 			"Instead, Formatted Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2080,7 +2080,7 @@ func TestTextLineSpecPlainText_GetTurnLineTerminatorOff_000100(t *testing.T) {
 			"TurnLineTerminatorOff value is INVALID!\n"+
 			"Expected TurnLineTerminatorOff = 'false'\n"+
 			"Instead, TurnLineTerminatorOff = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualTurnLineTerminatorOff)
 
 		return
@@ -2106,7 +2106,7 @@ func TestTextLineSpecPlainText_IsValidInstance_000100(t *testing.T) {
 			"Expected isValid == 'false' because \n"+
 			"plainTextLine01 is empty and invalid.\n"+
 			"HOWEVER, isValid == 'true'!!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2123,7 +2123,7 @@ func TestTextLineSpecPlainText_IsValidInstance_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2140,7 +2140,7 @@ func TestTextLineSpecPlainText_IsValidInstance_000100(t *testing.T) {
 			"Expected isValid == 'true' because \n"+
 			"plainTextLine02 is a valid instance.\n"+
 			"HOWEVER, isValid == 'false'!!!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2158,7 +2158,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 
 	err :=
 		plainTextLine01.IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err == nil {
@@ -2168,7 +2168,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"IsValidInstanceError()\n"+
 			"because 'plainTextLine01' is empty and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2187,7 +2187,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2196,7 +2196,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2207,7 +2207,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 	plainTextLine02.textString = ""
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err == nil {
 
@@ -2216,7 +2216,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"IsValidInstanceError()\n"+
 			"because plainTextLine02.textString = \"\".\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2226,7 +2226,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 	plainTextLine02.newLineChars = nil
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err == nil {
 
@@ -2235,7 +2235,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"IsValidInstanceError()\n"+
 			"because plainTextLine02.newLineChars = nil.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2246,7 +2246,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		strings.Repeat("x", 1000001)
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err == nil {
 
@@ -2256,7 +2256,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"because plainTextLine02.textString has\n"+
 			"over 1-million characters (1,000,001).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2267,7 +2267,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		[]rune(strings.Repeat("x", 1000001))
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err == nil {
 
@@ -2277,7 +2277,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"because plainTextLine02.leftMarginChars has\n"+
 			"over 1-million characters (1,000,001)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2291,7 +2291,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		[]rune(strings.Repeat("x", 1000001))
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err == nil {
 
@@ -2301,7 +2301,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"because plainTextLine02.rightMarginChars has\n"+
 			"over 1-million characters (1,000,001)\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2320,7 +2320,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2337,7 +2337,7 @@ func TestTextLineSpecPlainText_IsValidInstanceError_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2360,7 +2360,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		leftMarginSpaces,
 		rightMarginSpaces,
 		textString,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -2370,7 +2370,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2392,7 +2392,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 			"NewDefault()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2402,7 +2402,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		1000001,
 		rightMarginSpaces,
 		textString,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Invalid Left Margin Spaces"))
 
 	if err == nil {
@@ -2412,7 +2412,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 			"NewDefault()\n"+
 			"because 'leftMarginSpaces' is '1,000,001'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2422,7 +2422,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		3,
 		1000001,
 		textString,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Invalid Right Margin Spaces"))
 
 	if err == nil {
@@ -2432,7 +2432,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 			"NewDefault()\n"+
 			"because 'rightMarginSpaces' is '1,000,001'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2444,7 +2444,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 		3,
 		3,
 		textString,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Invalid Right Margin Spaces"))
 
 	if err == nil {
@@ -2454,7 +2454,7 @@ func TestTextLineSpecPlainText_NewDefault_000100(t *testing.T) {
 			"NewDefault()\n"+
 			"because 'textString' has '1,000,001' characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2482,7 +2482,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2491,7 +2491,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2515,7 +2515,7 @@ func TestTextLineSpecPlainText_NewPlainText_000100(t *testing.T) {
 			"NewPlainTextAllParms()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2543,7 +2543,7 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 		expectedTextChars,
 		expectedNewLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -2561,7 +2561,7 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 			"plainTextLine01.GetTurnLineTerminatorOff()\n"+
 			"Expected turnLineTerminatorOff == 'true'\n"+
 			"Instead, turnLineTerminatorOff == 'false'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2582,7 +2582,7 @@ func TestTextLineSpecPlainText_NewPlainTextRunes_000100(t *testing.T) {
 			"NewPlainTextRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2608,7 +2608,7 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -2618,7 +2618,7 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2641,7 +2641,7 @@ func TestTextLineSpecPlainText_NewPlainTextStrings_000100(t *testing.T) {
 			"NewPlainTextStrings()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2664,7 +2664,7 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		leftMargin,
 		rightMargin,
 		textString,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2673,7 +2673,7 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2697,7 +2697,7 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		expectedTextChars,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -2712,7 +2712,7 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected plainTextLine01 == plainTextLine02\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2731,7 +2731,7 @@ func TestTextLineSpecPlainText_NewPtrDefault_000100(t *testing.T) {
 			"NewPtrDefault()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2758,7 +2758,7 @@ func TestTextLineSpecPlainText_NewPtrPlainText_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2767,7 +2767,7 @@ func TestTextLineSpecPlainText_NewPtrPlainText_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2791,7 +2791,7 @@ func TestTextLineSpecPlainText_NewPtrPlainText_000100(t *testing.T) {
 			"NewPtrPlainText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2817,7 +2817,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextRunes_000100(t *testing.T) {
 		[]rune(expectedTextString),
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2826,7 +2826,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2850,7 +2850,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextRunes_000100(t *testing.T) {
 			"NewPtrPlainTextRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2876,7 +2876,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2885,7 +2885,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2909,7 +2909,7 @@ func TestTextLineSpecPlainText_NewPtrPlainTextStrings_000100(t *testing.T) {
 			"NewPtrPlainTextStrings()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2942,7 +2942,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -2974,7 +2974,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2985,7 +2985,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2995,7 +2995,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3004,7 +3004,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"plainTextLine01.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3016,7 +3016,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -3041,7 +3041,7 @@ func TestTextLineSpecPlainText_Read_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3076,7 +3076,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -3110,7 +3110,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3121,7 +3121,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3132,7 +3132,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3142,7 +3142,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3154,7 +3154,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -3179,7 +3179,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 		return
@@ -3190,7 +3190,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"Error: After a successful series of byte reads,\n"+
 			"plainTextLine01.textLineReader pointer has NOT\n"+
 			"BEEN RESET TO 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 		return
 	}
 
@@ -3217,7 +3217,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"Error: Test # 2\n"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3235,7 +3235,7 @@ func TestTextLineSpecPlainText_Read_000200(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 		return
@@ -3271,7 +3271,7 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 			textString,
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -3289,14 +3289,14 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 		err = txtSpecAtom.readBytes(
 		nil,
 		p,
-		ePrefix.XCtx("textReader == 'nil'"))
+		ePrefix.XCpy("textReader == 'nil'"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: Expected error return from txtSpecAtom.readBytes()"+
 			"because input parameter 'textReader' == 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3308,7 +3308,7 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 		err =
 		plainTxtNanobot.getFormattedText(
 			&plainTextLine01,
-			ePrefix.XCtx("plainTextLine01"))
+			ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3325,14 +3325,14 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 		err = txtSpecAtom.readBytes(
 		plainTextLine01.textLineReader,
 		p,
-		ePrefix.XCtx("p == zero length"))
+		ePrefix.XCpy("p == zero length"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Error: Expected error return from txtSpecAtom.readBytes()"+
 			"because input parameter 'p' is a zero length byte array.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3348,7 +3348,7 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 			err = txtSpecAtom.readBytes(
 			plainTextLine01.textLineReader,
 			p,
-			ePrefix.XCtx("plainTextLine is valid"))
+			ePrefix.XCpy("plainTextLine is valid"))
 
 		if n == 0 {
 			break
@@ -3363,7 +3363,7 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtSpecAtom.readBytes(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3376,7 +3376,7 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -3401,7 +3401,7 @@ func TestTextLineSpecPlainText_Read_000300(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3447,7 +3447,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 		textString,
 		newLineTerminator,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3479,7 +3479,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3490,7 +3490,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3500,7 +3500,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3509,7 +3509,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"plainTextLine01.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3521,7 +3521,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -3539,7 +3539,7 @@ func TestTextLineSpecPlainText_Read_000400(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 	}
@@ -3568,7 +3568,7 @@ func TestTextLineSpecPlainText_Read_000500(t *testing.T) {
 		textString,
 		newLineTerminator,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3577,7 +3577,7 @@ func TestTextLineSpecPlainText_Read_000500(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3600,7 +3600,7 @@ func TestTextLineSpecPlainText_Read_000500(t *testing.T) {
 			"Expected an error return from plainTextLine01.Read(p)\n"+
 			"because 'plainTextLine01' contains invalid data.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3633,7 +3633,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -3653,7 +3653,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by plainTextLine01.Read(p)\n"+
 			"Error:\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3664,7 +3664,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Error: plainTextLine01.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			n)
 
 		return
@@ -3695,7 +3695,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3706,7 +3706,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3716,7 +3716,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3725,7 +3725,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"plainTextLine01.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3737,7 +3737,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedStr,
 			readBytesCnt)
 
@@ -3762,7 +3762,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3773,7 +3773,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #1\n"+
 			"Completed Read Operation but plainTextLine01.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3801,7 +3801,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Test # 2"+
 			"Error Returned From plainTextLine01.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3813,7 +3813,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3824,7 +3824,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3840,7 +3840,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -3851,7 +3851,7 @@ func TestTextLineSpecPlainText_ReaderInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Completed Read Operation but plainTextLine01.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3879,7 +3879,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	err :=
 		plainTextLineZero.SetLeftMarginChars(
 			expectedLeftMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLineZero"))
 
 	if err != nil {
@@ -3900,7 +3900,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -3916,7 +3916,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineStr,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3925,7 +3925,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3938,7 +3938,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetLeftMarginChars(
 			expectedLeftMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -3959,7 +3959,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -3977,7 +3977,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 			"SetLeftMarginChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3991,7 +3991,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineStr,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4000,7 +4000,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4013,7 +4013,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetLeftMarginChars(
 			expectedLeftMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02"))
 
 	if err != nil {
@@ -4034,7 +4034,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -4052,7 +4052,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineStr,
 		false,
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4061,7 +4061,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	}
 
 	err = plainTextLine03.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4075,7 +4075,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 	err =
 		plainTextLine03.SetLeftMarginChars(
 			expectedLeftMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine03"))
 
 	if err == nil {
@@ -4084,7 +4084,7 @@ func TestTextLineSpecPlainText_SetLeftMarginChars_000100(t *testing.T) {
 			"SetLeftMarginChars()\n"+
 			"because 'expectedLeftMarginStr' has 1,000,001 characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 	}
 
 	expectedLeftMarginStr = ""
@@ -4110,7 +4110,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 
 	err := plainTextLineZero.SetLeftMarginRunes(
 		expectedLeftMarginRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLineZero"))
 
 	if err != nil {
@@ -4131,7 +4131,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -4147,7 +4147,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4156,7 +4156,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4171,7 +4171,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 
 	err = plainTextLine01.SetLeftMarginRunes(
 		expectedLeftMarginRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -4192,7 +4192,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -4209,7 +4209,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 			"SetLeftMarginChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4223,7 +4223,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4232,7 +4232,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4245,7 +4245,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 
 	err = plainTextLine02.SetLeftMarginRunes(
 		expectedLeftMarginRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err != nil {
@@ -4266,7 +4266,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedLeftMarginStr,
 			actualLeftMarginStr)
 
@@ -4286,7 +4286,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4295,7 +4295,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine03.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4309,7 +4309,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 		err = strMechPreon{}.ptr().getRepeatRuneChar(
 		1000001,
 		'X',
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Repeat Count = 1000001"))
 
 	if err != nil {
@@ -4320,7 +4320,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 
 	err = plainTextLine03.SetLeftMarginRunes(
 		expectedLeftMarginRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine03"))
 
 	if err == nil {
@@ -4329,7 +4329,7 @@ func TestTextLineSpecPlainText_SetLeftMarginRunes_000100(t *testing.T) {
 			"SetLeftMarginChars()\n"+
 			"because 'expectedLeftMarginStr'has 1,000,001 characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 	}
 
 	expectedLeftMarginRunes = nil
@@ -4353,7 +4353,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	err :=
 		plainTextLineZero.SetLineTerminationChars(
 			expectedNewLineStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLineZero"))
 
 	if err != nil {
@@ -4386,7 +4386,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedNewLineStr,
 			printableActualNewLineStr)
 
@@ -4402,7 +4402,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineStr,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4411,7 +4411,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4424,7 +4424,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetLineTerminationChars(
 			expectedNewLineStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -4455,7 +4455,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedNewLineStr,
 			printableActualNewLineStr)
 
@@ -4473,7 +4473,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 			"SetLeftMarginChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4487,7 +4487,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineStr,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4496,7 +4496,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4509,7 +4509,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetLineTerminationChars(
 			expectedNewLineStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02"))
 
 	if err == nil {
@@ -4518,7 +4518,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 			"SetNewLineChars()\n"+
 			"because 'expectedNewLineStr' is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4529,7 +4529,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetLineTerminationChars(
 			expectedNewLineStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02"))
 
 	if err == nil {
@@ -4538,7 +4538,7 @@ func TestTextLineSpecPlainText_SetLineTerminationChars_000100(t *testing.T) {
 			"SetNewLineChars()\n"+
 			"because 'expectedNewLineStr' has 1,000,001 characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 	}
 
 	expectedNewLineStr = ""
@@ -4561,7 +4561,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 
 	err := plainTextLineZero.SetLineTerminationRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLineZero"))
 
 	if err != nil {
@@ -4594,7 +4594,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedNewLineStr,
 			printableActualNewLineStr)
 
@@ -4610,7 +4610,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4619,7 +4619,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine01.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4631,7 +4631,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 
 	err = plainTextLine01.SetLineTerminationRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine01"))
 
 	if err != nil {
@@ -4662,7 +4662,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
 			"Expected Line Termination String = '%v'\n"+
 			"Instead, Line Termination String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedNewLineStr,
 			printableActualNewLineStr)
 
@@ -4680,7 +4680,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 			"SetNewLineRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4694,7 +4694,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4703,7 +4703,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine02.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine02"))
+		ePrefix.XCpy("plainTextLine02"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4715,7 +4715,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 
 	err = plainTextLine02.SetLineTerminationRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err == nil {
@@ -4726,7 +4726,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 			"because 'expectedNewLineRunes' is invalid.\n"+
 			"'expectedNewLineRunes' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4742,7 +4742,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineRunes,
 		false,
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4751,7 +4751,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 	}
 
 	err = plainTextLine03.IsValidInstanceError(
-		ePrefix.XCtx("plainTextLine03"))
+		ePrefix.XCpy("plainTextLine03"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4765,7 +4765,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 		err = strMechPreon{}.ptr().getRepeatRuneChar(
 		1000001,
 		'X',
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Repeat Count = 1000001"))
 
 	if err != nil {
@@ -4776,7 +4776,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 
 	err = plainTextLine03.SetLineTerminationRunes(
 		expectedNewLineRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine03"))
 
 	if err == nil {
@@ -4789,7 +4789,7 @@ func TestTextLineSpecPlainText_SetLineTerminationRunes_000100(t *testing.T) {
 			"'expectedNewLineRunes' has an array length greater\n"+
 			"than 1-million (1,000,000) characters.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4824,7 +4824,7 @@ func TestTextLineSpecPlainText_SetPlainTextDefault_000100(t *testing.T) {
 			"SetPlainTextDefault()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4859,7 +4859,7 @@ func TestTextLineSpecPlainText_SetPlainTextSpec_000100(t *testing.T) {
 			"SetPlainTextSpec()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 	}
 
@@ -4897,7 +4897,7 @@ func TestTextLineSpecPlainText_SetPlainTextSpecRunes_000100(t *testing.T) {
 			"SetPlainTextSpecRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 	}
 
@@ -4917,7 +4917,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 	err :=
 		plainTextLine01.SetRightMarginChars(
 			rightMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-rightMarginStr"))
 
 	if err != nil {
@@ -4931,7 +4931,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetRightMarginChars(
 			rightMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-rightMarginStr-invalid"))
 
 	if err == nil {
@@ -4940,7 +4940,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 			"SetRightMarginChars()\n"+
 			"because 'rightMarginStr' has a string length > 1,000,000.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4950,7 +4950,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetRightMarginChars(
 			rightMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-rightMarginStr-zero-length-string"))
 
 	if err != nil {
@@ -4973,7 +4973,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err != nil {
@@ -4987,7 +4987,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetRightMarginChars(
 			rightMarginStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02<-rightMarginStr"))
 
 	if err != nil {
@@ -5007,7 +5007,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 			"Actual Right Margin String.\n"+
 			"Expected Right Margin String = '%v'\n"+
 			"Actual Right Margin String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			rightMarginStr,
 			actualRightMarginStr)
 
@@ -5025,7 +5025,7 @@ func TestTextLineSpecPlainText_SetRightMarginChars_000100(t *testing.T) {
 			"SetRightMarginChars()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5047,7 +5047,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 	err :=
 		plainTextLine01.SetRightMarginRunes(
 			rightMarginRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-rightMarginRunes"))
 
 	if err != nil {
@@ -5062,7 +5062,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetRightMarginRunes(
 			rightMarginRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-rightMarginRunes-invalid"))
 
 	if err == nil {
@@ -5071,7 +5071,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 			"SetRightMarginRunes()\n"+
 			"because 'rightMarginRunes' has an array length > 1,000,000.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5081,7 +5081,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetRightMarginRunes(
 			rightMarginRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-rightMarginRunes-zero-length-string"))
 
 	if err != nil {
@@ -5104,7 +5104,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err != nil {
@@ -5118,7 +5118,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetRightMarginRunes(
 			rightMarginRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02<-rightMarginRunes"))
 
 	if err != nil {
@@ -5141,7 +5141,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 			"Actual Right Margin String.\n"+
 			"Expected Right Margin String = '%v'\n"+
 			"Actual Right Margin String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedRightMarginStr,
 			actualRightMarginStr)
 
@@ -5159,7 +5159,7 @@ func TestTextLineSpecPlainText_SetRightMarginRunes_000100(t *testing.T) {
 			"SetRightMarginRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5181,7 +5181,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 	err :=
 		plainTextLine01.SetTextRunes(
 			textRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-textRunes"))
 
 	if err != nil {
@@ -5196,7 +5196,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetTextRunes(
 			textRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-textRunes-invalid"))
 
 	if err == nil {
@@ -5205,7 +5205,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 			"SetTextRunes()\n"+
 			"because 'textRunes' has an array length > 1,000,000.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5215,7 +5215,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetTextRunes(
 			textRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-textRunes-zero-length-string"))
 
 	if err == nil {
@@ -5224,7 +5224,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 			"SetTextRunes()\n"+
 			"because 'textRunes' is a zero length array.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5243,7 +5243,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err != nil {
@@ -5257,7 +5257,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetTextRunes(
 			textRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02<-textRunes"))
 
 	if err != nil {
@@ -5280,7 +5280,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Actual Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextStr,
 			actualTextStr)
 
@@ -5298,7 +5298,7 @@ func TestTextLineSpecPlainText_SetTextRunes_000100(t *testing.T) {
 			"SetTextRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5319,7 +5319,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 	err :=
 		plainTextLine01.SetTextString(
 			textStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-textStr"))
 
 	if err != nil {
@@ -5334,7 +5334,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetTextString(
 			textStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-textStr-invalid"))
 
 	if err == nil {
@@ -5343,7 +5343,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 			"SetTextString()\n"+
 			"because 'textStr' has an array length > 1,000,000.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5353,7 +5353,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 	err =
 		plainTextLine01.SetTextString(
 			textStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01<-textStr-zero-length-string"))
 
 	if err == nil {
@@ -5362,7 +5362,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 			"SetTextRunes()\n"+
 			"because 'textStr' is an empty string.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5381,7 +5381,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTextLine02"))
 
 	if err != nil {
@@ -5395,7 +5395,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 	err =
 		plainTextLine02.SetTextString(
 			textStr,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine02<-textStr"))
 
 	if err != nil {
@@ -5417,7 +5417,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Actual Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextStr,
 			actualTextStr)
 
@@ -5435,7 +5435,7 @@ func TestTextLineSpecPlainText_SetTextString_000100(t *testing.T) {
 			"SetTextString()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5472,7 +5472,7 @@ func TestTextLineSpecPlainText_String_000100(t *testing.T) {
 			[]rune(textString),
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -5499,7 +5499,7 @@ func TestTextLineSpecPlainText_String_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -5517,7 +5517,7 @@ func TestTextLineSpecPlainText_String_000100(t *testing.T) {
 			"string containing the word \"Error\".\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n"+
 			"Actual Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualStr)
 
 		return
@@ -5555,7 +5555,7 @@ func TestTextLineSpecPlainText_TextBuilder_000100(t *testing.T) {
 			[]rune(textString),
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -5568,7 +5568,7 @@ func TestTextLineSpecPlainText_TextBuilder_000100(t *testing.T) {
 
 	err = plainTextLine01.TextBuilder(
 		&sb,
-		ePrefix.XCtx("plainTextLine01->sb"))
+		ePrefix.XCpy("plainTextLine01->sb"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5594,7 +5594,7 @@ func TestTextLineSpecPlainText_TextBuilder_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -5615,7 +5615,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 
 	err := plainTextLine01.TextBuilder(
 		&sb,
-		ePrefix.XCtx("empty plainTextLine01->sb"))
+		ePrefix.XCpy("empty plainTextLine01->sb"))
 
 	if err == nil {
 
@@ -5624,7 +5624,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 			"Expected error return from plainTextLine01.TextBuilder()\n"+
 			"because 'plainTextLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5650,7 +5650,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 			[]rune(textString),
 			[]rune{'\n'},
 			false,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine01"))
 
 	if err != nil {
@@ -5661,7 +5661,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 
 	err = plainTextLine01.TextBuilder(
 		nil,
-		ePrefix.XCtx("plainTextLine01->nil sb"))
+		ePrefix.XCpy("plainTextLine01->nil sb"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -5669,14 +5669,14 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 			"Expected error return from plainTextLine01.TextBuilder()\n"+
 			"because strings.Builder pointer is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = plainTextLine01.TextBuilder(
 		&sb,
-		ePrefix.XCtx("valid plainTextLine01->sb"))
+		ePrefix.XCpy("valid plainTextLine01->sb"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5702,7 +5702,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -5719,7 +5719,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5800,7 +5800,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5817,7 +5817,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"Error: Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
 			"would return a value of 'false'."+
 			"INSTEAD, THE RETURNED VALUE IS 'true' !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5833,7 +5833,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
 			"would return a value of 'true'."+
 			"INSTEAD, THE RETURNED VALUE IS 'false' !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5851,7 +5851,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOff_000100(t *testing.T) {
 			"Expected plainTextLine02.GetTurnLineTerminatorOff()\n"+
 			"would return a value of 'true'."+
 			"INSTEAD, THE RETURNED VALUE IS 'false' !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5878,7 +5878,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
 		expectedTextString,
 		expectedNewLineChars,
 		false,
-		ePrefix.XCtx("plainTextLine01"))
+		ePrefix.XCpy("plainTextLine01"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5897,7 +5897,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"Error: Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
 			"would return a value of 'true'."+
 			"INSTEAD, THE RETURNED VALUE IS 'false' !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5913,7 +5913,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"Expected plainTextLine01.GetTurnLineTerminatorOff()\n"+
 			"would return a value of 'false'."+
 			"INSTEAD, THE RETURNED VALUE IS 'true' !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5931,7 +5931,7 @@ func TestTextLineSpecPlainText_TurnAutoLineTerminationOn_000100(t *testing.T) {
 			"Expected plainTextLine02.GetTurnLineTerminatorOff()\n"+
 			"would return a value of 'false'."+
 			"INSTEAD, THE RETURNED VALUE IS 'true' !\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}

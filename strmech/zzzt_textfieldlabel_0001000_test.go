@@ -28,7 +28,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -38,7 +38,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 	}
 
 	err = txtFieldLabelOne.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -51,7 +51,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 
 	err = txtFieldLabelTwo.CopyIn(
 		txtFieldLabelOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -92,7 +92,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 
 	err = txtFieldLabelThree.CopyIn(
 		txtFieldLabelOne,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne->txtFieldLabelThree"))
 
 	if err != nil {
@@ -111,7 +111,7 @@ func TestTextFieldSpecLabel_CopyIn_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -265,7 +265,7 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 		labelRunes,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -287,7 +287,7 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 
 	txtFieldLabelTwo,
 		err = txtFieldLabelOne.CopyOut(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne->txtFieldLabelTwo"))
 
 	if err != nil {
@@ -309,7 +309,7 @@ func TestTextFieldSpecLabel_CopyOut_000100(t *testing.T) {
 
 	actualLabel,
 		err = txtFieldLabelOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -555,7 +555,7 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 		labelText,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -565,7 +565,7 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 	}
 
 	err = txtFieldLabelTwo.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -578,7 +578,7 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 
 	txtFieldSpec,
 		err = txtFieldLabelTwo.CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -597,13 +597,13 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Could not convert 'txtFieldSpec' to "+
 			"'*TextFieldSpecLabel'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = txtFieldLabelThree.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelThree"))
 
 	if err != nil {
@@ -622,7 +622,7 @@ func TestTextFieldSpecLabel_CopyOutITextField_000100(t *testing.T) {
 			"CopyOutITextField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -872,7 +872,7 @@ func TestTextFieldSpecLabel_Empty_000100(t *testing.T) {
 
 	_,
 		err = txtFieldLabelOne.GetFormattedText(
-		ePrefix.XCtx("txtFieldLabelOne"))
+		ePrefix.XCpy("txtFieldLabelOne"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -1045,7 +1045,7 @@ func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
 		"Hello World",
 		24,
 		TxtJustify.Left(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelThree"))
 
 	if err != nil {
@@ -1103,7 +1103,7 @@ func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTime"))
+		ePrefix.XCpy("txtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1133,7 +1133,7 @@ func TestTextFieldSpecLabel_EqualITextField_000100(t *testing.T) {
 
 	txtITextFieldSpecLabel,
 		err = txtFieldLabelThree.CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtITextFieldSpecLabel"))
 
 	if err != nil {
@@ -1282,7 +1282,7 @@ func TestTextFieldSpecLabel_GetFormattedText_000100(t *testing.T) {
 		labelRunes,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -1316,7 +1316,7 @@ func TestTextFieldSpecLabel_GetFormattedText_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected Formatted Text Label = '%v'\n"+
 			"Instead, Formatted Text Label = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextLabel,
 			formattedText)
 
@@ -1579,7 +1579,7 @@ func TestTextFieldSpecLabel_IsValidInstanceError_000100(t *testing.T) {
 		labelRunes,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -1629,7 +1629,7 @@ func TestTextFieldSpecLabel_NewPtrTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -1661,7 +1661,7 @@ func TestTextFieldSpecLabel_NewPtrTextLabel_000100(t *testing.T) {
 			"NewPtrTextLabel()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1689,7 +1689,7 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
 		[]rune(label),
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -1720,7 +1720,7 @@ func TestTextFieldSpecLabel_NewPtrTextLabelRunes_000100(t *testing.T) {
 			"NewPtrTextLabelRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2002,7 +2002,7 @@ func TestTextFieldSpecLabel_NewTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -2033,7 +2033,7 @@ func TestTextFieldSpecLabel_NewTextLabel_000100(t *testing.T) {
 			"NewTextLabel()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2232,7 +2232,7 @@ func TestTextFieldSpecLabel_NewTextTextLabelRunes_000100(t *testing.T) {
 		labelTextRunes,
 		fieldLen,
 		TxtJustify.Right(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabel"))
 
 	if err != nil {
@@ -2267,7 +2267,7 @@ func TestTextFieldSpecLabel_NewTextTextLabelRunes_000100(t *testing.T) {
 			"NewTextLabelRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2487,7 +2487,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelZero"))
 
 	if err != nil {
@@ -2507,7 +2507,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 			"Read(p)\n"+
 			"because 'txtFieldLabelZero.textLabel' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2527,7 +2527,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -2554,7 +2554,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtFieldLabelOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2565,7 +2565,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2575,7 +2575,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2584,7 +2584,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtFieldLabelOne.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2596,7 +2596,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedTextLabel,
 			readBytesCnt)
 
@@ -2621,7 +2621,7 @@ func TestTextFieldSpecLabel_Read_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2680,7 +2680,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldLabelOne.Read(p)\n"+
 			"Error:\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2691,7 +2691,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Error: txtFieldLabelOne.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			n)
 
 		return
@@ -2723,7 +2723,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtFieldLabelOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2734,7 +2734,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2744,7 +2744,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2753,7 +2753,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtFieldLabelOne.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2765,7 +2765,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedTextLabel,
 			readBytesCnt)
 
@@ -2790,7 +2790,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2801,7 +2801,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #1\n"+
 			"Completed Read Operation but txtFieldLabelOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2830,7 +2830,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Test # 2"+
 			"Error Returned From txtFieldLabelOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2842,7 +2842,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2853,7 +2853,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2869,7 +2869,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2880,7 +2880,7 @@ func TestTextFieldSpecLabel_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Completed Read Operation but txtFieldLabelOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2909,7 +2909,7 @@ func TestTextFieldSpecLabel_SetFieldLength_000100(t *testing.T) {
 			"SetFieldLength()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3052,7 +3052,7 @@ func TestTextFieldSpecLabel_SetText_000100(t *testing.T) {
 		initialLabel,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelZero"))
 
 	if err != nil {
@@ -3072,7 +3072,7 @@ func TestTextFieldSpecLabel_SetText_000100(t *testing.T) {
 			"SetText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3084,7 +3084,7 @@ func TestTextFieldSpecLabel_SetText_000100(t *testing.T) {
 		initialLabel,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -3208,7 +3208,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx("txtFieldLabelZero"))
+		ePrefix.XCpy("txtFieldLabelZero"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3226,7 +3226,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 			"SetTextJustification()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3238,7 +3238,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx("txtFieldLabelOne"))
+		ePrefix.XCpy("txtFieldLabelOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3250,7 +3250,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 
 	actualLabel,
 		err = txtFieldLabelOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -3289,7 +3289,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 
 	actualLabel,
 		err = txtFieldLabelOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -3327,7 +3327,7 @@ func TestTextFieldSpecLabel_SetTextJustification_000100(t *testing.T) {
 
 	actualLabel,
 		err = txtFieldLabelOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne #2"))
 
 	if err != nil {
@@ -3396,7 +3396,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelZero"))
 
 	if err != nil {
@@ -3417,7 +3417,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 			"SetTextLabel()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3429,7 +3429,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -3444,7 +3444,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -3457,7 +3457,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: txtFieldLabelOne IS NOT EQUAL to txtFieldLabelTwo!\n"+
 			"txtFieldLabelTwo.SetTextLabel() did NOT produce an identical copy!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 		return
 	}
 
@@ -3465,7 +3465,7 @@ func TestTextFieldSpecLabel_SetTextLabel_000100(t *testing.T) {
 
 	actualLabel,
 		err = txtFieldLabelTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -3801,7 +3801,7 @@ func TestTextFieldSpecLabel_SetTextLabelRunes_000100(t *testing.T) {
 			"SetTextLabelRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4501,7 +4501,7 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 		initialLabel,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelZero"))
 
 	if err != nil {
@@ -4521,7 +4521,7 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4533,7 +4533,7 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 		initialLabel,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -4558,7 +4558,7 @@ func TestTextFieldSpecLabel_SetTextRunes_000100(t *testing.T) {
 	err =
 		txtFieldLabelOne.SetTextRunes(
 			[]rune(expectedLabel),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabelOne"))
 
 	if err != nil {
@@ -4709,7 +4709,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelOne"))
 
 	if err != nil {
@@ -4732,7 +4732,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelOne.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabelOne->sb"))
 
 	if err != nil {
@@ -4764,7 +4764,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 			"fillerTxtFieldOne.TextBuilder()\n"+
 			"Expected Formatted Text = '%v'\n"+
 			"Instead, Formatted Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -4784,7 +4784,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4796,7 +4796,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -4806,7 +4806,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	}
 
 	err = txtFieldLabelTwo.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelTwo"))
 
 	if err != nil {
@@ -4818,7 +4818,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelTwo.TextBuilder(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabelTwo"))
 
 	if err == nil {
@@ -4827,7 +4827,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4839,7 +4839,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelThree"))
 
 	if err != nil {
@@ -4861,7 +4861,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4876,7 +4876,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelThree.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabelThree is invalid!"))
 
 	if err == nil {
@@ -4885,7 +4885,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'txtFieldLabelThree' contains invalid member varialbes.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4897,7 +4897,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelFour"))
 
 	if err != nil {
@@ -4911,7 +4911,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldLabelFour.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldLabelFour-sb"))
 
 	if err != nil {
@@ -4927,7 +4927,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedTextLabel,
 			actualFmtStr)
 
@@ -4938,7 +4938,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	formattedString,
 		err = txtFieldLabelFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabelFour"))
 
 	if err != nil {
@@ -4953,7 +4953,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 			"txtFieldLabelFour.GetFormattedText()"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			formattedString,
 			actualFmtStr)
 

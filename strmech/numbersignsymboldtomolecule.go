@@ -65,7 +65,7 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyIn(
 		err = numberSignSymbolDtoElectron{}.ptr().
 		testValidityOfNumSignSymbol(
 			incomingNumSignSymbol,
-			ePrefix.XCtx("incomingNumSignSymbol"))
+			ePrefix.XCpy("incomingNumSignSymbol"))
 
 	if err != nil {
 		return err
@@ -174,7 +174,7 @@ func (nSignSymMolecule *numberSignSymbolDtoMolecule) copyOut(
 		err = numberSignSymbolDtoElectron{}.ptr().
 		testValidityOfNumSignSymbol(
 			incomingNumSignSymbol,
-			ePrefix.XCtx("incomingNumSignSymbol"))
+			ePrefix.XCpy("incomingNumSignSymbol"))
 
 	if err != nil {
 		return newNumSignSymbol, err

@@ -133,7 +133,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 		err = textLineSpecPlainTextAtom{}.ptr().
 		testValidityOfTextLineSpecPlainText(
 			incomingPlainTextLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingPlainTextLine"))
 
 	if err != nil {
@@ -146,7 +146,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 		&targetPlainTextLine.leftMarginChars,
 		&incomingPlainTextLine.leftMarginChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingPlainTextLine.leftMarginChars->"+
 				"targetPlainTextLine.leftMarginChars"))
 
@@ -158,7 +158,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 		&targetPlainTextLine.rightMarginChars,
 		&incomingPlainTextLine.rightMarginChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingPlainTextLine.rightMarginChars->"+
 				"targetPlainTextLine.rightMarginChars"))
 
@@ -178,7 +178,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyIn(
 		&targetPlainTextLine.newLineChars,
 		&incomingPlainTextLine.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingPlainTextLine.newLineChars->"+
 				"targetPlainTextLine.newLineChars"))
 
@@ -282,7 +282,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 		err = textLineSpecPlainTextAtom{}.ptr().
 		testValidityOfTextLineSpecPlainText(
 			plainTxtLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTxtLine"))
 
 	if err != nil {
@@ -295,7 +295,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 		&newPlainTxtLine.leftMarginChars,
 		&plainTxtLine.leftMarginChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTxtLine.leftMarginChars->"+
 				"newPlainTxtLine.leftMarginChars"))
 
@@ -307,7 +307,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 		&newPlainTxtLine.rightMarginChars,
 		&plainTxtLine.rightMarginChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTxtLine.rightMarginChars->"+
 				"newPlainTxtLine.rightMarginChars"))
 
@@ -327,7 +327,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) copyOut(
 		&newPlainTxtLine.newLineChars,
 		&plainTxtLine.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"plainTxtLine.newLineChars->"+
 				"newPlainTxtLine.newLineChars"))
 
@@ -423,7 +423,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) getFormattedText(
 		err = textLineSpecPlainTextAtom{}.ptr().
 		testValidityOfTextLineSpecPlainText(
 			plainTxtLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTxtLine"))
 
 	if err != nil {
@@ -717,7 +717,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 		err = sMechPreon.getRepeatRuneChar(
 		leftMarginSpaces,
 		' ',
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"spaces->leftMarginChars"))
 
 	if err != nil {
@@ -730,7 +730,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 		err = sMechPreon.getRepeatRuneChar(
 		rightMarginSpaces,
 		' ',
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"spaces->rightMarginChars"))
 
 	if err != nil {
@@ -994,7 +994,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 			err = sMechPreon.
 			testValidityOfRuneCharArray(
 				leftMarginChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"leftMarginChars invalid!"))
 
 		if err != nil {
@@ -1008,7 +1008,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 			err = sMechPreon.
 			testValidityOfRuneCharArray(
 				rightMarginChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"rightMarginChars invalid!"))
 
 		if err != nil {
@@ -1022,7 +1022,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 			err = sMechPreon.
 			testValidityOfRuneCharArray(
 				newLineChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"newLineChars invalid!"))
 
 		if err != nil {
@@ -1035,7 +1035,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setPlainTextSpecRun
 		err = sMechPreon.
 		testValidityOfRuneCharArray(
 			textRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"textRunes invalid!"))
 
 	if err != nil {

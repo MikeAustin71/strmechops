@@ -111,7 +111,7 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 
 		err = fmt.Errorf("%v - ERROR\n"+
 			"The Text Field Collection, 'txtStdLine.textFields' is EMPTY!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return err
 	}
@@ -126,7 +126,7 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 			"in the Text Fields Collection.\n"+
 			"Last index in collection = '%v'\n"+
 			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lastIdx,
 			indexId)
 

@@ -84,7 +84,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 		t.Errorf("%v - Test #1\n"+
 			"Error: Expected Filler Text = '%v'\n"+
 			"Instead, Actual Filler Text = '%v'\n",
-			ePrefix,
+			ePrefix.String(),
 			expectedFillerText,
 			actualFillerText)
 		return
@@ -120,7 +120,7 @@ func TestTextFieldSpecFiller_CopyIn_000100(t *testing.T) {
 			".CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -612,7 +612,7 @@ func TestTextFieldSpecFiller_copyIn_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -625,7 +625,7 @@ func TestTextFieldSpecFiller_copyIn_000100(t *testing.T) {
 		t.Errorf("%v - Test #1\n"+
 			"Error: Expected fillerTxtFieldTwo Filler Text = '%v'\n"+
 			"Instead, Actual fillerTxtFieldTwo Filler Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFillerText,
 			actualFillerText)
 		return
@@ -771,7 +771,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -783,7 +783,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -792,7 +792,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -811,7 +811,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx("fillerTxtFieldOne"))
+		ePrefix.XCpy("fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -831,7 +831,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -880,7 +880,7 @@ func TestTextFieldSpecFiller_CopyOut_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -915,7 +915,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -931,7 +931,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		string(fillerChars),
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -941,7 +941,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 
 	fillerTxtFieldOne,
 		err = fillerTxtFieldTwoPtr.CopyOutPtr(
-		ePrefix.XCtx("Repairing fillerTxtFieldOne"))
+		ePrefix.XCpy("Repairing fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -960,7 +960,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 
 	fillerTxtFieldThree,
 		err = fillerTxtFieldOne.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -972,7 +972,7 @@ func TestTextFieldSpecFiller_CopyOut_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -1042,7 +1042,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1056,21 +1056,21 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldTwo - #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - #1"))
 
 	if err == nil {
 		t.Errorf("%v - Error\n"+
 			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
 			"because fillerTxtFieldOne.fillerCharsRepeatCount = -7\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
-			ePrefix.XCtx("fillerTxtFieldOne - invalid"))
+			ePrefix.XCpy("fillerTxtFieldOne - invalid"))
 		return
 	}
 
 	err = fillerTxtFieldOne.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldOne"))
+		ePrefix.XCpy("Repairing fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1079,7 +1079,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("Check repaired fillerTxtFieldOne"))
+		ePrefix.XCpy("Check repaired fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1091,7 +1091,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldTwo - #2"))
+		ePrefix.XCpy("fillerTxtFieldTwo - #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1100,7 +1100,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("Check new fillerTxtFieldTwo"))
+		ePrefix.XCpy("Check new fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1119,7 +1119,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 
 	fillerTxtFieldThree,
 		err = fillerTxtFieldTwo.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1128,7 +1128,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1147,7 +1147,7 @@ func TestTextFieldSpecFiller_CopyOut_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -1271,7 +1271,7 @@ func TestTextFieldSpecFiller_CopyOutITextField_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Could not convert 'txtFieldSpec' to "+
 			"'*TextFieldSpecFiller'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1300,7 +1300,7 @@ func TestTextFieldSpecFiller_CopyOutITextField_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldThree.CopyOutITextField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1335,7 +1335,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1349,21 +1349,21 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOutPtr(
-		ePrefix.XCtx("fillerTxtFieldTwo - #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - #1"))
 
 	if err == nil {
 		t.Errorf("%v - Error\n"+
 			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
 			"because fillerTxtFieldOne.fillerCharsRepeatCount = -7\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
-			ePrefix.XCtx("fillerTxtFieldOne - invalid"))
+			ePrefix.XCpy("fillerTxtFieldOne - invalid"))
 		return
 	}
 
 	err = fillerTxtFieldOne.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldOne"))
+		ePrefix.XCpy("Repairing fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1372,7 +1372,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("Check repaired fillerTxtFieldOne"))
+		ePrefix.XCpy("Check repaired fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1384,7 +1384,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOutPtr(
-		ePrefix.XCtx("fillerTxtFieldTwo - #2"))
+		ePrefix.XCpy("fillerTxtFieldTwo - #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1393,7 +1393,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("Check new fillerTxtFieldTwo"))
+		ePrefix.XCpy("Check new fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1412,7 +1412,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	fillerTxtFieldThree,
 		err = fillerTxtFieldTwo.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1421,7 +1421,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1440,7 +1440,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -1485,7 +1485,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 
 	fillerTxtFieldFour,
 		err = fillerTxtFieldThree.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldFour"))
+		ePrefix.XCpy("fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1494,7 +1494,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1519,7 +1519,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldThree.CopyOutPtr()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1554,7 +1554,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1568,21 +1568,21 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOutPtr(
-		ePrefix.XCtx("fillerTxtFieldTwo - #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - #1"))
 
 	if err == nil {
 		t.Errorf("%v - Error\n"+
 			"Expected an error return from fillerTxtFieldOne.CopyOut()\n"+
 			"because fillerTxtFieldOne.fillerCharsRepeatCount = -7\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!!\n",
-			ePrefix.XCtx("fillerTxtFieldOne - invalid"))
+			ePrefix.XCpy("fillerTxtFieldOne - invalid"))
 		return
 	}
 
 	err = fillerTxtFieldOne.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldOne"))
+		ePrefix.XCpy("Repairing fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1591,7 +1591,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("Check repaired fillerTxtFieldOne"))
+		ePrefix.XCpy("Check repaired fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1603,7 +1603,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 
 	fillerTxtFieldTwo,
 		err = fillerTxtFieldOne.CopyOutPtr(
-		ePrefix.XCtx("fillerTxtFieldTwo - #2"))
+		ePrefix.XCpy("fillerTxtFieldTwo - #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1612,7 +1612,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("Check new fillerTxtFieldTwo"))
+		ePrefix.XCpy("Check new fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1631,7 +1631,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 
 	fillerTxtFieldThree,
 		err = fillerTxtFieldTwo.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1640,7 +1640,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1659,7 +1659,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -1704,7 +1704,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 
 	fillerTxtFieldFour,
 		err = fillerTxtFieldThree.CopyOut(
-		ePrefix.XCtx("fillerTxtFieldFour"))
+		ePrefix.XCpy("fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1713,7 +1713,7 @@ func TestTextFieldSpecFiller_CopyOutPtr_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -1906,7 +1906,7 @@ func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -1917,7 +1917,7 @@ func TestTextFieldSpecFiller_EqualITextField(t *testing.T) {
 
 	err =
 		fillerTxtFieldThree.IsValidInstanceError(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -1984,7 +1984,7 @@ func TestTextFieldSpecFiller_GetFormattedStrLength_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected 'expectedFillerTextLen' == 'actualFillerTextLen'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1999,7 +1999,7 @@ func TestTextFieldSpecFiller_GetFormattedStrLength_000100(t *testing.T) {
 			"Expected 'actualFillerTextLen' to equal minus one (-1).\n"+
 			"HOWEVER, THE RETURN VALUE IS NOT MINUS ONE (-1)!\n"+
 			"actualFillerTextLen= '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualFillerTextLen)
 
 		return
@@ -2076,7 +2076,7 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -2087,7 +2087,7 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 
 	err = fillerTxtFieldTwo.
 		IsValidInstanceError(
-			ePrefix.XCtx("fillerTxtFieldTwo"))
+			ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2104,7 +2104,7 @@ func TestTextFieldSpecFiller_GetFormattedText_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldTwo.GetFormattedText()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2183,7 +2183,7 @@ func TestTextFieldSpecFiller_GetFillerRunes_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected 'runeArray' == 'nil'."+
 			"HOWEVER, 'runeArray' != 'nil'!!!\n",
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"runeArray"))
 
 		return
@@ -2257,7 +2257,7 @@ func TestTextFieldSpecFiller_IsValidInstanceError_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -2267,7 +2267,7 @@ func TestTextFieldSpecFiller_IsValidInstanceError_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -2284,7 +2284,7 @@ func TestTextFieldSpecFiller_IsValidInstanceError_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldThree.IsValidInstanceError()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2386,7 +2386,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2420,7 +2420,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -2443,7 +2443,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2462,7 +2462,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -2483,7 +2483,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -2527,7 +2527,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2536,7 +2536,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2553,7 +2553,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -2583,7 +2583,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000100(t *testing.T) {
 			"Expected an error return from fillerTxtFieldTwo.CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2616,7 +2616,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2650,7 +2650,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -2673,7 +2673,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2692,7 +2692,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -2713,7 +2713,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -2757,7 +2757,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2766,7 +2766,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2783,7 +2783,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -2830,7 +2830,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2864,7 +2864,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -2887,7 +2887,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2906,7 +2906,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -2927,7 +2927,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -2971,7 +2971,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2980,7 +2980,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -2997,7 +2997,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -3044,7 +3044,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3078,7 +3078,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -3101,7 +3101,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3120,7 +3120,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -3141,7 +3141,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -3185,7 +3185,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3194,7 +3194,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3211,7 +3211,7 @@ func TestTextFieldSpecFiller_NewPtrTextFiller_000400(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -3258,7 +3258,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3292,7 +3292,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -3315,7 +3315,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3334,7 +3334,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -3355,7 +3355,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -3405,7 +3405,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 			"Expected an error return from TextFieldSpecFiller{}.NewPtrTextFillerRune()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3415,7 +3415,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3424,7 +3424,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3441,7 +3441,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -3492,7 +3492,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3501,7 +3501,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3518,7 +3518,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -3586,7 +3586,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3620,7 +3620,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -3643,7 +3643,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3662,7 +3662,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -3683,7 +3683,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -3727,7 +3727,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3736,7 +3736,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3753,7 +3753,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -3804,7 +3804,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3813,7 +3813,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3830,7 +3830,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -3898,7 +3898,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3932,7 +3932,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -3955,7 +3955,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -3974,7 +3974,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -3995,7 +3995,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -4039,7 +4039,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4048,7 +4048,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4065,7 +4065,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -4116,7 +4116,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4125,7 +4125,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4142,7 +4142,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -4210,7 +4210,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4230,7 +4230,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 			"TextFieldSpecFiller{}.NewPtrTextFillerRuneArray()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4261,7 +4261,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -4284,7 +4284,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4303,7 +4303,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx("fillerTxtFieldOne"))
+		ePrefix.XCpy("fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4323,7 +4323,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -4367,7 +4367,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4376,7 +4376,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4393,7 +4393,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -4444,7 +4444,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4453,7 +4453,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4470,7 +4470,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -4538,7 +4538,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4572,7 +4572,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -4595,7 +4595,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4614,7 +4614,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -4635,7 +4635,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -4679,7 +4679,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4688,7 +4688,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4705,7 +4705,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -4756,7 +4756,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4765,7 +4765,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4782,7 +4782,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -4850,7 +4850,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4884,7 +4884,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -4907,7 +4907,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -4926,7 +4926,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -4947,7 +4947,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -4991,7 +4991,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5000,7 +5000,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5017,7 +5017,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -5068,7 +5068,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5077,7 +5077,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5094,7 +5094,7 @@ func TestTextFieldSpecFiller_NewPtrTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -5161,7 +5161,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5189,7 +5189,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -5212,7 +5212,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5231,7 +5231,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -5252,7 +5252,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -5303,7 +5303,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 			"TextFieldSpecFiller{}.NewTextFiller()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -5313,7 +5313,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5322,7 +5322,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5339,7 +5339,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -5390,7 +5390,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5399,7 +5399,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5416,7 +5416,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -5483,7 +5483,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5511,7 +5511,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -5534,7 +5534,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5553,7 +5553,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -5574,7 +5574,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -5618,7 +5618,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5627,7 +5627,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5644,7 +5644,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5694,7 +5694,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5703,7 +5703,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5720,7 +5720,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -5787,7 +5787,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5815,7 +5815,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -5838,7 +5838,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5857,7 +5857,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -5878,7 +5878,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -5922,7 +5922,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5931,7 +5931,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -5948,7 +5948,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -5999,7 +5999,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6008,7 +6008,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6025,7 +6025,7 @@ func TestTextFieldSpecFiller_NewTextFiller_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -6092,7 +6092,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6120,7 +6120,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -6143,7 +6143,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6170,7 +6170,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 			"TextFieldSpecFiller{}.NewTextFillerRune()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -6179,7 +6179,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -6200,7 +6200,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -6244,7 +6244,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6253,7 +6253,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6270,7 +6270,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -6321,7 +6321,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6330,7 +6330,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6347,7 +6347,7 @@ func TestTextFieldSpecFiller_NewTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -6433,7 +6433,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 		err := TextFieldSpecFiller{}.NewTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldOne"))
+		ePrefix.XCpy("fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6442,7 +6442,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6462,7 +6462,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 			"TextFieldSpecFiller{}.NewTextFillerRuneArray()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -6485,7 +6485,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -6508,7 +6508,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6527,7 +6527,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -6548,7 +6548,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -6592,7 +6592,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6601,7 +6601,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6618,7 +6618,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -6669,7 +6669,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6678,7 +6678,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6695,7 +6695,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -6763,7 +6763,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6789,7 +6789,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -6812,7 +6812,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6831,7 +6831,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -6852,7 +6852,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -6896,7 +6896,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6905,7 +6905,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6922,7 +6922,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -6973,7 +6973,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6982,7 +6982,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -6999,7 +6999,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -7067,7 +7067,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7093,7 +7093,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -7116,7 +7116,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7135,7 +7135,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -7156,7 +7156,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -7200,7 +7200,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7209,7 +7209,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7226,7 +7226,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -7277,7 +7277,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7286,7 +7286,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7303,7 +7303,7 @@ func TestTextFieldSpecFiller_NewTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -7387,7 +7387,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldZero"))
+		ePrefix.XCpy("fillerTxtFieldZero"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7451,7 +7451,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -7462,7 +7462,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7472,7 +7472,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7481,7 +7481,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"fillerTxtFieldOne.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7493,7 +7493,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedFillerText,
 			readBytesCnt)
 
@@ -7518,7 +7518,7 @@ func TestTextFieldSpecFiller_Read_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 	}
@@ -7567,7 +7567,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by fillerTxtFieldOne.Read(p)\n"+
 			"Error:\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -7578,7 +7578,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Error: fillerTxtFieldOne.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			n)
 
 		return
@@ -7610,7 +7610,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -7621,7 +7621,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7631,7 +7631,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7640,7 +7640,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"fillerTxtFieldOne.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7652,7 +7652,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedFillerText,
 			readBytesCnt)
 
@@ -7677,7 +7677,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -7688,7 +7688,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #1\n"+
 			"Completed Read Operation but fillerTxtFieldOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7717,7 +7717,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Test # 2"+
 			"Error Returned From fillerTxtFieldOne.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -7729,7 +7729,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7740,7 +7740,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7756,7 +7756,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -7767,7 +7767,7 @@ func TestTextFieldSpecFiller_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Completed Read Operation but fillerTxtFieldOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -7788,7 +7788,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000100(t *testing.T) {
 		err := TextFieldSpecFiller{}.NewTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldOne"))
+		ePrefix.XCpy("fillerTxtFieldOne"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7797,7 +7797,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7814,7 +7814,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000100(t *testing.T) {
 			&fillerTxtFieldTwo,
 			fillerCharRuneArray,
 			fillerRepeatCnt,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -7824,7 +7824,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -7859,7 +7859,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000200(t *testing.T) {
 			&fillerTxtFieldOne,
 			fillerCharRuneArray,
 			fillerRepeatCnt,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerRepeatCnt := 1000001"))
 
 	if err == nil {
@@ -7879,7 +7879,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000200(t *testing.T) {
 			&fillerTxtFieldOne,
 			fillerCharRuneArray,
 			fillerRepeatCnt,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerRepeatCnt := -99"))
 
 	if err == nil {
@@ -7900,7 +7900,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000200(t *testing.T) {
 			&fillerTxtFieldOne,
 			fillerCharRuneArray,
 			fillerRepeatCnt,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerCharRuneArray = nil"))
 
 	if err == nil {
@@ -7921,7 +7921,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000200(t *testing.T) {
 			&fillerTxtFieldOne,
 			fillerCharRuneArray,
 			fillerRepeatCnt,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerCharRuneArray contains zero value"))
 
 	if err == nil {
@@ -7943,7 +7943,7 @@ func TestTextFieldSpecFiller_setTxtFieldSpecFiller_000200(t *testing.T) {
 			fillerTxtFieldThree,
 			fillerCharRuneArray,
 			fillerRepeatCnt,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldThree is nil pointer"))
 
 	if err == nil {
@@ -8013,7 +8013,7 @@ func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100(t *testing.T) {
 			"fillerTxtFieldOne.SetFillerCharsRepeatCount()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -8024,7 +8024,7 @@ func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100(t *testing.T) {
 
 	err = fillerTxtFieldTwo.SetFillerCharsRepeatCount(
 		newFillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -8056,7 +8056,7 @@ func TestTextFieldSpecFiller_SetFillerCharsRepeatCount_000100(t *testing.T) {
 			"fillerTxtFieldOne.SetFillerCharsRepeatCount()\n"+
 			"because 'fillerCharsRepeatCount' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -8127,7 +8127,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8146,7 +8146,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 			"fillerTxtFieldOne.SetTextFillerRune()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -8170,7 +8170,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -8192,7 +8192,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8211,7 +8211,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -8232,7 +8232,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -8276,7 +8276,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8285,7 +8285,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8302,7 +8302,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -8353,7 +8353,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8362,7 +8362,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8379,7 +8379,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -8448,7 +8448,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8475,7 +8475,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -8497,7 +8497,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8516,7 +8516,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -8537,7 +8537,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -8581,7 +8581,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8590,7 +8590,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8607,7 +8607,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -8658,7 +8658,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8667,7 +8667,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8684,7 +8684,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -8753,7 +8753,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8780,7 +8780,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -8802,7 +8802,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8821,7 +8821,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -8842,7 +8842,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -8886,7 +8886,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8895,7 +8895,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8912,7 +8912,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -8963,7 +8963,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRune(
 		fillerChar,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8972,7 +8972,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -8989,7 +8989,7 @@ func TestTextFieldSpecFiller_SetTextFillerRune_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -9057,7 +9057,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 			"fillerTxtFieldOne.SetTextFillerRuneArray()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -9074,7 +9074,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9101,7 +9101,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -9123,7 +9123,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9142,7 +9142,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -9163,7 +9163,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -9207,7 +9207,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9216,7 +9216,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9233,7 +9233,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -9284,7 +9284,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9293,7 +9293,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9310,7 +9310,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -9379,7 +9379,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9406,7 +9406,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -9428,7 +9428,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9447,7 +9447,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -9468,7 +9468,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -9512,7 +9512,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9521,7 +9521,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9538,7 +9538,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -9589,7 +9589,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9598,7 +9598,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9615,7 +9615,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -9669,7 +9669,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFive.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFive - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldFive - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9691,7 +9691,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000200(t *testing.T) {
 	}
 
 	err = fillerTxtFieldSix.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldSix - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldSix - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9735,7 +9735,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9762,7 +9762,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -9784,7 +9784,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9803,7 +9803,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -9824,7 +9824,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -9868,7 +9868,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9877,7 +9877,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9894,7 +9894,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -9945,7 +9945,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFillerRuneArray(
 		fillerCharRuneArray,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9954,7 +9954,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -9971,7 +9971,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -10025,7 +10025,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFive.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFive - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldFive - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10047,7 +10047,7 @@ func TestTextFieldSpecFiller_SetTextFillerRuneArray_000300(t *testing.T) {
 	}
 
 	err = fillerTxtFieldSix.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldSix - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldSix - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10092,7 +10092,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10120,7 +10120,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	err = nil
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo"))
+		ePrefix.XCpy("fillerTxtFieldTwo"))
 
 	if err == nil {
 		t.Errorf("%v\n"+
@@ -10143,7 +10143,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldTwo.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldTwo - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldTwo - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10162,7 +10162,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -10183,7 +10183,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldTwo"))
 
 	if err != nil {
@@ -10227,7 +10227,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	err = fillerTxtFieldThree.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("fillerTxtFieldThree"))
+		ePrefix.XCpy("fillerTxtFieldThree"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10236,7 +10236,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldThree.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldThree - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldThree - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10253,7 +10253,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldThree.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -10283,7 +10283,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 			"fillerTxtFieldThree.SetTextFiller()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -10320,7 +10320,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	err = fillerTxtFieldFour.SetTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx("Repairing fillerTxtFieldFour"))
+		ePrefix.XCpy("Repairing fillerTxtFieldFour"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10329,7 +10329,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldFour.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldFour - Test #2"))
+		ePrefix.XCpy("fillerTxtFieldFour - Test #2"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10346,7 +10346,7 @@ func TestTextFieldSpecFiller_SetTextFiller_000100(t *testing.T) {
 
 	actualFillerText,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -10470,7 +10470,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldOne"))
 
 	if err != nil {
@@ -10480,7 +10480,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	}
 
 	err = fillerTxtFieldOne.IsValidInstanceError(
-		ePrefix.XCtx("fillerTxtFieldOne - Test #1"))
+		ePrefix.XCpy("fillerTxtFieldOne - Test #1"))
 
 	if err != nil {
 		t.Errorf("%v\n",
@@ -10493,7 +10493,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	err =
 		fillerTxtFieldOne.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldOne->sb"))
 
 	if err != nil {
@@ -10525,7 +10525,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"fillerTxtFieldOne.TextBuilder()\n"+
 			"Expected Formatted Text = '%v'\n"+
 			"Instead, Formatted Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -10545,7 +10545,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -10556,14 +10556,14 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"->fillerTxtFieldTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecFiller{}.NewTextFiller()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -10572,7 +10572,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	err =
 		fillerTxtFieldTwo.TextBuilder(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldTwo"))
 
 	if err == nil {
@@ -10581,7 +10581,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -10592,7 +10592,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldThree"))
 
 	if err != nil {
@@ -10614,7 +10614,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -10627,7 +10627,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	err =
 		fillerTxtFieldThree.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldThree is invalid!"))
 
 	if err == nil {
@@ -10636,7 +10636,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'fillerCharsRepeatCount' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -10647,7 +10647,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		err = TextFieldSpecFiller{}.NewPtrTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -10661,7 +10661,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 	err =
 		fillerTxtFieldFour.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerTxtFieldFour->sb"))
 
 	if err != nil {
@@ -10677,7 +10677,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFormattedText,
 			actualFmtStr)
 
@@ -10688,7 +10688,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	formattedString,
 		err = fillerTxtFieldFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"fillerTxtFieldFour"))
 
 	if err != nil {
@@ -10703,7 +10703,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"fillerTxtFieldFour.GetFormattedText()"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			formattedString,
 			actualFmtStr)
 

@@ -122,7 +122,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 		err = textFieldSpecLabelAtom{}.ptr().
 		isValidTextFieldLabel(
 			incomingTxtFieldLabel,
-			ePrefix.XCtx("incomingTxtFieldLabel"))
+			ePrefix.XCpy("incomingTxtFieldLabel"))
 
 	if err != nil {
 		return err
@@ -135,7 +135,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 		&targetTxtFieldLabel.textLabel,
 		&incomingTxtFieldLabel.textLabel,
 		true,
-		ePrefix.XCtx("targetTxtFieldLabel.textLabel=Target "+
+		ePrefix.XCpy("targetTxtFieldLabel.textLabel=Target "+
 			"<-incomingTxtFieldLabel.textLabel=Source"))
 
 	if err != nil {
@@ -240,7 +240,7 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 		err = textFieldSpecLabelAtom{}.ptr().
 		isValidTextFieldLabel(
 			txtFieldLabel,
-			ePrefix.XCtx("txtFieldLabel"))
+			ePrefix.XCpy("txtFieldLabel"))
 
 	if err != nil {
 		return TextFieldSpecLabel{}, err

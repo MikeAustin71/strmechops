@@ -12,7 +12,7 @@ type textFieldSpecFillerAtom struct {
 
 // isValidTextFieldSpecFiller - This method receives a pointer to
 // an instance of TextFieldSpecFiller and performs a diagnostic on
-// on the object to determine if it is valid or not.
+// the object to determine if it is valid or not.
 //
 // This method returns two parameters, 'isValid' and 'err'. If
 // input parameter 'txtFieldFiller' is valid, the return parameter
@@ -65,7 +65,7 @@ func (txtFieldFillerAtom *textFieldSpecFillerAtom) isValidTextFieldSpecFiller(
 	_,
 		err = txtFillerElectron.isFillerCharsValid(
 		txtFieldFiller.fillerCharacters,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldFiller.fillerCharacters"))
 
 	if err != nil {
@@ -74,7 +74,7 @@ func (txtFieldFillerAtom *textFieldSpecFillerAtom) isValidTextFieldSpecFiller(
 
 	err = txtFillerElectron.isFillerCharsRepeatCountValid(
 		txtFieldFiller.fillerCharsRepeatCount,
-		ePrefix.XCtx("txtFieldFiller.fillerCharsRepeatCount"))
+		ePrefix.XCpy("txtFieldFiller.fillerCharsRepeatCount"))
 
 	if err != nil {
 		return isValid, err

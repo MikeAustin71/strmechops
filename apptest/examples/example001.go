@@ -36,7 +36,7 @@ func (mt MainTest) TextLineSpecStandardLine01() {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine02 - fieldLen invalid."))
 
 	if err != nil {
@@ -50,7 +50,7 @@ func (mt MainTest) TextLineSpecStandardLine01() {
 	output =
 		fmt.Sprintf("%v\n"+
 			"SUCCESSFUL COMPLETION!!!\n\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 	fmt.Println(output)
 }
@@ -70,7 +70,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	rightMarginSpec,
 		err := strmech.TextFieldSpecSpacer{}.NewSpacer(
 		rightMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMarginSpec"))
 
 	if err != nil {
@@ -89,7 +89,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	leftMarginSpec,
 		err = strmech.TextFieldSpecSpacer{}.NewSpacer(
 		leftMarginLen,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMarginSpec"))
 
 	if err != nil {
@@ -112,7 +112,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 		label,
 		fieldLen,
 		txtJustify,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelSpec"))
 
 	if err != nil {
@@ -127,7 +127,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	_,
 		err = stdLine01.AddTextField(
 		&leftMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-leftMarginSpec"))
 
 	if err != nil {
@@ -142,7 +142,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	_,
 		err = stdLine01.AddTextField(
 		&labelSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-labelSpec"))
 
 	if err != nil {
@@ -157,7 +157,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	_,
 		err = stdLine01.AddTextField(
 		&rightMarginSpec,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01<-rightMarginSpec"))
 
 	if err != nil {
@@ -170,7 +170,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	}
 
 	err = stdLine01.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"stdLine01"))
 
 	if err != nil {
@@ -187,7 +187,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	err =
 		stdLine02.CopyIn(
 			stdLine01,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"stdLine02<-stdLine01 invalid newLinesChars"))
 
 	if err != nil {
@@ -201,7 +201,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 
 	output = fmt.Sprintf("\n%v\n"+
 		"SUCCESSFUL COMPLETION\n",
-		ePrefix.XCtxEmpty().String())
+		ePrefix.String())
 
 	fmt.Println(output)
 }
@@ -217,7 +217,7 @@ func (mt MainTest) TextLineSpecSolidLine01() {
 	_,
 		err :=
 		txtSolidLine03.CopyOutITextLine(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSolidLine03->_"))
 
 	if err == nil {
@@ -226,7 +226,7 @@ func (mt MainTest) TextLineSpecSolidLine01() {
 			"Error: txtSolidLine03.CopyOutITextLine()\n"+
 			"Expected an error return because 'txtSolidLine03' is empty!\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		fmt.Printf(errorStr + "\n")
 
@@ -286,7 +286,7 @@ func (mt MainTest) TextLineSpecBlkLines01() {
 	blankLinesAlpha,
 		err := strmech.TextLineSpecBlankLines{}.NewDefaultBlankLines(
 		3,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha"))
 
 	if err != nil {
@@ -299,7 +299,7 @@ func (mt MainTest) TextLineSpecBlkLines01() {
 	}
 
 	err = blankLinesAlpha.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesAlpha"))
 
 	if err != nil {
@@ -316,7 +316,7 @@ func (mt MainTest) TextLineSpecBlkLines01() {
 	err =
 		blankLinesBravo.CopyIn(
 			&blankLinesAlpha,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"blankLinesAlpha->blankLinesBravo"))
 
 	if err != nil {
@@ -329,7 +329,7 @@ func (mt MainTest) TextLineSpecBlkLines01() {
 	}
 
 	err = blankLinesBravo.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"blankLinesBravo"))
 
 	if err != nil {
@@ -342,7 +342,7 @@ func (mt MainTest) TextLineSpecBlkLines01() {
 	}
 
 	errText = fmt.Sprintf("%v\nSuccessful Completion\n",
-		ePrefix.XCtxEmpty().String())
+		ePrefix.String())
 
 	fmt.Println(errText)
 
@@ -400,7 +400,7 @@ func (mt MainTest) DateTimeTextField01() {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeOne"))
+		ePrefix.XCpy("txtFieldDateTimeOne"))
 
 	if err != nil {
 		errTxt = fmt.Sprintf("%v\n"+
@@ -501,7 +501,7 @@ func (mt MainTest) DateTimeTextField02() {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeOne"))
+		ePrefix.XCpy("txtFieldDateTimeOne"))
 
 	if err != nil {
 		errTxt = fmt.Sprintf("%v\n"+
@@ -602,7 +602,7 @@ func (mt MainTest) DateTimeTextField03() {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeOne"))
+		ePrefix.XCpy("txtFieldDateTimeOne"))
 
 	if err != nil {
 		errTxt = fmt.Sprintf("%v\n"+
@@ -1178,7 +1178,7 @@ func (mt MainTest) IntSeparateNumRunes04() {
 			ePrefix.String(),
 			lineLen,
 			strmech.TxtJustify.Center(),
-			ePrefix.XCtx("ePrefix.String()"))
+			ePrefix.XCpy("ePrefix.String()"))
 
 	if err != nil {
 		outStr = fmt.Sprintf("%v\n",
@@ -1193,7 +1193,7 @@ func (mt MainTest) IntSeparateNumRunes04() {
 			"Example Of restartIntGroupingSequence",
 			lineLen,
 			strmech.TxtJustify.Center(),
-			ePrefix.XCtx("txtLabel restartIntGroupingSequence"))
+			ePrefix.XCpy("txtLabel restartIntGroupingSequence"))
 
 	if err != nil {
 		outStr = fmt.Sprintf("%v\n",
@@ -1256,7 +1256,7 @@ func (mt MainTest) IntSeparateNumRunes04() {
 
 	lineBreak,
 		err = txtLineBreak.GetFormattedText(
-		ePrefix.XCtx("LineBreak"))
+		ePrefix.XCpy("LineBreak"))
 
 	if err != nil {
 		outStr = fmt.Sprintf(

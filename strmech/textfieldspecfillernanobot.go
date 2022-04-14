@@ -138,7 +138,7 @@ func (txtFieldFillerNanobot *textFieldSpecFillerNanobot) setTxtFieldSpecFiller(
 	lenFillerChars,
 		err = txtFillerElectron.isFillerCharsValid(
 		fillerCharacters,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Input parameter 'fillerCharacters' invalid!"))
 
 	if err != nil {
@@ -147,7 +147,7 @@ func (txtFieldFillerNanobot *textFieldSpecFillerNanobot) setTxtFieldSpecFiller(
 
 	err = txtFillerElectron.isFillerCharsRepeatCountValid(
 		fillerCharsRepeatCount,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Input parameter 'fillerCharsRepeatCount' invalid!"))
 
 	if err != nil {
@@ -173,7 +173,7 @@ func (txtFieldFillerNanobot *textFieldSpecFillerNanobot) setTxtFieldSpecFiller(
 			"Error: 'fillerCharacters' copy operation failed!\n"+
 			"Should have copied %v characters to txtFieldFiller.fillerCharacters.\n"+
 			"Instead, %v characters were copied to txtFieldFiller.fillerCharacters.\n",
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fillerCharacters->txtFieldFiller.fillerCharacters"),
 			lenFillerChars,
 			itemsCopied)

@@ -263,7 +263,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			nStrIntSepMolecule.applyIntSeparators(
 				&nStrIntSeparator,
 				[]rune(outputValStr),
-				ePrefix.XCtx("numOfDays"))
+				ePrefix.XCpy("numOfDays"))
 
 		if err != nil {
 			return timeDurationStrs, err
@@ -289,7 +289,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			nStrIntSepMolecule.applyIntSeparators(
 				&nStrIntSeparator,
 				[]rune(outputValStr),
-				ePrefix.XCtx("numOfHours"))
+				ePrefix.XCpy("numOfHours"))
 
 		if err != nil {
 			return timeDurationStrs, err
@@ -323,7 +323,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			nStrIntSepMolecule.applyIntSeparators(
 				&nStrIntSeparator,
 				[]rune(outputValStr),
-				ePrefix.XCtx("numOfMinutes"))
+				ePrefix.XCpy("numOfMinutes"))
 
 		if err != nil {
 			return timeDurationStrs, err
@@ -357,7 +357,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			nStrIntSepMolecule.applyIntSeparators(
 				&nStrIntSeparator,
 				[]rune(outputValStr),
-				ePrefix.XCtx("numOfSeconds"))
+				ePrefix.XCpy("numOfSeconds"))
 
 		if err != nil {
 			return timeDurationStrs, err
@@ -391,7 +391,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			nStrIntSepMolecule.applyIntSeparators(
 				&nStrIntSeparator,
 				[]rune(outputValStr),
-				ePrefix.XCtx("numOfMilliseconds"))
+				ePrefix.XCpy("numOfMilliseconds"))
 
 		if err != nil {
 			return timeDurationStrs, err
@@ -425,7 +425,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 			nStrIntSepMolecule.applyIntSeparators(
 				&nStrIntSeparator,
 				[]rune(outputValStr),
-				ePrefix.XCtx("numOfMicroseconds"))
+				ePrefix.XCpy("numOfMicroseconds"))
 
 		if err != nil {
 			return timeDurationStrs, err
@@ -458,7 +458,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		nStrIntSepMolecule.applyIntSeparators(
 			&nStrIntSeparator,
 			[]rune(outputValStr),
-			ePrefix.XCtx("numOfNanoseconds"))
+			ePrefix.XCpy("numOfNanoseconds"))
 
 	if err != nil {
 		return timeDurationStrs, err
@@ -494,7 +494,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 		nStrIntSepMolecule.applyIntSeparators(
 			&nStrIntSeparator,
 			[]rune(outputValStr),
-			ePrefix.XCtx("summaryNanoseconds"))
+			ePrefix.XCpy("summaryNanoseconds"))
 
 	if err != nil {
 		return timeDurationStrs, err

@@ -14,13 +14,15 @@ var mDataFieldTrailingDelimiterStringToCode = map[string]DataFieldTrailingDelimi
 	"EndOfString": DataFieldTrailingDelimiterType(0).EndOfString(),
 }
 
-var mDataFieldTrailingDelimiterLwrCaseStringToCode = map[string]DataFieldTrailingDelimiterType{
-	"unknown":     DataFieldTrailingDelimiterType(0).Unknown(),
-	"endoffield":  DataFieldTrailingDelimiterType(0).EndOfField(),
-	"comment":     DataFieldTrailingDelimiterType(0).Comment(),
-	"endofline":   DataFieldTrailingDelimiterType(0).EndOfLine(),
-	"endofstring": DataFieldTrailingDelimiterType(0).EndOfString(),
-}
+var (
+	mDataFieldTrailingDelimiterLwrCaseStringToCode = map[string]DataFieldTrailingDelimiterType{
+		"unknown":     DataFieldTrailingDelimiterType(0).Unknown(),
+		"endoffield":  DataFieldTrailingDelimiterType(0).EndOfField(),
+		"comment":     DataFieldTrailingDelimiterType(0).Comment(),
+		"endofline":   DataFieldTrailingDelimiterType(0).EndOfLine(),
+		"endofstring": DataFieldTrailingDelimiterType(0).EndOfString(),
+	}
+)
 
 var mDataFieldTrailingDelimiterToString = map[DataFieldTrailingDelimiterType]string{
 	DataFieldTrailingDelimiterType(0).Unknown():     "Unknown",

@@ -130,7 +130,7 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 		textFieldSpecFillerAtom{}.ptr().
 			isValidTextFieldSpecFiller(
 				incomingTxtFiller,
-				ePrefix.XCtx("incomingTxtFiller validation - "))
+				ePrefix.XCpy("incomingTxtFiller validation - "))
 
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyIn(
 		&targetTxtFiller.fillerCharacters,
 		&incomingTxtFiller.fillerCharacters,
 		true,
-		ePrefix.XCtx("targetTxtFiller.fillerCharacters=Target "+
+		ePrefix.XCpy("targetTxtFiller.fillerCharacters=Target "+
 			"<-incomingTxtFiller.fillerCharacters=Source"))
 
 	if err != nil {
@@ -247,7 +247,7 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
 		textFieldSpecFillerAtom{}.ptr().
 			isValidTextFieldSpecFiller(
 				txtFieldFiller,
-				ePrefix.XCtx("txtFieldFiller validation - "))
+				ePrefix.XCpy("txtFieldFiller validation - "))
 
 	if err != nil {
 		return TextFieldSpecFiller{}, err
@@ -260,7 +260,7 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) copyOut(
 		&newTxtFieldFiller.fillerCharacters,
 		&txtFieldFiller.fillerCharacters,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newTxtFieldFiller.fillerCharacters=Target "+
 				"<-txtFieldFiller.fillerCharacters=Source"))
 
@@ -427,7 +427,7 @@ func (txtFieldFillerMolecule *textFieldSpecFillerMolecule) getFormattedText(
 		textFieldSpecFillerAtom{}.ptr().
 			isValidTextFieldSpecFiller(
 				txtFieldFiller,
-				ePrefix.XCtx("txtFieldFiller validation - "))
+				ePrefix.XCpy("txtFieldFiller validation - "))
 
 	if err != nil {
 		return formattedText, err

@@ -384,7 +384,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOut(
 
 	return textLineSpecTimerLinesNanobot{}.ptr().copyOut(
 		txtSpecTimerLines,
-		ePrefix.XCtx("txtSpecTimerLines->"))
+		ePrefix.XCpy("txtSpecTimerLines->"))
 }
 
 // CopyOutITextLine - Returns a deep copy of the current
@@ -498,7 +498,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutITextLine(
 		err = textLineSpecTimerLinesNanobot{}.ptr().
 		copyOut(
 			txtSpecTimerLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSpecTimerLines->"))
 
 	if err != nil {
@@ -619,7 +619,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutPtr(
 		err = textLineSpecTimerLinesNanobot{}.ptr().
 		copyOut(
 			txtSpecTimerLines,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtSpecTimerLines->"))
 
 	return &newTxtLineSpecTimerLine, err
@@ -1198,7 +1198,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) IsValidInstanceError(
 		err = textLineSpecTimerLinesAtom{}.ptr().
 		testValidityOfTxtSpecTimerLines(
 			txtSpecTimerLines,
-			ePrefix.XCtx("txtSpecTimerLines"))
+			ePrefix.XCpy("txtSpecTimerLines"))
 
 	return err
 }
@@ -1377,7 +1377,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewDefaultFullTimerEvent(
 			len(timeDurationLabel),
 			TxtJustify.Right(),
 			nil,
-			ePrefix.XCtx("newTxtTimerLines"))
+			ePrefix.XCpy("newTxtTimerLines"))
 
 	return &newTxtTimerLines, err
 }
@@ -1808,7 +1808,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelRightMarginChars),
-			ePrefix.XCtx("newTxtTimerLines"))
+			ePrefix.XCpy("newTxtTimerLines"))
 
 	return &newTxtTimerLines, err
 }
@@ -2108,7 +2108,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEventRunes(
 			textLabelFieldLen,
 			labelJustification,
 			labelRightMarginChars,
-			ePrefix.XCtx("newTxtTimerLines"))
+			ePrefix.XCpy("newTxtTimerLines"))
 
 	return &newTxtTimerLines, err
 }
@@ -2397,7 +2397,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewShellTimerEvent(
 			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelRightMarginChars),
-			ePrefix.XCtx("newTxtTimerLines"))
+			ePrefix.XCpy("newTxtTimerLines"))
 
 	return &newTxtTimerLines, err
 }
@@ -2583,7 +2583,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 			err = textLineSpecTimerLinesMolecule{}.ptr().
 			getFormattedText(
 				txtSpecTimerLines,
-				ePrefix.XCtx("txtSpecTimerLines"))
+				ePrefix.XCpy("txtSpecTimerLines"))
 
 		if err != nil {
 			return n, err
@@ -2597,7 +2597,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"txtSpecTimerLines.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -2608,7 +2608,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 		readBytes(
 			txtSpecTimerLines.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> txtSpecTimerLines.textLineReader"))
 
 	if err == io.EOF {
@@ -2827,7 +2827,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 			len(timeDurationLabel),
 			TxtJustify.Right(),
 			nil,
-			ePrefix.XCtx("txtSpecTimerLines"))
+			ePrefix.XCpy("txtSpecTimerLines"))
 
 	return err
 }
@@ -3502,7 +3502,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelOutputSeparationChars),
-			ePrefix.XCtx("txtSpecTimerLines"))
+			ePrefix.XCpy("txtSpecTimerLines"))
 
 	return err
 }
@@ -3804,7 +3804,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
 			textLabelFieldLen,
 			labelJustification,
 			labelRightMarginChars,
-			ePrefix.XCtx("txtSpecTimerLines"))
+			ePrefix.XCpy("txtSpecTimerLines"))
 
 	return err
 }
@@ -4086,7 +4086,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 			textLabelFieldLen,
 			labelJustification,
 			[]rune(labelOutputSeparationChars),
-			ePrefix.XCtx("newTxtTimerLines"))
+			ePrefix.XCpy("newTxtTimerLines"))
 
 	return err
 }
@@ -4881,7 +4881,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelRightMarginChars(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		labelRightMarginCharsRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelRightMarginChars->"+
 				"labelRightMarginCharsRunes"))
 
@@ -4893,7 +4893,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelRightMarginChars(
 		&txtSpecTimerLines.labelRightMarginChars,
 		&labelRightMarginCharsRunes,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"labelRightMarginChars-> "+
 				"labelRightMarginCharsRunes-> "+
 				"txtSpecTimerLines.labelRightMarginChars"))
@@ -5287,7 +5287,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

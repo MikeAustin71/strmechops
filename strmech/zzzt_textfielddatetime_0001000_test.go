@@ -56,7 +56,7 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("incomingTxtFieldDateTime"))
+		ePrefix.XCpy("incomingTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -69,7 +69,7 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 	}
 
 	err = incomingTxtFieldDateTime.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingTxtFieldDateTime"))
 
 	if err != nil {
@@ -82,14 +82,14 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 
 	err = targetTxtFieldDateTime.CopyIn(
 		&incomingTxtFieldDateTime,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"targetTxtFieldDateTime"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by targetTxtFieldDateTime.CopyIn()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -112,7 +112,7 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 	err =
 		targetTxtFieldDateTime2.CopyIn(
 			nil,
-			ePrefix.XCtx("incomingTxtFieldDateTime==nil"))
+			ePrefix.XCpy("incomingTxtFieldDateTime==nil"))
 
 	if err == nil {
 		t.Errorf("%v - Error\n"+
@@ -129,7 +129,7 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 	err =
 		targetTxtFieldDateTime2.CopyIn(
 			&incomingTxtFieldDateTime,
-			ePrefix.XCtx("incomingTxtFieldDateTime==nil"))
+			ePrefix.XCpy("incomingTxtFieldDateTime==nil"))
 
 	if err == nil {
 		t.Errorf("%v - Error\n"+
@@ -186,7 +186,7 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("targetTxtFieldDateTime3"))
+		ePrefix.XCpy("targetTxtFieldDateTime3"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -202,7 +202,7 @@ func TestTextFieldSpecDateTime_CopyIn_000100(t *testing.T) {
 	err =
 		targetTxtFieldDateTime3.CopyIn(
 			targetTxtFieldDateTime,
-			ePrefix.XCtx("targetTxtFieldDateTime"))
+			ePrefix.XCpy("targetTxtFieldDateTime"))
 
 	if !targetTxtFieldDateTime3.Equal(
 		targetTxtFieldDateTime) {
@@ -230,7 +230,7 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 	err :=
 		txtFieldDateTimeOne.CopyIn(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"incomingDateTimeTxtField='nil'"))
 
 	if err == nil {
@@ -286,14 +286,14 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 			fieldLen,
 			dateTimeFormat,
 			textJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -307,14 +307,14 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetFieldLength(
 			fieldLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeTwo.SetFieldLength()\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -325,14 +325,14 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 	dateTimeTwoFmtStr,
 		err =
 		txtFieldDateTimeTwo.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeTwo.GetFormattedText()\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -343,14 +343,14 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 	err =
 		txtFieldDateTimeThree.CopyIn(
 			&txtFieldDateTimeTwo,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeTwo.CopyIn()\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -360,7 +360,7 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 		t.Errorf("%v - Error\n"+
 			"Expected txtFieldDateTimeTwo==txtFieldDateTimeThree.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -368,14 +368,14 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 	dateTimeThreeFmtStr,
 		err =
 		txtFieldDateTimeThree.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeThree"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeThree.GetFormattedText()\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -385,7 +385,7 @@ func TestTextFieldSpecDateTime_CopyIn_000200(t *testing.T) {
 		t.Errorf("%v - Error\n"+
 			"Expected dateTimeTwoFmtStr==dateTimeThreeFmtStr.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -440,7 +440,7 @@ func TestTextFieldSpecDateTime_CopyOut_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeOne"))
+		ePrefix.XCpy("txtFieldDateTimeOne"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -485,7 +485,7 @@ func TestTextFieldSpecDateTime_CopyOut_000100(t *testing.T) {
 	_,
 		err =
 		txtFieldDateTimeTwo.CopyOut(
-			ePrefix.XCtx("txtFieldDateTimeTwo is invalid!"))
+			ePrefix.XCpy("txtFieldDateTimeTwo is invalid!"))
 
 	if err == nil {
 		t.Errorf("%v - Error\n"+
@@ -542,7 +542,7 @@ func TestTextFieldSpecDateTime_CopyOut_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeThree"))
+		ePrefix.XCpy("txtFieldDateTimeThree"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -560,7 +560,7 @@ func TestTextFieldSpecDateTime_CopyOut_000100(t *testing.T) {
 	txtFieldDateTimeThree,
 		err =
 		txtFieldDateTimeOne.CopyOut(
-			ePrefix.XCtx("txtFieldDateTimeOne->txtFieldDateTimeThree"))
+			ePrefix.XCpy("txtFieldDateTimeOne->txtFieldDateTimeThree"))
 
 	if !txtFieldDateTimeOne.Equal(
 		&txtFieldDateTimeThree) {
@@ -587,7 +587,7 @@ func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
 
 	_,
 		err := txtFieldDateTime.CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTime"))
 
 	if err == nil {
@@ -643,7 +643,7 @@ func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -656,7 +656,7 @@ func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
 	}
 
 	err = txtFieldDateTimeTwo.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -669,7 +669,7 @@ func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
 
 	txtFieldSpec,
 		err = txtFieldDateTimeTwo.CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -688,13 +688,13 @@ func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Could not convert 'txtFieldSpec' to "+
 			"'*TextFieldSpecDateTime'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
 
 	err = txtFieldDateTimeThree.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeThree"))
 
 	if err != nil {
@@ -708,7 +708,7 @@ func TestTextFieldSpecDateTime_CopyOutITextField_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected 'txtFieldDateTimeTwo'==txtFieldDateTimeThree'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -781,7 +781,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -794,7 +794,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = txtFieldDateTimeTwo.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -814,7 +814,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 
 	txtFieldDateTimeThree,
 		err = txtFieldDateTimeTwo.CopyOutPtr(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeThree"))
 
 	if err != nil {
@@ -824,7 +824,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 	}
 
 	err = txtFieldDateTimeThree.IsValidInstanceError(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeThree"))
 
 	if err != nil {
@@ -838,7 +838,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: Expected 'txtFieldDateTimeTwo'=='txtFieldDateTimeThree'\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -848,7 +848,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 	actualFmtStr,
 		err =
 		txtFieldDateTimeThree.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeThree"))
 
 	if err != nil {
@@ -863,7 +863,7 @@ func TestTextFieldSpecDateTime_CopyOutPtr_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedDateTimeStr= '%v'\n"+
 			"actualFmtStr       = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedDateTimeStr,
 			actualFmtStr)
 
@@ -1146,7 +1146,7 @@ func TestTextFieldSpecDateTime_EqualITextField_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeThree"))
+		ePrefix.XCpy("txtFieldDateTimeThree"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1165,7 +1165,7 @@ func TestTextFieldSpecDateTime_EqualITextField_000100(t *testing.T) {
 		"Hello World",
 		24,
 		TxtJustify.Left(),
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldLabel"))
 
 	if err != nil {
@@ -1196,7 +1196,7 @@ func TestTextFieldSpecDateTime_EqualITextField_000100(t *testing.T) {
 
 	txtITextFieldSpecDateTime,
 		err = txtFieldDateTimeThree.CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtITextFieldSpecDateTime"))
 
 	if err != nil {
@@ -1287,7 +1287,7 @@ func TestTextFieldSpecDateTime_GetDateTime_000100(t *testing.T) {
 			"Expected 'actualDateTime' == ZERO.\n"+
 			"HOWEVER, 'actualDateTime' IS NOT ZERO!\n"+
 			"actualDateTime = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualDateTime.Format(dateTimeFormat))
 
 		return
@@ -1299,7 +1299,7 @@ func TestTextFieldSpecDateTime_GetDateTime_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeOne"))
+		ePrefix.XCpy("txtFieldDateTimeOne"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1320,7 +1320,7 @@ func TestTextFieldSpecDateTime_GetDateTime_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"dateTime       = '%v'\n"+
 			"actualDateTime = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			dateTime.Format(dateTimeFormat),
 			actualDateTime.Format(dateTimeFormat))
 
@@ -1379,7 +1379,7 @@ func TestTextFieldSpecDateTime_GetDateTimeFormat_000100(t *testing.T) {
 			"Expected 'actualDateTimeFormat' == empty string.\n"+
 			"HOWEVER, 'actualDateTimeFormat' IS NOT AN EMPTY STRING!\n"+
 			"actualDateTimeFormat = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualDateTimeFormat)
 
 		return
@@ -1391,7 +1391,7 @@ func TestTextFieldSpecDateTime_GetDateTimeFormat_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeOne"))
+		ePrefix.XCpy("txtFieldDateTimeOne"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1412,7 +1412,7 @@ func TestTextFieldSpecDateTime_GetDateTimeFormat_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"dateTimeFormat       = '%v'\n"+
 			"actualDateTimeFormat = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			dateTimeFormat,
 			actualDateTimeFormat)
 
@@ -1493,7 +1493,7 @@ func TestTextFieldSpecDateTime_GetDateTimeRawStrLen_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1601,7 +1601,7 @@ func TestTextFieldSpecDateTime_GetFieldLength_000100(t *testing.T) {
 		expectedFieldLength,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1702,7 +1702,7 @@ func TestTextFieldSpecDateTime_GetFormattedStrLength_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1718,7 +1718,7 @@ func TestTextFieldSpecDateTime_GetFormattedStrLength_000100(t *testing.T) {
 
 	formattedString,
 		err = txtFieldDateTimeTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -1765,7 +1765,7 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 
 	_,
 		err := txtFieldDateTimeOne.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeOne"))
 
 	if err == nil {
@@ -1774,7 +1774,7 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 			"txtFieldDateTimeOne.GetFormattedText()\n"+
 			"because 'txtFieldDateTimeOne' is EMPTY.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1826,7 +1826,7 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -1842,7 +1842,7 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 
 	actualFormattedText,
 		err = txtFieldDateTimeTwo.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -1879,7 +1879,7 @@ func TestTextFieldSpecDateTime_GetFormattedText_000100(t *testing.T) {
 			"GetFormattedText(TextFieldSpecDateTime{})\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -1957,7 +1957,7 @@ func TestTextFieldSpecDateTime_GetTextJustification_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		expectedTextJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -2052,7 +2052,7 @@ func TestTextFieldSpecDateTime_IsValidInstance_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -2161,7 +2161,7 @@ func TestTextFieldSpecDateTime_IsValidInstanceError_000100(t *testing.T) {
 			"IsValidInstanceError(TextFieldSpecDateTime{})\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2177,7 +2177,7 @@ func TestTextFieldSpecDateTime_IsValidInstanceError_000100(t *testing.T) {
 			"IsValidInstanceError(ePrefix)\n"+
 			"because 'txtFieldDateTimeOne.fieldLen' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2291,7 +2291,7 @@ func TestTextFieldSpecDateTime_NewDateTimeField_000100(t *testing.T) {
 			"NewDateTimeField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2405,7 +2405,7 @@ func TestTextFieldSpecDateTime_NewPtrDateTimeField_000100(t *testing.T) {
 			"NewPtrDateTimeField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2480,7 +2480,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -2493,7 +2493,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 	}
 
 	err = txtFieldDateTimeTwo.IsValidInstanceError(
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -2513,7 +2513,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 	expectedDateTimeText,
 		err =
 		txtFieldDateTimeTwo.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -2549,7 +2549,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtFieldDateTimeTwo.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2560,7 +2560,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2570,7 +2570,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2579,7 +2579,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtFieldDateTimeTwo.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2591,7 +2591,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedDateTimeText,
 			readBytesCnt)
 
@@ -2616,7 +2616,7 @@ func TestTextFieldSpecDateTime_Read_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2677,7 +2677,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -2690,7 +2690,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 	}
 
 	err = txtFieldDateTimeTwo.IsValidInstanceError(
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -2710,7 +2710,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 	expectedDateTimeText,
 		err =
 		txtFieldDateTimeTwo.GetFormattedText(
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
@@ -2734,7 +2734,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeTwo.Read(p)\n"+
 			"Error:\n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2745,7 +2745,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Error: fillerTxtFieldOne.Read(p)\n"+
 			"Expected n == 5\n"+
 			"Instead, n == %v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			n)
 
 		return
@@ -2777,7 +2777,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error Returned From txtFieldDateTimeTwo.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2788,7 +2788,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2798,7 +2798,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2807,7 +2807,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v\n"+
 			"Error: After completing Read Operation\n"+
 			"txtFieldDateTimeTwo.textLineReader != 'nil'\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2819,7 +2819,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"does NOT match the expected length.\n"+
 			"Expected Bytes Read = '%v'\n"+
 			"       Actual Bytes = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lenExpectedDateTimeText,
 			readBytesCnt)
 
@@ -2844,7 +2844,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2855,7 +2855,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #1\n"+
 			"Completed Read Operation but txtFieldLabelOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2884,7 +2884,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Test # 2"+
 			"Error Returned From txtFieldDateTimeTwo.Read(p)\n"+
 			"Error = \n%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -2896,7 +2896,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error == nil!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2907,7 +2907,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Error: After completing Read Operation\n"+
 			"the returned error should equal io.EOF.\n"+
 			"HOWEVER, returned error is NOT equal io.EOF!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -2923,7 +2923,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 			"Actual Text String.\n"+
 			"Expected Text String = '%v'\n"+
 			"Instead, Text String = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -2934,7 +2934,7 @@ func TestTextFieldSpecDateTime_ReadInitialize_000100(t *testing.T) {
 		t.Errorf("%v Test #2\n"+
 			"Completed Read Operation but txtFieldLabelOne.textLineReader\n"+
 			"is NOT equal to 'nil'!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3066,7 +3066,7 @@ func TestTextFieldSpecDateTime_SetDateTimeFieldSpec_000100(t *testing.T) {
 			"NewDateTimeField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3364,7 +3364,7 @@ func TestTextFieldSpecDateTime_SetDateTimeFormat_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormatTwo,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -3419,7 +3419,7 @@ func TestTextFieldSpecDateTime_SetDateTimeFormat_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetDateTimeFormat(
 			"",
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"dateTimeFormat==Empty String!"))
 
 	if err == nil {
@@ -3443,7 +3443,7 @@ func TestTextFieldSpecDateTime_SetDateTimeFormat_000100(t *testing.T) {
 			"SetDateTimeFormat()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3517,7 +3517,7 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -3559,14 +3559,14 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetDateTimeValue(
 			dateTimeTwo,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by txtFieldDateTimeTwo.SetDateTimeValue()\n"+
 			"Error='%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -3582,7 +3582,7 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 			"txtFieldDateTimeTwo.GetDateTime()\n"+
 			"Expected Date Time = '%v'\n"+
 			"Instead, Date Time = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			actualDateTime.Format(dateTimeFormat),
 			dateTimeTwo.Format(dateTimeFormat))
 
@@ -3600,7 +3600,7 @@ func TestTextFieldSpecDateTime_SetDateTimeValue_000100(t *testing.T) {
 			"SetDateTimeValue()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3689,7 +3689,7 @@ func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -3706,7 +3706,7 @@ func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetFieldLength(
 			expectedFieldLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"fieldLen==40"))
 
 	if err != nil {
@@ -3745,7 +3745,7 @@ func TestTextFieldSpecDateTime_SetFieldLength_000100(t *testing.T) {
 			"SetFieldLength()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3764,7 +3764,7 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 	err :=
 		txtFieldDateTimeOne.SetTextJustification(
 			TxtJustify.None(),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeOne"))
 
 	if err == nil {
@@ -3782,7 +3782,7 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.SetTextJustification(
 			TextJustify(-99),
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeOne"))
 
 	if err == nil {
@@ -3838,7 +3838,7 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeThree"))
+		ePrefix.XCpy("txtFieldDateTimeThree"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -3856,7 +3856,7 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeThree.SetTextJustification(
 			expectedTxtJustification,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeThree"))
 
 	if err != nil {
@@ -3895,7 +3895,7 @@ func TestTextFieldSpecDateTime_TextJustification_000100(t *testing.T) {
 			"SetTextJustification()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -3972,7 +3972,7 @@ func TestTextFieldSpecDateTime_String_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -3993,7 +3993,7 @@ func TestTextFieldSpecDateTime_String_000100(t *testing.T) {
 			"txtFieldDateTimeTwo.String()\n"+
 			"Expected Formatted Text = '%v'\n"+
 			"Instead, Formatted Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFormattedText,
 			actualFormattedText)
 
@@ -4074,7 +4074,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -4091,7 +4091,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 
 	if err != nil {
@@ -4123,7 +4123,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			"txtFieldDateTimeTwo.TextBuilder()\n"+
 			"Expected Formatted Text = '%v'\n"+
 			"Instead, Formatted Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			printableExpectedStr,
 			printableActualStr)
 
@@ -4141,7 +4141,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4156,13 +4156,13 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeThree"))
+		ePrefix.XCpy("txtFieldDateTimeThree"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecDateTime{}.NewDateTimeField()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -4171,7 +4171,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeThree.TextBuilder(
 			nil,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeThree"))
 
 	if err == nil {
@@ -4180,7 +4180,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			"TextBuilder()\n"+
 			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return
 	}
@@ -4193,14 +4193,14 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeFour"))
+		ePrefix.XCpy("txtFieldDateTimeFour"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
 			"Error returned by TextFieldSpecDateTime{}."+
 			"NewDateTimeField()\n"+
 			"Error:\n'%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err.Error())
 
 		return
@@ -4211,7 +4211,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 	err =
 		txtFieldDateTimeFour.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeFour-sb"))
 
 	if err != nil {
@@ -4227,7 +4227,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			expectedFormattedText,
 			actualFmtStr)
 
@@ -4238,7 +4238,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	formattedString,
 		err = txtFieldDateTimeFour.GetFormattedText(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtFieldDateTimeFour"))
 
 	if err != nil {
@@ -4253,7 +4253,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			"txtFieldDateTimeFour.GetFormattedText()"+
 			"Expected String Builder Text = '%v'\n"+
 			"Instead, String Builder Text = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			formattedString,
 			actualFmtStr)
 
@@ -4313,7 +4313,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000200(t *testing.T) {
 		fieldLen,
 		dateTimeFormat,
 		textJustification,
-		ePrefix.XCtx("txtFieldDateTimeTwo"))
+		ePrefix.XCpy("txtFieldDateTimeTwo"))
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -4334,7 +4334,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000200(t *testing.T) {
 	err =
 		txtFieldDateTimeTwo.TextBuilder(
 			&sb,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 
 	if err == nil {
@@ -4368,7 +4368,7 @@ func TestTextFieldSpecDateTime_TextFieldName_000100(t *testing.T) {
 			"txtFieldDateTimeOne.TextFieldName()\n"+
 			"Expected Text Field Name = 'TextFieldSpecDateTime'\n"+
 			"Instead, Text Field Name = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			textFieldName)
 
 		return
@@ -4393,7 +4393,7 @@ func TestTextFieldSpecDateTime_TextTypeName_000100(t *testing.T) {
 			"txtFieldDateTimeOne.TextTypeName()\n"+
 			"Expected Text Type Name = 'TextFieldSpecDateTime'\n"+
 			"Instead, Text Type Name = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			textTypeName)
 
 		return

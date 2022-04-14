@@ -199,7 +199,7 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) testValidityOfTextLinesC
 			err = fmt.Errorf("%v\n"+
 				"Error: Text Line member element is invalid!\n"+
 				"textLineCol.textLines[%v] has a 'nil' value.\n",
-				ePrefix.XCtx(fmt.Sprintf(
+				ePrefix.XCpy(fmt.Sprintf(
 					"textLineCol.textLines[%v]",
 					i)), i)
 
@@ -207,7 +207,7 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) testValidityOfTextLinesC
 		}
 
 		err = textLineCol.textLines[i].IsValidInstanceError(
-			ePrefix.XCtx(fmt.Sprintf(
+			ePrefix.XCpy(fmt.Sprintf(
 				"textLineCol.textLines[%v]",
 				i)))
 

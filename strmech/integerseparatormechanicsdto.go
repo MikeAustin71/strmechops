@@ -316,7 +316,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 		&nStrIntSep.intSeparatorChars,
 		&intSeparatorChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"intSeparatorChars->nStrIntSep.intSeparatorChars"))
 
 	if err != nil {
@@ -327,7 +327,7 @@ func (intSeparatorMech *integerSeparatorDtoMechanics) setWithComponents(
 		&nStrIntSep.intGroupingSequence,
 		&intGroupingSequence,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"intGroupingSequence->nStrIntSep.intGroupingSequence"))
 
 	if err != nil {

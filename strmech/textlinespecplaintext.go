@@ -337,7 +337,7 @@ func (plainTextLine *TextLineSpecPlainText) CopyOut(
 		err = textLineSpecPlainTextNanobot{}.ptr().
 		copyOut(
 			plainTextLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine"))
 
 	return newPlainTxtLine, err
@@ -454,7 +454,7 @@ func (plainTextLine *TextLineSpecPlainText) CopyOutITextLine(
 		err = textLineSpecPlainTextNanobot{}.ptr().
 		copyOut(
 			plainTextLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine"))
 
 	return ITextLineSpecification(&newPlainTxtLine), err
@@ -570,7 +570,7 @@ func (plainTextLine *TextLineSpecPlainText) CopyOutPtr(
 		err = textLineSpecPlainTextNanobot{}.ptr().
 		copyOut(
 			plainTextLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine"))
 
 	return &newPlainTxtLine, err
@@ -783,7 +783,7 @@ func (plainTextLine *TextLineSpecPlainText) GetFormattedText(
 	return textLineSpecPlainTextNanobot{}.ptr().
 		getFormattedText(
 			plainTextLine,
-			ePrefix.XCtx("plainTextLine"))
+			ePrefix.XCpy("plainTextLine"))
 }
 
 // GetLeftMarginStr - Returns a string containing the characters
@@ -1228,7 +1228,7 @@ func (plainTextLine *TextLineSpecPlainText) IsValidInstanceError(
 		err = textLineSpecPlainTextAtom{}.ptr().
 		testValidityOfTextLineSpecPlainText(
 			plainTextLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"plainTextLine"))
 
 	return err
@@ -1432,7 +1432,7 @@ func (plainTextLine TextLineSpecPlainText) NewDefault(
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
-			ePrefix.XCtx("newPlainTxtLine"))
+			ePrefix.XCpy("newPlainTxtLine"))
 
 	return newPlainTxtLine, err
 }
@@ -2267,7 +2267,7 @@ func (plainTextLine TextLineSpecPlainText) NewPtrDefault(
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
-			ePrefix.XCtx("newPlainTxtLine"))
+			ePrefix.XCpy("newPlainTxtLine"))
 
 	return &newPlainTxtLine, err
 }
@@ -3085,7 +3085,7 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 			err = textLineSpecPlainTextNanobot{}.ptr().
 			getFormattedText(
 				plainTextLine,
-				ePrefix.XCtx("plainTextLine"))
+				ePrefix.XCpy("plainTextLine"))
 
 		if err != nil {
 			return n, err
@@ -3099,7 +3099,7 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 				"Error: strings.NewReader(formattedText)\n"+
 				"returned a nil pointer.\n"+
 				"plainTextLine.textLineReader == nil\n",
-				ePrefix.XCtxEmpty().String())
+				ePrefix.String())
 
 			return n, err
 		}
@@ -3110,7 +3110,7 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 		readBytes(
 			plainTextLine.textLineReader,
 			p,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"p -> plainTextLine.textLineReader"))
 
 	if err == io.EOF {
@@ -3314,7 +3314,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginChars(
 			&plainTextLine.leftMarginChars,
 			&leftMarginRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"leftMarginRunes ->"+
 					"plainTextLine.leftMarginChars"))
 
@@ -3476,7 +3476,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginRunes(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		leftMarginRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"leftMarginRunes invalid!"))
 
 	if err != nil {
@@ -3488,7 +3488,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLeftMarginRunes(
 			&plainTextLine.leftMarginChars,
 			&leftMarginRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"leftMarginRunes->"+
 					"plainTextLine.leftMarginChars"))
 
@@ -3673,7 +3673,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		lineTerminationRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"lineTerminationRunes invalid!"))
 
 	if err != nil {
@@ -3685,7 +3685,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationChars(
 			&plainTextLine.newLineChars,
 			&lineTerminationRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"lineTerminationRunes->"+
 					"plainTextLine.newLineChars"))
 }
@@ -3861,7 +3861,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 		err =
 		sMechPreon.testValidityOfRuneCharArray(
 			lineTerminationRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"lineTerminationRunes Error"))
 
 	if err != nil {
@@ -3873,7 +3873,7 @@ func (plainTextLine *TextLineSpecPlainText) SetLineTerminationRunes(
 			&plainTextLine.newLineChars,
 			&lineTerminationRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"lineTerminationRunes->"+
 					"plainTextLine.newLineChars"))
 
@@ -4087,7 +4087,7 @@ func (plainTextLine *TextLineSpecPlainText) SetPlainTextDefault(
 			leftMarginSpaces,
 			rightMarginSpaces,
 			textString,
-			ePrefix.XCtx("plainTextLine"))
+			ePrefix.XCpy("plainTextLine"))
 }
 
 // SetPlainTextSpec - Resets all the member variable data values
@@ -4659,7 +4659,7 @@ func (plainTextLine *TextLineSpecPlainText) SetRightMarginChars(
 			&plainTextLine.rightMarginChars,
 			&rightMarginRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"rightMarginRunes ->"+
 					"plainTextLine.rightMarginChars"))
 
@@ -4821,7 +4821,7 @@ func (plainTextLine *TextLineSpecPlainText) SetRightMarginRunes(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		rightMarginRunes,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"rightMarginRunes invalid!"))
 
 	if err != nil {
@@ -4833,7 +4833,7 @@ func (plainTextLine *TextLineSpecPlainText) SetRightMarginRunes(
 			&plainTextLine.rightMarginChars,
 			&rightMarginRunes,
 			true,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"rightMarginRunes ->"+
 					"plainTextLine.rightMarginChars"))
 
@@ -4991,7 +4991,7 @@ func (plainTextLine *TextLineSpecPlainText) SetTextRunes(
 		err = strMechPreon{}.ptr().
 		testValidityOfRuneCharArray(
 			textRunes,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"textRunes invalid!"))
 
 	if err != nil {
@@ -5192,7 +5192,7 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 		err := textLineSpecPlainTextNanobot{}.ptr().
 		getFormattedText(
 			&plainTextLine,
-			ePrefix.XCtx("plainTextLine"))
+			ePrefix.XCpy("plainTextLine"))
 
 	if err != nil {
 		formattedTxtStr = fmt.Sprintf("%v\n",
@@ -5324,7 +5324,7 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 		err = textLineSpecPlainTextNanobot{}.ptr().
 		getFormattedText(
 			plainTextLine,
-			ePrefix.XCtx("plainTextLine"))
+			ePrefix.XCpy("plainTextLine"))
 
 	if err != nil {
 		return err
@@ -5339,7 +5339,7 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 		err = fmt.Errorf("%v\n"+
 			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
 			"%v\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			err2.Error())
 	}
 

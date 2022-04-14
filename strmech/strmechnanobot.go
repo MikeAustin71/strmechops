@@ -77,7 +77,7 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 		strPadLeftToCenter(
 			strToCenter,
 			fieldLen,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				fmt.Sprintf(
 					"\nstrToCenter='%v'\n"+
 						"fieldLen='%v'\n",

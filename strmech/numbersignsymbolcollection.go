@@ -465,7 +465,7 @@ func (numSignSymCol *NumberSignSymbolCollection) GetCollection(
 
 		col[i],
 			err = numSignSymCol.numSignSymbols[i].CopyOut(
-			ePrefix.XCtx(fmt.Sprintf("Collection Index='%v'",
+			ePrefix.XCpy(fmt.Sprintf("Collection Index='%v'",
 				i)))
 
 		if err != nil {

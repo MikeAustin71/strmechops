@@ -152,7 +152,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		testValidityOfTextFields(
 			sourceTextFields,
 			false, // allowZeroLengthTextFieldArray
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"testing validity of sourceTextFields"))
 
 	if err != nil {
@@ -164,7 +164,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 	err = textLineSpecStandardLineElectron{}.ptr().
 		emptyTextFields(
 			targetTextFields,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"Emptying targetTextFields"))
 
 	if err != nil {
@@ -190,7 +190,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 			"text fields.\n"+
 			"  lengthTargetTxtFields = '%v'\n"+
 			"testLenTargetTextFields = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lengthTargetTxtFields,
 			testLenTargetTextFields)
 
@@ -202,7 +202,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 		newTextField,
 			err2 :=
 			concreteSourceFields[i].CopyOutITextField(
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"newTextField<-"+
 							"concreteSourceFields[%v]", i)))
@@ -211,7 +211,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 				"An error occurred while copying\n"+
 				"concreteSourceFields[%v] to newTextField\n"+
 				"Error=\n%v\n",
-				ePrefix.XCtxEmpty().String(),
+				ePrefix.String(),
 				i,
 				err2.Error())
 
@@ -234,7 +234,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 			"    Length sourceTextFields = '%v'\n"+
 			"    Length targetTextFields = '%v'\n"+
 			"Expected Text Fields Length = '%v' \n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			len(*sourceTextFields),
 			len(*targetTextFields),
 			lengthTargetTxtFields)
@@ -378,7 +378,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 
 		err = fmt.Errorf("%v - ERROR\n"+
 			"The Text Field Collection, 'txtStdLine.textFields' is EMPTY!\n",
-			ePrefix.XCtxEmpty().String())
+			ePrefix.String())
 
 		return iTextField, err
 	}
@@ -389,7 +389,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 			"Input parameter 'indexId' is invalid!\n"+
 			"'indexId' is less than zero.\n"+
 			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			indexId)
 
 		return iTextField, err
@@ -403,7 +403,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 			"in the Text Fields Collection.\n"+
 			"Last index in collection = '%v'\n"+
 			"indexId = '%v'\n",
-			ePrefix.XCtxEmpty().String(),
+			ePrefix.String(),
 			lastIdx,
 			indexId)
 
@@ -412,7 +412,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 
 	iTextField,
 		err = txtStdLine.textFields[indexId].CopyOutITextField(
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			fmt.Sprintf(
 				"txtStdLine.textFields[%v]",
 				indexId)))
@@ -434,7 +434,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 			deleteTextField(
 				txtStdLine,
 				indexId,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					fmt.Sprintf(
 						"Deleting txtStdLine.textFields[%v]",
 						indexId)))
@@ -603,7 +603,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 			err =
 			sMechPreon.testValidityOfRuneCharArray(
 				txtStdLine.newLineChars,
-				ePrefix.XCtx(
+				ePrefix.XCpy(
 					"txtStdLine.newLineChars invalid"))
 
 		if err != nil {
@@ -616,7 +616,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) testValidityOfTextLineSpecSt
 		testValidityOfTextFields(
 			&txtStdLine.textFields,
 			allowZeroLengthTextFieldsArray,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"txtStdLine.textFields validity check"))
 
 	if err != nil {

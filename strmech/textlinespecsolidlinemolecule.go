@@ -124,7 +124,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 		err = textLineSpecSolidLineAtom{}.ptr().
 		testValidityOfTextSpecSolidLine(
 			incomingTxtSolidLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"'incomingTxtSolidLine' is invalid!"))
 
 	if err != nil {
@@ -137,7 +137,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 		&targetTxtSolidLine.solidLineChars,
 		&incomingTxtSolidLine.solidLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"incomingTxtSolidLine.solidLineChars->"+
 				"targetTxtSolidLine.solidLineChars"))
 
@@ -159,7 +159,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 		&targetTxtSolidLine.newLineChars,
 		&incomingTxtSolidLine.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"targetTxtSolidLine.newLineChars->"+
 				"incomingTxtSolidLine.newLineChars"))
 
@@ -255,7 +255,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 		err = textLineSpecSolidLineAtom{}.ptr().
 		testValidityOfTextSpecSolidLine(
 			txtSolidLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"'txtSolidLine' is invalid!"))
 
 	if err != nil {
@@ -268,7 +268,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 		&newTxtSolidLine.solidLineChars,
 		&txtSolidLine.solidLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine.solidLineChars->"+
 				"newTxtSolidLine.solidLineChars"))
 
@@ -288,7 +288,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 		&newTxtSolidLine.newLineChars,
 		&txtSolidLine.newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"txtSolidLine.newLineChars->"+
 				"newTxtSolidLine.newLineChars"))
 
@@ -390,7 +390,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 		err = textLineSpecSolidLineAtom{}.ptr().
 		testValidityOfTextSpecSolidLine(
 			txtSolidLine,
-			ePrefix.XCtx(
+			ePrefix.XCpy(
 				"'txtSolidLine' is invalid!"))
 
 	sb := strings.Builder{}
@@ -626,7 +626,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		solidLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Error: Input parameter 'solidLineChars'"+
 				" is invalid!"))
 
@@ -685,7 +685,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	_,
 		err = sMechPreon.testValidityOfRuneCharArray(
 		newLineChars,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"Testing Validity of 'newLineChars'"))
 
 	if err != nil {
@@ -696,7 +696,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		&txtSolidLine.solidLineChars,
 		&solidLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"solidLineChars->"+
 				"txtSolidLine.solidLineChars"))
 
@@ -718,7 +718,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		&txtSolidLine.newLineChars,
 		&newLineChars,
 		true,
-		ePrefix.XCtx(
+		ePrefix.XCpy(
 			"newLineChars->"+
 				"txtSolidLine.newLineChars"))
 

@@ -65,7 +65,7 @@ func (txtFieldLabelAtom *textFieldSpecLabelAtom) isValidTextFieldLabel(
 	_,
 		err = txtLabelElectron.isTextLabelValid(
 		txtFieldLabel.textLabel,
-		ePrefix.XCtx("txtFieldLabel.textLabel"))
+		ePrefix.XCpy("txtFieldLabel.textLabel"))
 
 	if err != nil {
 		return isValid, err
@@ -73,7 +73,7 @@ func (txtFieldLabelAtom *textFieldSpecLabelAtom) isValidTextFieldLabel(
 
 	err = txtLabelElectron.isFieldLengthValid(
 		txtFieldLabel.fieldLen,
-		ePrefix.XCtx("txtFieldLabel.fieldLen"))
+		ePrefix.XCpy("txtFieldLabel.fieldLen"))
 
 	if err != nil {
 		return isValid, err
@@ -83,7 +83,7 @@ func (txtFieldLabelAtom *textFieldSpecLabelAtom) isValidTextFieldLabel(
 		txtFieldLabel.textLabel,
 		txtFieldLabel.fieldLen,
 		txtFieldLabel.textJustification,
-		ePrefix.XCtx("txtFieldLabel.textJustification"))
+		ePrefix.XCpy("txtFieldLabel.textJustification"))
 
 	if err != nil {
 		return isValid, err

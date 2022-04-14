@@ -63,7 +63,7 @@ var mStrOpsTextJustifyLwrCaseStringToCode = map[string]TextJustify{
 //
 //
 // Center          (3) - Signals that the text justification format is
-//                       is set to 'Centered'. Strings will be positioned
+//                       set to 'Centered'. Strings will be positioned
 //                       in the center of the text field equidistant
 //                       from the left and right margins.
 //
