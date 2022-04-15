@@ -142,6 +142,39 @@ import (
 //       Example Output:
 //        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//
+//   ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+//              "YourType.YourMethodName()",
+//               "")
+//
+//   var startTime, endTime time.Time
+//   startTime = time.Now()
+//
+//   someReturnVal := someType.Method()
+//
+//   endTime = time.Now()
+//
+//   timerLines,
+//   err := TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+//   startTime,
+//   endTime,
+//   ePrefix)
+//
+//   if err != nil {
+//     return err
+//   }
+//
+//
+//   fmt.Println("Time Required to Run Your Method")
+//   fmt.Println()
+//   fmt.Println(timerLines.String())
+//
+//
 type TextLineSpecTimerLines struct {
 	labelLeftMarginChars   []rune
 	startTimeLabel         []rune

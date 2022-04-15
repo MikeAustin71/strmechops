@@ -693,8 +693,10 @@ func (mt MainTest) TimerEventText01() {
 	fmt.Println("---------------------------------")
 	fmt.Println()
 
+	var timerLines *strmech.TextLineSpecTimerLines
+
 	timerLines,
-		err := strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
 		startTime,
 		endTime,
 		ePrefix)
@@ -853,8 +855,10 @@ func (mt MainTest) TimerEventText03() {
 	fmt.Println("---------------------------------")
 	fmt.Println()
 
+	var timerLines *strmech.TextLineSpecTimerLines
+
 	timerLines,
-		err := strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
 		startTime,
 		endTime,
 		ePrefix)
