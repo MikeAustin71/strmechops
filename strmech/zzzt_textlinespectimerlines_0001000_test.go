@@ -503,6 +503,16 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 		return
 	}
 
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	var timerLines02 *TextLineSpecTimerLines
 
 	timerLines02,
@@ -651,6 +661,163 @@ func TestTextLineSpecTimerLines_CopyOutPtr_000100(t *testing.T) {
 
 		return
 	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Empty_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.Empty()
+
+	if timerLines01.labelLeftMarginChars != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.labelLeftMarginChars = nil\n"+
+			"Instead  timerLines01.labelLeftMarginChars = '%v'\n",
+			ePrefix.String(),
+			string(timerLines01.labelLeftMarginChars))
+
+		return
+	}
+
+	if timerLines01.startTimeLabel != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.startTimeLabel = nil\n"+
+			"Instead  timerLines01.startTimeLabel = '%v'\n",
+			ePrefix.String(),
+			string(timerLines01.startTimeLabel))
+
+		return
+	}
+
+	if !timerLines01.startTime.IsZero() {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.startTime = Zero\n"+
+			"Instead  timerLines01.startTime = '%v'\n",
+			ePrefix.String(),
+			timerLines01.startTime.String())
+
+		return
+	}
+
+	if timerLines01.endTimeLabel != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.endTimeLabel = nil\n"+
+			"Instead  timerLines01.endTimeLabel = '%v'\n",
+			ePrefix.String(),
+			string(timerLines01.endTimeLabel))
+
+		return
+	}
+
+	if !timerLines01.endTime.IsZero() {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.endTime = Zero\n"+
+			"Instead  timerLines01.endTime = '%v'\n",
+			ePrefix.String(),
+			timerLines01.endTime.String())
+
+		return
+	}
+
+	if len(timerLines01.timeFormat) != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.timeFormat = \"\"\n"+
+			"Instead  timerLines01.timeFormat = '%v'\n",
+			ePrefix.String(),
+			timerLines01.timeFormat)
+
+		return
+	}
+
+	if timerLines01.timeDurationLabel != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.timeDurationLabel = nil\n"+
+			"Instead  timerLines01.timeDurationLabel = '%v'\n",
+			ePrefix.String(),
+			string(timerLines01.timeDurationLabel))
+
+		return
+	}
+
+	if timerLines01.textLabelFieldLen != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.textLabelFieldLen = ZERO\n"+
+			"Instead  timerLines01.textLabelFieldLen = '%v'\n",
+			ePrefix.String(),
+			timerLines01.textLabelFieldLen)
+
+		return
+	}
+
+	if timerLines01.textLabelJustification != TxtJustify.None() {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.textLabelJustification = None\n"+
+			"Instead  timerLines01.textLabelFieldLen = '%v'\n",
+			ePrefix.String(),
+			timerLines01.textLabelJustification.String())
+
+		return
+	}
+
+	if timerLines01.labelRightMarginChars != nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Empty()"+
+			"Expected timerLines01.labelRightMarginChars = nil\n"+
+			"Instead  timerLines01.labelRightMarginChars = '%v'\n",
+			ePrefix.String(),
+			string(timerLines01.labelRightMarginChars))
+
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLines02.Empty()
 
 	return
 }

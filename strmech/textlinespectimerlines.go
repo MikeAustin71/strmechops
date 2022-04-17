@@ -13,7 +13,7 @@ import (
 // elapsed time. This format process requires user input specifying
 // a start time and ending time.
 //
-// The final formatted output string is comprised of four lines of
+// The final formatted output string is composed of four lines of
 // of text for output as text display, file output or
 // printing.
 //
