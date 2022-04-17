@@ -175,6 +175,15 @@ import (
 //   fmt.Println(timerLines.String())
 //
 //
+// ------------------------------------------------------------------------
+//
+// Sample Output
+//
+//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//  Elapsed Time: 55 Microseconds 0 Nanoseconds
+//                Total Elapsed Nanoseconds: 55,000
+//
 type TextLineSpecTimerLines struct {
 	labelLeftMarginChars   []rune
 	startTimeLabel         []rune

@@ -130,6 +130,19 @@ func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLines04.CopyIn(
+		timerLines01,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	return
 }
 
@@ -293,6 +306,175 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from timerLines01."+
 			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_CopyOutITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_CopyOutITextLine_000100()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var iTextLine ITextLineSpecification
+
+	iTextLine,
+		err =
+		timerLines01.CopyOutITextLine(
+			ePrefix.XCpy(
+				"timerLines01->iTextLine"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02,
+		ok := iTextLine.(*TextLineSpecTimerLines)
+
+	if !ok {
+		t.Errorf("%v\n"+
+			"Error: iTextLine.(*TextLineSpecTimerLines)\n"+
+			"Could not convert 'iTextLine' to TextLineSpecTimerLines\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var actualStr string
+
+	actualStr,
+		err = timerLines02.GetFormattedText(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines02.GetFormattedText()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			outputStr,
+			printableActualStr)
+
+		return
+	}
+
+	if !timerLines01.EqualITextLine(iTextLine) {
+		t.Errorf("%v\n"+
+			"Error: plainTextLine01.EqualITextLine(iTextLine)\n"+
+			"Expected timerLines01 == iTextLine\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	_,
+		err =
+		timerLines03.CopyOutITextLine(
+			ePrefix.XCpy(
+				"timerLines03->_"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: timerLines03.CopyOutITextLine()\n"+
+			"Expected an error return because 'timerLines03' is empty!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	outputStr,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"->timerLines04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines04.IsValidInstance() {
+		t.Errorf("%v\n"+
+			"Error: timerLines04.IsValidInstance()\n"+
+			"Expected a return value of 'true' because "+
+			"'timerLines04' should be valid.\n"+
+			"HOWEVER, A VALUD OF 'false' WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err =
+		timerLines04.CopyOutITextLine(
+			StrMech{})
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from timerLines04."+
+			"CopyOutITextLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
