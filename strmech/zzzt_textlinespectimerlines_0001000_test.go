@@ -200,7 +200,7 @@ func TestTextLineSpecTimerLines_CopyOut_000100(t *testing.T) {
 	if outputStr != printableActualStr {
 
 		t.Errorf("%v - ERROR\n"+
-			"timerLines02.GetFormattedText()"+
+			"timerLines02.GetFormattedText()\n"+
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
@@ -966,6 +966,115 @@ func TestTextLineSpecTimerLines_GetFormattedText_000300(t *testing.T) {
 			ePrefix.String())
 
 		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Equal_000100()",
+		"")
+
+	outputStr01,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualStr, outputStr02 string
+
+	actualStr,
+		err = timerLines01.GetFormattedText(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	outputStr02 =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr01 != outputStr02 {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected outputStr01 == outputStr02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n"+
+			"outputStr01 = '%v'\n"+
+			"outputStr02 = '%v'\n",
+			ePrefix.String(),
+			outputStr01,
+			outputStr02)
+
+		return
+
+	}
+
+	if !timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected timerLines01 == timerLines02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines02.labelRightMarginChars = nil
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected timerLines01 != timerLines02\n"+
+			"because timerLines02.labelRightMarginChars = nil"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timeLines03 := TextLineSpecTimerLines{}
+
+	if timeLines03.Equal(timerLines01) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timeLines03.Equal(timerLines01)\n"+
+			"Expected timeLines03 != timerLines01\n"+
+			"because timeLines03 is empty."+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+
 	}
 
 	return
