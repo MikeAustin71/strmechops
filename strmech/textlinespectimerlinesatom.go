@@ -118,8 +118,8 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 		return false
 	}
 
-	if txtTimerLinesOne.startTime !=
-		txtTimerLinesTwo.startTime {
+	if !txtTimerLinesOne.startTime.Equal(
+		txtTimerLinesTwo.startTime) {
 		return false
 	}
 
@@ -129,8 +129,8 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) equal(
 		return false
 	}
 
-	if txtTimerLinesOne.endTime !=
-		txtTimerLinesTwo.endTime {
+	if !txtTimerLinesOne.endTime.Equal(
+		txtTimerLinesTwo.endTime) {
 		return false
 	}
 

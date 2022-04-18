@@ -897,6 +897,144 @@ func (mt MainTest) TimerEventText03() {
 
 }
 
+func (mt MainTest) TimerEventText04() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.DateTimeTextField04()",
+		"")
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var err error
+	var timerLines01, timerLines02 *strmech.TextLineSpecTimerLines
+
+	var errTxt, outputStr01, outputStr02 string
+
+	tUtil := TestUtilities{}
+
+	outputStr01,
+		timerLines01,
+		err =
+		tUtil.CreateTestTextLineSpecTimerLines01(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"\n%v - ERROR\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"\n%v - ERROR\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	outputStr02,
+		timerLines02,
+		err =
+		tUtil.CreateTestTextLineSpecTimerLines01(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	err = timerLines02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"\n%v - ERROR\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	if outputStr01 != outputStr02 {
+		errTxt = fmt.Sprintf(
+			"\n%v - ERROR\n"+
+				"Expected outputStr01 == outputStr02\n"+
+				"HOWEVER, THEY ARE NOT EQUAL!\n"+
+				"outputStr01 = '%v'\n"+
+				"outputStr02 = '%v'\n",
+			ePrefix.String(),
+			outputStr01,
+			outputStr02)
+		fmt.Println(errTxt)
+		return
+	}
+
+	timeFtmStr := "2006-01-02 15:04:05.000000000 -0700 MST"
+
+	startTime01 := timerLines01.GetStartTime()
+	startTime01Str := startTime01.Format(timeFtmStr)
+
+	startTime02 := timerLines02.GetStartTime()
+	startTime02Str := startTime02.Format(timeFtmStr)
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	errTxt = fmt.Sprintf(
+		"StartTime01: %v\n"+
+			"StartTime02: %v\n",
+		startTime01Str,
+		startTime02Str)
+
+	fmt.Println(errTxt)
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	if !startTime01.Equal(startTime02) {
+
+		errTxt = fmt.Sprintf(
+			"\n%v - ERROR\n"+
+				"startTime01.Equal(startTime02)\n"+
+				"Expected timerLines01 == timerLines02\n"+
+				"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		fmt.Println(errTxt)
+		return
+
+	} else {
+
+		fmt.Println()
+		fmt.Println("---------------------------------")
+		fmt.Println("startTime01 and startTime02 ARE equal!")
+		fmt.Println("---------------------------------")
+		fmt.Println()
+
+	}
+
+	if !timerLines01.Equal(timerLines02) {
+
+		errTxt = fmt.Sprintf(
+			"\n%v - ERROR\n"+
+				"timerLines01.Equal(timerLines02)\n"+
+				"Expected timerLines01 == timerLines02\n"+
+				"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		fmt.Println(errTxt)
+		return
+	}
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println("**    Successful Completion    **")
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+}
 func (mt MainTest) IntSeparateNumRunes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -3437,4 +3575,89 @@ func (mt MainTest) Timer(
 	str += fmt.Sprintf("%v-Nanoseconds", numOfNanoseconds)
 
 	return t2Dur.Nanoseconds(), str
+}
+
+type TestUtilities struct {
+	input string
+}
+
+func (tUtil TestUtilities) CreateTestTextLineSpecTimerLines01(
+	errorPrefix interface{}) (
+	string,
+	*strmech.TextLineSpecTimerLines,
+	error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var outputStr string
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDataGeneration - "+
+			"createTestTextLineSpecStandardLine01()",
+		"")
+
+	if err != nil {
+		return outputStr, &strmech.TextLineSpecTimerLines{}, err
+	}
+
+	var loc *time.Location
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		return outputStr, &strmech.TextLineSpecTimerLines{}, err
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := startTime.Add((time.Microsecond * 5) + 999)
+
+	var timerLines01 *strmech.TextLineSpecTimerLines
+
+	timerLines01,
+		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		startTime,
+		endTime,
+		ePrefix)
+
+	if err != nil {
+		return outputStr, &strmech.TextLineSpecTimerLines{}, err
+	}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		return outputStr, &strmech.TextLineSpecTimerLines{}, err
+	}
+
+	/*
+		"[SPACE][SPACE]Start[SPACE]Time:[SPACE]2022-04-05[SPACE]10:00:00.000000000[SPACE]-0500[SPACE]CDT\n[SPACE][SPACE][SPACE][SPACE]End[SPACE]Time:[SPACE]2022-04-05[SPACE]10:00:00.000005999[SPACE]-0500[SPACE]CDT\nElapsed[SPACE]Time:[SPACE]5[SPACE]Microseconds[SPACE]999[SPACE]Nanoseconds\n[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]Total[SPACE]Elapsed[SPACE]Nanoseconds:[SPACE]5,999\n"
+	*/
+
+	outputStr =
+		"[SPACE][SPACE]Start[SPACE]Time:[SPACE]2022-04-05[SPACE]" +
+			"10:00:00.000000000[SPACE]-0500[SPACE]CDT\\n[SPACE][SPACE]" +
+			"[SPACE][SPACE]End[SPACE]Time:[SPACE]2022-04-05[SPACE]" +
+			"10:00:00.000005999[SPACE]-0500[SPACE]CDT\\nElapsed[SPACE]" +
+			"Time:[SPACE]5[SPACE]Microseconds[SPACE]999[SPACE]" +
+			"Nanoseconds\\n[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]" +
+			"[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]" +
+			"[SPACE]Total[SPACE]Elapsed[SPACE]" +
+			"Nanoseconds:[SPACE]5,999\\n"
+
+	return outputStr, timerLines01, err
 }

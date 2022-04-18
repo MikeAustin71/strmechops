@@ -990,22 +990,11 @@ func TestTextLineSpecTimerLines_Equal_000100(t *testing.T) {
 	}
 
 	var timerLines02 *TextLineSpecTimerLines
+	var outputStr02 string
 
-	timerLines02,
-		err = timerLines01.CopyOutPtr(
-		ePrefix.XCpy(
-			"timerLines02"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var actualStr, outputStr02 string
-
-	actualStr,
-		err = timerLines01.GetFormattedText(
+	outputStr02,
+		timerLines02,
+		err = createTestTextLineSpecTimerLines01(
 		ePrefix.XCpy(
 			"timerLines01"))
 
@@ -1014,13 +1003,6 @@ func TestTextLineSpecTimerLines_Equal_000100(t *testing.T) {
 			err.Error())
 		return
 	}
-
-	sMech := StrMech{}
-
-	outputStr02 =
-		sMech.ConvertNonPrintableChars(
-			[]rune(actualStr),
-			true)
 
 	if outputStr01 != outputStr02 {
 

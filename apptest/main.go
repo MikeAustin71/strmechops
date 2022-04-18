@@ -7,6 +7,6 @@ import (
 func main() {
 	mt := examples.MainTest{}
 
-	mt.TimerEventText03()
+	mt.TimerEventText04()
 
 }
