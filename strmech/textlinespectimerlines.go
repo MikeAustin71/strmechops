@@ -14,8 +14,7 @@ import (
 // a start time and ending time.
 //
 // The final formatted output string is composed of four lines of
-// of text for output as text display, file output or
-// printing.
+// text for output as text display, file output or printing.
 //
 // The first line of text shows the Starting Time. The second line
 // shows the Ending Time. The third line displays the time duration
@@ -877,12 +876,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText(
 }
 
 // GetEndTimeLabel - Returns the internal member variable
-// 'endTimeLabel' as a rune array.
+// 'endTimeLabel' as a string.
 //
 // 'endTimeLabel' is a text label inserted in the output
 // string to describe the ending time presentation.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() []rune {
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -892,7 +891,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() []rune {
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return txtSpecTimerLines.endTimeLabel
+	if len(txtSpecTimerLines.endTimeLabel) == 0 {
+		return ""
+	}
+
+	return string(txtSpecTimerLines.endTimeLabel)
 }
 
 // GetEndTime - Returns the internal member variable 'endTime'

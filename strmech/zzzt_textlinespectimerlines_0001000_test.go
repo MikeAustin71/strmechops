@@ -822,155 +822,6 @@ func TestTextLineSpecTimerLines_Empty_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecTimerLines_GetFormattedText_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_GetFormattedText_000100()",
-		"")
-
-	outputStr,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var actualStr string
-
-	actualStr,
-		err = timerLines01.GetFormattedText(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	sMech := StrMech{}
-
-	printableActualStr :=
-		sMech.ConvertNonPrintableChars(
-			[]rune(actualStr),
-			true)
-
-	if outputStr != printableActualStr {
-
-		t.Errorf("%v - ERROR\n"+
-			"timerLines01.GetFormattedText()"+
-			"Expected string DOES NOT match Actual string\n"+
-			"Expected string = '%v'\n"+
-			"  Actual string = '%v'\n",
-			ePrefix.String(),
-			outputStr,
-			printableActualStr)
-
-		return
-
-	}
-
-	return
-}
-
-func TestTextLineSpecTimerLines_GetFormattedText_000200(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTESTSERIES_TESTMETHOD_000200()",
-		"")
-
-	outputStr,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	var actualStr string
-
-	actualStr,
-		err = timerLines01.GetFormattedText(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	sMech := StrMech{}
-
-	printableActualStr :=
-		sMech.ConvertNonPrintableChars(
-			[]rune(actualStr),
-			true)
-
-	if outputStr != printableActualStr {
-
-		t.Errorf("%v - ERROR\n"+
-			"timerLines01.GetFormattedText()"+
-			"Expected string DOES NOT match Actual string\n"+
-			"Expected string = '%v'\n"+
-			"  Actual string = '%v'\n",
-			ePrefix.String(),
-			outputStr,
-			printableActualStr)
-
-		return
-
-	}
-
-	return
-}
-
-func TestTextLineSpecTimerLines_GetFormattedText_000300(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_GetFormattedText_000300()",
-		"")
-
-	_,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = timerLines01.GetFormattedText(
-		StrMech{})
-
-	if err == nil {
-
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from timerLines01."+
-			"GetFormattedText()\n"+
-			"because 'errorPrefix' is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	return
-}
-
 func TestTextLineSpecTimerLines_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -1170,6 +1021,210 @@ func TestTextLineSpecTimerLines_EqualITextLine_000100(t *testing.T) {
 			ePrefix.String())
 
 		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_GetFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetFormattedText_000100()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualStr string
+
+	actualStr,
+		err = timerLines01.GetFormattedText(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.GetFormattedText()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			outputStr,
+			printableActualStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_GetFormattedText_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_TESTMETHOD_000200()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualStr string
+
+	actualStr,
+		err = timerLines01.GetFormattedText(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.GetFormattedText()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			outputStr,
+			printableActualStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_GetFormattedText_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetFormattedText_000300()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = timerLines01.GetFormattedText(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"GetFormattedText()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_GetEndTimeLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetEndTimeLabel_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := "End Time"
+
+	actualStr := timerLines01.GetEndTimeLabel()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetEndTimeLabel()\n"+
+			"Expected string is not equal to atual string.\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	actualStr = timerLines02.GetEndTimeLabel()
+
+	if actualStr != "" {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetEndTimeLabel()\n"+
+			"Expected an empty string because\n"+
+			"timerLines02 is empty!\n"+
+			"However, Actual String = '%v'\n",
+			ePrefix.String(),
+			actualStr)
+		return
+
 	}
 
 	return
