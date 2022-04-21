@@ -1061,3 +1061,116 @@ func TestTextLineSpecTimerLines_Equal_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_EqualITextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_EqualITextLine_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual := timerLines01.EqualITextLine(
+		nil)
+
+	if areEqual == true {
+
+		t.Errorf("%v\n"+
+			"Error: timerLines01.EqualITextLine()\n"+
+			"Expected areEqual == true because input\n"+
+			"parameter 'nil' is invalid.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines02 TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOut(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	iTextLineSpec := ITextLineSpecification(timerLines01)
+
+	areEqual = timerLines02.EqualITextLine(
+		iTextLineSpec)
+
+	if areEqual == false {
+
+		t.Errorf("%v\n"+
+			"Error: timerLines02.EqualITextLine()\n"+
+			"Expected areEqual == true because input\n"+
+			"parameter 'timerLines02' is valid and equal.\n"+
+			"HOWEVER, areEqual == false\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	areEqual = timerLines03.EqualITextLine(
+		iTextLineSpec)
+
+	if areEqual == true {
+
+		t.Errorf("%v\n"+
+			"Error: timerLines03.EqualITextLine()\n"+
+			"Expected areEqual == false because input\n"+
+			"parameter 'timerLines03' is empty.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var stdLine01 TextLineSpecStandardLine
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	iTextLineSpec = ITextLineSpecification(&stdLine01)
+
+	areEqual = timerLines02.EqualITextLine(
+		iTextLineSpec)
+
+	if areEqual == true {
+
+		t.Errorf("%v\n"+
+			"Error: timerLines02.EqualITextLine()\n"+
+			"Expected areEqual == false because input\n"+
+			"parameter 'iTextLineSpec' is of type TextLineSpecStandardLine.\n"+
+			"HOWEVER, areEqual == true\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
