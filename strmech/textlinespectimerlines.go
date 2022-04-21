@@ -918,12 +918,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
 }
 
 // GetStartTimeLabel - Returns the internal member variable
-// 'startTimeLabel' as a rune array.
+// 'startTimeLabel' as a string.
 //
 // 'startTimeLabel' is a text label inserted in the output
 // string to describe the starting time presentation.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() []rune {
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -933,7 +933,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() []rune {
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return txtSpecTimerLines.startTimeLabel
+	if len(txtSpecTimerLines.startTimeLabel) == 0 {
+		return ""
+	}
+
+	return string(txtSpecTimerLines.startTimeLabel)
 }
 
 // GetStartTime - Returns the internal member variable 'startTime'

@@ -1229,3 +1229,77 @@ func TestTextLineSpecTimerLines_GetEndTimeLabel_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_GetEndTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetEndTime_000100()",
+		"")
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	expectedTime := timerLines01.GetEndTime()
+
+	timeFormat := "2006-01-02 15:04:05.000000000 -0700 MST"
+
+	if !expectedTime.IsZero() {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetEndTime()\n"+
+			"Expected the returned time to be Zero.\n"+
+			"However, the Actual Returned Time = '%v'\n",
+			ePrefix.String(),
+			expectedTime.Format(timeFormat))
+		return
+
+	}
+
+	_,
+		timerLines02,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedTime = timerLines02.endTime
+
+	actualTime := timerLines02.GetEndTime()
+
+	if !expectedTime.Equal(actualTime) {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetEndTime()\n"+
+			"Expected time is NOT EQUAL to Actual Time.\n"+
+			"Expected Time = '%v'\n"+
+			"  Actual Time = '%v'\n",
+			ePrefix.String(),
+			expectedTime.Format(timeFormat),
+			actualTime.Format(timeFormat))
+		return
+	}
+
+	expectedTimeStr := expectedTime.Format(timeFormat)
+
+	actualTimeStr := actualTime.Format(timeFormat)
+
+	if expectedTimeStr != actualTimeStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetEndTime() Time Strings\n"+
+			"expectedTimeStr != actualTimeStr\n"+
+			"Expected Time = '%v'\n"+
+			"  Actual Time = '%v'\n",
+			ePrefix.String(),
+			expectedTimeStr,
+			actualTimeStr)
+		return
+
+	}
+
+	return
+}
