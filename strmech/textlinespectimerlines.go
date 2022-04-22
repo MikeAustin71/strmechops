@@ -1046,7 +1046,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 }
 
 // GetTimeDurationLabel - Returns the internal member variable
-// 'timeDurationLabel' as an array of runes.
+// 'timeDurationLabel' as a string.
 //
 // 'timeDurationLabel' is a text label inserted in the
 // TextLineSpecTimerLines output string to describe the elapsed
@@ -1054,7 +1054,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 // timer event is computed by subtracting the starting time from
 // the ending time.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() []rune {
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -1064,7 +1064,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() []rune {
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return txtSpecTimerLines.timeDurationLabel
+	if len(txtSpecTimerLines.timeDurationLabel) == 0 {
+		return ""
+	}
+
+	return string(txtSpecTimerLines.timeDurationLabel)
 }
 
 // GetTimeFormat - Returns the internal member variable

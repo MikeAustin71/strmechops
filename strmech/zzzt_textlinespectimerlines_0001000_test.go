@@ -1469,6 +1469,10 @@ func TestTextLineSpecTimerLines_GetLabelFieldLength_000100(t *testing.T) {
 		return
 	}
 
+	timerLines02 := TextLineSpecTimerLines{}
+
+	_ = timerLines02.GetLabelFieldLength()
+
 	return
 }
 
@@ -1509,6 +1513,10 @@ func TestTextLineSpecTimerLines_GetLabelJustification_000100(t *testing.T) {
 		return
 	}
 
+	timerLines02 := TextLineSpecTimerLines{}
+
+	_ = timerLines02.GetLabelJustification()
+
 	return
 }
 
@@ -1547,6 +1555,65 @@ func TestTextLineSpecTimerLines_GetLabelOutputSeparationChars_000100(t *testing.
 			actualLabelOutputChars)
 
 		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	_ = timerLines02.GetLabelOutputSeparationChars()
+
+	return
+}
+
+func TestTextLineSpecTimerLines_GetTimeDurationLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetTimeDurationLabel_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := string(timerLines01.timeDurationLabel)
+
+	actualStr := timerLines01.GetTimeDurationLabel()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetTimeDurationLabel()\n"+
+			"Expected string is not equal to atual string.\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	actualStr = timerLines02.GetTimeDurationLabel()
+
+	if actualStr != "" {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetTimeDurationLabel()\n"+
+			"Expected an empty string because\n"+
+			"timerLines02 is empty!\n"+
+			"However, Actual String = '%v'\n",
+			ePrefix.String(),
+			actualStr)
+		return
+
 	}
 
 	return
