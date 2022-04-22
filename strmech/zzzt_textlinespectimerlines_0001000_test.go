@@ -1471,3 +1471,43 @@ func TestTextLineSpecTimerLines_GetLabelFieldLength_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_GetLabelJustification_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetLabelJustification_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelJustification := timerLines01.textLabelJustification
+
+	actualLabelJustification := timerLines01.GetLabelJustification()
+
+	if expectedLabelJustification != actualLabelJustification {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetLabelJustification()\n"+
+			"Expected Label Justification is NOT Equal to\n"+
+			"the Actual Label Justification value.\n"+
+			"Expected Label Justification = '%v'\n"+
+			"  Actual Label Justification = '%v'\n",
+			ePrefix.String(),
+			expectedLabelJustification.String(),
+			actualLabelJustification.String())
+
+		return
+	}
+
+	return
+}
