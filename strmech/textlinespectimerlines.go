@@ -1019,7 +1019,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJus
 }
 
 // GetLabelOutputSeparationChars - Returns the internal member
-// variable, 'labelRightMarginChars', as an array of runes.
+// variable, 'labelRightMarginChars', as a string.
 //
 // The 'labelRightMarginChars' is one or more characters used
 // to separate the text labels, 'startTime', 'endTime' and
@@ -1028,7 +1028,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJus
 // space character or the default value which is a colon and a
 // white space character (": ").
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars() []rune {
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars() string {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -1038,7 +1038,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return txtSpecTimerLines.labelRightMarginChars
+	if len(txtSpecTimerLines.labelRightMarginChars) == 0 {
+		return ""
+	}
+
+	return string(txtSpecTimerLines.labelRightMarginChars)
 }
 
 // GetTimeDurationLabel - Returns the internal member variable

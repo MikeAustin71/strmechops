@@ -1511,3 +1511,43 @@ func TestTextLineSpecTimerLines_GetLabelJustification_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_GetLabelOutputSeparationChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetLabelOutputSeparationChars_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelOutputChars := string(timerLines01.labelRightMarginChars)
+
+	actualLabelOutputChars := timerLines01.GetLabelOutputSeparationChars()
+
+	if expectedLabelOutputChars != actualLabelOutputChars {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetLabelOutputSeparationChars()\n"+
+			"Expected Label Separation Characters is NOT Equal to\n"+
+			"the Actual Label Separation Characters.\n"+
+			"Expected Label Separation Characters = '%v'\n"+
+			"  Actual Label Separation Characters = '%v'\n",
+			ePrefix.String(),
+			expectedLabelOutputChars,
+			actualLabelOutputChars)
+
+		return
+	}
+
+	return
+}
