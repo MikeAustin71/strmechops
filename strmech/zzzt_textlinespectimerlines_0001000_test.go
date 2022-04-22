@@ -1303,3 +1303,58 @@ func TestTextLineSpecTimerLines_GetEndTime_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_GetStartTimeLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetStartTimeLabel_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := "Start Time"
+
+	actualStr := timerLines01.GetStartTimeLabel()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetStartTimeLabel()\n"+
+			"Expected string is not equal to atual string.\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	actualStr = timerLines02.GetStartTimeLabel()
+
+	if actualStr != "" {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetStartTimeLabel()\n"+
+			"Expected an empty string because\n"+
+			"timerLines02 is empty!\n"+
+			"However, Actual String = '%v'\n",
+			ePrefix.String(),
+			actualStr)
+		return
+
+	}
+
+	return
+}
