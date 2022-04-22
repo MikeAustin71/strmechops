@@ -1673,3 +1673,50 @@ func TestTextLineSpecTimerLines_GetTimeFormat_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_IsValidInstance_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	isValid := timerLines01.IsValidInstance()
+
+	if !isValid {
+
+		t.Errorf("\n%v\n"+
+			"Error: isValid := timerLines01.IsValidInstance()\n"+
+			"Expected 'isValid' == 'true' because 'timerLines01' is valid.\n"+
+			"HOWEVER 'isValid' == 'false' !!\n",
+			ePrefix.String())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	isValid = timerLines02.IsValidInstance()
+
+	if isValid {
+
+		t.Errorf("\n%v\n"+
+			"Error: isValid := timerLines02.IsValidInstance()\n"+
+			"Expected 'isValid' == 'false' because 'timerLines02' is empty.\n"+
+			"HOWEVER 'isValid' == 'true' !!\n",
+			ePrefix.String())
+		return
+	}
+
+	return
+}
