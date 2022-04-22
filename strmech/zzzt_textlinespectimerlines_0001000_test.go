@@ -1358,3 +1358,116 @@ func TestTextLineSpecTimerLines_GetStartTimeLabel_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_GetStartTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetStartTime_000100()",
+		"")
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	expectedTime := timerLines01.GetStartTime()
+
+	timeFormat := "2006-01-02 15:04:05.000000000 -0700 MST"
+
+	if !expectedTime.IsZero() {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetEndTime()\n"+
+			"Expected the returned time to be Zero.\n"+
+			"However, the Actual Returned Time = '%v'\n",
+			ePrefix.String(),
+			expectedTime.Format(timeFormat))
+		return
+	}
+
+	_,
+		timerLines02,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedTime = timerLines02.startTime
+
+	actualTime := timerLines02.GetStartTime()
+
+	if !expectedTime.Equal(actualTime) {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetStartTime()\n"+
+			"Expected time is NOT EQUAL to Actual Time.\n"+
+			"Expected Time = '%v'\n"+
+			"  Actual Time = '%v'\n",
+			ePrefix.String(),
+			expectedTime.Format(timeFormat),
+			actualTime.Format(timeFormat))
+		return
+	}
+
+	expectedTimeStr := expectedTime.Format(timeFormat)
+
+	actualTimeStr := actualTime.Format(timeFormat)
+
+	if expectedTimeStr != actualTimeStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetStartTime() Time Strings\n"+
+			"expectedTimeStr != actualTimeStr\n"+
+			"Expected Time = '%v'\n"+
+			"  Actual Time = '%v'\n",
+			ePrefix.String(),
+			expectedTimeStr,
+			actualTimeStr)
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_GetLabelFieldLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetLabelFieldLength_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelFieldLength := timerLines01.textLabelFieldLen
+
+	actualLabelFieldLength := timerLines01.GetLabelFieldLength()
+
+	if expectedLabelFieldLength != actualLabelFieldLength {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetLabelFieldLength()\n"+
+			"Expected Label Field Length is NOT Equal to\n"+
+			"Actual Label Field Length.\n"+
+			"Expected Label Field Length = '%v'\n"+
+			"  Actual Label Field Length = '%v'\n",
+			ePrefix.String(),
+			expectedLabelFieldLength,
+			actualLabelFieldLength)
+
+		return
+	}
+
+	return
+}
