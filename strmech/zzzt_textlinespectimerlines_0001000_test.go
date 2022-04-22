@@ -1618,3 +1618,58 @@ func TestTextLineSpecTimerLines_GetTimeDurationLabel_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_GetTimeFormat_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetTimeFormat_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedStr := timerLines01.timeFormat
+
+	actualStr := timerLines01.GetTimeFormat()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines01.GetTimeFormat()\n"+
+			"Expected string is not equal to atual string.\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	actualStr = timerLines02.GetTimeFormat()
+
+	if actualStr != "" {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines02.GetTimeFormat()\n"+
+			"Expected an empty string because\n"+
+			"timerLines02 is empty!\n"+
+			"However, Actual String = '%v'\n",
+			ePrefix.String(),
+			actualStr)
+		return
+
+	}
+
+	return
+}
