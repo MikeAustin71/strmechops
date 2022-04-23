@@ -3,6 +3,7 @@ package strmech
 import (
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
+	"time"
 )
 
 func TestTextLineSpecTimerLines_CopyIn_000100(t *testing.T) {
@@ -1715,6 +1716,423 @@ func TestTextLineSpecTimerLines_IsValidInstance_000100(t *testing.T) {
 			"Expected 'isValid' == 'false' because 'timerLines02' is empty.\n"+
 			"HOWEVER 'isValid' == 'true' !!\n",
 			ePrefix.String())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_IsValidInstanceError_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines02.IsValidInstanceError()\n"+
+			"Expected an error return because 'timerLines02' is empty.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_IsValidInstanceError_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_IsValidInstanceError_000200()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.endTime = time.Time{}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines02.IsValidInstanceError()\n"+
+			"Expected an error return because \n"+
+			"'timerLines01.endTime' is zero.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+	_,
+		timerLines02,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var loc *time.Location
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	badEndTime := time.Date(
+		1966,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	timerLines02.endTime = badEndTime
+
+	err = timerLines02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines02.IsValidInstanceError()\n"+
+			"Expected an error return because \n"+
+			"'timerLines02.endTime' is before start time.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+		return
+	}
+
+	var timerLines03 *TextLineSpecTimerLines
+	_,
+		timerLines03,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines03.textLabelFieldLen = 1000001
+
+	err = timerLines03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines03.IsValidInstanceError()\n"+
+			"Expected an error return because \n"+
+			"'timerLines03.textLabelFieldLen' is greater than '1000000'.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03.textLabelFieldLen = -70
+
+	err = timerLines03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines03.IsValidInstanceError()\n"+
+			"Test # 2\n"+
+			"DID NOT Expect an error return because \n"+
+			"'timerLines03.textLabelFieldLen' is '-70'.\n"+
+			"HOWEVER AN ERROR WAS RETURNED!!\n"+
+			"Error= \n'%v\n",
+			ePrefix.String(),
+			err)
+
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines04.timeFormat = ""
+
+	err = timerLines04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines04.IsValidInstanceError()\n"+
+			"DID NOT Expect an error return because \n"+
+			"'timerLines04.timeFormat' is empty.\n"+
+			"HOWEVER AN ERROR WAS RETURNED!!\n"+
+			"Error= \n'%v\n",
+			ePrefix.String(),
+			err)
+
+		return
+	}
+
+	var timerLines05 *TextLineSpecTimerLines
+	_,
+		timerLines05,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines05.startTimeLabel = []rune{}
+
+	err = timerLines05.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines05.IsValidInstanceError()\n"+
+			"DID NOT Expect an error return because \n"+
+			"'timerLines05.startTimeLabel' is empty.\n"+
+			"HOWEVER AN ERROR WAS RETURNED!!\n"+
+			"Error= \n'%v\n",
+			ePrefix.String(),
+			err)
+
+		return
+	}
+
+	var timerLines06 *TextLineSpecTimerLines
+	_,
+		timerLines06,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines06"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines06.endTimeLabel = []rune{}
+
+	err = timerLines06.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines06"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines06.IsValidInstanceError()\n"+
+			"DID NOT Expect an error return because \n"+
+			"'timerLines06.endTimeLabel' is empty.\n"+
+			"HOWEVER AN ERROR WAS RETURNED!!\n"+
+			"Error= \n'%v\n",
+			ePrefix.String(),
+			err)
+
+		return
+	}
+
+	var timerLines07 *TextLineSpecTimerLines
+	_,
+		timerLines07,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines07"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines07.timeDurationLabel = []rune{}
+
+	err = timerLines07.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines07"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines07.IsValidInstanceError()\n"+
+			"DID NOT Expect an error return because \n"+
+			"'timerLines07.timeDurationLabel' is empty.\n"+
+			"HOWEVER AN ERROR WAS RETURNED!!\n"+
+			"Error= \n'%v\n",
+			ePrefix.String(),
+			err)
+
+		return
+	}
+
+	var timerLines08 *TextLineSpecTimerLines
+	_,
+		timerLines08,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines08"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines08.labelRightMarginChars = []rune{}
+
+	err = timerLines08.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines08"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines08.IsValidInstanceError()\n"+
+			"DID NOT Expect an error return because \n"+
+			"'timerLines08.labelRightMarginChars' is empty.\n"+
+			"HOWEVER AN ERROR WAS RETURNED!!\n"+
+			"Error= \n'%v\n",
+			ePrefix.String(),
+			err)
+
+		return
+	}
+
+	var timerLines09 *TextLineSpecTimerLines
+	_,
+		timerLines09,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines09"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines09.textLabelFieldLen = 60
+
+	err = timerLines09.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines09"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines09.IsValidInstanceError()\n"+
+			"Expected an error return because \n"+
+			"'timerLines09.textLabelFieldLen' is exceeds maximum field length.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines10 *TextLineSpecTimerLines
+	_,
+		timerLines10,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines10"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines10.textLabelJustification = -9
+
+	err = timerLines10.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines10"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines10.IsValidInstanceError()\n"+
+			"Expected an error return because \n"+
+			"'timerLines10.textLabelJustification' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
 		return
 	}
 

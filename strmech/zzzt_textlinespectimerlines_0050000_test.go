@@ -5,6 +5,35 @@ import (
 	"testing"
 )
 
+func TestTextLineSpecTimerLinesAtom_testValidityOfTxtSpecTimerLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesAtom_testValidityOfTxtSpecTimerLines_000100()",
+		"")
+
+	txtTimerLinesAtom := textLineSpecTimerLinesAtom{}
+
+	_,
+		err := txtTimerLinesAtom.testValidityOfTxtSpecTimerLines(
+		nil,
+		ePrefix.XCpy(
+			"txtTimerLines == nil"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines02.IsValidInstanceError()\n"+
+			"Expected an error return because input\n"+
+			"parameter 'txtTimerLines' is 'nil'.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

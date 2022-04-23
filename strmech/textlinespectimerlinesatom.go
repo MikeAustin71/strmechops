@@ -497,6 +497,10 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 		return isValid, err
 	}
 
+	if txtTimerLines.textLabelFieldLen < 0 {
+		txtTimerLines.textLabelFieldLen = -1
+	}
+
 	if len(txtTimerLines.timeFormat) == 0 {
 		txtTimerLines.timeFormat =
 			textSpecificationMolecule{}.ptr().
