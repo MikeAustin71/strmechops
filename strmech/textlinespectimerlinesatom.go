@@ -10,56 +10,6 @@ type textLineSpecTimerLinesAtom struct {
 	lock *sync.Mutex
 }
 
-// getLongestTimerLabelLength - Returns the length of the longest
-// text label or the text field length contained within an instance
-// of TextLineSpecTimerLines.
-//
-// Each instance of TextLineSpecTimerLines has three text labels:
-//  (1) TextLineSpecTimerLines.startTimeLabel
-//  (2) TextLineSpecTimerLines.endTimeLabel
-//  (3) TextLineSpecTimerLines.timeDurationLabel
-//
-// In addition, each instance of TextLineSpecTimerLines also
-// contains a text label field length specification. This method
-// simply computes the length of the longest text label and
-// compares that to the text field length. It then returns
-// whichever is greater: the longest text label length or the text
-// field length.
-//
-func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) getLongestTimerLabelLength(
-	txtTimerLines *TextLineSpecTimerLines) int {
-
-	if txtTimerLinesAtom.lock == nil {
-		txtTimerLinesAtom.lock = new(sync.Mutex)
-	}
-
-	txtTimerLinesAtom.lock.Lock()
-
-	defer txtTimerLinesAtom.lock.Unlock()
-
-	longestTxtLabelLen := 0
-
-	if txtTimerLines == nil {
-		return longestTxtLabelLen
-	}
-
-	longestTxtLabelLen = len(txtTimerLines.startTimeLabel)
-
-	if len(txtTimerLines.endTimeLabel) > longestTxtLabelLen {
-		longestTxtLabelLen = len(txtTimerLines.endTimeLabel)
-	}
-
-	if len(txtTimerLines.timeDurationLabel) > longestTxtLabelLen {
-		longestTxtLabelLen = len(txtTimerLines.timeDurationLabel)
-	}
-
-	if txtTimerLines.textLabelFieldLen > longestTxtLabelLen {
-		longestTxtLabelLen = txtTimerLines.textLabelFieldLen
-	}
-
-	return longestTxtLabelLen
-}
-
 // ptr - Returns a pointer to a new instance of
 // textLineSpecTimerLinesAtom.
 //
