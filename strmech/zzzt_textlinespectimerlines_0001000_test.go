@@ -1428,6 +1428,32 @@ func TestTextLineSpecTimerLines_GetFormattedText_000300(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_GetFormattedText_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetFormattedText_000400()",
+		"")
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	_,
+		err := timerLines01.GetFormattedText(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from timerLines01.GetFormattedText()\n"+
+			"because 'timerLines01' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextLineSpecTimerLines_GetEndTimeLabel_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
