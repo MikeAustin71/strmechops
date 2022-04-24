@@ -2445,3 +2445,55 @@ func TestTextLineSpecTimerLines_IsValidInstanceError_000200(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100()",
+		"")
+
+	var loc *time.Location
+	var err error
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := startTime.Add((time.Microsecond * 5) + 999)
+
+	_,
+		err = TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		startTime,
+		endTime,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from TextLineSpecTimerLines{}"+
+			"NewDefaultFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}

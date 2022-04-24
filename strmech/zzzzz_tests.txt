@@ -2069,7 +2069,7 @@
 === RUN   TestTextLineSpecStandardLine_NewStandardLine_000200
 --- PASS: TestTextLineSpecStandardLine_NewStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000100
---- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000100
@@ -2109,7 +2109,7 @@
 === RUN   TestTextLineSpecStandardLine_Read_000200
 --- PASS: TestTextLineSpecStandardLine_Read_000200 (0.01s)
 === RUN   TestTextLineSpecStandardLine_Read_000300
---- PASS: TestTextLineSpecStandardLine_Read_000300 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_Read_000300 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000400
 --- PASS: TestTextLineSpecStandardLine_Read_000400 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000500
@@ -2157,7 +2157,7 @@
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000200
 --- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_copyTextFields_000300
---- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000300 (0.00s)
+--- PASS: TestTextLineSpecStandardLineAtom_copyTextFields_000300 (0.01s)
 === RUN   TestTextLineSpecStandardLineAtom_peekPopTextField_000100
 --- PASS: TestTextLineSpecStandardLineAtom_peekPopTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineAtom_testValidityOfTextLineSpecStdLine_000100
@@ -2171,7 +2171,7 @@
 === RUN   TestTextLineSpecStandardLineElectron_emptyTextFields_000100
 --- PASS: TestTextLineSpecStandardLineElectron_emptyTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100
---- PASS: TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100 (0.02s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100
 --- PASS: TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200
@@ -2256,6 +2256,8 @@
 --- PASS: TestTextLineSpecTimerLines_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_IsValidInstanceError_000200
 --- PASS: TestTextLineSpecTimerLines_IsValidInstanceError_000200 (0.00s)
+=== RUN   TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100
+--- PASS: TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesAtom_equal_000100
 --- PASS: TestTextLineSpecTimerLinesAtom_equal_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesAtom_testValidityOfTxtSpecTimerLines_000100
@@ -2268,4 +2270,4 @@
 --- PASS: TestTextLineSpecTimerLinesMolecule_getFormattedText_000100 (0.00s)
 PASS
 coverage: 81.3% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.395s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.388s
