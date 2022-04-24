@@ -5,6 +5,89 @@ import (
 	"testing"
 )
 
+func TestTextLineSpecTimerLinesAtom_equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesAtom_equal_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01 #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtTimerLinesAtom := textLineSpecTimerLinesAtom{}
+
+	areEqual := txtTimerLinesAtom.equal(
+		timerLines01,
+		timerLines02)
+
+	if !areEqual {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtTimerLinesAtom.equal(timerLines02, timerLines01)\n"+
+			"Expected timerLines01 == timerLines02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	areEqual = txtTimerLinesAtom.equal(
+		nil,
+		timerLines02)
+
+	if areEqual {
+
+		t.Errorf("%v - ERROR Test#2\n"+
+			"txtTimerLinesAtom.equal(timerLines02, timerLines01)\n"+
+			"Expected timerLines01 NOT EQUAL to timerLines02\n"+
+			"because 'txtTimerLinesOne input parameter is 'nil'."+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	areEqual = txtTimerLinesAtom.equal(
+		timerLines01,
+		nil)
+
+	if areEqual {
+
+		t.Errorf("%v - ERROR Test#3\n"+
+			"txtTimerLinesAtom.equal(timerLines02, timerLines01)\n"+
+			"Expected timerLines01 NOT EQUAL to timerLines02\n"+
+			"because 'txtTimerLinesTwo input parameter is 'nil'."+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLinesAtom_testValidityOfTxtSpecTimerLines_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

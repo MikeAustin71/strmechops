@@ -914,6 +914,258 @@ func TestTextLineSpecTimerLines_Equal_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_Equal_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Equal_000200()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01 #0"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var loc *time.Location
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	badStartTime := time.Date(
+		1966,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	timerLines01.startTime = badStartTime
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.startTime and timerLines02.startTime\n"+
+			"are NOT Equal. \n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.endTime = badStartTime
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.endTime and\n"+
+			"timerLines02.endTime are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #2"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.endTimeLabel = []rune("Hello World")
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.endTimeLabel and\n"+
+			"timerLines02.endTimeLabel are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #3"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.endTimeLabel = []rune("Hello World")
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.endTimeLabel and\n"+
+			"timerLines02.endTimeLabel are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #3"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.timeFormat = "Hello World"
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.timeFormat and\n"+
+			"timerLines02.timeFormat are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #4"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.timeDurationLabel = []rune("Hello World")
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.timeDurationLabel and\n"+
+			"timerLines02.timeDurationLabel are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #5"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.textLabelFieldLen = 7
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.textLabelFieldLen and\n"+
+			"timerLines02.textLabelFieldLen are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01,
+		err = timerLines02.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines01<-timerLines02 #6"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines01.textLabelJustification = TxtJustify.None()
+
+	if timerLines01.Equal(timerLines02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.Equal(&timerLines02)\n"+
+			"Expected 'timerLines01' NOT EQUAL to 'timerLines02'\n"+
+			"because timerLines01.textLabelJustification and\n"+
+			"timerLines02.textLabelJustification are NOT Equal.\n"+
+			"HOWEVER, THE RETURNED ANALYSIS SHOWS THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestTextLineSpecTimerLines_EqualITextLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
