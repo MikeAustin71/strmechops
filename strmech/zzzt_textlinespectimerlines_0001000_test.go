@@ -2221,6 +2221,7 @@ func TestTextLineSpecTimerLines_IsValidInstanceError_000200(t *testing.T) {
 	}
 
 	var timerLines05 *TextLineSpecTimerLines
+
 	_,
 		timerLines05,
 		err = createTestTextLineSpecTimerLines01(
@@ -2408,6 +2409,34 @@ func TestTextLineSpecTimerLines_IsValidInstanceError_000200(t *testing.T) {
 			"Error: err = timerLines10.IsValidInstanceError()\n"+
 			"Expected an error return because \n"+
 			"'timerLines10.textLabelJustification' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines11 *TextLineSpecTimerLines
+	_,
+		timerLines11,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines11"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines11.IsValidInstanceError(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines11.IsValidInstanceError()\n"+
+			"Expected an error return because the error prefix\n"+
+			"is invalid.\n"+
 			"HOWEVER NO ERROR WAS RETURNED!!\n",
 			ePrefix.String())
 
