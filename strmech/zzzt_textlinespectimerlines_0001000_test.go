@@ -2497,3 +2497,75 @@ func TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100()",
+		"")
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var loc *time.Location
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := startTime.Add((time.Microsecond * 5) + 999)
+
+	timerLines02 :=
+		TextLineSpecTimerLines{}.NewDefaultShellTimerEvent()
+
+	err = timerLines02.SetStartAndEndTime(
+		startTime,
+		endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	areEqual := timerLines01.Equal(timerLines02)
+
+	if !areEqual {
+
+		t.Errorf("\n%v\n"+
+			"Error:\n"+
+			"Expected 'timerLines01' EQUAL 'timerLines02'.\n"+
+			"HOWEVER THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
