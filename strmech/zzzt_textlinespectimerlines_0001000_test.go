@@ -2569,3 +2569,112 @@ func TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_SetStartAndEndTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetStartAndEndTime_000100()",
+		"")
+
+	var loc *time.Location
+	var err error
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := startTime.Add((time.Microsecond * 5) + 999)
+
+	timerLines01 :=
+		TextLineSpecTimerLines{}.NewDefaultShellTimerEvent()
+
+	err = timerLines01.SetStartAndEndTime(
+		endTime,
+		startTime,
+		ePrefix.XCpy(
+			"timerLines01 start and end times reversed"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines01.SetStartAndEndTime()\n"+
+			"Expected an error return because \n"+
+			"start and end times are invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines02 TextLineSpecTimerLines
+
+	err = timerLines02.SetStartAndEndTime(
+		startTime,
+		endTime,
+		ePrefix.XCpy(
+			"timerLines02 is empty"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetStartAndEndTime(
+		time.Time{},
+		endTime,
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines03.SetStartAndEndTime()\n"+
+			"Expected an error return because \n"+
+			"'startTime' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLines04.SetStartAndEndTime(
+		startTime,
+		time.Time{},
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines04.SetStartAndEndTime()\n"+
+			"Expected an error return because \n"+
+			"'endTime' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
