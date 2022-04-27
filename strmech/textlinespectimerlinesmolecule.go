@@ -580,8 +580,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 //       elapsed for the timer event.
 //
 //       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//       'endTime' will be defaulted to value of 'startTime'.
 //
 //
 //  timeFormat                 string
