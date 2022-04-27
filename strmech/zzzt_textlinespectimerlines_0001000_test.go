@@ -2570,6 +2570,125 @@ func TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_NewEmptyTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_NewEmptyTimerEvent_000100()",
+		"")
+
+	timerLines01 := TextLineSpecTimerLines{}.NewEmptyTimerEvent()
+
+	isValid := timerLines01.IsValidInstance()
+
+	if isValid {
+
+		t.Errorf("\n%v\n"+
+			"Error: isValid = timerLines01.IsValidInstance()\n"+
+			"Expected 'isValid' equals 'false' because\n"+
+			"'timerLines01' is empty and invalid.\n"+
+			"HOWEVER 'isValid' IS 'true' !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecTimerLines_NewFullTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_NewFullTimerEvent_000100()",
+		"")
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		string(timerLines01.labelLeftMarginChars),
+		string(timerLines01.startTimeLabel),
+		timerLines01.startTime,
+		string(timerLines01.endTimeLabel),
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		string(timerLines01.timeDurationLabel),
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		string(timerLines01.labelRightMarginChars),
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(timerLines02) {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines02\n"+
+			"Expected 'timerLines01' would be equal to 'timerLines02'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	badEndTime := timerLines01.startTime
+
+	badEndTime = badEndTime.Add(-5000000000)
+
+	_,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		string(timerLines01.labelLeftMarginChars),
+		string(timerLines01.startTimeLabel),
+		timerLines01.startTime,
+		string(timerLines01.endTimeLabel),
+		badEndTime,
+		timerLines01.timeFormat,
+		string(timerLines01.timeDurationLabel),
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		string(timerLines01.labelRightMarginChars),
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error TextLineSpecTimerLines{}.NewFullTimerEvent()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'endTime' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLines_SetStartAndEndTime_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

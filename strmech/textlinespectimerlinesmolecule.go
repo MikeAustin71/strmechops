@@ -782,6 +782,14 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 				getDefaultTime()
 	}
 
+	if endTime.Before(startTime) {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'endTime' occurs before 'startTime!\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	labelLen := len(startTimeLabel)
 
 	if len(startTimeLabel) == 0 {
