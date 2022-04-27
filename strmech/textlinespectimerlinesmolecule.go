@@ -777,9 +777,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	}
 
 	if endTime.IsZero() {
-		endTime =
-			txtTimerLinesElectron.
-				getDefaultTime()
+		endTime = startTime
 	}
 
 	if endTime.Before(startTime) {

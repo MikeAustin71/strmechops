@@ -1649,8 +1649,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       elapsed for the timer event.
 //
 //       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//       'endTime' will be defaulted to value of 'startTime'.
 //
 //
 //  timeFormat                 string
@@ -1950,8 +1949,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       elapsed for the timer event.
 //
 //       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//       'endTime' will be defaulted to value of 'startTime'.
 //
 //
 //  timeFormat                 string
