@@ -739,14 +739,14 @@ func TestTextLineSpecStandardLine_Read_000600(t *testing.T) {
 		stdLine01.Read(p)
 
 	if err == nil {
-		t.Errorf("%v\n"+
-			"Error: stdLine01.Read(p)\n"+
-			"Expected an error return from Read operation.\n"+
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine01.Read(p)\n"+
+			"because 'stdLine01' contains invalid data.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
 		return
-
 	}
 
 	return
