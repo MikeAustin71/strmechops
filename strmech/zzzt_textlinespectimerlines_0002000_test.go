@@ -1,0 +1,1445 @@
+package strmech
+
+import (
+	ePref "github.com/MikeAustin71/errpref"
+	"io"
+	"strings"
+	"testing"
+	"time"
+)
+
+func TestTextLineSpecTimerLines_Read_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Read_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var expectedTextStr string
+
+	expectedTextStr,
+		err =
+		timerLines01.GetFormattedText(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, lenExpectedStr+1)
+
+	var n, readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = timerLines01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: timerLines01.Read(p)\n"+
+			"After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: timerLines01.Read(p)\n"+
+			"After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"timerLines01.textLineReader != 'nil'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: timerLines01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Read_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Read_000200()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var expectedTextStr string
+
+	expectedTextStr,
+		err =
+		timerLines01.GetFormattedText(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, 1)
+
+	var actualStr string
+
+	var n, readBytesCnt int
+
+	for {
+
+		n,
+			err = timerLines01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: timerLines01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+		return
+	}
+
+	if timerLines01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After a successful series of byte reads,\n"+
+			"timerLines01.textLineReader pointer has NOT\n"+
+			"BEEN RESET TO 'nil'!\n",
+			ePrefix.String())
+		return
+	}
+
+	p = make([]byte, 200)
+	readBytesCnt = 0
+	actualStr = ""
+
+	for {
+
+		n,
+			err = timerLines01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: Test # 2\n"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Test # 2\n"+
+			"Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Read_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Read_000300()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var expectedTextStr string
+
+	expectedTextStr,
+		err =
+		timerLines01.GetFormattedText(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	txtSpecAtom := textSpecificationAtom{}
+
+	var n int
+	p := make([]byte, 100)
+
+	n,
+		err = txtSpecAtom.readBytes(
+		nil,
+		p,
+		ePrefix.XCpy("textReader == 'nil'"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtSpecAtom.readBytes()"+
+			"because input parameter 'textReader' == 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var formattedTxtStr string
+	timerLinesMolecule := textLineSpecTimerLinesMolecule{}
+
+	formattedTxtStr,
+		err =
+		timerLinesMolecule.getFormattedText(
+			timerLines01,
+			ePrefix.XCpy("timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	p = make([]byte, 0)
+
+	timerLines01.textLineReader =
+		strings.NewReader(formattedTxtStr)
+
+	n,
+		err = txtSpecAtom.readBytes(
+		timerLines01.textLineReader,
+		p,
+		ePrefix.XCpy("p == zero length"))
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: Expected error return from txtSpecAtom.readBytes()"+
+			"because input parameter 'p' is a zero length byte array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	p = make([]byte, 100)
+
+	var readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = txtSpecAtom.readBytes(
+			timerLines01.textLineReader,
+			p,
+			ePrefix.XCpy("timerLines01 is valid"))
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From txtSpecAtom.readBytes(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: txtSpecAtom.readBytes(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Read_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Read_000400()",
+		"")
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var expectedTextStr string
+
+	expectedTextStr,
+		err =
+		timerLines01.GetFormattedText(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	p := make([]byte, 15)
+
+	var n, readBytesCnt int
+	sb := strings.Builder{}
+	sb.Grow(512)
+
+	for {
+
+		n,
+			err = timerLines01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		sb.Write(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"plainTextLine01.textLineReader != 'nil'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: plainTextLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb.String()),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Read_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Read_000500()",
+		"")
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	badEndTime := timerLines01.startTime
+	timerLines01.startTime = timerLines01.endTime
+	timerLines01.endTime = badEndTime
+	timerLines01.textLabelFieldLen = -99
+	timerLines01.textLabelJustification = -99
+
+	p := make([]byte, 15)
+
+	_,
+		err = timerLines01.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from timerLines01.Read(p)\n"+
+			"because 'timerLines01' contains invalid data.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_Read_000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_Read_000600()",
+		"")
+
+	p := make([]byte, 5)
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	_,
+		err := timerLines01.Read(p)
+
+	if err == nil {
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from timerLines01.Read(p)\n"+
+			"because 'timerLines01' contains invalid data.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_ReaderInitialize_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_ReaderInitialize_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines01.IsValidInstanceError(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var expectedTextStr string
+
+	expectedTextStr,
+		err =
+		timerLines01.GetFormattedText(
+			ePrefix.XCpy(
+				"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedStr := len(expectedTextStr)
+
+	p := make([]byte, 5)
+
+	var n int
+
+	n,
+		err = timerLines01.Read(p)
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"Error returned by timerLines01.Read(p)\n"+
+			"Error:\n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if n != 5 {
+		t.Errorf("%v\n"+
+			"Error: timerLines01.Read(p)\n"+
+			"Expected n == 5\n"+
+			"Instead, n == %v\n",
+			ePrefix.String(),
+			n)
+
+		return
+	}
+
+	p = make([]byte, 200)
+
+	timerLines01.ReaderInitialize()
+
+	var readBytesCnt int
+	var actualStr string
+
+	for {
+
+		n,
+			err = timerLines01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines01.textLineReader != nil {
+		t.Errorf("%v\n"+
+			"Error: After completing Read Operation\n"+
+			"plainTextLine01.textLineReader != 'nil'\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if readBytesCnt != lenExpectedStr {
+		t.Errorf("%v\n"+
+			"Byte Length Error: plainTextLine01.Read(p)\n"+
+			"The actual length of bytes read\n"+
+			"does NOT match the expected length.\n"+
+			"Expected Bytes Read = '%v'\n"+
+			"       Actual Bytes = '%v'\n",
+			ePrefix.String(),
+			lenExpectedStr,
+			readBytesCnt)
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedTextStr),
+			true)
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	if timerLines01.textLineReader != nil {
+		t.Errorf("%v Test #1\n"+
+			"Completed Read Operation but timerLines01.textLineReader\n"+
+			"is NOT equal to 'nil'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	p = make([]byte, 200)
+	actualStr = ""
+	readBytesCnt = 0
+
+	for {
+
+		n,
+			err = timerLines01.Read(p)
+
+		if n == 0 {
+			break
+		}
+
+		actualStr += string(p[:n])
+		readBytesCnt += n
+	}
+
+	if err != nil &&
+		err != io.EOF {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error Returned From timerLines01.Read(p)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error == nil!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if err != io.EOF {
+		t.Errorf("%v\n"+
+			"Test # 2"+
+			"Error: After completing Read Operation\n"+
+			"the returned error should equal io.EOF.\n"+
+			"HOWEVER, returned error is NOT equal io.EOF!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	printableActualStr =
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if printableExpectedStr != printableActualStr {
+		t.Errorf("%v Test #2\n"+
+			"Error: Expected Text String DOES NOT match\n"+
+			"Actual Text String.\n"+
+			"Expected Text String = '%v'\n"+
+			"Instead, Text String = '%v'\n",
+			ePrefix.String(),
+			printableExpectedStr,
+			printableActualStr)
+
+		return
+	}
+
+	if timerLines01.textLineReader != nil {
+		t.Errorf("%v Test #2\n"+
+			"Completed Read Operation but timerLines01.textLineReader\n"+
+			"is NOT equal to 'nil'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLines02.ReaderInitialize()
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.SetDefaultFullTimerEvent(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetDefaultFullTimerEvent(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetDefaultFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLines02.SetDefaultShellTimerEvent()
+
+	err = timerLines02.SetStartAndEndTime(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetEndTimeLabel_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.CopyIn(timerLines01,
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newEndTimeLabel := "Xray-97"
+
+	timerLines01.endTimeLabel = []rune(newEndTimeLabel)
+
+	err = timerLines02.SetEndTimeLabel(
+		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.CopyIn(timerLines01,
+		ePrefix.XCpy(
+			"timerLines03<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines03.SetEndTimeLabel(
+		newEndTimeLabel,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetDefaultFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLines04.SetEndTimeLabel(
+		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetEndTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetEndTime_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLines02.SetDefaultShellTimerEvent()
+
+	err = timerLines02.SetStartTime(
+		timerLines01.startTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines02.SetEndTime(
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.CopyIn(timerLines01,
+		ePrefix.XCpy(
+			"timerLines03<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines03.SetEndTime(
+		timerLines01.endTime,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetDefaultFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLines04.SetEndTime(
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetStartAndEndTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetStartAndEndTime_000100()",
+		"")
+
+	var loc *time.Location
+	var err error
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := startTime.Add((time.Microsecond * 5) + 999)
+
+	timerLines01 :=
+		TextLineSpecTimerLines{}.NewDefaultShellTimerEvent()
+
+	err = timerLines01.SetStartAndEndTime(
+		endTime,
+		startTime,
+		ePrefix.XCpy(
+			"timerLines01 start and end times reversed"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines01.SetStartAndEndTime()\n"+
+			"Expected an error return because \n"+
+			"start and end times are invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines02 TextLineSpecTimerLines
+
+	err = timerLines02.SetStartAndEndTime(
+		startTime,
+		endTime,
+		ePrefix.XCpy(
+			"timerLines02 is empty"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetStartAndEndTime(
+		time.Time{},
+		endTime,
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines03.SetStartAndEndTime()\n"+
+			"Expected an error return because \n"+
+			"'startTime' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLines04.SetStartAndEndTime(
+		startTime,
+		time.Time{},
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLines04.SetStartAndEndTime()\n"+
+			"Expected an error return because \n"+
+			"'endTime' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
