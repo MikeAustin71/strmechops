@@ -1497,6 +1497,95 @@ func TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_SetShellTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetShellTimerEvent_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.SetShellTimerEvent(
+		string(timerLines01.labelLeftMarginChars),
+		string(timerLines01.startTimeLabel),
+		string(timerLines01.endTimeLabel),
+		timerLines01.timeFormat,
+		string(timerLines01.timeDurationLabel),
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		string(timerLines01.labelRightMarginChars),
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines02.SetStartAndEndTime(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines02\n"+
+			"Expected 'timerLines01' would be equal to 'timerLines02'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetShellTimerEvent(
+		string(timerLines01.labelLeftMarginChars),
+		string(timerLines01.startTimeLabel),
+		string(timerLines01.endTimeLabel),
+		timerLines01.timeFormat,
+		string(timerLines01.timeDurationLabel),
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		string(timerLines01.labelRightMarginChars),
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error TextLineSpecTimerLines{}.SetShellTimerEvent()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLines_SetStartAndEndTime_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
