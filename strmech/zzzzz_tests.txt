@@ -1853,7 +1853,7 @@
 === RUN   TestTextLineSpecPlainText_setDefaultPlainTextSpec_000200
 --- PASS: TestTextLineSpecPlainText_setDefaultPlainTextSpec_000200 (0.00s)
 === RUN   TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100
---- PASS: TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100 (0.00s)
+--- PASS: TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000100 (0.01s)
 === RUN   TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000200
 --- PASS: TestTextLineSpecPlainText_testValidityOfTextLineSpecPlainText_000200 (0.00s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpec_000200
@@ -1943,7 +1943,7 @@
 === RUN   TestTextLineSpecSolidLine_SetNewLineChars_000100
 --- PASS: TestTextLineSpecSolidLine_SetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetNewLineRunes_000100
---- PASS: TestTextLineSpecSolidLine_SetNewLineRunes_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_SetNewLineRunes_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineAllParms_000100
 --- PASS: TestTextLineSpecSolidLine_SetSolidLineAllParms_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100
@@ -1997,7 +1997,7 @@
 === RUN   TestTextLineSpecStandardLine_AddTextField_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000100
---- PASS: TestTextLineSpecStandardLine_AddTextFields_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_AddTextFields_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000200
 --- PASS: TestTextLineSpecStandardLine_AddTextFields_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFieldDateTime_000100
@@ -2015,7 +2015,7 @@
 === RUN   TestTextLineSpecStandardLine_CopyOut_000100
 --- PASS: TestTextLineSpecStandardLine_CopyOut_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyOutITextLine_000100
---- PASS: TestTextLineSpecStandardLine_CopyOutITextLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_CopyOutITextLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_CopyOutPtr_000100
 --- PASS: TestTextLineSpecStandardLine_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_DeleteAtIndex_000100
@@ -2031,7 +2031,7 @@
 === RUN   TestTextLineSpecStandardLine_Equal_000200
 --- PASS: TestTextLineSpecStandardLine_Equal_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Equal_000300
---- PASS: TestTextLineSpecStandardLine_Equal_000300 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_Equal_000300 (0.01s)
 === RUN   TestTextLineSpecStandardLine_Equal_000400
 --- PASS: TestTextLineSpecStandardLine_Equal_000400 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Equal_000500
@@ -2047,11 +2047,11 @@
 === RUN   TestTextLineSpecStandardLine_GetNewLineChars_000100
 --- PASS: TestTextLineSpecStandardLine_GetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetNewLineRunes_000100
---- PASS: TestTextLineSpecStandardLine_GetNewLineRunes_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_GetNewLineRunes_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_GetNumOfStdLines_000100
 --- PASS: TestTextLineSpecStandardLine_GetNumOfStdLines_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetTextFields_000100
---- PASS: TestTextLineSpecStandardLine_GetTextFields_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_GetTextFields_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetTextFields_000200
 --- PASS: TestTextLineSpecStandardLine_GetTextFields_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetTurnLineTerminatorOff_000100
@@ -2077,13 +2077,13 @@
 === RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000200
 --- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PeekAtFirstTextField_000100
 --- PASS: TestTextLineSpecStandardLine_PeekAtFirstTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PeekAtFirstTextField_000200
---- PASS: TestTextLineSpecStandardLine_PeekAtFirstTextField_000200 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_PeekAtFirstTextField_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PeekAtLastTextField_000100
 --- PASS: TestTextLineSpecStandardLine_PeekAtLastTextField_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PeekAtLastTextField_000200
@@ -2097,21 +2097,21 @@
 === RUN   TestTextLineSpecStandardLine_PopFirstTextField_000200
 --- PASS: TestTextLineSpecStandardLine_PopFirstTextField_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PopLastTextField_000100
---- PASS: TestTextLineSpecStandardLine_PopLastTextField_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_PopLastTextField_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_PopLastTextField_000200
 --- PASS: TestTextLineSpecStandardLine_PopLastTextField_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100
 --- PASS: TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200
---- PASS: TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000100
 --- PASS: TestTextLineSpecStandardLine_Read_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000200
 --- PASS: TestTextLineSpecStandardLine_Read_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000300
---- PASS: TestTextLineSpecStandardLine_Read_000300 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_Read_000300 (0.01s)
 === RUN   TestTextLineSpecStandardLine_Read_000400
---- PASS: TestTextLineSpecStandardLine_Read_000400 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_Read_000400 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000500
 --- PASS: TestTextLineSpecStandardLine_Read_000500 (0.00s)
 === RUN   TestTextLineSpecStandardLine_Read_000600
@@ -2125,9 +2125,9 @@
 === RUN   TestTextLineSpecStandardLine_ReplaceTextField_000200
 --- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_ReplaceTextField_000300
---- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000300 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000300 (0.01s)
 === RUN   TestTextLineSpecStandardLine_ReplaceTextField_000400
---- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000400 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_ReplaceTextField_000400 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetNumOfStdLines_000100
 --- PASS: TestTextLineSpecStandardLine_SetNumOfStdLines_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetNewLineChars_000100
@@ -2135,9 +2135,9 @@
 === RUN   TestTextLineSpecStandardLine_SetNewLineRunes_000100
 --- PASS: TestTextLineSpecStandardLine_SetNewLineRunes_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetStandardLine_000100
---- PASS: TestTextLineSpecStandardLine_SetStandardLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_SetStandardLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_SetStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_SetStandardLineAllParms_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_SetStandardLineAllParms_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetTextFields_000100
 --- PASS: TestTextLineSpecStandardLine_SetTextFields_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_String_000100
@@ -2183,9 +2183,9 @@
 === RUN   TestTextLineSpecStandardLineMolecule_emptyStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineMolecule_emptyStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLineMolecule_emptyStdLineTextFields_000100
---- PASS: TestTextLineSpecStandardLineMolecule_emptyStdLineTextFields_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLineMolecule_emptyStdLineTextFields_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLineMolecule_equal_000100
---- PASS: TestTextLineSpecStandardLineMolecule_equal_000100 (0.01s)
+--- PASS: TestTextLineSpecStandardLineMolecule_equal_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineMolecule_getFormattedText_000100
 --- PASS: TestTextLineSpecStandardLineMolecule_getFormattedText_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLineMolecule_getFormattedText_000200
@@ -2215,13 +2215,13 @@
 === RUN   TestTextLineSpecTimerLines_CopyOutITextLine_000100
 --- PASS: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOutPtr_000100
---- PASS: TestTextLineSpecTimerLines_CopyOutPtr_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_Empty_000100
 --- PASS: TestTextLineSpecTimerLines_Empty_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_Equal_000100
 --- PASS: TestTextLineSpecTimerLines_Equal_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_Equal_000200
---- PASS: TestTextLineSpecTimerLines_Equal_000200 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_Equal_000200 (0.01s)
 === RUN   TestTextLineSpecTimerLines_EqualITextLine_000100
 --- PASS: TestTextLineSpecTimerLines_EqualITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_GetFormattedText_000100
@@ -2259,7 +2259,7 @@
 === RUN   TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100
---- PASS: TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_NewEmptyTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_NewEmptyTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_NewFullTimerEvent_000100
@@ -2269,11 +2269,11 @@
 === RUN   TestTextLineSpecTimerLines_NewShellTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_NewShellTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_Read_000100
---- PASS: TestTextLineSpecTimerLines_Read_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_Read_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Read_000200
---- PASS: TestTextLineSpecTimerLines_Read_000200 (0.02s)
+--- PASS: TestTextLineSpecTimerLines_Read_000200 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Read_000300
---- PASS: TestTextLineSpecTimerLines_Read_000300 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_Read_000300 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Read_000400
 --- PASS: TestTextLineSpecTimerLines_Read_000400 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Read_000500
@@ -2283,15 +2283,17 @@
 === RUN   TestTextLineSpecTimerLines_ReaderInitialize_000100
 --- PASS: TestTextLineSpecTimerLines_ReaderInitialize_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100
---- PASS: TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_SetEndTimeLabel_000100
 --- PASS: TestTextLineSpecTimerLines_SetEndTimeLabel_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_SetEndTime_000100
---- PASS: TestTextLineSpecTimerLines_SetEndTime_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_SetEndTime_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_SetFullTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_SetFullTimerEvent_000100 (0.00s)
+=== RUN   TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100
+--- PASS: TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_SetStartAndEndTime_000100
 --- PASS: TestTextLineSpecTimerLines_SetStartAndEndTime_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesAtom_equal_000100
@@ -2303,7 +2305,7 @@
 === RUN   TestTextLineSpecTimerLinesNanobot_copyOut_000100
 --- PASS: TestTextLineSpecTimerLinesNanobot_copyOut_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesMolecule_getFormattedText_000100
---- PASS: TestTextLineSpecTimerLinesMolecule_getFormattedText_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLinesMolecule_getFormattedText_000100 (0.01s)
 PASS
-coverage: 82.9% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.449s
+coverage: 83.0% of statements
+ok  	github.com/MikeAustin71/strmechops/strmech	1.417s

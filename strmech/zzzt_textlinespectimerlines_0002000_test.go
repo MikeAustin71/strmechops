@@ -1405,7 +1405,88 @@ func TestTextLineSpecTimerLines_SetFullTimerEvent_000100(t *testing.T) {
 
 		t.Errorf("\n%v - ERROR\n"+
 			"Expected an error return from timerLines01."+
-			"SetDefaultFullTimerEvent()\n"+
+			"SetFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.SetFullTimerEventRunes(
+		timerLines01.labelLeftMarginChars,
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetFullTimerEventRunes(
+		timerLines01.labelLeftMarginChars,
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetFullTimerEventRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
