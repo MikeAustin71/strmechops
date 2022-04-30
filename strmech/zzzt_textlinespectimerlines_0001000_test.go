@@ -3996,7 +3996,7 @@ func TestTextLineSpecTimerLines_ReaderInitialize_000100(t *testing.T) {
 func TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_ReaderInitialize_000100()",
+		"TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100()",
 		"")
 
 	_,
@@ -4052,6 +4052,154 @@ func TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLines02.SetDefaultShellTimerEvent()
+
+	err = timerLines02.SetStartAndEndTime(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetEndTimeLabel_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.CopyIn(timerLines01,
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newEndTimeLabel := "Xray-97"
+
+	timerLines01.endTimeLabel = []rune(newEndTimeLabel)
+
+	err = timerLines02.SetEndTimeLabel(
+		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.CopyIn(timerLines01,
+		ePrefix.XCpy(
+			"timerLines03<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines03.SetEndTimeLabel(
+		newEndTimeLabel,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetDefaultFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLines04.SetEndTimeLabel(
+		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 
