@@ -4118,7 +4118,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecTimerLines.SetShellTimerEvent()",
+		"TextLineSpecTimerLines."+
+			"SetShellTimerEvent()",
 		"")
 
 	if err != nil {
@@ -4254,7 +4255,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTimeLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecTimerLines.SetEndTimeLabel()",
+		"TextLineSpecTimerLines."+
+			"SetEndTimeLabel()",
 		"")
 
 	if err != nil {

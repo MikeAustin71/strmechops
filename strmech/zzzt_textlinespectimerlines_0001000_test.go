@@ -2720,6 +2720,7 @@ func TestTextLineSpecTimerLines_NewFullTimerEventRunes_000100(t *testing.T) {
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextLineSpecTimerLines_NewFullTimerEventRunes_000100()",
 		"")
+
 	_,
 		timerLines01,
 		err := createTestTextLineSpecTimerLines01(
@@ -2727,7 +2728,7 @@ func TestTextLineSpecTimerLines_NewFullTimerEventRunes_000100(t *testing.T) {
 			"timerLines01"))
 
 	if err != nil {
-		t.Errorf("%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
@@ -2750,7 +2751,7 @@ func TestTextLineSpecTimerLines_NewFullTimerEventRunes_000100(t *testing.T) {
 			"timerLines02"))
 
 	if err != nil {
-		t.Errorf("%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
