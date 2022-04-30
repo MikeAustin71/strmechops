@@ -3993,6 +3993,71 @@ func TestTextLineSpecTimerLines_ReaderInitialize_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_ReaderInitialize_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	err = timerLines02.SetDefaultFullTimerEvent(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines01.Equal(&timerLines02) {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected that timerLines01 would\n"+
+			"be Equal To timerLines02.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetDefaultFullTimerEvent(
+		timerLines01.startTime,
+		timerLines01.endTime,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetDefaultFullTimerEvent()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLines_SetStartAndEndTime_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

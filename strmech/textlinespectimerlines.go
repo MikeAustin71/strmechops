@@ -2858,7 +2858,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultFullTimerEvent(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecTimerLines.SetDefaultFullTimerEvent()",
+		"TextLineSpecTimerLines."+
+			"SetDefaultFullTimerEvent()",
 		"")
 
 	if err != nil {

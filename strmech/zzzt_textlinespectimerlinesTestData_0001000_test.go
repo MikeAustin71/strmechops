@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"time"
 )
@@ -33,7 +34,15 @@ func createTestTextLineSpecTimerLines01(
 		"America/Chicago")
 
 	if err != nil {
-		return outputStr, &TextLineSpecTimerLines{}, err
+
+		err2 := fmt.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return outputStr, &TextLineSpecTimerLines{}, err2
 	}
 
 	startTime := time.Date(
