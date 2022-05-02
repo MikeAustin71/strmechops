@@ -1586,6 +1586,142 @@ func TestTextLineSpecTimerLines_SetShellTimerEvent_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_SetStartTime_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_TESTMETHOD_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Setup #1\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var loc *time.Location
+
+	loc,
+		err = time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		t.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	newStartTime := time.Date(
+		2022,
+		4,
+		5,
+		9,
+		0,
+		0,
+		0,
+		loc)
+
+	timerLines01.startTime = newStartTime
+
+	err = timerLines02.SetStartTime(
+		newStartTime,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Inspection #2\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !timerLines02.startTime.Equal(
+		timerLines01.startTime) {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines02.startTime == timerLines01.startTime\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !timerLines02.startTime.Equal(newStartTime) {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #4\n"+
+			"Error: Expected timerLines02.startTime == timerLines01.startTime\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetStartTime(
+		newStartTime,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines03.SetStartTime()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLines_SetStartTimeLabel_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
