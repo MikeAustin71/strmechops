@@ -5071,7 +5071,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeDurationLabel(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecTimerLines.SetTimeDurationLabel()",
+		"TextLineSpecTimerLines."+
+			"SetTimeDurationLabel()",
 		"")
 
 	if err != nil {
