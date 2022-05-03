@@ -3521,7 +3521,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 	timeDurationLabel string,
 	textLabelFieldLen int,
 	labelJustification TextJustify,
-	labelOutputSeparationChars string,
+	labelRightMarginChars string,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -3557,7 +3557,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEvent(
 			[]rune(timeDurationLabel),
 			textLabelFieldLen,
 			labelJustification,
-			[]rune(labelOutputSeparationChars),
+			[]rune(labelRightMarginChars),
 			ePrefix.XCpy("txtSpecTimerLines"))
 
 	return err
@@ -4101,7 +4101,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 	timeDurationLabel string,
 	textLabelFieldLen int,
 	labelJustification TextJustify,
-	labelOutputSeparationChars string,
+	labelRightMarginChars string,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -4142,7 +4142,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 			[]rune(timeDurationLabel),
 			textLabelFieldLen,
 			labelJustification,
-			[]rune(labelOutputSeparationChars),
+			[]rune(labelRightMarginChars),
 			ePrefix.XCpy("newTxtTimerLines"))
 
 	return err
