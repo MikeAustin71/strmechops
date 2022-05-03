@@ -4148,6 +4148,128 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetShellTimerEvent(
 	return err
 }
 
+// SetStartTime - Sets the internal member variable 'startTime'
+// as time.Time value.
+//
+// The starting time is the start or beginning of the timing event
+// described by this instance of TextLineSpecTimerLines.
+//
+// If the input parameter 'startTime' is submitted as a zero time
+// value, this method will return an error.
+//
+// Of course, the starting time should occur before the ending
+// time for this instance of TextLineSpecTimerLines.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  startTime                  time.Time
+//     - The time at which the time event starts. The timer event
+//       refers to the subject timer event of the current
+//       TextLineSpecTimerLines instance.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTime(
+	startTime time.Time,
+	errorPrefix interface{}) error {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines."+
+			"SetStartTime()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if startTime.IsZero() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startTime' is set to a ZERO value!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtSpecTimerLines.startTime = startTime
+
+	return err
+}
+
 // SetStartTimeLabel - Sets the internal member variable
 // 'startTimeLabel'.
 //
@@ -4290,127 +4412,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTimeLabel(
 		txtSpecTimerLines.startTimeLabel =
 			[]rune(startTimeLabel)
 	}
-
-	return err
-}
-
-// SetStartTime - Sets the internal member variable 'startTime'
-// as time.Time value.
-//
-// The starting time is the start or beginning of the timing event
-// described by this instance of TextLineSpecTimerLines.
-//
-// If the input parameter 'startTime' is submitted as a zero time
-// value, this method will return an error.
-//
-// Of course, the starting time should occur before the ending
-// time for this instance of TextLineSpecTimerLines.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  startTime                  time.Time
-//     - The time at which the time event starts. The timer event
-//       refers to the subject timer event of the current
-//       TextLineSpecTimerLines instance.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTime(
-	startTime time.Time,
-	errorPrefix interface{}) error {
-
-	if txtSpecTimerLines.lock == nil {
-		txtSpecTimerLines.lock = new(sync.Mutex)
-	}
-
-	txtSpecTimerLines.lock.Lock()
-
-	defer txtSpecTimerLines.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error = nil
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextLineSpecTimerLines.SetStartTime()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if startTime.IsZero() {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startTime' is set to a ZERO value!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	txtSpecTimerLines.startTime = startTime
 
 	return err
 }
