@@ -2316,3 +2316,82 @@ func TestTextLineSpecTimerLines_SetTimeDurationLabel_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_SetTimeFormat_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetTimeFormat_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Setup #1\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	newTimeFormat := "Monday 2006-01-02 15:04:05.000000000 -0700 MST"
+
+	timerLines01.timeFormat = newTimeFormat
+
+	timerLines02.SetTimeFormat(
+		newTimeFormat)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Inspection #2\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines01.timeFormat != timerLines02.timeFormat {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines01.timeFormat\n"+
+			"to be EQUAL TO timerLines02.timeFormat\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
