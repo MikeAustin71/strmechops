@@ -3089,8 +3089,38 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from timerLines02.TextBuilder()\n"+
-			"because 'errorPrefix' is invalid.\n"+
+			"Expected an error return from timerLines04.TextBuilder()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines05 *TextLineSpecTimerLines
+
+	_,
+		timerLines05,
+		err = createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines05.TextBuilder(
+		nil,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines05.TextBuilder()\n"+
+			"because input parameter 'sBuilder' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!!\n",
 			ePrefix.String())
 
