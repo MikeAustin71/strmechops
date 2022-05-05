@@ -1265,6 +1265,12 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000200(t *testing.T) {
 		ePrefix.XCpy(
 			"newEndTimeLabelRunes"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	newEndTimeLabelStr := string(newEndTimeLabelRunesToLong)
 
 	err = timerLines01.SetEndTimeLabel(
@@ -2208,6 +2214,12 @@ func TestTextLineSpecTimerLines_SetStartTimeLabel_000100(t *testing.T) {
 		ePrefix.XCpy(
 			"newStartTimeLabelRunesToLong"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	newStartTimeLabelStr := string(newStartTimeLabelRunesToLong)
 
 	var timerLines04 *TextLineSpecTimerLines
@@ -2676,6 +2688,78 @@ func TestTextLineSpecTimerLines_SetTimeDurationLabel_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED !!\n",
 			ePrefix.String())
 
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newTimeDurationLabelRunesToLong []rune
+
+	newTimeDurationLabelRunesToLong,
+		err = sMechPreon.getRepeatRuneArray(
+		10,
+		[]rune("Xray94"),
+		ePrefix.XCpy(
+			"newEndTimeLabelRunes"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines04.SetTimeDurationLabel(
+		string(newTimeDurationLabelRunesToLong),
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetTimeDurationLabel()\n"+
+			"because input parameter 'timeDurationLabel' exceeds\n"+
+			"the maximum allowable string length.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines05 *TextLineSpecTimerLines
+
+	_,
+		timerLines05,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines05.SetTimeDurationLabel(
+		"",
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 

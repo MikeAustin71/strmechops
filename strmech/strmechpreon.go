@@ -780,8 +780,171 @@ func (sMechPreon *strMechPreon) findRunesInRunes(
 	return foundIndex, err
 }
 
+// getRepeatRuneArray - Returns a slice of runes containing a single
+// rune array repeated multiple times.
+//
+// -----------------------------------------------------------------
+//
+// Important
+//
+// The maxinum number of times that the input parameter rune array
+// ('repeatRuneChars') will be repeated is limited only by
+// available memory.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeRepeatCount            int
+//     - An integer value specifying the number of times a rune
+//       array will be repeated in the slice of runes returned by
+//       this method.
+//
+//       If 'runeRepeatCount' is less than zero (0), an error will
+//       be returned.
+//
+//       If 'runeRepeatCount' is set to zero (0), the returned
+//       slice runes will be set to a 'nil' value and NO error will
+//       be returned.
+//
+//       BE CAREFUL, the maximum value of 'runeRepeatCount' is
+//       limited only by available memory.
+//
+//
+//  repeatRuneChars            []rune
+//     - This rune array specifies the text characters which will
+//       be repeated multiple times in the slice of runes returned
+//       by this method.
+//
+//       If this value is equal to integer zero (0), an error will
+//       be returned.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  runeChars                  []rune
+//     - If this method completes successfully, this parameter will
+//       return a slice of runes containing a single text character
+//       repeated multiple times.
+//
+//       The single text character is specified by input parameter,
+//       'repeatRuneChar'. The number of times this character is
+//       repeated will be specified by input parameter,
+//       'runeRepeatCount'.
+//
+//       If this method completes successfully, the length of
+//       'runeChars' will be equal to 'repeatRuneChar'.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMechPreon *strMechPreon) getRepeatRuneArray(
+	runeRepeatCount int,
+	repeatRuneChars []rune,
+	errPrefDto *ePref.ErrPrefixDto) (
+	runeChars []rune,
+	err error) {
+
+	if sMechPreon.lock == nil {
+		sMechPreon.lock = new(sync.Mutex)
+	}
+
+	sMechPreon.lock.Lock()
+
+	defer sMechPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	runeChars = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechPreon."+
+			"getRepeatRuneArray()",
+		"")
+
+	if err != nil {
+		return runeChars, err
+	}
+
+	if runeRepeatCount < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeRepeatCount' is invalid!\n"+
+			"'runeRepeatCount' has a value less than zero (0).\n"+
+			"runeRepeatCount = '%v'\n",
+			ePrefix.String(),
+			runeRepeatCount)
+
+		return runeChars, err
+	}
+
+	lenRepeatRuneChars := len(repeatRuneChars)
+
+	if lenRepeatRuneChars == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'repeatRuneChars' is INVALID!\n"+
+			"The lenght of 'repeatRuneChars' is equal to zero (0).\n",
+			ePrefix.String())
+
+		return runeChars, err
+	}
+
+	if runeRepeatCount == 0 {
+
+		return runeChars, err
+	}
+
+	runeChars = make([]rune,
+		lenRepeatRuneChars*runeRepeatCount)
+
+	j := 0
+
+	for i := 0; i < runeRepeatCount; i++ {
+		for k := 0; k < lenRepeatRuneChars; k++ {
+			runeChars[j] = repeatRuneChars[k]
+			j++
+		}
+
+	}
+
+	return runeChars, err
+}
+
 // getRepeatRuneChar - Returns a slice of runes containing a single
 // rune character repeated multiple times.
+//
+// -----------------------------------------------------------------
+//
+// Important
+//
+// The maxinum number of times that the input parameter rune
+// character ('repeatRuneChar') will be repeated is limited only by
+// available memory.
 //
 //
 // -----------------------------------------------------------------
