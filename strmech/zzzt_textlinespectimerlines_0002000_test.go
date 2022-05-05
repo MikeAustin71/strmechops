@@ -2814,12 +2814,6 @@ func TestTextLineSpecTimerLines_SetTimeFormat_000100(t *testing.T) {
 	timerLines02.SetTimeFormat(
 		newTimeFormat)
 
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	if !timerLines02.Equal(timerLines01) {
 		t.Errorf("%v\n"+
 			"Test Inspection #2\n"+
@@ -2840,6 +2834,35 @@ func TestTextLineSpecTimerLines_SetTimeFormat_000100(t *testing.T) {
 			ePrefix.String())
 
 		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	timerLines03.SetTimeFormat(
+		newTimeFormat)
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	timerLines04.SetTimeFormat(
+		"")
+
+	defaultTimeFormat := "2006-01-02 15:04:05.000000000 -0700 MST"
+
+	if timerLines04.timeFormat != defaultTimeFormat {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines04.timeFormat\n"+
+			"to be EQUAL TO the default time format.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n"+
+			"Expected Time Format: %v\n"+
+			"  Actual Time Format: %v\n",
+			ePrefix.String(),
+			defaultTimeFormat,
+			timerLines04.timeFormat)
+
+		return
+
 	}
 
 	return
