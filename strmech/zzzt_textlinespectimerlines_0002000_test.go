@@ -1212,7 +1212,7 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
 
 		t.Errorf("\n%v - ERROR\n"+
 			"Expected an error return from timerLines01."+
-			"SetDefaultFullTimerEvent()\n"+
+			"SetEndTimeLabel()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1224,6 +1224,82 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
 
 	err = timerLines04.SetEndTimeLabel(
 		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetEndTimeLabel_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetEndTimeLabel_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	var newEndTimeLabelRunesToLong []rune
+
+	newEndTimeLabelRunesToLong,
+		err = sMechPreon.getRepeatRuneChar(
+		94,
+		'X',
+		ePrefix.XCpy(
+			"newEndTimeLabelRunes"))
+
+	newEndTimeLabelStr := string(newEndTimeLabelRunesToLong)
+
+	err = timerLines01.SetEndTimeLabel(
+		newEndTimeLabelStr,
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetEndTimeLabel()\n"+
+			"because 'endTimeLabel' exceeds maximum allowable length.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	_,
+		timerLines02,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines02.SetEndTimeLabel(
+		"",
 		ePrefix.XCpy(
 			"timerLines04"))
 
@@ -1311,7 +1387,7 @@ func TestTextLineSpecTimerLines_SetEndTime_000100(t *testing.T) {
 
 		t.Errorf("\n%v - ERROR\n"+
 			"Expected an error return from timerLines01."+
-			"SetDefaultFullTimerEvent()\n"+
+			"SetEndTime()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1329,6 +1405,39 @@ func TestTextLineSpecTimerLines_SetEndTime_000100(t *testing.T) {
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
+		return
+	}
+
+	var timerLines05 *TextLineSpecTimerLines
+
+	_,
+		timerLines05,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newZeroTime := time.Time{}
+
+	err = timerLines05.SetEndTime(
+		newZeroTime,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetEndTime()\n"+
+			"because 'endTime' has a zero value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
 		return
 	}
 
@@ -1489,6 +1598,386 @@ func TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100(t *testing.T) {
 			"SetFullTimerEventRunes()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetLabelFieldLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetLabelFieldLength_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Setup #1\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	newLabelFieldLen := 75
+
+	timerLines01.textLabelFieldLen = newLabelFieldLen
+
+	timerLines02.SetLabelFieldLength(newLabelFieldLen)
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Inspection #2\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines02.textLabelFieldLen !=
+		timerLines01.textLabelFieldLen {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines02.textLabelFieldLen\n"+
+			"to be EQUAL TO timerLines01.textLabelFieldLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines02.textLabelFieldLen != newLabelFieldLen {
+
+		t.Errorf("\n%v\n"+
+			"Test Inspection #4\n"+
+			"Error: Expected timerLines02.textLabelFieldLen\n"+
+			"to be EQUAL TO newLabelFieldLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines03 *TextLineSpecTimerLines
+	_,
+		timerLines03,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines03.SetLabelFieldLength(1000001)
+
+	if timerLines03.textLabelFieldLen != -1 {
+
+		t.Errorf("\n%v\n"+
+			"Test Inspection #5\n"+
+			"Error: Expected timerLines03.textLabelFieldLen\n"+
+			"would return an error because input parameter\n"+
+			"'labelFieldLength' is greater than 1,000,000.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n"+
+			"Expected value of timerLines03.textLabelFieldLen = %v\n"+
+			"  Actual value of timerLines03.textLabelFieldLen = %v\n",
+			ePrefix.String(),
+			-1,
+			timerLines03.textLabelFieldLen)
+
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines04.SetLabelFieldLength(-2)
+
+	if timerLines04.textLabelFieldLen != -1 {
+
+		t.Errorf("\n%v\n"+
+			"Test Inspection #6\n"+
+			"Error: Expected timerLines04.textLabelFieldLen\n"+
+			"would return an error because input parameter\n"+
+			"'labelFieldLength' is less than -1.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n"+
+			"Expected value of timerLines04.textLabelFieldLen = %v\n"+
+			"  Actual value of timerLines04.textLabelFieldLen = %v\n",
+			ePrefix.String(),
+			-1,
+			timerLines04.textLabelFieldLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetLabelJustification_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetLabelJustification_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Setup #1\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01.textLabelJustification = TxtJustify.Left()
+
+	err = timerLines02.SetLabelJustification(
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Inspection #2\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines02.textLabelJustification !=
+		timerLines01.textLabelJustification {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines02.textLabelJustification\n"+
+			"to be EQUAL TO timerLines01.textLabelJustification\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetLabelJustification(
+		TxtJustify.Left(),
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines03.SetLabelJustification()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines04.SetLabelJustification(
+		-9,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines04.SetLabelJustification()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'labelJustification' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetLabelRightMarginChars_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetLabelRightMarginChars_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Setup #1\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines01.labelRightMarginChars = []rune("- ")
+
+	err = timerLines02.SetLabelRightMarginChars(
+		"- ",
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Inspection #2\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		timerLines01.labelRightMarginChars,
+		timerLines02.labelRightMarginChars)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines02.labelRightMarginChars\n"+
+			"to be EQUAL TO timerLines01.labelRightMarginChars\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLines03.SetLabelRightMarginChars(
+		"- ",
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines03.SetLabelRightMarginChars()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
 			ePrefix.String())
 
 		return
@@ -1678,6 +2167,75 @@ func TestTextLineSpecTimerLines_SetStartTimeLabel_000100(t *testing.T) {
 		return
 	}
 
+	sMechPreon := strMechPreon{}
+
+	var newStartTimeLabelRunesToLong []rune
+
+	newStartTimeLabelRunesToLong,
+		err = sMechPreon.getRepeatRuneChar(
+		94,
+		'X',
+		ePrefix.XCpy(
+			"newStartTimeLabelRunesToLong"))
+
+	newStartTimeLabelStr := string(newStartTimeLabelRunesToLong)
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines04.SetStartTimeLabel(
+		newStartTimeLabelStr,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error timerLines04.SetStartTimeLabel()\n"+
+			"Expected an error return because\n"+
+			"input parameter 'startTimeLabel' exceeds maximum string length.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines05 *TextLineSpecTimerLines
+
+	_,
+		timerLines05,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines05.SetStartTimeLabel(
+		"",
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	return
 }
 
@@ -1814,6 +2372,39 @@ func TestTextLineSpecTimerLines_SetStartTime_000100(t *testing.T) {
 		return
 	}
 
+	newZeroTime := time.Time{}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines04.SetStartTime(
+		newZeroTime,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01."+
+			"SetStartTime()\n"+
+			"because 'startTime' has a zero value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 
@@ -1923,20 +2514,12 @@ func TestTextLineSpecTimerLines_SetStartAndEndTime_000100(t *testing.T) {
 		return
 	}
 
-	return
-}
-
-func TestTextLineSpecTimerLines_SetLabelFieldLength_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_SetLabelFieldLength_000100()",
-		"")
-
+	var timerLines05 *TextLineSpecTimerLines
 	_,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines01(
+		timerLines05,
+		err = createTestTextLineSpecTimerLines01(
 		ePrefix.XCpy(
-			"timerLines01"))
+			"timerLines05"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -1944,266 +2527,18 @@ func TestTextLineSpecTimerLines_SetLabelFieldLength_000100(t *testing.T) {
 		return
 	}
 
-	var timerLines02 *TextLineSpecTimerLines
-
-	timerLines02,
-		err = timerLines01.CopyOutPtr(
-		ePrefix.XCpy(
-			"timerLines02<-timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Setup #1\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	newLabelFieldLen := 75
-
-	timerLines01.textLabelFieldLen = newLabelFieldLen
-
-	timerLines02.SetLabelFieldLength(newLabelFieldLen)
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Inspection #2\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if timerLines02.textLabelFieldLen !=
-		timerLines01.textLabelFieldLen {
-
-		t.Errorf("%v\n"+
-			"Test Inspection #3\n"+
-			"Error: Expected timerLines02.textLabelFieldLen\n"+
-			"to be EQUAL TO timerLines01.textLabelFieldLen\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if timerLines02.textLabelFieldLen != newLabelFieldLen {
-
-		t.Errorf("%v\n"+
-			"Test Inspection #4\n"+
-			"Error: Expected timerLines02.textLabelFieldLen\n"+
-			"to be EQUAL TO newLabelFieldLen\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	return
-}
-
-func TestTextLineSpecTimerLines_SetLabelJustification_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_SetLabelJustification_000100()",
-		"")
-
-	_,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	var timerLines02 *TextLineSpecTimerLines
-
-	timerLines02,
-		err = timerLines01.CopyOutPtr(
-		ePrefix.XCpy(
-			"timerLines02<-timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Setup #1\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	timerLines01.textLabelJustification = TxtJustify.Left()
-
-	err = timerLines02.SetLabelJustification(
-		TxtJustify.Left(),
-		ePrefix.XCpy(
-			"timerLines02"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Inspection #2\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if timerLines02.textLabelJustification !=
-		timerLines01.textLabelJustification {
-
-		t.Errorf("%v\n"+
-			"Test Inspection #3\n"+
-			"Error: Expected timerLines02.textLabelJustification\n"+
-			"to be EQUAL TO timerLines01.textLabelJustification\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	timerLines03 := TextLineSpecTimerLines{}
-
-	err = timerLines03.SetLabelJustification(
-		TxtJustify.Left(),
+	err = timerLines05.SetStartAndEndTime(
+		startTime,
+		endTime,
 		StrMech{})
 
 	if err == nil {
 
 		t.Errorf("\n%v\n"+
-			"Error timerLines03.SetLabelJustification()\n"+
-			"Expected an error return because\n"+
-			"input parameter 'errorPrefix' is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED !!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	return
-}
-
-func TestTextLineSpecTimerLines_SetLabelRightMarginChars_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_SetLabelRightMarginChars_000100()",
-		"")
-
-	_,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	var timerLines02 *TextLineSpecTimerLines
-
-	timerLines02,
-		err = timerLines01.CopyOutPtr(
-		ePrefix.XCpy(
-			"timerLines02<-timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Setup #1\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	timerLines01.labelRightMarginChars = []rune("- ")
-
-	err = timerLines02.SetLabelRightMarginChars(
-		"- ",
-		ePrefix.XCpy(
-			"timerLines02"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Inspection #2\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	sMechPreon := strMechPreon{}
-
-	areEqual := sMechPreon.equalRuneArrays(
-		timerLines01.labelRightMarginChars,
-		timerLines02.labelRightMarginChars)
-
-	if !areEqual {
-
-		t.Errorf("%v\n"+
-			"Test Inspection #3\n"+
-			"Error: Expected timerLines02.labelRightMarginChars\n"+
-			"to be EQUAL TO timerLines01.labelRightMarginChars\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	timerLines03 := TextLineSpecTimerLines{}
-
-	err = timerLines03.SetLabelRightMarginChars(
-		"- ",
-		StrMech{})
-
-	if err == nil {
-
-		t.Errorf("\n%v\n"+
-			"Error timerLines03.SetLabelRightMarginChars()\n"+
-			"Expected an error return because\n"+
-			"input parameter 'errorPrefix' is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED !!\n",
+			"Error: timerLines05.SetStartAndEndTime()\n"+
+			"Expected an error return because input\n"+
+			"parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
 			ePrefix.String())
 
 		return
@@ -2672,6 +3007,63 @@ func TestTextLineSpecTimerLines_TextLineSpecName_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"timerLines02.TextLineSpecName()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_TextTypeName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_TextTypeName_000100()",
+		"")
+
+	expectedStr := "TextLineSpecTimerLines"
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	actualStr := timerLines01.TextTypeName()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.TextTypeName()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	_,
+		timerLines02,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualStr = timerLines02.TextTypeName()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines02.TextTypeName()"+
 			"Expected string DOES NOT match Actual string\n"+
 			"Expected string = '%v'\n"+
 			"  Actual string = '%v'\n",
