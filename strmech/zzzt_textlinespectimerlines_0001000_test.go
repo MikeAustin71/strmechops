@@ -1452,6 +1452,7 @@ func TestTextLineSpecTimerLines_GetFormattedText_000400(t *testing.T) {
 		return
 	}
 
+	return
 }
 
 func TestTextLineSpecTimerLines_GetEndTimeLabel_000100(t *testing.T) {

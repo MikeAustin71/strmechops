@@ -2395,3 +2395,122 @@ func TestTextLineSpecTimerLines_SetTimeFormat_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_String_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_String_000100()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var actualStr string
+
+	actualStr = timerLines01.String()
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.String()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			outputStr,
+			printableActualStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_String_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_String_000200()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	actualStr := timerLines01.String()
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(actualStr),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.String()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			outputStr,
+			printableActualStr)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_String_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_String_000300()",
+		"")
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	actualStr := timerLines01.String()
+
+	containsError := strings.Contains(
+		actualStr, "Error")
+
+	if !containsError {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines01.String()\n"+
+			"because 'timerLines01' is empty.\n"+
+			"HOWEVER, THE RETURNED STRING DOES NOT CONTAIN THE WORD 'Error'!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
