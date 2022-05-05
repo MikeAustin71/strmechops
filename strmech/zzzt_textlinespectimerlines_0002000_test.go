@@ -2514,3 +2514,116 @@ func TestTextLineSpecTimerLines_String_000300(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_TextBuilder_000100()",
+		"")
+
+	outputStr,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	sb0 := strings.Builder{}
+
+	err = timerLines02.TextBuilder(
+		&sb0,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines02.TextBuilder()\n"+
+			"because 'timerLines02' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines03 *TextLineSpecTimerLines
+
+	timerLines03,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines03<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sb0.Reset()
+
+	err = timerLines03.TextBuilder(
+		&sb0,
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	sMech := StrMech{}
+
+	printableActualStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(sb0.String()),
+			true)
+
+	if outputStr != printableActualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines03.TextBuilder()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			outputStr,
+			printableActualStr)
+
+		return
+
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	timerLines04,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines04<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sb0.Reset()
+
+	err = timerLines04.TextBuilder(
+		&sb0,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines02.TextBuilder()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
