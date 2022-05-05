@@ -2213,7 +2213,7 @@
 === RUN   TestTextLineSpecTimerLines_CopyOut_000100
 --- PASS: TestTextLineSpecTimerLines_CopyOut_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOutITextLine_000100
---- PASS: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOutPtr_000100
 --- PASS: TestTextLineSpecTimerLines_CopyOutPtr_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_Empty_000100
@@ -2338,4 +2338,4 @@
 --- PASS: TestTextLineSpecTimerLinesMolecule_getFormattedText_000100 (0.00s)
 PASS
 coverage: 84.3% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	1.414s
+ok  	github.com/MikeAustin71/strmechops/strmech	1.411s

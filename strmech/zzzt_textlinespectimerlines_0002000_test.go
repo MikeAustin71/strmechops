@@ -1752,6 +1752,10 @@ func TestTextLineSpecTimerLines_SetLabelFieldLength_000100(t *testing.T) {
 		return
 	}
 
+	timerLines05 := TextLineSpecTimerLines{}
+
+	timerLines05.SetLabelFieldLength(-1)
+
 	return
 }
 
@@ -1866,7 +1870,8 @@ func TestTextLineSpecTimerLines_SetLabelJustification_000100(t *testing.T) {
 
 	err = timerLines04.SetLabelJustification(
 		-9,
-		StrMech{})
+		ePrefix.XCpy(
+			"timerLines04"))
 
 	if err == nil {
 
@@ -1980,6 +1985,31 @@ func TestTextLineSpecTimerLines_SetLabelRightMarginChars_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED !!\n",
 			ePrefix.String())
 
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines04.SetLabelRightMarginChars(
+		"",
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 
