@@ -2627,3 +2627,60 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLines_TextLineSpecName_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_TextLineSpecName_000100()",
+		"")
+
+	expectedStr := "TextLineSpecTimerLines"
+
+	timerLines01 := TextLineSpecTimerLines{}
+
+	actualStr := timerLines01.TextLineSpecName()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines01.TextLineSpecName()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	_,
+		timerLines02,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualStr = timerLines02.TextLineSpecName()
+
+	if expectedStr != actualStr {
+
+		t.Errorf("%v - ERROR\n"+
+			"timerLines02.TextLineSpecName()"+
+			"Expected string DOES NOT match Actual string\n"+
+			"Expected string = '%v'\n"+
+			"  Actual string = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	return
+}
