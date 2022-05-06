@@ -305,6 +305,185 @@ func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000200(t *testing.T)
 	return
 }
 
+func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesElectron_computeTimeDuration_000300()",
+		"")
+
+	var loc *time.Location
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		t.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		2,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		9,
+		5,
+		22,
+		58,
+		47,
+		999999989,
+		loc)
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		startTime,
+		endTime,
+		55,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLinesElectron_empty_000100(t *testing.T) {
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	timerLinesElectron.empty(
+		nil)
+
+}
+
+func TestTextLineSpecTimerLinesElectron_getLengthOfLongestLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_getLengthOfLongestLabel_000100()",
+		"")
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	longestLabel := "A Very Grand End Time Label"
+
+	expectedLabelLen := len(longestLabel)
+
+	actualLongestLabelLen :=
+		timerLinesElectron.getLengthOfLongestLabel(
+			[]rune("startTime"),
+			[]rune(longestLabel),
+			[]rune("Time Duration"))
+
+	if expectedLabelLen != actualLongestLabelLen {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLinesElectron.getLengthOfLongestLabel()\n"+
+			"Expected Max Label Length != Actual Max Label Length\n"+
+			"Expected Max Label Length = '%v'\n"+
+			"  Actual Max Label Length = '%v'\n",
+			ePrefix.String(),
+			expectedLabelLen,
+			actualLongestLabelLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesMolecule_getFormattedText_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	txtTimerLinesMolecule := textLineSpecTimerLinesMolecule{}
+
+	_,
+		err = txtTimerLinesMolecule.getFormattedText(
+		timerLines01,
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtTimerLinesMolecule.getFormattedText(
+		nil,
+		ePrefix.XCpy(
+			"timerLines01-Test#2"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because 'txtTimerLines' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	_,
+		err = txtTimerLinesMolecule.getFormattedText(
+		&timerLines02,
+		ePrefix.XCpy(
+			"timerLines02-Test#1"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because 'txtTimerLines' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -500,79 +679,6 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtTimerLinesNanobot."+
 			"copyOut()\n"+
-			"because 'txtTimerLines' is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	return
-}
-
-func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLinesMolecule_getFormattedText_000100()",
-		"")
-
-	_,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines02(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	txtTimerLinesMolecule := textLineSpecTimerLinesMolecule{}
-
-	_,
-		err = txtTimerLinesMolecule.getFormattedText(
-		timerLines01,
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	_,
-		err = txtTimerLinesMolecule.getFormattedText(
-		nil,
-		ePrefix.XCpy(
-			"timerLines01-Test#2"))
-
-	if err == nil {
-
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtTimerLinesMolecule."+
-			"getFormattedText()\n"+
-			"because 'txtTimerLines' is 'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	timerLines02 := TextLineSpecTimerLines{}
-
-	_,
-		err = txtTimerLinesMolecule.getFormattedText(
-		&timerLines02,
-		ePrefix.XCpy(
-			"timerLines02-Test#1"))
-
-	if err == nil {
-
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtTimerLinesMolecule."+
-			"getFormattedText()\n"+
 			"because 'txtTimerLines' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
