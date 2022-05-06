@@ -536,7 +536,316 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 		return
 	}
 
+	var timerLines03 *TextLineSpecTimerLines
+
+	_,
+		timerLines03,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+
+	timerLines04,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		"   ",
+		string(timerLines03.startTimeLabel),
+		timerLines03.startTime,
+		string(timerLines03.endTimeLabel),
+		timerLines03.endTime,
+		timerLines03.timeFormat,
+		string(timerLines03.timeDurationLabel),
+		timerLines03.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		string(timerLines03.labelRightMarginChars),
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLinesMolecule02 := textLineSpecTimerLinesMolecule{}
+
+	_,
+		err = timerLinesMolecule02.getFormattedText(
+		timerLines04,
+		ePrefix.XCpy(
+			"timerLines04-Test#1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	return
+}
+
+func TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000100()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLinesMolecule := textLineSpecTimerLinesMolecule{}
+
+	err = timerLinesMolecule.setTxtLineSpecTimerLines(
+		&timerLines02,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLinesMolecule03 := textLineSpecTimerLinesMolecule{}
+
+	err = timerLinesMolecule03.setTxtLineSpecTimerLines(
+		nil,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"txtTimerLines== nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because input parameter 'txtTimerLines' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines03 := TextLineSpecTimerLines{}
+
+	err = timerLinesMolecule03.setTxtLineSpecTimerLines(
+		&timerLines03,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		1000001,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because input parameter 'timerLines01.textLabelFieldLen'\n"+
+			"has a value of  1,000,001.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	err = timerLinesMolecule03.setTxtLineSpecTimerLines(
+		&timerLines04,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		-3,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because input parameter 'timerLines01.textLabelFieldLen'\n"+
+			"has a value of less than minus one (-1).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines05 := TextLineSpecTimerLines{}
+
+	err = timerLinesMolecule.setTxtLineSpecTimerLines(
+		&timerLines05,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		nil,
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	var runeArrayTooLong []rune
+
+	runeArrayTooLong,
+		err = sMechPreon.getRepeatRuneArray(
+		50,
+		[]rune("   "),
+		ePrefix.XCpy(
+			"runeArrayTooLong"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines06 := TextLineSpecTimerLines{}
+
+	err = timerLinesMolecule03.setTxtLineSpecTimerLines(
+		&timerLines06,
+		runeArrayTooLong,
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		timerLines01.textLabelFieldLen,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines06"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because total label length exceeds\n"+
+			"the maximum allowable label length.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines07 := TextLineSpecTimerLines{}
+
+	var badJustify TextJustify = -99
+
+	err = timerLinesMolecule03.setTxtLineSpecTimerLines(
+		&timerLines07,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		timerLines01.textLabelFieldLen,
+		badJustify,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines07"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtTimerLinesMolecule."+
+			"getFormattedText()\n"+
+			"because input parameter 'labelJustification' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines08 := TextLineSpecTimerLines{}
+
+	err = timerLinesMolecule.setTxtLineSpecTimerLines(
+		&timerLines08,
+		[]rune("  "),
+		timerLines01.startTimeLabel,
+		timerLines01.startTime,
+		timerLines01.endTimeLabel,
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		timerLines01.timeDurationLabel,
+		2,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines08"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 }
 
 func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
