@@ -1035,6 +1035,103 @@ func (mt MainTest) TimerEventText04() {
 	fmt.Println()
 
 }
+
+func (mt MainTest) TimerEventText05() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TimerEventText05()",
+		"")
+
+	var errTxt string
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n"+
+				"%v\n",
+			"Error - time.LoadLocation()",
+			err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		5,
+		5,
+		10,
+		30,
+		45,
+		9582,
+		loc)
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var timerLines *strmech.TextLineSpecTimerLines
+
+	timerLines,
+		err = strmech.TextLineSpecTimerLines{}.NewFullTimerEvent(
+		" ",
+		"Start Time",
+		startTime,
+		"End Time",
+		endTime,
+		"2006-01-02 15:04:05.000000000 -0700 MST",
+		"Elapsed Time",
+		len("Elapsed Time"),
+		strmech.TxtJustify.Left(),
+		": ",
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	err = timerLines.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	fmt.Println("Time Lines Output")
+	fmt.Println()
+	fmt.Printf(timerLines.String())
+
+	/*
+
+	   Start Time  : 2022-04-05 10:00:00.000000000 -0500 CDT
+	   End Time    : 2022-05-05 10:30:45.000009582 -0500 CDT
+	   Elapsed Time: 30 Days 0 Hours 30 Minutes 45 Seconds 0 Milliseconds
+	                 9 Microseconds 582 Nanoseconds
+	                 Total Elapsed Nanoseconds: 2,593,845,000,009,582
+	*/
+
+}
+
 func (mt MainTest) IntSeparateNumRunes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

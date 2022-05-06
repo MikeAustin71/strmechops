@@ -3,6 +3,7 @@ package strmech
 import (
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
+	"time"
 )
 
 func TestTextLineSpecTimerLinesAtom_equal_000100(t *testing.T) {
@@ -105,10 +106,197 @@ func TestTextLineSpecTimerLinesAtom_testValidityOfTxtSpecTimerLines_000100(t *te
 	if err == nil {
 
 		t.Errorf("\n%v\n"+
-			"Error: err = timerLines02.IsValidInstanceError()\n"+
+			"Error: err = txtTimerLinesAtom.testValidityOfTxtSpecTimerLines()\n"+
 			"Expected an error return because input\n"+
 			"parameter 'txtTimerLines' is 'nil'.\n"+
 			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesElectron_computeTimeDuration_000100()",
+		"")
+
+	var loc *time.Location
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		t.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		2,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		9,
+		5,
+		10,
+		32,
+		16,
+		9000,
+		loc)
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		startTime,
+		endTime,
+		5,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesElectron_computeTimeDuration_000200()",
+		"")
+
+	var loc *time.Location
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		t.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		2,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		9,
+		5,
+		10,
+		32,
+		16,
+		9000,
+		loc)
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		time.Time{},
+		endTime,
+		5,
+		&ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from\n"+
+			"timerLinesElectron.computeTimeDuration()\n"+
+			"because 'startTime' has a zero value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		startTime,
+		time.Time{},
+		5,
+		&ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from\n"+
+			"timerLinesElectron.computeTimeDuration()\n"+
+			"because 'endTime' has a zero value.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		endTime,
+		startTime,
+		5,
+		&ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from\n"+
+			"timerLinesElectron.computeTimeDuration()\n"+
+			"because 'endTime' occurrs before 'startTime.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		startTime,
+		endTime,
+		-1,
+		&ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from\n"+
+			"timerLinesElectron.computeTimeDuration()\n"+
+			"because 'summaryTextLineLeftMargin' has a value of -1.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!!\n",
 			ePrefix.String())
 
 		return
@@ -130,7 +318,7 @@ func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 			"timerLines01"))
 
 	if err != nil {
-		t.Errorf("%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}

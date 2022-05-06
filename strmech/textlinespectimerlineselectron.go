@@ -66,6 +66,16 @@ type textLineSpecTimerLinesElectron struct {
 //     - An array of text strings presenting the results of the time
 //       duration computation.
 //
+//       Example Output:
+//       timeDurationStrs[0] 211 Days
+//       timeDurationStrs[1]  23 Hours
+//       timeDurationStrs[2]  32 Minutes
+//       timeDurationStrs[3]  16 Seconds
+//       timeDurationStrs[4]   0 Milliseconds
+//       timeDurationStrs[5]   9 Microseconds
+//       timeDurationStrs[6]   0 Nanoseconds
+//       timeDurationStrs[7]   Total Elapsed Nanoseconds: 18,315,136,000,009,000
+//
 //
 //  error
 //     - If this method completes successfully, this returned error
@@ -76,6 +86,20 @@ type textLineSpecTimerLinesElectron struct {
 //       If an error message is returned, the text value for input
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Output:
+//       timeDurationStrs[0] 211 Days
+//       timeDurationStrs[1]  23 Hours
+//       timeDurationStrs[2]  32 Minutes
+//       timeDurationStrs[3]  16 Seconds
+//       timeDurationStrs[4]   0 Milliseconds
+//       timeDurationStrs[5]   9 Microseconds
+//       timeDurationStrs[6]   0 Nanoseconds
+//       timeDurationStrs[7]   Total Elapsed Nanoseconds: 18,315,136,000,009,000
+//
 //
 func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration(
 	startTime time.Time,
