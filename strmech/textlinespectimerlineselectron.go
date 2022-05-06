@@ -26,7 +26,7 @@ type textLineSpecTimerLinesElectron struct {
 // Important
 //
 // Be advised that the Summary Elapsed Time Break Out will be
-// displyed over multiple text lines. This method will apply the
+// displayed over multiple text lines. This method will apply the
 // line breaks automatically based on the input parameter,
 // 'summaryTextLineLeftMargin'. In applying these line breaks, this
 // method will assume a maximum line length of 78-characters.
@@ -244,11 +244,6 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	if totalNanoseconds >= MinuteNanoseconds {
 		numOfMinutes = totalNanoseconds / MinuteNanoseconds
 		totalNanoseconds = totalNanoseconds - (numOfMinutes * MinuteNanoseconds)
-	}
-
-	if totalNanoseconds >= SecondNanoseconds {
-		numOfSeconds = totalNanoseconds / SecondNanoseconds
-		totalNanoseconds = totalNanoseconds - (numOfSeconds * SecondNanoseconds)
 	}
 
 	if totalNanoseconds >= SecondNanoseconds {
