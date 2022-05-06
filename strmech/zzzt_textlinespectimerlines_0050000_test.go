@@ -411,6 +411,61 @@ func TestTextLineSpecTimerLinesElectron_getLengthOfLongestLabel_000100(t *testin
 	return
 }
 
+func TestTextLineSpecTimerLinesElectron_getTotalLabelLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesElectron_getTotalLabelLength_000100()",
+		"")
+
+	txtStr := "  "
+	labelLeftMarginChars := []rune(txtStr)
+
+	txtStr = "Start Time"
+	startTimeLabel := []rune(txtStr)
+
+	txtStr = "A Very Very Grand End Time Label"
+	endTimeLabel := []rune(txtStr)
+
+	txtStr = "Elapsed Time"
+	timeDurationLabel := []rune(txtStr)
+
+	textLabelFieldLen := 40
+
+	txtStr = ": "
+	labelRightMarginChars := []rune(txtStr)
+
+	expectedTotalLabelLen := textLabelFieldLen +
+		len(labelLeftMarginChars) +
+		len(labelRightMarginChars)
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	actualTotalLabelLen :=
+		timerLinesElectron.getTotalLabelLength(
+			labelLeftMarginChars,
+			startTimeLabel,
+			endTimeLabel,
+			timeDurationLabel,
+			textLabelFieldLen,
+			labelRightMarginChars)
+
+	if expectedTotalLabelLen != actualTotalLabelLen {
+
+		t.Errorf("\n%v\n"+
+			"Error: timerLinesElectron.getTotalLabelLength()\n"+
+			"Expected Total Label Length != Actual Total Label Length\n"+
+			"Expected Total Label Length = '%v'\n"+
+			"  Actual Total Label Length = '%v'\n",
+			ePrefix.String(),
+			expectedTotalLabelLen,
+			actualTotalLabelLen)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
