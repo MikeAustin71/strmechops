@@ -21,6 +21,16 @@ type textLineSpecTimerLinesElectron struct {
 // total nanoseconds. The output text display of these values begins
 // with the first category that has the first non-zero value.
 //
+// ------------------------------------------------------------------------
+//
+// Important
+//
+// Be advised that the Summary Elapsed Time Break Out will be
+// displyed over multiple text lines. This method will apply the
+// line breaks automatically based on the input parameter,
+// 'summaryTextLineLeftMargin'. In applying these line breaks, this
+// method will assume a maximum line length of 78-characters.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -118,6 +128,8 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	defer txtTimerLinesElectron.lock.Unlock()
 
 	const maxSummaryTextLeftLineMargin = 55
+
+	const maxOutputLineLen = 78
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -273,7 +285,9 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 	outputValStr := ""
 	var numStrWithIntSeps []rune
 	var foundFirstValue = false
-	maxSummaryLineLen := 78 - summaryTextLineLeftMargin
+	maxSummaryLineLen :=
+		maxOutputLineLen - summaryTextLineLeftMargin
+
 	newOutputLine := ""
 
 	// numOfDays
