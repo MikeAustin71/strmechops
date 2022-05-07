@@ -856,9 +856,9 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	}
 
 	lenLongestLabel := txtTimerLinesElectron.getLengthOfLongestLabel(
-		txtTimerLines.startTimeLabel,
-		txtTimerLines.endTimeLabel,
-		txtTimerLines.timeDurationLabel)
+		startTimeLabel,
+		endTimeLabel,
+		timeDurationLabel)
 
 	totalLabelLen := txtTimerLinesElectron.
 		getTotalLabelLength(
@@ -875,11 +875,12 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	if totalLabelLen > maxAllowableLabelLen {
 		err = fmt.Errorf("%v\n"+
 			"Error: The total length of the text label field is invalid!\n"+
-			"The maximum text label field length is %v-characters\n"+
+			"The maximum allowable text label field length is %v-characters\n"+
 			"The total length of 'labelLeftMarginChars' plus 'labelRightMarginChars'"+
 			"plus the the text label field length is %v-characters."+
 			"'text label field length' is computed by taking the longest"+
-			"of the longest text label or the user entered text field length.\n"+
+			"text label length or the user entered text field length (whichever"+
+			"is greater).\n"+
 			"labelLeftMarginChars  = '%v'\n"+
 			"startTimeLabel        = '%v'\n"+
 			"endTimeLabel          = '%v'\n"+
@@ -889,12 +890,12 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 			ePrefix.String(),
 			maxAllowableLabelLen,
 			totalLabelLen,
-			len(txtTimerLines.labelLeftMarginChars),
-			len(txtTimerLines.startTimeLabel),
-			len(txtTimerLines.endTimeLabel),
-			len(txtTimerLines.timeDurationLabel),
-			len(txtTimerLines.labelRightMarginChars),
-			txtTimerLines.textLabelFieldLen)
+			len(labelLeftMarginChars),
+			len(startTimeLabel),
+			len(endTimeLabel),
+			len(timeDurationLabel),
+			len(labelRightMarginChars),
+			textLabelFieldLen)
 
 		return err
 	}

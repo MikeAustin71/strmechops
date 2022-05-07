@@ -848,6 +848,51 @@ func TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000100(t *testi
 
 }
 
+func TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000200()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines02(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	timerLinesMolecule := textLineSpecTimerLinesMolecule{}
+
+	err = timerLinesMolecule.setTxtLineSpecTimerLines(
+		&timerLines02,
+		[]rune("  "),
+		[]rune("Starting Time"),
+		timerLines01.startTime,
+		[]rune("Ending Time"),
+		timerLines01.endTime,
+		timerLines01.timeFormat,
+		[]rune("Time Duration"),
+		6,
+		timerLines01.textLabelJustification,
+		timerLines01.labelRightMarginChars,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+}
+
 func TestTextLineSpecTimerLinesNanobot_copyIn_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

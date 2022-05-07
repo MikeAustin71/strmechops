@@ -2174,13 +2174,22 @@ func TestTextLineSpecTimerLines_SetStartTimeLabel_000100(t *testing.T) {
 		return
 	}
 
-	if !timerLines01.Equal(timerLines02) {
+	expectedStr := string(timerLines01.startTimeLabel)
+
+	actualStr := string(timerLines02.startTimeLabel)
+
+	if expectedStr != actualStr {
 
 		t.Errorf("\n%v\n"+
 			"Error timerLines02\n"+
-			"Expected 'timerLines01' WOULD BE EQUAL to 'timerLines02'.\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!!\n",
-			ePrefix.String())
+			"Expected 'timerLines01.startTimeLabel' \n"+
+			"WOULD BE EQUAL to 'timerLines02.startTimeLabel'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n"+
+			"Expected String = '%v'\n"+
+			"  Actual String = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
 
 		return
 	}
