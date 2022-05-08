@@ -949,6 +949,107 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
 	return txtSpecTimerLines.endTime
 }
 
+// GetLabelJustification - Returns the internal member variable
+// 'textLabelJustification'.
+//
+// The Label Justification specification is of type, TextJustify.
+// TextJustify is an enumeration which specifies the position of a
+// string of text within a text field.
+//
+// The text justification enumeration specification must be set to
+// one of these three valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+// You can also use the abbreviated text justification enumeration
+// syntax as follows:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJustify {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return txtSpecTimerLines.textLabelJustification
+}
+
+// GetLabelOutputSeparationChars - Returns the internal member
+// variable, 'labelRightMarginChars', as a string.
+//
+// The 'labelRightMarginChars' is one or more characters used
+// to separate the text labels, 'startTime', 'endTime' and
+// 'timeDuration' from their respective output values. Usually,
+// 'labelRightMarginChars' is set to either a single white
+// space character or the default value which is a colon and a
+// white space character (": ").
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars() string {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	if len(txtSpecTimerLines.labelRightMarginChars) == 0 {
+		return ""
+	}
+
+	return string(txtSpecTimerLines.labelRightMarginChars)
+}
+
+// GetLengthOfLongestLabel - Compares the string lengths of the
+// three text labels, Start Time Label, End Time Label and Time
+// Duration Label, and returns the longest character length as an
+// integer value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method analyzes the string lengths of the three text
+//       labels, Start Time Label, End Time Label and Time Duration
+//       Label. It then returns the longest character length as an
+//       an integer value.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestLabel() int {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	return txtTimerLinesElectron.getLengthOfLongestLabel(
+		txtSpecTimerLines.startTimeLabel,
+		txtSpecTimerLines.endTimeLabel,
+		txtSpecTimerLines.timeDurationLabel)
+}
+
 // GetStartTimeLabel - Returns the internal member variable
 // 'startTimeLabel' as a string.
 //
@@ -1086,107 +1187,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTextLabelFieldLength() int {
 	}
 
 	return txtSpecTimerLines.textLabelFieldLen
-}
-
-// GetLabelJustification - Returns the internal member variable
-// 'textLabelJustification'.
-//
-// The Label Justification specification is of type, TextJustify.
-// TextJustify is an enumeration which specifies the position of a
-// string of text within a text field.
-//
-// The text justification enumeration specification must be set to
-// one of these three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-// You can also use the abbreviated text justification enumeration
-// syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
-//
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelJustification() TextJustify {
-
-	if txtSpecTimerLines.lock == nil {
-		txtSpecTimerLines.lock = new(sync.Mutex)
-	}
-
-	txtSpecTimerLines.lock.Lock()
-
-	defer txtSpecTimerLines.lock.Unlock()
-
-	return txtSpecTimerLines.textLabelJustification
-}
-
-// GetLabelOutputSeparationChars - Returns the internal member
-// variable, 'labelRightMarginChars', as a string.
-//
-// The 'labelRightMarginChars' is one or more characters used
-// to separate the text labels, 'startTime', 'endTime' and
-// 'timeDuration' from their respective output values. Usually,
-// 'labelRightMarginChars' is set to either a single white
-// space character or the default value which is a colon and a
-// white space character (": ").
-//
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars() string {
-
-	if txtSpecTimerLines.lock == nil {
-		txtSpecTimerLines.lock = new(sync.Mutex)
-	}
-
-	txtSpecTimerLines.lock.Lock()
-
-	defer txtSpecTimerLines.lock.Unlock()
-
-	if len(txtSpecTimerLines.labelRightMarginChars) == 0 {
-		return ""
-	}
-
-	return string(txtSpecTimerLines.labelRightMarginChars)
-}
-
-// GetLengthOfLongestLabel - Compares the string lengths of the
-// three text labels, Start Time Label, End Time Label and Time
-// Duration Label, and returns the longest character length as an
-// integer value.
-//
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters
-//
-//  NONE
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  int
-//     - This method analyzes the string lengths of the three text
-//       labels, Start Time Label, End Time Label and Time Duration
-//       Label. It then returns the longest character length as an
-//       an integer value.
-//
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestLabel() int {
-
-	if txtSpecTimerLines.lock == nil {
-		txtSpecTimerLines.lock = new(sync.Mutex)
-	}
-
-	txtSpecTimerLines.lock.Lock()
-
-	defer txtSpecTimerLines.lock.Unlock()
-
-	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
-
-	return txtTimerLinesElectron.getLengthOfLongestLabel(
-		txtSpecTimerLines.startTimeLabel,
-		txtSpecTimerLines.endTimeLabel,
-		txtSpecTimerLines.timeDurationLabel)
 }
 
 // GetTimeDurationLabel - Returns the internal member variable
