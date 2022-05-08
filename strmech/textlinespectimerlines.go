@@ -881,6 +881,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText(
 // 'endTimeLabel' is a text label inserted in the output
 // string to describe the ending time presentation.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns the current value of the End Time
+//       Label as a string.
+//
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() string {
 
 	if txtSpecTimerLines.lock == nil {
@@ -904,6 +920,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTimeLabel() string {
 // The ending time is the end of the timing event described by this
 // instance of TextLineSpecTimerLines.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  time.Time
+//     - This method returns the current value of the "End Time"
+//       for this Time Duration Event.
+//
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
 
 	if txtSpecTimerLines.lock == nil {
@@ -922,6 +954,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetEndTime() time.Time {
 //
 // 'startTimeLabel' is a text label inserted in the output
 // string to describe the starting time presentation.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns the current value of the Start Time
+//       Label as a string.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() string {
 
@@ -946,6 +994,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTimeLabel() string {
 // The starting time is the start or beginning of the timing event
 // described by this instance of TextLineSpecTimerLines.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  time.Time
+//     - This method returns the current value of the "Start Time"
+//       for this Time Duration Event.
+//
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTime() time.Time {
 
 	if txtSpecTimerLines.lock == nil {
@@ -959,20 +1023,49 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetStartTime() time.Time {
 	return txtSpecTimerLines.startTime
 }
 
-// GetLabelFieldLength - Returns the internal member variable
+// GetTextLabelFieldLength - Returns the internal member variable
 // 'textLabelFieldLen' as an integer value.
 //
-// The Label Field Length specifies the length of the text field in
-// which all three labels, 'startTimeLabel', 'endTimeLabel' and
-// 'timeDurationLabel', will be positioned and justified.
+// The Text Label Field Length specifies the length of the text
+// field in which all three labels, 'startTimeLabel',
+// 'endTimeLabel' and 'timeDurationLabel', will be positioned and
+// justified.
 //
-// If Label Field Length is longer than the length of the longest
-// label string, the Text Justification specification
+// If Text Label Field Length is longer than the length of the
+// longest label string, the Text Justification specification
 // 'textLabelJustification' will be applied to position all three
 // labels in their text fields. Text Justification can be set to
 // 'Right', 'Left' or 'Center'.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelFieldLength() int {
+// ----------------------------------------------------------------
+//
+// Be Advised
+//
+// If the text field length is less than the length of the longest
+// label, the text field length will be reset to the length of the
+// longest label.
+//
+// The length of the longest label is determined by calculating the
+// character lengths of the three text labels: 'startTimeLabel',
+// 'endTimeLabel' and 'timeDurationLabel'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method returns the Text Label Field Length as an
+//       integer value.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetTextLabelFieldLength() int {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -981,6 +1074,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelFieldLength() int {
 	txtSpecTimerLines.lock.Lock()
 
 	defer txtSpecTimerLines.lock.Unlock()
+
+	lenLongestLabel := textLineSpecTimerLinesElectron{}.ptr().
+		getLengthOfLongestLabel(
+			txtSpecTimerLines.endTimeLabel,
+			txtSpecTimerLines.startTimeLabel,
+			txtSpecTimerLines.timeDurationLabel)
+
+	if txtSpecTimerLines.textLabelFieldLen < lenLongestLabel {
+		txtSpecTimerLines.textLabelFieldLen = lenLongestLabel
+	}
 
 	return txtSpecTimerLines.textLabelFieldLen
 }
@@ -1045,6 +1148,47 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 	return string(txtSpecTimerLines.labelRightMarginChars)
 }
 
+// GetLengthOfLongestLabel - Compares the string lengths of the
+// three text labels, Start Time Label, End Time Label and Time
+// Duration Label, and returns the longest character length as an
+// integer value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method analyzes the string lengths of the three text
+//       labels, Start Time Label, End Time Label and Time Duration
+//       Label. It then returns the longest character length as an
+//       an integer value.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestLabel() int {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	return txtTimerLinesElectron.getLengthOfLongestLabel(
+		txtSpecTimerLines.startTimeLabel,
+		txtSpecTimerLines.endTimeLabel,
+		txtSpecTimerLines.timeDurationLabel)
+}
+
 // GetTimeDurationLabel - Returns the internal member variable
 // 'timeDurationLabel' as a string.
 //
@@ -1053,6 +1197,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 // time presentation. Time duration, or elapsed time, for this
 // timer event is computed by subtracting the starting time from
 // the ending time.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns the current value of the Time Duration
+//       Label as a string.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() string {
 
@@ -1078,6 +1238,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeDurationLabel() string {
 // The Go Programming language uses pattern formatting to format
 // time values. Reference:
 //   https://pkg.go.dev/time#Time.Format
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns the current value of the Time Format
+//       as a string.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeFormat() string {
 

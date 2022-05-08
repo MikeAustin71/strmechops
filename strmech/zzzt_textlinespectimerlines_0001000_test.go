@@ -1732,12 +1732,12 @@ func TestTextLineSpecTimerLines_GetLabelFieldLength_000100(t *testing.T) {
 
 	expectedLabelFieldLength := timerLines01.textLabelFieldLen
 
-	actualLabelFieldLength := timerLines01.GetLabelFieldLength()
+	actualLabelFieldLength := timerLines01.GetTextLabelFieldLength()
 
 	if expectedLabelFieldLength != actualLabelFieldLength {
 
 		t.Errorf("\n%v\n"+
-			"Error: timerLines01.GetLabelFieldLength()\n"+
+			"Error: timerLines01.GetTextLabelFieldLength()\n"+
 			"Expected Label Field Length is NOT Equal to\n"+
 			"Actual Label Field Length.\n"+
 			"Expected Label Field Length = '%v'\n"+
@@ -1751,7 +1751,7 @@ func TestTextLineSpecTimerLines_GetLabelFieldLength_000100(t *testing.T) {
 
 	timerLines02 := TextLineSpecTimerLines{}
 
-	_ = timerLines02.GetLabelFieldLength()
+	_ = timerLines02.GetTextLabelFieldLength()
 
 	return
 }
