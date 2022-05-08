@@ -1030,7 +1030,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 //     - This method analyzes the string lengths of the three text
 //       labels, Start Time Label, End Time Label and Time Duration
 //       Label. It then returns the longest character length as an
-//       an integer value.
+//       integer value.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestLabel() int {
 
@@ -3345,8 +3345,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTimeLabel(
 	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
 
 	lenLongestLabel := txtTimerLinesElectron.getLengthOfLongestLabel(
-		endTimeLabelRunes,
 		txtSpecTimerLines.startTimeLabel,
+		endTimeLabelRunes,
 		txtSpecTimerLines.timeDurationLabel)
 
 	totalLabelLen := txtTimerLinesElectron.
@@ -5266,6 +5266,52 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 	txtSpecTimerLines.endTime = endTime
 
 	return err
+}
+
+// SetTextLabelFieldLength - If the current value of Text Field
+// Length is less than the length of the longest text label, the
+// value of Text Field Length will be reset to the length of the
+// longest label.
+//
+// The length of the longest label is determined by calculating the
+// character lengths of the three text labels: 'startTimeLabel',
+// 'endTimeLabel' and 'timeDurationLabel'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength() {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	lenLongestLabel := textLineSpecTimerLinesElectron{}.ptr().
+		getLengthOfLongestLabel(
+			txtSpecTimerLines.endTimeLabel,
+			txtSpecTimerLines.startTimeLabel,
+			txtSpecTimerLines.timeDurationLabel)
+
+	if txtSpecTimerLines.textLabelFieldLen < lenLongestLabel {
+		txtSpecTimerLines.textLabelFieldLen = lenLongestLabel
+	}
+
+	return
 }
 
 // SetTimeDurationLabel - Sets the internal member variable
