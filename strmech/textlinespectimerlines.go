@@ -3014,10 +3014,13 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
 // string to describe the ending time presentation.
 //
 // If the input parameter 'endTimeLabel' is submitted as an empty
-// string, its value will be defaulted to "End Time".
+// string, its value will be defaulted to the string "End Time".
 //
-// If the length of input parameter 'endTimeLabel' is greater than
-// fifty (50) characters, this method will return an error.
+// If the total character length of the new End Time Label, plus
+// the lengths of the Start Time Label, Time Duration label, the
+// Left Margin Characters and the Right Margin Characters, exceeds
+// the maximum available label length (55-characters), an error
+// will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -3191,8 +3194,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetEndTimeLabel(
 			"text label length from the text labels, 'startTimeLabel',\n"+
 			"'endTimeLabel' and 'timeDurationLabel'.\n"+
 			"labelLeftMarginChars  = '%v'\n"+
-			"New startTimeLabel    = '%v'\n"+
-			"endTimeLabel          = '%v'\n"+
+			"startTimeLabel        = '%v'\n"+
+			"New endTimeLabel      = '%v'\n"+
 			"timeDurationLabel     = '%v'\n"+
 			"labelRightMarginChars = '%v'\n"+
 			"textLabelFieldLen     = '%v'\n",
@@ -4739,10 +4742,13 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartTime(
 // string to describe the starting time presentation.
 //
 // If input parameter 'startTimeLabel' is submitted as an empty
-// string, its value will be defaulted to "Start Time".
+// string, its value will be defaulted to the string "Start Time".
 //
-// If the length of input parameter 'startTimeLabel' is greater
-// than fifty (50) characters, this method will return an error.
+// If the total character length of the new Start Time Label, plus
+// the lengths of the End Time Label, Time Duration label, the Left
+// Margin Characters and the Right Margin Characters, exceeds the
+// maximum available label length (55-characters), an error will be
+// returned.
 //
 // ----------------------------------------------------------------
 //
@@ -5096,10 +5102,26 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 // the ending time.
 //
 // If the input parameter 'timeDurationLabel' is submitted as an
-// empty string, its value will be defaulted to "Elapsed Time".
+// empty string, its value will be defaulted to the string
+// "Elapsed Time".
 //
-// If the length of input parameter 'timeDurationLabel' is greater
-// than fifty (50) characters, this method will return an error.
+// If the total character length of the new Time Duration Label,
+// plus the lengths of the Start Time Label, End Time label, the
+// Left Margin Characters and the Right Margin Characters, exceeds
+// the maximum available label length (55-characters), an error
+// will be returned.
+//
+// ----------------------------------------------------------------
+//
+// Be Advised
+//
+// If this method completes successfully and the text field length
+// is less than the length of the longest label, the text field
+// length will be reset to the length of the longest label.
+//
+// The length of the longest label is determined by calculating the
+// character lengths of the three text labels: 'startTimeLabel',
+// 'endTimeLabel' and 'timeDurationLabel'.
 //
 //
 // ------------------------------------------------------------------------
@@ -5205,12 +5227,12 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeDurationLabel(
 		return err
 	}
 
-	lenLabel := len(timeDurationLabel)
+	lengthOfNewTimeDurationLabel := len(timeDurationLabel)
 
-	maxLabelLen := textLineSpecTimerLinesPreon{}.ptr().
+	maxAllowableLabelLen := textLineSpecTimerLinesPreon{}.ptr().
 		getMaximumTimerLabelLen()
 
-	if lenLabel > maxLabelLen {
+	if lengthOfNewTimeDurationLabel > maxAllowableLabelLen {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'timeDurationLabel'\n"+
@@ -5218,19 +5240,70 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeDurationLabel(
 			"The maximum label string length is %v-characters\n"+
 			"The length of 'timeDurationLabel' is %v-characters\n",
 			ePrefix.String(),
-			maxLabelLen,
-			lenLabel)
+			maxAllowableLabelLen,
+			lengthOfNewTimeDurationLabel)
 
 		return err
 	}
 
-	if lenLabel == 0 {
+	if lengthOfNewTimeDurationLabel == 0 {
 		txtSpecTimerLines.timeDurationLabel =
 			textLineSpecTimerLinesElectron{}.ptr().
 				getDefaultTimeDurationLabel()
-	} else {
-		txtSpecTimerLines.timeDurationLabel =
-			[]rune(timeDurationLabel)
+	}
+
+	timeDurationLabelRunes := []rune(timeDurationLabel)
+
+	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	lenLongestLabel := txtTimerLinesElectron.getLengthOfLongestLabel(
+		txtSpecTimerLines.startTimeLabel,
+		txtSpecTimerLines.endTimeLabel,
+		timeDurationLabelRunes)
+
+	totalLabelLen := txtTimerLinesElectron.
+		getTotalLabelLength(
+			txtSpecTimerLines.labelLeftMarginChars,
+			txtSpecTimerLines.startTimeLabel,
+			txtSpecTimerLines.endTimeLabel,
+			timeDurationLabelRunes,
+			txtSpecTimerLines.textLabelFieldLen,
+			txtSpecTimerLines.labelRightMarginChars)
+
+	if totalLabelLen > maxAllowableLabelLen {
+		err = fmt.Errorf("%v\n"+
+			"Error: The total length of the text label field is invalid!\n"+
+			"The New 'Time Duration Label' will cause the entire text label\n"+
+			"to exceed the maximum available text label field length.\n"+
+			"The maximum text label field length is %v-characters\n"+
+			"The total length of 'labelLeftMarginChars' plus 'labelRightMarginChars'"+
+			"plus the the text label field length is %v-characters."+
+			"'text label field length' is computed by taking the longest"+
+			"text label length.\n"+
+			"labelLeftMarginChars  = '%v'\n"+
+			"startTimeLabel        = '%v'\n"+
+			"endTimeLabel          = '%v'\n"+
+			"New timeDurationLabel = '%v'\n"+
+			"labelRightMarginChars = '%v'\n"+
+			"textLabelFieldLen     = '%v'\n",
+			ePrefix.String(),
+			maxAllowableLabelLen,
+			totalLabelLen,
+			len(txtSpecTimerLines.labelLeftMarginChars),
+			len(txtSpecTimerLines.startTimeLabel),
+			len(txtSpecTimerLines.endTimeLabel),
+			len(timeDurationLabelRunes),
+			len(txtSpecTimerLines.labelRightMarginChars),
+			txtSpecTimerLines.textLabelFieldLen)
+
+		return err
+	}
+
+	txtSpecTimerLines.timeDurationLabel =
+		timeDurationLabelRunes
+
+	if txtSpecTimerLines.textLabelFieldLen < lenLongestLabel {
+		txtSpecTimerLines.textLabelFieldLen = lenLongestLabel
 	}
 
 	return err

@@ -2639,12 +2639,13 @@ func TestTextLineSpecTimerLines_SetTimeDurationLabel_000100(t *testing.T) {
 		return
 	}
 
-	newTimeDurationLabel := "Time Duration"
+	expectedTimeDurationLabel := "Time Duration"
 
-	timerLines01.timeDurationLabel = []rune(newTimeDurationLabel)
+	timerLines01.timeDurationLabel =
+		[]rune(expectedTimeDurationLabel)
 
 	err = timerLines02.SetTimeDurationLabel(
-		newTimeDurationLabel,
+		expectedTimeDurationLabel,
 		ePrefix.XCpy(
 			"timerLines02"))
 
@@ -2654,12 +2655,20 @@ func TestTextLineSpecTimerLines_SetTimeDurationLabel_000100(t *testing.T) {
 		return
 	}
 
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
+	actualTimeDurationLabel :=
+		string(timerLines02.timeDurationLabel)
+
+	if expectedTimeDurationLabel != actualTimeDurationLabel {
+
+		t.Errorf("\n%v\n"+
 			"Test Inspection #2\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
+			"Error: Expected Time Duration Label is\n"+
+			"NOT EQUAL TO actual Time Duration Label\n"+
+			"Expected Time Duration Label = '%v'\n"+
+			"  Actual Time Duration Label = '%v'\n",
+			ePrefix.String(),
+			expectedTimeDurationLabel,
+			actualTimeDurationLabel)
 
 		return
 	}
@@ -2685,7 +2694,7 @@ func TestTextLineSpecTimerLines_SetTimeDurationLabel_000100(t *testing.T) {
 	timerLines03 := TextLineSpecTimerLines{}
 
 	err = timerLines03.SetTimeDurationLabel(
-		newTimeDurationLabel,
+		expectedTimeDurationLabel,
 		StrMech{})
 
 	if err == nil {
