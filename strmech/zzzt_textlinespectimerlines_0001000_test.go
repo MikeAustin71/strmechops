@@ -1867,12 +1867,12 @@ func TestTextLineSpecTimerLines_GetLengthOfLongestLabel_000100(t *testing.T) {
 	expectedLenLongestLabel := len(expectedLongestLabel)
 
 	actualLenLongestLabel :=
-		timerLines01.GetLengthOfLongestLabel()
+		timerLines01.GetLengthOfLongestTextLabel()
 
 	if expectedLenLongestLabel != actualLenLongestLabel {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"timerLines01.GetLengthOfLongestLabel()\n"+
+			"timerLines01.GetLengthOfLongestTextLabel()\n"+
 			"Expected Length of Longest Text Label should"+
 			"be equal to Actual Length of Longest Text Label.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
@@ -1891,12 +1891,12 @@ func TestTextLineSpecTimerLines_GetLengthOfLongestLabel_000100(t *testing.T) {
 	expectedLenLongestLabel = 0
 
 	actualLenLongestLabel =
-		timerLines02.GetLengthOfLongestLabel()
+		timerLines02.GetLengthOfLongestTextLabel()
 
 	if expectedLenLongestLabel != actualLenLongestLabel {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"timerLines02.GetLengthOfLongestLabel()\n"+
+			"timerLines02.GetLengthOfLongestTextLabel()\n"+
 			"Expected Length of Longest Text Label should"+
 			"be equal to Actual Length of Longest Text Label.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
@@ -1958,7 +1958,7 @@ func TestTextLineSpecTimerLines_GetTextLabelFieldLength_000100(t *testing.T) {
 	timerLines02.textLabelFieldLen = 2
 
 	expectedTextLabelFieldLen =
-		timerLines02.GetLengthOfLongestLabel()
+		timerLines02.GetLengthOfLongestTextLabel()
 
 	actualTextLabelFieldLen =
 		timerLines02.GetTextLabelFieldLength()

@@ -1233,25 +1233,6 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
 		return
 	}
 
-	sMechPreon := strMechPreon{}
-
-	var expectedLabelRunes []rune
-
-	expectedLabelRunes,
-		err = sMechPreon.getRepeatRuneArray(
-		8,
-		[]rune(newEndTimeLabel),
-		ePrefix.XCpy(
-			"newEndTimeLabel Repeat=3"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	newEndTimeLabel = string(expectedLabelRunes)
-
 	var timerLines05 *TextLineSpecTimerLines
 
 	_,
@@ -1265,6 +1246,22 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
 			err.Error())
 		return
 	}
+
+	totalLabelLength := timerLines05.GetLengthTotalLabel()
+
+	longestLabelLength := timerLines05.GetLengthOfLongestTextLabel()
+
+	maximumLabelLength :=
+		timerLines05.GetMaximumTextLabelLength()
+
+	adjustedTotalTableLength :=
+		totalLabelLength - longestLabelLength
+
+	newEndTimeLabelCharCount :=
+		maximumLabelLength -
+			adjustedTotalTableLength + 1
+
+	newEndTimeLabel = strings.Repeat("X", newEndTimeLabelCharCount)
 
 	err = timerLines05.SetEndTimeLabel(
 		newEndTimeLabel,
@@ -2719,7 +2716,7 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 	}
 
 	longestTxtLabelLen :=
-		timerLines02.GetLengthOfLongestLabel()
+		timerLines02.GetLengthOfLongestTextLabel()
 
 	err = timerLines02.SetTextLabelFieldLength(
 		-1,
@@ -2766,7 +2763,7 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 	}
 
 	longestTxtLabelLen =
-		timerLines03.GetLengthOfLongestLabel()
+		timerLines03.GetLengthOfLongestTextLabel()
 
 	newTextLabelFieldLength := longestTxtLabelLen + 10
 

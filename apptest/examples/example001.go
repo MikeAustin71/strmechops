@@ -1228,6 +1228,123 @@ func (mt MainTest) TimerEventText06() {
 
 }
 
+func (mt MainTest) TextLineSpecTimerLinesSetEndTimeLabel07() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecTimerLinesSetEndTimeLabel07()",
+		"")
+
+	var errTxt string
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n"+
+				"%v\n",
+			"Error - time.LoadLocation()",
+			err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	elapsedTime := (time.Microsecond * 5) + 999
+	endTime := startTime.Add(elapsedTime)
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println(ePrefix.String())
+	fmt.Println("---------------------------------")
+	fmt.Println()
+
+	var timerLines *strmech.TextLineSpecTimerLines
+
+	timerLines,
+		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		startTime,
+		endTime,
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	err = timerLines.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	maximumTextLabelLength :=
+		timerLines.GetMaximumTextLabelLength()
+
+	totalTextLabelLength :=
+		timerLines.GetLengthTotalLabel()
+
+	adjustedTotalTextLabelLength :=
+		totalTextLabelLength -
+			timerLines.GetLengthOfLongestTextLabel()
+
+	newEndTimeLabelLength :=
+		maximumTextLabelLength - adjustedTotalTextLabelLength + 1
+
+	newEndTimeLabel :=
+		strings.Repeat("X", newEndTimeLabelLength)
+
+	err = timerLines.SetEndTimeLabel(
+		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines"))
+
+	if err == nil {
+
+		errTxt = fmt.Sprintf(
+			"\n%v\n"+
+				"ERROR timerLines.SetEndTimeLabel()\n"+
+				"Expected an error return because input\n"+
+				"parameter 'endTimeLabel' exceeds maximum length!\n"+
+				"HOWEVER NO ERROR WAS RETURNED!\n"+
+				"Maximum Text Label Length   = '%v'\n"+
+				"Original Total Label Length = '%v'\n"+
+				"New End Time Label Length   = '%v'\n",
+			ePrefix.String(),
+			maximumTextLabelLength,
+			totalTextLabelLength,
+			len(newEndTimeLabel))
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	fmt.Println()
+	fmt.Println("    SUCCESSFUL COMPLETION!")
+	fmt.Println("=================================")
+	fmt.Println(ePrefix.String())
+	fmt.Println("=================================")
+	fmt.Println()
+
+}
+
 func (mt MainTest) IntSeparateNumRunes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

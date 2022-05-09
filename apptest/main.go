@@ -7,6 +7,6 @@ import (
 func main() {
 	mt := examples.MainTest{}
 
-	mt.TimerEventText06()
+	mt.TextLineSpecTimerLinesSetEndTimeLabel07()
 
 }

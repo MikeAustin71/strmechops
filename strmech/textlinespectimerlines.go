@@ -1009,7 +1009,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 	return string(txtSpecTimerLines.labelRightMarginChars)
 }
 
-// GetLengthOfLongestLabel - Compares the string lengths of the
+// GetLengthOfLongestTextLabel - Compares the string lengths of the
 // three text labels, Start Time Label, End Time Label and Time
 // Duration Label, and returns the longest character length as an
 // integer value.
@@ -1032,7 +1032,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 //       Label. It then returns the longest character length as an
 //       integer value.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestLabel() int {
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestTextLabel() int {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -1048,6 +1048,104 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestLabel() int {
 		txtSpecTimerLines.startTimeLabel,
 		txtSpecTimerLines.endTimeLabel,
 		txtSpecTimerLines.timeDurationLabel)
+}
+
+// GetLengthTotalLabel - Returns the total length of the text label
+// field length plus the lengths of the left and right margin
+// fields.
+//
+// The text label field length is computed by taking the greater of
+// the longest text label length or the current value of the text
+// label field length.
+//
+// The longest text label length is determined by calculating the
+// character lengths of the three text labels: 'startTimeLabel',
+// 'endTimeLabel' and 'timeDurationLabel'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method computes the total label length and returns
+//       this value as an integer.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthTotalLabel() int {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	return txtTimerLinesElectron.
+		getTotalLabelLength(
+			txtSpecTimerLines.labelLeftMarginChars,
+			txtSpecTimerLines.startTimeLabel,
+			txtSpecTimerLines.endTimeLabel,
+			txtSpecTimerLines.timeDurationLabel,
+			txtSpecTimerLines.textLabelFieldLen,
+			txtSpecTimerLines.labelRightMarginChars)
+
+}
+
+// GetMaximumTextLabelLength - Returns the maximum allowable text
+// label length.
+//
+// The total text label length is computed by adding the the text
+// field length plus the lengths of the left and right margin
+// fields.
+//
+// The text label field length is computed by taking the greater of
+// the longest text label length or the current value of the text
+// label field length.
+//
+// The longest text label length is determined by calculating the
+// character lengths of the three text labels: 'startTimeLabel',
+// 'endTimeLabel' and 'timeDurationLabel'.
+//
+// The total text label length cannot exceed the maximum value
+// returned by this method.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - Returns the maximum allowable text label length as an
+//       integer value.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetMaximumTextLabelLength() int {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	return textLineSpecTimerLinesPreon{}.ptr().
+		getMaximumTimerLabelLen()
 }
 
 // GetStartTimeLabel - Returns the internal member variable
@@ -3206,9 +3304,9 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetDefaultShellTimerEvent() {
 // is less than the length of the longest label, the text field
 // length will be reset to the length of the longest label.
 //
-// The length of the longest label is determined by calculating the
-// character lengths of the three text labels: 'startTimeLabel',
-// 'endTimeLabel' and 'timeDurationLabel'.
+// The length of the longest text label is determined by
+// calculating the character lengths of the three text labels:
+// 'startTimeLabel', 'endTimeLabel' and 'timeDurationLabel'.
 //
 //
 // ----------------------------------------------------------------
