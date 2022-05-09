@@ -1249,7 +1249,7 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
 
 	totalLabelLength := timerLines05.GetLengthTotalLabel()
 
-	longestLabelLength := timerLines05.GetLengthOfLongestTextLabel()
+	longestLabelLength := timerLines05.GetLengthLongestTextLabel()
 
 	maximumLabelLength :=
 		timerLines05.GetMaximumTextLabelLength()
@@ -2716,7 +2716,7 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 	}
 
 	longestTxtLabelLen :=
-		timerLines02.GetLengthOfLongestTextLabel()
+		timerLines02.GetLengthLongestTextLabel()
 
 	err = timerLines02.SetTextLabelFieldLength(
 		-1,
@@ -2763,7 +2763,7 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 	}
 
 	longestTxtLabelLen =
-		timerLines03.GetLengthOfLongestTextLabel()
+		timerLines03.GetLengthLongestTextLabel()
 
 	newTextLabelFieldLength := longestTxtLabelLen + 10
 

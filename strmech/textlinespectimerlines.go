@@ -1009,7 +1009,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 	return string(txtSpecTimerLines.labelRightMarginChars)
 }
 
-// GetLengthOfLongestTextLabel - Compares the string lengths of the
+// GetLengthLongestTextLabel - Compares the string lengths of the
 // three text labels, Start Time Label, End Time Label and Time
 // Duration Label, and returns the longest character length as an
 // integer value.
@@ -1032,7 +1032,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLabelOutputSeparationChars()
 //       Label. It then returns the longest character length as an
 //       integer value.
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthOfLongestTextLabel() int {
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthLongestTextLabel() int {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)

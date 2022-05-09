@@ -1302,7 +1302,7 @@ func (mt MainTest) TextLineSpecTimerLinesSetEndTimeLabel07() {
 
 	adjustedTotalTextLabelLength :=
 		totalTextLabelLength -
-			timerLines.GetLengthOfLongestTextLabel()
+			timerLines.GetLengthLongestTextLabel()
 
 	newEndTimeLabelLength :=
 		maximumTextLabelLength - adjustedTotalTextLabelLength + 1
