@@ -1357,11 +1357,41 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000200(t *testing.T) {
 	err = timerLines02.SetEndTimeLabel(
 		"",
 		ePrefix.XCpy(
-			"timerLines04"))
+			"timerLines02"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
+		return
+	}
+
+	var timerLines03 *TextLineSpecTimerLines
+
+	_,
+		timerLines03,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines03.SetEndTimeLabel(
+		"Xray",
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines03.SetEndTimeLabel()\n"+
+			"Expected an error return because the error prefix\n"+
+			"is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
 		return
 	}
 
@@ -2271,6 +2301,39 @@ func TestTextLineSpecTimerLines_SetStartTimeLabel_000200(t *testing.T) {
 		return
 	}
 
+	var timerLines07 *TextLineSpecTimerLines
+	_,
+		timerLines07,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newEndTimeLabelCharCount = 5
+
+	newStartTimeLabel = strings.Repeat("X", newEndTimeLabelCharCount)
+
+	err = timerLines07.SetStartTimeLabel(
+		newStartTimeLabel,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines07.SetStartTimeLabel()\n"+
+			"Expected an error return because the error prefix\n"+
+			"is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 
@@ -3157,6 +3220,94 @@ func TestTextLineSpecTimerLines_SetTimeDurationLabel_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecTimerLines_SetTimeDurationLabel_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetTimeDurationLabel_000200()",
+		"")
+	_,
+		timerLines05,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	totalLabelLength := timerLines05.GetLengthTotalLabel()
+
+	longestLabelLength := timerLines05.GetLengthLongestTextLabel()
+
+	maximumLabelLength :=
+		timerLines05.GetMaximumTextLabelLength()
+
+	adjustedTotalTableLength :=
+		totalLabelLength - longestLabelLength
+
+	newStartTimeLabelCharCount :=
+		maximumLabelLength -
+			adjustedTotalTableLength + 1
+
+	newStartTimeLabel := strings.Repeat("X", newStartTimeLabelCharCount)
+
+	err = timerLines05.SetTimeDurationLabel(
+		newStartTimeLabel,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines05."+
+			"SetTimeDurationLabel()\n"+
+			"because input parameter 'newStartTimeLabel' is invalid.\n"+
+			"'newStartTimeLabel' exceeds the maximum Field Length!\n"+
+			"Length of 'newStartTimeLabel' = '%v'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			len(newStartTimeLabel))
+
+		return
+	}
+
+	var timerLines07 *TextLineSpecTimerLines
+	_,
+		timerLines07,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newStartTimeLabelCharCount = 5
+
+	newStartTimeLabel = strings.Repeat("X", newStartTimeLabelCharCount)
+
+	err = timerLines07.SetTimeDurationLabel(
+		newStartTimeLabel,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines07.SetTimeDurationLabel()\n"+
+			"Expected an error return because the error prefix\n"+
+			"is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
 }
 
 func TestTextLineSpecTimerLines_SetTimeFormat_000100(t *testing.T) {
