@@ -2187,6 +2187,93 @@ func TestTextLineSpecTimerLines_SetStartTimeLabel_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecTimerLines_SetStartTimeLabel_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetStartTimeLabel_000200()",
+		"")
+
+	_,
+		timerLines05,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	totalLabelLength := timerLines05.GetLengthTotalLabel()
+
+	longestLabelLength := timerLines05.GetLengthLongestTextLabel()
+
+	maximumLabelLength :=
+		timerLines05.GetMaximumTextLabelLength()
+
+	adjustedTotalTableLength :=
+		totalLabelLength - longestLabelLength
+
+	newEndTimeLabelCharCount :=
+		maximumLabelLength -
+			adjustedTotalTableLength + 1
+
+	newStartTimeLabel := strings.Repeat("X", newEndTimeLabelCharCount)
+
+	err = timerLines05.SetStartTimeLabel(
+		newStartTimeLabel,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines05."+
+			"SetStartTimeLabel()\n"+
+			"because input parameter 'newStartTimeLabel' is invalid.\n"+
+			"'newStartTimeLabel' exceeds the maximum Field Length!\n"+
+			"Length of 'newStartTimeLabel' = '%v'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			len(newStartTimeLabel))
+
+		return
+	}
+
+	var timerLines06 *TextLineSpecTimerLines
+	_,
+		timerLines06,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newEndTimeLabelCharCount = 12
+
+	newStartTimeLabel = strings.Repeat("X", newEndTimeLabelCharCount)
+
+	timerLines06.textLabelFieldLen = 11
+
+	err = timerLines06.SetStartTimeLabel(
+		newStartTimeLabel,
+		ePrefix.XCpy(
+			"timerLines06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLines_SetStartTime_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
