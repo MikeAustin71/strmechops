@@ -2941,6 +2941,35 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000200(t *testing.T) {
 		return
 	}
 
+	var timerLines06 *TextLineSpecTimerLines
+	_,
+		timerLines06,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines06.SetTextLabelFieldLength(
+		15,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: err = timerLines06.SetTextLabelFieldLength()\n"+
+			"Expected an error return because the error prefix\n"+
+			"is invalid.\n"+
+			"HOWEVER NO ERROR WAS RETURNED!!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 
