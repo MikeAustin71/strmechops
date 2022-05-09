@@ -2685,11 +2685,12 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 	if longestTxtLabelLen != actualTextFieldLength {
 
 		t.Errorf("\n%v - ERROR\n"+
+			"timerLines02.SetTextLabelFieldLength()\n"+
 			"Expected Length of Longest Text Label would"+
 			"be equal to actual Text Label Field length.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"Length of Longest Text Label   = '%v'\n"+
-			"Actual Text Label Field length = '%v\n",
+			"Actual Text Label Field length = '%v'\n",
 			ePrefix.String(),
 			longestTxtLabelLen,
 			actualTextFieldLength)
@@ -2733,6 +2734,44 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 	if newTextLabelFieldLength != actualTextFieldLength {
 
 		t.Errorf("\n%v - ERROR\n"+
+			"timerLines03.SetTextLabelFieldLength()\n"+
+			"Expected Text Label Field length would be\n"+
+			"equal to the NEW Text Label Field length.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"New Text Label Field length    = '%v'\n"+
+			"Actual Text Label Field length = '%v\n"+
+			"Lenght Of Longest Label        = '%v'\n",
+			ePrefix.String(),
+			newTextLabelFieldLength,
+			actualTextFieldLength,
+			longestTxtLabelLen)
+
+		return
+
+	}
+
+	timerLines04 := TextLineSpecTimerLines{}
+
+	newTextLabelFieldLength = 15
+
+	err = timerLines04.SetTextLabelFieldLength(
+		newTextLabelFieldLength,
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTextFieldLength =
+		timerLines04.textLabelFieldLen
+
+	if newTextLabelFieldLength != actualTextFieldLength {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"timerLines04.SetTextLabelFieldLength()\n"+
 			"Expected Text Label Field length would be\n"+
 			"equal to the NEW Text Label Field length.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+

@@ -1844,6 +1844,75 @@ func TestTextLineSpecTimerLines_GetLabelOutputSeparationChars_000100(t *testing.
 	return
 }
 
+func TestTextLineSpecTimerLines_GetLengthOfLongestLabel_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_GetLengthOfLongestLabel_000100()",
+		"")
+
+	expectedLongestLabel := "Elapsed Time"
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLenLongestLabel := len(expectedLongestLabel)
+
+	actualLenLongestLabel :=
+		timerLines01.GetLengthOfLongestLabel()
+
+	if expectedLenLongestLabel != actualLenLongestLabel {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"timerLines01.GetLengthOfLongestLabel()\n"+
+			"Expected Length of Longest Text Label should"+
+			"be equal to Actual Length of Longest Text Label.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"Expected Length of Longest Text Label = '%v'\n"+
+			"Actual Length of Longest Text Label   = '%v'\n",
+			ePrefix.String(),
+			expectedLenLongestLabel,
+			actualLenLongestLabel)
+
+		return
+
+	}
+
+	timerLines02 := TextLineSpecTimerLines{}
+
+	expectedLenLongestLabel = 0
+
+	actualLenLongestLabel =
+		timerLines02.GetLengthOfLongestLabel()
+
+	if expectedLenLongestLabel != actualLenLongestLabel {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"timerLines02.GetLengthOfLongestLabel()\n"+
+			"Expected Length of Longest Text Label should"+
+			"be equal to Actual Length of Longest Text Label.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"Expected Length of Longest Text Label = '%v'\n"+
+			"Actual Length of Longest Text Label   = '%v'\n",
+			ePrefix.String(),
+			expectedLenLongestLabel,
+			actualLenLongestLabel)
+
+		return
+
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLines_GetTimeDurationLabel_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
