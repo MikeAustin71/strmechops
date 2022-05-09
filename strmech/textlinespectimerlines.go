@@ -5268,30 +5268,39 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 	return err
 }
 
-// SetTextLabelFieldLength - If the current value of Text Field
-// Length is less than the length of the longest text label, the
-// value of Text Field Length will be reset to the length of the
-// longest label.
+// SetTextLabelFieldLength - Sets the value of Text Field Length.
 //
-// The length of the longest label is determined by calculating the
-// character lengths of the three text labels: 'startTimeLabel',
-// 'endTimeLabel' and 'timeDurationLabel'.
+// If Text Field Length is longer than the longest text label, all
+// text labels will be justified (Left, Right or Center) within a
+// field which has a length equal to Text Field Length.
+//
+// If Text Field Length is less than the length of the longest text
+// label, Text Field Length will be automatically set to the length
+// of the longest text label.
+//
+// The length of the longest text label is determined by
+// calculating the character lengths of the three text labels:
+// 'startTimeLabel', 'endTimeLabel' and 'timeDurationLabel'.
 //
 //
-// ----------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
+//  fieldLength               int
+//     - The new value for Text Field Length. If the value of
+//       'fieldLength' is less than minus one (-1) or greater than
+//       one-million (1,000,000) an error will be returned.
 //
-//
-// ------------------------------------------------------------------------
+// -----------------------------------------------------------------
 //
 // Return Values
 //
 //  NONE
 //
-func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength() {
+func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength(
+	fieldLength int,
+	errorPrefix interface{}) (err error) {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -5301,17 +5310,60 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTextLabelFieldLength() {
 
 	defer txtSpecTimerLines.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecTimerLines."+
+			"SetTextLabelFieldLength()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	lenLongestLabel := textLineSpecTimerLinesElectron{}.ptr().
 		getLengthOfLongestLabel(
 			txtSpecTimerLines.endTimeLabel,
 			txtSpecTimerLines.startTimeLabel,
 			txtSpecTimerLines.timeDurationLabel)
 
-	if txtSpecTimerLines.textLabelFieldLen < lenLongestLabel {
-		txtSpecTimerLines.textLabelFieldLen = lenLongestLabel
+	if fieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Input parameter 'fieldLength' is invalid.\n"+
+			"The value of 'fieldLength' is less than minus one (-1)\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return err
 	}
 
-	return
+	if fieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Input parameter 'fieldLength' is invalid.\n"+
+			"The value of 'fieldLength' is greater than one-million (1,000,000)\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return err
+	}
+
+	if fieldLength < lenLongestLabel {
+
+		txtSpecTimerLines.textLabelFieldLen = lenLongestLabel
+
+	} else {
+
+		txtSpecTimerLines.textLabelFieldLen = fieldLength
+
+	}
+
+	return err
 }
 
 // SetTimeDurationLabel - Sets the internal member variable
