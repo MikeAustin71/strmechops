@@ -1989,7 +1989,7 @@ func (txtDateTimeField TextFieldSpecDateTime) NewDateTimeField(
 //
 //       The date/time format is documented in the Golang time.Time
 //       package, https://pkg.go.dev/time. The format operations are
-//       are documented at https://pkg.go.dev/time#Time.Format .
+//       documented at https://pkg.go.dev/time#Time.Format .
 //
 //       If this parameter is submitted as an empty string,
 //       parameter 'dateTimeFormat' will be assigned a default
@@ -2577,7 +2577,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) ReaderInitialize() {
 //
 //       The date/time format is documented in the Golang time.Time
 //       package, https://pkg.go.dev/time. The format operations are
-//       are documented at https://pkg.go.dev/time#Time.Format .
+//       documented at https://pkg.go.dev/time#Time.Format .
 //
 //       If this parameter is submitted as an empty string,
 //       parameter 'dateTimeFormat' will be assigned a default

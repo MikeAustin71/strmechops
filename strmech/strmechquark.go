@@ -1147,7 +1147,7 @@ func (sMechQuark *strMechQuark) getCharCountInStr(
 //
 //  int
 //     - This returned integer value will be set to the number of
-//       of 'runes' counted in 'targetStr'.
+//       'runes' counted in 'targetStr'.
 //
 func (sMechQuark *strMechQuark) getRuneCountInStr(
 	targetStr string) int {

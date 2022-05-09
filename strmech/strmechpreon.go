@@ -787,7 +787,7 @@ func (sMechPreon *strMechPreon) findRunesInRunes(
 //
 // Important
 //
-// The maxinum number of times that the input parameter rune array
+// The maximum number of times that the input parameter rune array
 // ('repeatRuneChars') will be repeated is limited only by
 // available memory.
 //
@@ -942,7 +942,7 @@ func (sMechPreon *strMechPreon) getRepeatRuneArray(
 //
 // Important
 //
-// The maxinum number of times that the input parameter rune
+// The maximum number of times that the input parameter rune
 // character ('repeatRuneChar') will be repeated is limited only by
 // available memory.
 //

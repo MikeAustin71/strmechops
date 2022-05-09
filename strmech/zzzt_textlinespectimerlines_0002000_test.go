@@ -1662,159 +1662,6 @@ func TestTextLineSpecTimerLines_SetFullTimerEventRunes_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecTimerLines_SetLabelFieldLength_000100(t *testing.T) {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecTimerLines_SetLabelFieldLength_000100()",
-		"")
-
-	_,
-		timerLines01,
-		err := createTestTextLineSpecTimerLines01(
-		ePrefix.XCpy(
-			"timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	var timerLines02 *TextLineSpecTimerLines
-
-	timerLines02,
-		err = timerLines01.CopyOutPtr(
-		ePrefix.XCpy(
-			"timerLines02<-timerLines01"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Setup #1\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	newLabelFieldLen := 75
-
-	timerLines01.textLabelFieldLen = newLabelFieldLen
-
-	timerLines02.SetLabelFieldLength(newLabelFieldLen)
-
-	if !timerLines02.Equal(timerLines01) {
-		t.Errorf("%v\n"+
-			"Test Inspection #2\n"+
-			"Error: Expected timerLines02 == timerLines01\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if timerLines02.textLabelFieldLen !=
-		timerLines01.textLabelFieldLen {
-
-		t.Errorf("%v\n"+
-			"Test Inspection #3\n"+
-			"Error: Expected timerLines02.textLabelFieldLen\n"+
-			"to be EQUAL TO timerLines01.textLabelFieldLen\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if timerLines02.textLabelFieldLen != newLabelFieldLen {
-
-		t.Errorf("\n%v\n"+
-			"Test Inspection #4\n"+
-			"Error: Expected timerLines02.textLabelFieldLen\n"+
-			"to be EQUAL TO newLabelFieldLen\n"+
-			"HOWEVER, THEY ARE NOT EQUAL!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	var timerLines03 *TextLineSpecTimerLines
-	_,
-		timerLines03,
-		err = createTestTextLineSpecTimerLines01(
-		ePrefix.XCpy(
-			"timerLines03"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	timerLines03.SetLabelFieldLength(1000001)
-
-	if timerLines03.textLabelFieldLen != -1 {
-
-		t.Errorf("\n%v\n"+
-			"Test Inspection #5\n"+
-			"Error: Expected timerLines03.textLabelFieldLen\n"+
-			"would return an error because input parameter\n"+
-			"'labelFieldLength' is greater than 1,000,000.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n"+
-			"Expected value of timerLines03.textLabelFieldLen = %v\n"+
-			"  Actual value of timerLines03.textLabelFieldLen = %v\n",
-			ePrefix.String(),
-			-1,
-			timerLines03.textLabelFieldLen)
-
-		return
-	}
-
-	var timerLines04 *TextLineSpecTimerLines
-	_,
-		timerLines04,
-		err = createTestTextLineSpecTimerLines01(
-		ePrefix.XCpy(
-			"timerLines04"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	timerLines04.SetLabelFieldLength(-2)
-
-	if timerLines04.textLabelFieldLen != -1 {
-
-		t.Errorf("\n%v\n"+
-			"Test Inspection #6\n"+
-			"Error: Expected timerLines04.textLabelFieldLen\n"+
-			"would return an error because input parameter\n"+
-			"'labelFieldLength' is less than -1.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n"+
-			"Expected value of timerLines04.textLabelFieldLen = %v\n"+
-			"  Actual value of timerLines04.textLabelFieldLen = %v\n",
-			ePrefix.String(),
-			-1,
-			timerLines04.textLabelFieldLen)
-
-		return
-	}
-
-	timerLines05 := TextLineSpecTimerLines{}
-
-	timerLines05.SetLabelFieldLength(-1)
-
-	return
-}
-
 func TestTextLineSpecTimerLines_SetLabelJustification_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -2835,6 +2682,176 @@ func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000100(t *testing.T) {
 
 		return
 
+	}
+
+	return
+}
+
+func TestTextLineSpecTimerLines_SetTextLabelFieldLength_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLines_SetTextLabelFieldLength_000200()",
+		"")
+
+	_,
+		timerLines01,
+		err := createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var timerLines02 *TextLineSpecTimerLines
+
+	timerLines02,
+		err = timerLines01.CopyOutPtr(
+		ePrefix.XCpy(
+			"timerLines02<-timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Setup #1\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	newLabelFieldLen := 75
+
+	timerLines01.textLabelFieldLen = newLabelFieldLen
+
+	err = timerLines02.SetTextLabelFieldLength(
+		newLabelFieldLen,
+		ePrefix.XCpy(
+			"timerLines02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !timerLines02.Equal(timerLines01) {
+		t.Errorf("%v\n"+
+			"Test Inspection #2\n"+
+			"Error: Expected timerLines02 == timerLines01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines02.textLabelFieldLen !=
+		timerLines01.textLabelFieldLen {
+
+		t.Errorf("%v\n"+
+			"Test Inspection #3\n"+
+			"Error: Expected timerLines02.textLabelFieldLen\n"+
+			"to be EQUAL TO timerLines01.textLabelFieldLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if timerLines02.textLabelFieldLen != newLabelFieldLen {
+
+		t.Errorf("\n%v\n"+
+			"Test Inspection #4\n"+
+			"Error: Expected timerLines02.textLabelFieldLen\n"+
+			"to be EQUAL TO newLabelFieldLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines03 *TextLineSpecTimerLines
+	_,
+		timerLines03,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines03.SetTextLabelFieldLength(
+		1000001,
+		ePrefix.XCpy(
+			"timerLines03"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Test Inspection #5\n"+
+			"timerLines03.SetTextLabelFieldLength()\n"+
+			"Expected an error return because input paramter\n"+
+			"'labelFieldLength' is greater than 1,000,000.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var timerLines04 *TextLineSpecTimerLines
+	_,
+		timerLines04,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err =
+		timerLines04.SetTextLabelFieldLength(
+			-2,
+			ePrefix.XCpy(
+				"timerLines04"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Test Inspection #6\n"+
+			"timerLines04.SetTextLabelFieldLength()\n"+
+			"Expected an error returen because input parameter\n"+
+			"'labelFieldLength' is less than -1.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	timerLines05 := TextLineSpecTimerLines{}
+
+	err = timerLines05.SetTextLabelFieldLength(
+		-1,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
 	}
 
 	return

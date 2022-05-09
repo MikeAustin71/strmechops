@@ -431,7 +431,7 @@ func (sMechAtom *strMechAtom) copyOut(
 //  targetStr               string   - The target string from which the data field will be extracted.
 //
 //
-//  leadingKeyWordDelimiters []string- Data fields are often preceded by field names or field designators.
+//  leadingKeyWordDelimiters []string - Data fields are often preceded by field names or field designators.
 //                                       The 'leadingKeyWordDelimiters' parameter is a string array
 //                                       containing 'Key Word Delimiters'. A Key Word Delimiter may be
 //                                       a Key Word string or a character which identifies and immediately
@@ -513,7 +513,7 @@ func (sMechAtom *strMechAtom) copyOut(
 //       CommentDelimiterIndex          int    //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
 //       EndOfLineDelimiter             string //  If an End-Of-Line Delimiter is detected it is captured and stored here.
 //       EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
-//     }
+//    }
 //
 //
 //   error

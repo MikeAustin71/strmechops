@@ -1054,7 +1054,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthLongestTextLabel() int
 // field length plus the lengths of the left and right margin
 // fields.
 //
-// The text label field length is computed by taking the greater of
+// The text label field length is computed by taking the greatest of
 // the longest text label length or the current value of the text
 // label field length.
 //
@@ -1104,11 +1104,11 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetLengthTotalLabel() int {
 // GetMaximumTextLabelLength - Returns the maximum allowable text
 // label length.
 //
-// The total text label length is computed by adding the the text
+// The total text label length is computed by adding the text
 // field length plus the lengths of the left and right margin
 // fields.
 //
-// The text label field length is computed by taking the greater of
+// The text label field length is computed by taking the greatest of
 // the longest text label length or the current value of the text
 // label field length.
 //
@@ -4206,71 +4206,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetFullTimerEventRunes(
 	return err
 }
 
-// SetLabelFieldLength - Sets the internal member variable
-// 'textLabelFieldLen' as an integer value.
-//
-// The Label Field Length specifies the length of the text field in
-// which all three time event description labels, will be
-// positioned and justified.
-//
-// The three description labels associated with the time event
-// specified by this instance of TextLineSpecTimerLines are listed
-// as follows:
-//   (1) TextLineSpecTimerLines.startTimeLabel
-//       - Describes the starting time for this timer event.
-//
-//   (2) TextLineSpecTimerLines.endTimeLabel
-//       - Describes the ending time for this timer event.
-//
-//   (3) TextLineSpecTimerLines.timeDuration
-//       - Describes the time duration or elapsed time for this
-//         timer event.
-//
-// If Label Field Length ('labelFieldLength') is longer than the
-// length of the longest of the three label strings, the Text
-// Justification specification 'textLabelJustification' will be applied
-// to position all three labels in their text fields. Text
-// Justification can be set to 'Right', 'Left' or 'Center'.
-//
-// If Label Field Length ('labelFieldLength') is less than the
-// length of the longest of the three label strings, it will be set
-// equal to that maximum length. Label strings with a length less
-// than the maximum length will be justified according to the
-// Text Justification Specification. Reference:
-//    TextLineSpecTimerLines.SetLabelJustification()
-//
-// If input parameter 'labelFieldLength' is set to a value less
-// than minus one (-1), it will be defaulted to a value of minus
-// one (-1).
-//
-// If input parameter 'labelFieldLength' is set to a value greater
-// than one-million (1,000,000), it will be defaulted to a value of
-// minus one (-1).
-//
-func (txtSpecTimerLines *TextLineSpecTimerLines) SetLabelFieldLength(
-	labelFieldLength int) {
-
-	if txtSpecTimerLines.lock == nil {
-		txtSpecTimerLines.lock = new(sync.Mutex)
-	}
-
-	txtSpecTimerLines.lock.Lock()
-
-	defer txtSpecTimerLines.lock.Unlock()
-
-	if labelFieldLength < -1 {
-		labelFieldLength = -1
-	}
-
-	if labelFieldLength > 1000000 {
-		labelFieldLength = -1
-	}
-
-	txtSpecTimerLines.textLabelFieldLen = labelFieldLength
-
-	return
-}
-
 // SetLabelJustification - Sets the text justification for the text
 // labels used to describe various aspects of the timer event.
 // Valid text justifications are 'Left', 'Right' or 'Center'.
@@ -5366,19 +5301,47 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 	return err
 }
 
-// SetTextLabelFieldLength - Sets the value of Text Field Length.
+// SetTextLabelFieldLength - Sets the Text Label Field Length. This
+// value is stored in the internal member variable
+// 'textLabelFieldLen' as an integer value.
 //
-// If Text Field Length is longer than the longest text label, all
-// text labels will be justified (Left, Right or Center) within a
-// field which has a length equal to Text Field Length.
+// The Text Label Field Length specifies the length of the text
+// field in which all three time event description labels, will
+// be positioned and justified.
 //
-// If Text Field Length is less than the length of the longest text
-// label, Text Field Length will be automatically set to the length
-// of the longest text label.
+// The three description labels associated with the time event
+// specified by this instance of TextLineSpecTimerLines are listed
+// as follows:
+//   (1) TextLineSpecTimerLines.startTimeLabel
+//       - Describes the starting time for this timer event.
 //
-// The length of the longest text label is determined by
-// calculating the character lengths of the three text labels:
-// 'startTimeLabel', 'endTimeLabel' and 'timeDurationLabel'.
+//   (2) TextLineSpecTimerLines.endTimeLabel
+//       - Describes the ending time for this timer event.
+//
+//   (3) TextLineSpecTimerLines.timeDuration
+//       - Describes the time duration or elapsed time for this
+//         timer event.
+//
+// If Text Label Field Length ('fieldLength') is longer than the
+// length of the longest of the three label strings, the Text
+// Justification specification 'textLabelJustification' will be
+// applied to position all three labels within a standard text
+// field length. Text Justification can be set to 'Right', 'Left'
+// or 'Center'.
+//
+// If Text Label Field Length ('fieldLength') is less than the
+// length of the longest of the three label strings, it will be
+// automatically set equal to the longest label length. Label
+// strings with a length less than the maximum length will be
+// justified according to the Text Justification Specification.
+// Reference:
+//    TextLineSpecTimerLines.SetLabelJustification()
+//
+// If input parameter 'fieldLength' is set to a value less than
+// minus one (-1), an error will be generated.
+//
+// If input parameter 'fieldLength' is set to a value greater than
+// one-million (1,000,000), an error will be generated.
 //
 //
 // -----------------------------------------------------------------
@@ -5386,9 +5349,16 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetStartAndEndTime(
 // Input Parameters
 //
 //  fieldLength               int
-//     - The new value for Text Field Length. If the value of
-//       'fieldLength' is less than minus one (-1) or greater than
-//       one-million (1,000,000) an error will be returned.
+//     - The new value for the Text Label Field Length. If the
+//       value of 'fieldLength' is less than minus one (-1) or
+//       greater than one-million (1,000,000) an error will be
+//       returned.
+//
+//       If this input value is less than the length of the
+//       currently configured longest text label, Text Label Field
+//       Length will be automatically set to the length of that
+//       longest text label.
+//
 //
 // -----------------------------------------------------------------
 //

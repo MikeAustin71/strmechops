@@ -336,7 +336,7 @@ func (nSignSymbol *NumberSignSymbolDto) CopyOut(
 	return newNumSignSymbol, err
 }
 
-// Empty - Reinitializes all internal member variables for the
+// Empty - Reinitialize all internal member variables for the
 // current NumberSignSymbolDto instance to their zero values.
 //
 // IMPORTANT
