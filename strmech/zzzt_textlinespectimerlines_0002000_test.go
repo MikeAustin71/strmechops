@@ -1233,6 +1233,59 @@ func TestTextLineSpecTimerLines_SetEndTimeLabel_000100(t *testing.T) {
 		return
 	}
 
+	sMechPreon := strMechPreon{}
+
+	var expectedLabelRunes []rune
+
+	expectedLabelRunes,
+		err = sMechPreon.getRepeatRuneArray(
+		8,
+		[]rune(newEndTimeLabel),
+		ePrefix.XCpy(
+			"newEndTimeLabel Repeat=3"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newEndTimeLabel = string(expectedLabelRunes)
+
+	var timerLines05 *TextLineSpecTimerLines
+
+	_,
+		timerLines05,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines05.SetEndTimeLabel(
+		newEndTimeLabel,
+		ePrefix.XCpy(
+			"timerLines05"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from timerLines05."+
+			"SetEndTimeLabel()\n"+
+			"because 'newEndTimeLabel' is invalid.\n"+
+			"'newEndTimeLabel' exceeds the maximum Field Length!\n"+
+			"Length of 'newEndTimeLabel' = '%v'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			len(newEndTimeLabel))
+
+		return
+	}
+
 	return
 }
 

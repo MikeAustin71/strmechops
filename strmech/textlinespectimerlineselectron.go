@@ -804,8 +804,8 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) getTotalLabelLength
 		longestLabelLen = itemLen
 	}
 
-	if textLabelFieldLen > longestLabelLen {
-		longestLabelLen = textLabelFieldLen
+	if textLabelFieldLen < longestLabelLen {
+		textLabelFieldLen = longestLabelLen
 	}
 
 	return textLabelFieldLen +
