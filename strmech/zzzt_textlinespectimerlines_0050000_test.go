@@ -392,7 +392,7 @@ func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000400(t *testing.T)
 	}
 
 	startTime := time.Date(
-		2022,
+		2021,
 		2,
 		5,
 		10,
@@ -417,7 +417,7 @@ func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000400(t *testing.T)
 		err = timerLinesElectron.computeTimeDuration(
 		startTime,
 		endTime,
-		57,
+		55,
 		&ePrefix)
 
 	if err != nil {
@@ -1158,6 +1158,14 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecTimerLinesPreon_getMaximumOutputTimerLineLen_000100(t *testing.T) {
+
+	timerLinesPreon := textLineSpecTimerLinesPreon{}
+
+	_ = timerLinesPreon.getMaximumOutputTimerLineLen()
+
 }
 
 func TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100(t *testing.T) {
