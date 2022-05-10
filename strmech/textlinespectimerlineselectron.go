@@ -127,9 +127,13 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 	defer txtTimerLinesElectron.lock.Unlock()
 
-	const maxSummaryTextLeftLineMargin = 55
+	timerLinesPreon := textLineSpecTimerLinesPreon{}
 
-	const maxOutputLineLen = 78
+	maxSummaryTextLeftLineMargin :=
+		timerLinesPreon.getMaximumTimerLabelLen()
+
+	maxOutputLineLen :=
+		timerLinesPreon.getMaximumOutputTimerLineLen()
 
 	var ePrefix *ePref.ErrPrefixDto
 

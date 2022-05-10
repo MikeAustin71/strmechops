@@ -367,6 +367,68 @@ func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000300(t *testing.T)
 	return
 }
 
+func TestTextLineSpecTimerLinesElectron_computeTimeDuration_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecTimerLinesElectron_computeTimeDuration_000400()",
+		"")
+
+	var loc *time.Location
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		t.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		2,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		9,
+		5,
+		22,
+		58,
+		47,
+		999999989,
+		loc)
+
+	timerLinesElectron := textLineSpecTimerLinesElectron{}
+
+	_,
+		err = timerLinesElectron.computeTimeDuration(
+		startTime,
+		endTime,
+		57,
+		&ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecTimerLinesElectron_empty_000100(t *testing.T) {
 
 	timerLinesElectron := textLineSpecTimerLinesElectron{}
