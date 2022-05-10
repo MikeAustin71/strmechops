@@ -1097,3 +1097,11 @@ func TestTextLineSpecTimerLinesNanobot_copyOut_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100(t *testing.T) {
+
+	timerLinesPreon := textLineSpecTimerLinesPreon{}
+
+	_ = timerLinesPreon.getMaximumTimerLabelLen()
+
+}
