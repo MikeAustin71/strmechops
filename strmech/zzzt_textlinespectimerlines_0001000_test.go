@@ -2625,7 +2625,7 @@ func TestTextLineSpecTimerLines_IsValidInstanceError_000200(t *testing.T) {
 			"timerLines11"))
 
 	if err != nil {
-		t.Errorf("%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}

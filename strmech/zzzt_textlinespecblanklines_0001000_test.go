@@ -30,7 +30,7 @@ func TestTextLineSpecBlankLines_CopyIn_000100(t *testing.T) {
 			"blankLinesAlpha"))
 
 	if err != nil {
-		t.Errorf("%v\n",
+		t.Errorf("\n%v\n",
 			err.Error())
 		return
 	}
