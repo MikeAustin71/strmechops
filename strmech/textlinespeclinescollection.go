@@ -440,6 +440,33 @@ func (txtLinesCol *TextLineSpecLinesCollection) EmptyTextLines() {
 	return
 }
 
+// Equal - Receives a pointer to another instance of
+// TextLineSpecLinesCollection and proceeds to compare the member
+// variables to those of the current TextLineSpecLinesCollection
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) Equal(
+	textLinesCol02 *TextLineSpecLinesCollection) bool {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	return textLineSpecLinesCollectionAtom{}.ptr().
+		equalCollections(
+			txtLinesCol,
+			textLinesCol02)
+}
+
 // GetNumberOfTextLines - Returns the number of text lines
 // encapsulated by the current TextLineSpecLinesCollection
 // instance.

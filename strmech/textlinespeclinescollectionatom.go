@@ -53,6 +53,84 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) emptyCollection(
 	return
 }
 
+// equalCollections - Analyzes two Text Line Collections to
+// determine if they are equal in all respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLinesCol01             *TextLineSpecLinesCollection
+//     - The instance of TextLineSpecLinesCollection will be
+//       compared to a second TextLineSpecLinesCollection
+//       instance (textLinesCol02) in order to determine if
+//       both instances are equal in all respects.
+//
+//
+//  textLinesCol02             *TextLineSpecLinesCollection
+//     - The instance of TextLineSpecLinesCollection will be
+//       compared to a second TextLineSpecLinesCollection
+//       instance (textLinesCol01) in order to determine if
+//       both instances are equal in all respects.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If input parameters 'textLinesCol01' and 'textLinesCol02'
+//       are determined to be equal in all respects, this returned
+//       boolean value is set to 'true'.
+//
+//       If an error occurs or if the two instance of
+//       TextLineSpecLinesCollection are NOT equivalent, this
+//       returned boolean value is set to 'false'.
+
+func (txtLinesColAtom *textLineSpecLinesCollectionAtom) equalCollections(
+	textLinesCol01 *TextLineSpecLinesCollection,
+	textLinesCol02 *TextLineSpecLinesCollection) bool {
+
+	if txtLinesColAtom.lock == nil {
+		txtLinesColAtom.lock = new(sync.Mutex)
+	}
+
+	txtLinesColAtom.lock.Lock()
+
+	defer txtLinesColAtom.lock.Unlock()
+
+	if textLinesCol01 == nil ||
+		textLinesCol02 == nil {
+
+		return false
+	}
+
+	lenTextLinesCol01 := len(textLinesCol01.textLines)
+
+	if lenTextLinesCol01 !=
+		len(textLinesCol02.textLines) {
+
+		return false
+	}
+
+	if lenTextLinesCol01 == 0 {
+		return true
+	}
+
+	for i := 0; i < lenTextLinesCol01; i++ {
+
+		if !textLinesCol01.textLines[i].EqualITextLine(
+			textLinesCol02.textLines[i]) {
+
+			return false
+		}
+
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // textLineSpecLinesCollectionAtom.
 //
