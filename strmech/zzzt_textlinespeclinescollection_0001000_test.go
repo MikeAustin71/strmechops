@@ -215,3 +215,128 @@ func TestTextLineSpecLinesCollection_CopyIn_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_CopyOut_000100()",
+		"")
+
+	expectedNumOfTxtLines,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines := txtLinesCol01.GetNumberOfTextLines()
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.GetNumberOfTextLines()\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"Instead  Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+
+	}
+
+	var txtLinesCol02 TextLineSpecLinesCollection
+
+	txtLinesCol02,
+		err = txtLinesCol01.CopyOut(
+		ePrefix.XCpy(
+			"txtLinesCol02<-txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines = txtLinesCol02.GetNumberOfTextLines()
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.GetNumberOfTextLines()\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"Instead  Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+
+	}
+
+	if !txtLinesCol01.Equal(&txtLinesCol02) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.Equal(&txtLinesCol02)\n"+
+			"Expected 'txtLinesCol01' == 'txtLinesCol02'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol03.CopyOut(
+		ePrefix.XCpy(
+			"txtLinesCol03 is Empty!"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"CopyOut()\n"+
+			"because 'txtLinesCol03' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	txtLinesCol04,
+		err = txtLinesCol01.CopyOut(
+		ePrefix.XCpy(
+			"txtLinesCol04<-txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol04.CopyOut(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}

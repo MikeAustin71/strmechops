@@ -307,11 +307,12 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 
 	for i := 0; i < lenTxtLineCol; i++ {
 
-		if newTxtLinesCol.textLines[i] == nil {
+		if textLineCol.textLines[i] == nil {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: Text Line element newTxtLinesCol.textLines[%v]\n"+
-				"has a 'nil' value!\n",
+				"Error: Text Line element textLineCol.textLines[%v]\n"+
+				"has a 'nil' value!\n"+
+				"'textLineCol' is an input parameter.\n",
 				ePrefix.String(),
 				i)
 
@@ -319,7 +320,7 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyOut(
 		}
 
 		newTextLine,
-			err = newTxtLinesCol.textLines[i].CopyOutITextLine(
+			err = textLineCol.textLines[i].CopyOutITextLine(
 			ePrefix.XCpy(
 				fmt.Sprintf(
 					"incomingTextLineCol.textLines[%v] copy error",

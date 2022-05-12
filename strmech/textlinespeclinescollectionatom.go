@@ -271,6 +271,8 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) testValidityOfTextLinesC
 		return isValid, err
 	}
 
+	var err2 error
+
 	for i := 0; i < lenTxtLines; i++ {
 
 		if textLineCol.textLines[i] == nil {
@@ -284,12 +286,19 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) testValidityOfTextLinesC
 			return isValid, err
 		}
 
-		err = textLineCol.textLines[i].IsValidInstanceError(
+		err2 = textLineCol.textLines[i].IsValidInstanceError(
 			ePrefix.XCpy(fmt.Sprintf(
 				"textLineCol.textLines[%v]",
 				i)))
 
-		if err != nil {
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"ERROR: textLineCol.textLines[%v] is invalid!\n"+
+				"%v\n",
+				ePrefix.String(),
+				i,
+				err2)
+
 			return isValid, err
 		}
 
