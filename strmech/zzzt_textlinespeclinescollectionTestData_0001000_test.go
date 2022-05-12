@@ -189,3 +189,98 @@ func createTestTextLineSpecCollection01(
 
 	return numOfLines, txtLineCollection, err
 }
+
+func createTestTextLineSpecCollection02(
+	errorPrefix interface{}) (
+	numOfLines int,
+	txtLineCollection TextLineSpecLinesCollection,
+	err error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	txtLineCollection = TextLineSpecLinesCollection{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDataGeneration - "+
+			"createTestTextLineSpecCollection02()",
+		"")
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	leftMargin := 3
+	rightMargin := 3
+	textString := "The cow jumped over the moon!"
+
+	var plainTextLine01 TextLineSpecPlainText
+
+	plainTextLine01,
+		err = TextLineSpecPlainText{}.NewDefault(
+		leftMargin,
+		rightMargin,
+		textString,
+		ePrefix.XCpy(
+			"plainTextLine01"))
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	err = txtLineCollection.AddTextLine(
+		&plainTextLine01,
+		ePrefix.XCpy(
+			"plainTextLine01"))
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	numOfLines++
+
+	var stdLine01, stdLine02 TextLineSpecStandardLine
+
+	stdLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	err = txtLineCollection.AddTextLine(
+		&stdLine01,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	numOfLines++
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	err = txtLineCollection.AddTextLine(
+		&stdLine02,
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		return numOfLines, txtLineCollection, err
+	}
+
+	numOfLines++
+
+	return numOfLines, txtLineCollection, err
+}

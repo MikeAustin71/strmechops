@@ -15,7 +15,7 @@ func TestTextLineSpecLinesCollection_AddTextLine_000100(t *testing.T) {
 		txtLinesCol01,
 		err := createTestTextLineSpecCollection01(
 		ePrefix.XCpy(
-			"stdLinesCol01"))
+			"txtLinesCol01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -105,6 +105,107 @@ func TestTextLineSpecLinesCollection_AddTextLine_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesCol03."+
 			"AddTextLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_CopyIn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_CopyIn_000100()",
+		"")
+
+	expectedNumOfTxtLines,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol01<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	err =
+		txtLinesCol02.CopyIn(
+			&txtLinesCol01,
+			ePrefix.XCpy(
+				"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines := txtLinesCol02.GetNumberOfTextLines()
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.GetNumberOfTextLines()\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"Instead  Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+
+	}
+
+	if !txtLinesCol01.Equal(&txtLinesCol02) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.Equal(&txtLinesCol02)\n"+
+			"Expected 'txtLinesCol01' == 'txtLinesCol02'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	err =
+		txtLinesCol03.CopyIn(
+			nil,
+			ePrefix.XCpy(
+				"txtLinesCol03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"CopyIn()\n"+
+			"because 'incomingTxtLinesCol' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol04 := TextLineSpecLinesCollection{}
+
+	err =
+		txtLinesCol04.CopyIn(
+			&txtLinesCol01,
+			StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"CopyIn()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
