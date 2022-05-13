@@ -23,6 +23,17 @@ func TestTextLineSpecLinesCollection_AddTextLine_000100(t *testing.T) {
 		return
 	}
 
+	if !txtLinesCol01.IsValidInstance() {
+		t.Errorf("%v - ERROR\n"+
+			"The 'txtLinesCol1' is invalid!\n"+
+			"createTestTextLineSpecCollection01()\n"+
+			"returned an invalid collection!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
 	actualNumOfTxtLines :=
 		txtLinesCol01.GetNumberOfTextLines()
 
@@ -147,6 +158,16 @@ func TestTextLineSpecLinesCollection_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	if !txtLinesCol02.IsValidInstance() {
+		t.Errorf("%v - ERROR\n"+
+			"The 'txtLinesCol02' is invalid!\n"+
+			"txtLinesCol02.CopyIn(&txtLinesCol01)\n"+
+			"returned an invalid collection!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	actualNumOfTxtLines := txtLinesCol02.GetNumberOfTextLines()
 
 	if expectedNumOfTxtLines != actualNumOfTxtLines {
@@ -234,6 +255,16 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 		return
 	}
 
+	if !txtLinesCol01.IsValidInstance() {
+		t.Errorf("%v - ERROR\n"+
+			"The 'txtLinesCol01' is invalid!\n"+
+			"createTestTextLineSpecCollection02()\n"+
+			"returned an invalid collection!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	actualNumOfTxtLines := txtLinesCol01.GetNumberOfTextLines()
 
 	if expectedNumOfTxtLines != actualNumOfTxtLines {
@@ -260,6 +291,16 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
+		return
+	}
+
+	if !txtLinesCol02.IsValidInstance() {
+		t.Errorf("%v - ERROR\n"+
+			"The 'txtLinesCol02' is invalid!\n"+
+			"txtLinesCol02.CopyOut() returned\n"+
+			"an invalid collection!\n",
+			ePrefix.String())
+
 		return
 	}
 
@@ -333,6 +374,29 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 			"CopyOut()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_IsValidInstance_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_IsValidInstance_000100()",
+		"")
+
+	txtLinesCol01 := TextLineSpecLinesCollection{}
+
+	if txtLinesCol01.IsValidInstance() {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected a value of 'false' from txtLinesCol01."+
+			"IsValidInstance()\n"+
+			"because 'txtLinesCol01' is empty.\n"+
+			"HOWEVER, A VALUE OF 'true' WAS RETURNED!\n",
 			ePrefix.String())
 
 		return

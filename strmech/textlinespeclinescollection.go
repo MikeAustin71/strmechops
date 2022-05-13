@@ -657,6 +657,60 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
 	return newTextLines, err
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineSpecLinesCollection
+// instance to determine if they are valid.
+//
+// If all data element evaluate as valid, this method returns
+// 'true'. If any data element is invalid, this method returns
+// 'false'.
+//
+// ------------------------------------------------------------------------
+//
+// BE ADVISED
+//
+// If the current instance of TextLineSpecLinesCollection contains
+// zero Text Line members in the collection, this method will
+// return 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If all data elements encapsulated by the current instance
+//       of TextLineSpecLinesCollection are valid, this returned
+//       boolean value is set to 'true'. If any data values are
+//       invalid, this return parameter is set to 'false'.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstance() (
+	isValid bool) {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	isValid,
+		_ = textLineSpecLinesCollectionAtom{}.ptr().
+		testValidityOfTextLinesCollection(
+			txtLinesCol,
+			nil)
+
+	return isValid
+}
+
 // ReplaceTextLine - Receives an object which implements the
 // ITextLineSpecification interface. This object will replace an
 // existing text line object within the text line collection
