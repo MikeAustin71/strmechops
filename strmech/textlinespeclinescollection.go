@@ -629,9 +629,9 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 }
 
 // GetTextLine - Returns a deep copy of the Text Line Collection
-// member specified by input parameter, 'zeroBasedIndex'.
+// member element specified by input parameter, 'zeroBasedIndex'.
 //
-// If the text line collection maintained by the current
+// If the Text Line collection maintained by the current
 // TextLineSpecLinesCollection instance is empty (contains zero
 // elements), an error will be returned.
 //
@@ -644,7 +644,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 // zero.
 //
 // If input parameter 'zeroBasedIndex' is less than zero or greater
-// than the last member element in collection, an error will be
+// than the last member element in the collection, an error will be
 // returned.
 //
 //

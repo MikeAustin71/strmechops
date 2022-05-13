@@ -2409,6 +2409,203 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 	return len(stdLine.textFields)
 }
 
+// GetTextField - Returns a deep copy of the Text Fields Collection
+// member element specified by input parameter, 'zeroBasedIndex'.
+//
+// If the Text Fields collection maintained by the current
+// TextLineSpecStandardLine instance is empty (contains zero
+// elements), an error will be returned.
+//
+// If any of the Text Fields within the collection maintained by
+// the current TextLineSpecStandardLine instance are invalid,
+// an error will be returned.
+//
+// Remember that indexes in the Text Fields collection are zero
+// based. This means the first element in the collection is index
+// zero.
+//
+// If input parameter 'zeroBasedIndex' is less than zero or greater
+// than the last member element in the collection, an error will be
+// returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  zeroBasedIndex             int
+//     - Specifies the index of the member element in the Text
+//       Fields collection which will be returned as a deep copy
+//       of the original. If this input parameter is found to be
+//       invalid or if the Text Fields collection is empty, an
+//       error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ITextFieldSpecification
+//     - If this method completes successfully, a deep copy of the
+//       Text Field member element specified by input parameter
+//       'zeroBasedIndex' will be returned.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine *TextLineSpecStandardLine) GetTextField(
+	zeroBasedIndex int,
+	errorPrefix interface{}) (
+	ITextFieldSpecification,
+	error) {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var iTextFieldSpec ITextFieldSpecification
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"GetTextField()",
+		"")
+
+	if err != nil {
+		return iTextFieldSpec, err
+	}
+
+	lenTextFields := len(stdLine.textFields)
+
+	if lenTextFields == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The Text Fields Collection is empty\n"+
+			"and contains zero elements!\n",
+			ePrefix.String())
+
+		return iTextFieldSpec, err
+
+	}
+
+	if zeroBasedIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
+			"'zeroBasedIndex' is less than zero!\n"+
+			"zeroBasedIndex = '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return iTextFieldSpec, err
+
+	}
+
+	lastIndex := lenTextFields - 1
+
+	if zeroBasedIndex > lastIndex {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
+			"The value of 'zeroBasedIndex' is greater than the last\n"+
+			"index in the Text Fields Collection!\n"+
+			"Last Collection Index = '%v'\n"+
+			"zeroBasedIndex        = '%v'\n",
+			ePrefix.String(),
+			lastIndex,
+			zeroBasedIndex)
+
+		return iTextFieldSpec, err
+	}
+
+	if stdLine.textFields[zeroBasedIndex] == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The Text Field Collection is invalid.\n"+
+			"The value of stdLine.textFields[zeroBasedIndex] is nill\n"+
+			"zeroBasedIndex = '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return iTextFieldSpec, err
+
+	}
+
+	iTextFieldSpec,
+		err = stdLine.textFields[zeroBasedIndex].
+		CopyOutITextField(
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"stdLine.textFields[%v]",
+					zeroBasedIndex)))
+
+	return iTextFieldSpec, err
+}
+
 // GetTextFieldCollection - Returns a deep copy of the text fields contained
 // in the current TextLineSpecStandardLine instance.
 //
