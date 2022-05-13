@@ -2409,7 +2409,7 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 	return len(stdLine.textFields)
 }
 
-// GetTextFields - Returns a deep copy of the text fields contained
+// GetTextFieldCollection - Returns a deep copy of the text fields contained
 // in the current TextLineSpecStandardLine instance.
 //
 // These text fields are returned in an array of
@@ -2498,7 +2498,7 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (stdLine *TextLineSpecStandardLine) GetTextFields(
+func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 	errorPrefix interface{}) (
 	[]ITextFieldSpecification,
 	error) {
@@ -2517,7 +2517,8 @@ func (stdLine *TextLineSpecStandardLine) GetTextFields(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecStandardLine.GetTextFields()",
+		"TextLineSpecStandardLine."+
+			"GetTextFieldCollection()",
 		"")
 
 	if err != nil {

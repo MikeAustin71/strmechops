@@ -382,6 +382,16 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 	return
 }
 
+//func TestTextLineSpecLinesCollection_DeleteTextLineMember_000100(t *testing.T) {
+//
+//	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+//		"TestTextLineSpecLinesCollection_DeleteTextLineMember_000100()",
+//		"")
+//
+//
+//
+//}
+
 func TestTextLineSpecLinesCollection_Empty_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

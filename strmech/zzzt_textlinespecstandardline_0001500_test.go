@@ -674,7 +674,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 	stdLine01 := TextLineSpecStandardLine{}
 
 	_,
-		err := stdLine01.GetTextFields(
+		err := stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"stdLine01"))
 
@@ -700,7 +700,7 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 	var textLines []ITextFieldSpecification
 
 	textLines,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textLines<-stdLine02"))
 
@@ -737,14 +737,14 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 	}
 
 	_,
-		err = stdLine03.GetTextFields(
+		err = stdLine03.GetTextFieldCollection(
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from TextLineSpecStandardLine{}."+
-			"GetTextFields()\n"+
+			"GetTextFieldCollection()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -775,14 +775,14 @@ func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
 	stdLine02.textFields[2] = nil
 
 	_,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textLines<-stdLine02"))
 
 	if err == nil {
 
 		t.Errorf("%v\n"+
-			"Error: stdLine02.GetTextFields()\n"+
+			"Error: stdLine02.GetTextFieldCollection()\n"+
 			"Expected an error return because\n"+
 			"stdLine02.textFields[2] = nil .\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
@@ -1192,7 +1192,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000100(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -1339,7 +1339,7 @@ func TestTextLineSpecStandardLine_NewStandardLine_000200(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -1391,7 +1391,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000100(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -1538,7 +1538,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLine_000200(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -1589,7 +1589,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000100(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -1838,7 +1838,7 @@ func TestTextLineSpecStandardLine_NewStandardLineAllParms_000200(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -1894,7 +1894,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100(t *testing.T
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -2143,7 +2143,7 @@ func TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200(t *testing.T
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 

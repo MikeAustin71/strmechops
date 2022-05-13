@@ -269,7 +269,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 
@@ -329,7 +329,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000100(t *testing.T) {
 	}
 
 	textFields,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine02"))
 
@@ -376,7 +376,7 @@ func TestTextLineSpecStandardLine_AddTextFields_000200(t *testing.T) {
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine01"))
 

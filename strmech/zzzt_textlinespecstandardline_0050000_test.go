@@ -34,7 +34,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000100(t *testing.T) {
 	var textFields01, textFields02 []ITextFieldSpecification
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01"))
 
@@ -57,7 +57,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000100(t *testing.T) {
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields02<-stdLine02"))
 
@@ -153,7 +153,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 	var textFields01, textFields02 []ITextFieldSpecification
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01"))
 
@@ -177,7 +177,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000200(t *testing.T) {
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields02<-stdLine02"))
 
@@ -280,7 +280,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000300(t *testing.T) {
 	var textFields01, textFields02 []ITextFieldSpecification
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01"))
 
@@ -302,7 +302,7 @@ func TestTextLineSpecStandardLineAtom_copyTextFields_000300(t *testing.T) {
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields02<-stdLine02"))
 
@@ -893,7 +893,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	var textFields01, textFields02 []ITextFieldSpecification
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01"))
 
@@ -917,7 +917,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields02<-stdLine02"))
 
@@ -953,7 +953,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01 #2"))
 
@@ -975,7 +975,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields02,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine02 #2"))
 
@@ -1021,7 +1021,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01 #3"))
 
@@ -1043,7 +1043,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields02<-stdLine02 #3"))
 
@@ -1084,7 +1084,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine02 #4"))
 
@@ -1133,7 +1133,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01 #4"))
 
@@ -1165,7 +1165,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	textFields01 = make([]ITextFieldSpecification, 0)
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine02 #4"))
 
@@ -1223,7 +1223,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields01,
-		err = stdLine01.GetTextFields(
+		err = stdLine01.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine01 #5"))
 
@@ -1245,7 +1245,7 @@ func TestTextLineSpecStandardLineElectron_equalTextFieldArrays_000100(t *testing
 	}
 
 	textFields02,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields01<-stdLine02 #5"))
 
@@ -1325,7 +1325,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *tes
 
 	textFields,
 		err =
-		stdLine01.GetTextFields(
+		stdLine01.GetTextFieldCollection(
 			ePrefix.XCpy(
 				"textFields<-stdLine01"))
 
@@ -1359,7 +1359,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000200(t *tes
 
 	textFields,
 		err =
-		stdLine01.GetTextFields(
+		stdLine01.GetTextFieldCollection(
 			ePrefix.XCpy(
 				"#2 textFields<-stdLine01"))
 
@@ -1411,7 +1411,7 @@ func TestTextLineSpecStandardLineElectron_testValidityOfTextFields_000300(t *tes
 
 	textFields,
 		err =
-		stdLine01.GetTextFields(
+		stdLine01.GetTextFieldCollection(
 			ePrefix.XCpy(
 				"textFields<-stdLine01"))
 
@@ -1771,7 +1771,7 @@ func TestTestTextLineSpecStandardLineNanobot_addTextFields_000100(t *testing.T) 
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine02"))
 
@@ -1840,7 +1840,7 @@ func TestTestTextLineSpecStandardLineNanobot_addTextFields_000200(t *testing.T) 
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine02"))
 
@@ -2596,7 +2596,7 @@ func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000100(t *testin
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine02"))
 
@@ -2761,7 +2761,7 @@ func TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200(t *testin
 	var textFields []ITextFieldSpecification
 
 	textFields,
-		err = stdLine02.GetTextFields(
+		err = stdLine02.GetTextFieldCollection(
 		ePrefix.XCpy(
 			"textFields<-stdLine02"))
 

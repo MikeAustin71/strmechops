@@ -506,7 +506,8 @@ func (txtLinesCol *TextLineSpecLinesCollection) DeleteTextLineMember(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecLinesCollection.CopyIn()",
+		"TextLineSpecLinesCollection."+
+			"DeleteTextLineMember()",
 		"")
 
 	if err != nil {
@@ -627,8 +628,205 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 	return len(txtLinesCol.textLines)
 }
 
-// GetTextLines - Returns a deep copy of the text lines contained
-// in the current TextLineSpecLinesCollection instance.
+// GetTextLine - Returns a deep copy of the Text Line Collection
+// member specified by input parameter, 'zeroBasedIndex'.
+//
+// If the text line collection maintained by the current
+// TextLineSpecLinesCollection instance is empty (contains zero
+// elements), an error will be returned.
+//
+// If any of the text lines within the collection maintained by
+// the current TextLineSpecLinesCollection instance are invalid,
+// an error will be returned.
+//
+// Remember that indexes in the Text Lines collection are zero
+// based. This means the first element in the collection is index
+// zero.
+//
+// If input parameter 'zeroBasedIndex' is less than zero or greater
+// than the last member element in collection, an error will be
+// returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  zeroBasedIndex             int
+//     - Specifies the index of the member element in the Text
+//       Lines collection which will be returned as a deep copy
+//       of the original. If this input parameter is found to be
+//       invalid or if the Text Lines collection is empty, an
+//       error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ITextLineSpecification
+//     - If this method completes successfully, a deep copy of the
+//       Text Line member element specified by input parameter
+//       'zeroBasedIndex' will be returned.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
+	zeroBasedIndex int,
+	errorPrefix interface{}) (
+	ITextLineSpecification,
+	error) {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var iTextLineSpec ITextLineSpecification
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"DeleteTextLineMember()",
+		"")
+
+	if err != nil {
+		return iTextLineSpec, err
+	}
+
+	lenTextLines := len(txtLinesCol.textLines)
+
+	if lenTextLines == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The Text Lines Collection is empty\n"+
+			"and contains zero elements!\n",
+			ePrefix.String())
+
+		return iTextLineSpec, err
+
+	}
+
+	if zeroBasedIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
+			"'zeroBasedIndex' is less than zero!\n"+
+			"zeroBasedIndex = '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return iTextLineSpec, err
+
+	}
+
+	lastIndex := lenTextLines - 1
+
+	if zeroBasedIndex > lastIndex {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
+			"The value of 'zeroBasedIndex' is greater than the last\n"+
+			"index in the Text Lines Collection!\n"+
+			"Last Collection Index = '%v'\n"+
+			"zeroBasedIndex        = '%v'\n",
+			ePrefix.String(),
+			lastIndex,
+			zeroBasedIndex)
+
+		return iTextLineSpec, err
+	}
+
+	if txtLinesCol.textLines[zeroBasedIndex] == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The Text Line Collection is invalid.\n"+
+			"The value of txtLinesCol.textLines[zeroBasedIndex] is nill\n"+
+			"zeroBasedIndex = '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return iTextLineSpec, err
+
+	}
+
+	iTextLineSpec,
+		err = txtLinesCol.textLines[zeroBasedIndex].
+		CopyOutITextLine(
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"txtLinesCol.textLines[%v]",
+					zeroBasedIndex)))
+
+	return iTextLineSpec, err
+}
+
+// GetTextLineCollection - Returns a deep copy of the text lines
+// contained in the current TextLineSpecLinesCollection instance.
 //
 // These text lines are returned in an array of
 // ITextLineSpecification objects.
@@ -715,7 +913,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
+func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 	errorPrefix interface{}) (
 	[]ITextLineSpecification,
 	error) {
@@ -734,7 +932,8 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLines(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextLineSpecLinesCollection.GetTextLines()",
+		"TextLineSpecLinesCollection."+
+			"GetTextLineCollection()",
 		"")
 
 	if err != nil {
