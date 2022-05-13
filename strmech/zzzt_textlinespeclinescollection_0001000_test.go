@@ -404,3 +404,131 @@ func TestTextLineSpecLinesCollection_IsValidInstance_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecLinesCollection_IsValidInstanceError_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_IsValidInstanceError_000100()",
+		"")
+
+	_,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol02 TextLineSpecLinesCollection
+
+	txtLinesCol02,
+		err = txtLinesCol01.CopyOut(
+		ePrefix.XCpy(
+			"txtLinesCol02<-txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol02.textLines[2].Empty()
+
+	err = txtLinesCol02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol02-invalid array element"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"IsValidInstanceError()\n"+
+			"because 'txtLinesCol02.textLines[2]' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	err = txtLinesCol03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol03 is empty"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"IsValidInstanceError()\n"+
+			"because 'txtLinesCol03' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	txtLinesCol04,
+		err = txtLinesCol01.CopyOut(
+		ePrefix.XCpy(
+			"txtLinesCol04<-txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol04.IsValidInstanceError(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"IsValidInstanceError()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
