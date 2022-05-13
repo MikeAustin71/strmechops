@@ -382,6 +382,76 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecLinesCollection_Empty_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_Empty_000100()",
+		"")
+
+	_,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol01.Empty()
+
+	actualNumOfTextLines := txtLinesCol01.GetNumberOfTextLines()
+
+	if actualNumOfTextLines != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"After calling txtLinesCol01.Empty()\n"+
+			"it was expected that all Text Lines would be deleted.\n"+
+			"HOWEVER, TEXT LINES STILL REMAIN IN THE COLLECTION!\n"+
+			"Actual Number of Text Lines in Collection = '%v'\n",
+			ePrefix.String(),
+			actualNumOfTextLines)
+
+		return
+
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	txtLinesCol02.Empty()
+
+	err = txtLinesCol02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol03 is empty"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"IsValidInstanceError()\n"+
+			"because 'txtLinesCol02.Empty()' was called\n"+
+			"immediately prior.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecLinesCollection_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
