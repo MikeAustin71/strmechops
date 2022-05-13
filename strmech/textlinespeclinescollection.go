@@ -387,6 +387,144 @@ func (txtLinesCol *TextLineSpecLinesCollection) CopyOut(
 				"txtLinesCol->"))
 }
 
+// DeleteTextLineMember - Deletes a member of the Text Lines
+// collection encapsulated by the current instance of
+// TextLineSpecLinesCollection.
+//
+// Input parameter 'zeroBasedIndex' is used to specify the
+// collection member which will be deleted. If the operation
+// is completed successfully, the total number of member elements
+// in the collection will be reduced by one (1).
+//
+// If input parameter 'zeroBasedIndex' is less than zero or greater
+// than the last member element in collection, an error will be
+// returned. Also, if this method is called on an empty collection,
+// an error will be returned.
+//
+// Remember that indexes in the Text Lines collection are zero
+// based. This means the first element in the collection is index
+// zero.
+//
+// ----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// If you delete the last element in the collection, the current
+// instance TextLineSpecLinesCollection will be rendered invalid,
+// and cannot be used until more Text Line elements are added to
+// the collection
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  zeroBasedIndex             int
+//     - Specifies the index of the member element in the Text
+//       Lines collection which will be deleted. If this input
+//       parameter is found to be invalid or if the Text Lines
+//       collection is empty, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) DeleteTextLineMember(
+	zeroBasedIndex int,
+	errorPrefix interface{}) error {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection.CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = textLineSpecLinesCollectionAtom{}.ptr().
+		deleteTextLineElement(
+			txtLinesCol,
+			zeroBasedIndex,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"Delete Element txtLinesCol[%v]",
+					zeroBasedIndex)))
+
+	return err
+}
+
 // Empty - Empties the text line collection and resets all member
 // variables to their initial or zero values.
 //

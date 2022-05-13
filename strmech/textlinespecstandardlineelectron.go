@@ -136,19 +136,37 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) deleteTextField(
 
 	if indexId == 0 {
 
-		txtStdLine.textFields[0].Empty()
+		if txtStdLine.textFields[0] != nil {
+
+			txtStdLine.textFields[0].Empty()
+
+			txtStdLine.textFields[0] = nil
+
+		}
 
 		txtStdLine.textFields = txtStdLine.textFields[1:]
 
 	} else if indexId == lastIdx {
 
-		txtStdLine.textFields[lastIdx].Empty()
+		if txtStdLine.textFields[lastIdx] != nil {
+
+			txtStdLine.textFields[lastIdx].Empty()
+
+			txtStdLine.textFields[lastIdx] = nil
+
+		}
 
 		txtStdLine.textFields = txtStdLine.textFields[0:lastIdx]
 
 	} else {
 
-		txtStdLine.textFields[indexId].Empty()
+		if txtStdLine.textFields[indexId] != nil {
+
+			txtStdLine.textFields[indexId].Empty()
+
+			txtStdLine.textFields[indexId] = nil
+
+		}
 
 		txtStdLine.textFields = append(
 			txtStdLine.textFields[0:indexId],
