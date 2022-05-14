@@ -382,15 +382,153 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 	return
 }
 
-//func TestTextLineSpecLinesCollection_DeleteTextLineMember_000100(t *testing.T) {
-//
-//	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-//		"TestTextLineSpecLinesCollection_DeleteTextLineMember_000100()",
-//		"")
-//
-//
-//
-//}
+func TestTextLineSpecLinesCollection_DeleteTextLineMember_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_DeleteTextLineMember_000100()",
+		"")
+
+	expectedNumOfTxtLines,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumOfTxtLines--
+
+	err = txtLinesCol01.DeleteTextLineMember(
+		2,
+		ePrefix.XCpy(
+			"txtLinesCol01 index=2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines :=
+		txtLinesCol01.GetNumberOfTextLines()
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.GetNumberOfTextLines()\n"+
+			"Expected Text Lines Don't Match Actual Text Lines\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"  Acutal Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+	}
+
+	var iTxtLine ITextLineSpecification
+
+	iTxtLine,
+		err = txtLinesCol01.GetTextLine(
+		2,
+		ePrefix.XCpy(
+			"txtLinesCol01 index=2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	typeName := iTxtLine.TextLineSpecName()
+
+	if typeName != "BlankLines" {
+
+		t.Errorf("\n%v\n"+
+			"Error: iTxtLine.TextLineSpecName()\n"+
+			"Expected Type Name would equal 'BlankLines'\n"+
+			"after deleting index #2. However, the Expected\n"+
+			"Type Name DOES NOT EQUAL the Actual Type Name\n"+
+			"Expected Type Name = 'Blank Lines' \n"+
+			"  Acutal Type Name = '%v'\n",
+			ePrefix.String(),
+			typeName)
+
+		return
+	}
+
+	var txtLinesCol02 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol02,
+		err = createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol02.DeleteTextLineMember(
+		-1,
+		ePrefix.XCpy(
+			"txtLinesCol02 index=-1"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"DeleteTextLineMember()\n"+
+			"because input parameter 'zeroBaseIndex' has\n"+
+			"a value of minus one (-1).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesCol02.DeleteTextLineMember(
+		99,
+		ePrefix.XCpy(
+			"txtLinesCol02 index=99"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"DeleteTextLineMember()\n"+
+			"because input parameter 'zeroBaseIndex'\n"+
+			"has a value of 99.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesCol02.DeleteTextLineMember(
+		2,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"DeleteTextLineMember()\n"+
+			"because input parameter 'errorPrefix is invalid.'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
 
 func TestTextLineSpecLinesCollection_Empty_000100(t *testing.T) {
 
