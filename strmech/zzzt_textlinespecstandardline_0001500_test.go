@@ -665,10 +665,149 @@ func TestTextLineSpecStandardLine_GetNumOfStdLines_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
+func TestTextLineSpecStandardLine_GetTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_GetTextFields_000100()",
+		"TestTextLineSpecStandardLine_GetTextField_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	_,
+		err := stdLine01.GetTextField(
+		0,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine01.GetTextField()\n"+
+			"because the Text Fields collection is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTextField ITextFieldSpecification
+
+	iTextField,
+		err = stdLine02.GetTextField(
+		1,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	fieldName := iTextField.TextFieldName()
+
+	if fieldName != "Label" {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected Field Name for returned field index 1\n"+
+			"would be 'Label'\n"+
+			"HOWEVER, A DIFFERNT FIELD NAME WAS RETURNED!\n"+
+			"Expected Field Name = 'Label'\n"+
+			"  Actual Field Name = '%v'",
+			ePrefix.String(),
+			fieldName)
+
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine03.GetTextField(
+		1,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03."+
+			"GetTextField()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = stdLine03.GetTextField(
+		-1,
+		ePrefix.XCpy(
+			"stdLine03 index=-1"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03."+
+			"GetTextField()\n"+
+			"because input parameter 'zeroBasedIndex' has\n"+
+			"a value of minus one (-1) and is therefore invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err = stdLine03.GetTextField(
+		999,
+		ePrefix.XCpy(
+			"stdLine03 index=999"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from stdLine03."+
+			"GetTextField()\n"+
+			"because input parameter 'zeroBasedIndex' has\n"+
+			"a value of 999 and is therefore invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_GetTextFieldCollection_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetTextFieldCollection_000100()",
 		"")
 
 	stdLine01 := TextLineSpecStandardLine{}
@@ -755,10 +894,10 @@ func TestTextLineSpecStandardLine_GetTextFields_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_GetTextFields_000200(t *testing.T) {
+func TestTextLineSpecStandardLine_TestTextLineSpecStandardLine_GetTextFieldCollection_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_GetTextFields_000200()",
+		"TestTextLineSpecStandardLine_TestTextLineSpecStandardLine_GetTextFieldCollection_000200()",
 		"")
 
 	stdLine02,
