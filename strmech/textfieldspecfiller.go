@@ -3413,7 +3413,7 @@ func (txtFillerField *TextFieldSpecFiller) TextFieldName() string {
 
 	defer txtFillerField.lock.Unlock()
 
-	return "TextFieldSpecFiller"
+	return "Filler"
 }
 
 // TextTypeName - returns a string specifying the type

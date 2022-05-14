@@ -4967,7 +4967,7 @@ func TestTextFieldSpecLabel_TextFieldName_0001000(t *testing.T) {
 
 	ePrefix := "TestTextFieldSpecLabel_TextFieldName_0001000()"
 
-	expectedTxtFieldName := "TextFieldSpecLabel"
+	expectedTxtFieldName := "Label"
 
 	actualTxtFieldName := TextFieldSpecLabel{}.
 		NewPtr().TextFieldName()

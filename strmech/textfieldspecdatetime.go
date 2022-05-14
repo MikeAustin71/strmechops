@@ -3824,7 +3824,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextFieldName() string {
 
 	defer txtDateTimeField.lock.Unlock()
 
-	return "TextFieldSpecDateTime"
+	return "DateTime"
 }
 
 // TextTypeName - returns a string specifying the type of Text

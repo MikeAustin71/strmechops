@@ -1922,7 +1922,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextFieldName() string {
 
 	defer txtFieldSpacer.lock.Unlock()
 
-	return "TextFieldSpecSpacer"
+	return "Spacer"
 }
 
 // TextTypeName - returns a string specifying the type of Text

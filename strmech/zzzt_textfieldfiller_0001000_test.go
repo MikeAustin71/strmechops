@@ -10720,7 +10720,7 @@ func TestTextFieldSpecFiller_TextFieldName_000100(t *testing.T) {
 	fillerChars := "-"
 	fillerRepeatCnt := 5
 
-	expectedFieldName := "TextFieldSpecFiller"
+	expectedFieldName := "Filler"
 
 	fillerTxtFieldOne,
 		err := TextFieldSpecFiller{}.NewPtrTextFiller(
@@ -10799,6 +10799,8 @@ func TestTextFieldSpecFiller_TextTypeName_000100(t *testing.T) {
 	actualTextTypeName = "A B C D E F X Y Z"
 
 	actualTextTypeName = TextFieldSpecFiller{}.NewPtr().TextFieldName()
+
+	expectedTextTypeName = "Filler"
 
 	if expectedTextTypeName != actualTextTypeName {
 		t.Errorf("%v - Test #2\n"+

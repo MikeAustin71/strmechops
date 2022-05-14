@@ -2319,7 +2319,7 @@ func TestTextFieldSpecSpacer_TextFieldName_000100(t *testing.T) {
 
 	fieldName := txtFieldSpacerOne.TextFieldName()
 
-	if fieldName != "TextFieldSpecSpacer" {
+	if fieldName != "Spacer" {
 
 		t.Errorf("%v\n"+
 			"Expected txtFieldSpacerOne.TextFieldName()\n"+

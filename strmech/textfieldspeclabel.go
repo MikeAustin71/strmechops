@@ -3528,7 +3528,7 @@ func (txtFieldLabel *TextFieldSpecLabel) TextFieldName() string {
 
 	defer txtFieldLabel.lock.Unlock()
 
-	return "TextFieldSpecLabel"
+	return "Label"
 }
 
 // TextTypeName - returns a string specifying the type of Text

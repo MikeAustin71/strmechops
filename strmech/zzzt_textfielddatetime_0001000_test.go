@@ -4362,7 +4362,7 @@ func TestTextFieldSpecDateTime_TextFieldName_000100(t *testing.T) {
 	textFieldName :=
 		txtFieldDateTimeOne.TextFieldName()
 
-	if textFieldName != "TextFieldSpecDateTime" {
+	if textFieldName != "DateTime" {
 
 		t.Errorf("%v - ERROR\n"+
 			"txtFieldDateTimeOne.TextFieldName()\n"+
