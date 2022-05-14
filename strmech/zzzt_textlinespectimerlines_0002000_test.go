@@ -3680,7 +3680,7 @@ func TestTextLineSpecTimerLines_TextLineSpecName_000100(t *testing.T) {
 		"TestTextLineSpecTimerLines_TextLineSpecName_000100()",
 		"")
 
-	expectedStr := "TextLineSpecTimerLines"
+	expectedStr := "TimerLines"
 
 	timerLines01 := TextLineSpecTimerLines{}
 

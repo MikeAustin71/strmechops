@@ -4771,7 +4771,7 @@ func TestTextLineSpecBlankLines_TextLineSpecName_000100(t *testing.T) {
 	textLineSpecName :=
 		txtBlankLinesOne.TextLineSpecName()
 
-	expectedTextLineSpecName := "TextLineSpecBlankLines"
+	expectedTextLineSpecName := "BlankLines"
 
 	if textLineSpecName != expectedTextLineSpecName {
 

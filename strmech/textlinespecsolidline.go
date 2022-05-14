@@ -5902,13 +5902,13 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) TextBuilder(
 	return err
 }
 
-// TextTypeName - returns a string specifying the type
-// of Text Line Specification.
+// TextLineSpecName - returns a string specifying the name
+// of this Text Line Specification.
 //
-// This method fulfills requirements of ITextSpecification
+// This method fulfills requirements of ITextLineSpecification
 // interface.
 //
-func (txtSpecSolidLine *TextLineSpecSolidLine) TextTypeName() string {
+func (txtSpecSolidLine *TextLineSpecSolidLine) TextLineSpecName() string {
 
 	if txtSpecSolidLine.lock == nil {
 		txtSpecSolidLine.lock = new(sync.Mutex)
@@ -5918,16 +5918,16 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) TextTypeName() string {
 
 	defer txtSpecSolidLine.lock.Unlock()
 
-	return "TextLineSpecSolidLine"
+	return "SolidLine"
 }
 
-// TextLineSpecName - returns a string specifying the name
-// of this Text Line Specification.
+// TextTypeName - returns a string specifying the type
+// of Text Line Specification.
 //
-// This method fulfills requirements of ITextLineSpecification
+// This method fulfills requirements of ITextSpecification
 // interface.
 //
-func (txtSpecSolidLine *TextLineSpecSolidLine) TextLineSpecName() string {
+func (txtSpecSolidLine *TextLineSpecSolidLine) TextTypeName() string {
 
 	if txtSpecSolidLine.lock == nil {
 		txtSpecSolidLine.lock = new(sync.Mutex)

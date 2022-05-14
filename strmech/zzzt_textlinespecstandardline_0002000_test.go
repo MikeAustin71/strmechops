@@ -2314,7 +2314,7 @@ func TestTextLineSpecStandardLine_TextLineSpecName_000100(t *testing.T) {
 
 	stdLine01 := TextLineSpecStandardLine{}
 
-	expectedStr := "TextLineSpecStandardLine"
+	expectedStr := "StandardLine"
 
 	actualStr := stdLine01.TextLineSpecName()
 

@@ -3400,7 +3400,7 @@ func TestTextLineSpecSolidLine_TextLineSpecName_000100(t *testing.T) {
 	actualTxtLineSpecName :=
 		txtSolidLine01.TextLineSpecName()
 
-	expectedTxtLineSpecName := "TextLineSpecSolidLine"
+	expectedTxtLineSpecName := "SolidLine"
 
 	if expectedTxtLineSpecName !=
 		actualTxtLineSpecName {

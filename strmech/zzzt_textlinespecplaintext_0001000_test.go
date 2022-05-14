@@ -5765,7 +5765,7 @@ func TestTextLineSpecPlainText_TextLineSpecName_000100(t *testing.T) {
 	actualTxtLineSpecName :=
 		plainTextLine01.TextLineSpecName()
 
-	expectedTxtLineSpecName := "TextLineSpecPlainText"
+	expectedTxtLineSpecName := "PlainText"
 
 	if expectedTxtLineSpecName !=
 		actualTxtLineSpecName {

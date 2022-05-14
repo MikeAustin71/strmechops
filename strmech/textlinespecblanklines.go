@@ -3127,7 +3127,7 @@ func (blkLines TextLineSpecBlankLines) TextLineSpecName() string {
 
 	defer blkLines.lock.Unlock()
 
-	return "TextLineSpecBlankLines"
+	return "BlankLines"
 }
 
 // TextTypeName - returns a string specifying the type

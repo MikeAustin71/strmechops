@@ -5362,7 +5362,7 @@ func (plainTextLine *TextLineSpecPlainText) TextLineSpecName() string {
 
 	defer plainTextLine.lock.Unlock()
 
-	return "TextLineSpecPlainText"
+	return "PlainText"
 }
 
 // TextTypeName - returns a string specifying the type

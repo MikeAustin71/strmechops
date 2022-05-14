@@ -5965,7 +5965,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextLineSpecName() string {
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return "TextLineSpecTimerLines"
+	return "TimerLines"
 }
 
 // TextTypeName - returns a string specifying the type
