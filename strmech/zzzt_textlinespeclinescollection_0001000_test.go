@@ -768,7 +768,7 @@ func TestTextLineSpecLinesCollection_Equal_000100(t *testing.T) {
 func TestTextLineSpecLinesCollection_GetNumberOfTextLines_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTESTSERIES_TESTMETHOD_000100()",
+		"TestTextLineSpecLinesCollection_GetNumberOfTextLines_000100()",
 		"")
 
 	expectedNumOfTxtLines,
@@ -817,6 +817,115 @@ func TestTextLineSpecLinesCollection_GetNumberOfTextLines_000100(t *testing.T) {
 
 		return
 
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_GetTextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_GetTextLine_000100()",
+		"")
+
+	// Index 1
+	stdLine02,
+		err := createTestTextLineSpecStandardLine02(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	var txtLinesCol01 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol01,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTxtLineSpec ITextLineSpecification
+
+	iTxtLineSpec,
+		err = txtLinesCol01.GetTextLine(
+		1,
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !iTxtLineSpec.EqualITextLine(
+		&stdLine02) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.GetTextLine(1)\n"+
+			"Expected ITextLineSpecifications object would be\n"+
+			"Equal to Actual ITextLineSpecifications object."+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol02.GetTextLine(
+		1,
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"DeleteTextLineMember()\n"+
+			"because input parameter 'zeroBaseIndex' has\n"+
+			"a value of minus one (-1).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	err = txtLinesCol03.CopyIn(
+		&txtLinesCol01,
+		ePrefix.XCpy(
+			"txtLinesCol03<=txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol03.GetTextLine(
+		1,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"DeleteTextLineMember()\n"+
+			"because input parameter 'zeroBaseIndex' has\n"+
+			"a value of minus one (-1).\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
 	}
 
 	return

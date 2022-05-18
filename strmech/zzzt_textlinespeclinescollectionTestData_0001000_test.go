@@ -36,6 +36,7 @@ func createTestTextLineSpecCollection01(
 		return numOfLines, txtLineCollection, err
 	}
 
+	// Index 0
 	err = txtLineCollection.AddTextLine(
 		&stdLine01,
 		ePrefix.XCpy(
@@ -56,6 +57,7 @@ func createTestTextLineSpecCollection01(
 		return numOfLines, txtLineCollection, err
 	}
 
+	// Index 1
 	err = txtLineCollection.AddTextLine(
 		&stdLine02,
 		ePrefix.XCpy(
@@ -76,6 +78,7 @@ func createTestTextLineSpecCollection01(
 		return numOfLines, txtLineCollection, err
 	}
 
+	// Index 2
 	err = txtLineCollection.AddTextLine(
 		&stdLine03,
 		ePrefix.XCpy(
