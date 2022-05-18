@@ -669,6 +669,102 @@ func TestTextLineSpecLinesCollection_EmptyTextLines_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecLinesCollection_Equal_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_Equal_000100()",
+		"")
+
+	_,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol01<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	areEqual := txtLinesCol02.Equal(
+		&txtLinesCol01)
+
+	if areEqual == true {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected a return of 'false' from txtLinesCol02."+
+			"Equal()\n"+
+			"because 'txtLinesCol02' is empty.\n"+
+			"HOWEVER, A VALUE OF 'true' WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err =
+		txtLinesCol02.CopyIn(
+			&txtLinesCol01,
+			ePrefix.XCpy(
+				"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtLinesCol01.Equal(&txtLinesCol02) {
+
+		t.Errorf("\n%v\n"+
+			"Test #2 \n"+
+			"Error: txtLinesCol01.Equal(&txtLinesCol02)\n"+
+			"Expected 'txtLinesCol01' == 'txtLinesCol02'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesCol02.DeleteTextLineMember(
+		1,
+		ePrefix.XCpy(
+			"txtLinesCol02 Delete Index 1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if txtLinesCol01.Equal(&txtLinesCol02) {
+
+		t.Errorf("\n%v\n"+
+			"Test #3 \n"+
+			"Error: txtLinesCol01.Equal(&txtLinesCol02)\n"+
+			"Expected 'txtLinesCol01' would NOT be equal to 'txtLinesCol02'"+
+			"because txtLinesCol02 index #1 has been deleted.\n"+
+			"HOWEVER, THEY ARE EQUAL!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecLinesCollection_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
