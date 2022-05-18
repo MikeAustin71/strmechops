@@ -765,6 +765,63 @@ func TestTextLineSpecLinesCollection_Equal_000100(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecLinesCollection_GetNumberOfTextLines_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_TESTMETHOD_000100()",
+		"")
+
+	expectedNumOfTxtLines,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol01<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines :=
+		txtLinesCol01.GetNumberOfTextLines()
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.GetNumberOfTextLines()\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"Instead  Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	actualNumOfTxtLines =
+		txtLinesCol02.GetNumberOfTextLines()
+
+	if actualNumOfTxtLines != 0 {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.GetNumberOfTextLines()\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"Instead  Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			0,
+			actualNumOfTxtLines)
+
+		return
+
+	}
+
+	return
+}
+
 func TestTextLineSpecLinesCollection_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
