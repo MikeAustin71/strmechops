@@ -941,10 +941,10 @@ func TestTextLineSpecStandardLine_GetTurnLineTerminatorOff_000100(t *testing.T) 
 
 }
 
-func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
+func TestTextLineSpecStandardLine_InsertTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100()",
+		"TestTextLineSpecStandardLine_InsertTextField_000100()",
 		"")
 
 	stdLine01,
@@ -982,7 +982,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 	var lastIndexId int
 
 	lastIndexId,
-		err = stdLine01.InsertTextFieldAtIndex(
+		err = stdLine01.InsertTextField(
 		&labelTxt,
 		2,
 		ePrefix.XCpy(
@@ -997,7 +997,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 	if expectedLastIndex != lastIndexId {
 
 		t.Errorf("%v - Error\n"+
-			"stdLine01.InsertTextFieldAtIndex()\n"+
+			"stdLine01.InsertTextField()\n"+
 			"Expected Last Index Id did NOT match\n"+
 			"Actual Last Index Id.\n"+
 			"Expected Last Index Id = '%v'\n"+
@@ -1088,10 +1088,10 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
+func TestTextLineSpecStandardLine_InsertTextField_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200()",
+		"TestTextLineSpecStandardLine_InsertTextField_000200()",
 		"")
 
 	expectedLabelText := "Xray7 where are?"
@@ -1115,7 +1115,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 	stdLine01 := TextLineSpecStandardLine{}
 
 	_,
-		err = stdLine01.InsertTextFieldAtIndex(
+		err = stdLine01.InsertTextField(
 		&labelTxt,
 		2,
 		ePrefix.XCpy(
@@ -1124,7 +1124,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - Error\n"+
-			"Expected an error return from stdLine01.InsertTextFieldAtIndex()\n"+
+			"Expected an error return from stdLine01.InsertTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -1146,7 +1146,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 	}
 
 	_,
-		err = stdLine02.InsertTextFieldAtIndex(
+		err = stdLine02.InsertTextField(
 		&labelTxt,
 		2,
 		textLineSpecStandardLineElectron{})
@@ -1154,7 +1154,7 @@ func TestTextLineSpecStandardLine_InsertTextFieldAtIndex_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - Error\n"+
-			"stdLine02.InsertTextFieldAtIndex()\n"+
+			"stdLine02.InsertTextField()\n"+
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",

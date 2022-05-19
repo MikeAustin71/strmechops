@@ -2788,7 +2788,7 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 	return stdLine.turnLineTerminatorOff
 }
 
-// InsertTextFieldAtIndex - Receives a Text Field in the form of a
+// InsertTextField - Receives a Text Field in the form of a
 // type ITextFieldSpecification. This Text Field is then inserted
 // into Text Fields Collection maintained by the current instance
 // of TextLineSpecStandardLine.
@@ -2796,6 +2796,9 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 // The Text Field input parameter, 'iTextField', is inserted into
 // the internal Text Fields array at the array element index
 // position indicated by input parameter, 'indexId'.
+//
+// After this method completes, the number of elements in the Text
+// Field Collection will be increased by one.
 //
 //
 // -----------------------------------------------------------------
@@ -2913,7 +2916,7 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 //       the beginning of the error message.
 //
 //
-func (stdLine *TextLineSpecStandardLine) InsertTextFieldAtIndex(
+func (stdLine *TextLineSpecStandardLine) InsertTextField(
 	iTextField ITextFieldSpecification,
 	indexId int,
 	errorPrefix interface{}) (
@@ -2936,7 +2939,7 @@ func (stdLine *TextLineSpecStandardLine) InsertTextFieldAtIndex(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"InsertTextFieldAtIndex()",
+			"InsertTextField()",
 		"")
 
 	if err != nil {
