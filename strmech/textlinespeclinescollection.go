@@ -1306,6 +1306,15 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 		return err
 	}
 
+	if textLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLine' is 'nil' and invalid!\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
 	err = textLine.IsValidInstanceError(
 		ePrefix.XCpy("Input Parameter: textLine"))
 
@@ -1320,6 +1329,18 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 			"replaceAtIndex = '%v'\n",
 			ePrefix.String(),
 			replaceAtIndex)
+	}
+
+	if replaceAtIndex < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'replaceAtIndex' is out of range and invalid!\n"+
+			"'replaceAtIndex' is less than zero. The first index in the collection\n"+
+			"is always zero.\n"+
+			"Input parameter 'replaceAtIndex' = '%v'\n",
+			ePrefix.String(),
+			replaceAtIndex)
+
+		return err
 	}
 
 	lenOfTextLinesCol--
