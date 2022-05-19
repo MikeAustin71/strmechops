@@ -931,6 +931,148 @@ func TestTextLineSpecLinesCollection_GetTextLine_000100(t *testing.T) {
 	return
 }
 
+func TestTestTextLineSpecLinesCollection_GetTextLineCollection_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTestTextLineSpecLinesCollection_GetTextLineCollection_000100()",
+		"")
+
+	expectedNumOfTxtLines,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines :=
+		txtLinesCol01.GetNumberOfTextLines()
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.GetNumberOfTextLines()\n"+
+			"Expected Text Lines Don't Match Actual Text Lines\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"  Acutal Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+	}
+
+	var iTxtLineArray []ITextLineSpecification
+
+	iTxtLineArray,
+		err = txtLinesCol01.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol01->iTxtLineArray"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualNumOfTxtLines = len(iTxtLineArray)
+
+	if expectedNumOfTxtLines != actualNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.GetTextLineCollection()\n"+
+			"Expected Text Lines Don't Match Actual Text Lines\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"  Acutal Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfTxtLines,
+			actualNumOfTxtLines)
+
+		return
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	txtLinesCol02.textLines = iTxtLineArray
+
+	if !txtLinesCol02.Equal(&txtLinesCol01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.Equal(&txtLinesCol01)\n"+
+			"Expected 'txtLinesCol02' EQUALS 'txtLinesCol01'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol03.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol03 is EMPTY"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: txtLinesCol03.GetTextLineCollection()\n"+
+			"Expected an error return because 'txtLinesCol03'\n"+
+			"is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection02(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol04.GetTextLineCollection(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: txtLinesCol04.GetTextLineCollection()\n"+
+			"Expected an error return because input\n"+
+			"parameter 'errorPrefix is invalid.'\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecLinesCollection_IsValidInstance_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
