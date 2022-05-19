@@ -658,7 +658,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	lengthTextFields = len(txtStdLine.textFields)
 
 	if lengthTextFields == 0 ||
-		indexId > lengthTextFields {
+		indexId > (lengthTextFields-1) {
 
 		txtStdLine.textFields = append(
 			txtStdLine.textFields,
@@ -692,8 +692,10 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	for i := 0; i < lengthTextFields; i++ {
 
 		if i == indexId {
+
 			newTextFieldsArray[j] =
 				newTextField
+
 			j++
 		}
 
@@ -710,17 +712,19 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 
 		// Should new field be appended
 		// to end of array?
-		if i == lengthTextFields-1 &&
-			j == i {
-
-			newTextFieldsArray[j] =
-				newTextField
-
-		}
+		//if i == lengthTextFields-1 &&
+		//	j == i {
+		//
+		//	newTextFieldsArray[j] =
+		//		newTextField
+		//
+		//}
 
 		j++
 
 		txtStdLine.textFields[i].Empty()
+
+		txtStdLine.textFields[i] = nil
 	}
 
 	txtStdLine.textFields = nil

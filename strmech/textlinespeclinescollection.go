@@ -994,6 +994,257 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 	return newTextLines, err
 }
 
+// InsertTextLine - Receives a Text Line instance in the form of a
+// type ITextLineSpecification. This Text Line object is then
+// inserted into Text Lines Collection maintained by the current
+// instance of TextLineSpecLinesCollection.
+//
+// The Text Input input parameter, 'textLine', is inserted into
+// the internal Text Lines array at the array element index
+// position indicated by input parameter, 'indexId'.
+//
+// After this method completes, the number of elements in the Text
+// Lines Collection will be increased by one.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLine                   ITextLineSpecification
+//     - A Text Line object which implements the
+//       ITextLineSpecification interface. A deep copy of this
+//       text field will be inserted into the Text Lines Collection
+//       maintained by the current instance of
+//       TextLineSpecLinesCollection.
+//
+//       After the insertion operation is completed, the
+//       'textLine' object will be located at array element
+//       'indexId' immediately BEFORE the original array element
+//       located at that array index.
+//
+//       NOTE: You will need to pass the concrete instance of
+//       'textLine' as a pointer to the Text Line (&textLine).
+//
+//       If the 'iTextField' parameter are found to be invalid, an
+//       error will be returned.
+//
+//
+//  indexId                    int
+//     - This index number designates the array element index in
+//       the Text Lines Collection of the 'txtLinesCol' instance at
+//       which the Text Line parameter, 'textLine' will be
+//       inserted. This means that 'textLine' will be inserted
+//       immediately BEFORE the array element specified by
+//       'indexId' in the final Text Lines Array.
+//
+//       If the value of 'indexId' is less than zero, it will be
+//       reset to zero. This means that the 'textLine' object
+//       will be inserted in the first array element position of
+//       the Text Fields Collection maintained by the current
+//       TextLineSpecLinesCollection instance.
+//
+//       If the value of 'indexId' is greater the last array
+//       element index in the Text Fields Collection, the
+//       'textLine' object will be appended to the end of the Text
+//       Lines Collection.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  lastIndexId                int
+//     - If this method completes successfully, the internal array
+//       index of the last text line object for the Text Lines
+//       Collection maintained by the current
+//       TextLineSpecLinesCollection instance will be returned as
+//       an integer value.
+//
+//       In the event of an error, 'lastIndexId' will be set to a
+//       value of minus one (-1).
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
+	textLine ITextLineSpecification,
+	indexId int,
+	errorPrefix interface{}) (
+	lastIndexId int,
+	err error) {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	lastIndexId = -1
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"InsertTextLine()",
+		"")
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	if textLine == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLine' is 'nil' and invalid!\n",
+			ePrefix.String())
+
+		return lastIndexId, err
+	}
+
+	err = textLine.IsValidInstanceError(
+		ePrefix.XCpy("Input Parameter: textLine"))
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	var newTextLine ITextLineSpecification
+
+	newTextLine,
+		err = textLine.CopyOutITextLine(
+		ePrefix.XCpy("textLine->newTextLine"))
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
+	lengthTextLines := len(txtLinesCol.textLines)
+
+	lastIndexId = lengthTextLines
+
+	if lengthTextLines == 0 ||
+		indexId > (lengthTextLines-1) {
+
+		txtLinesCol.textLines = append(
+			txtLinesCol.textLines,
+			newTextLine)
+
+		return lastIndexId, err
+	}
+
+	if indexId <= 0 {
+
+		txtLinesCol.textLines = append(
+			[]ITextLineSpecification{newTextLine},
+			txtLinesCol.textLines...)
+
+		return lastIndexId, err
+	}
+
+	// arr := []int{1,2,3,4,5}
+	// arr[:2]         [1,2]
+	// arr[2:])        [3,4,5]
+
+	newTextLinesArray := make([]ITextLineSpecification,
+		lengthTextLines+1)
+
+	j := 0
+
+	for i := 0; i < lengthTextLines; i++ {
+
+		if i == indexId {
+
+			newTextLinesArray[j] =
+				newTextLine
+
+			j++
+		}
+
+		newTextLinesArray[j],
+			err = txtLinesCol.textLines[i].CopyOutITextLine(
+			ePrefix.XCpy(fmt.Sprintf(
+				"txtLinesCol.textLines[%v]->newTextFieldsArray[%v]",
+				i,
+				j)))
+
+		if err != nil {
+			lastIndexId = -1
+			return lastIndexId, err
+		}
+
+		j++
+
+		txtLinesCol.textLines[i].Empty()
+
+		txtLinesCol.textLines[i] = nil
+	}
+
+	txtLinesCol.textLines = nil
+
+	txtLinesCol.textLines = newTextLinesArray
+
+	return lastIndexId, err
+}
+
 // IsValidInstance - Performs a diagnostic review of the data
 // values encapsulated in the current TextLineSpecLinesCollection
 // instance to determine if they are valid.
@@ -1191,6 +1442,9 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
 //       If member variable data values contained in this
 //       'textLine' parameter are found to be invalid, an error
 //       will be returned.
+//
+//       NOTE: You will need to pass the concrete instance of
+//       'textLine' as a pointer to the Text Line (&textLine).
 //
 //
 //  replaceAtIndex             int
