@@ -514,7 +514,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) DeleteTextLineMember(
 		return err
 	}
 
-	err = textLineSpecLinesCollectionAtom{}.ptr().
+	err = textLineSpecLinesCollectionElectron{}.ptr().
 		deleteTextLineElement(
 			txtLinesCol,
 			zeroBasedIndex,
@@ -758,68 +758,15 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
 		return iTextLineSpec, err
 	}
 
-	lenTextLines := len(txtLinesCol.textLines)
-
-	if lenTextLines == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Text Lines Collection is empty\n"+
-			"and contains zero elements!\n",
-			ePrefix.String())
-
-		return iTextLineSpec, err
-
-	}
-
-	if zeroBasedIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
-			"'zeroBasedIndex' is less than zero!\n"+
-			"zeroBasedIndex = '%v'\n",
-			ePrefix.String(),
-			zeroBasedIndex)
-
-		return iTextLineSpec, err
-
-	}
-
-	lastIndex := lenTextLines - 1
-
-	if zeroBasedIndex > lastIndex {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
-			"The value of 'zeroBasedIndex' is greater than the last\n"+
-			"index in the Text Lines Collection!\n"+
-			"Last Collection Index = '%v'\n"+
-			"zeroBasedIndex        = '%v'\n",
-			ePrefix.String(),
-			lastIndex,
-			zeroBasedIndex)
-
-		return iTextLineSpec, err
-	}
-
-	if txtLinesCol.textLines[zeroBasedIndex] == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Text Line Collection is invalid.\n"+
-			"The value of txtLinesCol.textLines[zeroBasedIndex] is nill\n"+
-			"zeroBasedIndex = '%v'\n",
-			ePrefix.String(),
-			zeroBasedIndex)
-
-		return iTextLineSpec, err
-
-	}
-
 	iTextLineSpec,
-		err = txtLinesCol.textLines[zeroBasedIndex].
-		CopyOutITextLine(
+		err = textLineSpecLinesCollectionAtom{}.ptr().
+		peekPopTextLine(
+			txtLinesCol,
+			zeroBasedIndex,
+			false,
 			ePrefix.XCpy(
 				fmt.Sprintf(
-					"txtLinesCol.textLines[%v]",
+					"txtLinesCol[%v]",
 					zeroBasedIndex)))
 
 	return iTextLineSpec, err

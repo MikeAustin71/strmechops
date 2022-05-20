@@ -247,13 +247,14 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 // on an array element in the Text Fields Collection as specified
 // by the input parameter, 'popTextField'.
 //
-// A 'Pop' operation returns a deep copy of the last Text Field
-// in the Text Field Collection and then deletes that designated
-// array element.
+// A 'Pop' operation returns a deep copy of the designated Text
+// Field in the Text Field Collection and then DELETES that
+// designated array element. The designated array element is
+// specified by input parameter, 'indexId'.
 //
 // On the other hand, a 'Peek' operation will return a deep copy of
 // the designated Text Field in the Text Field Collection and WILL
-// NOT delete that array element. The designated array element
+// NOT DELETE that array element. The designated array element
 // therefore remains in the collection after the 'Peek' operation
 // is completed.
 //
@@ -264,26 +265,26 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 //
 //  txtStdLine                 *TextLineSpecStandardLine
 //     - A pointer to an instance of TextLineSpecStandardLine. A
-//       deep copy of the first Text Field in the Text Fields
+//       deep copy of the designated Text Field in the Text Fields
 //       Collection for this instance of TextLineSpecStandardLine
 //       will be returned to the calling function.
 //
 //       Depending on the value of input parameter, 'popTextField',
-//       either an 'Peek' or 'Pop' operation will be performed on
-//       the  first Text Field in the Text Fields Collection.
+//       either a 'Peek' or 'Pop' operation will be performed on
+//       the designated Text Field in the Text Fields Collection.
 //
 //
 //  indexId                    int
-//     - The index number of the array element in the Text Fields
-//       Collection on which the 'Pop' or 'Peek' operation will be
-//       performed.
+//     - The zero based index number of the array element in the
+//       Text Fields Collection on which the 'Pop' or 'Peek'
+//       operation will be performed.
 //
 //
 //  popTextField               bool
 //     - If this parameter is set to 'true', it signals that a
 //       'Pop' operation will be performed on the designated Text
 //       Field in the Text Fields Collection encapsulated in
-//       parameter 'txtStdLine'. A 'Pop' operation will delete the
+//       parameter 'txtStdLine'. A 'Pop' operation WILL DELETE the
 //       designated Text Field from the Text Fields Collection.
 //
 //       If this parameter is set to 'false', it signals that a
@@ -291,7 +292,7 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) copyTextFields(
 //       Field in the Text Fields Collection encapsulated in
 //       parameter 'txtStdLine'. A 'Peek' operation means that the
 //       designated Text Field element in the Text Fields
-//       Collection WILL NOT be deleted and will remain in the
+//       Collection WILL NOT BE DELETED and will remain in the
 //       collection.
 //
 //

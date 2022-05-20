@@ -2428,6 +2428,14 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 // than the last member element in the collection, an error will be
 // returned.
 //
+// ----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// This method ( GetTextField() ) is functionally equivalent to
+// method:
+//   TextLineSpecStandardLine.PeekAtTextField()
+//
 //
 // ----------------------------------------------------------------
 //
@@ -4743,8 +4751,16 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 // After completion of this method, the Text Field Collection array
 // will remain unchanged.
 //
+// -----------------------------------------------------------------
 //
-// ------------------------------------------------------------------------
+// BE ADVISED
+//
+// This method ( PeekAtTextField() ) is functionally equivalent to
+// method:
+//   TextLineSpecStandardLine.GetTextField()
+//
+//
+// -----------------------------------------------------------------
 //
 // Input Parameters
 //

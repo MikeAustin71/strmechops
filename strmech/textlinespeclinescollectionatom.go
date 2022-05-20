@@ -10,127 +10,6 @@ type textLineSpecLinesCollectionAtom struct {
 	lock *sync.Mutex
 }
 
-func (txtLinesColAtom *textLineSpecLinesCollectionAtom) deleteTextLineElement(
-	textLinesCol *TextLineSpecLinesCollection,
-	zeroBasedIndex int,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if txtLinesColAtom.lock == nil {
-		txtLinesColAtom.lock = new(sync.Mutex)
-	}
-
-	txtLinesColAtom.lock.Lock()
-
-	defer txtLinesColAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textLineSpecLinesCollectionAtom."+
-			"deleteTextLineElement()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if textLinesCol == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLinesCol' is "+
-			"a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	lenTextLines := len(textLinesCol.textLines)
-
-	if lenTextLines == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Text Lines Collection is empty\n"+
-			"and contains zero elements!\n",
-			ePrefix.String())
-
-		return err
-
-	}
-
-	if zeroBasedIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
-			"'zeroBasedIndex' is less than zero!\n"+
-			"zeroBasedIndex = '%v'\n",
-			ePrefix.String(),
-			zeroBasedIndex)
-
-		return err
-	}
-
-	lastIndex := lenTextLines - 1
-
-	if zeroBasedIndex > lastIndex {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
-			"The value of 'zeroBasedIndex' is greater than the last\n"+
-			"index in the Text Lines Collection!\n"+
-			"Last Collection Index = '%v'\n"+
-			"zeroBasedIndex        = '%v'\n",
-			ePrefix.String(),
-			lastIndex,
-			zeroBasedIndex)
-
-		return err
-	}
-
-	if zeroBasedIndex == 0 {
-
-		if textLinesCol.textLines[0] != nil {
-
-			textLinesCol.textLines[0].Empty()
-
-			textLinesCol.textLines[0] = nil
-
-		}
-
-		textLinesCol.textLines = textLinesCol.textLines[1:]
-
-	} else if zeroBasedIndex == lastIndex {
-
-		if textLinesCol.textLines[lastIndex] != nil {
-
-			textLinesCol.textLines[lastIndex].Empty()
-
-			textLinesCol.textLines[lastIndex] = nil
-
-		}
-
-		textLinesCol.textLines = textLinesCol.textLines[0:lastIndex]
-
-	} else {
-
-		if textLinesCol.textLines[zeroBasedIndex] != nil {
-
-			textLinesCol.textLines[zeroBasedIndex].Empty()
-
-			textLinesCol.textLines[zeroBasedIndex] = nil
-
-		}
-
-		textLinesCol.textLines = append(
-			textLinesCol.textLines[0:zeroBasedIndex],
-			textLinesCol.textLines[zeroBasedIndex+1:]...)
-
-	}
-
-	return err
-}
-
 // emptyCollection - Deletes all the text line objects from a text
 // line collection maintained by an instance of
 // TextLineSpecLinesCollection.
@@ -250,6 +129,205 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) equalCollections(
 	}
 
 	return true
+}
+
+// peekPopTextLine - Performs either a 'Peek' or 'Pop' operation
+// on an array element in the Text Lines Collection as specified
+// by the input parameter, 'popTextLine'.
+//
+// A 'Pop' operation returns a deep copy of the designated Text
+// Line element in the Text Lines Collection and then DELETES that
+// designated array element. The designated array element is
+// specified by input parameter, 'zeroBasedIndex'.
+//
+// On the other hand, a 'Peek' operation will return a deep copy of
+// the designated Text Line in the Text lines Collection and WILL
+// NOT delete that array element. The designated array element
+// therefore remains in the collection after the 'Peek' operation
+// is completed.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLinesCol               *TextLineSpecLinesCollection
+//     - A pointer to an instance of TextLineSpecLinesCollection. A
+//       deep copy of the designated Text Line in the Text Lines
+//       Collection for this instance of TextLineSpecLinesCollection
+//       will be returned to the calling function. The returned Text
+//       Line is designated by input parameter, 'zeroBasedIndex'.
+//
+//       Depending on the value of input parameter, 'popTextLine',
+//       either a 'Peek' or 'Pop' operation will be performed on
+//       the designated Text Line in the Text Lines Collection.
+//
+//
+//  zeroBasedIndex             int
+//     - The index number of the array element in the Text Lines
+//       Collection on which the 'Pop' or 'Peek' operation will be
+//       performed.
+//
+//
+//  popTextLine                bool
+//     - If this parameter is set to 'true', it signals that a
+//       'Pop' operation will be performed on the designated Text
+//       Line in the Text Lines Collection encapsulated in
+//       parameter 'textLinesCol'. A 'Pop' operation will DELETE
+//       the designated Text Field from the Text Fields Collection.
+//
+//       If this parameter is set to 'false', it signals that a
+//       'Peek' operation will be performed on the designated Text
+//       Line in the Text Lines Collection encapsulated in
+//       parameter 'textLinesCol'. A 'Peek' operation means that
+//       the designated Text Line element in the Text Lines
+//       Collection WILL NOT be deleted and will remain in the
+//       collection.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  iTextLine                  ITextLineSpecification
+//     - If this method completes successfully, a deep copy of
+//       if the designated member of the Text Lines Collection
+//       will be returned to the calling function. The returned
+//       object will implement the ITextLineSpecification
+//       interface.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
+	textLinesCol *TextLineSpecLinesCollection,
+	zeroBasedIndex int,
+	popTextLine bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	iTextLine ITextLineSpecification,
+	err error) {
+
+	if txtLinesColAtom.lock == nil {
+		txtLinesColAtom.lock = new(sync.Mutex)
+	}
+
+	txtLinesColAtom.lock.Lock()
+
+	defer txtLinesColAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecLinesCollectionAtom."+
+			"peekPopTextLine()",
+		"")
+
+	if err != nil {
+		return iTextLine, err
+	}
+
+	if textLinesCol == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'textLinesCol' is a nil pointer!\n",
+			ePrefix.String())
+
+		return iTextLine, err
+	}
+
+	lenTextLinesCollection := len(textLinesCol.textLines)
+
+	lastIdx := lenTextLinesCollection - 1
+
+	if lenTextLinesCollection == 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The Text Lines Collection, 'textLinesCol.textLines' is EMPTY!\n",
+			ePrefix.String())
+
+		return iTextLine, err
+	}
+
+	if zeroBasedIndex < 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'zeroBasedIndex' is invalid!\n"+
+			"'zeroBasedIndex' is less than zero.\n"+
+			"indexId = '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return iTextLine, err
+	}
+
+	if zeroBasedIndex > lastIdx {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'zeroBasedIndex' is invalid!\n"+
+			"'zeroBasedIndex' is greater than the last index\n"+
+			"in the Text Lines Collection.\n"+
+			"Last index in collection = '%v'\n"+
+			"zeroBasedIndex = '%v'\n",
+			ePrefix.String(),
+			lastIdx,
+			zeroBasedIndex)
+
+		return iTextLine, err
+	}
+
+	iTextLine,
+		err = textLinesCol.textLines[zeroBasedIndex].CopyOutITextLine(
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"textLinesCol.textLines[%v]",
+				zeroBasedIndex)))
+
+	if err != nil {
+		return iTextLine, err
+	}
+
+	if !popTextLine {
+		// popTextLine == false
+		// This means a 'peek' operation is
+		// being performed and the designated
+		// array element will NOT be deleted.
+		return iTextLine, err
+	}
+
+	err =
+		textLineSpecLinesCollectionElectron{}.ptr().
+			deleteTextLineElement(
+				textLinesCol,
+				zeroBasedIndex,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"Deleting textLinesCol.textLines[%v]",
+						zeroBasedIndex)))
+
+	return iTextLine, err
 }
 
 // ptr - Returns a pointer to a new instance of
