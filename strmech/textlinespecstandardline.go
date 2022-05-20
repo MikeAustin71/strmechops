@@ -1920,7 +1920,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	return &newStdLine, err
 }
 
-// DeleteAtIndex - Deletes a member Text Field array element from
+// DeleteTextField - Deletes a member Text Field array element from
 // the Text Field Collection at the index specified by input
 // parameter 'indexId'.
 //
@@ -1999,7 +1999,7 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
+func (stdLine *TextLineSpecStandardLine) DeleteTextField(
 	indexId int,
 	errorPrefix interface{}) error {
 
@@ -2018,7 +2018,7 @@ func (stdLine *TextLineSpecStandardLine) DeleteAtIndex(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"DeleteAtIndex()",
+			"DeleteTextField()",
 		"")
 
 	if err != nil {

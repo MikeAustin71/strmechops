@@ -278,7 +278,7 @@ func TestTextLineSpecStandardLine_Equal_000500(t *testing.T) {
 
 	}
 
-	err = stdLine02.DeleteAtIndex(
+	err = stdLine02.DeleteTextField(
 		2,
 		ePrefix.XCpy(
 			"stdLine02"))

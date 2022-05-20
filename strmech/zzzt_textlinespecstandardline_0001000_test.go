@@ -76,7 +76,7 @@ func TestTextLineSpecStandardLine_AddStandardLine_000100(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from stdLine02.DeleteAtIndex()\n"+
+			"Expected an error return from stdLine02.DeleteTextField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -2330,10 +2330,10 @@ func TestTextLineSpecStandardLine_CopyOutPtr_000100(t *testing.T) {
 
 }
 
-func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
+func TestTextLineSpecStandardLine_DeleteTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_DeleteAtIndex_000100()",
+		"TestTextLineSpecStandardLine_DeleteTextField_000100()",
 		"")
 
 	stdLine01 := TextLineSpecStandardLine{}.NewPtr()
@@ -2569,7 +2569,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	}
 
 	err =
-		stdLine01.DeleteAtIndex(
+		stdLine01.DeleteTextField(
 			2,
 			ePrefix.XCpy(
 				"Delete Index 2"))
@@ -2581,7 +2581,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 	}
 
 	err =
-		stdLine01.DeleteAtIndex(
+		stdLine01.DeleteTextField(
 			0,
 			ePrefix.XCpy(
 				"Delete Index 0"))
@@ -2640,15 +2640,15 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000100(t *testing.T) {
 
 }
 
-func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
+func TestTextLineSpecStandardLine_DeleteTextField_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_DeleteAtIndex_000200()",
+		"TestTextLineSpecStandardLine_DeleteTextField_000200()",
 		"")
 
 	stdLine01 := TextLineSpecStandardLine{}
 
-	err := stdLine01.DeleteAtIndex(
+	err := stdLine01.DeleteTextField(
 		5,
 		ePrefix.XCpy(
 			"Empty Object, Invalid Index"))
@@ -2656,7 +2656,7 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Expected error return from stdLine01.DeleteAtIndex()\n"+
+			"Expected error return from stdLine01.DeleteTextField()\n"+
 			"because stdLine01 is empty and index is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -2676,14 +2676,14 @@ func TestTextLineSpecStandardLine_DeleteAtIndex_000200(t *testing.T) {
 		return
 	}
 
-	err = stdLine02.DeleteAtIndex(
+	err = stdLine02.DeleteTextField(
 		2,
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from stdLine02.DeleteAtIndex()\n"+
+			"Expected an error return from stdLine02.DeleteTextField()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
