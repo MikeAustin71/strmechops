@@ -658,7 +658,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	lengthTextFields = len(txtStdLine.textFields)
 
 	if lengthTextFields == 0 ||
-		indexId > (lengthTextFields-1) {
+		indexId >= lengthTextFields {
 
 		txtStdLine.textFields = append(
 			txtStdLine.textFields,
@@ -669,14 +669,18 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 		return lengthTextFields, err
 	}
 
-	if indexId <= 0 {
+	if indexId < 0 {
+		indexId = 0
+	}
+	var oldTextField ITextFieldSpecification
 
-		txtStdLine.textFields = append(
-			[]ITextFieldSpecification{newTextField},
-			txtStdLine.textFields...)
+	oldTextField,
+		err = txtStdLine.textFields[indexId].CopyOutITextField(
+		ePrefix.XCpy(fmt.Sprintf(
+			"oldTextField<-txtStdLine.textFields[%v]",
+			indexId)))
 
-		lengthTextFields++
-
+	if err != nil {
 		return lengthTextFields, err
 	}
 
@@ -684,52 +688,18 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	// arr[:2]         [1,2]
 	// arr[2:])        [3,4,5]
 
-	newTextFieldsArray := make([]ITextFieldSpecification,
-		lengthTextFields+1)
+	txtStdLine.textFields[indexId].Empty()
+	txtStdLine.textFields[indexId] = nil
 
-	j := 0
+	txtStdLine.textFields = append(
+		txtStdLine.textFields[:indexId+1],
+		txtStdLine.textFields[indexId:]...)
 
-	for i := 0; i < lengthTextFields; i++ {
+	txtStdLine.textFields[indexId+1] =
+		oldTextField
 
-		if i == indexId {
-
-			newTextFieldsArray[j] =
-				newTextField
-
-			j++
-		}
-
-		newTextFieldsArray[j],
-			err = txtStdLine.textFields[i].CopyOutITextField(
-			ePrefix.XCpy(fmt.Sprintf(
-				"txtStdLine.textFields[%v]->newTextFieldsArray[%v]",
-				i,
-				j)))
-
-		if err != nil {
-			return lengthTextFields, err
-		}
-
-		// Should new field be appended
-		// to end of array?
-		//if i == lengthTextFields-1 &&
-		//	j == i {
-		//
-		//	newTextFieldsArray[j] =
-		//		newTextField
-		//
-		//}
-
-		j++
-
-		txtStdLine.textFields[i].Empty()
-
-		txtStdLine.textFields[i] = nil
-	}
-
-	txtStdLine.textFields = nil
-
-	txtStdLine.textFields = newTextFieldsArray
+	txtStdLine.textFields[indexId] =
+		newTextField
 
 	lengthTextFields++
 

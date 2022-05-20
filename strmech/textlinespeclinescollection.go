@@ -1177,12 +1177,10 @@ func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 		return lastIndexId, err
 	}
 
-	lengthTextLines := len(txtLinesCol.textLines)
+	lastIndexId = len(txtLinesCol.textLines)
 
-	lastIndexId = lengthTextLines
-
-	if lengthTextLines == 0 ||
-		indexId > (lengthTextLines-1) {
+	if lastIndexId == 0 ||
+		indexId >= lastIndexId {
 
 		txtLinesCol.textLines = append(
 			txtLinesCol.textLines,
@@ -1191,56 +1189,25 @@ func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 		return lastIndexId, err
 	}
 
-	if indexId <= 0 {
+	if indexId < 0 {
 
-		txtLinesCol.textLines = append(
-			[]ITextLineSpecification{newTextLine},
-			txtLinesCol.textLines...)
+		indexId = 0
 
-		return lastIndexId, err
 	}
 
 	// arr := []int{1,2,3,4,5}
 	// arr[:2]         [1,2]
 	// arr[2:])        [3,4,5]
 
-	newTextLinesArray := make([]ITextLineSpecification,
-		lengthTextLines+1)
+	// 	orig = append(orig[:index+1], orig[index:]...)
 
-	j := 0
+	txtLinesCol.textLines = append(
+		txtLinesCol.textLines[:indexId+1],
+		txtLinesCol.textLines[indexId:]...)
 
-	for i := 0; i < lengthTextLines; i++ {
-
-		if i == indexId {
-
-			newTextLinesArray[j] =
-				newTextLine
-
-			j++
-		}
-
-		newTextLinesArray[j],
-			err = txtLinesCol.textLines[i].CopyOutITextLine(
-			ePrefix.XCpy(fmt.Sprintf(
-				"txtLinesCol.textLines[%v]->newTextFieldsArray[%v]",
-				i,
-				j)))
-
-		if err != nil {
-			lastIndexId = -1
-			return lastIndexId, err
-		}
-
-		j++
-
-		txtLinesCol.textLines[i].Empty()
-
-		txtLinesCol.textLines[i] = nil
-	}
-
-	txtLinesCol.textLines = nil
-
-	txtLinesCol.textLines = newTextLinesArray
+	txtLinesCol.textLines[indexId].Empty()
+	txtLinesCol.textLines[indexId] = nil
+	txtLinesCol.textLines[indexId] = newTextLine
 
 	return lastIndexId, err
 }

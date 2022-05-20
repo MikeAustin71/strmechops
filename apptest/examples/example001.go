@@ -206,6 +206,379 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 	fmt.Println(output)
 }
 
+func (mt MainTest) TextLineSpecStandardLine03() error {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecStandardLine03()",
+		"")
+
+	lineBar := strings.Repeat("-", 60)
+
+	testUtil := TestUtilities{}
+
+	stdLine01,
+		err := testUtil.CreateTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return err
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return err
+	}
+
+	lenTxtFields := stdLine01.GetNumOfTextFields()
+
+	initialLastIdx := lenTxtFields - 1
+
+	fmt.Printf("\n%v\n"+
+		"Running Function - %v\n"+
+		"%v\n\n",
+		lineBar,
+		ePrefix.String(),
+		lineBar)
+
+	fmt.Printf("Initial Length of\n"+
+		"stdLine01 Text Fields ='%v'\n"+
+		"Initial Last Index = '%v'\n\n",
+		lenTxtFields,
+		initialLastIdx)
+
+	expectedLabelText := "Xray7 where are you?"
+
+	var labelTxt strmech.TextFieldSpecLabel
+
+	labelTxt,
+		err = strmech.TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		strmech.TxtJustify.Left(),
+		ePrefix.XCpy(
+			"labelTxt"))
+
+	if err != nil {
+		return err
+	}
+
+	var newLastIndexId int
+
+	newLastIndexId,
+		err = stdLine01.InsertTextField(
+		&labelTxt,
+		initialLastIdx,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-labeText",
+				initialLastIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	lenTxtFields = stdLine01.GetNumOfTextFields()
+
+	fmt.Printf("After Insertion Length of\n"+
+		"stdLine01 Text Fields ='%v'\n"+
+		"New Last Index ID ='%v'\n\n",
+		lenTxtFields,
+		newLastIndexId)
+
+	var lastITxtField strmech.ITextFieldSpecification
+
+	lastITxtField,
+		err =
+		stdLine01.GetTextField(
+			newLastIndexId,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"stdLine01[%v]",
+					newLastIndexId)))
+
+	if err != nil {
+		return err
+	}
+
+	err = lastITxtField.IsValidInstanceError(
+		ePrefix.XCpy(
+			"lastITxtField"))
+
+	if err != nil {
+		return err
+	}
+
+	var iTxtFieldSpec strmech.ITextFieldSpecification
+
+	iTxtFieldSpec,
+		err = stdLine01.GetTextField(
+		initialLastIdx,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]",
+				initialLastIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	err = iTxtFieldSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"iTxtFieldSpec - Inserted Field"))
+
+	if err != nil {
+		return err
+	}
+
+	actualLabelField,
+		ok := iTxtFieldSpec.(*strmech.TextFieldSpecLabel)
+
+	if !ok {
+		err = fmt.Errorf("\n%v\n"+
+			"Error converting stdLine01[%v] to a\n"+
+			"label Field!\n",
+			ePrefix.String(),
+			initialLastIdx)
+
+		return err
+	}
+
+	if !actualLabelField.Equal(&labelTxt) {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error!\n"+
+			"Expected that stdLine01[%v] would\n"+
+			"equal the inserted Label Field.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String(),
+			initialLastIdx)
+
+		return err
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"After stdLine[%v] label insertion",
+				initialLastIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("\n%v\n"+
+		"Successful Completion - %v\n"+
+		"%v\n\n",
+		lineBar,
+		ePrefix.String(),
+		lineBar)
+
+	return err
+}
+
+func (mt MainTest) TextLineSpecStandardLine04() error {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TextLineSpecStandardLine04()",
+		"")
+
+	lineBar := strings.Repeat("-", 60)
+
+	testUtil := TestUtilities{}
+
+	stdLine01,
+		err := testUtil.CreateTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return err
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return err
+	}
+
+	lenTxtFields := stdLine01.GetNumOfTextFields()
+
+	initialTargetIdx := 1
+
+	fmt.Printf("\n%v\n"+
+		"Running Function - %v\n"+
+		"%v\n\n",
+		lineBar,
+		ePrefix.String(),
+		lineBar)
+
+	fmt.Printf("Initial Length of\n"+
+		"stdLine01 Text Fields ='%v'\n"+
+		"Initial Target Index = '%v'\n\n",
+		lenTxtFields,
+		initialTargetIdx)
+
+	expectedLabelText := "Xray7 where are you?"
+
+	var labelTxt strmech.TextFieldSpecLabel
+
+	labelTxt,
+		err = strmech.TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		strmech.TxtJustify.Left(),
+		ePrefix.XCpy(
+			"labelTxt"))
+
+	if err != nil {
+		return err
+	}
+
+	var newLastIndexId int
+
+	newLastIndexId,
+		err = stdLine01.InsertTextField(
+		&labelTxt,
+		initialTargetIdx,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-labeText",
+				initialTargetIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	lenTxtFields = stdLine01.GetNumOfTextFields()
+
+	targetIdxPlus1 := initialTargetIdx + 1
+
+	fmt.Printf("After Insertion Length of\n"+
+		"stdLine01 Text Fields ='%v'\n"+
+		"New Last Index ID ='%v'\n\n",
+		lenTxtFields,
+		newLastIndexId)
+
+	var targetITxtField strmech.ITextFieldSpecification
+
+	targetITxtField,
+		err =
+		stdLine01.GetTextField(
+			initialTargetIdx,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"stdLine01[%v]",
+					initialTargetIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	err = targetITxtField.IsValidInstanceError(
+		ePrefix.XCpy(
+			"targetITxtField"))
+
+	if err != nil {
+		return err
+	}
+
+	var targetPlus1ITxtField strmech.ITextFieldSpecification
+
+	targetPlus1ITxtField,
+		err =
+		stdLine01.GetTextField(
+			targetIdxPlus1,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"stdLine01[%v]",
+					targetIdxPlus1)))
+
+	if err != nil {
+		return err
+	}
+
+	err = targetPlus1ITxtField.IsValidInstanceError(
+		ePrefix.XCpy(
+			"targetPlus1ITxtField"))
+
+	if err != nil {
+		return err
+	}
+
+	var initialITargetField strmech.ITextFieldSpecification
+
+	initialITargetField,
+		err = stdLine01.GetTextField(
+		initialTargetIdx,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]",
+				initialTargetIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	err = initialITargetField.IsValidInstanceError(
+		ePrefix.XCpy(
+			"initialITargetField"))
+
+	if err != nil {
+		return err
+	}
+
+	actualLabelField,
+		ok := initialITargetField.(*strmech.TextFieldSpecLabel)
+
+	if !ok {
+		err = fmt.Errorf("\n%v\n"+
+			"Error converting stdLine01[%v] to a\n"+
+			"label Field!\n",
+			ePrefix.String(),
+			initialTargetIdx)
+
+		return err
+	}
+
+	if !actualLabelField.Equal(&labelTxt) {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error!\n"+
+			"Expected that stdLine01[%v] would\n"+
+			"equal the inserted Label Field.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n",
+			ePrefix.String(),
+			initialTargetIdx)
+
+		return err
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"After stdLine[%v] label insertion",
+				initialTargetIdx)))
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("\n%v\n"+
+		"Successful Completion - %v\n"+
+		"%v\n\n",
+		lineBar,
+		ePrefix.String(),
+		lineBar)
+
+	return err
+}
+
 func (mt MainTest) TextLineSpecSolidLine01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -3970,4 +4343,114 @@ func (tUtil TestUtilities) CreateTestTextLineSpecTimerLines01(
 			"Nanoseconds:[SPACE]5,999\\n"
 
 	return outputStr, timerLines01, err
+}
+
+func (tUtil TestUtilities) CreateTestTextLineSpecStandardLine01(
+	errorPrefix interface{}) (
+	strmech.TextLineSpecStandardLine,
+	error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	stdLine01 := strmech.TextLineSpecStandardLine{}.New()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestUtilities."+
+			"CreateTestTextLineSpecStandardLine01()",
+		"")
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	rightMarginLen := 5
+	var rightMarginSpec strmech.TextFieldSpecSpacer
+
+	rightMarginSpec,
+		err = strmech.TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCpy(
+			"rightMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	var leftMarginSpec strmech.TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = strmech.TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCpy(
+			"leftMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	label := "How Now Brown Cow!"
+	fieldLen := len(label) + 4
+	txtJustify := strmech.TxtJustify.Center()
+
+	var labelSpec strmech.TextFieldSpecLabel
+
+	labelSpec,
+		err = strmech.TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCpy(
+			"labelSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 0
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCpy(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 1
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCpy(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 2
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCpy(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	return stdLine01, err
 }

@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
 )
@@ -994,6 +995,16 @@ func TestTextLineSpecStandardLine_InsertTextField_000100(t *testing.T) {
 		return
 	}
 
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01 after insert"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
 	if expectedLastIndex != lastIndexId {
 
 		t.Errorf("%v - Error\n"+
@@ -1031,7 +1042,7 @@ func TestTextLineSpecStandardLine_InsertTextField_000100(t *testing.T) {
 
 		t.Errorf("%v - Error\n"+
 			"spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-			"Expected return of type 'TextFieldSpecSpacer'.\n"+
+			"Expected return of type 'TextFieldSpecLabel'.\n"+
 			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
 			ePrefix.String())
 
@@ -1081,6 +1092,83 @@ func TestTextLineSpecStandardLine_InsertTextField_000100(t *testing.T) {
 			ePrefix.String(),
 			expectedTxtFieldLen,
 			actualTxtFieldLen)
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lastIdx := stdLine02.GetNumOfTextFields() - 1
+
+	lastIndexId,
+		err = stdLine02.InsertTextField(
+		&labelTxt,
+		lastIdx,
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	var txtField ITextFieldSpecification
+
+	txtField,
+		err = stdLine02.GetTextField(
+		lastIdx,
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	actualLabelField,
+		ok = txtField.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"Text #2\n"+
+			"actualLabelField, ok := txtField.(*TextFieldSpecLabel)\n"+
+			"Expected return of type 'TextFieldSpecLabel'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = actualLabelField.IsValidInstanceError(
+		ePrefix.XCpy(
+			"labelField #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelText = actualLabelField.GetTextLabel()
+
+	if expectedLabelText != actualLabelText {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedLabelText==actualLabelText\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.String(),
+			expectedLabelText,
+			actualLabelText)
 
 		return
 	}
@@ -1161,6 +1249,706 @@ func TestTextLineSpecStandardLine_InsertTextField_000200(t *testing.T) {
 			ePrefix.String())
 
 		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_InsertTextField_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextField_000300()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	expectedLabelText := "Car 54 where are you?"
+
+	var expectedTxtLabelField TextFieldSpecLabel
+
+	expectedTxtLabelField,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"expectedTxtLabelField"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumTxtFields :=
+		stdLine01.GetNumOfTextFields() + 1
+
+	initialTargetIndex := 0
+
+	var iOldTxtField ITextFieldSpecification
+
+	iOldTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.InsertTextField(
+		&expectedTxtLabelField,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-expectedTxtLabelField",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01 after insertion"))
+
+	actualNumTxtFields :=
+		stdLine01.GetNumOfTextFields()
+
+	if expectedNumTxtFields != actualNumTxtFields {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.InsertTextField()\n"+
+			"Expected Number Of Text Fields\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Fields.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedNumTxtFields,
+			actualNumTxtFields)
+
+		return
+	}
+
+	var iTargetTxtField ITextFieldSpecification
+
+	iTargetTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelField,
+		ok := iTargetTxtField.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTargetTxtField.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecLabel'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !expectedTxtLabelField.Equal(actualLabelField) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedTxtLabelField==actualLabelField\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.String(),
+			expectedTxtLabelField.GetTextLabel(),
+			actualLabelField.GetTextLabel())
+
+		return
+
+	}
+
+	var iOldTxtField2 ITextFieldSpecification
+
+	iOldTxtField2,
+		err = stdLine01.GetTextField(
+		initialTargetIndex+1,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex+1)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !iOldTxtField.EqualITextField(
+		iOldTxtField2) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected original stdLine01[%v] \n"+
+			"would EQUAL stdLine01[%v] after insertion.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String(),
+			initialTargetIndex,
+			initialTargetIndex+1)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_InsertTextField_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextField_000400()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	expectedLabelText := "The answer is 42!"
+
+	var expectedTxtLabelField TextFieldSpecLabel
+
+	expectedTxtLabelField,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"expectedTxtLabelField"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumTxtFields :=
+		stdLine01.GetNumOfTextFields() + 1
+
+	initialTargetIndex := 4
+
+	var iOldTxtField ITextFieldSpecification
+
+	iOldTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.InsertTextField(
+		&expectedTxtLabelField,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-expectedTxtLabelField",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01 after insertion"))
+
+	actualNumTxtFields :=
+		stdLine01.GetNumOfTextFields()
+
+	if expectedNumTxtFields != actualNumTxtFields {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.InsertTextField()\n"+
+			"Expected Number Of Text Fields\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Fields.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedNumTxtFields,
+			actualNumTxtFields)
+
+		return
+	}
+
+	var iTargetTxtField ITextFieldSpecification
+
+	iTargetTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelField,
+		ok := iTargetTxtField.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTargetTxtField.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecLabel'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !expectedTxtLabelField.Equal(actualLabelField) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedTxtLabelField==actualLabelField\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.String(),
+			expectedTxtLabelField.GetTextLabel(),
+			actualLabelField.GetTextLabel())
+
+		return
+
+	}
+
+	var iOldTxtField2 ITextFieldSpecification
+
+	iOldTxtField2,
+		err = stdLine01.GetTextField(
+		initialTargetIndex+1,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex+1)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !iOldTxtField.EqualITextField(
+		iOldTxtField2) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected original stdLine01[%v] \n"+
+			"would EQUAL stdLine01[%v] after insertion.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String(),
+			initialTargetIndex,
+			initialTargetIndex+1)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_InsertTextField_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextField_000500()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	expectedLabelText := "Shiver me timbers!"
+
+	var expectedTxtLabelField TextFieldSpecLabel
+
+	expectedTxtLabelField,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"expectedTxtLabelField"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumTxtFields :=
+		stdLine01.GetNumOfTextFields() + 1
+
+	initialTargetIndex := stdLine01.GetNumOfTextFields() - 1
+
+	var iOldTxtField ITextFieldSpecification
+
+	iOldTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.InsertTextField(
+		&expectedTxtLabelField,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-expectedTxtLabelField",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01 after insertion"))
+
+	actualNumTxtFields :=
+		stdLine01.GetNumOfTextFields()
+
+	if expectedNumTxtFields != actualNumTxtFields {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.InsertTextField()\n"+
+			"Expected Number Of Text Fields\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Fields.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedNumTxtFields,
+			actualNumTxtFields)
+
+		return
+	}
+
+	var iTargetTxtField ITextFieldSpecification
+
+	iTargetTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelField,
+		ok := iTargetTxtField.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTargetTxtField.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecLabel'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !expectedTxtLabelField.Equal(actualLabelField) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedTxtLabelField==actualLabelField\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.String(),
+			expectedTxtLabelField.GetTextLabel(),
+			actualLabelField.GetTextLabel())
+
+		return
+
+	}
+
+	var iOldTxtField2 ITextFieldSpecification
+
+	iOldTxtField2,
+		err = stdLine01.GetTextField(
+		initialTargetIndex+1,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex+1)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !iOldTxtField.EqualITextField(
+		iOldTxtField2) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected original stdLine01[%v] \n"+
+			"would EQUAL stdLine01[%v] after insertion.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String(),
+			initialTargetIndex,
+			initialTargetIndex+1)
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_InsertTextField_000600(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextField_000600()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	expectedLabelText := "Say it ain't so Joe!"
+
+	var expectedTxtLabelField TextFieldSpecLabel
+
+	expectedTxtLabelField,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"expectedTxtLabelField"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	expectedNumTxtFields :=
+		stdLine01.GetNumOfTextFields() + 1
+
+	initialTargetIndex := stdLine01.GetNumOfTextFields()
+
+	var iOldTxtField ITextFieldSpecification
+
+	iOldTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex-1,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex-1)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.InsertTextField(
+		&expectedTxtLabelField,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-expectedTxtLabelField",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01 after insertion"))
+
+	actualNumTxtFields :=
+		stdLine01.GetNumOfTextFields()
+
+	if expectedNumTxtFields != actualNumTxtFields {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine01.InsertTextField()\n"+
+			"Expected Number Of Text Fields\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Fields.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedNumTxtFields,
+			actualNumTxtFields)
+
+		return
+	}
+
+	var iTargetTxtField ITextFieldSpecification
+
+	iTargetTxtField,
+		err = stdLine01.GetTextField(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualLabelField,
+		ok := iTargetTxtField.(*TextFieldSpecLabel)
+
+	if !ok {
+
+		t.Errorf("%v - Error\n"+
+			"spacerField, ok := iTargetTxtField.(*TextFieldSpecSpacer)\n"+
+			"Expected return of type 'TextFieldSpecLabel'.\n"+
+			"HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if !expectedTxtLabelField.Equal(actualLabelField) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected expectedTxtLabelField==actualLabelField\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedLabelText= '%v'\n"+
+			"  actualLabelText= '%v'\n",
+			ePrefix.String(),
+			expectedTxtLabelField.GetTextLabel(),
+			actualLabelField.GetTextLabel())
+
+		return
+
+	}
+
+	var iOldTxtField2 ITextFieldSpecification
+
+	iOldTxtField2,
+		err = stdLine01.GetTextField(
+		initialTargetIndex-1,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"iOldTxtField<-stdLine01[%v]",
+				initialTargetIndex-1)))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	if !iOldTxtField.EqualITextField(
+		iOldTxtField2) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected original stdLine01[%v] \n"+
+			"would EQUAL stdLine01[%v] after insertion.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String(),
+			initialTargetIndex,
+			initialTargetIndex-1)
+
+		return
+
 	}
 
 	return

@@ -581,7 +581,7 @@ func (txtStdLineElectron *textLineSpecStandardLineElectron) testValidityOfTextFi
 		}
 
 		err2 = val.IsValidInstanceError(
-			ePrefix)
+			nil)
 
 		if err2 != nil {
 			err = fmt.Errorf("%v\n"+

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
+	"time"
 )
 
 // createTestTextLineSpecStandardLine01 - Generates a
@@ -114,6 +115,7 @@ func createTestTextLineSpecStandardLine01(
 		return stdLine01, err
 	}
 
+	//Index 0
 	_,
 		err = stdLine01.AddTextField(
 		&leftMarginSpec,
@@ -123,6 +125,8 @@ func createTestTextLineSpecStandardLine01(
 	if err != nil {
 		return stdLine01, err
 	}
+
+	//Index 1
 
 	_,
 		err = stdLine01.AddTextField(
@@ -134,6 +138,7 @@ func createTestTextLineSpecStandardLine01(
 		return stdLine01, err
 	}
 
+	//Index 2
 	_,
 		err = stdLine01.AddTextField(
 		&rightMarginSpec,
@@ -661,6 +666,284 @@ func createTestTextLineSpecStandardLine04(
 	}
 
 	return stdLine02, err
+}
+
+// createTestTextLineSpecStandardLine05 - Generates a
+// TextLineSpecStandardLine object used for test operations.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecStandardLine
+//     - If this method completes successfully, it will create and
+//       return a new, populated concrete instance of
+//       TextLineSpecStandardLine which is fully configured with all
+//       the parameters necessary to format one or more standard lines
+//       of text for text display, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func createTestTextLineSpecStandardLine05(
+	errorPrefix interface{}) (
+	TextLineSpecStandardLine,
+	error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	stdLine01 := TextLineSpecStandardLine{}.New()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TestDataGeneration - "+
+			"createTestTextLineSpecStandardLine05()",
+		"")
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	var leftMarginSpec TextFieldSpecSpacer
+
+	leftMarginLen := 6
+
+	leftMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		leftMarginLen,
+		ePrefix.XCpy(
+			"leftMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	rightMarginLen := 5
+	var rightMarginSpec TextFieldSpecSpacer
+
+	rightMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCpy(
+			"rightMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	label := "This Is A Date Time:"
+	fieldLen := len(label) + 1
+	txtJustify := TxtJustify.Right()
+
+	var labelSpec TextFieldSpecLabel
+
+	labelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		label,
+		fieldLen,
+		txtJustify,
+		ePrefix.XCpy(
+			"labelSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 0
+	_,
+		err = stdLine01.AddTextField(
+		&leftMarginSpec,
+		ePrefix.XCpy(
+			"stdLine01<-leftMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 1
+
+	_,
+		err = stdLine01.AddTextField(
+		&labelSpec,
+		ePrefix.XCpy(
+			"stdLine01<-labelSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 2
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCpy(
+			"stdLine01<-rightMarginSpec"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	timeZoneName := "America/Chicago"
+
+	tzLocPtr, err2 := time.LoadLocation(timeZoneName)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned by time.LoadLocation(timeZoneName)\n"+
+			"timeZoneName='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			timeZoneName,
+			err2.Error())
+
+		return stdLine01, err
+	}
+
+	dateTime := time.Date(
+		2021,
+		time.Month(10),
+		14,
+		15,
+		28,
+		0,
+		0,
+		tzLocPtr)
+
+	dateTimeFormat :=
+		"Monday January 2, 2006 15:04:05.000000000 -0700 MST"
+
+	fieldLen = len(dateTimeFormat)
+
+	textJustification := TxtJustify.Left()
+
+	var incomingTxtFieldDateTime TextFieldSpecDateTime
+
+	incomingTxtFieldDateTime,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		dateTime,
+		fieldLen,
+		dateTimeFormat,
+		textJustification,
+		ePrefix.XCpy("incomingTxtFieldDateTime"))
+
+	if err != nil {
+
+		return stdLine01, err
+
+	}
+
+	//Index 3
+	_,
+		err = stdLine01.AddTextField(
+		&incomingTxtFieldDateTime,
+		ePrefix.XCpy(
+			"stdLine01<-incomingTxtFieldDateTime"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	rightMarginLen = 2
+
+	rightMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCpy(
+			"rightMarginSpec#2"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 4
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCpy(
+			"stdLine01<-rightMarginSpec#2"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	fillerChars := "-"
+	fillerRepeatCnt := 5
+
+	var fillerTxtFieldOne TextFieldSpecFiller
+
+	fillerTxtFieldOne,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerChars,
+		fillerRepeatCnt,
+		ePrefix)
+
+	//Index 5
+	_,
+		err = stdLine01.AddTextField(
+		&fillerTxtFieldOne,
+		ePrefix.XCpy(
+			"stdLine01<-fillerTxtFieldOne"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	rightMarginLen = 1
+
+	rightMarginSpec,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		rightMarginLen,
+		ePrefix.XCpy(
+			"rightMarginSpec#3"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	//Index 6
+	_,
+		err = stdLine01.AddTextField(
+		&rightMarginSpec,
+		ePrefix.XCpy(
+			"stdLine01<-rightMarginSpec#3"))
+
+	if err != nil {
+		return stdLine01, err
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01-final"))
+
+	return stdLine01, err
 }
 
 func TestTextLineSpecStandardLine_AddTextFields_000010(t *testing.T) {
