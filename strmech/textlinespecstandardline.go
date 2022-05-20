@@ -2526,7 +2526,7 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	var iTextFieldSpec ITextFieldSpecification
+	var iTxtFieldSpec ITextFieldSpecification
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2536,74 +2536,21 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 		"")
 
 	if err != nil {
-		return iTextFieldSpec, err
+		return iTxtFieldSpec, err
 	}
 
-	lenTextFields := len(stdLine.textFields)
-
-	if lenTextFields == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Text Fields Collection is empty\n"+
-			"and contains zero elements!\n",
-			ePrefix.String())
-
-		return iTextFieldSpec, err
-
-	}
-
-	if zeroBasedIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
-			"'zeroBasedIndex' is less than zero!\n"+
-			"zeroBasedIndex = '%v'\n",
-			ePrefix.String(),
-			zeroBasedIndex)
-
-		return iTextFieldSpec, err
-
-	}
-
-	lastIndex := lenTextFields - 1
-
-	if zeroBasedIndex > lastIndex {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'zeroBasedIndex' is invalid.\n"+
-			"The value of 'zeroBasedIndex' is greater than the last\n"+
-			"index in the Text Fields Collection!\n"+
-			"Last Collection Index = '%v'\n"+
-			"zeroBasedIndex        = '%v'\n",
-			ePrefix.String(),
-			lastIndex,
-			zeroBasedIndex)
-
-		return iTextFieldSpec, err
-	}
-
-	if stdLine.textFields[zeroBasedIndex] == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Text Field Collection is invalid.\n"+
-			"The value of stdLine.textFields[zeroBasedIndex] is nill\n"+
-			"zeroBasedIndex = '%v'\n",
-			ePrefix.String(),
-			zeroBasedIndex)
-
-		return iTextFieldSpec, err
-
-	}
-
-	iTextFieldSpec,
-		err = stdLine.textFields[zeroBasedIndex].
-		CopyOutITextField(
+	iTxtFieldSpec,
+		err = textLineSpecStandardLineAtom{}.ptr().
+		peekPopTextField(
+			stdLine,
+			zeroBasedIndex,
+			false,
 			ePrefix.XCpy(
 				fmt.Sprintf(
 					"stdLine.textFields[%v]",
 					zeroBasedIndex)))
 
-	return iTextFieldSpec, err
+	return iTxtFieldSpec, err
 }
 
 // GetTextFieldCollection - Returns a deep copy of the text fields contained
