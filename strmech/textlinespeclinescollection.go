@@ -1195,19 +1195,35 @@ func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 
 	}
 
+	var oldTextLine ITextLineSpecification
+
+	oldTextLine,
+		err = txtLinesCol.textLines[indexId].CopyOutITextLine(
+		ePrefix.XCpy(fmt.Sprintf(
+			"oldTextLine<-txtLinesCol.textLines[%v]",
+			indexId)))
+
+	if err != nil {
+		return lastIndexId, err
+	}
+
 	// arr := []int{1,2,3,4,5}
 	// arr[:2]         [1,2]
 	// arr[2:])        [3,4,5]
-
 	// 	orig = append(orig[:index+1], orig[index:]...)
+
+	txtLinesCol.textLines[indexId].Empty()
+	txtLinesCol.textLines[indexId] = nil
 
 	txtLinesCol.textLines = append(
 		txtLinesCol.textLines[:indexId+1],
 		txtLinesCol.textLines[indexId:]...)
 
-	txtLinesCol.textLines[indexId].Empty()
-	txtLinesCol.textLines[indexId] = nil
-	txtLinesCol.textLines[indexId] = newTextLine
+	txtLinesCol.textLines[indexId+1] =
+		oldTextLine
+
+	txtLinesCol.textLines[indexId] =
+		newTextLine
 
 	return lastIndexId, err
 }

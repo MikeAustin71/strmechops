@@ -672,6 +672,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	if indexId < 0 {
 		indexId = 0
 	}
+
 	var oldTextField ITextFieldSpecification
 
 	oldTextField,
@@ -687,6 +688,7 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	// arr := []int{1,2,3,4,5}
 	// arr[:2]         [1,2]
 	// arr[2:])        [3,4,5]
+	// 	orig = append(orig[:index+1], orig[index:]...)
 
 	txtStdLine.textFields[indexId].Empty()
 	txtStdLine.textFields[indexId] = nil
