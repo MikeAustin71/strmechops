@@ -1077,7 +1077,7 @@ func TestTextLineSpecStandardLine_ReplaceTextField_000100(t *testing.T) {
 	var iTxtFieldSpec ITextFieldSpecification
 
 	iTxtFieldSpec,
-		err = stdLine01.PeekAtTextFieldAtIndex(
+		err = stdLine01.PeekAtTextField(
 		1,
 		ePrefix.XCpy(
 			"stdLine01"))

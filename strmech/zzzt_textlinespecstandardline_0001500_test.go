@@ -1024,7 +1024,7 @@ func TestTextLineSpecStandardLine_InsertTextField_000100(t *testing.T) {
 	var iTxtFieldSpec ITextFieldSpecification
 
 	iTxtFieldSpec,
-		err = stdLine01.PeekAtTextFieldAtIndex(
+		err = stdLine01.PeekAtTextField(
 		2,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -3344,10 +3344,10 @@ func TestTextLineSpecStandardLine_PeekAtLastTextField_000200(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
+func TestTextLineSpecStandardLine_PeekAtTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100()",
+		"TestTextLineSpecStandardLine_PeekAtTextField_000100()",
 		"")
 
 	stdLine01,
@@ -3365,7 +3365,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
 	var iTxtFieldSpec ITextFieldSpecification
 
 	iTxtFieldSpec,
-		err = stdLine01.PeekAtTextFieldAtIndex(
+		err = stdLine01.PeekAtTextField(
 		4,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -3420,16 +3420,16 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
+func TestTextLineSpecStandardLine_PeekAtTextField_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200()",
+		"TestTextLineSpecStandardLine_PeekAtTextField_000200()",
 		"")
 
 	stdLine01 := TextLineSpecStandardLine{}
 
 	_,
-		err := stdLine01.PeekAtTextFieldAtIndex(
+		err := stdLine01.PeekAtTextField(
 		0,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -3437,7 +3437,7 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - Error\n"+
-			"Expected an error return from stdLine01.PeekAtTextFieldAtIndex()\n"+
+			"Expected an error return from stdLine01.PeekAtTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -3459,14 +3459,14 @@ func TestTextLineSpecStandardLine_PeekAtTextFieldAtIndex_000200(t *testing.T) {
 	}
 
 	_,
-		err = stdLine02.PeekAtTextFieldAtIndex(
+		err = stdLine02.PeekAtTextField(
 		2,
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {
 
 		t.Errorf("%v - Error\n"+
-			"stdLine02.PeekAtTextFieldAtIndex()\n"+
+			"stdLine02.PeekAtTextField()\n"+
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",

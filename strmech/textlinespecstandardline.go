@@ -4754,7 +4754,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"PeekAtTextFieldAtIndex()",
+			"PeekAtTextField()",
 		"")
 
 	if err != nil {
@@ -4785,7 +4785,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 	return iTxtFieldSpec, err
 }
 
-// PeekAtTextFieldAtIndex - Returns a deep copy of the Text Field
+// PeekAtTextField - Returns a deep copy of the Text Field
 // ('ITextFieldSpecification') object located at index, 'indexId',
 // in the Text Field Collection ('stdLine.textFields').
 //
@@ -4898,7 +4898,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //     var iTxtFieldSpec ITextFieldSpecification
 //
 //     iTxtFieldSpec,
-//     err = stdLine01.PeekAtTextFieldAtIndex(
+//     err = stdLine01.PeekAtTextField(
 //           indexId,
 //           ePrefix.XCpy(
 //           "stdLine01"))
@@ -4930,7 +4930,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //     spacerLen := spacerField.GetFieldLength()
 //
 //
-func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
+func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 	indexId int,
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
@@ -4952,7 +4952,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextFieldAtIndex(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecStandardLine."+
-			"PeekAtTextFieldAtIndex()",
+			"PeekAtTextField()",
 		"")
 
 	if err != nil {

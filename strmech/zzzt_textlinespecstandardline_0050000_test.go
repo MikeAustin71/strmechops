@@ -2435,7 +2435,7 @@ func TestTextLineSpecStandardLineNanobot_insertTextFieldAtIndex_000100(t *testin
 	var iTxtFieldSpec ITextFieldSpecification
 
 	iTxtFieldSpec,
-		err = stdLine01.PeekAtTextFieldAtIndex(
+		err = stdLine01.PeekAtTextField(
 		2,
 		ePrefix.XCpy(
 			"stdLine01"))
