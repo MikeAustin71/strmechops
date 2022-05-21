@@ -690,8 +690,13 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) insertTextFieldAtIndex
 	// arr[2:])        [3,4,5]
 	// 	orig = append(orig[:index+1], orig[index:]...)
 
-	txtStdLine.textFields[indexId].Empty()
-	txtStdLine.textFields[indexId] = nil
+	if txtStdLine.textFields[indexId] != nil {
+
+		txtStdLine.textFields[indexId].Empty()
+
+		txtStdLine.textFields[indexId] = nil
+
+	}
 
 	txtStdLine.textFields = append(
 		txtStdLine.textFields[:indexId+1],
