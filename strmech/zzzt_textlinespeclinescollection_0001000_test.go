@@ -1870,7 +1870,7 @@ func TestTextLineSpecLinesCollection_InsertTextLine_000500(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from txtLinesCol01."+
+			"Expected an error return from txtLinesCol03."+
 			"InsertTextLine()\n"+
 			"because 'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
@@ -2029,6 +2029,16 @@ func TestTextLineSpecLinesCollection_InsertTextLine_000500(t *testing.T) {
 			fmt.Sprintf(
 				"txtLinesCol08[%v]<-newTxtLine01",
 				2)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol08.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol08 #2"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",

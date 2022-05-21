@@ -2770,7 +2770,8 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 //       After the insertion operation is completed, the
 //       'iTextField' object will be located at array element
 //       'indexId' immediately BEFORE the original array element
-//       located at that array index.
+//       located at that array index in the final Text Fields
+//       Array.
 //
 //       NOTE: You will need to pass the concrete instance of
 //       'iTextField' as a pointer to the Text Field (&textField).
@@ -2786,6 +2787,10 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 //       inserted. This means that 'iTextField' will be inserted
 //       immediately BEFORE the array element specified by
 //       'indexId' in the final Text Fields Array.
+//
+//       For example, if 'indexId' is set to '4', the original Text
+//       Field object at index '4' will be moved to index position
+//       '5' after the insertion operation is completed.
 //
 //       If the value of 'indexId' is less than zero, it will be
 //       reset to zero. This means that the 'iTextField' object

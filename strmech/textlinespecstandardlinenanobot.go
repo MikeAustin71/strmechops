@@ -496,7 +496,18 @@ func (txtStdLineNanobot *textLineSpecStandardLineNanobot) copyOut(
 	return newStdLine, err
 }
 
-// insertTextFieldAtIndex - STOP@COL68
+// insertTextFieldAtIndex - Receives an instance of Text Field in
+// the form of an ITextFieldSpecification. This Test Field object
+// is then inserted into the Text Fields Collection maintained by
+// the TextLineSpecStandardLine instance passed as input parameter,
+// 'txtStdLine'.
+//
+// The Text Field input parameter, 'iTextField', is inserted into
+// the internal Text Field collection array at the array element
+// index position indicated by input parameter, 'indexId'.
+//
+// After this method completes, the number of elements in the Text
+// Fields Collection will be increased by one.
 //
 //
 // -----------------------------------------------------------------

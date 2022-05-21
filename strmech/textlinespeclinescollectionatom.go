@@ -137,9 +137,9 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) equalCollections(
 // TextLineSpecLinesCollection instance passed as input parameter,
 // 'textLinesCol'.
 //
-// The Text Input input parameter, 'textLine', is inserted into
-// the internal Text Lines array at the array element index
-// position indicated by input parameter, 'zeroBasedIndex'.
+// The Text Line input parameter, 'textLine', is inserted into
+// the internal Text Lines collection array at the array element
+// index position indicated by input parameter, 'zeroBasedIndex'.
 //
 // After this method completes, the number of elements in the Text
 // Lines Collection will be increased by one.
@@ -187,9 +187,9 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) equalCollections(
 //       BEFORE the array element specified by 'zeroBasedIndex'
 //       in the final Text Lines Array.
 //
-//       If 'zeroBasedIndex' is set to '4', the original Text Line
-//       object at index '4' will be moved to index position '5'
-//       after the insertion operation is completed.
+//       For example, if 'zeroBasedIndex' is set to '4', the
+//       original Text Line object at index '4' will be moved to
+//       index position '5' after the insertion operation is completed.
 //
 //       If the value of 'zeroBasedIndex' is less than zero, it
 //       will be reset to zero. This means that the 'textLine'

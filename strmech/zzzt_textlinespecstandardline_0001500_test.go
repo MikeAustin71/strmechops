@@ -1275,6 +1275,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000300(t *testing.T) {
 		ePrefix.XCpy(
 			"stdLine01"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	expectedLabelText := "Car 54 where are you?"
 
 	var expectedTxtLabelField TextFieldSpecLabel
@@ -1332,6 +1338,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000300(t *testing.T) {
 	err = stdLine01.IsValidInstanceError(
 		ePrefix.XCpy(
 			"stdLine01 after insertion"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	actualNumTxtFields :=
 		stdLine01.GetNumOfTextFields()
@@ -1450,6 +1462,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000400(t *testing.T) {
 		ePrefix.XCpy(
 			"stdLine01"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	expectedLabelText := "The answer is 42!"
 
 	var expectedTxtLabelField TextFieldSpecLabel
@@ -1507,6 +1525,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000400(t *testing.T) {
 	err = stdLine01.IsValidInstanceError(
 		ePrefix.XCpy(
 			"stdLine01 after insertion"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	actualNumTxtFields :=
 		stdLine01.GetNumOfTextFields()
@@ -1625,6 +1649,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000500(t *testing.T) {
 		ePrefix.XCpy(
 			"stdLine01"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	expectedLabelText := "Shiver me timbers!"
 
 	var expectedTxtLabelField TextFieldSpecLabel
@@ -1682,6 +1712,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000500(t *testing.T) {
 	err = stdLine01.IsValidInstanceError(
 		ePrefix.XCpy(
 			"stdLine01 after insertion"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	actualNumTxtFields :=
 		stdLine01.GetNumOfTextFields()
@@ -1800,6 +1836,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000600(t *testing.T) {
 		ePrefix.XCpy(
 			"stdLine01"))
 
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	expectedLabelText := "Say it ain't so Joe!"
 
 	var expectedTxtLabelField TextFieldSpecLabel
@@ -1857,6 +1899,12 @@ func TestTextLineSpecStandardLine_InsertTextField_000600(t *testing.T) {
 	err = stdLine01.IsValidInstanceError(
 		ePrefix.XCpy(
 			"stdLine01 after insertion"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 
 	actualNumTxtFields :=
 		stdLine01.GetNumOfTextFields()
@@ -1949,6 +1997,386 @@ func TestTextLineSpecStandardLine_InsertTextField_000600(t *testing.T) {
 
 		return
 
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_InsertTextField_000700(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_InsertTextField_000700()",
+		"")
+
+	// Test Invalid Parameters
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedLabelText := "All my bags are packed..."
+
+	var newTxtLabelField TextFieldSpecLabel
+
+	newTxtLabelField,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		expectedLabelText,
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"newTxtLabelField"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine01.InsertTextField(
+		&newTxtLabelField,
+		0,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine01[%v]<-newTxtLabelField",
+				0)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine01 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine02.InsertTextField(
+		nil,
+		0,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine02[%v]<-nil",
+				0)))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine02."+
+			"InsertTextField()\n"+
+			"because input parameter 'iTextField' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = stdLine02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine02 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = stdLine03.InsertTextField(
+		&newTxtLabelField,
+		0,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from stdLine03."+
+			"InsertTextLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = stdLine03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine03 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine04 TextLineSpecStandardLine
+
+	stdLine04,
+		err = createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testIndex := -99
+
+	_,
+		err = stdLine04.InsertTextField(
+		&newTxtLabelField,
+		testIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine04[%v]<-newTxtLabelField",
+				testIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine04 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine05 TextLineSpecStandardLine
+
+	stdLine05,
+		err = createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine05.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testIndex = 999
+
+	_,
+		err = stdLine05.InsertTextField(
+		&newTxtLabelField,
+		testIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine05[%v]<-newTxtLabelField",
+				testIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine05.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine05 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine06 TextLineSpecStandardLine
+
+	stdLine06,
+		err = createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine06.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testIndex = 1
+
+	_,
+		err = stdLine06.InsertTextField(
+		&newTxtLabelField,
+		testIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine06[%v]<-newTxtLabelField",
+				testIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine06.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine06 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var stdLine07 TextLineSpecStandardLine
+
+	stdLine07,
+		err = createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine07.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	testIndex = 2
+
+	_,
+		err = stdLine07.InsertTextField(
+		&newTxtLabelField,
+		testIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"stdLine07[%v]<-newTxtLabelField",
+				testIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = stdLine07.IsValidInstanceError(
+		ePrefix.XCpy(
+			"stdLine07 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
 	}
 
 	return
