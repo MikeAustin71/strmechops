@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
 )
@@ -205,7 +206,7 @@ func TestTextLineSpecLinesCollection_CopyIn_000100(t *testing.T) {
 
 	if err == nil {
 
-		t.Errorf("%v - ERROR\n"+
+		t.Errorf("\n%v - ERROR\n"+
 			"Expected an error return from txtLinesCol03."+
 			"CopyIn()\n"+
 			"because 'incomingTxtLinesCol' is 'nil' and invalid.\n"+
@@ -1067,6 +1068,971 @@ func TestTextLineSpecLinesCollection_GetTextLineCollection_000100(t *testing.T) 
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_InsertTextLine_000100(t *testing.T) {
+
+	// Target Index is first index 0
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_InsertTextLine_000100()",
+		"")
+
+	expectedTxtLinesColLen,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// Num Of Lines after insertion
+	expectedTxtLinesColLen++
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var oldTargetTextLineObj01,
+		oldTargetTextLineObj02 ITextLineSpecification
+
+	// Target First Array Element
+	initialTargetIndex := 0
+
+	oldTargetTextLineObj01Index :=
+		initialTargetIndex
+
+	newOldTargetTextLineObj02Index :=
+		initialTargetIndex + 1
+
+	oldTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		oldTargetTextLineObj01Index,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01.textLines[%v] oldTargetTextLineObj01Index",
+				oldTargetTextLineObj01Index)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newTxtLine01 TextLineSpecStandardLine
+
+	newTxtLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"newTxtLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTxtLinesColLength := 0
+
+	actualTxtLinesColLength,
+		err = txtLinesCol01.InsertTextLine(
+		&newTxtLine01,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01[%v]<-newTxtLine01",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01 after insertion #1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// Adjust Last Index to Collection Length
+	actualTxtLinesColLength++
+
+	if expectedTxtLinesColLen != actualTxtLinesColLength {
+
+		t.Errorf("%v - Error\n"+
+			"txtLinesCol01.InsertTextLine()\n"+
+			"Expected Number Of Text Lines\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Lines.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedTxtLinesColLen,
+			actualTxtLinesColLength)
+
+		return
+	}
+
+	var actualTargetTextLineObj01 ITextLineSpecification
+
+	actualTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLinesCol01.textLines[%v] initialTargetIndex",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !actualTargetTextLineObj01.EqualITextLine(&newTxtLine01) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected newTxtLine01==actualTargetTextLineObj01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	oldTargetTextLineObj02,
+		err = txtLinesCol01.GetTextLine(
+		newOldTargetTextLineObj02Index,
+		ePrefix.XCpy(fmt.Sprintf(
+			"txtLinesCol01.textLines[%v] newOldTargetTextLineObj02Index",
+			newOldTargetTextLineObj02Index)))
+
+	if !oldTargetTextLineObj01.EqualITextLine(oldTargetTextLineObj02) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected oldTargetTextLineObj01==oldTargetTextLineObj02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_InsertTextLine_000200(t *testing.T) {
+
+	// Target Index is equal to last index
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_InsertTextLine_000200()",
+		"")
+
+	expectedTxtLinesColLen,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var oldTargetTextLineObj01,
+		oldTargetTextLineObj02 ITextLineSpecification
+
+	// Target Last Array Element
+	initialTargetIndex := expectedTxtLinesColLen - 1
+
+	oldTargetTextLineObj01Index :=
+		initialTargetIndex
+
+	newOldTargetTextLineObj02Index :=
+		initialTargetIndex + 1
+
+	oldTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		oldTargetTextLineObj01Index,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01.textLines[%v] oldTargetTextLineObj01Index",
+				oldTargetTextLineObj01Index)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newTxtLine01 TextLineSpecStandardLine
+
+	newTxtLine01,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCpy(
+			"newTxtLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTxtLinesColLength := 0
+
+	actualTxtLinesColLength,
+		err = txtLinesCol01.InsertTextLine(
+		&newTxtLine01,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01[%v]<-newTxtLine01",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01 after insertion #1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// Num Of Lines after insertion
+	expectedTxtLinesColLen++
+
+	// Adjust Last Index to Collection Length
+	actualTxtLinesColLength++
+
+	if expectedTxtLinesColLen != actualTxtLinesColLength {
+
+		t.Errorf("%v - Error\n"+
+			"txtLinesCol01.InsertTextLine()\n"+
+			"Expected Number Of Text Lines\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Lines.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedTxtLinesColLen,
+			actualTxtLinesColLength)
+
+		return
+	}
+
+	var actualTargetTextLineObj01 ITextLineSpecification
+
+	actualTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLinesCol01.textLines[%v] initialTargetIndex",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !actualTargetTextLineObj01.EqualITextLine(&newTxtLine01) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected newTxtLine01==actualTargetTextLineObj01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	oldTargetTextLineObj02,
+		err = txtLinesCol01.GetTextLine(
+		newOldTargetTextLineObj02Index,
+		ePrefix.XCpy(fmt.Sprintf(
+			"txtLinesCol01.textLines[%v] newOldTargetTextLineObj02Index",
+			newOldTargetTextLineObj02Index)))
+
+	if !oldTargetTextLineObj01.EqualITextLine(oldTargetTextLineObj02) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected oldTargetTextLineObj01==oldTargetTextLineObj02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_InsertTextLine_000300(t *testing.T) {
+
+	// Target Index is greater than last index
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_InsertTextLine_000300()",
+		"")
+
+	expectedTxtLinesColLen,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var oldTargetTextLineObj01,
+		oldTargetTextLineObj02 ITextLineSpecification
+
+	// Target Index Greater Than Last Array Index
+	initialTargetIndex := expectedTxtLinesColLen
+
+	oldTargetTextLineObj01Index :=
+		txtLinesCol01.GetNumberOfTextLines() - 1
+
+	newOldTargetTextLineObj02Index :=
+		oldTargetTextLineObj01Index
+
+	oldTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		oldTargetTextLineObj01Index,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01.textLines[%v] "+
+					"oldTargetTextLineObj01Index",
+				oldTargetTextLineObj01Index)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newTxtLine01 TextLineSpecStandardLine
+
+	newTxtLine01,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCpy(
+			"newTxtLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTxtLinesColLength := 0
+
+	actualTxtLinesColLength,
+		err = txtLinesCol01.InsertTextLine(
+		&newTxtLine01,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01[%v]<-newTxtLine01",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01 after insertion #1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// Num Of Lines after insertion
+	expectedTxtLinesColLen++
+
+	// Adjust Last Index to Collection Length
+	actualTxtLinesColLength++
+
+	if expectedTxtLinesColLen != actualTxtLinesColLength {
+
+		t.Errorf("%v - Error\n"+
+			"txtLinesCol01.InsertTextLine()\n"+
+			"Expected Number Of Text Lines\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Lines.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedTxtLinesColLen,
+			actualTxtLinesColLength)
+
+		return
+	}
+
+	var actualTargetTextLineObj01 ITextLineSpecification
+
+	actualTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLinesCol01.textLines[%v] initialTargetIndex",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !actualTargetTextLineObj01.EqualITextLine(&newTxtLine01) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected newTxtLine01==actualTargetTextLineObj01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	oldTargetTextLineObj02,
+		err = txtLinesCol01.GetTextLine(
+		newOldTargetTextLineObj02Index,
+		ePrefix.XCpy(fmt.Sprintf(
+			"txtLinesCol01.textLines[%v] newOldTargetTextLineObj02Index",
+			newOldTargetTextLineObj02Index)))
+
+	if !oldTargetTextLineObj01.EqualITextLine(oldTargetTextLineObj02) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected oldTargetTextLineObj01==oldTargetTextLineObj02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_InsertTextLine_000400(t *testing.T) {
+
+	// Target Index is less than last index but greater than zero
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_InsertTextLine_000400()",
+		"")
+
+	expectedTxtLinesColLen,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var oldTargetTextLineObj01,
+		oldTargetTextLineObj02 ITextLineSpecification
+
+	// Target Index is less than last index but greater than zero
+	initialTargetIndex := 5
+
+	oldTargetTextLineObj01Index :=
+		initialTargetIndex
+
+	newOldTargetTextLineObj02Index :=
+		initialTargetIndex + 1
+
+	oldTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		oldTargetTextLineObj01Index,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01.textLines[%v] "+
+					"oldTargetTextLineObj01Index",
+				oldTargetTextLineObj01Index)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newTxtLine01 TextLineSpecStandardLine
+
+	newTxtLine01,
+		err = createTestTextLineSpecStandardLine02(
+		ePrefix.XCpy(
+			"newTxtLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTxtLinesColLength := 0
+
+	actualTxtLinesColLength,
+		err = txtLinesCol01.InsertTextLine(
+		&newTxtLine01,
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01[%v]<-newTxtLine01",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol01 after insertion #1"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	// Adjust for Num Of Lines after insertion
+	expectedTxtLinesColLen++
+
+	// Adjust Last Index to Collection Length
+	actualTxtLinesColLength++
+
+	if expectedTxtLinesColLen != actualTxtLinesColLength {
+
+		t.Errorf("%v - Error\n"+
+			"txtLinesCol01.InsertTextLine()\n"+
+			"Expected Number Of Text Lines\n"+
+			"DID NOT MATCH the Actual Number\n"+
+			"of Text Lines.\n"+
+			"Expected Number of Text Fields = '%v'\n"+
+			"  Actual Number of Text Fields = '%v'\n",
+			ePrefix.String(),
+			expectedTxtLinesColLen,
+			actualTxtLinesColLength)
+
+		return
+	}
+
+	var actualTargetTextLineObj01 ITextLineSpecification
+
+	actualTargetTextLineObj01,
+		err = txtLinesCol01.GetTextLine(
+		initialTargetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLinesCol01.textLines[%v] initialTargetIndex",
+				initialTargetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !actualTargetTextLineObj01.EqualITextLine(&newTxtLine01) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected newTxtLine01==actualTargetTextLineObj01\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	oldTargetTextLineObj02,
+		err = txtLinesCol01.GetTextLine(
+		newOldTargetTextLineObj02Index,
+		ePrefix.XCpy(fmt.Sprintf(
+			"txtLinesCol01.textLines[%v] newOldTargetTextLineObj02Index",
+			newOldTargetTextLineObj02Index)))
+
+	if !oldTargetTextLineObj01.EqualITextLine(oldTargetTextLineObj02) {
+
+		t.Errorf("%v - Error\n"+
+			"Expected oldTargetTextLineObj01==oldTargetTextLineObj02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_InsertTextLine_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_InsertTextLine_000500()",
+		"")
+
+	// Test Invalid Parameters
+
+	_,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newTxtLine01 TextLineSpecStandardLine
+
+	newTxtLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"newTxtLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol01.InsertTextLine(
+		&newTxtLine01,
+		0,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol01[%v]<-newTxtLine01",
+				0)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol02 TextLineSpecLinesCollection
+	_,
+		txtLinesCol02,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol02.InsertTextLine(
+		nil,
+		0,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol02[%v]<-nil",
+				0)))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"InsertTextLine()\n"+
+			"because input parameter 'textLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesCol02.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol02 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol03 TextLineSpecLinesCollection
+	_,
+		txtLinesCol03,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol03.InsertTextLine(
+		&newTxtLine01,
+		0,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from txtLinesCol01."+
+			"InsertTextLine()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesCol03.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol03 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+	_,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol04.InsertTextLine(
+		&newTxtLine01,
+		-99,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol04[%v]<-newTxtLine01",
+				-99)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol04.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol04 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol05 TextLineSpecLinesCollection
+	_,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol05.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol05.InsertTextLine(
+		&newTxtLine01,
+		999,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol05[%v]<-newTxtLine01",
+				999)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol05.IsValidInstanceError(
+		ePrefix.XCpy(
+			"txtLinesCol05 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol06 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol06.InsertTextLine(
+		&newTxtLine01,
+		-99,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol06[%v]<-newTxtLine01",
+				-99)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol07 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol07.InsertTextLine(
+		&newTxtLine01,
+		999,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol07[%v]<-newTxtLine01",
+				999)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol08 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol08.InsertTextLine(
+		&newTxtLine01,
+		2,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol08[%v]<-newTxtLine01",
+				2)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 

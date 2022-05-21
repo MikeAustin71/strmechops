@@ -751,7 +751,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecLinesCollection."+
-			"DeleteTextLineMember()",
+			"GetTextLine()",
 		"")
 
 	if err != nil {
