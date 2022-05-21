@@ -943,12 +943,12 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 
 // InsertTextLine - Receives a Text Line instance in the form of a
 // type ITextLineSpecification. This Text Line object is then
-// inserted into Text Lines Collection maintained by the current
-// instance of TextLineSpecLinesCollection.
+// inserted into the Text Lines Collection maintained by the
+// current instance of TextLineSpecLinesCollection.
 //
-// The Text Input input parameter, 'textLine', is inserted into
-// the internal Text Lines array at the array element index
-// position indicated by input parameter, 'indexId'.
+// The Text Line input parameter, 'textLine', is inserted into
+// the internal Text Lines collection at the array element index
+// position indicated by input parameter, 'zeroBasedIndex'.
 //
 // After this method completes, the number of elements in the Text
 // Lines Collection will be increased by one.
@@ -967,31 +967,36 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 //
 //       After the insertion operation is completed, the
 //       'textLine' object will be located at array element
-//       'indexId' immediately BEFORE the original array element
-//       located at that array index.
+//       'zeroBasedIndex' immediately BEFORE the original array
+//        element previously located at that array index.
 //
 //       NOTE: You will need to pass the concrete instance of
 //       'textLine' as a pointer to the Text Line (&textLine).
 //
-//       If the 'iTextField' parameter are found to be invalid, an
+//       If the 'textLine' parameter is found to be invalid, an
 //       error will be returned.
 //
 //
-//  indexId                    int
+//  zeroBasedIndex             int
 //     - This index number designates the array element index in
-//       the Text Lines Collection of the 'txtLinesCol' instance at
-//       which the Text Line parameter, 'textLine' will be
-//       inserted. This means that 'textLine' will be inserted
-//       immediately BEFORE the array element specified by
-//       'indexId' in the final Text Lines Array.
+//       the Text Lines Collection of the current
+//       TextLineSpecLinesCollection instance where the Text Line
+//       parameter, 'textLine' will be inserted. After insertion,
+//       the 'textLine' object will be positioned immediately
+//       BEFORE the original array element previously located at
+//       that array index.
 //
-//       If the value of 'indexId' is less than zero, it will be
-//       reset to zero. This means that the 'textLine' object
-//       will be inserted in the first array element position of
-//       the Text Fields Collection maintained by the current
-//       TextLineSpecLinesCollection instance.
+//       If 'zeroBasedIndex' is set to '4', the original Text Line
+//       object at index '4' will be moved to index position '5'
+//       after the insertion operation is completed.
 //
-//       If the value of 'indexId' is greater the last array
+//       If the value of 'zeroBasedIndex' is less than zero, it
+//       will be reset to zero. This means that the 'textLine'
+//       object will be inserted in the first array element
+//       position of the Text Fields Collection maintained by the
+//       current TextLineSpecLinesCollection instance.
+//
+//       If the value of 'zeroBasedIndex' is greater the last array
 //       element index in the Text Fields Collection, the
 //       'textLine' object will be appended to the end of the Text
 //       Lines Collection.
@@ -1052,7 +1057,9 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 //       index of the last text line object for the Text Lines
 //       Collection maintained by the current
 //       TextLineSpecLinesCollection instance will be returned as
-//       an integer value.
+//       an integer value. Remember, this is a zero based index
+//       value which is always one less than the length of the Text
+//       Line Collection.
 //
 //       In the event of an error, 'lastIndexId' will be set to a
 //       value of minus one (-1).
@@ -1071,7 +1078,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetTextLineCollection(
 //
 func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 	textLine ITextLineSpecification,
-	indexId int,
+	zeroBasedIndex int,
 	errorPrefix interface{}) (
 	lastIndexId int,
 	err error) {
@@ -1099,78 +1106,17 @@ func (txtLinesCol *TextLineSpecLinesCollection) InsertTextLine(
 		return lastIndexId, err
 	}
 
-	if textLine == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLine' is 'nil' and invalid!\n",
-			ePrefix.String())
+	txtLinesColAtom := textLineSpecLinesCollectionAtom{}
 
-		return lastIndexId, err
-	}
-
-	err = textLine.IsValidInstanceError(
-		ePrefix.XCpy("Input Parameter: textLine"))
-
-	if err != nil {
-		return lastIndexId, err
-	}
-
-	var newTextLine ITextLineSpecification
-
-	newTextLine,
-		err = textLine.CopyOutITextLine(
-		ePrefix.XCpy("textLine->newTextLine"))
-
-	if err != nil {
-		return lastIndexId, err
-	}
-
-	lastIndexId = len(txtLinesCol.textLines)
-
-	if lastIndexId == 0 ||
-		indexId >= lastIndexId {
-
-		txtLinesCol.textLines = append(
-			txtLinesCol.textLines,
-			newTextLine)
-
-		return lastIndexId, err
-	}
-
-	if indexId < 0 {
-
-		indexId = 0
-
-	}
-
-	var oldTextLine ITextLineSpecification
-
-	oldTextLine,
-		err = txtLinesCol.textLines[indexId].CopyOutITextLine(
-		ePrefix.XCpy(fmt.Sprintf(
-			"oldTextLine<-txtLinesCol.textLines[%v]",
-			indexId)))
-
-	if err != nil {
-		return lastIndexId, err
-	}
-
-	// arr := []int{1,2,3,4,5}
-	// arr[:2]         [1,2]
-	// arr[2:])        [3,4,5]
-	// 	orig = append(orig[:index+1], orig[index:]...)
-
-	txtLinesCol.textLines[indexId].Empty()
-	txtLinesCol.textLines[indexId] = nil
-
-	txtLinesCol.textLines = append(
-		txtLinesCol.textLines[:indexId+1],
-		txtLinesCol.textLines[indexId:]...)
-
-	txtLinesCol.textLines[indexId+1] =
-		oldTextLine
-
-	txtLinesCol.textLines[indexId] =
-		newTextLine
+	lastIndexId,
+		err = txtLinesColAtom.insertTextLine(
+		txtLinesCol,
+		textLine,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol[%v]<-textLine",
+				zeroBasedIndex)))
 
 	return lastIndexId, err
 }
@@ -1507,20 +1453,11 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 	}
 
 	if replaceAtIndex < 0 {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'replaceAtIndex' is invalid!\n"+
 			"'replaceAtIndex' is less than zero (0).\n"+
 			"replaceAtIndex = '%v'\n",
-			ePrefix.String(),
-			replaceAtIndex)
-	}
-
-	if replaceAtIndex < 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'replaceAtIndex' is out of range and invalid!\n"+
-			"'replaceAtIndex' is less than zero. The first index in the collection\n"+
-			"is always zero.\n"+
-			"Input parameter 'replaceAtIndex' = '%v'\n",
 			ePrefix.String(),
 			replaceAtIndex)
 
