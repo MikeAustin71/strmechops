@@ -833,7 +833,7 @@ func TestTextLineSpecLinesCollection_GetTextLine_000100(t *testing.T) {
 	stdLine02,
 		err := createTestTextLineSpecStandardLine02(
 		ePrefix.XCpy(
-			"stdLine01"))
+			"stdLine02"))
 
 	var txtLinesCol01 TextLineSpecLinesCollection
 
@@ -889,7 +889,7 @@ func TestTextLineSpecLinesCollection_GetTextLine_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesCol02."+
-			"DeleteTextLineMember()\n"+
+			"GetTextLine()\n"+
 			"because input parameter 'zeroBaseIndex' has\n"+
 			"a value of minus one (-1).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
@@ -920,7 +920,7 @@ func TestTextLineSpecLinesCollection_GetTextLine_000100(t *testing.T) {
 
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesCol02."+
-			"DeleteTextLineMember()\n"+
+			"GetTextLine()\n"+
 			"because input parameter 'zeroBaseIndex' has\n"+
 			"a value of minus one (-1).\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
@@ -2191,6 +2191,149 @@ func TestTextLineSpecLinesCollection_IsValidInstanceError_000100(t *testing.T) {
 			"Expected an error return from txtLinesCol04."+
 			"IsValidInstanceError()\n"+
 			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_PeekAtFirstTextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_PeekAtFirstTextLine_000100()",
+		"")
+
+	// Index 1
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol01 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol01,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTxtLineSpec ITextLineSpecification
+
+	iTxtLineSpec,
+		err = txtLinesCol01.PeekAtFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !iTxtLineSpec.EqualITextLine(
+		&stdLine01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.PeekAtFirstTextLine()\n"+
+			"Expected ITextLineSpecifications object would be\n"+
+			"Equal to Actual ITextLineSpecifications object."+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	err = txtLinesCol02.CopyIn(
+		&txtLinesCol01,
+		ePrefix.XCpy(
+			"txtLinesCol02<=txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		err = txtLinesCol02.PeekAtFirstTextLine(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"PeekAtFirstTextLine()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	_,
+		err = txtLinesCol03.PeekAtFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"PeekAtFirstTextLine()\n"+
+			"because 'txtLinesCol03' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol04.textLines[0] = nil
+
+	_,
+		err = txtLinesCol04.PeekAtFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"PeekAtFirstTextLine()\n"+
+			"because 'txtLinesCol04.textLines[2]' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 

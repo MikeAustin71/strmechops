@@ -569,6 +569,17 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 		return iTextLine, err
 	}
 
+	if textLinesCol.textLines[zeroBasedIndex] == nil {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The requested Text Lines array element is invalid!\n"+
+			"textLinesCol.textLines[%v] has a 'nil' value.\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return iTextLine, err
+	}
+
 	iTextLine,
 		err = textLinesCol.textLines[zeroBasedIndex].CopyOutITextLine(
 		ePrefix.XCpy(

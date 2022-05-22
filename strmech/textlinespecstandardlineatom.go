@@ -373,8 +373,6 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 
 	lenTextFieldCollection := len(txtStdLine.textFields)
 
-	lastIdx := lenTextFieldCollection - 1
-
 	if lenTextFieldCollection == 0 {
 
 		err = fmt.Errorf("%v - ERROR\n"+
@@ -396,6 +394,8 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 		return iTextField, err
 	}
 
+	lastIdx := lenTextFieldCollection - 1
+
 	if indexId > lastIdx {
 
 		err = fmt.Errorf("%v - ERROR\n"+
@@ -406,6 +406,17 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 			"indexId = '%v'\n",
 			ePrefix.String(),
 			lastIdx,
+			indexId)
+
+		return iTextField, err
+	}
+
+	if txtStdLine.textFields[indexId] == nil {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The request Text Field array element is invalid!\n"+
+			"txtStdLine.textFields[%v] has a 'nil' value.\n",
+			ePrefix.String(),
 			indexId)
 
 		return iTextField, err

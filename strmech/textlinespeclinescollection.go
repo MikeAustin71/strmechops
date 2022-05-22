@@ -635,10 +635,6 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 // TextLineSpecLinesCollection instance is empty (contains zero
 // elements), an error will be returned.
 //
-// If any of the text lines within the collection maintained by
-// the current TextLineSpecLinesCollection instance are invalid,
-// an error will be returned.
-//
 // Remember that indexes in the Text Lines collection are zero
 // based. This means the first element in the collection is index
 // zero.
@@ -646,6 +642,14 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 // If input parameter 'zeroBasedIndex' is less than zero or greater
 // than the last member element in the collection, an error will be
 // returned.
+//
+// ----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// This method ( GetTextField() ) is functionally equivalent to
+// method:
+//   TextLineSpecLinesCollection.PeekAtTextField()
 //
 //
 // ----------------------------------------------------------------
@@ -1691,6 +1695,201 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 			ePrefix.XCpy(
 				fmt.Sprintf("txtLinesCol[%v]",
 					lastIdx)))
+
+	return iTextLineSpec, err
+}
+
+// PeekAtTextLine - Returns a deep copy of the Text Line Collection
+// member element specified by input parameter, 'zeroBasedIndex'.
+//
+// If the Text Line collection maintained by the current
+// TextLineSpecLinesCollection instance is empty (contains zero
+// elements), an error will be returned.
+//
+// Remember that indexes in the Text Lines collection are zero
+// based. This means the first element in the collection is index
+// zero.
+//
+// If input parameter 'zeroBasedIndex' is less than zero or greater
+// than the last member element in the collection, an error will be
+// returned.
+//
+// -----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// This method ( PeekAtTextField() ) is functionally equivalent to
+// method:
+//   TextLineSpecLinesCollection.GetTextField()
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  zeroBasedIndex             int
+//     - Specifies the index of the member element in the Text
+//       Lines collection which will be returned as a deep copy
+//       of the original. If this input parameter is found to be
+//       invalid or if the Text Lines collection is empty, an
+//       error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ITextLineSpecification
+//     - If this method completes successfully, a deep copy of the
+//       Text Line member element specified by input parameter
+//       'zeroBasedIndex' will be returned.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  When casting ITextLineSpecification returned from this method,
+//  use the following syntax to cast the interface object to a
+//  concrete type.
+//
+//  It is necessary to cast the interface object ('iTxtLineSpec')
+//  as a pointer to the concrete type ('stdLine'). This is because
+//  the concrete type uses methods with pointer receivers.
+//
+//  ------------------------------------------------------------
+//     var iTxtLineSpec ITextLineSpecification
+//
+//     iTxtLineSpec,
+//     err = txtLinesCol01.PeekAtTextLine(
+//             2,  // Return Text Line at index '2'
+//             ePrefix.XCpy(
+//             "txtLinesCol01"))
+//
+//     if err != nil {
+//       return err
+//     }
+//
+//     var stdLine *TextLineSpecStandardLine
+//
+//     var ok bool
+//
+//     stdLine, ok = iTxtLineSpec.(*TextLineSpecStandardLine)
+//
+//     if !ok {
+//
+//       err = fmt.Errorf("%v - Error\n"+
+//       "stdLine, ok := iTxtLineSpec.(*TextLineSpecStandardLine)\n"+
+//       "Expected return of type 'TextLineSpecStandardLine'.\n"+
+//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//       ePrefix.String())
+//
+//       return err
+//     }
+//
+//     // 'stdLine' is now available for use
+//     // as a concrete object.
+//     stdLineLen := stdLine.GetLineLength()
+//
+func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
+	zeroBasedIndex int,
+	errorPrefix interface{}) (
+	ITextLineSpecification,
+	error) {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var iTextLineSpec ITextLineSpecification
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"GetTextLine()",
+		"")
+
+	if err != nil {
+		return iTextLineSpec, err
+	}
+
+	iTextLineSpec,
+		err = textLineSpecLinesCollectionAtom{}.ptr().
+		peekPopTextLine(
+			txtLinesCol,
+			zeroBasedIndex,
+			false,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"txtLinesCol[%v]",
+					zeroBasedIndex)))
 
 	return iTextLineSpec, err
 }

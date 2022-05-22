@@ -2447,10 +2447,6 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 // TextLineSpecStandardLine instance is empty (contains zero
 // elements), an error will be returned.
 //
-// If any of the Text Fields within the collection maintained by
-// the current TextLineSpecStandardLine instance are invalid,
-// an error will be returned.
-//
 // Remember that indexes in the Text Fields collection are zero
 // based. This means the first element in the collection is index
 // zero.
