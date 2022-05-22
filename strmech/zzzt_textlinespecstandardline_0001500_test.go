@@ -4192,10 +4192,10 @@ func TestTextLineSpecStandardLine_PopLastTextField_000200(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
+func TestTextLineSpecStandardLine_PopTextField_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100()",
+		"TestTextLineSpecStandardLine_PopTextField_000100()",
 		"")
 
 	stdLine01,
@@ -4221,7 +4221,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 
 	iTxtFieldSpec,
 		remainingNumOfTxtFields,
-		err = stdLine01.PopTextFieldAtIndex(
+		err = stdLine01.PopTextField(
 		4,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -4262,7 +4262,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 	if expectedLabelText != actualLabelText {
 
 		t.Errorf("%v - Error\n"+
-			"stdLine01.PopTextFieldAtIndex()\n"+
+			"stdLine01.PopTextField()\n"+
 			"Expected expectedLabelText==actualLabelText\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
 			"expectedLabelText= '%v'\n"+
@@ -4293,17 +4293,17 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000100(t *testing.T) {
 	return
 }
 
-func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
+func TestTextLineSpecStandardLine_PopTextField_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200()",
+		"TestTextLineSpecStandardLine_PopTextField_000200()",
 		"")
 
 	stdLine01 := TextLineSpecStandardLine{}
 
 	_,
 		_,
-		err := stdLine01.PopTextFieldAtIndex(
+		err := stdLine01.PopTextField(
 		0,
 		ePrefix.XCpy(
 			"stdLine01"))
@@ -4311,7 +4311,7 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
 	if err == nil {
 
 		t.Errorf("%v - Error\n"+
-			"Expected an error return from stdLine01.PopTextFieldAtIndex()\n"+
+			"Expected an error return from stdLine01.PopTextField()\n"+
 			"because 'stdLine01' is empty.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -4334,14 +4334,14 @@ func TestTextLineSpecStandardLine_PopTextFieldAtIndex_000200(t *testing.T) {
 
 	_,
 		_,
-		err = stdLine02.PopTextFieldAtIndex(
+		err = stdLine02.PopTextField(
 		2,
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {
 
 		t.Errorf("%v - Error\n"+
-			"stdLine02.PopTextFieldAtIndex()\n"+
+			"stdLine02.PopTextField()\n"+
 			"Expected an error return because\n"+
 			"'errorPrefix' is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
