@@ -371,6 +371,10 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 		return iTextField, err
 	}
 
+	if err != nil {
+		return iTextField, err
+	}
+
 	lenTextFieldCollection := len(txtStdLine.textFields)
 
 	if lenTextFieldCollection == 0 {
@@ -428,10 +432,6 @@ func (txtStdLineAtom *textLineSpecStandardLineAtom) peekPopTextField(
 			fmt.Sprintf(
 				"txtStdLine.textFields[%v]",
 				indexId)))
-
-	if err != nil {
-		return iTextField, err
-	}
 
 	if !popTextField {
 		// popTextField == false
