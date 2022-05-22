@@ -3652,6 +3652,72 @@ func TestTextLineSpecStandardLine_PeekAtFirstTextField_000200(t *testing.T) {
 		return
 	}
 
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine03.textFields[0] = nil
+
+	_,
+		err = stdLine03.PeekAtFirstTextField(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine03.PeekAtFirstTextField()\n"+
+			"Expected an error return because\n"+
+			"'stdLine03.textFields[0]' is 'nil'.\n"+
+			"stdLine03.textFields[0]==nil is invalid!\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var stdLine04 TextLineSpecStandardLine
+
+	stdLine04,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCpy(
+			"stdLine04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	stdLine04.textFields[0].Empty()
+
+	_,
+		err = stdLine04.PeekAtFirstTextField(
+		ePrefix.XCpy(
+			"stdLine04"))
+
+	if err == nil {
+
+		t.Errorf("%v - Error\n"+
+			"stdLine04.PeekAtFirstTextField()\n"+
+			"Expected an error return because\n"+
+			"'stdLine04.textFields[0]' is invalid!\n"+
+			"stdLine04.textFields[0].Empty() was previously called.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 

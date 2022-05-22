@@ -2333,7 +2333,41 @@ func TestTextLineSpecLinesCollection_PeekAtFirstTextLine_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesCol04."+
 			"PeekAtFirstTextLine()\n"+
-			"because 'txtLinesCol04.textLines[2]' is invalid.\n"+
+			"because 'txtLinesCol04.textLines[0]' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol05 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol05.textLines[0].Empty()
+
+	_,
+		err = txtLinesCol05.PeekAtFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol05."+
+			"PeekAtFirstTextLine()\n"+
+			"because 'txtLinesCol05.textLines[0]' is invalid.\n"+
+			"txtLinesCol05.textLines[0].Empty() was previously called.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
