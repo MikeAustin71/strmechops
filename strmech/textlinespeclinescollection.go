@@ -1493,7 +1493,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecLinesCollection."+
-			"GetTextLine()",
+			"PeekAtFirstTextLine()",
 		"")
 
 	if err != nil {
@@ -1508,6 +1508,189 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 			false,
 			ePrefix.XCpy(
 				"txtLinesCol[0]"))
+
+	return iTextLineSpec, err
+}
+
+// PeekAtLastTextLine - Returns a deep copy of the last Text Line
+// ('ITextLineSpecification') object in the Text Lines Collection
+// ('txtLinesCol.textLines[lastIdx]').
+//
+// As a 'Peek' method, the original Text Line object
+// ('txtLinesCol.textLines[lastIdx]') WILL NOT be deleted from the Text
+// Line Collection encapsulated by this instance of
+// TextLineSpecStandardLine.
+//
+// After completion of this method, the Text Line Collection array
+// will remain unchanged.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  iTxtLineSpec              ITextLineSpecification
+//     - If this method completes successfully, a deep copy of
+//       the last member element of the Text Lines Collection
+//       will be returned to the calling function. The returned
+//       object will implement the ITextLineSpecification
+//       interface.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  When casting ITextLineSpecification returned from this method,
+//  use the following syntax to cast the interface object to a
+//  concrete type.
+//
+//  It is necessary to cast the interface object ('iTxtLineSpec')
+//  as a pointer to the concrete type ('stdLine'). This is because
+//  the concrete type uses methods with pointer receivers.
+///
+//  ------------------------------------------------------------
+//     var iTxtLineSpec ITextLineSpecification
+//
+//     iTxtLineSpec,
+//     err = txtLinesCol01.PeekAtLastTextLine(
+//           ePrefix.XCpy(
+//           "txtLinesCol01"))
+//
+//     if err != nil {
+//       return err
+//     }
+//
+//     var stdLine *TextLineSpecStandardLine
+//
+//     var ok bool
+//
+//     stdLine, ok = iTxtLineSpec.(*TextLineSpecStandardLine)
+//
+//     if !ok {
+//
+//       err = fmt.Errorf("%v - Error\n"+
+//       "stdLine, ok := iTxtLineSpec.(*TextLineSpecStandardLine)\n"+
+//       "Expected return of type 'TextLineSpecStandardLine'.\n"+
+//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//       ePrefix.String())
+//
+//       return err
+//     }
+//
+//     // 'stdLine' is now available for use
+//     // as a concrete object.
+//     stdLineLen := stdLine.GetLineLength()
+//
+func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
+	errorPrefix interface{}) (
+	ITextLineSpecification,
+	error) {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var iTextLineSpec ITextLineSpecification
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"PeekAtLastTextLine()",
+		"")
+
+	if err != nil {
+		return iTextLineSpec, err
+	}
+
+	lastIdx := len(txtLinesCol.textLines) - 1
+
+	if lastIdx < 0 {
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The Text Lines Collection is empty!\n",
+			ePrefix.String())
+
+		return iTextLineSpec, err
+	}
+
+	iTextLineSpec,
+		err = textLineSpecLinesCollectionAtom{}.ptr().
+		peekPopTextLine(
+			txtLinesCol,
+			lastIdx,
+			false,
+			ePrefix.XCpy(
+				fmt.Sprintf("txtLinesCol[%v]",
+					lastIdx)))
 
 	return iTextLineSpec, err
 }
