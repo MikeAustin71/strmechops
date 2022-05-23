@@ -761,7 +761,7 @@ func TestTextLineSpecLinesCollection_PopFirstTextLine_000100(t *testing.T) {
 		"TestTextLineSpecLinesCollection_PopFirstTextLine_000100()",
 		"")
 
-	// Index 1
+	// Index 0
 	stdLine01,
 		err := createTestTextLineSpecStandardLine01(
 		ePrefix.XCpy(
@@ -946,6 +946,219 @@ func TestTextLineSpecLinesCollection_PopFirstTextLine_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesCol05."+
 			"PopFirstTextLine()\n"+
+			"because 'txtLinesCol05.textLines[0]' is invalid.\n"+
+			"txtLinesCol05.textLines[0].Empty() was previously called.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecLinesCollection_PopLastTextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_PopLastTextLine_000100()",
+		"")
+
+	// Index 8
+
+	var timerLines01 *TextLineSpecTimerLines
+	var err error
+
+	_,
+		timerLines01,
+		err = createTestTextLineSpecTimerLines01(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol01 TextLineSpecLinesCollection
+	expectedCollectionLen := 0
+
+	expectedCollectionLen,
+		txtLinesCol01,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTxtLineSpec ITextLineSpecification
+	actualCollectionLen := 0
+
+	iTxtLineSpec,
+		actualCollectionLen,
+		err = txtLinesCol01.PopLastTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !iTxtLineSpec.EqualITextLine(
+		timerLines01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.PopLastTextLine()\n"+
+			"Expected ITextLineSpecifications object would be\n"+
+			"Equal to Actual ITextLineSpecifications object."+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	expectedCollectionLen--
+
+	if expectedCollectionLen != actualCollectionLen {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.PopLastTextLine()\n"+
+			"Expected Collection Length is NOT EQUAL TO\n"+
+			"Actual Collection Length!!\n"+
+			"Expected Collection Length = '%v'\n"+
+			"  Actual Collection Length = '%v'\n",
+			ePrefix.String(),
+			expectedCollectionLen,
+			actualCollectionLen)
+
+		return
+
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	_,
+		txtLinesCol02,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		_,
+		err = txtLinesCol02.PopLastTextLine(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"PopLastTextLine()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	_,
+		_,
+		err = txtLinesCol03.PopLastTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"PopLastTextLine()\n"+
+			"because 'txtLinesCol03' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	expectedCollectionLen,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lastIndex := expectedCollectionLen - 1
+
+	txtLinesCol04.textLines[lastIndex] = nil
+
+	_,
+		_,
+		err = txtLinesCol04.PopLastTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"PopLastTextLine()\n"+
+			"because 'txtLinesCol04.textLines[%v]' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			lastIndex)
+
+		return
+	}
+
+	var txtLinesCol05 TextLineSpecLinesCollection
+
+	lastIndex,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lastIndex--
+
+	txtLinesCol05.textLines[lastIndex].Empty()
+
+	_,
+		_,
+		err = txtLinesCol05.PopLastTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol05."+
+			"PopLastTextLine()\n"+
 			"because 'txtLinesCol05.textLines[0]' is invalid.\n"+
 			"txtLinesCol05.textLines[0].Empty() was previously called.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
