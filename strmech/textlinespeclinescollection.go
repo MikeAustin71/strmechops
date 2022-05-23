@@ -1873,7 +1873,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineSpecLinesCollection."+
-			"GetTextLine()",
+			"PeekAtTextLine()",
 		"")
 
 	if err != nil {
@@ -2100,6 +2100,205 @@ func (txtLinesCol *TextLineSpecLinesCollection) ReplaceTextLine(
 	}
 
 	txtLinesCol.textLines[replaceAtIndex] = newTextLine
+
+	return err
+}
+
+// SetTextLineCollection - Deletes the Text Line Collection for the
+// current instance of TextLineSpecLinesCollection. This collection
+// is then replaced with the new Text Line Collection passed as
+// input parameter, 'newTextLineCol'.
+//
+// Input parameter 'newTextLineCol' is an array of
+// ITextLineSpecification objects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newTextLineCol             []ITextLineSpecification
+//     - An array of ITextLineSpecification objects which will
+//       replace the Text Line Collection for the current instance
+//       of TextLineSpecLinesCollection.
+//
+//       If any of the member elements of this array are found to
+//       be invalid, or if this parameter is passed as a zero
+//       length array, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  []ITextLineSpecification
+//     - If this method completes successfully, a deep copy of the
+//       text line collection maintained by the current
+//       TextLineSpecLinesCollection instance will be returned.
+//       These text lines are returned as an array of objects
+//       implementing the ITextLineSpecification interface.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLinesCol *TextLineSpecLinesCollection) SetTextLineCollection(
+	newTextLineCol []ITextLineSpecification,
+	errorPrefix interface{}) error {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecLinesCollection."+
+			"GetTextLineCollection()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenOfNewTxtLines := len(newTextLineCol)
+
+	if lenOfNewTxtLines == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'newTextLineCol' is invalid!\n"+
+			"'newTextLineCol' contains zero text line objects!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	for i := 0; i < lenOfNewTxtLines; i++ {
+
+		if newTextLineCol[i] == nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter element newTextLineCol[%v] is invalid!\n"+
+				"newTextLineCol[%v] has a 'nil' value.\n",
+				ePrefix.String(),
+				i,
+				i)
+
+			return err
+		}
+
+		err2 = newTextLineCol[i].IsValidInstanceError(
+			nil)
+
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter element newTextLineCol[%v] is invalid!\n"+
+				"newTextLineCol[%v] produced the following validation error:\n"+
+				"%v\n",
+				ePrefix.String(),
+				i,
+				i,
+				err2.Error())
+
+			return err
+		}
+	}
+
+	textLineColAtom := textLineSpecLinesCollectionAtom{}
+
+	textLineColAtom.emptyCollection(
+		txtLinesCol)
+
+	txtLinesCol.textLines = make([]ITextLineSpecification, lenOfNewTxtLines)
+
+	for j := 0; j < lenOfNewTxtLines; j++ {
+		txtLinesCol.textLines[j],
+			err2 = newTextLineCol[j].CopyOutITextLine(
+			nil)
+
+		if err2 != nil {
+
+			textLineColAtom.emptyCollection(
+				txtLinesCol)
+
+			err = fmt.Errorf("%v\n"+
+				"Error: newTextLineCol[%v] Deep Copy Failed!\n"+
+				"The Text Line Collection for the Current Instance\n"+
+				"of TextLineSpecLinesCollection is now deleted and empty.\n"+
+				"The copy operation for newTextLineCol[%v] produced the\n"+
+				"following error:\n"+
+				"%v\n",
+				ePrefix.String(),
+				j,
+				j,
+				err2.Error())
+
+			return err
+		}
+
+	}
 
 	return err
 }

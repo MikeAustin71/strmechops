@@ -390,7 +390,7 @@ func createTestTextLineSpecCollection03(
 	stdLine03,
 		err = createTestTextLineSpecStandardLine03(
 		3,
-		"Helo World! Have a GREAT DAY!",
+		"Hello World! Have a GREAT DAY!",
 		-1,
 		TxtJustify.Left(),
 		2,
