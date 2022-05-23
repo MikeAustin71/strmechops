@@ -5018,7 +5018,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 //
 // As a 'Pop' method, the first Text Field object will be deleted
 // from the Text Field Collection encapsulated by this instance of
-// TextLineSpecStandardLine. Parameter 'remainingNumOfTxtFields'
+// TextLineSpecStandardLine. Parameter 'remainingNumOfTextFields'
 // will be returned to the calling function containing the number
 // of array elements still remaining in the Text Field Collection
 // after deletion of the first array element.
@@ -5094,7 +5094,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 //       interface.
 //
 //
-//  remainingNumOfTxtFields    int
+//  remainingNumOfTextFields   int
 //     - If this method completes successfully, the first array
 //       element in the Text Fields Collection will be deleted.
 //       After deleting that element, this parameter will return
@@ -5162,7 +5162,7 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
-	remainingNumOfTxtFields int,
+	remainingNumOfTextFields int,
 	err error) {
 
 	if stdLine.lock == nil {
@@ -5175,7 +5175,7 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 
 	iTxtFieldSpec = nil
 
-	remainingNumOfTxtFields = -1
+	remainingNumOfTextFields = -1
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5187,7 +5187,7 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 		"")
 
 	if err != nil {
-		return iTxtFieldSpec, remainingNumOfTxtFields, err
+		return iTxtFieldSpec, remainingNumOfTextFields, err
 	}
 
 	iTxtFieldSpec,
@@ -5199,9 +5199,9 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 			ePrefix.XCpy(
 				"stdLine.textFields[0]"))
 
-	remainingNumOfTxtFields = len(stdLine.textFields)
+	remainingNumOfTextFields = len(stdLine.textFields)
 
-	return iTxtFieldSpec, remainingNumOfTxtFields, err
+	return iTxtFieldSpec, remainingNumOfTextFields, err
 }
 
 // PopLastTextField - Returns a deep copy of the last Text Field

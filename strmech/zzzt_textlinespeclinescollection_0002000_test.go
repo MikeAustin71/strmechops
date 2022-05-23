@@ -755,6 +755,208 @@ func TestTextLineSpecLinesCollection_PeekAtTextLine_000200(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecLinesCollection_PopFirstTextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_PopFirstTextLine_000100()",
+		"")
+
+	// Index 1
+	stdLine01,
+		err := createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol01 TextLineSpecLinesCollection
+	expectedCollectionLen := 0
+
+	expectedCollectionLen,
+		txtLinesCol01,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTxtLineSpec ITextLineSpecification
+	actualCollectionLen := 0
+
+	iTxtLineSpec,
+		actualCollectionLen,
+		err = txtLinesCol01.PopFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !iTxtLineSpec.EqualITextLine(
+		&stdLine01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.PopFirstTextLine()\n"+
+			"Expected ITextLineSpecifications object would be\n"+
+			"Equal to Actual ITextLineSpecifications object."+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	expectedCollectionLen--
+
+	if expectedCollectionLen != actualCollectionLen {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol01.PopFirstTextLine()\n"+
+			"Expected Collection Length is NOT EQUAL TO\n"+
+			"Actual Collection Length!!\n"+
+			"Expected Collection Length = '%v'\n"+
+			"  Actual Collection Length = '%v'\n",
+			ePrefix.String(),
+			expectedCollectionLen,
+			actualCollectionLen)
+
+		return
+
+	}
+
+	txtLinesCol02 := TextLineSpecLinesCollection{}
+
+	err = txtLinesCol02.CopyIn(
+		&txtLinesCol01,
+		ePrefix.XCpy(
+			"txtLinesCol02<=txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		_,
+		err = txtLinesCol02.PopFirstTextLine(
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol02."+
+			"PopFirstTextLine()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	txtLinesCol03 := TextLineSpecLinesCollection{}
+
+	_,
+		_,
+		err = txtLinesCol03.PopFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"PopFirstTextLine()\n"+
+			"because 'txtLinesCol03' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol04.textLines[0] = nil
+
+	_,
+		_,
+		err = txtLinesCol04.PopFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"PopFirstTextLine()\n"+
+			"because 'txtLinesCol04.textLines[0]' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol05 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol05.textLines[0].Empty()
+
+	_,
+		_,
+		err = txtLinesCol05.PopFirstTextLine(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol05."+
+			"PopFirstTextLine()\n"+
+			"because 'txtLinesCol05.textLines[0]' is invalid.\n"+
+			"txtLinesCol05.textLines[0].Empty() was previously called.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
