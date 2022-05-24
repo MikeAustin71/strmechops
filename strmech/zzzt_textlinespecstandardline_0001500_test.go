@@ -506,6 +506,133 @@ func TestTextLineSpecStandardLine_GetFormattedText_000200(t *testing.T) {
 	return
 }
 
+func TestTextLineSpecStandardLine_GetFormattedText_000300(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetFormattedText_000300()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine06(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedTotalLinesLength :=
+		stdLine01.GetTotalLinesLength()
+
+	var formattedText string
+
+	formattedText,
+		err = stdLine01.GetFormattedText(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTotalLinesLength :=
+		len(formattedText)
+
+	if expectedTotalLinesLength !=
+		actualTotalLinesLength {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.GetTotalLinesLength()\n"+
+			"Expected Total Lines Length IS NOT EQUAL to\n"+
+			"Actual Total Lines Length.\n"+
+			"Expected Total Lines Length = '%v'\n"+
+			"  Actual Total Lines Length = '%v'\n",
+			ePrefix.String(),
+			expectedTotalLinesLength,
+			actualTotalLinesLength)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_GetFormattedText_000400(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecStandardLine_GetFormattedText_000300()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	expectedTotalLinesLength :=
+		stdLine01.GetTotalLinesLength()
+
+	var formattedText string
+
+	formattedText,
+		err = stdLine01.GetFormattedText(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTotalLinesLength :=
+		len(formattedText)
+
+	if expectedTotalLinesLength !=
+		actualTotalLinesLength {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.GetTotalLinesLength()\n"+
+			"Expected Total Lines Length IS NOT EQUAL to\n"+
+			"Actual Total Lines Length.\n"+
+			"Expected Total Lines Length = '%v'\n"+
+			"  Actual Total Lines Length = '%v'\n",
+			ePrefix.String(),
+			expectedTotalLinesLength,
+			actualTotalLinesLength)
+
+		return
+	}
+
+	singleLineLength := stdLine01.GetSingleLineLength()
+
+	if singleLineLength != actualTotalLinesLength {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.GetTotalLinesLength()\n"+
+			"Expected Single Line Length IS NOT EQUAL to\n"+
+			"Actual Total Lines Length.\n"+
+			"Expected Single Line Length = '%v'\n"+
+			"  Actual Total Lines Length = '%v'\n",
+			ePrefix.String(),
+			singleLineLength,
+			actualTotalLinesLength)
+
+		return
+	}
+
+	return
+}
+
 func TestTextLineSpecStandardLine_GetNewLineChars_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -661,6 +788,100 @@ func TestTextLineSpecStandardLine_GetNumOfStdLines_000100(t *testing.T) {
 			actualNumOfStdLines)
 
 		return
+	}
+
+	lenOfSingleTxtLine := stdLine02.GetSingleLineLength()
+
+	expectedTotalLinesLen :=
+		lenOfSingleTxtLine * expectedNumOfStdLines
+
+	actualTotalLinesLen := stdLine02.GetTotalLinesLength()
+
+	if expectedTotalLinesLen != actualTotalLinesLen {
+
+		t.Errorf("%v\n"+
+			"Error: stdLine02.GetTotalLinesLength()\n"+
+			"Expected Total Lines Length == Actual Total Lines Length.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!\n"+
+			"Expected Total Lines Length = '%v'\n"+
+			"  Actual Total Lines Length = '%v'\n",
+			ePrefix.String(),
+			expectedTotalLinesLen,
+			actualTotalLinesLen)
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_GetSingleLineLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_TESTMETHOD_000100()",
+		"")
+
+	stdLine01 := TextLineSpecStandardLine{}
+
+	singleLineLen :=
+		stdLine01.GetSingleLineLength()
+
+	if singleLineLen != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.GetSingleLineLength()"+
+			"Expected that returned Single Line Length would be\n"+
+			"equal to zero because 'stdLine01' is empty.\n"+
+			"HOWEVER, THE RETURNED VALUE IS NOT EQUAL TO ZERO!\n"+
+			"Expected Single Line Length = '%v'\n"+
+			"  Actual Single Line Length = '%v'\n",
+			ePrefix.String(),
+			0,
+			singleLineLen)
+
+		return
+	}
+
+	var stdLine02 TextLineSpecStandardLine
+	var err error
+
+	stdLine02,
+		err = createTestTextLineSpecStandardLine04(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	singleLineLen =
+		stdLine02.GetSingleLineLength()
+
+	var formattedText string
+
+	formattedText,
+		err = stdLine02.GetFormattedText(
+		ePrefix.XCpy(
+			"stdLine02"))
+
+	actualSingleLineLen := len(formattedText)
+
+	if singleLineLen != actualSingleLineLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine02.GetSingleLineLength()"+
+			"Expected Single Line Length IS NOT EQUAL TO\n"+
+			"Actual Single Line Length.\n"+
+			"Expected Single Line Length = '%v'\n"+
+			"  Actual Single Line Length = '%v'\n",
+			ePrefix.String(),
+			singleLineLen,
+			actualSingleLineLen)
+
+		return
+
 	}
 
 	return
@@ -927,6 +1148,155 @@ func TestTextLineSpecStandardLine_TestTextLineSpecStandardLine_GetTextFieldColle
 			"stdLine02.textFields[2] = nil .\n"+
 			"HOWEVER, NO ERROR WAS RETURN!\n",
 			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestTextLineSpecStandardLine_GetTotalLinesLength_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTESTSERIES_TESTMETHOD_000100()",
+		"")
+
+	stdLine01,
+		err := createTestTextLineSpecStandardLine06(
+		ePrefix.XCpy("stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	singleLineLen := stdLine01.GetSingleLineLength()
+
+	totalLinesLen := stdLine01.GetTotalLinesLength()
+
+	var formattedText string
+
+	formattedText,
+		err = stdLine01.GetFormattedText(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTotalLinesLen := len(formattedText)
+
+	if totalLinesLen != actualTotalLinesLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.GetTotalLinesLength()"+
+			"Expected Total Line Length IS NOT EQUAL TO\n"+
+			"Actual Total Line Length.\n"+
+			"Expected Total Line Length = '%v'\n"+
+			"  Actual Total Line Length = '%v'\n",
+			ePrefix.String(),
+			totalLinesLen,
+			actualTotalLinesLen)
+
+		return
+	}
+
+	computedTotalLineLen := singleLineLen * 3
+
+	if totalLinesLen != computedTotalLineLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine01.GetTotalLinesLength()\n"+
+			"Expected Total Line Length IS NOT EQUAL TO\n"+
+			"Computed Total Line Length.\n"+
+			"Expected Total Line Length = '%v'\n"+
+			"Computed Total Line Length = '%v'\n",
+			ePrefix.String(),
+			totalLinesLen,
+			computedTotalLineLen)
+
+		return
+	}
+
+	stdLine02 := TextLineSpecStandardLine{}
+
+	actualTotalLinesLen = stdLine02.GetTotalLinesLength()
+
+	if actualTotalLinesLen != 0 {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine02.GetTotalLinesLength()\n"+
+			"NOTE: stdLine02 is empty.\n"+
+			"Expected Total Line Length IS NOT EQUAL TO\n"+
+			"  Actual Total Line Length.\n"+
+			"Expected Total Line Length = '%v'\n"+
+			" Actual Total Line Length = '%v'\n",
+			ePrefix.String(),
+			0,
+			actualTotalLinesLen)
+
+		return
+	}
+
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine05(
+		ePrefix.XCpy("stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	totalLinesLen = stdLine03.GetTotalLinesLength()
+
+	computedTotalLineLen = stdLine03.GetSingleLineLength()
+
+	formattedText,
+		err = stdLine03.GetFormattedText(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	actualTotalLinesLen = len(formattedText)
+
+	if totalLinesLen != actualTotalLinesLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine03.GetTotalLinesLength()\n"+
+			"Expected Total Line Length IS NOT EQUAL TO\n"+
+			"  Actual Total Line Length.\n"+
+			"Expected Total Line Length = '%v'\n"+
+			" Actual Total Line Length = '%v'\n",
+			ePrefix.String(),
+			totalLinesLen,
+			actualTotalLinesLen)
+
+		return
+	}
+
+	if computedTotalLineLen != actualTotalLinesLen {
+
+		t.Errorf("%v - ERROR\n"+
+			"stdLine03.GetTotalLinesLength()\n"+
+			"Computed Total Line Length IS NOT EQUAL TO\n"+
+			"  Actual Total Line Length.\n"+
+			"Computed Total Line Length = '%v'\n"+
+			"  Actual Total Line Length = '%v'\n",
+			ePrefix.String(),
+			computedTotalLineLen,
+			actualTotalLinesLen)
 
 		return
 	}

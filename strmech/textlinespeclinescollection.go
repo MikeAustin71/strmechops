@@ -777,7 +777,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) GetNumberOfTextLines() int {
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) GetTextLine(
 	zeroBasedIndex int,
@@ -1473,7 +1473,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 	errorPrefix interface{}) (
@@ -1645,7 +1645,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtFirstTextLine(
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 	errorPrefix interface{}) (
@@ -1848,7 +1848,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
 	zeroBasedIndex int,
@@ -2049,7 +2049,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtTextLine(
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) PopFirstTextLine(
 	errorPrefix interface{}) (
@@ -2247,7 +2247,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopFirstTextLine(
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) PopLastTextLine(
 	errorPrefix interface{}) (
@@ -2476,7 +2476,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PopLastTextLine(
 //
 //     // 'stdLine' is now available for use
 //     // as a concrete object.
-//     stdLineLen := stdLine.GetLineLength()
+//     stdLineLen := stdLine.GetSingleLineLength()
 //
 func (txtLinesCol *TextLineSpecLinesCollection) PopTextLine(
 	zeroBasedIndex int,
