@@ -2275,20 +2275,37 @@ func (stdLine *TextLineSpecStandardLine) GetFormattedText(
 		return "", err
 	}
 
-	return textLineSpecStandardLineMolecule{}.ptr().
+	var formattedText string
+
+	formattedText,
+		_,
+		_,
+		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
 			stdLine,
 			ePrefix)
+
+	return formattedText, err
 }
 
-// GetLineLength - Returns the total length of the formatted text
-// string produced by the current instance of
+// GetLineLength - Returns the length of the formatted single
+// line of text produced by the current instance of
 // TextLineSpecStandardLine.
 //
 // The number of text characters returned for line length includes
 // any trailing new line characters configured for this instance of
 // TextLineSpecStandardLine.
-
+//
+// Remember, that users have the option to specify a repeat count,
+// or multiple number of text lines, produced by the current
+// instance of TextLineSpecStandardLine. The repeat count causes
+// a single line of text to be replicated multiple times when
+// generating the final formatted text output.
+//
+// To get the total length of all text lines produced by the
+// current instance of TextLineSpecStandardLine, see method:
+//   TextLineSpecStandardLine.GetTotalLinesLength()
+//
 func (stdLine *TextLineSpecStandardLine) GetLineLength() int {
 
 	if stdLine.lock == nil {
@@ -2299,8 +2316,13 @@ func (stdLine *TextLineSpecStandardLine) GetLineLength() int {
 
 	defer stdLine.lock.Unlock()
 
-	lineStr,
-		err := textLineSpecStandardLineMolecule{}.ptr().
+	var singleLineLength int
+	var err error
+
+	_,
+		singleLineLength,
+		_,
+		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
 			stdLine,
 			nil)
@@ -2309,7 +2331,52 @@ func (stdLine *TextLineSpecStandardLine) GetLineLength() int {
 		return 0
 	}
 
-	return len(lineStr)
+	return singleLineLength
+}
+
+// GetTotalLinesLength - Returns the total length of the formatted
+// lines of text produced by the current instance of
+// TextLineSpecStandardLine.
+//
+// Remember, that users have the option to specify a repeat count,
+// or multiple number of text lines, produced by the current
+// instance of TextLineSpecStandardLine. The repeat count causes
+// a single line of text to be replicated multiple times when
+// generating the final formatted text output.
+//
+// The total length of all text lines produced by the
+// current instance of TextLineSpecStandardLine, is the length of
+// a single text line times the repeat count.
+//
+// To get the length of a single line of text, see method:
+//   TextLineSpecStandardLine.GetLineLength()
+//
+func (stdLine *TextLineSpecStandardLine) GetTotalLinesLength() int {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var totalLinesLength int
+	var err error
+
+	_,
+		_,
+		totalLinesLength,
+		err = textLineSpecStandardLineMolecule{}.ptr().
+		getFormattedText(
+			stdLine,
+			nil)
+
+	if err != nil {
+		return 0
+	}
+
+	return totalLinesLength
 }
 
 // GetNewLineChars - Returns a string representing
@@ -5794,6 +5861,8 @@ func (stdLine *TextLineSpecStandardLine) Read(
 		var formattedText string
 
 		formattedText,
+			_,
+			_,
 			err = textLineSpecStandardLineMolecule{}.ptr().
 			getFormattedText(
 				stdLine,
@@ -7140,6 +7209,8 @@ func (stdLine TextLineSpecStandardLine) String() string {
 	var err error
 
 	formattedText,
+		_,
+		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
 			&stdLine,
@@ -7267,6 +7338,8 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 	var formattedTxtStr string
 
 	formattedTxtStr,
+		_,
+		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
 			stdLine,

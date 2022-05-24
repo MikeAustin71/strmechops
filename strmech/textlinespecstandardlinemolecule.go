@@ -235,6 +235,19 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 //       input parameter 'txtStdLine'.
 //
 //
+//  singleLineLength           int
+//     - The length of a single text line including trailing new
+//       line characters if new line characters are configured.
+//
+//
+//  totalLinesLength           int
+//     - The length of all text lines including trailing new
+//       line characters if new line characters are configured.
+//       Users have the option of specifying a repeat count for
+//       text lines. Therefore,
+//        'totalLineLength' = 'singleLineLength' X repeat count
+//
+//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -249,6 +262,8 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	txtStdLine *TextLineSpecStandardLine,
 	errPrefDto *ePref.ErrPrefixDto) (
 	formattedText string,
+	singleLineLength int,
+	totalLinesLength int,
 	err error) {
 
 	if txtStdLineMolecule.lock == nil {
@@ -271,7 +286,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		"")
 
 	if err != nil {
-		return formattedText, err
+		return formattedText, singleLineLength, totalLinesLength, err
 	}
 
 	if txtStdLine == nil {
@@ -279,7 +294,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
 			ePrefix.String())
 
-		return formattedText, err
+		return formattedText, singleLineLength, totalLinesLength, err
 	}
 
 	_,
@@ -292,7 +307,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	// If Text Fields Array Length has a zero length,
 	// an error is returned.
 	if err != nil {
-		return formattedText, err
+		return formattedText, singleLineLength, totalLinesLength, err
 	}
 
 	lenTextFields := len(txtStdLine.textFields)
@@ -309,7 +324,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 					"txtStdLine.textFields[i] == nil"),
 				i)
 
-			return formattedText, err
+			return formattedText, singleLineLength, totalLinesLength, err
 		}
 
 		tempStr,
@@ -320,24 +335,26 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 					i)))
 
 		if err != nil {
-			return formattedText, err
+			return formattedText, singleLineLength, totalLinesLength, err
 		}
 
 		lineStr += tempStr
+
 	}
+
+	if txtStdLine.turnLineTerminatorOff == false {
+		lineStr += string(txtStdLine.newLineChars)
+	}
+
+	singleLineLength = len(lineStr)
 
 	for j := 0; j < txtStdLine.numOfStdLines; j++ {
 		formattedText += lineStr
 	}
 
-	if txtStdLine.turnLineTerminatorOff == true {
+	totalLinesLength = len(formattedText)
 
-		return formattedText, err
-	}
-
-	formattedText += string(txtStdLine.newLineChars)
-
-	return formattedText, err
+	return formattedText, singleLineLength, totalLinesLength, err
 }
 
 // ptr - Returns a pointer to a new instance of

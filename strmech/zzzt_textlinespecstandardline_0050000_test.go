@@ -1621,6 +1621,8 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) 
 	stdLineMolecule := textLineSpecStandardLineMolecule{}
 
 	_,
+		_,
+		_,
 		err := stdLineMolecule.getFormattedText(
 		nil,
 		ePrefix.XCpy(
@@ -1654,6 +1656,8 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) 
 	stdLine01.numOfStdLines = -5
 
 	_,
+		_,
+		_,
 		err = stdLineMolecule.getFormattedText(
 		&stdLine01,
 		ePrefix.XCpy(
@@ -1697,6 +1701,8 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000200(t *testing.T) 
 	stdLine01.textFields = nil
 
 	_,
+		_,
+		_,
 		err = stdLineMolecule.getFormattedText(
 		&stdLine01,
 		ePrefix.XCpy(
@@ -1731,6 +1737,8 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000200(t *testing.T) 
 	stdLine02.textFields[1] = nil
 
 	_,
+		_,
+		_,
 		err = stdLineMolecule.getFormattedText(
 		&stdLine01,
 		ePrefix.XCpy(

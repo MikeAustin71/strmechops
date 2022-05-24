@@ -425,6 +425,8 @@ func TestTextLineSpecStandardLine_Read_000300(t *testing.T) {
 	stdLineMolecule := textLineSpecStandardLineMolecule{}
 
 	formattedTxtStr,
+		_,
+		_,
 		err =
 		stdLineMolecule.getFormattedText(
 			&stdLine01,
