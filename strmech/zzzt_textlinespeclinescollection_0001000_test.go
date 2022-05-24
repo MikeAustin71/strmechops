@@ -145,7 +145,7 @@ func TestTextLineSpecLinesCollection_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	txtLinesCol02 := TextLineSpecLinesCollection{}
+	txtLinesCol02 := TextLineSpecLinesCollection{}.New()
 
 	err =
 		txtLinesCol02.CopyIn(
@@ -196,7 +196,7 @@ func TestTextLineSpecLinesCollection_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	txtLinesCol03 := TextLineSpecLinesCollection{}
+	txtLinesCol03 := TextLineSpecLinesCollection{}.NewPtr()
 
 	err =
 		txtLinesCol03.CopyIn(
@@ -332,7 +332,7 @@ func TestTextLineSpecLinesCollection_CopyOut_000100(t *testing.T) {
 		return
 	}
 
-	txtLinesCol03 := TextLineSpecLinesCollection{}
+	txtLinesCol03 := TextLineSpecLinesCollection{}.New()
 
 	_,
 		err = txtLinesCol03.CopyOut(
@@ -524,6 +524,157 @@ func TestTextLineSpecLinesCollection_DeleteTextLineMember_000100(t *testing.T) {
 			"because input parameter 'errorPrefix is invalid.'\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol03 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol03,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	targetIndexNo := 0
+
+	var iTxtLineSpec01 ITextLineSpecification
+
+	iTxtLineSpec01,
+		err = txtLinesCol03.PeekAtTextLine(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol03[%v]",
+				targetIndexNo)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol03.DeleteTextLineMember(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol03[%v]",
+				targetIndexNo)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var iTxtLineSpec02 ITextLineSpecification
+
+	iTxtLineSpec02,
+		err = txtLinesCol03.PeekAtTextLine(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol03[%v]",
+				targetIndexNo)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if iTxtLineSpec01.EqualITextLine(iTxtLineSpec02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtLinesCol03.DeleteTextLineMember()\n"+
+			"Expected txtLinesCol03[%v] would be deleted.\n"+
+			"HOWEVER, THE DELETE OPERATION FAILED!\n",
+			ePrefix.String(),
+			targetIndexNo)
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	var numOfTxtLines int
+
+	numOfTxtLines,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	targetIndexNo = numOfTxtLines - 1
+
+	iTxtLineSpec01,
+		err = txtLinesCol04.PeekAtTextLine(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol04[%v]",
+				targetIndexNo)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol04.DeleteTextLineMember(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol04[%v]",
+				targetIndexNo)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	iTxtLineSpec02,
+		err = txtLinesCol04.PeekAtTextLine(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol04[%v]",
+				targetIndexNo)))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"PeekAtTextLine()\n"+
+			"Because txtLinesCol04[%v] was deleted.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			targetIndexNo)
+
+		return
+	}
+
+	if iTxtLineSpec01.EqualITextLine(iTxtLineSpec02) {
+
+		t.Errorf("%v - ERROR\n"+
+			"txtLinesCol04.DeleteTextLineMember()\n"+
+			"Expected txtLinesCol04[%v] would be deleted.\n"+
+			"HOWEVER, THE DELETE OPERATION FAILED!\n",
+			ePrefix.String(),
+			targetIndexNo)
 
 		return
 	}

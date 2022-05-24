@@ -1344,6 +1344,93 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
 	return err
 }
 
+// New - Returns a new, empty instance of
+// TextLineSpecLinesCollection.
+//
+// The Text Line Collection for this returned instance is empty and
+// contains zero member elements.
+//
+// To add Text Lines to the collection encapsulated by this
+// instance of TextLineSpecLinesCollection, call the method
+//    TextLineSpecLinesCollection.AddTextLine()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLineSpecLinesCollection
+//     - This method will return an empty or unitialized instance
+//       of TextLineSpecLinesCollection. The Text Line Collection
+//       encapsulated by this instance contains zero member
+//       elements.
+//
+func (txtLinesCol TextLineSpecLinesCollection) New() TextLineSpecLinesCollection {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	newTxtLineSpec := TextLineSpecLinesCollection{}
+
+	return newTxtLineSpec
+}
+
+// NewPtr - Returns a pointer to a new, empty instance of
+// TextLineSpecLinesCollection.
+//
+// The Text Line Collection for this returned instance is empty and
+// contains zero member elements.
+//
+// To add Text Lines to the collection encapsulated by this
+// instance of TextLineSpecLinesCollection, call the method
+//    TextLineSpecLinesCollection.AddTextLine()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextLineSpecLinesCollection
+//     - This method will return a pointer to an empty or
+//       unitialized instance of TextLineSpecLinesCollection. The
+//       Text Line Collection encapsulated by this instance
+//       contains zero member elements.
+//
+func (txtLinesCol TextLineSpecLinesCollection) NewPtr() *TextLineSpecLinesCollection {
+
+	if txtLinesCol.lock == nil {
+		txtLinesCol.lock = new(sync.Mutex)
+	}
+
+	txtLinesCol.lock.Lock()
+
+	defer txtLinesCol.lock.Unlock()
+
+	newTxtLineSpec := TextLineSpecLinesCollection{}
+
+	return &newTxtLineSpec
+
+}
+
 // PeekAtFirstTextLine - Returns a deep copy of the first Text Line
 // ('ITextLineSpecification') object in the Text Lines Collection
 // ('txtLinesCol.textLines[0]').
