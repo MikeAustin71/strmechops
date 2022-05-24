@@ -1367,7 +1367,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) IsValidInstanceError(
 // Return Values
 //
 //  TextLineSpecLinesCollection
-//     - This method will return an empty or unitialized instance
+//     - This method will return an empty or uninitialized instance
 //       of TextLineSpecLinesCollection. The Text Line Collection
 //       encapsulated by this instance contains zero member
 //       elements.
@@ -1411,7 +1411,7 @@ func (txtLinesCol TextLineSpecLinesCollection) New() TextLineSpecLinesCollection
 //
 //  *TextLineSpecLinesCollection
 //     - This method will return a pointer to an empty or
-//       unitialized instance of TextLineSpecLinesCollection. The
+//       uninitialized instance of TextLineSpecLinesCollection. The
 //       Text Line Collection encapsulated by this instance
 //       contains zero member elements.
 //

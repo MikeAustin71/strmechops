@@ -549,6 +549,8 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	txtTimerLinesMolecule := textLineSpecTimerLinesMolecule{}
 
 	_,
+		_,
+		_,
 		err = txtTimerLinesMolecule.getFormattedText(
 		timerLines01,
 		ePrefix.XCpy(
@@ -561,6 +563,8 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	}
 
 	_,
+		_,
+		_,
 		err = txtTimerLinesMolecule.getFormattedText(
 		nil,
 		ePrefix.XCpy(
@@ -581,6 +585,8 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	timerLines02 := TextLineSpecTimerLines{}
 
 	_,
+		_,
+		_,
 		err = txtTimerLinesMolecule.getFormattedText(
 		&timerLines02,
 		ePrefix.XCpy(
@@ -638,6 +644,8 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 	timerLinesMolecule02 := textLineSpecTimerLinesMolecule{}
 
 	_,
+		_,
+		_,
 		err = timerLinesMolecule02.getFormattedText(
 		timerLines04,
 		ePrefix.XCpy(

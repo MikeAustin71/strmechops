@@ -429,6 +429,8 @@ func TestTextLineSpecTimerLines_Read_000300(t *testing.T) {
 	timerLinesMolecule := textLineSpecTimerLinesMolecule{}
 
 	formattedTxtStr,
+		_,
+		_,
 		err =
 		timerLinesMolecule.getFormattedText(
 			timerLines01,
