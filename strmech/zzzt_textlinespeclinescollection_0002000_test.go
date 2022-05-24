@@ -2136,3 +2136,312 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecLinesCollection_SetTextLineCollection_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollection_SetTextLineCollection_000100()",
+		"")
+
+	_,
+		txtLinesCol01,
+		err := createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLineCol []ITextLineSpecification
+
+	txtLineCol,
+		err = txtLinesCol01.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLineCol<-txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	newNumOfTxtLines := len(txtLineCol)
+
+	var txtLinesCol02 TextLineSpecLinesCollection
+
+	oldNumOfTxtLines := 0
+
+	oldNumOfTxtLines,
+		txtLinesCol02,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol02.SetTextLineCollection(
+		txtLineCol,
+		ePrefix.XCpy(
+			"txtLinesCol02<-txtLineCol"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !txtLinesCol02.Equal(&txtLinesCol01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.SetTextLineCollection()\n"+
+			"Expected txtLinesCol01 == txtLinesCol02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	currentNumOfTxtLines :=
+		txtLinesCol02.GetNumberOfTextLines()
+
+	if currentNumOfTxtLines != newNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.SetTextLineCollection()\n"+
+			"Expected Text Lines Don't Match Actual Text Lines\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"  Acutal Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			newNumOfTxtLines,
+			currentNumOfTxtLines)
+
+		return
+	}
+
+	if currentNumOfTxtLines == oldNumOfTxtLines {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol02.SetTextLineCollection()\n"+
+			"Expected Text Lines Don't Match Actual Text Lines\n"+
+			"Expected Number Of Text Lines = '%v' \n"+
+			"  Acutal Number Of Text Lines = '%v'\n",
+			ePrefix.String(),
+			newNumOfTxtLines,
+			currentNumOfTxtLines)
+
+		return
+	}
+
+	var txtLinesCol03 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol03,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol03.SetTextLineCollection(
+		nil,
+		ePrefix.XCpy(
+			"txtLinesCol03<-nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"SetTextLineCollection()\n"+
+			"because input parameter 'newTextLineCol' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol04 TextLineSpecLinesCollection
+
+	newNumOfTxtLines,
+		txtLinesCol04,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLineCol,
+		err = txtLinesCol04.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol04"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	targetIndex := newNumOfTxtLines - 1
+
+	txtLineCol[targetIndex].Empty()
+
+	err = txtLinesCol04.SetTextLineCollection(
+		txtLineCol,
+		ePrefix.XCpy(
+			"txtLinesCol04<-nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol04."+
+			"SetTextLineCollection()\n"+
+			"because input parameter 'txtLineCol[%v]' is invalid.\n"+
+			"txtLineCol[%v].Empty() was previously called.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			targetIndex,
+			targetIndex)
+
+		return
+	}
+
+	var txtLinesCol05 TextLineSpecLinesCollection
+
+	newNumOfTxtLines,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLineCol,
+		err = txtLinesCol05.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	targetIndex = newNumOfTxtLines - 1
+
+	txtLineCol[targetIndex] = nil
+
+	err = txtLinesCol05.SetTextLineCollection(
+		txtLineCol,
+		ePrefix.XCpy(
+			"txtLinesCol05<-nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol05."+
+			"SetTextLineCollection()\n"+
+			"because input parameter 'txtLineCol[%v]' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String(),
+			targetIndex)
+
+		return
+	}
+
+	_,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol05 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLineCol,
+		err = txtLinesCol05.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol05 #2"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol06 := TextLineSpecLinesCollection{}
+
+	err = txtLinesCol06.SetTextLineCollection(
+		txtLineCol,
+		ePrefix.XCpy(
+			"txtLinesCol06<-txtLineCol"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var txtLinesCol07 TextLineSpecLinesCollection
+
+	newNumOfTxtLines,
+		txtLinesCol07,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLineCol,
+		err = txtLinesCol07.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol07.SetTextLineCollection(
+		txtLineCol,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol07."+
+			"SetTextLineCollection()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
