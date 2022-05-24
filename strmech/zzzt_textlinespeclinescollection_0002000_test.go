@@ -1833,11 +1833,14 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 		return
 	}
 
+	targetIndex := 1
+
 	err = txtLinesCol01.ReplaceTextLine(
 		&plainTextLine01,
-		1,
+		targetIndex,
 		ePrefix.XCpy(
-			"txtLinesCol01[1]<-plainTextLine01"))
+			fmt.Sprintf("txtLinesCol01[%v]<-plainTextLine01",
+				targetIndex)))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -1845,13 +1848,14 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 		return
 	}
 
-	var idx1ITxtLineSpec ITextLineSpecification
+	var iTxtLineSpec ITextLineSpecification
 
-	idx1ITxtLineSpec,
+	iTxtLineSpec,
 		err = txtLinesCol01.PeekAtTextLine(
-		1,
+		targetIndex,
 		ePrefix.XCpy(
-			"idx1ITxtLineSpec<-txtLinesCol01[1]"))
+			fmt.Sprintf("iTxtLineSpec<-txtLinesCol01[%v]",
+				targetIndex)))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -1859,14 +1863,15 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 		return
 	}
 
-	if !idx1ITxtLineSpec.EqualITextLine(
+	if !iTxtLineSpec.EqualITextLine(
 		&plainTextLine01) {
 
 		t.Errorf("\n%v\n"+
-			"Error: txtLinesCol01.ReplaceTextLine()\n"+
-			"Expected 'idx1ITxtLineSpec' EQUALS 'plainTextLine01'.\n"+
+			"Error: txtLinesCol01.PeekAtTextLine(%v)\n"+
+			"Expected 'iTxtLineSpec' EQUALS 'plainTextLine01'.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!!!!\n",
-			ePrefix.String())
+			ePrefix.String(),
+			targetIndex)
 
 		return
 	}
@@ -2014,6 +2019,117 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 			"parameter 'textLine' is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol07 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol07,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol07"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	targetIndex = 0
+
+	err = txtLinesCol07.ReplaceTextLine(
+		&plainTextLine01,
+		targetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLinesCol07[%v] <- plainTextLine01",
+				targetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	iTxtLineSpec,
+		err = txtLinesCol07.PeekAtTextLine(
+		targetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("iTxtLineSpec<-txtLinesCol07[%v]",
+				targetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !iTxtLineSpec.EqualITextLine(
+		&plainTextLine01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol07.PeekAtTextLine(%v)\n"+
+			"Expected 'iTxtLineSpec' EQUALS 'plainTextLine01'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!!\n",
+			ePrefix.String(),
+			targetIndex)
+
+		return
+	}
+
+	var txtLinesCol08 TextLineSpecLinesCollection
+	numOfTxtLines := 0
+
+	numOfTxtLines,
+		txtLinesCol08,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol08"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	targetIndex = numOfTxtLines - 1
+
+	err = txtLinesCol08.ReplaceTextLine(
+		&plainTextLine01,
+		targetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("txtLinesCol08[%v] <- plainTextLine01",
+				targetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	iTxtLineSpec,
+		err = txtLinesCol08.PeekAtTextLine(
+		targetIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("iTxtLineSpec<-txtLinesCol08[%v]",
+				targetIndex)))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !iTxtLineSpec.EqualITextLine(
+		&plainTextLine01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: txtLinesCol08.PeekAtTextLine(%v)\n"+
+			"Expected 'iTxtLineSpec' EQUALS 'plainTextLine01'.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!!\n",
+			ePrefix.String(),
+			targetIndex)
 
 		return
 	}
