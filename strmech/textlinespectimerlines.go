@@ -1152,6 +1152,72 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetMaximumTextLabelLength() int
 		getMaximumTimerLabelLen()
 }
 
+// GetSingleLineLength - Returns the maximum line length calculated
+// by comparing individual text lines which comprise the formatted
+// text produced by the current instance of TextLineSpecTimerLines.
+//
+// Type TextLineSpecTimerLines differs from other Text Line
+// Specifications in that it always produces multiple lines of text
+// of varying string lengths.
+//
+// This method therefore analyzes the multiple lines of text which
+// comprise the formatted text produced by this instance of
+// TextLineSpecTimerLines to return the length of the longest text
+// line.
+//
+// To obtain the total length of all text lines produced by the
+// current instance of TextLineSpecTimerLines, see method:
+//   TextLineSpecTimerLines.GetTotalLinesLength()
+//
+// Remember that the returned line length always includes the
+// trailing new line characters.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  maxSingleLineLen           int
+//     - This method will return an integer value specifying
+//       the length of the longest text line included in
+//       the formatted text produced by the current instance of
+//       TextLineSpecTimerLines.
+//
+//       In the event of an error, a zero value will be returned.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetSingleLineLength() (
+	maxSingleLineLen int) {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+	var err error
+	_,
+		maxSingleLineLen,
+		_,
+		err = textLineSpecTimerLinesMolecule{}.ptr().
+		getFormattedText(
+			txtSpecTimerLines,
+			nil)
+
+	if err != nil {
+		maxSingleLineLen = 0
+	}
+
+	return maxSingleLineLen
+}
+
 // GetStartTimeLabel - Returns the internal member variable
 // 'startTimeLabel' as a string.
 //
@@ -1368,6 +1434,67 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTimeFormat() string {
 	defer txtSpecTimerLines.lock.Unlock()
 
 	return txtSpecTimerLines.timeFormat
+}
+
+// GetTotalLinesLength - Returns the total length of all the
+// formatted lines of text produced by the current instance of
+// TextLineSpecTimerLines.
+//
+// Type TextLineSpecTimerLines differs from other Text Line
+// Specifications in that it always produces multiple lines of text
+// of varying string lengths.
+//
+// This method totals the line lengths of each line of text and
+// returns this total value.
+//
+// To obtain the length of the longest single line of text, see
+// method:
+//   TextLineSpecTimerLines.GetSingleLineLength()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  totalLinesLength           int
+//     - This method will return an integer value specifying the
+//       total length of all the formatted lines produced by the
+//       current instance of TextLineSpecStandardLine.
+//
+//       In the event of an error, a zero value will be returned.
+//
+func (txtSpecTimerLines *TextLineSpecTimerLines) GetTotalLinesLength() (
+	totalLinesLength int) {
+
+	if txtSpecTimerLines.lock == nil {
+		txtSpecTimerLines.lock = new(sync.Mutex)
+	}
+
+	txtSpecTimerLines.lock.Lock()
+
+	defer txtSpecTimerLines.lock.Unlock()
+
+	var err error
+	_,
+		_,
+		totalLinesLength,
+		err = textLineSpecTimerLinesMolecule{}.ptr().
+		getFormattedText(
+			txtSpecTimerLines,
+			nil)
+
+	if err != nil {
+		totalLinesLength = 0
+	}
+
+	return totalLinesLength
 }
 
 // IsValidInstance - Performs a diagnostic review of the data

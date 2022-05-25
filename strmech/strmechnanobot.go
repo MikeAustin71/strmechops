@@ -3,11 +3,223 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
 type strMechNanobot struct {
 	lock *sync.Mutex
+}
+
+// extractTextLines - This method is designed to extract single
+// text lines from a string containing multiple text lines.
+//
+// The multiple text line strings are contained in input parameter,
+// 'targetStr'.
+//
+// The text lines are delimited and parsed based on the value of
+// input parameter, 'endOfLineDelimiters'.
+//
+// Individual text lines parsed by this method will be returned to
+// the calling function as an array of strings, 'textLineStrs'. The
+// number of text lines included in 'textLineStrs' is contained in
+// return parameter, 'numOfTextLines'.
+//
+// If no End-Of-Line delimiters are found in 'targetStr', no
+// error will be generated, the return parameter 'numOfTextLines'
+// will be set to zero and the length of the returned string array,
+// 'textLineStrs', will be zero.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStr                  string
+//     - The string containing multiple text lines will be parsed
+//       out and returned as an array of individual text line
+//       strings.
+//
+//       If this parameter is an empty string, an error will be
+//       returned.
+//
+//  endOfLineDelimiters        []string
+//     - An array of strings which contains a series of
+//       'end-of-line' characters used to delimit and extract
+//       individual lines of text. When any one of the End Of
+//       Line Delimiter strings is found in parameter, 'targetStr',
+//       it marks the end of a single line of text which is then
+//       extracted and returned to the calling function.
+//
+//       If parameter 'endOfLineDelimiters' is submitted as a zero
+//       length array or if any of the individual array elements
+//       are empty, an error will be returned.
+//
+//
+//  includeEndOfLineDelimiters bool
+//     - If this boolean value is set to 'true', the end of line
+//       characters will be included in the text line strings
+//       returned by this method.
+//
+//       If this parameter is set to 'false', end of line
+//       characters WILL NOT BE INCLUDED in the text line strings
+//       returned by this method.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  textLineStrs               []string
+//     - If this method completes successfully, an array of strings
+//       will be returned to the calling function. This string
+//       array contains the individual lines of text extracted from
+//       input parameter, 'targetStr' using the End-Of-Line
+//       delimiters specified by input parameter,
+//       'endOfLineDelimiters'
+//
+//       If no End-Of-Line delimiters are found in 'targetStr', no
+//       error will be generated and this returned array of text
+//       strings, 'textLineStrs', will have a length of zero.
+//
+//
+//  numOfTextLines             int
+//     - The number of Text Lines extracted from input parameter,
+//       'targetStr', and encapsulated in return parameter,
+//       'textLineStrs'.
+//
+//       If no End-Of-Line delimiters are found in 'targetStr',
+//       the value of this return parameter will be set to zero.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (sMechNanobot *strMechNanobot) extractTextLines(
+	targetStr string,
+	endOfLineDelimiters []string,
+	includeEndOfLineDelimiters bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	textLineStrs []string,
+	numOfTextLines int,
+	err error) {
+
+	if sMechNanobot.lock == nil {
+		sMechNanobot.lock = new(sync.Mutex)
+	}
+
+	sMechNanobot.lock.Lock()
+
+	defer sMechNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	textLineStrs = make([]string, 0)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechNanobot."+
+			"extractTextLines()",
+		"")
+
+	if err != nil {
+		return textLineStrs, numOfTextLines, err
+	}
+
+	lastLenTargetStr := len(targetStr)
+
+	if lastLenTargetStr == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetStr' is invalid.\n"+
+			"'targetStr' has a length of zero characters!\n",
+			ePrefix.String())
+
+		return textLineStrs, numOfTextLines, err
+	}
+
+	lenEndOfLineDelimiters := len(endOfLineDelimiters)
+
+	if lenEndOfLineDelimiters == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'endOfLineDelimiters' is invalid.\n"+
+			"'endOfLineDelimiters' has an array length of zero!\n",
+			ePrefix.String())
+
+		return textLineStrs, numOfTextLines, err
+	}
+
+	for j := 0; j < lenEndOfLineDelimiters; j++ {
+
+		if len(endOfLineDelimiters[j]) == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: endOfLineDelimiters[%v] is empty\n"+
+				"and has a string length of zero.\n",
+				ePrefix.String(),
+				j)
+
+			return textLineStrs, numOfTextLines, err
+		}
+
+	}
+
+	var before, after string
+
+	var foundDelimiter bool
+
+	doLoop := true
+
+	for doLoop == true {
+
+		doLoop = false
+
+		for i := 0; i < lenEndOfLineDelimiters; i++ {
+
+			before,
+				after,
+				foundDelimiter = strings.Cut(
+				targetStr,
+				endOfLineDelimiters[i])
+
+			if !foundDelimiter {
+				continue
+			}
+
+			targetStr = after
+
+			if includeEndOfLineDelimiters {
+				before += endOfLineDelimiters[i]
+			}
+
+			textLineStrs = append(textLineStrs, before)
+
+			doLoop = true
+		}
+	}
+
+	numOfTextLines = len(textLineStrs)
+
+	return textLineStrs, numOfTextLines, err
 }
 
 // strCenterInStrLeft - returns a string which includes a left pad blank string

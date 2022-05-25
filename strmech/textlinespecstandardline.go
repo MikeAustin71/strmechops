@@ -2430,9 +2430,28 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 // a single line of text to be replicated multiple times when
 // generating the final formatted text output.
 //
-// To get the total length of all text lines produced by the
+// To obtain the total length of all text lines produced by the
 // current instance of TextLineSpecStandardLine, see method:
 //   TextLineSpecStandardLine.GetTotalLinesLength()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method will return an integer value specifying the
+//       length of a single formatted text line produced by the
+//       current instance of TextLineSpecStandardLine.
+//
+//       In the event of an error, a zero value will be returned.
 //
 func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 
@@ -2456,7 +2475,7 @@ func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 			nil)
 
 	if err != nil {
-		return 0
+		singleLineLength = 0
 	}
 
 	return singleLineLength
@@ -2803,8 +2822,8 @@ func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 	return newTextFields, err
 }
 
-// GetTotalLinesLength - Returns the total length of the formatted
-// lines of text produced by the current instance of
+// GetTotalLinesLength - Returns the total length of all the
+// formatted lines of text produced by the current instance of
 // TextLineSpecStandardLine.
 //
 // Remember, that users have the option to specify a repeat count,
@@ -2817,8 +2836,27 @@ func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 // current instance of TextLineSpecStandardLine, is the length of
 // a single text line times the repeat count.
 //
-// To get the length of a single line of text, see method:
+// To obtain the length of a single line of text, see method:
 //   TextLineSpecStandardLine.GetSingleLineLength()
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method will return an integer value specifying the
+//       total length of all the formatted lines produced by the
+//       current instance of TextLineSpecStandardLine.
+//
+//       In the event of an error, a zero value will be returned.
 //
 func (stdLine *TextLineSpecStandardLine) GetTotalLinesLength() int {
 

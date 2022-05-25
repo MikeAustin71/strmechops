@@ -1290,6 +1290,186 @@ func (sMech *StrMech) ExtractNumberRunes(
 		err
 }
 
+// ExtractTextLines - This method is designed to extract single
+// text lines from a string containing multiple text lines.
+//
+// The multiple text line strings are contained in input parameter,
+// 'targetStr'.
+//
+// The text lines are delimited and parsed based on the value of
+// input parameter, 'endOfLineDelimiters'.
+//
+// Individual text lines parsed by this method will be returned to
+// the calling function as an array of strings, 'textLineStrs'. The
+// number of text lines included in 'textLineStrs' is contained in
+// return parameter, 'numOfTextLines'.
+//
+// If no End-Of-Line delimiters are found in 'targetStr', no
+// error will be generated, the return parameter 'numOfTextLines'
+// will be set to zero and the length of the returned string array,
+// 'textLineStrs', will be zero.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStr                  string
+//     - The string containing multiple text lines will be parsed
+//       out and returned as an array of individual text line
+//       strings.
+//
+//       If this parameter is an empty string, an error will be
+//       returned.
+//
+//
+//  endOfLineDelimiters        []string
+//     - An array of strings which contains a series of
+//       'end-of-line' characters used to delimit and extract
+//       individual lines of text. When any one of the End Of
+//       Line Delimiter strings is found in parameter, 'targetStr',
+//       it marks the end of a single line of text which is then
+//       extracted and returned to the calling function.
+//
+//       If parameter 'endOfLineDelimiters' is submitted as a zero
+//       length array or if any of the individual array elements
+//       are empty, an error will be returned.
+//
+//
+//  includeEndOfLineDelimiters bool
+//     - If this boolean value is set to 'true', the end of line
+//       characters will be included in the text line strings
+//       returned by this method.
+//
+//       If this parameter is set to 'false', end of line
+//       characters WILL NOT BE INCLUDED in the text line strings
+//       returned by this method.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  textLineStrs               []string
+//     - If this method completes successfully, an array of strings
+//       will be returned to the calling function. This string
+//       array contains the individual lines of text extracted from
+//       input parameter, 'targetStr' using the End-Of-Line
+//       delimiters specified by input parameter,
+//       'endOfLineDelimiters'
+//
+//       If no End-Of-Line delimiters are found in 'targetStr', no
+//       error will be generated and this returned array of text
+//       strings, 'textLineStrs', will have a length of zero.
+//
+//
+//  numOfTextLines             int
+//     - The number of Text Lines extracted from input parameter,
+//       'targetStr', and encapsulated in return parameter,
+//       'textLineStrs'.
+//
+//       If no End-Of-Line delimiters are found in 'targetStr',
+//       the value of this return parameter will be set to zero.
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the input parameter
+//       'errorPrefix' (error prefix) will be inserted or prefixed
+//       at the beginning of the error message.
+//
+func (sMech *StrMech) ExtractTextLines(
+	targetStr string,
+	endOfLineDelimiters []string,
+	includeEndOfLineDelimiters bool,
+	errorPrefix interface{}) (
+	textLineStrs []string,
+	numOfTextLines int,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	textLineStrs = make([]string, 0)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ExtractTextLines()",
+		"")
+
+	if err != nil {
+		return textLineStrs, numOfTextLines, err
+	}
+
+	textLineStrs,
+		numOfTextLines,
+		err = strMechNanobot{}.ptr().
+		extractTextLines(
+			targetStr,
+			endOfLineDelimiters,
+			includeEndOfLineDelimiters,
+			ePrefix)
+
+	return textLineStrs, numOfTextLines, err
+}
+
 // FindFirstNonSpaceChar - Returns the string index of the first non-space character in
 // a string segment. The string to be searched is input parameter 'targetStr'. The string
 // segment which will be searched from left to right in 'targetStr' is defined by the
