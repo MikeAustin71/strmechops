@@ -285,7 +285,11 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			ePrefix.XCpy(
 				"Second Line - txtLabelLeftFiller"))
 
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		if err != nil {
+
+			return formattedText, maxSingleLineLen, totalLinesLen, err
+
+		}
 	}
 
 	err = txtDescLabel.SetTextRunes(

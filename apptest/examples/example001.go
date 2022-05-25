@@ -1718,6 +1718,162 @@ func (mt MainTest) TextLineSpecTimerLinesSetEndTimeLabel07() {
 
 }
 
+func (mt MainTest) TimerEventText08() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TimerEventText08()",
+		"")
+
+	var errTxt string
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n"+
+				"%v\n",
+			"Error - time.LoadLocation()",
+			err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		5,
+		5,
+		10,
+		30,
+		45,
+		999999998,
+		loc)
+
+	var lineBreakSpec strmech.TextLineSpecSolidLine
+
+	lineBreakSpec,
+		err = strmech.TextLineSpecSolidLine{}.NewSolidLine(
+		0,
+		0,
+		"-",
+		60,
+		ePrefix.XCpy(
+			"lineBreak"))
+
+	lineBreakSpec.TurnAutoLineTerminationOff()
+
+	lineBreak := lineBreakSpec.String()
+
+	fmt.Println()
+	fmt.Println(lineBreak)
+	fmt.Println(ePrefix.String())
+	fmt.Println(lineBreak)
+	fmt.Println()
+
+	var timerLines *strmech.TextLineSpecTimerLines
+
+	timerLines,
+		err = strmech.TextLineSpecTimerLines{}.NewFullTimerEvent(
+		" ",
+		"Start Time",
+		startTime,
+		"End Time",
+		endTime,
+		"2006-01-02 15:04:05.000000000 -0700 MST",
+		"Elapsed Time",
+		6,
+		strmech.TxtJustify.Left(),
+		": ",
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	err = timerLines.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	timerLinesText := timerLines.String()
+
+	sMech := strmech.StrMech{}
+
+	var timerLineStrs []string
+	numOfTxtLines := 0
+	eolDelimiters := []string{"\n"}
+
+	timerLineStrs,
+		numOfTxtLines,
+		err = sMech.ExtractTextLines(
+		timerLinesText,
+		eolDelimiters,
+		false,
+		ePrefix.XCpy(
+			"timerLineStrs"))
+
+	if err != nil {
+		errTxt = fmt.Sprintf(
+			"%v\n", err.Error())
+		fmt.Println(errTxt)
+		return
+	}
+
+	if numOfTxtLines <= 0 {
+		errTxt = fmt.Sprintf(
+			"%v\n"+
+				"sMech.ExtractTextLines() FAILED!\n"+
+				"Error: 'numOfTxtLines' is zero.\n",
+			ePrefix.String())
+		return
+	}
+
+	fmt.Println(lineBreak)
+	fmt.Println()
+	fmt.Println("Timer Line Strs!")
+	fmt.Println()
+	for i := 0; i < numOfTxtLines; i++ {
+		fmt.Println(timerLineStrs[i])
+	}
+
+	fmt.Println(lineBreak)
+	fmt.Println("SUCCESSFUL COMPLETION")
+	fmt.Println("Time Lines Output")
+	fmt.Println()
+	fmt.Printf(timerLinesText)
+	fmt.Println()
+	fmt.Println(lineBreak)
+
+	/*
+
+	   Start Time  : 2022-04-05 10:00:00.000000000 -0500 CDT
+	   End Time    : 2022-05-05 10:30:45.000009582 -0500 CDT
+	   Elapsed Time: 30 Days 0 Hours 30 Minutes 45 Seconds 0 Milliseconds
+	                 9 Microseconds 582 Nanoseconds
+	                 Total Elapsed Nanoseconds: 2,593,845,000,009,582
+	*/
+
+}
+
 func (mt MainTest) IntSeparateNumRunes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
