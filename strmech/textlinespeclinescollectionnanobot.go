@@ -10,6 +10,178 @@ type textLineSpecLinesCollectionNanobot struct {
 	lock *sync.Mutex
 }
 
+// AddTextLine - Adds a ITextLineSpecification object to the
+// end of the Text Line collection maintained by this instance of
+// TextLineSpecLinesCollection.
+//
+// A deep copy of this ITextLineSpecification object ('textLine')
+// is added to the end of the array of ITextLineSpecification
+// objects encapsulated in this instance of
+// TextLineSpecLinesCollection.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLinesCol               *TextLineSpecLinesCollection
+//     - A pointer to an instance of TextLineSpecLinesCollection.
+//       A deep copy of input parameter 'textLine' will be appended
+//       to the end of the Text Lines Collection maintained by this
+//       instance of TextLineSpecLinesCollection.
+//
+//
+//  textLine                   ITextLineSpecification
+//     - A text line object which implements the
+//       ITextLineSpecification interface. A deep copy of this
+//       object will be appended to the end of the text lines
+//       collection maintained by the 'textLinesCol' instance
+//       of TextLineSpecLinesCollection.
+//
+//       If member variable data values contained in this
+//       'textLine' parameter are found to be invalid, an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) addTextLine(
+	textLinesCol *TextLineSpecLinesCollection,
+	textLine ITextLineSpecification,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtLinesColNanobot.lock == nil {
+		txtLinesColNanobot.lock = new(sync.Mutex)
+	}
+
+	txtLinesColNanobot.lock.Lock()
+
+	defer txtLinesColNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineSpecLinesCollectionNanobot."+
+			"addTextLine()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if textLinesCol == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLinesCol' is "+
+			"a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if textLine == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLine' is 'nil'\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err2 := textLine.IsValidInstanceError(
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLine' is failed validation test!\n"+
+			"Validation Error:\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return err
+	}
+
+	var newTextLine ITextLineSpecification
+
+	newTextLine,
+		err = textLine.CopyOutITextLine(
+		ePrefix.XCpy(
+			"textLine->newTextLine"))
+
+	if err != nil {
+		return err
+	}
+
+	textLinesCol.textLines =
+		append(
+			textLinesCol.textLines,
+			newTextLine)
+
+	return err
+}
+
 // copyIn - Copies all data from input parameter
 // 'incomingTextLineCol' to input parameter 'targetTextLineCol'.
 //

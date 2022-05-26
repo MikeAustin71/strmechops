@@ -12,12 +12,12 @@ type TextLineSpecLinesCollection struct {
 }
 
 // AddTextLine - Adds a ITextLineSpecification object to the
-// collection of text lines maintained by this instance of
+// end of the Text Line collection maintained by this instance of
 // TextLineSpecLinesCollection.
 //
 // A deep copy of this ITextLineSpecification object ('textLine')
-// is added to the end of the array of ITextLineSpecification
-// objects encapsulated in this instance of
+// is appended to the end of the array of ITextLineSpecification
+// objects maintained by this instance of
 // TextLineSpecLinesCollection.
 //
 //
@@ -122,28 +122,13 @@ func (txtLinesCol *TextLineSpecLinesCollection) AddTextLine(
 		return err
 	}
 
-	err = textLine.IsValidInstanceError(
-		ePrefix.XCpy("textLine"))
+	txtLinesColNanobot := textLineSpecLinesCollectionNanobot{}
 
-	if err != nil {
-		return err
-	}
-
-	var newTextLine ITextLineSpecification
-
-	newTextLine,
-		err = textLine.CopyOutITextLine(
+	err = txtLinesColNanobot.addTextLine(
+		txtLinesCol,
+		textLine,
 		ePrefix.XCpy(
-			"textLine->newTextLine"))
-
-	if err != nil {
-		return err
-	}
-
-	txtLinesCol.textLines =
-		append(
-			txtLinesCol.textLines,
-			newTextLine)
+			"txtLinesCol<-textLine"))
 
 	return err
 }
