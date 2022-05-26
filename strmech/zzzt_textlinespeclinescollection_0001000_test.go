@@ -679,6 +679,27 @@ func TestTextLineSpecLinesCollection_DeleteTextLineMember_000100(t *testing.T) {
 		return
 	}
 
+	txtLinesCol05 := TextLineSpecLinesCollection{}
+
+	err = txtLinesCol05.DeleteTextLineMember(
+		targetIndexNo,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"txtLinesCol04[%v]",
+				targetIndexNo)))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol05."+
+			"DeleteTextLineMember()\n"+
+			"Because txtLinesCol05 is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 
@@ -1188,7 +1209,7 @@ func TestTextLineSpecLinesCollection_GetTextLineCollection_000100(t *testing.T) 
 		txtLinesCol04,
 		err = createTestTextLineSpecCollection02(
 		ePrefix.XCpy(
-			"txtLinesCol03"))
+			"txtLinesCol04"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -1216,6 +1237,72 @@ func TestTextLineSpecLinesCollection_GetTextLineCollection_000100(t *testing.T) 
 			"ERROR: txtLinesCol04.GetTextLineCollection()\n"+
 			"Expected an error return because input\n"+
 			"parameter 'errorPrefix is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol05 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol05,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol05.textLines[3] = nil
+
+	_,
+		err = txtLinesCol05.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol05"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: txtLinesCol05.GetTextLineCollection()\n"+
+			"Expected an error return because input\n"+
+			"parameter txtLinesCol05.textLines[3] = nil is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol06 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol06,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol06"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol06.textLines[3].Empty()
+
+	_,
+		err = txtLinesCol06.GetTextLineCollection(
+		ePrefix.XCpy(
+			"txtLinesCol06"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: txtLinesCol06.GetTextLineCollection()\n"+
+			"Expected an error return because input\n"+
+			"parameter txtLinesCol06.textLines[3].Empty() is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 

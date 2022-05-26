@@ -2134,6 +2134,40 @@ func TestTextLineSpecLinesCollection_ReplaceTextLine_000100(t *testing.T) {
 		return
 	}
 
+	plainTextLine02 := TextLineSpecPlainText{}
+
+	var txtLinesCol09 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol09,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"txtLinesCol09"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = txtLinesCol09.ReplaceTextLine(
+		&plainTextLine02,
+		0,
+		ePrefix.XCpy(
+			"plainTextLine02 is empty"))
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: txtLinesCol09.ReplaceTextLine()\n"+
+			"Expected an error return because input\n"+
+			"parameter 'textLine' (plainTextLine02) is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 

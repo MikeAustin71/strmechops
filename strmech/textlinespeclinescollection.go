@@ -2999,6 +2999,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) SetTextLineCollection(
 	txtLinesCol.textLines = make([]ITextLineSpecification, lenOfNewTxtLines)
 
 	for j := 0; j < lenOfNewTxtLines; j++ {
+
 		txtLinesCol.textLines[j],
 			err2 = newTextLineCol[j].CopyOutITextLine(
 			nil)
