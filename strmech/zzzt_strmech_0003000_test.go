@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"testing"
@@ -1359,8 +1358,6 @@ func TestStrMech_ExtractTextLines_000100(t *testing.T) {
 		"TestStrMech_ExtractTextLines_000100()",
 		"")
 
-	var errTxt string
-
 	loc,
 		err := time.LoadLocation(
 		"America/Chicago")
@@ -1414,9 +1411,8 @@ func TestStrMech_ExtractTextLines_000100(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		errTxt = fmt.Sprintf(
-			"%v\n", err.Error())
-		fmt.Println(errTxt)
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 
@@ -1424,9 +1420,8 @@ func TestStrMech_ExtractTextLines_000100(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		errTxt = fmt.Sprintf(
-			"%v\n", err.Error())
-		fmt.Println(errTxt)
+		t.Errorf("\n%v\n",
+			err.Error())
 		return
 	}
 
@@ -1544,6 +1539,360 @@ func TestStrMech_ExtractTextLines_000100(t *testing.T) {
 	                 9 Microseconds 582 Nanoseconds
 	                 Total Elapsed Nanoseconds: 2,593,845,000,009,582
 	*/
+
+	return
+}
+
+func TestStrMech_ExtractTextLines_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractTextLines_000200()",
+		"")
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		t.Errorf(
+			"%v\n"+
+				"Error - time.LoadLocation()\n"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := time.Date(
+		2022,
+		5,
+		5,
+		10,
+		30,
+		45,
+		999999998,
+		loc)
+
+	var timerLines *TextLineSpecTimerLines
+
+	timerLines,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		" ",
+		"Start Time",
+		startTime,
+		"End Time",
+		endTime,
+		"2006-01-02 15:04:05.000000000 -0700 MST",
+		"Elapsed Time",
+		6,
+		TxtJustify.Left(),
+		": ",
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = timerLines.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	timerLinesText := timerLines.String()
+
+	sMech := StrMech{}
+
+	var timerLineStrs []string
+	numOfTxtLines := 0
+	var remainderStr string
+	eolDelimiters := []string{"\n"}
+
+	timerLineStrs,
+		numOfTxtLines,
+		remainderStr,
+		err = sMech.ExtractTextLines(
+		timerLinesText,
+		eolDelimiters,
+		true,
+		ePrefix.XCpy(
+			"timerLineStrs"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if len(remainderStr) > 0 {
+
+		printableRemainderStr :=
+			sMech.ConvertNonPrintableString(
+				remainderStr,
+				true)
+
+		t.Errorf(
+			"%v\n"+
+				"Error: sMech.ExtractTextLines()\n"+
+				"Text Line Extraction Failed!\n"+
+				"Remainder String =\n     '%v'\n",
+			ePrefix.String(),
+			printableRemainderStr)
+
+	}
+
+	if numOfTxtLines <= 0 {
+
+		t.Errorf(
+			"%v\n"+
+				"sMech.ExtractTextLines() FAILED!\n"+
+				"Error: 'numOfTxtLines' is zero.\n",
+			ePrefix.String())
+
+		return
+	}
+
+	expectedMaxStrLen := 0
+	lenTimerLine := 0
+	expectedTotalLinesLength := 0
+
+	for i := 0; i < numOfTxtLines; i++ {
+
+		lenTimerLine = len(timerLineStrs[i])
+
+		if lenTimerLine > expectedMaxStrLen {
+			expectedMaxStrLen = lenTimerLine
+		}
+
+		expectedTotalLinesLength += lenTimerLine
+	}
+
+	actualMaxStrLen := timerLines.GetSingleLineLength()
+
+	if expectedMaxStrLen != actualMaxStrLen {
+
+		t.Errorf(
+			"%v\n"+
+				"Error:"+
+				"Expected Single Line Length is NOT EQUAL TO"+
+				"Actual Single Line Length!\n"+
+				"Expected Single Line Length = '%v'\n"+
+				"  Actual Single Line Length = '%v'\n",
+			ePrefix.String(),
+			expectedMaxStrLen,
+			actualMaxStrLen)
+
+		return
+
+	}
+
+	actualTotalLinesLen := timerLines.GetTotalLinesLength()
+
+	if expectedTotalLinesLength != actualTotalLinesLen {
+
+		t.Errorf(
+			"%v\n"+
+				"Error:"+
+				"Expected Total Lines Length is NOT EQUAL TO"+
+				"Actual Total Lines Length!\n"+
+				"Expected Total Lines Length = '%v'\n"+
+				"  Actual Total Lines Length = '%v'\n",
+			ePrefix.String(),
+			expectedTotalLinesLength,
+			actualTotalLinesLen)
+
+		return
+
+	}
+
+	_,
+		_,
+		_,
+		err = sMech.ExtractTextLines(
+		"",
+		eolDelimiters,
+		true,
+		ePrefix.XCpy(
+			"timerLineStrs"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractTextLines()\n"+
+			"because input parameter 'targetStr' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	//timerLineStrs,
+	//	numOfTxtLines,
+	//	remainderStr,
+	//	err = sMech.ExtractTextLines(
+	//	timerLinesText,
+	//	eolDelimiters,
+	//	true,
+	//	ePrefix.XCpy(
+	//		"timerLineStrs"))
+
+	_,
+		_,
+		_,
+		err = sMech.ExtractTextLines(
+		timerLinesText,
+		nil,
+		true,
+		ePrefix.XCpy(
+			"timerLineStrs"))
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractTextLines()\n"+
+			"because input parameter 'endOfLineDelimiters' is 'nil' and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		_,
+		_,
+		err = sMech.ExtractTextLines(
+		timerLinesText,
+		eolDelimiters,
+		true,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractTextLines()\n"+
+			"because input parameter 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	testStr := "Hello World! How are you. Have a GREAT Day!"
+
+	timerLineStrs,
+		numOfTxtLines,
+		remainderStr,
+		err = sMech.ExtractTextLines(
+		testStr,
+		eolDelimiters,
+		true,
+		ePrefix.XCpy(
+			"timerLineStrs"))
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"sMech.ExtractTextLines()\n"+
+			"Did not expect an error because input parameter\n"+
+			"'targetStr' did NOT contain any End-Of-Line Characters\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!\n"+
+			"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if testStr != remainderStr {
+
+		t.Errorf("\n%v\n"+
+			"sMech.ExtractTextLines()\n"+
+			"Expected that 'testStr' would equal 'remainderStr' because input\n"+
+			"parameter 'testStr' did NOT contain any End-Of-Line Characters\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"     testStr = '%v'\n"+
+			"remainderStr = '%v'\n",
+			ePrefix.String(),
+			testStr,
+			remainderStr)
+
+		return
+
+	}
+
+	testStr = "Good Morning!\nWake up sleepy head!\nHello World! How are you.\nHave a GREAT Day!"
+
+	expectedStr := "Have a GREAT Day!"
+
+	timerLineStrs,
+		numOfTxtLines,
+		remainderStr,
+		err = sMech.ExtractTextLines(
+		testStr,
+		eolDelimiters,
+		true,
+		ePrefix.XCpy(
+			"timerLineStrs"))
+
+	if expectedStr != remainderStr {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: sMech.ExtractTextLines()\n"+
+			"Expected 'remainderStr' DID NOT EQUAL Actual 'remainderStr'.\n"+
+			"Expected 'remainderStr' = '%v'\n"+
+			"  Actual 'remainderStr' = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			remainderStr)
+
+		return
+	}
+
+	if numOfTxtLines != 3 {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: sMech.ExtractTextLines()\n"+
+			"Expected 'numOfTxtLines' DID NOT EQUAL '3'.\n"+
+			"Expected 'numOfTxtLines' = '3'\n"+
+			"  Actual 'numOfTxtLines' = '%v'\n",
+			ePrefix.String(),
+			numOfTxtLines)
+
+		return
+	}
+
+	if len(timerLineStrs) != 3 {
+
+		t.Errorf("\n%v\n"+
+			"ERROR: sMech.ExtractTextLines()\n"+
+			"Expected length of 'timerLineStrs' DID NOT EQUAL '3'.\n"+
+			"Expected length of 'timerLineStrs' = '3'\n"+
+			"  Actual length of 'timerLineStrs' = '%v'\n",
+			ePrefix.String(),
+			numOfTxtLines)
+
+		return
+	}
 
 	return
 }
