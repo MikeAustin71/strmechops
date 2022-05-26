@@ -170,6 +170,7 @@ func TestStrMech_BreakTextAtLineLength_04(t *testing.T) {
 	}
 }
 
+//goland:noinspection ALL
 func TestStrMech_BreakTextAtLineLength_05(t *testing.T) {
 
 	thisFuncName := "TestStrMech_BreakTextAtLineLength_05()"
@@ -231,6 +232,7 @@ func TestStrMech_BreakTextAtLineLength_06(t *testing.T) {
 
 	thisFuncName := "TestStrMech_BreakTextAtLineLength_06()"
 
+	//goland:noinspection ALL
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
@@ -252,6 +254,7 @@ func TestStrMech_BreakTextAtLineLength_07(t *testing.T) {
 
 	thisFuncName := "TestStrMech_BreakTextAtLineLength_07()"
 
+	//goland:noinspection ALL
 	tstStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu ex sit amet " +
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
@@ -315,6 +318,10 @@ func TestStrMech_BreakTextAtLineLength_09(t *testing.T) {
 
 func TestStrMech_ConvertNonPrintableChars_01(t *testing.T) {
 
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ConvertNonPrintableChars_01()",
+		"")
+
 	testStr := "Hello world! How are you doing today?\n"
 	testRunes := []rune(testStr)
 	expectedStr := "Hello world! How are you doing today?\\n"
@@ -327,8 +334,30 @@ func TestStrMech_ConvertNonPrintableChars_01(t *testing.T) {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
 			"Instead, actual result string='%v'\n",
 			expectedStr, actualStr)
+
+		return
 	}
 
+	actualStr = sMech.ConvertNonPrintableChars(
+		nil,
+		false)
+
+	expectedStr = "[EMPTY]"
+
+	if expectedStr != actualStr {
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ConvertNonPrintableChars()\n"+
+			"Expected actualStr = '%v'\n"+
+			"Instead, actualStr = '%v'\n",
+			ePrefix.String(),
+			expectedStr,
+			actualStr)
+
+		return
+
+	}
+
+	return
 }
 
 func TestStrMech_ConvertNonPrintableChars_02(t *testing.T) {
@@ -351,6 +380,7 @@ func TestStrMech_ConvertNonPrintableChars_03(t *testing.T) {
 
 	testStr := "Hello world!\tHow\rare\ayou\bdoing\ftoday?\v\n"
 	testRunes := []rune(testStr)
+	//goland:noinspection ALL
 	expectedStr := "Hello world!\\tHow\\rare\\ayou\\bdoing\\ftoday?\\v\\n"
 
 	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
@@ -516,8 +546,10 @@ func TestStrMech_ConvertNonPrintableChars_09(t *testing.T) {
 			"\\" +
 			"[SPACE]"
 
+	sMech := StrMech{}
+
 	printableChars :=
-		StrMech{}.Ptr().ConvertNonPrintableChars(
+		sMech.ConvertNonPrintableChars(
 			tRunes,
 			true)
 
@@ -531,6 +563,101 @@ func TestStrMech_ConvertNonPrintableChars_09(t *testing.T) {
 			expectedStr)
 	}
 
+}
+
+func TestStrMech_ConvertNonPrintableString_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ConvertNonPrintableString_000100()",
+		"")
+
+	tRunes := []rune{
+		0,    // [NULL]
+		1,    // [SOH]
+		2,    // [STX]
+		3,    // [ETX]
+		4,    // "[EOT]"
+		5,    // [ENQ]
+		6,    // [ACK]
+		7,    // "\\a"
+		8,    // "\\b"
+		9,    // "\\t"
+		0x0a, // "\\n"
+		0x0b, // "\\v"
+		0x0c, // "\\f"
+		0x0d, // "\\r"
+		0x0e, // "[SO]"
+		0x0f, // "[SI]"
+		0x5c, // "\\"
+		0x20, // "[SPACE]"
+	}
+
+	expectedStr :=
+		"[NULL]" +
+			"[SOH]" +
+			"[STX]" +
+			"[ETX]" +
+			"[EOT]" +
+			"[ENQ]" +
+			"[ACK]" +
+			"\\a" +
+			"\\b" +
+			"\\t" +
+			"\\n" +
+			"\\v" +
+			"\\f" +
+			"\\r" +
+			"[SO]" +
+			"[SI]" +
+			"\\" +
+			"[SPACE]"
+
+	sMech := StrMech{}
+
+	printableString :=
+		sMech.ConvertNonPrintableString(
+			string(tRunes),
+			true)
+
+	if printableString != expectedStr {
+		t.Errorf("%v\n"+
+			"ERROR:\n"+
+			"sMech.ConvertNonPrintableString()\n"+
+			"Expected printableString == expectedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"printableString='%v'\n"+
+			"expectedStr='%v'\n",
+			ePrefix.String(),
+			printableString,
+			expectedStr)
+
+		return
+	}
+
+	printableString =
+		sMech.ConvertNonPrintableString(
+			"",
+			true)
+
+	expectedStr = "[EMPTY]"
+
+	if printableString != expectedStr {
+		t.Errorf("\n%v\n"+
+			"ERROR:\n"+
+			"sMech.ConvertNonPrintableString()\n"+
+			"'nonPrintableString' parameter is empty.\n"+
+			"Expected printableString == expectedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"printableString='%v'\n"+
+			"expectedStr='%v'\n",
+			ePrefix.String(),
+			printableString,
+			expectedStr)
+
+		return
+	}
+
+	return
 }
 
 func TestStrMech_ConvertPrintableChars_01(t *testing.T) {
@@ -622,6 +749,176 @@ func TestStrMech_ConvertPrintableChars_01(t *testing.T) {
 		}
 	}
 
+	_,
+		err =
+		sMech.ConvertPrintableChars(
+			printableCharsStr,
+			StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ConvertPrintableChars()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			funcName)
+
+		return
+	}
+
+	_,
+		err =
+		sMech.ConvertPrintableChars(
+			"",
+			funcName)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ConvertPrintableChars()\n"+
+			"because 'printableChars' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			funcName)
+
+		return
+	}
+
+	return
+}
+
+func TestStrMech_ConvertPrintableString_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ConvertPrintableString_000100()",
+		"")
+
+	nonPrintableRuneArray := []rune{
+		0,    // [NULL]
+		1,    // [SOH]
+		2,    // [STX]
+		3,    // [ETX]
+		4,    // "[EOT]"
+		5,    // [ENQ]
+		6,    // [ACK]
+		7,    // "\\a"
+		8,    // "\\b"
+		9,    // "\\t"
+		0x0a, // "\\n"
+		0x0b, // "\\v"
+		0x0c, // "\\f"
+		0x0d, // "\\r"
+		0x0e, // "[SO]"
+		0x0f, // "[SI]"
+		0x5c, // "\\"
+		0x20, // "[SPACE]"
+	}
+
+	printableCharsStr :=
+		"[NULL]" +
+			"[SOH]" +
+			"[STX]" +
+			"[ETX]" +
+			"[EOT]" +
+			"[ENQ]" +
+			"[ACK]" +
+			"\\a" +
+			"\\b" +
+			"\\t" +
+			"\\n" +
+			"\\v" +
+			"\\f" +
+			"\\r" +
+			"[SO]" +
+			"[SI]" +
+			"\\" +
+			"[SPACE]"
+
+	sMech := StrMech{}
+
+	var nonPrintableString string
+	var err error
+
+	nonPrintableString,
+		err =
+		sMech.ConvertPrintableString(
+			printableCharsStr,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedRuneArray := len(nonPrintableRuneArray)
+
+	runeArray := []rune(nonPrintableString)
+
+	if lenExpectedRuneArray != len(runeArray) {
+		t.Errorf("Error:\n"+
+			"Expected lenExpectedRuneArray == len(runeArray).\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"lenExpectedRuneArray='%v'\n"+
+			"      len(runeArray)='%v'\n",
+			lenExpectedRuneArray,
+			len(runeArray))
+		return
+	}
+
+	for i := 0; i < len(nonPrintableRuneArray); i++ {
+		if nonPrintableRuneArray[i] != runeArray[i] {
+			t.Errorf("ERROR:\n"+
+				"nonPrintableRuneArray[%v] != runeArray[%v]\n"+
+				"nonPrintableRuneArray[%v]='%v'\n"+
+				"runeArray[%v]='%v'\n",
+				i,
+				i,
+				i,
+				nonPrintableRuneArray[i],
+				i,
+				runeArray[i])
+		}
+	}
+
+	_,
+		err =
+		sMech.ConvertPrintableString(
+			printableCharsStr,
+			StrMech{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ConvertPrintableString()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	_,
+		err =
+		sMech.ConvertPrintableString(
+			"",
+			ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ConvertPrintableString()\n"+
+			"because 'printableString' is empty and invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
 }
 
 func TestStrMech_CopyIn_01(t *testing.T) {
