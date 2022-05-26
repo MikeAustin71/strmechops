@@ -1767,7 +1767,7 @@ func (mt MainTest) TimerEventText08() {
 		0,
 		0,
 		"-",
-		60,
+		75,
 		ePrefix.XCpy(
 			"lineBreak"))
 
@@ -1820,14 +1820,16 @@ func (mt MainTest) TimerEventText08() {
 
 	var timerLineStrs []string
 	numOfTxtLines := 0
+	var remainderStr string
 	eolDelimiters := []string{"\n"}
 
 	timerLineStrs,
 		numOfTxtLines,
+		remainderStr,
 		err = sMech.ExtractTextLines(
 		timerLinesText,
 		eolDelimiters,
-		false,
+		true,
 		ePrefix.XCpy(
 			"timerLineStrs"))
 
@@ -1847,17 +1849,37 @@ func (mt MainTest) TimerEventText08() {
 		return
 	}
 
-	fmt.Println(lineBreak)
-	fmt.Println()
-	fmt.Println("Timer Line Strs!")
-	fmt.Println()
-	for i := 0; i < numOfTxtLines; i++ {
-		fmt.Println(timerLineStrs[i])
+	printableRemainderStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(remainderStr),
+			true)
+
+	if len(remainderStr) != 0 {
+		fmt.Println(lineBreak)
+		fmt.Println()
+		fmt.Printf("Remainder Strings:\n"+
+			"%v\n",
+			printableRemainderStr)
+		fmt.Println()
+		fmt.Println(lineBreak)
+		fmt.Println()
 	}
 
 	fmt.Println(lineBreak)
+	fmt.Println()
+	fmt.Println("Timer Line Strings")
+	fmt.Println()
+	for i := 0; i < numOfTxtLines; i++ {
+		fmt.Printf(timerLineStrs[i])
+	}
+	fmt.Println(lineBreak)
+
+	fmt.Println()
+	fmt.Println()
+	fmt.Println(lineBreak)
 	fmt.Println("SUCCESSFUL COMPLETION")
-	fmt.Println("Time Lines Output")
+	fmt.Println(ePrefix.String())
+	fmt.Println("TextLineSpecTimerLines Output")
 	fmt.Println()
 	fmt.Printf(timerLinesText)
 	fmt.Println()

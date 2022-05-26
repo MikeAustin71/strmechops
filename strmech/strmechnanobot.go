@@ -25,10 +25,16 @@ type strMechNanobot struct {
 // number of text lines included in 'textLineStrs' is contained in
 // return parameter, 'numOfTextLines'.
 //
+// If any remaining segment of 'targetStr' is not delimited with
+// End-Of-Line characters, that remaining string segment will be
+// returned in parameter 'remainderStr'.
+//
 // If no End-Of-Line delimiters are found in 'targetStr', no
 // error will be generated, the return parameter 'numOfTextLines'
-// will be set to zero and the length of the returned string array,
-// 'textLineStrs', will be zero.
+// will be set to zero, the length of the returned string array,
+// 'textLineStrs', will be set to zero and retrun parameter
+// 'remainderStr' will be set equal to 'targetStr'.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -104,6 +110,17 @@ type strMechNanobot struct {
 //       the value of this return parameter will be set to zero.
 //
 //
+//  remainderStr               string
+//     - After parsing input parameter 'targetStr' for text lines,
+//       any remaining string segment which does NOT contain
+//       End-Of-Line delimiters will be returned through this
+//       parameter.
+//
+//       If no End-Of-Line delimiters are found in 'targetStr' and
+//       no text lines are extracted, 'remainderStr' will be
+//       equivalent to the original 'targetStr'.
+//
+//
 //  err                        error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -121,6 +138,7 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 	errPrefDto *ePref.ErrPrefixDto) (
 	textLineStrs []string,
 	numOfTextLines int,
+	remainderStr string,
 	err error) {
 
 	if sMechNanobot.lock == nil {
@@ -143,7 +161,7 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 		"")
 
 	if err != nil {
-		return textLineStrs, numOfTextLines, err
+		return textLineStrs, numOfTextLines, remainderStr, err
 	}
 
 	lastLenTargetStr := len(targetStr)
@@ -154,7 +172,7 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 			"'targetStr' has a length of zero characters!\n",
 			ePrefix.String())
 
-		return textLineStrs, numOfTextLines, err
+		return textLineStrs, numOfTextLines, remainderStr, err
 	}
 
 	lenEndOfLineDelimiters := len(endOfLineDelimiters)
@@ -165,7 +183,7 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 			"'endOfLineDelimiters' has an array length of zero!\n",
 			ePrefix.String())
 
-		return textLineStrs, numOfTextLines, err
+		return textLineStrs, numOfTextLines, remainderStr, err
 	}
 
 	for j := 0; j < lenEndOfLineDelimiters; j++ {
@@ -178,7 +196,7 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 				ePrefix.String(),
 				j)
 
-			return textLineStrs, numOfTextLines, err
+			return textLineStrs, numOfTextLines, remainderStr, err
 		}
 
 	}
@@ -189,6 +207,8 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 
 	doLoop := true
 
+	remainderStr = targetStr
+
 	for doLoop == true {
 
 		doLoop = false
@@ -198,14 +218,14 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 			before,
 				after,
 				foundDelimiter = strings.Cut(
-				targetStr,
+				remainderStr,
 				endOfLineDelimiters[i])
 
 			if !foundDelimiter {
 				continue
 			}
 
-			targetStr = after
+			remainderStr = after
 
 			if includeEndOfLineDelimiters {
 				before += endOfLineDelimiters[i]
@@ -219,7 +239,7 @@ func (sMechNanobot *strMechNanobot) extractTextLines(
 
 	numOfTextLines = len(textLineStrs)
 
-	return textLineStrs, numOfTextLines, err
+	return textLineStrs, numOfTextLines, remainderStr, err
 }
 
 // strCenterInStrLeft - returns a string which includes a left pad blank string

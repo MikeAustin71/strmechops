@@ -170,10 +170,10 @@ func (sMech *StrMech) BreakTextAtLineLength(
 		ePrefix)
 }
 
-// ConvertNonPrintableChars - A string containing non-printable
-// characters is passed to this method. The method then converts
-// the non-printable characters to 'printable' characters and
-// returns the converted string.
+// ConvertNonPrintableChars - An array of runes containing
+// non-printable characters is passed to this method. The method
+// then converts the non-printable characters to 'printable'
+// characters and returns the converted characters as a string.
 //
 // Examples of non-printable characters are '\n', '\t' or 0x06
 // (Acknowledge). These example characters would be translated into
@@ -185,6 +185,10 @@ func (sMech *StrMech) BreakTextAtLineLength(
 //
 // Reference:
 //    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+// This method is similar to StrMech.ConvertNonPrintableString()
+// with the sole difference being that this method receives an
+// array of runes instead of a string.
 //
 //
 // ------------------------------------------------------------------------
@@ -206,7 +210,7 @@ func (sMech *StrMech) BreakTextAtLineLength(
 //
 // Return Values
 //
-//  printableChars      string
+//  printableString     string
 //     - This returned string is identical to input parameter
 //       'nonPrintableChars' with the exception that non-printable
 //       characters are translated into printable characters.
@@ -230,7 +234,7 @@ func (sMech *StrMech) BreakTextAtLineLength(
 func (sMech *StrMech) ConvertNonPrintableChars(
 	nonPrintableChars []rune,
 	convertSpace bool) (
-	printableChars string) {
+	printableString string) {
 
 	if sMech.stringDataMutex == nil {
 		sMech.stringDataMutex = new(sync.Mutex)
@@ -246,13 +250,102 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 
 	sOpsQuark := strMechQuark{}
 
-	printableChars,
+	printableString,
 		_ = sOpsQuark.convertNonPrintableChars(
 		nonPrintableChars,
 		convertSpace,
 		&ePrefix)
 
-	return printableChars
+	return printableString
+}
+
+// ConvertNonPrintableString - A string containing non-printable
+// characters is passed to this method. The method then converts
+// the non-printable characters to 'printable' characters and
+// returns the converted characters as a string.
+//
+// Examples of non-printable characters are '\n', '\t' or 0x06
+// (Acknowledge). These example characters would be translated into
+// printable string characters as: "\\n", "\\t" and "[ACK]".
+//
+// Space characters are typically translated as " ". However, if
+// the input parameter 'convertSpace' is set to 'true' then all
+// spaces are converted to "[SPACE]" in the returned string.
+//
+// Reference:
+//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+// This method is similar to StrMech.ConvertNonPrintableChars()
+// with the sole difference being that this method receives a
+// string instead of an array of runes.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  nonPrintableString   string
+//     - An string containing non-printable characters. The
+//       non-printable characters will be converted to printable
+//       characters and returned as a string.
+//
+//
+//  convertSpace        bool
+//     - Space or white space characters (0x20) are by default
+//       translated as " ". However, if this parameter is set to
+//       'true', space characters will be converted to "[SPACE]".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  printableString     string
+//     - This returned string is identical to input parameter
+//       'nonPrintableString' with the exception that non-printable
+//       characters are translated into printable characters.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  testStr := "Hello world!\n"
+//
+//  actualStr :=
+//    StrMech{}.NewConstructor().
+//      ConvertNonPrintableString(testStr, true)
+//
+//  ----------------------------------------------------
+//  'actualStr' is now equal to:
+//     "Hello[SPACE]world!\\n"
+//
+func (sMech *StrMech) ConvertNonPrintableString(
+	nonPrintableString string,
+	convertSpace bool) (
+	printableString string) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"StrMech.ConvertNonPrintableString()",
+		"")
+
+	sOpsQuark := strMechQuark{}
+
+	printableString,
+		_ = sOpsQuark.convertNonPrintableChars(
+		[]rune(nonPrintableString),
+		convertSpace,
+		&ePrefix)
+
+	return printableString
 }
 
 // ConvertPrintableChars - Converts printable characters to their
@@ -283,6 +376,10 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 //
 // Reference:
 //    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+// This method is similar to StrMech.ConvertPrintableString()
+// with the sole difference being that this method returns an
+// array of runes instead of a string.
 //
 //
 // ------------------------------------------------------------------------
@@ -371,9 +468,10 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 //
 //  sMech := StrMech{}
 //
-//  actualRuneArray :=
-//    sMech.
-//      ConvertPrintableChars(
+//  var actualRuneArray []rune
+//
+//  actualRuneArray =
+//    sMech.ConvertPrintableChars(
 //           testStr,
 //           ePrefix)
 //
@@ -414,6 +512,177 @@ func (sMech *StrMech) ConvertPrintableChars(
 		ePrefix)
 
 	return nonPrintableChars, err
+}
+
+// ConvertPrintableString - Converts printable characters to their
+// non-printable or native equivalent. For example, instances of
+// '\\n' in a string will be converted to '\n'.
+//
+// Additional examples of converted printable string characters
+// are: "\\n", "\\t" and "[ACK]". These printable characters be
+// converted into their native, non-printable state: '\n', '\t' or
+// 0x06 (Acknowledge).
+//
+// This method, StrMech.ConvertPrintableString(), performs the
+// mirror operation to that performed by method
+// StrMech.ConvertNonPrintableString().
+//
+// StrMech.ConvertNonPrintableString() converts non-printable
+// characters into printable characters.
+//
+// StrMech.ConvertPrintableString() preforms in just the opposite
+// manner. It converts printable characters back into non-printable
+// characters.
+//
+// If StrMech.ConvertNonPrintableString() is called on a string
+// containing non-printable characters, calling this method,
+// StrMech.ConvertPrintableString(), on the resulting string will
+// reverse the operation and return that string to its original
+// content.
+//
+//
+// Reference:
+//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+// This method is similar to StrMech.ConvertPrintableChars()
+// with the sole difference being that this method returns a
+// string instead of an array of runes.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  printableString     string
+//     - A string which may contain non-printable characters converted
+//       to their printable equivalents. These printable characters will
+//       be converted back to their native, non-printable values.
+//
+//
+//  errorPrefix         interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  nonPrintableString  string
+//     - A string containing non-printable characters. The
+//       non-printable characters will be converted from the
+//       printable characters contained in input parameter
+//       'printableString'.
+//
+//
+//  err                 error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  testStr := "Hello[SPACE]world!\\n"
+//  ePrefix := "theCallingFunction()"
+//
+//  sMech := StrMech{}
+//
+//  var actualPrintableStr string
+//
+//  actualPrintableStr,
+//  err =
+//    sMech.ConvertPrintableString(
+//           testStr,
+//           ePrefix)
+//
+//  ----------------------------------------------------
+//  'actualPrintableStr' is now equal to:
+//     "Hello world!\n"
+//
+func (sMech *StrMech) ConvertPrintableString(
+	printableString string,
+	errorPrefix interface{}) (
+	nonPrintableString string,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	nonPrintableChars := make([]rune, 0)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ConvertPrintableString()",
+		"")
+
+	if err != nil {
+		return nonPrintableString, err
+	}
+
+	nonPrintableChars,
+		err = strMechQuark{}.ptr().convertPrintableChars(
+		printableString,
+		ePrefix)
+
+	nonPrintableString = string(nonPrintableChars)
+
+	return nonPrintableString, err
 }
 
 // CopyIn - Copies string information from another StrMech
@@ -1304,10 +1573,16 @@ func (sMech *StrMech) ExtractNumberRunes(
 // number of text lines included in 'textLineStrs' is contained in
 // return parameter, 'numOfTextLines'.
 //
+// If any remaining segment of 'targetStr' is not delimited with
+// End-Of-Line characters, that remaining string segment will be
+// returned in parameter 'remainderStr'.
+//
 // If no End-Of-Line delimiters are found in 'targetStr', no
 // error will be generated, the return parameter 'numOfTextLines'
-// will be set to zero and the length of the returned string array,
-// 'textLineStrs', will be zero.
+// will be set to zero, the length of the returned string array,
+// 'textLineStrs', will be set to zero and return parameter
+// 'remainderStr' will be set equal to 'targetStr'.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -1417,6 +1692,17 @@ func (sMech *StrMech) ExtractNumberRunes(
 //       the value of this return parameter will be set to zero.
 //
 //
+//  remainderStr               string
+//     - After parsing input parameter 'targetStr' for text lines,
+//       any remaining string segment which does NOT contain
+//       End-Of-Line delimiters will be returned through this
+//       parameter.
+//
+//       If no End-Of-Line delimiters are found in 'targetStr' and
+//       no text lines are extracted, 'remainderStr' will be
+//       equivalent to the original 'targetStr'.
+//
+//
 //  err                        error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -1434,6 +1720,7 @@ func (sMech *StrMech) ExtractTextLines(
 	errorPrefix interface{}) (
 	textLineStrs []string,
 	numOfTextLines int,
+	remainderStr string,
 	err error) {
 
 	if sMech.stringDataMutex == nil {
@@ -1455,11 +1742,12 @@ func (sMech *StrMech) ExtractTextLines(
 		"")
 
 	if err != nil {
-		return textLineStrs, numOfTextLines, err
+		return textLineStrs, numOfTextLines, remainderStr, err
 	}
 
 	textLineStrs,
 		numOfTextLines,
+		remainderStr,
 		err = strMechNanobot{}.ptr().
 		extractTextLines(
 			targetStr,
@@ -1467,7 +1755,7 @@ func (sMech *StrMech) ExtractTextLines(
 			includeEndOfLineDelimiters,
 			ePrefix)
 
-	return textLineStrs, numOfTextLines, err
+	return textLineStrs, numOfTextLines, remainderStr, err
 }
 
 // FindFirstNonSpaceChar - Returns the string index of the first non-space character in
