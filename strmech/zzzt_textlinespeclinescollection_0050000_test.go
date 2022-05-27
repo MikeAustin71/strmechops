@@ -338,7 +338,7 @@ func TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100(t *testing.T) {
 
 }
 
-func TestTextLineSpecLinesCollectionAtomS_testValidityOfTextLinesCollection_000100(t *testing.T) {
+func TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextLineSpecLinesCollectionAtomS_testValidityOfTextLinesCollection_000100()",
@@ -407,10 +407,27 @@ func TestTextLineSpecLinesCollectionNanobot_addTextLine_000100(t *testing.T) {
 		"TestTextLineSpecLinesCollectionNanobot_addTextLine_000100()",
 		"")
 
-	var stdLine01,
+	var stdLine01 TextLineSpecStandardLine
+	var err error
+
+	stdLine01,
 		err = createTestTextLineSpecStandardLine01(
 		ePrefix.XCpy(
 			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textLineCol01 TextLineSpecLinesCollection
+
+	_,
+		textLineCol01,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"textLineCol01"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -431,7 +448,151 @@ func TestTextLineSpecLinesCollectionNanobot_addTextLine_000100(t *testing.T) {
 		t.Errorf("%v - ERROR\n"+
 			"Expected an error return from txtLinesNanobot."+
 			"addTextLine()\n"+
-			"because input parameter 'txtLinesCol' is nil.\n"+
+			"because input parameter 'textLinesCol' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesNanobot.addTextLine(
+		&textLineCol01,
+		nil,
+		ePrefix.XCpy(
+			"textLinesCol==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"addTextLine()\n"+
+			"because input parameter 'textLine' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecLinesCollectionNanobot_copyIn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollectionNanobot_copyIn_000100()",
+		"")
+
+	var targetTextLineCol, incomingTextLineCol TextLineSpecLinesCollection
+	var err error
+
+	_,
+		targetTextLineCol,
+		err = createTestTextLineSpecCollection01(
+		ePrefix.XCpy(
+			"targetTextLineCol"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		incomingTextLineCol,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"incomingTextLineCol"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesNanobot := textLineSpecLinesCollectionNanobot{}
+
+	err = txtLinesNanobot.copyIn(
+		nil,
+		&incomingTextLineCol,
+		ePrefix.XCpy(
+			"targetTextLineCol is nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"copyIn()\n"+
+			"because input parameter 'targetTextLineCol' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = txtLinesNanobot.copyIn(
+		&targetTextLineCol,
+		nil,
+		ePrefix.XCpy(
+			"incomingTextLineCol is nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"copyIn()\n"+
+			"because input parameter 'incomingTextLineCol' is 'nill'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	incomingTextLineCol.textLines[4].Empty()
+
+	err = txtLinesNanobot.copyIn(
+		&targetTextLineCol,
+		&incomingTextLineCol,
+		ePrefix.XCpy(
+			"incomingTextLineCol is nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"copyIn()\n"+
+			"because input parameter 'incomingTextLineCol.textLines[4].Empty()'"+
+			"is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+	_,
+		incomingTextLineCol,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"incomingTextLineCol"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	incomingTextLineCol.textLines[4].Empty()
+
+	err = txtLinesNanobot.copyIn(
+		&targetTextLineCol,
+		&incomingTextLineCol,
+		ePrefix.XCpy(
+			"incomingTextLineCol is nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"copyIn()\n"+
+			"because input parameter 'incomingTextLineCol.textLines[4]'"+
+			"is 'nil'.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 

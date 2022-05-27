@@ -314,15 +314,8 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyIn(
 
 	lenTxtLineCol := len(incomingTextLineCol.textLines)
 
-	if lenTxtLineCol == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'incomingTextLineCol' is invalid!\n"+
-			"The 'incomingTextLineCol' text lines collection is empty.\n"+
-			"There is nothing to copy.\n",
-			ePrefix.String())
-
-		return err
-	}
+	// If lenTxtLineCol is zero, Validity Check above
+	// would fail.
 
 	targetTextLineCol.textLines =
 		make([]ITextLineSpecification, lenTxtLineCol)
@@ -331,16 +324,8 @@ func (txtLinesColNanobot *textLineSpecLinesCollectionNanobot) copyIn(
 
 	for i := 0; i < lenTxtLineCol; i++ {
 
-		if incomingTextLineCol.textLines[i] == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Text Line element incomingTextLineCol.textLines[%v]\n"+
-				"has a 'nil' value!\n",
-				ePrefix.String(),
-				i)
-
-			return err
-		}
+		// If incomingTextLineCol.textLines[i] == nil
+		// Validity check above would fail.
 
 		newTextLine,
 			err = incomingTextLineCol.textLines[i].CopyOutITextLine(
