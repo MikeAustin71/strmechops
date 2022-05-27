@@ -307,3 +307,96 @@ func TestTextLineSpecLinesCollectionAtom_insertTextLine_000100(t *testing.T) {
 
 	return
 }
+
+func TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100()",
+		"")
+
+	txtLinesColAtom := textLineSpecLinesCollectionAtom{}
+
+	_,
+		err := txtLinesColAtom.peekPopTextLine(
+		nil,
+		3,
+		false,
+		ePrefix.XCpy(
+			"textLinesCol==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesColAtom."+
+			"peekPopTextLine()\n"+
+			"because input parameter 'txtLinesCol' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
+func TestTextLineSpecLinesCollectionAtomS_testValidityOfTextLinesCollection_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollectionAtomS_testValidityOfTextLinesCollection_000100()",
+		"")
+
+	txtLinesColAtom := textLineSpecLinesCollectionAtom{}
+
+	_,
+		err := txtLinesColAtom.testValidityOfTextLinesCollection(
+		nil,
+		ePrefix.XCpy(
+			"textLineCol==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesColAtom."+
+			"testValidityOfTextLinesCollection()\n"+
+			"because input parameter 'txtLinesCol' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var txtLinesCol01 TextLineSpecLinesCollection
+
+	_,
+		txtLinesCol01,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"txtLinesCol01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesCol01.textLines[3] = nil
+
+	_,
+		err = txtLinesColAtom.testValidityOfTextLinesCollection(
+		&txtLinesCol01,
+		ePrefix.XCpy(
+			"txtLinesCol01.textLines[3]==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesColAtom."+
+			"testValidityOfTextLinesCollection()\n"+
+			"because input parameter txtLinesCol01.textLines[3] = nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
