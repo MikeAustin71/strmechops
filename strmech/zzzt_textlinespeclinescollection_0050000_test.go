@@ -400,3 +400,43 @@ func TestTextLineSpecLinesCollectionAtomS_testValidityOfTextLinesCollection_0001
 
 	return
 }
+
+func TestTextLineSpecLinesCollectionNanobot_addTextLine_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollectionNanobot_addTextLine_000100()",
+		"")
+
+	var stdLine01,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	txtLinesNanobot := textLineSpecLinesCollectionNanobot{}
+
+	err = txtLinesNanobot.addTextLine(
+		nil,
+		&stdLine01,
+		ePrefix.XCpy(
+			"textLinesCol==nil"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"addTextLine()\n"+
+			"because input parameter 'txtLinesCol' is nil.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
