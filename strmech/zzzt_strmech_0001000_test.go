@@ -70,6 +70,25 @@ func TestStrMech_BreakTextAtLineLength_01(t *testing.T) {
 			expected, actualTxt)
 	}
 
+	actualTxt, err = sMech.BreakTextAtLineLength(
+		tstStr,
+		40,
+		'\n',
+		strMechAtom{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"BreakTextAtLineLength()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			thisFuncName)
+
+		return
+
+	}
+
 }
 
 func TestStrMech_BreakTextAtLineLength_02(t *testing.T) {
@@ -951,6 +970,7 @@ func TestStrMech_CopyIn_01(t *testing.T) {
 			"s1 StringData='%v'", string3, actualStr)
 	}
 
+	s1.CopyIn(nil)
 }
 
 func TestStrMech_CopyRuneArrays000100(t *testing.T) {
@@ -1014,6 +1034,26 @@ func TestStrMech_CopyRuneArrays000100(t *testing.T) {
 			return
 		}
 	}
+
+	err = StrMech{}.Ptr().CopyRuneArrays(
+		&targetRuneArray,
+		&sourceRuneArray,
+		false,
+		strMechAtom{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesCol03."+
+			"CopyOut()\n"+
+			"because 'errorPrefix' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
 }
 
 func TestStrMech_CopyRuneArrays000200(t *testing.T) {
@@ -1548,6 +1588,9 @@ func TestStrMech_CopyOut_01(t *testing.T) {
 			"s2 StringData='%v'", string3, actualStr)
 	}
 
+	sMech := StrMech{}
+
+	_ = sMech.CopyOut()
 }
 
 func TestStrMech_CopyOut_02(t *testing.T) {

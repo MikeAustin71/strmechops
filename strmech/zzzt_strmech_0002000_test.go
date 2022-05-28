@@ -389,6 +389,29 @@ func TestStrMech_ExtractDataField_01(t *testing.T) {
 			expectedEndOfLineDelimiterIdx, datDto.CommentDelimiterIndex)
 	}
 
+	_,
+		err = sMech.ExtractDataField(
+		targetStr,
+		leadingKeyWordDelimiters,
+		startIdx,
+		leadingFieldDelimiters,
+		trailingFieldDelimiters,
+		commentDelimiters,
+		endOfLineDelimiters,
+		strMechAtom{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractDataField()\n"+
+			"because 'errorPrefix' is empty.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
 }
 
 func TestStrMech_ExtractDataField_02(t *testing.T) {
