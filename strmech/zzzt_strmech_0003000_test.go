@@ -49,37 +49,72 @@ func TestStrMech_ExtractNumericDigits_01(t *testing.T) {
 		t.Errorf("Expected starting numeric index='%v'\n"+
 			"Instead, staring numeric index='%v'\n",
 			expectedNumIdx, nStrDto.FirstNumCharIndex)
+
+		return
 	}
 
 	if expectedNumStr != nStrDto.NumStr {
 		t.Errorf("Expected number string ='%v'\n"+
 			"Instead, number string ='%v'\n",
 			expectedNumStr, nStrDto.NumStr)
+
+		return
 	}
 
 	if expectedNumStrLen != nStrDto.NumStrLen {
 		t.Errorf("Expected number string length ='%v'\n"+
 			"Instead, number string length ='%v'\n",
 			expectedNumStrLen, nStrDto.NumStrLen)
+
+		return
 	}
 
 	if expectedLeadingSignChar != nStrDto.LeadingSignChar {
 		t.Errorf("Expected leading sign char ='%v'\n"+
 			"Instead, leading sign char ='%v'\n",
 			expectedLeadingSignChar, nStrDto.LeadingSignChar)
+
+		return
 	}
 
 	if expectedLeadingSignCharIndex != nStrDto.LeadingSignIndex {
 		t.Errorf("Expected leading sign char index ='%v'\n"+
 			"Instead, leading sign char index ='%v'\n",
 			expectedLeadingSignCharIndex, nStrDto.LeadingSignIndex)
+
+		return
 	}
 
 	if expectedNextTargetStrIndex != nStrDto.NextTargetStrIndex {
 		t.Errorf("Expected next target index after number string ='%v'\n"+
 			"Instead, next target string index ='%v'\n",
 			expectedNextTargetStrIndex, nStrDto.NextTargetStrIndex)
+
+		return
 	}
+
+	_,
+		err = sMech.ExtractNumericDigits(
+		targetStr,
+		startIndex,
+		keepLeadingChars,
+		keepInteriorChars,
+		keepTrailingChars,
+		strMechMolecule{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumericDigits()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	return
 }
 
 func TestStrMech_ExtractNumericDigits_02(t *testing.T) {
@@ -1350,6 +1385,312 @@ func TestStrMech_ExtractNumericDigits_21(t *testing.T) {
 			"Instead, next target string index ='%v'\n",
 			expectedNextTargetStrIndex, nStrDto.NextTargetStrIndex)
 	}
+}
+
+func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_01()",
+		"")
+	rawNumStrRunes := []rune("1234.5678")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'1', '2', '3', '4'}
+	expectedFractionalRunes := []rune{'5', '6', '7', '8'}
+	expectedNumSign := 1
+	expectedDigitsFound := 8
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			string(expectedIntRunes),
+			string(intRunes),
+			ePrefix.String())
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		strMechMolecule{})
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumberRunes()\n"+
+			"because 'errorPrefix' is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		nil,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumberRunes()\n"+
+			"because 'rawNumStrRunes' is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		nil,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		nil,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		nil,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	badRawNumStrRunes :=
+		[]rune{'1', '2', '3', '4', 0, '.', '5', '6', '7', '8'}
+	badLeadingNegativeSignChars := []rune{'-', 0}
+	badTrailingNegativeSignChars := []rune{0}
+	badDecimalSeparatorChars := []rune{'.', 0}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		badRawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumberRunes()\n"+
+			"because 'rawNumStrRunes' is an invalid character array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		badLeadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumberRunes()\n"+
+			"because 'leadingNegativeSignChars' is an invalid character array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		badTrailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumberRunes()\n"+
+			"because 'trailingNegativeSignChars' is an invalid character array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	_,
+		_,
+		_,
+		_,
+		err = sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		badDecimalSeparatorChars,
+		ePrefix)
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from sMech."+
+			"ExtractNumberRunes()\n"+
+			"because 'decimalSeparatorChars' is an invalid character array.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix)
+
+		return
+	}
+
+	return
 }
 
 func TestStrMech_ExtractTextLines_000100(t *testing.T) {

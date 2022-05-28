@@ -1461,6 +1461,7 @@ func (sMechPreon *strMechPreon) testValidityOfRuneCharArray(
 	}
 
 	if charArray == nil {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'charArray' is invalid.\n"+
 			"'charArray' is equal to 'nil'!\n",

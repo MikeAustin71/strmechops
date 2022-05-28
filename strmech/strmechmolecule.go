@@ -51,9 +51,9 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	defer sMechMolecule.lock.Unlock()
 
-	// var ePrefix *ePref.ErrPrefixDto
+	var ePrefix *ePref.ErrPrefixDto
 
-	_,
+	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		ePrefDto,
 		"strMechMolecule.extractNumRunes()",
@@ -69,9 +69,13 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	lenRawNumRunes := len(rawNumStrRunes)
 
-	// 'numberStr' is empty,
-	// nothing to do...
 	if lenRawNumRunes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'rawNumStrRunes' is invalid.\n"+
+			"'rawNumStrRunes' has an array length of zero!\n",
+			ePrefix.String())
+
 		return intRunes,
 			fractionalRunes,
 			numberSign,
@@ -79,11 +83,24 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	lenDecSepChars := len(decimalSeparatorChars)
+	sMechPreon := strMechPreon{}
+	var err2 error
 
-	if lenDecSepChars == 0 {
-		decimalSeparatorChars = make([]rune, 1)
-		lenDecSepChars = 1
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		rawNumStrRunes,
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'rawNumStrRunes' is invalid.\n"+
+			"A validity test on this rune array produced the following error:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return
 	}
 
 	lenLeadingNegativeSignChars := len(leadingNegativeSignChars)
@@ -92,6 +109,26 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		leadingNegativeSignChars = make([]rune, 1)
 		lenLeadingNegativeSignChars = 1
+
+	} else {
+
+		_,
+			err2 = sMechPreon.testValidityOfRuneCharArray(
+			leadingNegativeSignChars,
+			nil)
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter 'leadingNegativeSignChars' is invalid.\n"+
+				"A validity test on this rune array produced the following error:\n"+
+				"%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return
+		}
+
 	}
 
 	lenTrailingNegativeSignChars := len(trailingNegativeSignChars)
@@ -99,6 +136,54 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	if lenTrailingNegativeSignChars == 0 {
 		trailingNegativeSignChars = make([]rune, 1)
 		lenTrailingNegativeSignChars = 1
+
+	} else {
+
+		_,
+			err2 = sMechPreon.testValidityOfRuneCharArray(
+			trailingNegativeSignChars,
+			nil)
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter 'trailingNegativeSignChars' is invalid.\n"+
+				"A validity test on this rune array produced the following error:\n"+
+				"%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return
+		}
+
+	}
+
+	lenDecSepChars := len(decimalSeparatorChars)
+
+	if lenDecSepChars == 0 {
+
+		decimalSeparatorChars = make([]rune, 1)
+		lenDecSepChars = 1
+
+	} else {
+
+		_,
+			err2 = sMechPreon.testValidityOfRuneCharArray(
+			decimalSeparatorChars,
+			nil)
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter 'decimalSeparatorChars' is invalid.\n"+
+				"A validity test on this rune array produced the following error:\n"+
+				"%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return
+		}
+
 	}
 
 	haveFirstNumericDigit := false
