@@ -1435,9 +1435,9 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 			"Actual Integer Runes.\n"+
 			"Expected Integer Runes = '%v'\n"+
 			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes),
-			ePrefix.String())
+			string(intRunes))
 
 		return
 
@@ -1688,6 +1688,783 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 			ePrefix)
 
 		return
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_02()",
+		"")
+	rawNumStrRunes := []rune("-1234.5678")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'1', '2', '3', '4'}
+	expectedFractionalRunes := []rune{'5', '6', '7', '8'}
+	expectedNumSign := -1
+	expectedDigitsFound := 8
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_03(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_03()",
+		"")
+	rawNumStrRunes := []rune("-1234")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'1', '2', '3', '4'}
+	var expectedFractionalRunes []rune
+	expectedNumSign := -1
+	expectedDigitsFound := 4
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_04(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_04()",
+		"")
+	rawNumStrRunes := []rune("1234")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'1', '2', '3', '4'}
+	var expectedFractionalRunes []rune
+	expectedNumSign := 1
+	expectedDigitsFound := 4
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_05(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_05()",
+		"")
+	rawNumStrRunes := []rune(".1234")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'0'}
+	expectedFractionalRunes := []rune{'1', '2', '3', '4'}
+	expectedNumSign := 1
+	expectedDigitsFound := 4
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_06(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_06()",
+		"")
+	rawNumStrRunes := []rune("-.1234")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'0'}
+	expectedFractionalRunes := []rune{'1', '2', '3', '4'}
+	expectedNumSign := -1
+	expectedDigitsFound := 4
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_07(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_07()",
+		"")
+	rawNumStrRunes := []rune("0.1234")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'0'}
+	expectedFractionalRunes := []rune{'1', '2', '3', '4'}
+	expectedNumSign := 1
+	expectedDigitsFound := 5
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_08(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_08()",
+		"")
+	rawNumStrRunes := []rune("-0.1234")
+	leadingNegativeSignChars := []rune{'-'}
+	var trailingNegativeSignChars []rune
+	decimalSeparatorChars := []rune{'.'}
+
+	expectedIntRunes := []rune{'0'}
+	expectedFractionalRunes := []rune{'1', '2', '3', '4'}
+	expectedNumSign := -1
+	expectedDigitsFound := 5
+
+	sMech := StrMech{}
+
+	intRunes,
+		fracRunes,
+		numberSign,
+		digitsFound,
+		err := sMech.ExtractNumberRunes(
+		rawNumStrRunes,
+		leadingNegativeSignChars,
+		trailingNegativeSignChars,
+		decimalSeparatorChars,
+		ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	sMechPreon := strMechPreon{}
+
+	areEqual := sMechPreon.equalRuneArrays(
+		expectedIntRunes,
+		intRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes()\n"+
+			"Expected Integer Runes DO NOT MATCH\n"+
+			"Actual Integer Runes.\n"+
+			"Expected Integer Runes = '%v'\n"+
+			"  Actual Integer Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedIntRunes),
+			string(intRunes))
+
+		return
+
+	}
+
+	areEqual = sMechPreon.equalRuneArrays(
+		expectedFractionalRunes,
+		fracRunes)
+
+	if !areEqual {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Fractional Runes\n"+
+			"Expected Fractional Runes DO NOT MATCH\n"+
+			"Actual Fractional Runes.\n"+
+			"Expected Fractional Runes = '%v'\n"+
+			"  Actual Fractional Runes = '%v'\n",
+			ePrefix.String(),
+			string(expectedFractionalRunes),
+			string(fracRunes))
+
+		return
+
+	}
+
+	if expectedNumSign != numberSign {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Number Sign\n"+
+			"Expected Number Sign DOES NOT MATCH\n"+
+			"Actual Number Sign.\n"+
+			"Expected Number Sign = '%v'\n"+
+			"  Actual Number Sign = '%v'\n",
+			ePrefix.String(),
+			expectedNumSign,
+			numberSign)
+
+		return
+
+	}
+
+	if expectedDigitsFound != digitsFound {
+
+		t.Errorf("%v\n"+
+			"ERROR: sMech.ExtractNumberRunes() - Digits Found\n"+
+			"Expected Digits Found DOES NOT MATCH\n"+
+			"Actual Digits Found.\n"+
+			"Expected Digits Found = '%v'\n"+
+			"  Actual Digits Found = '%v'\n",
+			expectedDigitsFound,
+			digitsFound,
+			ePrefix.String())
+
+		return
+
 	}
 
 	return
