@@ -672,3 +672,34 @@ func TestTextLineSpecLinesCollectionNanobot_copyOut_000100(t *testing.T) {
 	}
 
 }
+
+func TestTextLineSpecLinesCollectionElectron_deleteTextLineElement_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollectionElectron_deleteTextLineElement_000100()",
+		"")
+
+	txtLinesElectron :=
+		textLineSpecLinesCollectionElectron{}
+
+	err := txtLinesElectron.deleteTextLineElement(
+		nil,
+		3,
+		ePrefix.XCpy(
+			"textLinesCol=='nil'"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"copyOut()\n"+
+			"because input parameter 'textLineCol'"+
+			"is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
