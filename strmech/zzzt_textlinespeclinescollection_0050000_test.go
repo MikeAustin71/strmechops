@@ -473,6 +473,48 @@ func TestTextLineSpecLinesCollectionNanobot_addTextLine_000100(t *testing.T) {
 		return
 	}
 
+	var stdLine03 TextLineSpecStandardLine
+
+	stdLine03,
+		err = createTestTextLineSpecStandardLine01(
+		ePrefix.XCpy(
+			"stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var textLineCol02 TextLineSpecLinesCollection
+
+	_,
+		textLineCol02,
+		err = createTestTextLineSpecCollection03(
+		ePrefix.XCpy(
+			"textLineCol02"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	ePrefix.EmptyEPrefCollection()
+
+	err = txtLinesNanobot.addTextLine(
+		&textLineCol02,
+		&stdLine03,
+		ePrefix.XCpy(
+			"textLineCol02<-stdLine03"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	return
 }
 
 func TestTextLineSpecLinesCollectionNanobot_copyIn_000100(t *testing.T) {
@@ -600,4 +642,33 @@ func TestTextLineSpecLinesCollectionNanobot_copyIn_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestTextLineSpecLinesCollectionNanobot_copyOut_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestTextLineSpecLinesCollectionNanobot_copyOut_000100()",
+		"")
+
+	var txtLinesNanobot = textLineSpecLinesCollectionNanobot{}
+
+	_,
+		err := txtLinesNanobot.copyOut(
+		nil,
+		ePrefix.XCpy(
+			"textLineCol=='nil'"))
+
+	if err == nil {
+
+		t.Errorf("%v - ERROR\n"+
+			"Expected an error return from txtLinesNanobot."+
+			"copyOut()\n"+
+			"because input parameter 'textLineCol'"+
+			"is 'nil'.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 }
