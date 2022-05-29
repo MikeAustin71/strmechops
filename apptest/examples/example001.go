@@ -4131,6 +4131,8 @@ func (mt MainTest) ExampleIoCopy02() {
 	fmt.Println("New value of n: ", n)
 }
 
+/* Extract Number Runes Disabled
+
 func (mt MainTest) ExampleExtractNumRunes01() {
 	funcName := "ExampleExtractNumRunes01()"
 	rawNumStrRunes := []rune("1234.5678")
@@ -4342,7 +4344,9 @@ func (mt MainTest) ExampleExtractNumRunes03(
 
 	return nil
 }
+*/
 
+// Timer - Timer example!
 func (mt MainTest) Timer(
 	startTime, endTime time.Time) (totalNanoSecs int64, elapsedTime string) {
 

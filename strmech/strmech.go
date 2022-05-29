@@ -1235,6 +1235,7 @@ func (sMech *StrMech) ExtractDataField(
 // a number string along with characteristics describing that
 // number string are returned in a Type 'NumStrProfileDto'.
 //
+//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
@@ -1507,6 +1508,8 @@ func (sMech *StrMech) ExtractNumericDigits(
 //
 func (sMech *StrMech) ExtractNumberRunes(
 	rawNumStrRunes []rune,
+	startSearchIndex int,
+	characterSearchLength int,
 	leadingNegativeSignChars []rune,
 	trailingNegativeSignChars []rune,
 	decimalSeparatorChars []rune,
@@ -1515,6 +1518,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 	fractionalRunes []rune,
 	numberSign int,
 	digitsFound int,
+	nextTargetSearchIndex int,
 	err error) {
 
 	if sMech.stringDataMutex == nil {
@@ -1534,10 +1538,12 @@ func (sMech *StrMech) ExtractNumberRunes(
 		"")
 
 	if err != nil {
+
 		return intRunes,
 			fractionalRunes,
 			numberSign,
 			digitsFound,
+			nextTargetSearchIndex,
 			err
 	}
 
@@ -1545,8 +1551,11 @@ func (sMech *StrMech) ExtractNumberRunes(
 		fractionalRunes,
 		numberSign,
 		digitsFound,
+		nextTargetSearchIndex,
 		err = strMechMolecule{}.ptr().extractNumRunes(
 		rawNumStrRunes,
+		startSearchIndex,
+		characterSearchLength,
 		leadingNegativeSignChars,
 		trailingNegativeSignChars,
 		decimalSeparatorChars,
@@ -1556,6 +1565,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 		fractionalRunes,
 		numberSign,
 		digitsFound,
+		nextTargetSearchIndex,
 		err
 }
 

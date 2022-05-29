@@ -1387,6 +1387,9 @@ func TestStrMech_ExtractNumericDigits_21(t *testing.T) {
 	}
 }
 
+/*
+
+
 func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -2649,18 +2652,21 @@ func TestStrMech_ExtractTextLines_000100(t *testing.T) {
 
 	}
 
-	/*
 
-	   Start Time  : 2022-04-05 10:00:00.000000000 -0500 CDT
-	   End Time    : 2022-05-05 10:30:45.000009582 -0500 CDT
-	   Elapsed Time: 30 Days 0 Hours 30 Minutes 45 Seconds 0 Milliseconds
-	                 9 Microseconds 582 Nanoseconds
-	                 Total Elapsed Nanoseconds: 2,593,845,000,009,582
-	*/
+
+	   //Start Time  : 2022-04-05 10:00:00.000000000 -0500 CDT
+	   //End Time    : 2022-05-05 10:30:45.000009582 -0500 CDT
+	   //Elapsed Time: 30 Days 0 Hours 30 Minutes 45 Seconds 0 Milliseconds
+	   //              9 Microseconds 582 Nanoseconds
+	   //              Total Elapsed Nanoseconds: 2,593,845,000,009,582
+
 
 	return
 }
 
+*/
+
+// TestStrMech_ExtractTextLines_000200
 func TestStrMech_ExtractTextLines_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

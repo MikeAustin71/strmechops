@@ -33,14 +33,17 @@ func (sMechMolecule strMechMolecule) ptr() *strMechMolecule {
 // numeric digits as text characters.
 func (sMechMolecule *strMechMolecule) extractNumRunes(
 	rawNumStrRunes []rune,
-	leadingNegativeSignChars []rune,
-	trailingNegativeSignChars []rune,
+	rawNumStrRunesName string,
+	startSearchIndex int,
+	characterSearchLength int,
+	negativeNumberSignChars []NegativeNumberSignSpec,
 	decimalSeparatorChars []rune,
 	ePrefDto *ePref.ErrPrefixDto) (
 	intRunes []rune,
 	fractionalRunes []rune,
 	numberSign int,
 	digitsFound int,
+	nextTargetSearchIndex int,
 	err error) {
 
 	if sMechMolecule.lock == nil {
@@ -64,7 +67,12 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			fractionalRunes,
 			numberSign,
 			digitsFound,
+			nextTargetSearchIndex,
 			err
+	}
+
+	if len(rawNumStrRunesName) == 0 {
+		rawNumStrRunesName = "rawNumStrRunes"
 	}
 
 	lenRawNumRunes := len(rawNumStrRunes)
@@ -80,6 +88,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			fractionalRunes,
 			numberSign,
 			digitsFound,
+			nextTargetSearchIndex,
 			err
 	}
 
@@ -94,68 +103,129 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'rawNumStrRunes' is invalid.\n"+
+			"Error: Input parameter '%v' is invalid.\n"+
 			"A validity test on this rune array produced the following error:\n"+
 			"%v\n",
 			ePrefix.String(),
+			rawNumStrRunesName,
 			err2.Error())
 
-		return
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
 	}
 
-	lenLeadingNegativeSignChars := len(leadingNegativeSignChars)
+	if startSearchIndex == -1 {
+		startSearchIndex = 0
+	}
 
-	if lenLeadingNegativeSignChars == 0 {
+	if startSearchIndex < 0 {
 
-		leadingNegativeSignChars = make([]rune, 1)
-		lenLeadingNegativeSignChars = 1
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startSearchIndex' is invalid.\n"+
+			"'startSearchIndex' has a value less than zero!\n"+
+			"startSearchIndex = '%v'\n",
+			ePrefix.String(),
+			startSearchIndex)
 
-	} else {
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
+	}
 
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			leadingNegativeSignChars,
+	if startSearchIndex >= lenRawNumRunes {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startSearchIndex' is invalid.\n"+
+			"'startSearchIndex' has a value greater than the last index\n"+
+			"of %v!\n"+
+			"startSearchIndex = '%v'\n"+
+			"%v last index = %v\n",
+			ePrefix.String(),
+			rawNumStrRunesName,
+			startSearchIndex,
+			rawNumStrRunesName,
+			lenRawNumRunes-1)
+
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
+	}
+
+	if characterSearchLength == -1 {
+		characterSearchLength = lenRawNumRunes
+	}
+
+	if characterSearchLength < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'characterSearchLength' is invalid.\n"+
+			"'characterSearchLength' has a value less than one (1)!\n"+
+			"characterSearchLength = '%v'\n",
+			ePrefix.String(),
+			characterSearchLength)
+
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
+	}
+
+	if characterSearchLength > lenRawNumRunes {
+		characterSearchLength = lenRawNumRunes
+	}
+
+	lenNegNumSignChars := len(negativeNumberSignChars)
+
+	if lenNegNumSignChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'negativeNumberSignChars' is invalid.\n"+
+			"'negativeNumberSignChars' has an array length of zero!\n",
+			ePrefix.String())
+
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
+	}
+
+	for i := 0; i < lenNegNumSignChars; i++ {
+
+		err2 = negativeNumberSignChars[i].IsValidInstanceError(
 			nil)
 
 		if err2 != nil {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'leadingNegativeSignChars' is invalid.\n"+
-				"A validity test on this rune array produced the following error:\n"+
+				"Error: Input parameter negativeNumberSignChars[%v] is invalid.\n"+
+				"The following validation error was returned:\n"+
 				"%v\n",
 				ePrefix.String(),
+				i,
 				err2.Error())
 
-			return
+			return intRunes,
+				fractionalRunes,
+				numberSign,
+				digitsFound,
+				nextTargetSearchIndex,
+				err
+
 		}
-
-	}
-
-	lenTrailingNegativeSignChars := len(trailingNegativeSignChars)
-
-	if lenTrailingNegativeSignChars == 0 {
-		trailingNegativeSignChars = make([]rune, 1)
-		lenTrailingNegativeSignChars = 1
-
-	} else {
-
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			trailingNegativeSignChars,
-			nil)
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'trailingNegativeSignChars' is invalid.\n"+
-				"A validity test on this rune array produced the following error:\n"+
-				"%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return
-		}
-
 	}
 
 	lenDecSepChars := len(decimalSeparatorChars)
@@ -181,8 +251,38 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				ePrefix.String(),
 				err2.Error())
 
-			return
+			return intRunes,
+				fractionalRunes,
+				numberSign,
+				digitsFound,
+				nextTargetSearchIndex,
+				err
 		}
+
+	}
+
+	sMechQuark := strMechQuark{}
+
+	var relativeStartIndex int
+
+	rawNumStrRunes,
+		relativeStartIndex,
+		lenRawNumRunes,
+		err = sMechQuark.createCharacterSearchRunes(
+		rawNumStrRunes,
+		rawNumStrRunesName,
+		startSearchIndex,
+		characterSearchLength,
+		ePrefix)
+
+	if err != nil {
+
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
 
 	}
 
@@ -369,6 +469,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		fractionalRunes,
 		numberSign,
 		digitsFound,
+		nextTargetSearchIndex,
 		err
 }
 
