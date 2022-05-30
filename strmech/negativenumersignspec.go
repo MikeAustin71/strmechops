@@ -24,9 +24,9 @@ type NegativeNumberSignSpec struct {
 	trailingNegNumSignSymbols []rune
 	// Processing flags
 	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit
-	//   the number string has been found
+	//                                       the number string has been found
 	foundNegNumSignSymbols bool // Indicates all negative number sign symbols
-	//   in this specification have been found
+	//                               in this specification have been found
 	foundLeadingNegNumSign       bool
 	foundLeadingNegNumSignIndex  int
 	foundTrailingNegNumSign      bool
@@ -361,6 +361,12 @@ func (negNumSignSpec *NegativeNumberSignSpec) IsValidInstanceError(
 // NegativeNumberSignSpec are configured using the input parameter
 // 'leadingNegNumSignSymbols'.
 //
+// This method is identical in function to the method:
+//  NegativeNumberSignSpec.NewLeadingNegNumSignStr()
+//
+// The only difference between the two methods is that this method
+// receives a rune array as an input parameter.
+//
 //
 // -----------------------------------------------------------------
 //
@@ -483,6 +489,141 @@ func (negNumSignSpec NegativeNumberSignSpec) NewLeadingNegNumSignRunes(
 	return newLeadingNegNumSignSpec, err
 }
 
+// NewLeadingNegNumSignStr - Returns a fully populated
+// specification for a Leading Negative Number Sign.
+//
+// All internal member variables in the returned instance of
+// NegativeNumberSignSpec are configured using the input parameter
+// 'leadingNegNumSignSymbols'.
+//
+// This method is identical in function to the method:
+//  NegativeNumberSignSpec.NewLeadingNegNumSignRunes()
+//
+// The only difference between the two methods is that this method
+// receives a string as an input parameter.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leadingNegNumSignSymbols   string
+//     - A strung identifying the character or characters which
+//       comprise the Leading Negative Number Symbol used in
+//       configuring the NegativeNumberSignSpec instance returned
+//       to the calling function.
+//
+//       If this string is empty (has a zero length) an error will
+//       be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  NegativeNumberSignSpec     NegativeNumberSignSpec
+//     - If the method completes successfully, a fully populated
+//       instance of NegativeNumberSignSpec will be configured as a
+//       Leading Negative Number Sign Specification and returned to
+//       the calling function.
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSignSpec NegativeNumberSignSpec) NewLeadingNegNumSignStr(
+	leadingNegNumSignSymbols string,
+	errorPrefix interface{}) (
+	newLeadingNegNumSignSpec NegativeNumberSignSpec,
+	err error) {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSignSpec."+
+			"NewLeadingNegNumSignStr()",
+		"")
+
+	if err != nil {
+		return newLeadingNegNumSignSpec, err
+	}
+
+	negNumSignNanobot := negNumSignSpecNanobot{}
+
+	err = negNumSignNanobot.setLeadingNegNumSignSpec(
+		&newLeadingNegNumSignSpec,
+		[]rune(leadingNegNumSignSymbols),
+		ePrefix.XCpy(
+			"newLeadingNegNumSignSpec<-leadingNegNumSignSymbols"))
+
+	return newLeadingNegNumSignSpec, err
+}
+
 // NewLeadingAndTrailingNegNumSignRunes - Returns a fully populated
 // specification for a Leading and Trailing Negative Number Sign.
 //
@@ -496,6 +637,12 @@ func (negNumSignSpec NegativeNumberSignSpec) NewLeadingNegNumSignRunes(
 // Sign Specification. As an example, in the US and Canada
 // parentheses "()" are used to indicate negative numeric
 // values. Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
+//
+// This method is identical in function to method:
+//    NegativeNumberSignSpec.NewLeadingAndTrailingNegNumSignStr()
+//
+// The only difference between to the two methods is that this
+// method receives rune arrays as input parameters.
 //
 //
 // -----------------------------------------------------------------
@@ -632,12 +779,171 @@ func (negNumSignSpec NegativeNumberSignSpec) NewLeadingAndTrailingNegNumSignRune
 	return leadingAndTrailingNegNumSignSpec, err
 }
 
+// NewLeadingAndTrailingNegNumSignStr - Returns a fully populated
+// specification for a Leading and Trailing Negative Number Sign.
+//
+// All internal member variables in the returned instance of
+// NegativeNumberSignSpec are configured using the input parameters
+// 'leadingNegNumSignSymbols' and 'trailingNegNumSignSymbols '.
+//
+// In certain nations and cultures, a pair of symbols is used to
+// designate a numeric value as negative. These pairs of symbols
+// are described here as a Leading and Trailing Negative Number
+// Sign Specification. As an example, in the US and Canada
+// parentheses "()" are used to indicate negative numeric
+// values. Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
+//
+// This method is identical in function to method:
+//    NegativeNumberSignSpec.NewLeadingAndTrailingNegNumSignRunes()
+//
+// The only difference between to the two methods is that this
+// method receives strings as input parameters.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leadingNegNumSignSymbols   string
+//     - A string identifying the character or characters which
+//       comprise the Leading Negative Number Symbol used in
+//       configuring the NegativeNumberSignSpec instance returned
+//       to the calling function.
+//
+//       If this string is empty (has a zero length), an error will
+//       be returned.
+//
+//
+//  trailingNegNumSignSymbols  string
+//     - A string identifying the character or characters which
+//       comprise the Trailing Negative Number Symbol used in
+//       configuring the NegativeNumberSignSpec instance returned
+//       to the calling function.
+//
+//       If this string is empty (has a zero length), an error will
+//       be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  NegativeNumberSignSpec     NegativeNumberSignSpec
+//     - If the method completes successfully, a fully populated
+//       instance of NegativeNumberSignSpec will be configured as a
+//       Leading and Trailing Negative Number Sign Specification
+//       and returned to the calling function.
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSignSpec NegativeNumberSignSpec) NewLeadingAndTrailingNegNumSignStr(
+	leadingNegNumSignSymbols string,
+	trailingNegNumSignSymbols string,
+	errorPrefix interface{}) (
+	leadingAndTrailingNegNumSignSpec NegativeNumberSignSpec,
+	err error) {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSignSpec."+
+			"NewLeadingAndTrailingNegNumSignRunes()",
+		"")
+
+	if err != nil {
+		return leadingAndTrailingNegNumSignSpec, err
+	}
+
+	err = negNumSignSpecNanobot{}.ptr().
+		setLeadingAndTrailingNegNumSignSpec(
+			&leadingAndTrailingNegNumSignSpec,
+			[]rune(leadingNegNumSignSymbols),
+			[]rune(trailingNegNumSignSymbols),
+			ePrefix.XCpy(
+				"leadingAndTrailingNegNumSignSpec"))
+
+	return leadingAndTrailingNegNumSignSpec, err
+}
+
 // NewTrailingNegNumSignRunes - Returns a fully populated specification
 // for a Trailing Negative Number Sign.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSignSpec are configured using the input parameter
-// 'leadingNegNumSignSymbols'.
+// 'trailingNegNumSignSymbols'.
+//
+// This method is identical in function to method:
+//    NegativeNumberSignSpec.NewTrailingNegNumSignStr()
+//
+// The only difference between to the two methods is that this
+// method receives a rune array as an input parameter.
 //
 //
 // -----------------------------------------------------------------
@@ -755,6 +1061,140 @@ func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignRunes(
 		setTrailingNegNumSignSpec(
 			&trailingNegNumSignSpec,
 			trailingNegNumSignSymbols,
+			ePrefix.XCpy(
+				"trailingNegNumSignSpec<-trailingNegNumSignSymbols"))
+
+	return trailingNegNumSignSpec, err
+}
+
+// NewTrailingNegNumSignStr - Returns a fully populated specification
+// for a Trailing Negative Number Sign.
+//
+// All internal member variables in the returned instance of
+// NegativeNumberSignSpec are configured using the input parameter
+// 'trailingNegNumSignSymbols'.
+//
+// This method is identical in function to method:
+//    NegativeNumberSignSpec.NewTrailingNegNumSignStr()
+//
+// The only difference between to the two methods is that this
+// method receives a string as an input parameter.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  trailingNegNumSignSymbols  string
+//     - A string identifying the character or characters which
+//       comprise the Trailing Negative Number Symbol used in
+//       configuring the NegativeNumberSignSpec instance returned
+//       to the calling function.
+//
+//       If this string is empty (has a zero length), an error will
+//       be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  NegativeNumberSignSpec     NegativeNumberSignSpec
+//     - If the method completes successfully, a fully populated
+//       instance of NegativeNumberSignSpec will be configured as a
+//       Trailing Negative Number Sign Specification and returned
+//       to the calling function.
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignStr(
+	trailingNegNumSignSymbols string,
+	errorPrefix interface{}) (
+	trailingNegNumSignSpec NegativeNumberSignSpec,
+	err error) {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSignSpec."+
+			"NewTrailingNegNumSignStr()",
+		"")
+
+	if err != nil {
+		return trailingNegNumSignSpec, err
+	}
+
+	err = negNumSignSpecNanobot{}.ptr().
+		setTrailingNegNumSignSpec(
+			&trailingNegNumSignSpec,
+			[]rune(trailingNegNumSignSymbols),
 			ePrefix.XCpy(
 				"trailingNegNumSignSpec<-trailingNegNumSignSymbols"))
 
