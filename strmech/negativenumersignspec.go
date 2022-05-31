@@ -362,7 +362,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) IsValidInstanceError(
 // 'leadingNegNumSignSymbols'.
 //
 // Leading Negative Number symbols are used by many countries
-// including the US and Canda. Examples: -123.45  -6,432
+// including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegativeNumberSignSpec.NewLeadingNegNumSignStr()
@@ -501,7 +501,7 @@ func (negNumSignSpec NegativeNumberSignSpec) NewLeadingNegNumSignRunes(
 // 'leadingNegNumSignSymbols'.
 //
 // Leading Negative Number symbols are used by many countries
-// including the US and Canda. Examples: -123.45  -6,432
+// including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegativeNumberSignSpec.NewLeadingNegNumSignRunes()
@@ -1220,7 +1220,7 @@ func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignStr(
 // 'leadingNegNumSignSymbols'.
 //
 // Leading Negative Number symbols are used by many countries
-// including the US and Canda. Examples: -123.45  -6,432
+// including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegativeNumberSignSpec.SetLeadingNegNumSignStr()
@@ -1360,7 +1360,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SetLeadingNegNumSignRunes(
 // 'leadingNegNumSignSymbols'.
 //
 // Leading Negative Number symbols are used by many countries
-// including the US and Canda. Examples: -123.45  -6,432
+// including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegativeNumberSignSpec.SetLeadingNegNumSignRunes()
