@@ -20,10 +20,19 @@ import (
 // Number Sign symbols found in number strings.
 //
 type NegativeNumberSignSpec struct {
-	negNumSignPosition        NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
+	negNumSignPosition NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
+	//                                                   Negative Number Signs are classified
+	//                                                   by their location relative to the
+	//                                                   numeric digits in a number string.
 	leadingNegNumSignSymbols  []rune
 	trailingNegNumSignSymbols []rune
+
 	// Processing flags
+
+	negNumSignTargetSearchChars []rune // The target search text characters to be
+	//                                       searched for a negative number sign
+	//                                       symbols
+
 	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit
 	//                                       the number string has been found
 	foundNegNumSignSymbols bool // Indicates all negative number sign symbols
@@ -1284,7 +1293,6 @@ func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignStr(
 //
 func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 	foundFirstNumericDigitInNumStr bool,
-	searchTargetChars *[]rune,
 	startingSearchIndex int,
 	errorPrefix interface{}) (
 	foundNegNumSignSymbols bool,
@@ -1318,28 +1326,6 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 			err
 	}
 
-	if searchTargetChars == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'searchTargetChars' is a nil pointer!\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if *searchTargetChars == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'searchTargetChars' is empty and\n"+
-			"has a length of zero!\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
 	var err2 error
 
 	err2 = negNumSignSpec.IsValidInstanceError(
@@ -1348,7 +1334,9 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
 			"Error: The current instance of NegativeNumberSignSpec\n"+
-			"is invalid. Validation checks returned the following error:\n"+
+			"is invalid. The Number String parsing operation has been aborted.\n"+
+			"Validation checks returned the following error for this intance of\n"+
+			"NegativeNumberSignSpec:\n"+
 			"%v\n",
 			ePrefix.String(),
 			err2.Error())
@@ -1368,7 +1356,6 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 			negNumSignAtom.beforeNegSignSymSearch(
 				negNumSignSpec,
 				foundFirstNumericDigitInNumStr,
-				searchTargetChars,
 				startingSearchIndex,
 				ePrefix)
 
@@ -1381,6 +1368,161 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 	return foundNegNumSignSymbols,
 		lastIndex,
 		err
+}
+
+// SetForNumberStringSearch - Call this method once to setup
+// internal member variables in preparation for a number string
+// parsing operation.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Call this method once at the BEGINNING of a number string
+// processing operation.
+//
+// DO NOT call this method again until that number string
+// parsing operation is completed.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetSearchChars          []rune
+//     - An array of runes containing the text characters to be
+//       searched as part of a number string parsing operation.
+//       This rune array is set once for each instance of
+//       NegativeNumberSignSpec.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSignSpec *NegativeNumberSignSpec) SetForNumberStringSearch(
+	targetSearchChars []rune,
+	errorPrefix interface{}) (err error) {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSignSpec."+
+			"SearchForNegNumSignSymbol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	negNumSignSpecElectron{}.ptr().emptyProcessingFlags(
+		negNumSignSpec)
+
+	lenTargetSearchChars := len(targetSearchChars)
+
+	if lenTargetSearchChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetSearchChars' is empty and invalid!\n",
+			ePrefix.String())
+
+	}
+
+	negNumSignSpec.negNumSignTargetSearchChars =
+		make([]rune, lenTargetSearchChars)
+
+	itemsCopied := copy(
+		negNumSignSpec.negNumSignTargetSearchChars,
+		targetSearchChars)
+
+	if itemsCopied != lenTargetSearchChars {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'targetSearchChars' copy operation failed!\n"+
+			"Expected %v characters would be copied from\n"+
+			"'targetSearchChars' to \n"+
+			"'negNumSignSpec.negNumSignTargetSearchChars'\n"+
+			"However, only %v characters out of a total of\n"+
+			"%v characters were copied.\n",
+			ePrefix.String(),
+			lenTargetSearchChars,
+			itemsCopied,
+			lenTargetSearchChars)
+
+		negNumSignSpec.negNumSignTargetSearchChars = nil
+
+		return err
+	}
+
+	return err
 }
 
 // SetFoundNegNumSignSymbols - Sets the processing flag describing

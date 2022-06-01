@@ -56,7 +56,6 @@ func (negNumSignAtom negNumSignSpecAtom) ptr() *negNumSignSpecAtom {
 func (negNumSignAtom *negNumSignSpecAtom) beforeNegSignSymSearch(
 	negNumSignSpec *NegativeNumberSignSpec,
 	foundFirstNumericDigitInNumStr bool,
-	searchTargetChars *[]rune,
 	startingSearchIndex int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	foundNegNumSignSymbols bool,
@@ -75,6 +74,8 @@ func (negNumSignAtom *negNumSignSpecAtom) beforeNegSignSymSearch(
 
 	foundNegNumSignSymbols = false
 
+	// This assumes startingSearchIndex has
+	// already been validated
 	lastIndex = startingSearchIndex
 
 	ePrefix,
@@ -101,9 +102,16 @@ func (negNumSignAtom *negNumSignSpecAtom) beforeNegSignSymSearch(
 			err
 	}
 
-	if searchTargetChars == nil {
+	lenNegNumSignTargetSearchChars := len(negNumSignSpec.negNumSignTargetSearchChars)
+
+	if lenNegNumSignTargetSearchChars == 0 {
+
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'searchTargetChars' is a nil pointer!\n",
+			"Error: This instance of NegativeNumberSignSpec has NOT"+
+			"been properly configured for a number string parsing operation."+
+			"negNumSignSpec.negNumSignTargetSearchChars has a length of zero!"+
+			"There are no target search characters in which to search for "+
+			"Negative Number Sign symbols.\n",
 			ePrefix.String())
 
 		return foundNegNumSignSymbols,
@@ -111,16 +119,33 @@ func (negNumSignAtom *negNumSignSpecAtom) beforeNegSignSymSearch(
 			err
 	}
 
-	if *searchTargetChars == nil {
+	if startingSearchIndex < 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'searchTargetChars' is empty and\n"+
-			"has a length of zero!\n",
-			ePrefix.String())
+			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
+			"startingSearchIndex has a length less than zero.\n"+
+			"startingSearchIndex length = '%v'\n",
+			ePrefix.String(),
+			startingSearchIndex)
 
 		return foundNegNumSignSymbols,
 			lastIndex,
 			err
+	}
+
+	if startingSearchIndex >= lenNegNumSignTargetSearchChars {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
+			"startingSearchIndex has a length less than zero.\n"+
+			"startingSearchIndex length = '%v'\n",
+			ePrefix.String(),
+			startingSearchIndex)
+
+		return foundNegNumSignSymbols,
+			lastIndex,
+			err
+
 	}
 
 	if negNumSignSpec.foundFirstNumericDigitInNumStr {
@@ -162,56 +187,12 @@ func (negNumSignAtom *negNumSignSpecAtom) beforeNegSignSymSearch(
 	negNumSignSpec.foundFirstNumericDigitInNumStr =
 		foundFirstNumericDigitInNumStr
 
-	lenSrcRuneAry := len(*searchTargetChars)
-
-	if startingSearchIndex >= lenSrcRuneAry {
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	if startingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"'startingSearchIndex' has a value less than zero!\n"+
-			"startingSearchIndex = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
 	leadNegNumSymIdx := 0
 
-	concreteSearchTarget := make([]rune, lenSrcRuneAry)
-
-	itemsCopied := copy(concreteSearchTarget, *searchTargetChars)
-
-	if itemsCopied <= 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: 'searchTargetChars' copy operation failed!\n"+
-			"copy(concreteSearchTarget, *searchTargetChars)\n"+
-			"itemsCopied = '%v'\n",
-			ePrefix.String(),
-			itemsCopied)
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	for i := startingSearchIndex; i < lenSrcRuneAry; i++ {
+	for i := startingSearchIndex; i < lenNegNumSignTargetSearchChars; i++ {
 
 		if negNumSignSpec.leadingNegNumSignSymbols[leadNegNumSymIdx] !=
-			concreteSearchTarget[i] {
+			negNumSignSpec.negNumSignTargetSearchChars[i] {
 
 			return foundNegNumSignSymbols,
 				lastIndex,
