@@ -1358,6 +1358,8 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 			err
 	}
 
+	// Set internal processing flag
+	// foundFirstNumericDigitInNumStr
 	negNumSignSpec.foundFirstNumericDigitInNumStr =
 		foundFirstNumericDigitInNumStr
 
