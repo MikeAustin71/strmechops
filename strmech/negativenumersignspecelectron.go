@@ -1,6 +1,8 @@
 package strmech
 
-import "sync"
+import (
+	"sync"
+)
 
 type negNumSignSpecElectron struct {
 	lock *sync.Mutex

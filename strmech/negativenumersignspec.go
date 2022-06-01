@@ -1288,7 +1288,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 	startingSearchIndex int,
 	errorPrefix interface{}) (
 	foundNegNumSignSymbols bool,
-	hitEndOfSearchArray bool,
+	lastIndex int,
 	err error) {
 
 	if negNumSignSpec.lock == nil {
@@ -1302,7 +1302,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 	var ePrefix *ePref.ErrPrefixDto
 
 	foundNegNumSignSymbols = false
-	hitEndOfSearchArray = false
+	lastIndex = startingSearchIndex
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1314,7 +1314,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 	if err != nil {
 
 		return foundNegNumSignSymbols,
-			hitEndOfSearchArray,
+			lastIndex,
 			err
 	}
 
@@ -1324,7 +1324,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 			ePrefix.String())
 
 		return foundNegNumSignSymbols,
-			hitEndOfSearchArray,
+			lastIndex,
 			err
 	}
 
@@ -1336,7 +1336,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 			ePrefix.String())
 
 		return foundNegNumSignSymbols,
-			hitEndOfSearchArray,
+			lastIndex,
 			err
 	}
 
@@ -1354,45 +1354,32 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 			err2.Error())
 
 		return foundNegNumSignSymbols,
-			hitEndOfSearchArray,
+			lastIndex,
 			err
 	}
 
-	// Set internal processing flag
-	// foundFirstNumericDigitInNumStr
-	negNumSignSpec.foundFirstNumericDigitInNumStr =
-		foundFirstNumericDigitInNumStr
+	negNumSignAtom := negNumSignSpecAtom{}
 
-	lenSrcRuneAry := len(*searchTargetChars)
+	if negNumSignSpec.negNumSignPosition == NSignSymPos.Before() {
 
-	if startingSearchIndex >= lenSrcRuneAry {
-		hitEndOfSearchArray = true
+		foundNegNumSignSymbols,
+			lastIndex,
+			err =
+			negNumSignAtom.beforeNegSignSymSearch(
+				negNumSignSpec,
+				foundFirstNumericDigitInNumStr,
+				searchTargetChars,
+				startingSearchIndex,
+				ePrefix)
 
-		return foundNegNumSignSymbols,
-			hitEndOfSearchArray,
-			err
+	} else if negNumSignSpec.negNumSignPosition == NSignSymPos.After() {
 
-	}
-
-	if startingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"'startingSearchIndex' has a value less than zero!\n"+
-			"startingSearchIndex = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundNegNumSignSymbols,
-			hitEndOfSearchArray,
-			err
+	} else {
+		// Must be: NSignSymPos.BeforeAndAfter()
 
 	}
-
-	// TODO - Finish processing logic
-
 	return foundNegNumSignSymbols,
-		hitEndOfSearchArray,
+		lastIndex,
 		err
 }
 
