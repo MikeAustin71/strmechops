@@ -7,8 +7,9 @@ import (
 )
 
 // NegativeNumberSignSpec - Negative Number Sign Specification.
-// This type is used to configure parameters used in identifying
-// negative numeric value when parsing a string of numeric digits.
+// This type is used to configure search parameters for identifying
+// negative numeric values within text strings when extracting or
+// parsing numeric digits.
 //
 // Parsing functions used in converting strings of numeric
 // characters into numeric values assume that those values are
@@ -16,7 +17,7 @@ import (
 // present in the string of numeric digits.
 //
 // The NegativeNumberSignSpec type is used to identify Negative
-// Number Sign symbols found in the parsing of number strings.
+// Number Sign symbols found in number strings.
 //
 type NegativeNumberSignSpec struct {
 	negNumSignPosition        NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
@@ -76,12 +77,40 @@ func (negNumSignSpec *NegativeNumberSignSpec) EmptyProcessingFlags() {
 
 	negNumSignSpec.lock.Lock()
 
+	defer negNumSignSpec.lock.Unlock()
+
 	negNumSignSpecElectron{}.ptr().emptyProcessingFlags(
 		negNumSignSpec)
 
-	negNumSignSpec.lock.Unlock()
+}
 
-	negNumSignSpec.lock = nil
+// GetFoundFirstNumericDigit - This flag is set during a number
+// string parsing operation. If the first numeric digit in a
+// numeric value has been identified in the string parsing
+// operation, the internal member variable
+// 'foundFirstNumericDigitInNumStr' is set to the boolean value of
+// 'true'. This member variable is typically set by the number
+// string parsing routine.
+//
+// If the first numeric digit has not yet been located in the
+// parsing operation, 'foundFirstNumericDigitInNumStr' is set to
+// 'false'.
+//
+// This method returns the status flag
+// ('foundFirstNumericDigitInNumStr') indicating whether the first
+// numeric digit has been located in the number string parsing
+// operation.
+func (negNumSignSpec *NegativeNumberSignSpec) GetFoundFirstNumericDigit() bool {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	return negNumSignSpec.foundFirstNumericDigitInNumStr
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the data
@@ -1209,6 +1238,34 @@ func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignStr(
 				"trailingNegNumSignSpec<-trailingNegNumSignSymbols"))
 
 	return trailingNegNumSignSpec, err
+}
+
+// SetFoundFirstNumericDigit - Sets the internal member variable,
+// 'foundFirstNumericDigitInNumStr'.
+//
+// This flag is typically set during a number string parsing
+// operation. If the first numeric digit in a numeric value has
+// been identified in the string parsing operation, this internal
+// member variable is set to the boolean value of 'true'. Again,
+// this member variable is typically set by the number string
+// parsing routine.
+//
+// If the first numeric digit in a number string has not yet been
+// identified, this flag is set to 'false'.
+//
+func (negNumSignSpec *NegativeNumberSignSpec) SetFoundFirstNumericDigit(
+	foundFirstNumericDigitInNumStr bool) {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	negNumSignSpec.foundFirstNumericDigitInNumStr =
+		foundFirstNumericDigitInNumStr
 }
 
 // SetLeadingNegNumSignRunes - Reconfigures the current instance of
