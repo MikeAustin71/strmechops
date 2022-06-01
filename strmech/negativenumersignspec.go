@@ -85,12 +85,13 @@ func (negNumSignSpec *NegativeNumberSignSpec) EmptyProcessingFlags() {
 }
 
 // GetFoundFirstNumericDigit - This flag is set during a number
-// string parsing operation. If the first numeric digit in a
-// numeric value has been identified in the string parsing
-// operation, the internal member variable
-// 'foundFirstNumericDigitInNumStr' is set to the boolean value of
-// 'true'. This member variable is typically set by the number
-// string parsing routine.
+// string parsing operation.
+//
+// If the first numeric digit in a numeric value has been
+// identified in the string parsing operation, the internal member
+// variable 'foundFirstNumericDigitInNumStr' is set to the boolean
+// value of 'true'. This member variable is typically set by the
+// number string parsing routine.
 //
 // If the first numeric digit has not yet been located in the
 // parsing operation, 'foundFirstNumericDigitInNumStr' is set to
@@ -100,6 +101,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) EmptyProcessingFlags() {
 // ('foundFirstNumericDigitInNumStr') indicating whether the first
 // numeric digit has been located in the number string parsing
 // operation.
+//
 func (negNumSignSpec *NegativeNumberSignSpec) GetFoundFirstNumericDigit() bool {
 
 	if negNumSignSpec.lock == nil {
@@ -111,6 +113,40 @@ func (negNumSignSpec *NegativeNumberSignSpec) GetFoundFirstNumericDigit() bool {
 	defer negNumSignSpec.lock.Unlock()
 
 	return negNumSignSpec.foundFirstNumericDigitInNumStr
+}
+
+// GetFoundNegNumSignSymbols - This processing flag is set during a
+// number string parsing operation.
+//
+// If the all the symbols comprising the Negative Number Sign
+// defined by the current instance of NegativeNumberSignSpec have
+// been located within a number string, the internal member
+// variable, 'foundNegNumSignSymbols' is set to true.
+//
+// Otherwise, 'foundNegNumSignSymbols' is set to false signaling
+// that a negative number sign matching that defined by the current
+// NegativeNumberSignSpec instance has not yet been identified in
+// the target number string.
+//
+// This internal member variable is typically set by the number
+// string parsing routine.
+//
+// This method returns the status flag ('foundNegNumSignSymbols')
+// indicating whether the Negative Number Sign Symbols defined by
+// the current NegativeNumberSignSpec instance have been located by
+// the number string parsing routine.
+//
+func (negNumSignSpec *NegativeNumberSignSpec) GetFoundNegNumSignSymbols() bool {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	return negNumSignSpec.foundNegNumSignSymbols
 }
 
 // IsValidInstanceError - Performs a diagnostic review of the data
@@ -1238,6 +1274,48 @@ func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignStr(
 				"trailingNegNumSignSpec<-trailingNegNumSignSymbols"))
 
 	return trailingNegNumSignSpec, err
+}
+
+func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol() {
+
+}
+
+// SetFoundNegNumSignSymbols - Sets the processing flag describing
+// the results of a number string parsing operation.
+//
+// If the all the symbols comprising the Negative Number Sign
+// defined by the current instance of NegativeNumberSignSpec have
+// been located within a number string, the internal member
+// variable, 'foundNegNumSignSymbols' is set to true.
+//
+// Otherwise, 'foundNegNumSignSymbols' is set to false signaling
+// that a negative number sign matching that defined by the
+// current NegativeNumberSignSpec instance has not yet been
+// identified in the target number string.
+//
+// This internal member variable is typically set by the number
+// string parsing routine when calling method:
+//    NegativeNumberSignSpec.SearchForNegNumSignSymbol()
+//
+// This method sets the processing status flag
+// ('foundNegNumSignSymbols') indicating whether the Negative
+// Number Sign Symbols defined by the current
+// NegativeNumberSignSpec instance have been located by the number
+// string parsing routine.
+//
+func (negNumSignSpec *NegativeNumberSignSpec) SetFoundNegNumSignSymbols(
+	foundNegNumSignSymbols bool) {
+
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	negNumSignSpec.foundNegNumSignSymbols =
+		foundNegNumSignSymbols
 }
 
 // SetFoundFirstNumericDigit - Sets the internal member variable,
