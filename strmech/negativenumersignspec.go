@@ -1276,8 +1276,122 @@ func (negNumSignSpec NegativeNumberSignSpec) NewTrailingNegNumSignStr(
 	return trailingNegNumSignSpec, err
 }
 
-func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol() {
+// SearchForNegNumSignSymbol - This method is typically called by
+// a number string parsing routine attempting to determine if the
+// characters in a search string match the Negative Number Sign
+// Symbol defined by this current instance of NegativeNumberSignSpec.
+//
+//
+func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
+	foundFirstNumericDigitInNumStr bool,
+	searchTargetChars *[]rune,
+	startingSearchIndex int,
+	errorPrefix interface{}) (
+	foundNegNumSignSymbols bool,
+	hitEndOfSearchArray bool,
+	err error) {
 
+	if negNumSignSpec.lock == nil {
+		negNumSignSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSignSpec.lock.Lock()
+
+	defer negNumSignSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	foundNegNumSignSymbols = false
+	hitEndOfSearchArray = false
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSignSpec."+
+			"SearchForNegNumSignSymbol()",
+		"")
+
+	if err != nil {
+
+		return foundNegNumSignSymbols,
+			hitEndOfSearchArray,
+			err
+	}
+
+	if searchTargetChars == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'searchTargetChars' is a nil pointer!\n",
+			ePrefix.String())
+
+		return foundNegNumSignSymbols,
+			hitEndOfSearchArray,
+			err
+	}
+
+	if *searchTargetChars == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'searchTargetChars' is empty and\n"+
+			"has a length of zero!\n",
+			ePrefix.String())
+
+		return foundNegNumSignSymbols,
+			hitEndOfSearchArray,
+			err
+	}
+
+	var err2 error
+
+	err2 = negNumSignSpec.IsValidInstanceError(
+		nil)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: The current instance of NegativeNumberSignSpec\n"+
+			"is invalid. Validation checks returned the following error:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return foundNegNumSignSymbols,
+			hitEndOfSearchArray,
+			err
+	}
+
+	negNumSignSpec.foundFirstNumericDigitInNumStr =
+		foundFirstNumericDigitInNumStr
+
+	lenSrcRuneAry := len(*searchTargetChars)
+
+	if startingSearchIndex >= lenSrcRuneAry {
+		hitEndOfSearchArray = true
+
+		return foundNegNumSignSymbols,
+			hitEndOfSearchArray,
+			err
+
+	}
+
+	if startingSearchIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
+			"'startingSearchIndex' has a value less than zero!\n"+
+			"startingSearchIndex = '%v'\n",
+			ePrefix.String(),
+			startingSearchIndex)
+
+		return foundNegNumSignSymbols,
+			hitEndOfSearchArray,
+			err
+
+	}
+
+	// TODO - Finish processing logic
+
+	return foundNegNumSignSymbols,
+		hitEndOfSearchArray,
+		err
 }
 
 // SetFoundNegNumSignSymbols - Sets the processing flag describing
