@@ -589,7 +589,7 @@ func (negNumSignSpec NegativeNumberSignSpec) NewLeadingNegNumSignRunes(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   string
-//     - A strung identifying the character or characters which
+//     - A string identifying the character or characters which
 //       comprise the Leading Negative Number Symbol used in
 //       configuring the NegativeNumberSignSpec instance returned
 //       to the calling function.
@@ -1353,7 +1353,7 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 		foundNegNumSignSymbols,
 			lastIndex,
 			err =
-			negNumSignAtom.beforeNegSignSymSearch(
+			negNumSignAtom.leadingNegSignSymSearch(
 				negNumSignSpec,
 				foundFirstNumericDigitInNumStr,
 				startingSearchIndex,
@@ -1365,12 +1365,13 @@ func (negNumSignSpec *NegativeNumberSignSpec) SearchForNegNumSignSymbol(
 		// Must be: NSignSymPos.BeforeAndAfter()
 
 	}
+
 	return foundNegNumSignSymbols,
 		lastIndex,
 		err
 }
 
-// SetForNumberStringSearch - Call this method once to setup
+// SetForNumberStringSearch - Call this method once to configure
 // internal member variables in preparation for a number string
 // parsing operation.
 //
