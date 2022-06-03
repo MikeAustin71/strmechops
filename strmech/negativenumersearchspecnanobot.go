@@ -6,36 +6,36 @@ import (
 	"sync"
 )
 
-type negNumSignSpecNanobot struct {
+type negNumSignSearchNanobot struct {
 	lock *sync.Mutex
 }
 
 // ptr - Returns a pointer to a new instance of
-// negNumSignSpecNanobot.
+// negNumSignSearchNanobot.
 //
-func (negNumSignNanobot negNumSignSpecNanobot) ptr() *negNumSignSpecNanobot {
+func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobot {
 
-	if negNumSignNanobot.lock == nil {
-		negNumSignNanobot.lock = new(sync.Mutex)
+	if negNumSearchNanobot.lock == nil {
+		negNumSearchNanobot.lock = new(sync.Mutex)
 	}
 
-	negNumSignNanobot.lock.Lock()
+	negNumSearchNanobot.lock.Lock()
 
-	defer negNumSignNanobot.lock.Unlock()
+	defer negNumSearchNanobot.lock.Unlock()
 
-	return &negNumSignSpecNanobot{
+	return &negNumSignSearchNanobot{
 		lock: new(sync.Mutex),
 	}
 }
 
-// setLeadingNegNumSignSpec - Receives an instance of
-// NegativeNumberSignSpec and proceeds to configure that instance
+// setLeadingNegNumSearchSpec - Receives an instance of
+// NegativeNumberSearchSpec and proceeds to configure that instance
 // as a Leading Negative Number Sign Specification. All internal
 // member variables are then configured using the input parameter
 // 'leadingNegNumSignSymbols'.
 //
 // Any previous configuration data associated with this instance of
-// NegativeNumberSignSpec will be deleted before applying the
+// NegativeNumberSearchSpec will be deleted before applying the
 // new configuration specifications.
 //
 //
@@ -43,8 +43,8 @@ func (negNumSignNanobot negNumSignSpecNanobot) ptr() *negNumSignSpecNanobot {
 //
 // Input Parameters
 //
-//  negNumSignSpec             *NegativeNumberSignSpec
-//     - A pointer to an instance of NegativeNumberSignSpec. This
+//  negNumSignSpec             *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Leading Negative Number
 //       Sign Specification. All previous configuration data will be
 //       deleted and replaced with a new Leading Negative Number
@@ -54,7 +54,7 @@ func (negNumSignNanobot negNumSignSpecNanobot) ptr() *negNumSignSpecNanobot {
 //  leadingNegNumSignSymbols   []rune
 //     - An array of runes identifying the character or characters
 //       which comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSignSpec instance,
+//       configuring the NegativeNumberSearchSpec instance,
 //       'negNumSignSpec'.
 //
 //       If this array is empty (zero length) or includes array
@@ -89,27 +89,27 @@ func (negNumSignNanobot negNumSignSpecNanobot) ptr() *negNumSignSpecNanobot {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
-	negNumSignSpec *NegativeNumberSignSpec,
+func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
+	negNumSignSpec *NegativeNumberSearchSpec,
 	leadingNegNumSignSymbols []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if negNumSignNanobot.lock == nil {
-		negNumSignNanobot.lock = new(sync.Mutex)
+	if negNumSearchNanobot.lock == nil {
+		negNumSearchNanobot.lock = new(sync.Mutex)
 	}
 
-	negNumSignNanobot.lock.Lock()
+	negNumSearchNanobot.lock.Lock()
 
-	defer negNumSignNanobot.lock.Unlock()
+	defer negNumSearchNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSignSpecNanobot."+
-			"setLeadingNegNumSignSpec()",
+		"negNumSignSearchNanobot."+
+			"setLeadingNegNumSearchSpec()",
 		"")
 
 	if err != nil {
@@ -136,7 +136,7 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
 		return err
 	}
 
-	negNumSignAtom := negNumSignSpecAtom{}
+	negNumSignAtom := negNumSearchSpecAtom{}
 
 	negNumSignAtom.empty(
 		negNumSignSpec)
@@ -177,15 +177,15 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
 	return err
 }
 
-// setLeadingAndTrailingNegNumSignSpec - Receives an instance of
-// NegativeNumberSignSpec and proceeds to configure that instance
+// setLeadingAndTrailingNegNumSearchSpec - Receives an instance of
+// NegativeNumberSearchSpec and proceeds to configure that instance
 // as a Leading and Trailing Negative Number Sign Specification.
 // All internal member variables are then configured using the
 // input parameter 'leadingNegNumSignSymbols' and
 // 'trailingNegNumSignSymbols'.
 //
 // Any previous configuration data associated with this instance of
-// NegativeNumberSignSpec will be deleted and replaced with the new
+// NegativeNumberSearchSpec will be deleted and replaced with the new
 // configuration specifications.
 //
 // In certain nations and cultures, a pair of symbols is used to
@@ -200,8 +200,8 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
 //
 // Input Parameters
 //
-//  negNumSignSpec             *NegativeNumberSignSpec
-//     - A pointer to an instance of NegativeNumberSignSpec. This
+//  negNumSignSpec             *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Leading and Trailing
 //       Negative Number Sign Specification. All previous
 //       configuration data will be deleted and replaced with a new
@@ -211,7 +211,7 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
 //  leadingNegNumSignSymbols   []rune
 //     - An array of runes identifying the character or characters
 //       which comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSignSpec instance,
+//       configuring the NegativeNumberSearchSpec instance,
 //       'negNumSignSpec'.
 //
 //       If this array is empty (zero length) or includes array
@@ -222,7 +222,7 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
 //  trailingNegNumSignSymbols  []rune
 //     - An array of runes identifying the character or characters
 //       which comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSignSpec instance,
+//       configuring the NegativeNumberSearchSpec instance,
 //       'negNumSignSpec'.
 //
 //       If this array is empty (zero length) or includes array
@@ -257,28 +257,28 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingNegNumSignSpec(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingAndTrailingNegNumSignSpec(
-	negNumSignSpec *NegativeNumberSignSpec,
+func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumSearchSpec(
+	negNumSignSpec *NegativeNumberSearchSpec,
 	leadingNegNumSignSymbols []rune,
 	trailingNegNumSignSymbols []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if negNumSignNanobot.lock == nil {
-		negNumSignNanobot.lock = new(sync.Mutex)
+	if negNumSearchNanobot.lock == nil {
+		negNumSearchNanobot.lock = new(sync.Mutex)
 	}
 
-	negNumSignNanobot.lock.Lock()
+	negNumSearchNanobot.lock.Lock()
 
-	defer negNumSignNanobot.lock.Unlock()
+	defer negNumSearchNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSignSpecNanobot."+
-			"setLeadingAndTrailingNegNumSignSpec()",
+		"negNumSignSearchNanobot."+
+			"setLeadingAndTrailingNegNumSearchSpec()",
 		"")
 
 	if err != nil {
@@ -379,14 +379,14 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingAndTrailingNegNumSignS
 	return err
 }
 
-// setTrailingNegNumSignSpec - Receives an instance of
-// NegativeNumberSignSpec and proceeds to configure that instance
+// setTrailingNegNumSearchSpec - Receives an instance of
+// NegativeNumberSearchSpec and proceeds to configure that instance
 // as a Trailing Negative Number Sign Specification. All internal
 // member variables are then configured using the input parameter
 // 'trailingNegNumSignSymbols'.
 //
 // Any previous configuration data associated with this instance of
-// NegativeNumberSignSpec will be deleted before applying the
+// NegativeNumberSearchSpec will be deleted before applying the
 // new configuration specifications.
 //
 //
@@ -394,8 +394,8 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingAndTrailingNegNumSignS
 //
 // Input Parameters
 //
-//  negNumSignSpec             *NegativeNumberSignSpec
-//     - A pointer to an instance of NegativeNumberSignSpec. This
+//  negNumSignSpec             *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Trailing Negative Number
 //       Sign Specification. All previous configuration data will
 //       be deleted and replaced with a new Trailing Negative Number
@@ -405,7 +405,7 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingAndTrailingNegNumSignS
 //  trailingNegNumSignSymbols  []rune
 //     - An array of runes identifying the character or characters
 //       which comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSignSpec instance,
+//       configuring the NegativeNumberSearchSpec instance,
 //       'negNumSignSpec'.
 //
 //       If this array is empty (zero length) or includes array
@@ -440,27 +440,27 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setLeadingAndTrailingNegNumSignS
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (negNumSignNanobot *negNumSignSpecNanobot) setTrailingNegNumSignSpec(
-	negNumSignSpec *NegativeNumberSignSpec,
+func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
+	negNumSignSpec *NegativeNumberSearchSpec,
 	trailingNegNumSignSymbols []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if negNumSignNanobot.lock == nil {
-		negNumSignNanobot.lock = new(sync.Mutex)
+	if negNumSearchNanobot.lock == nil {
+		negNumSearchNanobot.lock = new(sync.Mutex)
 	}
 
-	negNumSignNanobot.lock.Lock()
+	negNumSearchNanobot.lock.Lock()
 
-	defer negNumSignNanobot.lock.Unlock()
+	defer negNumSearchNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSignSpecNanobot."+
-			"setTrailingNegNumSignSpec()",
+		"negNumSignSearchNanobot."+
+			"setTrailingNegNumSearchSpec()",
 		"")
 
 	if err != nil {
@@ -487,7 +487,7 @@ func (negNumSignNanobot *negNumSignSpecNanobot) setTrailingNegNumSignSpec(
 		return err
 	}
 
-	negNumSignSpecAtom{}.ptr().empty(
+	negNumSearchSpecAtom{}.ptr().empty(
 		negNumSignSpec)
 
 	sMechPreon := strMechPreon{}

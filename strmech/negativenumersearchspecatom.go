@@ -6,20 +6,20 @@ import (
 	"sync"
 )
 
-type negNumSignSpecAtom struct {
+type negNumSearchSpecAtom struct {
 	lock *sync.Mutex
 }
 
-func (negNumSignAtom *negNumSignSpecAtom) empty(
-	negNumSignSpec *NegativeNumberSignSpec) {
+func (negNumSearchAtom *negNumSearchSpecAtom) empty(
+	negNumSignSpec *NegativeNumberSearchSpec) {
 
-	if negNumSignAtom.lock == nil {
-		negNumSignAtom.lock = new(sync.Mutex)
+	if negNumSearchAtom.lock == nil {
+		negNumSearchAtom.lock = new(sync.Mutex)
 	}
 
-	negNumSignAtom.lock.Lock()
+	negNumSearchAtom.lock.Lock()
 
-	defer negNumSignAtom.lock.Unlock()
+	defer negNumSearchAtom.lock.Unlock()
 
 	if negNumSignSpec == nil {
 		return
@@ -29,26 +29,26 @@ func (negNumSignAtom *negNumSignSpecAtom) empty(
 	negNumSignSpec.leadingNegNumSignSymbols = nil
 	negNumSignSpec.trailingNegNumSignSymbols = nil
 
-	negNumSignSpecElectron{}.ptr().
+	negNumSearchSpecElectron{}.ptr().
 		emptyProcessingFlags(negNumSignSpec)
 
 	return
 }
 
 // ptr - Returns a pointer to a new instance of
-// negNumSignSpecAtom.
+// negNumSearchSpecAtom.
 //
-func (negNumSignAtom negNumSignSpecAtom) ptr() *negNumSignSpecAtom {
+func (negNumSearchAtom negNumSearchSpecAtom) ptr() *negNumSearchSpecAtom {
 
-	if negNumSignAtom.lock == nil {
-		negNumSignAtom.lock = new(sync.Mutex)
+	if negNumSearchAtom.lock == nil {
+		negNumSearchAtom.lock = new(sync.Mutex)
 	}
 
-	negNumSignAtom.lock.Lock()
+	negNumSearchAtom.lock.Lock()
 
-	defer negNumSignAtom.lock.Unlock()
+	defer negNumSearchAtom.lock.Unlock()
 
-	return &negNumSignSpecAtom{
+	return &negNumSearchSpecAtom{
 		lock: new(sync.Mutex),
 	}
 }
@@ -57,15 +57,15 @@ func (negNumSignAtom negNumSignSpecAtom) ptr() *negNumSignSpecAtom {
 // Number Sign Symbols in a number string. The text characters to
 // be searched were previously configured and saved in internal
 // member variable,
-//   'NegativeNumberSignSpec.negNumSignTargetSearchChars'
+//   'NegativeNumberSearchSpec.negNumSignTargetSearchChars'
 //
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  negNumSignSpec                  *NegativeNumberSignSpec
-//     - A pointer to an instance of NegativeNumberSignSpec. This
+//  negNumSignSpec                  *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Leading and Trailing
 //       Negative Number Sign Specification. All previous
 //       configuration data will be deleted and replaced with a new
@@ -89,7 +89,7 @@ func (negNumSignAtom negNumSignSpecAtom) ptr() *negNumSignSpecAtom {
 //  startingSearchIndex             int
 //        The target search characters which will be searched for
 //        Leading Negative Number Symbols must be previously
-//        configured and saved in the NegativeNumberSignSpec
+//        configured and saved in the NegativeNumberSearchSpec
 //        internal member variable 'negNumSignTargetSearchChars'.
 //
 //        The 'startingSearchIndex' parameter specifies the index
@@ -150,8 +150,8 @@ func (negNumSignAtom negNumSignSpecAtom) ptr() *negNumSignSpecAtom {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (negNumSignAtom *negNumSignSpecAtom) leadingNegSignSymSearch(
-	negNumSignSpec *NegativeNumberSignSpec,
+func (negNumSearchAtom *negNumSearchSpecAtom) leadingNegSignSymSearch(
+	negNumSignSpec *NegativeNumberSearchSpec,
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -159,13 +159,13 @@ func (negNumSignAtom *negNumSignSpecAtom) leadingNegSignSymSearch(
 	lastIndex int,
 	err error) {
 
-	if negNumSignAtom.lock == nil {
-		negNumSignAtom.lock = new(sync.Mutex)
+	if negNumSearchAtom.lock == nil {
+		negNumSearchAtom.lock = new(sync.Mutex)
 	}
 
-	negNumSignAtom.lock.Lock()
+	negNumSearchAtom.lock.Lock()
 
-	defer negNumSignAtom.lock.Unlock()
+	defer negNumSearchAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -178,7 +178,7 @@ func (negNumSignAtom *negNumSignSpecAtom) leadingNegSignSymSearch(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSignSpecElectron."+
+		"negNumSearchSpecElectron."+
 			"leadingNegSignSymSearch()",
 		"")
 
@@ -231,9 +231,9 @@ func (negNumSignAtom *negNumSignSpecAtom) leadingNegSignSymSearch(
 	if lenNegNumSignTargetSearchChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NegativeNumberSignSpec has NOT\n"+
+			"Error: This instance of NegativeNumberSearchSpec has NOT\n"+
 			"been properly configured for a number string parsing operation.\n"+
-			"NegativeNumberSignSpec.negNumSignTargetSearchChars has a length\n"+
+			"NegativeNumberSearchSpec.negNumSignTargetSearchChars has a length\n"+
 			"of zero! There are no target search characters in which to search\n"+
 			"for Negative Number Sign symbols.\n",
 			ePrefix.String())
@@ -277,7 +277,7 @@ func (negNumSignAtom *negNumSignSpecAtom) leadingNegSignSymSearch(
 	if lenLeadingNegNumSymbols == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NegativeNumberSignSpec is invalid!\n"+
+			"Error: This instance of NegativeNumberSearchSpec is invalid!\n"+
 			"No Leading Negative Number Sign Symbols have been previously\n"+
 			"configured. The length of the negNumSignSpec.leadingNegNumSignSymbols"+
 			"array is zero. The array is empty.\n",
