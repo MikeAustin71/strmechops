@@ -23,7 +23,6 @@ func (negNumSearchElectron *negNumSearchSpecElectron) emptyProcessingFlags(
 		return
 	}
 
-	negNumSignSpec.negNumSignTargetSearchChars = nil
 	negNumSignSpec.foundFirstNumericDigitInNumStr = false
 	negNumSignSpec.foundNegNumSignSymbols = false
 	negNumSignSpec.foundLeadingNegNumSign = false

@@ -152,6 +152,7 @@ func (negNumSearchAtom negNumSearchSpecAtom) ptr() *negNumSearchSpecAtom {
 //
 func (negNumSearchAtom *negNumSearchSpecAtom) leadingNegSignSymSearch(
 	negNumSignSpec *NegativeNumberSearchSpec,
+	targetSearchString *TargetSearchStringDto,
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -199,6 +200,17 @@ func (negNumSearchAtom *negNumSearchSpecAtom) leadingNegSignSymSearch(
 			err
 	}
 
+	if targetSearchString == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetSearchString' is a nil pointer!\n",
+			ePrefix.String())
+
+		return foundNegNumSignSymbols,
+			lastIndex,
+			err
+
+	}
+
 	if negNumSignSpec.foundFirstNumericDigitInNumStr {
 
 		// Nothing to do. Already found the first
@@ -226,15 +238,14 @@ func (negNumSearchAtom *negNumSearchSpecAtom) leadingNegSignSymSearch(
 			err
 	}
 
-	lenNegNumSignTargetSearchChars := len(negNumSignSpec.negNumSignTargetSearchChars)
+	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsToSearch)
 
 	if lenNegNumSignTargetSearchChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NegativeNumberSearchSpec has NOT\n"+
-			"been properly configured for a number string parsing operation.\n"+
-			"NegativeNumberSearchSpec.negNumSignTargetSearchChars has a length\n"+
-			"of zero! There are no target search characters in which to search\n"+
+			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
+			"'targetSearchString.CharsToSearch' has an array length of zero.\n"+
+			"There are no target search characters in which to search\n"+
 			"for Negative Number Sign symbols.\n",
 			ePrefix.String())
 
@@ -300,7 +311,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) leadingNegSignSymSearch(
 	for i := startingSearchIndex; i < lenNegNumSignTargetSearchChars; i++ {
 
 		if negNumSignSpec.leadingNegNumSignSymbols[leadNegNumSymIdx] !=
-			negNumSignSpec.negNumSignTargetSearchChars[i] {
+			targetSearchString.CharsToSearch[i] {
 
 			// The Leading Negative Number Symbols were
 			// NOT found in this search string.

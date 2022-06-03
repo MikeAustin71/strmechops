@@ -6,7 +6,12 @@ import (
 	"sync"
 )
 
-// NegativeNumberSearchSpec - Negative Number Sign Specification.
+// NegativeNumberSearchSpec - Negative Number Search Specification.
+// This type is designed for use by number string parsing functions.
+// These functions review a string of text characters searching for
+// numeric digits with the purpose extracting numeric values from
+// the string of text characters.
+//
 // This type is used to configure search parameters for identifying
 // negative numeric values within text strings when extracting or
 // parsing numeric digits.
@@ -16,7 +21,7 @@ import (
 // positive unless a Negative Number Sign symbol or symbols are
 // present in the string of numeric digits.
 //
-// The NegativeNumberSearchSpec type is used to specify the
+// The NegativeNumberSearchSpec type is used to define the
 // criterion used to identify Negative Number Sign Symbols
 // found in number strings and properly classify the extracted
 // numeric values as positive or negative values.
@@ -30,16 +35,6 @@ type NegativeNumberSearchSpec struct {
 	trailingNegNumSignSymbols []rune
 
 	// Processing flags
-
-	parentNegNumSignCollection *NegNumSearchSpecCollection // If this pointer is not 'nil',
-	//                                                       it signals that this instance is
-	//                                                       a member of a collection. This
-	//                                                       allows for efficient access to
-	//                                                       Target Text Search Characters.
-
-	negNumSignTargetSearchChars []rune // The target search text characters to be
-	//                                       searched for a negative number sign
-	//                                       symbols
 
 	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit
 	//                                       the number string has been found
@@ -135,10 +130,11 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundFirstNumericDigit() bo
 // GetFoundNegNumSignSymbols - This processing flag is set during a
 // number string parsing operation.
 //
-// If the all the symbols comprising the Negative Number Sign
-// defined by the current instance of NegativeNumberSearchSpec have
-// been located within a number string, the internal member
-// variable, 'foundNegNumSignSymbols' is set to true.
+// If the all the symbols comprising the Negative Number Search
+// Specification defined by the current instance of
+// NegativeNumberSearchSpec have been located within a number
+// string, the internal member variable, 'foundNegNumSignSymbols'
+// is set to 'true'.
 //
 // Otherwise, 'foundNegNumSignSymbols' is set to false signaling
 // that a negative number sign matching that defined by the current
@@ -437,7 +433,8 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstanceError(
 }
 
 // NewLeadingNegNumSearchRunes - Returns a fully populated
-// specification for a Leading Negative Number Sign.
+// configuration for a Leading Negative Number Search
+// Specification.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSearchSpec are configured using the input parameter
@@ -458,10 +455,10 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstanceError(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance returned
-//       to the calling function.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Leading Negative Number
+//       Symbols used in configuring the NegativeNumberSearchSpec
+//       instance returned to the calling function.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -523,7 +520,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstanceError(
 //  NegativeNumberSearchSpec   NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
 //       instance of NegativeNumberSearchSpec will be configured as a
-//       Leading Negative Number Sign Specification and returned to
+//       Leading Negative Number Search Specification and returned to
 //       the calling function.
 //
 //
@@ -576,7 +573,8 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchRunes(
 }
 
 // NewLeadingNegNumSearchStr - Returns a fully populated
-// specification for a Leading Negative Number Sign.
+// configuration for a Leading Negative Number Search
+// Specification.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSearchSpec are configured using the input parameter
@@ -597,8 +595,8 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchRunes(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   string
-//     - A string identifying the character or characters which
-//       comprise the Leading Negative Number Symbol used in
+//     - A string identifying the text character or characters
+//       which comprise the Leading Negative Number Symbols used in
 //       configuring the NegativeNumberSearchSpec instance returned
 //       to the calling function.
 //
@@ -661,7 +659,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchRunes(
 //  NegativeNumberSearchSpec     NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
 //       instance of NegativeNumberSearchSpec will be configured as a
-//       Leading Negative Number Sign Specification and returned to
+//       Leading Negative Number Search Specification and returned to
 //       the calling function.
 //
 //
@@ -713,8 +711,9 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchStr(
 	return newLeadingNegNumSignSpec, err
 }
 
-// NewLeadingAndTrailingNegNumSearchRunes - Returns a fully populated
-// specification for a Leading and Trailing Negative Number Sign.
+// NewLeadingAndTrailingNegNumSearchRunes - Returns a fully
+// populated configuration for a Leading and Trailing Negative
+// Number Search Specification.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSearchSpec are configured using the input parameters
@@ -739,10 +738,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchStr(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance returned
-//       to the calling function.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Leading Negative Number
+//       Symbols used in configuring the NegativeNumberSearchSpec
+//       instance returned to the calling function.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -750,10 +749,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchStr(
 //
 //
 //  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance returned
-//       to the calling function.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Trailing Negative Number
+//       Symbols used in configuring the NegativeNumberSearchSpec
+//       instance returned to the calling function.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -815,7 +814,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchStr(
 //  NegativeNumberSearchSpec     NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
 //       instance of NegativeNumberSearchSpec will be configured as a
-//       Leading and Trailing Negative Number Sign Specification
+//       Leading and Trailing Negative Number Search Specification
 //       and returned to the calling function.
 //
 //
@@ -869,7 +868,8 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 }
 
 // NewLeadingAndTrailingNegNumSearchStr - Returns a fully populated
-// specification for a Leading and Trailing Negative Number Sign.
+// configuration for a Leading and Trailing Negative Number Search
+// Specification.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSearchSpec are configured using the input parameters
@@ -894,10 +894,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   string
-//     - A string identifying the character or characters which
-//       comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance returned
-//       to the calling function.
+//     - A string identifying the text character or characters
+//       which comprise the Leading Negative Number Symbols used
+//       in configuring the NegativeNumberSearchSpec instance
+//       returned to the calling function.
 //
 //       If this string is empty (has a zero length), an error will
 //       be returned.
@@ -968,7 +968,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 //  NegativeNumberSearchSpec     NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
 //       instance of NegativeNumberSearchSpec will be configured as a
-//       Leading and Trailing Negative Number Sign Specification
+//       Leading and Trailing Negative Number Search Specification
 //       and returned to the calling function.
 //
 //
@@ -1021,8 +1021,9 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 	return leadingAndTrailingNegNumSignSpec, err
 }
 
-// NewTrailingNegNumSearchRunes - Returns a fully populated specification
-// for a Trailing Negative Number Sign.
+// NewTrailingNegNumSearchRunes - Returns a fully populated
+// configuration for a Trailing Negative Number Search
+// Specification.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSearchSpec are configured using the input parameter
@@ -1043,10 +1044,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 // Input Parameters
 //
 //  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance returned
-//       to the calling function.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Trailing Negative Number
+//       Symbols used in configuring the NegativeNumberSearchSpec
+//       instance returned to the calling function.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -1108,7 +1109,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 //  NegativeNumberSearchSpec     NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
 //       instance of NegativeNumberSearchSpec will be configured as a
-//       Trailing Negative Number Sign Specification and returned
+//       Trailing Negative Number Search Specification and returned
 //       to the calling function.
 //
 //
@@ -1159,8 +1160,9 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchRunes(
 	return trailingNegNumSignSpec, err
 }
 
-// NewTrailingNegNumSearchStr - Returns a fully populated specification
-// for a Trailing Negative Number Sign.
+// NewTrailingNegNumSearchStr - Returns a fully populated
+// configuration for a Trailing Negative Number Search
+// Specification.
 //
 // All internal member variables in the returned instance of
 // NegativeNumberSearchSpec are configured using the input parameter
@@ -1178,10 +1180,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchRunes(
 // Input Parameters
 //
 //  trailingNegNumSignSymbols  string
-//     - A string identifying the character or characters which
-//       comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance returned
-//       to the calling function.
+//     - A string identifying the text character or characters
+//       which comprise the Trailing Negative Number Symbols used
+//       in configuring the NegativeNumberSearchSpec instance
+//       returned to the calling function.
 //
 //       If this string is empty (has a zero length), an error will
 //       be returned.
@@ -1242,7 +1244,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchRunes(
 //  NegativeNumberSearchSpec     NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
 //       instance of NegativeNumberSearchSpec will be configured as a
-//       Trailing Negative Number Sign Specification and returned
+//       Trailing Negative Number Search Specification and returned
 //       to the calling function.
 //
 //
@@ -1296,10 +1298,12 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 // SearchForNegNumSignSymbols - This method is typically called by
 // a number string parsing routine attempting to determine if the
 // characters in a search string match the Negative Number Sign
-// Symbol defined by this current instance of NegativeNumberSearchSpec.
+// Symbol defined by this current instance of
+// NegativeNumberSearchSpec.
 //
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
+	targetSearchString *TargetSearchStringDto,
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
 	errorPrefix interface{}) (
@@ -1363,6 +1367,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			err =
 			negNumSignAtom.leadingNegSignSymSearch(
 				negNumSearchSpec,
+				targetSearchString,
 				foundFirstNumericDigitInNumStr,
 				startingSearchIndex,
 				ePrefix)
@@ -1379,170 +1384,15 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		err
 }
 
-// SetForNumberStringSearch - Call this method once to configure
-// internal member variables in preparation for a number string
-// parsing operation.
-//
-// ----------------------------------------------------------------
-//
-// IMPORTANT
-//
-// Call this method once at the BEGINNING of a number string
-// processing operation.
-//
-// DO NOT call this method again until that number string
-// parsing operation is completed.
-//
-//
-// -----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  targetSearchChars          []rune
-//     - An array of runes containing the text characters to be
-//       searched as part of a number string parsing operation.
-//       This rune array is set once for each instance of
-//       NegativeNumberSearchSpec.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (negNumSearchSpec *NegativeNumberSearchSpec) SetForNumberStringSearch(
-	targetSearchChars []rune,
-	errorPrefix interface{}) (err error) {
-
-	if negNumSearchSpec.lock == nil {
-		negNumSearchSpec.lock = new(sync.Mutex)
-	}
-
-	negNumSearchSpec.lock.Lock()
-
-	defer negNumSearchSpec.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"NegativeNumberSearchSpec."+
-			"SearchForNegNumSignSymbols()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	negNumSearchSpecElectron{}.ptr().emptyProcessingFlags(
-		negNumSearchSpec)
-
-	lenTargetSearchChars := len(targetSearchChars)
-
-	if lenTargetSearchChars == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchChars' is empty and invalid!\n",
-			ePrefix.String())
-
-	}
-
-	negNumSearchSpec.negNumSignTargetSearchChars =
-		make([]rune, lenTargetSearchChars)
-
-	itemsCopied := copy(
-		negNumSearchSpec.negNumSignTargetSearchChars,
-		targetSearchChars)
-
-	if itemsCopied != lenTargetSearchChars {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: 'targetSearchChars' copy operation failed!\n"+
-			"Expected %v characters would be copied from\n"+
-			"'targetSearchChars' to \n"+
-			"'negNumSearchSpec.negNumSignTargetSearchChars'\n"+
-			"However, only %v characters out of a total of\n"+
-			"%v characters were copied.\n",
-			ePrefix.String(),
-			lenTargetSearchChars,
-			itemsCopied,
-			lenTargetSearchChars)
-
-		negNumSearchSpec.negNumSignTargetSearchChars = nil
-
-		return err
-	}
-
-	return err
-}
-
 // SetFoundNegNumSignSymbols - Sets the processing flag describing
 // the results of a number string parsing operation.
 //
 // If the all the symbols comprising the Negative Number Sign
 // defined by the current instance of NegativeNumberSearchSpec have
 // been located within a number string, the internal member
-// variable, 'foundNegNumSignSymbols' is set to true.
+// variable, 'foundNegNumSignSymbols' is set to 'true'.
 //
-// Otherwise, 'foundNegNumSignSymbols' is set to false signaling
+// Otherwise, 'foundNegNumSignSymbols' is set to 'false' signaling
 // that a negative number sign matching that defined by the
 // current NegativeNumberSearchSpec instance has not yet been
 // identified in the target number string.
@@ -1601,7 +1451,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetFoundFirstNumericDigit(
 }
 
 // SetLeadingNegNumSearchRunes - Reconfigures the current instance of
-// NegativeNumberSearchSpec as a Leading Negative Number Sign
+// NegativeNumberSearchSpec as a Leading Negative Number Search
 // Specification.
 //
 // All internal member variables in the current instance of
@@ -1623,7 +1473,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetFoundFirstNumericDigit(
 //
 // All internal member variable data values will be deleted and
 // replaced when configuring the current NegativeNumberSearchSpec
-// instance as a Leading Negative Number Sign Specification.
+// instance as a Leading Negative Number Search Specification.
 //
 //
 // -----------------------------------------------------------------
@@ -1631,10 +1481,11 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetFoundFirstNumericDigit(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring the current NegativeNumberSearchSpec instance as
-//       a Leading Negative Number Sign Specification.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Leading Negative Number
+//       Symbols used in configuring the current
+//       NegativeNumberSearchSpec instance as a Leading Negative
+//       Number Search Specification.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -1741,7 +1592,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchRunes(
 }
 
 // SetLeadingNegNumSearchStr  - Reconfigures the current instance of
-// NegativeNumberSearchSpec as a Leading Negative Number Sign
+// NegativeNumberSearchSpec as a Leading Negative Number Search
 // Specification.
 //
 // All internal member variables in the returned instance of
@@ -1763,7 +1614,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchRunes(
 //
 // All internal member variable data values will be deleted and
 // replaced when configuring the current NegativeNumberSearchSpec
-// instance as a Leading Negative Number Sign Specification.
+// instance as a Leading Negative Number Search Specification.
 //
 //
 // -----------------------------------------------------------------
@@ -1771,10 +1622,10 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchRunes(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   string
-//     - A strung identifying the character or characters which
-//       comprise the Leading Negative Number Symbol used in
-//       configuring the current NegativeNumberSearchSpec instance as
-//       a Leading Negative Number Sign Specification.
+//     - A strung identifying the text character or characters
+//       which comprise the Leading Negative Number Symbols used in
+//       configuring the current NegativeNumberSearchSpec instance
+//       as a Leading Negative Number Search Specification.
 //
 //       If this string is empty (has a zero length) an error will
 //       be returned.
@@ -1880,7 +1731,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchStr(
 
 // SetLeadingAndTrailingNegNumSearchRunes - Reconfigures the current
 // instance of NegativeNumberSearchSpec as a Leading and Trailing
-// Negative Number Sign Specification.
+// Negative Number Search Specification.
 //
 // All internal member variables in the current instance of
 // NegativeNumberSearchSpec are reconfigured using the input
@@ -1906,7 +1757,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchStr(
 //
 // All internal member variable data values will be deleted and
 // replaced when configuring the current NegativeNumberSearchSpec
-// instance as a Leading and Trailing Negative Number Sign
+// instance as a Leading and Trailing Negative Number Search
 // Specification.
 //
 //
@@ -1915,9 +1766,9 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchStr(
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring the current instance of
+//     - An array of runes identifying the text character or
+//       characters which comprise the Leading Negative Number
+//       Symbols used in configuring the current instance of
 //       NegativeNumberSearchSpec.
 //
 //       If this array is empty (zero length) or includes array
@@ -1926,9 +1777,10 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingNegNumSearchStr(
 //
 //
 //  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring the current instance of NegativeNumberSearchSpec.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Trailing Negative Number
+//       Symbols used in configuring the current instance of
+//       NegativeNumberSearchSpec.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -2037,7 +1889,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 
 // SetLeadingAndTrailingNegNumSearchStr - Reconfigures the current
 // instance of NegativeNumberSearchSpec as a Leading and Trailing
-// Negative Number Sign Specification.
+// Negative Number Search Specification.
 //
 // All internal member variables in the current instance of
 // NegativeNumberSearchSpec are reconfigured using the input
@@ -2063,7 +1915,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 //
 // All internal member variable data values will be deleted and
 // replaced when configuring the current NegativeNumberSearchSpec
-// instance as a Leading and Trailing Negative Number Sign
+// instance as a Leading and Trailing Negative Number Search
 // Specification.
 //
 //
@@ -2072,8 +1924,8 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 // Input Parameters
 //
 //  leadingNegNumSignSymbols   string
-//     - A string identifying the character or characters which
-//       comprise the Leading Negative Number Symbol used in
+//     - A string identifying the text character or characters
+//       which comprise the Leading Negative Number Symbols used in
 //       configuring the current instance of
 //       NegativeNumberSearchSpec.
 //
@@ -2082,9 +1934,9 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 //
 //
 //  trailingNegNumSignSymbols  string
-//     - A string identifying the character or characters which
-//       comprise the Trailing Negative Number Symbol used in
-//       configuring the current instance of
+//     - A string identifying the text character or characters
+//       which comprise the Trailing Negative Number Symbols used
+//       in configuring the current instance of
 //       NegativeNumberSearchSpec.
 //
 //       If this string is empty (has a zero length), an error will
@@ -2192,7 +2044,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 }
 
 // SetTrailingNegNumSearchRunes - Reconfigures the current instance
-// of NegativeNumberSearchSpec as a Trailing Negative Number Sign
+// of NegativeNumberSearchSpec as a Trailing Negative Number Search
 // Specification.
 //
 // All internal member variables in the current instance of
@@ -2214,7 +2066,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 //
 // All internal member variable data values will be deleted and
 // replaced when configuring the current NegativeNumberSearchSpec
-// instance as a Trailing Negative Number Sign Specification.
+// instance as a Trailing Negative Number Search Specification.
 //
 //
 // -----------------------------------------------------------------
@@ -2222,10 +2074,11 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetLeadingAndTrailingNegNumSea
 // Input Parameters
 //
 //  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring the current NegativeNumberSearchSpec instance as
-//       a Trailing Negative Number Sign Specification.
+//     - An array of runes identifying the text character or
+//       characters which comprise the Trailing Negative Number
+//       Symbols used in configuring the current
+//       NegativeNumberSearchSpec instance as a Trailing Negative
+//       Number Search Specification.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -2331,7 +2184,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetTrailingNegNumSearchRunes(
 }
 
 // SetTrailingNegNumSearchStr - Reconfigures the current instance of
-// NegativeNumberSearchSpec as a Trailing Negative Number Sign
+// NegativeNumberSearchSpec as a Trailing Negative Number Search
 // Specification.
 //
 // All internal member variables in the current instance of
@@ -2353,7 +2206,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetTrailingNegNumSearchRunes(
 //
 // All internal member variable data values will be deleted and
 // replaced when configuring the current NegativeNumberSearchSpec
-// instance as a Trailing Negative Number Sign Specification.
+// instance as a Trailing Negative Number Search Specification.
 //
 //
 // -----------------------------------------------------------------
@@ -2361,10 +2214,10 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetTrailingNegNumSearchRunes(
 // Input Parameters
 //
 //  trailingNegNumSignSymbols  string
-//     - A string identifying the character or characters which
-//       comprise the Trailing Negative Number Symbol used in
-//       configuring the current NegativeNumberSearchSpec instance as
-//       a Trailing Negative Number Sign Specification.
+//     - A string identifying the text character or characters
+//       which comprise the Trailing Negative Number Symbols used
+//       in configuring the current NegativeNumberSearchSpec
+//       instance as a Trailing Negative Number Search Specification.
 //
 //       If this string is empty (has a zero length), an error will
 //       be returned.
@@ -2424,9 +2277,9 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetTrailingNegNumSearchRunes(
 //
 //  NegativeNumberSearchSpec     NegativeNumberSearchSpec
 //     - If the method completes successfully, a fully populated
-//       instance of NegativeNumberSearchSpec will be configured as a
-//       Trailing Negative Number Sign Specification and returned
-//       to the calling function.
+//       instance of NegativeNumberSearchSpec will be configured as
+//       a Trailing Negative Number Search Specification and
+//       returned to the calling function.
 //
 //
 //  err                        error

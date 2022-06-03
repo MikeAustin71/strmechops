@@ -1,14 +1,15 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
 
 type NegNumSearchSpecCollection struct {
-	negNumSignSpecs             []NegativeNumberSearchSpec
-	negNumSignTargetSearchChars []rune
-	lock                        *sync.Mutex
+	negNumSignSpecs    []NegativeNumberSearchSpec
+	targetSearchString TargetSearchStringDto
+	lock               *sync.Mutex
 }
 
 // AddLeadingNegNumSearchRunes - Adds a Leading Negative Number search
@@ -631,6 +632,57 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSear
 		append(
 			negNumSignCol.negNumSignSpecs,
 			newLeadingNegNumSign)
+
+	return err
+}
+
+func (negNumSignCol *NegNumSearchSpecCollection) SetTargetSearchString(
+	targetSearchString []rune,
+	errorPrefix interface{}) (
+	err error) {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSearchSpec."+
+			"SetTargetSearchString()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenOfTargetSearchStr := len(targetSearchString)
+
+	if lenOfTargetSearchStr == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
+			"'targetSearchString' has an array length of zero.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	negNumSignCol.targetSearchString.CharsToSearch = nil
+
+	negNumSignCol.targetSearchString.CharsToSearch =
+		make([]rune, lenOfTargetSearchStr)
+
+	for i := 0; i < lenOfTargetSearchStr; i++ {
+		negNumSignCol.targetSearchString.CharsToSearch[i] =
+			targetSearchString[i]
+	}
 
 	return err
 }
