@@ -35,7 +35,7 @@ type NegativeNumberSearchSpec struct {
 	//                                                       it signals that this instance is
 	//                                                       a member of a collection. This
 	//                                                       allows for efficient access to
-	//                                                       to Target Text Search Characters.
+	//                                                       Target Text Search Characters.
 
 	negNumSignTargetSearchChars []rune // The target search text characters to be
 	//                                       searched for a negative number sign
