@@ -7,9 +7,9 @@ import (
 )
 
 type NegNumSearchSpecCollection struct {
-	negNumSignSpecs    []NegativeNumberSearchSpec
-	targetSearchString TargetSearchStringDto
-	lock               *sync.Mutex
+	negNumSearchSpecsCol []NegativeNumberSearchSpec
+	targetSearchString   TargetSearchStringDto
+	lock                 *sync.Mutex
 }
 
 // AddLeadingNegNumSearchRunes - Adds a Leading Negative Number search
@@ -21,6 +21,9 @@ type NegNumSearchSpecCollection struct {
 // NegativeNumberSearchSpec and add it to the end of the
 // NegativeNumberSearchSpec collection. This new instance will be
 // configured as a Leading Negative Number Search Specification.
+//
+// Leading Negative Number symbols are used by many countries
+// including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegNumSearchSpecCollection.AddLeadingNegNumSearchStr()
@@ -146,9 +149,9 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchRunes(
 		return err
 	}
 
-	negNumSignCol.negNumSignSpecs =
+	negNumSignCol.negNumSearchSpecsCol =
 		append(
-			negNumSignCol.negNumSignSpecs,
+			negNumSignCol.negNumSearchSpecsCol,
 			newLeadingNegNumSign)
 
 	return err
@@ -163,6 +166,9 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchRunes(
 // NegativeNumberSearchSpec and add it to the end of the
 // NegativeNumberSearchSpec collection. This new instance will be
 // configured as a Leading Negative Number Search Specification.
+//
+// Leading Negative Number symbols are used by many countries
+// including the US and Canada. Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
@@ -288,9 +294,9 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingNegNumSearchStr(
 		return err
 	}
 
-	negNumSignCol.negNumSignSpecs =
+	negNumSignCol.negNumSearchSpecsCol =
 		append(
-			negNumSignCol.negNumSignSpecs,
+			negNumSignCol.negNumSearchSpecsCol,
 			newLeadingNegNumSign)
 
 	return err
@@ -458,9 +464,9 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSear
 		return err
 	}
 
-	negNumSignCol.negNumSignSpecs =
+	negNumSignCol.negNumSearchSpecsCol =
 		append(
-			negNumSignCol.negNumSignSpecs,
+			negNumSignCol.negNumSearchSpecsCol,
 			newLeadingNegNumSign)
 
 	return err
@@ -628,10 +634,300 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddLeadingAndTrailingNegNumSear
 		return err
 	}
 
-	negNumSignCol.negNumSignSpecs =
+	negNumSignCol.negNumSearchSpecsCol =
 		append(
-			negNumSignCol.negNumSignSpecs,
+			negNumSignCol.negNumSearchSpecsCol,
 			newLeadingNegNumSign)
+
+	return err
+}
+
+// AddTrailingNegNumSearchRunes - Adds a Trailing Negative Number
+// search profile to the end of the collection of
+// NegativeNumberSearchSpec objects maintained by the current
+// instance of NegNumSearchSpecCollection.
+//
+// This method will create a new instance of
+// NegativeNumberSearchSpec and add it to the end of the
+// NegativeNumberSearchSpec collection. This new instance will be
+// configured as a Trailing Negative Number Search Specification.
+//
+// Trailing negative number symbols are used by various European
+// Union countries. Examples:  127.45-   654-
+//
+// This method is identical in function to the method:
+//  NegNumSearchSpecCollection.AddTrailingNegNumSearchStr()
+//
+// The only difference between the two methods is that this method
+// receives an array of runes as an input parameter.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  TrailingNegNumSignSymbols   []rune
+//     - An array of runes identifying the text character or
+//       characters which comprise the Trailing Negative Number
+//       Symbol used in configuring a NegativeNumberSearchSpec
+//       instance. This instance will be added to the end of the
+//       Negative Number Search Specification Collection maintained
+//       by the current instance of NegNumSearchSpecCollection.
+//
+//       If this rune array is empty (has a zero length), an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchRunes(
+	trailingNegNumSignSymbols []rune,
+	errorPrefix interface{}) (
+	err error) {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSearchSpec."+
+			"AddLeadingNegNumSearchRunes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newLeadingNegNumSign NegativeNumberSearchSpec
+
+	newLeadingNegNumSign,
+		err =
+		NegativeNumberSearchSpec{}.NewTrailingNegNumSearchRunes(
+			trailingNegNumSignSymbols,
+			ePrefix.XCpy(
+				"newLeadingNegNumSign<-trailingNegNumSignSymbols"))
+
+	if err != nil {
+		return err
+	}
+
+	negNumSignCol.negNumSearchSpecsCol =
+		append(
+			negNumSignCol.negNumSearchSpecsCol,
+			newLeadingNegNumSign)
+
+	return err
+}
+
+// AddTrailingNegNumSearchStr - Adds a Trailing Negative Number search
+// profile to the end of the collection of NegativeNumberSearchSpec
+// objects maintained by the current instance of
+// NegNumSearchSpecCollection.
+//
+// This method will create a new instance of
+// NegativeNumberSearchSpec and add it to the end of the
+// NegativeNumberSearchSpec collection. This new instance will be
+// configured as a Trailing Negative Number Search Specification.
+//
+// Trailing negative number symbols are used by various European
+// Union countries. Examples:  127.45-   654-
+//
+// This method is identical in function to the method:
+//  NegNumSearchSpecCollection.AddTrailingNegNumSearchRunes()
+//
+// The only difference between the two methods is that this method
+// receives a string as an input parameter.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  TrailingNegNumSignSymbols   string
+//     - A string identifying the text character or characters
+//       which comprise the Trailing Negative Number Symbol used in
+//       configuring a NegativeNumberSearchSpec instance, This
+//       instance will be added to the end of the Negative Number
+//       Search Specification Collection maintained by the current
+//       instance of NegNumSearchSpecCollection.
+//
+//       If this string is empty (has a zero length), an error will
+//       be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchStr(
+	trailingNegNumSignSymbols string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSearchSpec."+
+			"AddTrailingNegNumSearchStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var newTrailingNegNumSign NegativeNumberSearchSpec
+
+	newTrailingNegNumSign,
+		err =
+		NegativeNumberSearchSpec{}.NewTrailingNegNumSearchStr(
+			trailingNegNumSignSymbols,
+			ePrefix.XCpy(
+				"newTrailingNegNumSign"))
+
+	if err != nil {
+		return err
+	}
+
+	negNumSignCol.negNumSearchSpecsCol =
+		append(
+			negNumSignCol.negNumSearchSpecsCol,
+			newTrailingNegNumSign)
 
 	return err
 }
@@ -653,6 +949,10 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	defer negNumSignCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
+	foundNegNumSignSymbols = false
+
+	lastIndex = startingSearchIndex
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -676,16 +976,65 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 			"'targetSearchString' has an array length of zero.\n",
 			ePrefix.String())
 
+		return foundNegNumSignSymbols,
+			lastIndex,
+			err
+
 	}
 
-	// TODO - Finish This!
-	foundFirstNumericDigitInNumStr = false
-	startingSearchIndex = -1
+	lenNegNumSpecsCol := len(negNumSignCol.negNumSearchSpecsCol)
+
+	if lenNegNumSpecsCol == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of NegNumSearchSpecCollection is invalid!\n"+
+			"The Negatvie Number Search Specs collection is empty.\n"+
+			"The internal member \n"+
+			"for Negative Number Sign symbols.\n",
+			ePrefix.String())
+
+		return foundNegNumSignSymbols,
+			lastIndex,
+			err
+
+	}
+
+	var err2 error
+
+	for i := 0; i < lenNegNumSpecsCol; i++ {
+
+		foundNegNumSignSymbols,
+			lastIndex,
+			err2 = negNumSignCol.negNumSearchSpecsCol[i].
+			SearchForNegNumSignSymbols(
+				&negNumSignCol.targetSearchString,
+				foundFirstNumericDigitInNumStr,
+				startingSearchIndex,
+				nil)
+
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error returned by negNumSearchSpecsCol[%v].\n"+
+				"SearchForNegNumSignSymbols(). Error text follows:\n"+
+				"%v\n",
+				ePrefix,
+				i,
+				err2.Error())
+
+			return foundNegNumSignSymbols,
+				lastIndex,
+				err
+
+		}
+
+		if foundNegNumSignSymbols {
+			break
+		}
+	}
 
 	return foundNegNumSignSymbols,
 		lastIndex,
 		err
-
 }
 
 // SetTargetSearchString - This method Target Search String which

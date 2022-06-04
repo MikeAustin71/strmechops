@@ -1168,6 +1168,9 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchRunes(
 // NegativeNumberSearchSpec are configured using the input parameter
 // 'trailingNegNumSignSymbols'.
 //
+// Trailing negative number symbols are used by various European
+// Union countries. Examples:  127.45-   654-
+//
 // This method is identical in function to method:
 //    NegativeNumberSearchSpec.NewTrailingNegNumSearchRunes()
 //
