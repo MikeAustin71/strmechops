@@ -47,6 +47,120 @@ type NegativeNumberSearchSpec struct {
 	lock                         *sync.Mutex
 }
 
+// CopyOut - Returns a deep copy of the current
+// NegativeNumberSearchSpec instance.
+//
+// If the current NegativeNumberSearchSpec instance contains
+// invalid member variables, this method will return an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NegativeNumberSearchSpec
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current NegativeNumberSearchSpec instance.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) CopyOut(
+	errorPrefix interface{}) (
+	copyOfNegNumSearchSpec NegativeNumberSearchSpec,
+	err error) {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSearchSpec."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return copyOfNegNumSearchSpec, err
+	}
+
+	copyOfNegNumSearchSpec,
+		err =
+		negNumSignSearchNanobot{}.ptr().
+			copyOut(
+				negNumSearchSpec,
+				ePrefix.XCpy(
+					"copyOfNegNumSearchSpec<-negNumSearchSpec"))
+
+	return copyOfNegNumSearchSpec, err
+}
+
 // Empty - Resets all internal member variables for the current
 // instance of NegativeNumberSearchSpec to their initial or zero
 // states.
@@ -162,6 +276,63 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundNegNumSignSymbols() bo
 	return negNumSearchSpec.foundNegNumSignSymbols
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current NegativeNumberSearchSpec
+// instance to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid, this method
+// returns a boolean value of 'true'.
+//
+// This method is functionally equivalent to
+// NegativeNumberSearchSpec.IsValidInstanceError() with the sole
+// exceptions being that this method takes no input parameters and
+// returns a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If any of the internal member data variables contained in
+//       the current instance of NegativeNumberSearchSpec are found
+//       to be invalid, this method will return a boolean value of
+//       'false'.
+//
+//       If all internal member data variables contained in the
+//       current instance of NegativeNumberSearchSpec are found to be
+//       valid, this method returns a boolean value of 'true'.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstance() bool {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	isValid,
+		_ :=
+		negNumSearchSpecAtom{}.ptr().
+			testValidityOfNegNumSearchSpec(
+				negNumSearchSpec,
+				nil)
+
+	return isValid
+}
+
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current NegativeNumberSearchSpec
 // instance to determine if they are valid.
@@ -257,177 +428,12 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstanceError(
 		return err
 	}
 
-	if !negNumSearchSpec.negNumSignPosition.XIsValid() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-			"The internal member variable 'negNumSignPosition' is NOT configured.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	sMechPreon := strMechPreon{}
-
-	var err2 error
-
-	if negNumSearchSpec.negNumSignPosition == NSignSymPos.Before() {
-
-		if len(negNumSearchSpec.trailingNegNumSignSymbols) > 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Leading Negative Number Sign.\n"+
-				"However, it contains Trailing Negative Number Sign characters.\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		if len(negNumSearchSpec.leadingNegNumSignSymbols) == 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Leading Negative Number Sign.\n"+
-				"However, no Leading Negative Number Sign characters are configured.\n",
-				ePrefix.String())
-
-			return err
-		}
-
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.leadingNegNumSignSymbols,
-			nil)
-
-		if err2 != nil {
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Leading Negative Number Sign Symbol.\n"+
-				"Internal member variable 'leadingNegNumSignSymbols' returned\n"+
-				"the following validation error:\n"+
-				"%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return err
-		}
-
-		return err
-	}
-
-	if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
-
-		if len(negNumSearchSpec.leadingNegNumSignSymbols) > 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Trailing Negative Number Sign.\n"+
-				"However, it contains Leading Negative Number Sign characters.\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		if len(negNumSearchSpec.trailingNegNumSignSymbols) == 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Trailing Negative Number Sign.\n"+
-				"However, no Trailing Negative Number Sign characters are configured.\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.trailingNegNumSignSymbols,
-			nil)
-
-		if err2 != nil {
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Trailing Negative Number Sign Symbol.\n"+
-				"Internal member variable 'trailingNegNumSignSymbols' returned\n"+
-				"the following validation error:\n"+
-				"%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return err
-		}
-
-		return err
-	}
-
-	if negNumSearchSpec.negNumSignPosition == NSignSymPos.BeforeAndAfter() {
-
-		if len(negNumSearchSpec.leadingNegNumSignSymbols) == 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Leading and Trailing Negative Number Sign.\n"+
-				"However, it contains NO Leading Negative Number Sign characters.\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.leadingNegNumSignSymbols,
-			nil)
-
-		if err2 != nil {
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Leading and Trailing Negative Number Sign Symbol.\n"+
-				"Internal member variable 'leadingNegNumSignSymbols' returned\n"+
-				"the following validation error:\n"+
-				"%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return err
-		}
-
-		if len(negNumSearchSpec.trailingNegNumSignSymbols) == 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Trailing Negative Number Sign.\n"+
-				"However, it contains NO Trailing Negative Number Sign characters.\n",
-				ePrefix.String())
-
-			return err
-
-		}
-
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.trailingNegNumSignSymbols,
-			nil)
-
-		if err2 != nil {
-			err = fmt.Errorf("%v\n"+
-				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
-				"It is configured as a Leading and Trailing Negative Number Sign Symbol.\n"+
-				"Internal member variable 'trailingNegNumSignSymbols' returned\n"+
-				"the following validation error:\n"+
-				"%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return err
-		}
-
-		return err
-	}
+	_,
+		err =
+		negNumSearchSpecAtom{}.ptr().
+			testValidityOfNegNumSearchSpec(
+				negNumSearchSpec,
+				ePrefix)
 
 	return err
 }

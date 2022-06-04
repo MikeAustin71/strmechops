@@ -10,6 +10,220 @@ type negNumSignSearchNanobot struct {
 	lock *sync.Mutex
 }
 
+// copyOut - Returns a deep copy of the input parameter
+// 'negNumSearchSpec'.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The input parameter 'negNumSearchSpec' is determined to be
+// invalid, this method will return an error.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  negNumSearchSpec           *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec. A
+//       deep copy of the internal member variables will be created
+//       and returned in a new instance of NegativeNumberSearchSpec.
+//
+//       If the member variable data values encapsulated by
+//       'negNumSearchSpec' are found to be invalid, this method will
+//       return an error
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  copyOfNegNumSearchSpec     NegativeNumberSearchSpec
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'negNumSearchSpec' will be created and returned
+//       in a new instance of NegativeNumberSearchSpec.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
+	negNumSearchSpec *NegativeNumberSearchSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	copyOfNegNumSearchSpec NegativeNumberSearchSpec,
+	err error) {
+
+	if negNumSearchNanobot.lock == nil {
+		negNumSearchNanobot.lock = new(sync.Mutex)
+	}
+
+	negNumSearchNanobot.lock.Lock()
+
+	defer negNumSearchNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSignSearchNanobot."+
+			"copyOut()",
+		"")
+
+	if err != nil {
+
+		return copyOfNegNumSearchSpec, err
+
+	}
+
+	if negNumSearchSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
+			ePrefix.String())
+
+		return copyOfNegNumSearchSpec, err
+	}
+
+	var err2 error
+
+	_,
+		err2 =
+		negNumSearchSpecAtom{}.ptr().
+			testValidityOfNegNumSearchSpec(
+				negNumSearchSpec,
+				nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Validation of input parameter 'negNumSearchSpec' failed!\n"+
+			"This instance of NegativeNumberSearchSpec is invalid.\n"+
+			"Validation error message reads as follows:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return copyOfNegNumSearchSpec, err
+	}
+
+	copyOfNegNumSearchSpec.negNumSignPosition =
+		negNumSearchSpec.negNumSignPosition
+
+	var lenLeadingNegNumSignSymbols,
+		lenTrailingNegNumSignSymbols int
+
+	if copyOfNegNumSearchSpec.negNumSignPosition ==
+		NSignSymPos.Before() {
+
+		lenLeadingNegNumSignSymbols =
+			len(negNumSearchSpec.leadingNegNumSignSymbols)
+
+		copyOfNegNumSearchSpec.leadingNegNumSignSymbols =
+			make([]rune, lenLeadingNegNumSignSymbols)
+
+		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
+			copyOfNegNumSearchSpec.leadingNegNumSignSymbols[i] =
+				negNumSearchSpec.leadingNegNumSignSymbols[i]
+		}
+
+		copyOfNegNumSearchSpec.foundLeadingNegNumSign =
+			negNumSearchSpec.foundLeadingNegNumSign
+
+		copyOfNegNumSearchSpec.foundLeadingNegNumSignIndex =
+			negNumSearchSpec.foundLeadingNegNumSignIndex
+
+	} else if copyOfNegNumSearchSpec.negNumSignPosition ==
+		NSignSymPos.BeforeAndAfter() {
+
+		lenTrailingNegNumSignSymbols =
+			len(negNumSearchSpec.trailingNegNumSignSymbols)
+
+		copyOfNegNumSearchSpec.trailingNegNumSignSymbols =
+			make([]rune, lenTrailingNegNumSignSymbols)
+
+		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
+			copyOfNegNumSearchSpec.trailingNegNumSignSymbols[i] =
+				negNumSearchSpec.trailingNegNumSignSymbols[i]
+		}
+
+		copyOfNegNumSearchSpec.foundTrailingNegNumSign =
+			negNumSearchSpec.foundTrailingNegNumSign
+
+		copyOfNegNumSearchSpec.foundTrailingNegNumSignIndex =
+			negNumSearchSpec.foundTrailingNegNumSignIndex
+
+	} else {
+		// Must be copyOfNegNumSearchSpec.negNumSignPosition ==
+		//            NSignSymPos.After()
+
+		// Leading data elements
+		lenLeadingNegNumSignSymbols =
+			len(negNumSearchSpec.leadingNegNumSignSymbols)
+
+		copyOfNegNumSearchSpec.leadingNegNumSignSymbols =
+			make([]rune, lenLeadingNegNumSignSymbols)
+
+		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
+			copyOfNegNumSearchSpec.leadingNegNumSignSymbols[i] =
+				negNumSearchSpec.leadingNegNumSignSymbols[i]
+		}
+
+		copyOfNegNumSearchSpec.foundLeadingNegNumSign =
+			negNumSearchSpec.foundLeadingNegNumSign
+
+		copyOfNegNumSearchSpec.foundLeadingNegNumSignIndex =
+			negNumSearchSpec.foundLeadingNegNumSignIndex
+
+		// Trailing Data Elements
+		lenTrailingNegNumSignSymbols =
+			len(negNumSearchSpec.trailingNegNumSignSymbols)
+
+		copyOfNegNumSearchSpec.trailingNegNumSignSymbols =
+			make([]rune, lenTrailingNegNumSignSymbols)
+
+		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
+			copyOfNegNumSearchSpec.trailingNegNumSignSymbols[i] =
+				negNumSearchSpec.trailingNegNumSignSymbols[i]
+		}
+
+		copyOfNegNumSearchSpec.foundTrailingNegNumSign =
+			negNumSearchSpec.foundTrailingNegNumSign
+
+		copyOfNegNumSearchSpec.foundTrailingNegNumSignIndex =
+			negNumSearchSpec.foundTrailingNegNumSignIndex
+
+	}
+
+	copyOfNegNumSearchSpec.foundFirstNumericDigitInNumStr =
+		negNumSearchSpec.foundFirstNumericDigitInNumStr
+
+	copyOfNegNumSearchSpec.foundNegNumSignSymbols =
+		negNumSearchSpec.foundNegNumSignSymbols
+
+	return copyOfNegNumSearchSpec, err
+}
+
 // ptr - Returns a pointer to a new instance of
 // negNumSignSearchNanobot.
 //
@@ -43,7 +257,7 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 //
 // Input Parameters
 //
-//  negNumSignSpec             *NegativeNumberSearchSpec
+//  negNumSearchSpec           *NegativeNumberSearchSpec
 //     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Leading Negative Number
 //       Sign Specification. All previous configuration data will be
@@ -55,7 +269,7 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 //     - An array of runes identifying the character or characters
 //       which comprise the Leading Negative Number Symbol used in
 //       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSignSpec'.
+//       'negNumSearchSpec'.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -90,7 +304,7 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 //       the beginning of the error message.
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
-	negNumSignSpec *NegativeNumberSearchSpec,
+	negNumSearchSpec *NegativeNumberSearchSpec,
 	leadingNegNumSignSymbols []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -116,10 +330,10 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 		return err
 	}
 
-	if negNumSignSpec == nil {
+	if negNumSearchSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'negNumSignSpec' is a nil pointer!\n",
+			"ERROR: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -139,7 +353,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 	negNumSignAtom := negNumSearchSpecAtom{}
 
 	negNumSignAtom.empty(
-		negNumSignSpec)
+		negNumSearchSpec)
 
 	sMechPreon := strMechPreon{}
 
@@ -162,17 +376,17 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSignSpec.leadingNegNumSignSymbols,
+		&negNumSearchSpec.leadingNegNumSignSymbols,
 		&leadingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
-			"negNumSignSpec<-leadingNegNumSignSymbols"))
+			"negNumSearchSpec<-leadingNegNumSignSymbols"))
 
 	if err != nil {
 		return err
 	}
 
-	negNumSignSpec.negNumSignPosition = NSignSymPos.Before()
+	negNumSearchSpec.negNumSignPosition = NSignSymPos.Before()
 
 	return err
 }
@@ -200,7 +414,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 //
 // Input Parameters
 //
-//  negNumSignSpec             *NegativeNumberSearchSpec
+//  negNumSearchSpec           *NegativeNumberSearchSpec
 //     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Leading and Trailing
 //       Negative Number Sign Specification. All previous
@@ -212,7 +426,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 //     - An array of runes identifying the character or characters
 //       which comprise the Leading Negative Number Symbol used in
 //       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSignSpec'.
+//       'negNumSearchSpec'.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -223,7 +437,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 //     - An array of runes identifying the character or characters
 //       which comprise the Trailing Negative Number Symbol used in
 //       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSignSpec'.
+//       'negNumSearchSpec'.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -258,7 +472,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 //       the beginning of the error message.
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumSearchSpec(
-	negNumSignSpec *NegativeNumberSearchSpec,
+	negNumSearchSpec *NegativeNumberSearchSpec,
 	leadingNegNumSignSymbols []rune,
 	trailingNegNumSignSymbols []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -285,10 +499,10 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 		return err
 	}
 
-	if negNumSignSpec == nil {
+	if negNumSearchSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'negNumSignSpec' is a nil pointer!\n",
+			"ERROR: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -353,28 +567,28 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSignSpec.leadingNegNumSignSymbols,
+		&negNumSearchSpec.leadingNegNumSignSymbols,
 		&leadingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
-			"negNumSignSpec<-leadingNegNumSignSymbols"))
+			"negNumSearchSpec<-leadingNegNumSignSymbols"))
 
 	if err != nil {
 		return err
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSignSpec.trailingNegNumSignSymbols,
+		&negNumSearchSpec.trailingNegNumSignSymbols,
 		&trailingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
-			"negNumSignSpec<-trailingNegNumSignSymbols"))
+			"negNumSearchSpec<-trailingNegNumSignSymbols"))
 
 	if err != nil {
 		return err
 	}
 
-	negNumSignSpec.negNumSignPosition = NSignSymPos.BeforeAndAfter()
+	negNumSearchSpec.negNumSignPosition = NSignSymPos.BeforeAndAfter()
 
 	return err
 }
@@ -394,7 +608,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 //
 // Input Parameters
 //
-//  negNumSignSpec             *NegativeNumberSearchSpec
+//  negNumSearchSpec           *NegativeNumberSearchSpec
 //     - A pointer to an instance of NegativeNumberSearchSpec. This
 //       instance will be configured as a Trailing Negative Number
 //       Sign Specification. All previous configuration data will
@@ -406,7 +620,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 //     - An array of runes identifying the character or characters
 //       which comprise the Trailing Negative Number Symbol used in
 //       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSignSpec'.
+//       'negNumSearchSpec'.
 //
 //       If this array is empty (zero length) or includes array
 //       elements containing a zero value, an error will be
@@ -441,7 +655,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 //       the beginning of the error message.
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
-	negNumSignSpec *NegativeNumberSearchSpec,
+	negNumSearchSpec *NegativeNumberSearchSpec,
 	trailingNegNumSignSymbols []rune,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
@@ -467,10 +681,10 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 		return err
 	}
 
-	if negNumSignSpec == nil {
+	if negNumSearchSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'negNumSignSpec' is a nil pointer!\n",
+			"ERROR: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
 			ePrefix.String())
 
 		return err
@@ -488,7 +702,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 	}
 
 	negNumSearchSpecAtom{}.ptr().empty(
-		negNumSignSpec)
+		negNumSearchSpec)
 
 	sMechPreon := strMechPreon{}
 
@@ -511,17 +725,17 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSignSpec.trailingNegNumSignSymbols,
+		&negNumSearchSpec.trailingNegNumSignSymbols,
 		&trailingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
-			"negNumSignSpec<-trailingNegNumSignSymbols"))
+			"negNumSearchSpec<-trailingNegNumSignSymbols"))
 
 	if err != nil {
 		return err
 	}
 
-	negNumSignSpec.negNumSignPosition = NSignSymPos.After()
+	negNumSearchSpec.negNumSignPosition = NSignSymPos.After()
 
 	return err
 }
