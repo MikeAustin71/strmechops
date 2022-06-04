@@ -937,18 +937,25 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchStr(
 // by the current instance of NegNumSearchSpecCollection.
 //
 // Type NegNumSearchSpecCollection manages an internal member
-// variable named 'negNumSearchSpecsCol'. This is a an array of
+// variable named 'negNumSearchSpecsCol'. This is an array of
 // NegativeNumberSearchSpec objects. This method returns the number
 // of NegativeNumberSearchSpec objects in that array.
+//
+// Type NegativeNumberSearchSpec is used in number string parsing
+// functions to search for negative number symbols. The presence
+// of valid negative number character symbols in a number string
+// classify the extracted numeric digits as a negative numeric
+// value.
 //
 // -----------------------------------------------------------------
 //
 // BE ADVISED
 //
-// If the number of elements in the collection is zero, it means
-// that the current instance of NegNumSearchSpecCollection is
-// invalid and cannot be used in number string parsing functions to
-// search for negative number symbols.
+// If the number of elements in the 'negNumSearchSpecsCol'
+// collection is zero, it means that the current instance of
+// NegNumSearchSpecCollection is invalid and cannot be used in
+// number string parsing functions to search for negative number
+// symbols.
 //
 func (negNumSignCol *NegNumSearchSpecCollection) GetNumberOfNegNumSearchSpecs() int {
 
@@ -961,6 +968,104 @@ func (negNumSignCol *NegNumSearchSpecCollection) GetNumberOfNegNumSearchSpecs() 
 	defer negNumSignCol.lock.Unlock()
 
 	return len(negNumSignCol.negNumSearchSpecsCol)
+}
+
+// GetNegNumSearchSpecCollection - Returns an array of
+// NegativeNumberSearchSpec objects.
+//
+// Type NegNumSearchSpecCollection manages an internal member
+// variable named 'negNumSearchSpecsCol'. This is an array of
+// NegativeNumberSearchSpec objects. This method returns a deep
+// copy of the NegativeNumberSearchSpec objects in that array.
+//
+// Type NegativeNumberSearchSpec is used in number string parsing
+// functions to search for negative number symbols. The presence
+// of valid negative number character symbols in a number string
+// classify the extracted numeric digits as a negative numeric
+// value.
+//
+// -----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// If the length of the 'negNumSearchSpecsCol' collection is zero,
+// this method will return an error.
+//
+// Also, if the number of elements in the 'negNumSearchSpecsCol'
+// collection is zero, it means that the current instance of
+// NegNumSearchSpecCollection is invalid and cannot be used in
+// number string parsing functions to search for negative number
+// symbols.
+//
+func (negNumSignCol *NegNumSearchSpecCollection) GetNegNumSearchSpecCollection(
+	errorPrefix interface{}) (
+	negNumSearchSpecCol []NegativeNumberSearchSpec,
+	err error) {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	negNumSearchSpecCol = nil
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NegativeNumberSearchSpec."+
+			"SetTargetSearchString()",
+		"")
+
+	if err != nil {
+
+		return negNumSearchSpecCol, err
+
+	}
+
+	lenNegNumSearchSpecsCol :=
+		len(negNumSignCol.negNumSearchSpecsCol)
+
+	if lenNegNumSearchSpecsCol == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The length of the Negative Number Search\n"+
+			"Spec Collection is zero. The Collection is empty!\n"+
+			"len(negNumSignCol.negNumSearchSpecsCol) == 0\n"+
+			"The current instance of NegNumSearchSpecCollection\n"+
+			"is therefore invalid.\n",
+			ePrefix.String())
+
+		return negNumSearchSpecCol, err
+	}
+
+	negNumSearchSpecCol =
+		make([]NegativeNumberSearchSpec, lenNegNumSearchSpecsCol)
+
+	itemsCopied :=
+		copy(negNumSearchSpecCol,
+			negNumSignCol.negNumSearchSpecsCol)
+
+	if itemsCopied != lenNegNumSearchSpecsCol {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Copy Operation Failed!\n"+
+			"The number of elements copied from the Negative\n"+
+			"Number Search Spec Collection is invalid.\n"+
+			"'negNumSearchSpecsCol' elements available = '%v'\n"+
+			"   'negNumSearchSpecsCol' elements copied = '%v'\n",
+			ePrefix.String(),
+			lenNegNumSearchSpecsCol,
+			itemsCopied)
+
+		return negNumSearchSpecCol, err
+	}
+
+	return negNumSearchSpecCol, err
 }
 
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
@@ -988,8 +1093,8 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"NegativeNumberSearchSpec."+
-			"SetTargetSearchString()",
+		"NegNumSearchSpecCollection."+
+			"SearchForNegNumSignSymbols()",
 		"")
 
 	if err != nil {
