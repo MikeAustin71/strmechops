@@ -932,6 +932,37 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchStr(
 	return err
 }
 
+// GetNumberOfNegNumSearchSpecs - Returns the number of elements in
+// the Negative Number Search Specification Collection maintained
+// by the current instance of NegNumSearchSpecCollection.
+//
+// Type NegNumSearchSpecCollection manages an internal member
+// variable named 'negNumSearchSpecsCol'. This is a an array of
+// NegativeNumberSearchSpec objects. This method returns the number
+// of NegativeNumberSearchSpec objects in that array.
+//
+// -----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// If the number of elements in the collection is zero, it means
+// that the current instance of NegNumSearchSpecCollection is
+// invalid and cannot be used in number string parsing functions to
+// search for negative number symbols.
+//
+func (negNumSignCol *NegNumSearchSpecCollection) GetNumberOfNegNumSearchSpecs() int {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	return len(negNumSignCol.negNumSearchSpecsCol)
+}
+
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
