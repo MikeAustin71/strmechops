@@ -236,8 +236,38 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) Equal(
 		incomingNegNumSearchSpec)
 }
 
-// GetFoundFirstNumericDigit - This flag is set during a number
-// string parsing operation.
+// GetFoundLeadingNegNumSign - This boolean flag is set internally
+// during a number string parsing operation.
+//
+// This boolean value signals whether valid Leading Negative Number
+// Sign Symbols were located during a number string parsing operation.
+//
+// This method returns the current value of this boolean value in the
+// form of internal member variable:
+//   'NegativeNumberSearchSpec.foundLeadingNegNumSign'
+//
+// If this returned value is set to 'true' it means that valid
+// Leading Negative Number Symbol(s) were located in the target
+// number string.
+//
+// If the Leading Negative Number Symbol(s) are NOT present in the
+// target number string, this return value is set to 'false'.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundLeadingNegNumSign() bool {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	return negNumSearchSpec.foundLeadingNegNumSign
+}
+
+// GetFoundFirstNumericDigit - This boolean flag is set internally
+// during a number string parsing operation.
 //
 // If the first numeric digit in a numeric value has been
 // identified in the string parsing operation, the internal member
@@ -253,6 +283,12 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) Equal(
 // ('foundFirstNumericDigitInNumStr') indicating whether the first
 // numeric digit has been located in the number string parsing
 // operation.
+//
+// Type NegativeNumberSearchSpec uses this flag internally to
+// determine if searches for Leading Negative Number Sign Symbols
+// are required. If the First Numeric Digit in a number string has
+// already been located, then Leading Negative Number Sign Symbols
+// are not present in the number string.
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundFirstNumericDigit() bool {
 
