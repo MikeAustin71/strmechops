@@ -266,6 +266,51 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundLeadingNegNumSign() bo
 	return negNumSearchSpec.foundLeadingNegNumSign
 }
 
+// GetFoundLeadingNegNumSignIndex - This integer value is set
+// internally during a number string parsing operation.
+//
+// If Leading Negative Number Symbol(s) are present in a number
+// string, this value is set to the beginning zero based index of
+// the Leading Negative Number Symbol(s).
+//
+// Effectively, this zero based index marks the beginning of the
+// Leading Negative Number Symbol(s) found in the target number
+// string.
+//
+// This method returns the current value of this boolean value in the
+// form of internal member variable:
+//   'NegativeNumberSearchSpec.foundLeadingNegNumSign'
+//
+// This method returns the current integer value of this index in
+// the form of internal member variable:
+//   'NegativeNumberSearchSpec.foundLeadingNegNumSignIndex'
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Before using this index value, be sure to call method:
+//  NegativeNumberSearchSpec.GetFoundLeadingNegNumSign()
+//
+// The result of this method will signal whether the
+// 'foundLeadingNegNumSignIndex' is valid.
+//
+// If Leading Negative Number Symbol(s) have not yet been located
+// in the target number string, this index value is invalid.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundLeadingNegNumSignIndex() int {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	return negNumSearchSpec.foundLeadingNegNumSignIndex
+}
+
 // GetFoundFirstNumericDigit - This boolean flag is set internally
 // during a number string parsing operation.
 //
