@@ -210,6 +210,32 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) EmptyProcessingFlags() {
 
 }
 
+// Equal - Receives a pointer to another instance of
+// NegativeNumberSearchSpec and proceeds to compare the member
+// variables to those of the current NegativeNumberSearchSpec
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) Equal(
+	incomingNegNumSearchSpec *NegativeNumberSearchSpec) bool {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	return negNumSearchSpecElectron{}.ptr().equal(
+		negNumSearchSpec,
+		incomingNegNumSearchSpec)
+}
+
 // GetFoundFirstNumericDigit - This flag is set during a number
 // string parsing operation.
 //
