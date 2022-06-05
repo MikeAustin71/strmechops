@@ -12,7 +12,8 @@ type textFieldSpecLabelMolecule struct {
 
 // copyIn - Copies all data from input parameter
 // 'incomingTxtFieldLabel' to input parameter
-// 'targetTxtFieldLabel'.
+// 'targetTxtFieldLabel'. Both instances are of type
+// TextFieldSpecLabel.
 //
 // IMPORTANT
 // -----------------------------------------------------------------

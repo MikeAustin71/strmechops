@@ -10,6 +10,242 @@ type negNumSignSearchNanobot struct {
 	lock *sync.Mutex
 }
 
+// copyIn - Copies all data from input parameter
+// 'incomingNegNumSearchSpec' to input parameter
+// 'targetNegNumSearchSpec'. Both instances are of type
+// NegativeNumberSearchSpec.
+//
+// IMPORTANT
+// -----------------------------------------------------------------
+// Be advised that the data fields in 'targetNegNumSearchSpec' will be
+// overwritten.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetNegNumSearchSpec        *NegativeNumberSearchSpec
+//     - A pointer to a NegativeNumberSearchSpec instance. All the
+//       member variable data fields in this object will be
+//       replaced by data values extracted from input parameter
+//       'incomingNegNumSearchSpec'.
+//
+//       'targetNegNumSearchSpec' is the target of this copy
+//       operation.
+//
+//
+//  incomingNegNumSearchSpec      *NegativeNumberSearchSpec
+//     - A pointer to another NegativeNumberSearchSpec instance. All
+//       the member variable data values from this object will
+//       be copied to corresponding member variables in
+//       'targetNegNumSearchSpec'.
+//
+//       'incomingNegNumSearchSpec' is the source for this copy
+//       operation.
+//
+//       If 'incomingNegNumSearchSpec' is determined to be invalid,
+//       an error will be returned.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
+	targetNegNumSearchSpec *NegativeNumberSearchSpec,
+	incomingNegNumSearchSpec *NegativeNumberSearchSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if negNumSearchNanobot.lock == nil {
+		negNumSearchNanobot.lock = new(sync.Mutex)
+	}
+
+	negNumSearchNanobot.lock.Lock()
+
+	defer negNumSearchNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSignSearchNanobot."+
+			"copyIn()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if targetNegNumSearchSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'targetNegNumSearchSpec' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if incomingNegNumSearchSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'incomingNegNumSearchSpec' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	_,
+		err2 =
+		negNumSearchSpecAtom{}.ptr().
+			testValidityOfNegNumSearchSpec(
+				incomingNegNumSearchSpec,
+				nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Validation of input parameter 'incomingNegNumSearchSpec' failed!\n"+
+			"This instance of NegativeNumberSearchSpec is invalid.\n"+
+			"Validation error message reads as follows:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return err
+	}
+
+	// Reset all targetNegNumSearchSpec member
+	//  variables to their zero values
+	negNumSearchSpecAtom{}.ptr().
+		empty(targetNegNumSearchSpec)
+
+	targetNegNumSearchSpec.negNumSignPosition =
+		incomingNegNumSearchSpec.negNumSignPosition
+
+	var lenLeadingNegNumSignSymbols,
+		lenTrailingNegNumSignSymbols int
+
+	if targetNegNumSearchSpec.negNumSignPosition ==
+		NSignSymPos.Before() {
+
+		lenLeadingNegNumSignSymbols =
+			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols)
+
+		targetNegNumSearchSpec.leadingNegNumSignSymbols =
+			make([]rune, lenLeadingNegNumSignSymbols)
+
+		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
+			targetNegNumSearchSpec.leadingNegNumSignSymbols[i] =
+				incomingNegNumSearchSpec.leadingNegNumSignSymbols[i]
+		}
+
+		targetNegNumSearchSpec.foundLeadingNegNumSign =
+			incomingNegNumSearchSpec.foundLeadingNegNumSign
+
+		targetNegNumSearchSpec.foundLeadingNegNumSignIndex =
+			incomingNegNumSearchSpec.foundLeadingNegNumSignIndex
+
+	} else if targetNegNumSearchSpec.negNumSignPosition ==
+		NSignSymPos.BeforeAndAfter() {
+
+		lenTrailingNegNumSignSymbols =
+			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols)
+
+		targetNegNumSearchSpec.trailingNegNumSignSymbols =
+			make([]rune, lenTrailingNegNumSignSymbols)
+
+		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
+			targetNegNumSearchSpec.trailingNegNumSignSymbols[i] =
+				incomingNegNumSearchSpec.trailingNegNumSignSymbols[i]
+		}
+
+		targetNegNumSearchSpec.foundTrailingNegNumSign =
+			incomingNegNumSearchSpec.foundTrailingNegNumSign
+
+		targetNegNumSearchSpec.foundTrailingNegNumSignIndex =
+			incomingNegNumSearchSpec.foundTrailingNegNumSignIndex
+
+	} else {
+		// Must be targetNegNumSearchSpec.negNumSignPosition ==
+		//            NSignSymPos.After()
+
+		// Leading data elements
+		lenLeadingNegNumSignSymbols =
+			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols)
+
+		targetNegNumSearchSpec.leadingNegNumSignSymbols =
+			make([]rune, lenLeadingNegNumSignSymbols)
+
+		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
+			targetNegNumSearchSpec.leadingNegNumSignSymbols[i] =
+				incomingNegNumSearchSpec.leadingNegNumSignSymbols[i]
+		}
+
+		targetNegNumSearchSpec.foundLeadingNegNumSign =
+			incomingNegNumSearchSpec.foundLeadingNegNumSign
+
+		targetNegNumSearchSpec.foundLeadingNegNumSignIndex =
+			incomingNegNumSearchSpec.foundLeadingNegNumSignIndex
+
+		// Trailing Data Elements
+		lenTrailingNegNumSignSymbols =
+			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols)
+
+		targetNegNumSearchSpec.trailingNegNumSignSymbols =
+			make([]rune, lenTrailingNegNumSignSymbols)
+
+		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
+			targetNegNumSearchSpec.trailingNegNumSignSymbols[i] =
+				incomingNegNumSearchSpec.trailingNegNumSignSymbols[i]
+		}
+
+		targetNegNumSearchSpec.foundTrailingNegNumSign =
+			incomingNegNumSearchSpec.foundTrailingNegNumSign
+
+		targetNegNumSearchSpec.foundTrailingNegNumSignIndex =
+			incomingNegNumSearchSpec.foundTrailingNegNumSignIndex
+
+	}
+
+	targetNegNumSearchSpec.foundFirstNumericDigitInNumStr =
+		incomingNegNumSearchSpec.foundFirstNumericDigitInNumStr
+
+	targetNegNumSearchSpec.foundNegNumSignSymbols =
+		incomingNegNumSearchSpec.foundNegNumSignSymbols
+
+	return err
+}
+
 // copyOut - Returns a deep copy of the input parameter
 // 'negNumSearchSpec'.
 //
