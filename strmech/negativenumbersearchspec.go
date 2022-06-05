@@ -302,6 +302,36 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundNegNumSignSymbols() bo
 	return negNumSearchSpec.foundNegNumSignSymbols
 }
 
+// GetNegNumSignPosition - Returns the position of the Negative
+// Number Sign Symbol defined the current instance of
+// NegativeNumberSearchSpec.
+//
+// Negative Number Sign Symbols are positioned in a string of text
+// characters relative to the number digits comprising a numeric
+// value. As such, Negative Number Sign Symbols will be positioned
+// 'Before', 'After' or 'Before and After' the numeric digits.
+//
+// If the current instance of NumSignSymbolPosition is valid and
+// properly configured, this method will return a type
+// NumSignSymbolPosition set to one of the following valid values:
+//           Value                   Example
+//    NSignSymPos.Before()           -123.45
+//    NSignSymPos.After()             123.45-
+//    NSignSymPos.BeforeAndAfter()   (123.45)
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) GetNegNumSignPosition() NumSignSymbolPosition {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	return negNumSearchSpec.negNumSignPosition
+}
+
 // IsValidInstance - Performs a diagnostic review of the data
 // values encapsulated in the current NegativeNumberSearchSpec
 // instance to determine if they are valid.
