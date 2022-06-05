@@ -246,7 +246,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) Equal(
 // form of internal member variable:
 //   'NegativeNumberSearchSpec.foundLeadingNegNumSign'
 //
-// If this returned value is set to 'true' it means that valid
+// If this returned value is set to 'true', it means that valid
 // Leading Negative Number Symbol(s) were located in the target
 // number string.
 //
@@ -381,6 +381,37 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundNegNumSignSymbols() bo
 	defer negNumSearchSpec.lock.Unlock()
 
 	return negNumSearchSpec.foundNegNumSignSymbols
+}
+
+// GetFoundTrailingNegNumSign - This boolean flag is set internally
+// during a number string parsing operation.
+//
+// This boolean value signals whether valid Trailing Negative
+// Number Sign Symbol(s) were located during a number string
+// parsing operation.
+//
+// This method returns the current value of this boolean value in
+// the form of internal member variable:
+//   'NegativeNumberSearchSpec.foundTrailingNegNumSign'
+//
+// If this returned value is set to 'true', it means that valid
+// Trailing Negative Number Symbol(s) were located in the target
+// number string.
+//
+// If the Trailing Negative Number Symbol(s) are NOT present in the
+// target number string, this return value is set to 'false'.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundTrailingNegNumSign() bool {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	return negNumSearchSpec.foundTrailingNegNumSign
 }
 
 // GetNegNumSignPosition - Returns the position of the Negative
