@@ -8,8 +8,12 @@ type negNumSearchSpecElectron struct {
 	lock *sync.Mutex
 }
 
+// emptyProcessingFlags - Sets NegativeNumberSearchSpec internal
+// member variables used as Processing Flags to their initial or
+// zero values.
+//
 func (negNumSearchElectron *negNumSearchSpecElectron) emptyProcessingFlags(
-	negNumSignSpec *NegativeNumberSearchSpec) {
+	negNumSearchSpec *NegativeNumberSearchSpec) {
 
 	if negNumSearchElectron.lock == nil {
 		negNumSearchElectron.lock = new(sync.Mutex)
@@ -19,16 +23,16 @@ func (negNumSearchElectron *negNumSearchSpecElectron) emptyProcessingFlags(
 
 	defer negNumSearchElectron.lock.Unlock()
 
-	if negNumSignSpec == nil {
+	if negNumSearchSpec == nil {
 		return
 	}
 
-	negNumSignSpec.foundFirstNumericDigitInNumStr = false
-	negNumSignSpec.foundNegNumSignSymbols = false
-	negNumSignSpec.foundLeadingNegNumSign = false
-	negNumSignSpec.foundLeadingNegNumSignIndex = -1
-	negNumSignSpec.foundTrailingNegNumSign = false
-	negNumSignSpec.foundTrailingNegNumSignIndex = -1
+	negNumSearchSpec.foundFirstNumericDigitInNumStr = false
+	negNumSearchSpec.foundNegNumSignSymbols = false
+	negNumSearchSpec.foundLeadingNegNumSign = false
+	negNumSearchSpec.foundLeadingNegNumSignIndex = -1
+	negNumSearchSpec.foundTrailingNegNumSign = false
+	negNumSearchSpec.foundTrailingNegNumSignIndex = -1
 
 }
 
