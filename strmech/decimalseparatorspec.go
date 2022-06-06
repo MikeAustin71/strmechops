@@ -571,6 +571,49 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 	return string(decSeparatorSpec.decimalSeparatorChars)
 }
 
+// GetFoundDecimalSeparatorSymbols - This boolean flag is set internally
+// during a number string parsing operation.
+//
+// As such it is almost exclusively used by Number String parsing
+// functions. Users will typically have little or no use for this
+// boolean processing flag.
+//
+// Internal Processing flags like internal member variable
+// 'foundDecimalSeparatorSymbols' are used by Number String parsing
+// functions to identify a Decimal Separator Symbol or Symbols in
+// strings of numeric digits called 'Number Strings'. Number String
+// parsing functions review strings of text characters containing
+// numeric digits and convert those numeric digits to numeric
+// values.
+//
+// If the Decimal Separator character or characters configured for
+// the current instance of DecimalSeparatorSpec is located in a
+// Number String during a number string parsing operation, this
+// boolean value is set to 'true'.
+//
+// If the subject Decimal Separator character or characters has not
+// yet been located in the Number String, this value is set to
+// 'false'.
+//
+// This method returns the internal processing status flag
+// 'foundDecimalSeparatorSymbols' indicating whether the Decimal
+// Separator character or characters has been located in a number
+// string parsing operation.
+//
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundDecimalSeparatorSymbols() bool {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	return decSeparatorSpec.foundDecimalSeparatorSymbols
+}
+
 // GetFoundFirstNumericDigit - This boolean flag is set internally
 // during a number string parsing operation.
 //
@@ -579,7 +622,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 // boolean processing flag.
 //
 // Internal Processing flags like internal member variable
-// ('foundFirstNumericDigitInNumStr') are used by Number String
+// 'foundFirstNumericDigitInNumStr' are used by Number String
 // parsing functions to identify a Decimal Separator Symbol or
 // Symbols in strings of numeric digits called 'Number Strings'.
 // Number String parsing functions review strings of text
@@ -596,8 +639,8 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 // parsing operation, 'foundFirstNumericDigitInNumStr' is set to
 // 'false'.
 //
-// This method returns the status flag
-// ('foundFirstNumericDigitInNumStr') indicating whether the first
+// This method returns the internal processing status flag
+// 'foundFirstNumericDigitInNumStr' indicating whether the first
 // numeric digit has been located in a number string parsing
 // operation.
 //
