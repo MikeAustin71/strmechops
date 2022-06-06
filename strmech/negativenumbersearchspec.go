@@ -317,6 +317,14 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) CopyOut(
 // instance of NegativeNumberSearchSpec to their initial or zero
 // states.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of
+// NegativeNumberSearchSpec.
+//
 func (negNumSearchSpec *NegativeNumberSearchSpec) Empty() {
 
 	if negNumSearchSpec.lock == nil {

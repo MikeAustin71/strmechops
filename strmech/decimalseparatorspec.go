@@ -16,7 +16,7 @@ import (
 // First, it is used by number string parsing functions to search
 // for decimal separators within a number string or string of
 // numeric digits. Number string parsing functions are designed to
-// convert strings to numeric characters into numeric values.
+// convert strings of numeric text characters into numeric values.
 //
 // Second, the DecimalSeparatorSpec type is used to format number
 // strings. Number string formatting functions likewise use the
@@ -290,4 +290,33 @@ func (decSeparatorSpec *DecimalSeparatorSpec) CopyOut(
 				"copyOfDecSepSpec<-decSeparatorSpec"))
 
 	return copyOfDecSepSpec, err
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of NegativeNumberSearchSpec to their initial or zero
+// states.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of
+// DecimalSeparatorSpec.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	decimalSeparatorSpecAtom{}.ptr().
+		empty(
+			decSeparatorSpec)
+
+	decSeparatorSpec.lock.Unlock()
+
+	decSeparatorSpec.lock = nil
 }
