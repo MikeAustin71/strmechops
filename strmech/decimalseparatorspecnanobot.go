@@ -6,10 +6,10 @@ import (
 	"sync"
 )
 
-// decimalSepSearchNanobot - Provides helper methods for type
+// decimalSepSpecNanobot - Provides helper methods for type
 // DecimalSeparatorSpec.
 //
-type decimalSepSearchNanobot struct {
+type decimalSepSpecNanobot struct {
 	lock *sync.Mutex
 }
 
@@ -78,26 +78,26 @@ type decimalSepSearchNanobot struct {
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
+func (decSepSpecNanobot *decimalSepSpecNanobot) copyIn(
 	targetDecSepSpec *DecimalSeparatorSpec,
 	incomingDecSepSpec *DecimalSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
-	if decSepSearchNanobot.lock == nil {
-		decSepSearchNanobot.lock = new(sync.Mutex)
+	if decSepSpecNanobot.lock == nil {
+		decSepSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	decSepSearchNanobot.lock.Lock()
+	decSepSpecNanobot.lock.Lock()
 
-	defer decSepSearchNanobot.lock.Unlock()
+	defer decSepSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSignSearchNanobot."+
+		"decimalSepSpecNanobot."+
 			"copyIn()",
 		"")
 
@@ -241,26 +241,26 @@ func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (decSepSearchNanobot *decimalSepSearchNanobot) copyOut(
+func (decSepSpecNanobot *decimalSepSpecNanobot) copyOut(
 	decSepSpec *DecimalSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	copyOfDecSepSpec DecimalSeparatorSpec,
 	err error) {
 
-	if decSepSearchNanobot.lock == nil {
-		decSepSearchNanobot.lock = new(sync.Mutex)
+	if decSepSpecNanobot.lock == nil {
+		decSepSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	decSepSearchNanobot.lock.Lock()
+	decSepSpecNanobot.lock.Lock()
 
-	defer decSepSearchNanobot.lock.Unlock()
+	defer decSepSpecNanobot.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"decimalSepSearchNanobot."+
+		"decimalSepSpecNanobot."+
 			"copyOut()",
 		"")
 
@@ -337,19 +337,19 @@ func (decSepSearchNanobot *decimalSepSearchNanobot) copyOut(
 }
 
 // ptr - Returns a pointer to a new instance of
-// decimalSepSearchNanobot.
+// decimalSepSpecNanobot.
 //
-func (decSepSearchNanobot decimalSepSearchNanobot) ptr() *decimalSepSearchNanobot {
+func (decSepSpecNanobot decimalSepSpecNanobot) ptr() *decimalSepSpecNanobot {
 
-	if decSepSearchNanobot.lock == nil {
-		decSepSearchNanobot.lock = new(sync.Mutex)
+	if decSepSpecNanobot.lock == nil {
+		decSepSpecNanobot.lock = new(sync.Mutex)
 	}
 
-	decSepSearchNanobot.lock.Lock()
+	decSepSpecNanobot.lock.Lock()
 
-	defer decSepSearchNanobot.lock.Unlock()
+	defer decSepSpecNanobot.lock.Unlock()
 
-	return &decimalSepSearchNanobot{
+	return &decimalSepSpecNanobot{
 		lock: new(sync.Mutex),
 	}
 }

@@ -82,11 +82,8 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) empty(
 
 	decSepSpec.decimalSeparatorChars = nil
 
-	decSepSpec.foundFirstNumericDigitInNumStr = false
-
-	decSepSpec.foundDecimalSeparatorSymbols = false
-
-	decSepSpec.foundDecimalSeparatorIndex = -1
+	decimalSepSpecElectron{}.ptr().
+		emptyProcessingFlags(decSepSpec)
 
 	return
 }
@@ -143,7 +140,7 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) empty(
 //
 //  err                        error
 //     - If input parameter 'depSecSpec' is judged to be valid in
-//       all respects, this return parameter will be set to'nil'.
+//       all respects, this return parameter will be set to 'nil'.
 //
 //       If input parameter, 'depSecSpec' is found to be invalid,
 //       this return parameter will be configured with an

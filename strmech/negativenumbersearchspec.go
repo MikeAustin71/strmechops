@@ -30,9 +30,9 @@ import (
 //
 // Examples of Negative Number Sign Symbols:
 //
-//   "-"   The Minus Sign ('-'). Dpending on the country or culture
-//         Minus Signs could be positioned before or after a string
-//         of numeric digits.
+//   "-"   The Minus Sign ('-'). Depending on the country or
+//         culture, the Minus Signs could be positioned before or
+//         after a string of numeric digits.
 //               -127.54
 //               - 127.54
 //               127.54-
@@ -325,6 +325,20 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) CopyOut(
 // variable data values in the current instance of
 // NegativeNumberSearchSpec.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (negNumSearchSpec *NegativeNumberSearchSpec) Empty() {
 
 	if negNumSearchSpec.lock == nil {
@@ -344,16 +358,37 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) Empty() {
 // EmptyProcessingFlags - Resets all the internal processing flags
 // to their initial or zero states.
 //
-// The NegativeNumberSearchSpec type includes a series of flags which
-// are used during the process of identifying Negative Numeric Sign
-// symbols within as number string. As part of parsing these number
-// strings, the internal flags are used to record the status of a
-// search for the Negative Number Sign symbol or symbols defined by
+// Internal Processing flags are used by Number String parsing
+// functions to identify a Negative Number Sign Symbol or Symbols
+// in strings of numeric digits called 'Number Strings'. Number
+// String parsing functions review strings of text characters
+// containing numeric digits and convert those numeric digits to
+// numeric values.
+//
+// The NegativeNumberSearchSpec type includes a series of flags
+// which are used to identify a Negative Numeric Sign Symbol or
+// Symbols within Number Strings. Number String parsing functions
+// use these internal processing flags to record the status of a
+// search for a Negative Number Sign Symbol or Symbols defined by
 // the current instance of NegativeNumberSearchSpec.
 //
-// Calling this method will effectively clear all of these flags
-// and prepare the current instance of NegativeNumberSearchSpec for
-// a new number string parsing operation.
+// Calling this method will effectively clear all of these internal
+// processing flags and prepare the current instance of
+// NegativeNumberSearchSpec for a new number string parsing operation.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) EmptyProcessingFlags() {
 

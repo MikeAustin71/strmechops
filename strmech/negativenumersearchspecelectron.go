@@ -12,6 +12,12 @@ type negNumSearchSpecElectron struct {
 // member variables used as Processing Flags to their initial or
 // zero values.
 //
+// Internal Processing flags are used by Number String parsing
+// functions to identify Negative Number Sign Symbols in strings of
+// numeric digits called 'Number Strings'. Number String parsing
+// functions review strings of text characters containing numeric
+// digits and convert those numeric digits to numeric values.
+//
 func (negNumSearchElectron *negNumSearchSpecElectron) emptyProcessingFlags(
 	negNumSearchSpec *NegativeNumberSearchSpec) {
 
