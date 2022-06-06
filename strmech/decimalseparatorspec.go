@@ -458,3 +458,115 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
 			decSeparatorSpec,
 			incomingDepSepSpec)
 }
+
+// GetDecimalSeparatorRunes - Returns the currently configured
+// Decimal Separator character or characters as an array of runes.
+//
+// Decimal Separators are comprised of a text character or
+// characters and are used to separate integer digits from
+// fractional digits in floating point numeric values.
+//
+// The specific characters used as decimal separators vary by
+// country and culture.
+//
+// For example, in the United States, the decimal point or period
+// ('.') serves as the decimal separator. Example: 127.54
+//
+// In various European countries, the comma (',') is used as a
+// decimal separator. Example: 127,54
+//
+// This method will return a string containing the configured
+// Decimal Separator text character or characters for the current
+// instance of DecimalSeparatorSpec.
+//
+// If Decimal Separator character(s) have not yet been configured,
+// this method will return 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  []rune
+//     - An array of runes containing the text character or
+//       characters configured for the current instance of
+//       DecimalSeparatorSpec.
+//
+//       If Decimal Separator character(s) have not yet been
+//       configured, this method will return 'nil'.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorRunes() []rune {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	return decSeparatorSpec.decimalSeparatorChars
+}
+
+// GetDecimalSeparatorStr - Returns the currently configured Decimal Separator
+// character or characters as a string.
+//
+// Decimal Separators are comprised of a text character or
+// characters and are used to separate integer digits from
+// fractional digits in floating point numeric values.
+//
+// The specific characters used as decimal separators vary by
+// country and culture.
+//
+// For example, in the United States, the decimal point or period
+// ('.') serves as the decimal separator. Example: 127.54
+//
+// In various European countries, the comma (',') is used as a
+// decimal separator. Example: 127,54
+//
+// This method will return a string containing the configured
+// Decimal Separator text character or characters for the current
+// instance of DecimalSeparatorSpec.
+//
+// If Decimal Separator character(s) have not yet been configured,
+// this method will return an empty string.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - A string containing the text character or characters
+//       configured for the current instance of
+//       DecimalSeparatorSpec.
+//
+//       If Decimal Separator character(s) have not yet been
+//       configured, this method will return an empty string.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	return string(decSeparatorSpec.decimalSeparatorChars)
+}
