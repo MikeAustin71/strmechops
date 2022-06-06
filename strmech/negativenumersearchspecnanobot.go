@@ -28,7 +28,7 @@ type negNumSignSearchNanobot struct {
 //  targetNegNumSearchSpec        *NegativeNumberSearchSpec
 //     - A pointer to a NegativeNumberSearchSpec instance. All the
 //       member variable data fields in this object will be
-//       replaced by data values extracted from input parameter
+//       replaced by data values copied from input parameter
 //       'incomingNegNumSearchSpec'.
 //
 //       'targetNegNumSearchSpec' is the target of this copy
@@ -124,9 +124,11 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 
 	var err2 error
 
+	negNumSearchAtom := negNumSearchSpecAtom{}
+
 	_,
 		err2 =
-		negNumSearchSpecAtom{}.ptr().
+		negNumSearchAtom.
 			testValidityOfNegNumSearchSpec(
 				incomingNegNumSearchSpec,
 				nil)
@@ -146,7 +148,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 
 	// Reset all targetNegNumSearchSpec member
 	//  variables to their zero values
-	negNumSearchSpecAtom{}.ptr().
+	negNumSearchAtom.
 		empty(targetNegNumSearchSpec)
 
 	targetNegNumSearchSpec.negNumSignPosition =

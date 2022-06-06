@@ -20,7 +20,11 @@ type negNumSearchSpecAtom struct {
 // IMPORTANT
 //
 // All the member variable data values contained in input parameter
-// 'negNumSearchSpec' will be deleted and reset to their zero values.
+// 'negNumSearchSpec' will be deleted and reset to their zero
+// values.
+//
+// All member variables containing zero based index values will be
+// set to minus one (-1).
 //
 //
 // ------------------------------------------------------------------------
@@ -30,7 +34,9 @@ type negNumSearchSpecAtom struct {
 //  negNumSearchSpec           *NegativeNumberSearchSpec
 //     - A pointer to an instance of NegativeNumberSearchSpec. All
 //       the internal member variables contained in this instance
-//       will be deleted and reset to their zero values.
+//       will be deleted and reset to their zero values. All member
+//       variables containing zero based index values will be set
+//       to minus one (-1).
 //
 //
 // ------------------------------------------------------------------------

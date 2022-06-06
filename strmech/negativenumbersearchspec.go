@@ -7,24 +7,52 @@ import (
 )
 
 // NegativeNumberSearchSpec - Negative Number Search Specification.
-// This type is designed for use by number string parsing functions.
-// These functions review a string of text characters searching for
-// numeric digits with the purpose extracting numeric values from
-// the string of text characters.
+// This type is designed for use by number string parsing
+// functions. These functions review a string of text characters
+// searching for numeric digits. The numeric digits are extracted
+// to form numeric values. Number string parsing functions
+// therefore convert numeric text characters to valid numeric
+// values.
 //
-// This type is used to configure search parameters for identifying
-// negative numeric values within text strings when extracting or
-// parsing numeric digits.
+// Type NegativeNumberSearchSpec allows users to configure search
+// parameters for identifying negative numeric values within number
+// strings when extracting or parsing numeric digits.
 //
 // Parsing functions used in converting strings of numeric
 // characters into numeric values assume that those values are
-// positive unless a Negative Number Sign symbol or symbols are
-// present in the string of numeric digits.
+// positive unless a Negative Number Sign Symbol or Symbols are
+// present in the number string.
 //
-// The NegativeNumberSearchSpec type is used to define the
-// criterion used to identify Negative Number Sign Symbols
-// found in number strings and properly classify the extracted
-// numeric values as positive or negative values.
+// Users configure the NegativeNumberSearchSpec type to define the
+// criterion for identifying those Negative Number Sign Symbols.
+// Number string parsing functions then apply this criterion when
+// searching for Negative Number Sign Symbols in number strings.
+//
+// Examples of Negative Number Sign Symbols:
+//
+//   "-" - The Minus Sign ('-'). Dpending on the country or culture
+//         Minus Signs could be positioned before or after a string
+//         of numeric digits.
+//               -127.54
+//               - 127.54
+//               127.54-
+//               127.54 -
+//
+//
+//   "(-)" - These three characters are often used in Europe and
+//           the United Kingdom to classify a numeric value as
+//           negative.
+//               (-) 127.54
+//               (-)127.54
+//               127.54(-)
+//               127.54 (-)
+//
+//   "()" - Opposing parenthesis characters are frequently used in
+//          the United States to classify numeric values as
+//          negative.
+//               (127.54)
+//               ( 127.54 )
+//
 //
 type NegativeNumberSearchSpec struct {
 	negNumSignPosition NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
@@ -36,7 +64,7 @@ type NegativeNumberSearchSpec struct {
 
 	// Processing flags
 
-	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit
+	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit in
 	//                                       the number string has been found
 	foundNegNumSignSymbols bool // Indicates all negative number sign symbols
 	//                               in this specification have been found
@@ -153,7 +181,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) CopyIn(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"NegativeNumberSearchSpec."+
-			"CopyOut()",
+			"CopyIn()",
 		"")
 
 	if err != nil {
