@@ -63,6 +63,13 @@ type NegativeNumberSearchSpec struct {
 	trailingNegNumSignSymbols []rune
 
 	// Processing flags
+	//
+	// Internal Processing flags are used by Number String parsing
+	// functions to identify Negative Number Sign Symbols in
+	// strings of numeric digits called 'Number Strings'. These
+	// Number String parsing functions review strings of text
+	// characters containing numeric digits and convert those
+	// numeric digits to numeric values.
 
 	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit in
 	//                                       the number string has been found
