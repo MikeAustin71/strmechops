@@ -367,6 +367,13 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
 // processing flags and prepare the current instance of
 // DecimalSeparatorSpec for a new number string parsing operation.
 //
+// This method will only reset the internal processing flags:
+//   DecimalSeparatorSpec.foundFirstNumericDigitInNumStr
+//   DecimalSeparatorSpec.foundDecimalSeparatorSymbols
+//   DecimalSeparatorSpec.foundDecimalSeparatorIndex
+//
+// This method will not alter the Decimal Separator Characters
+// configured for the current instance of DecimalSeparatorSpec.
 //
 // ------------------------------------------------------------------------
 //
@@ -397,4 +404,57 @@ func (decSeparatorSpec *DecimalSeparatorSpec) EmptyProcessingFlags() {
 		decSeparatorSpec)
 
 	return
+}
+
+// Equal - Receives a pointer to another instance of
+// DecimalSeparatorSpec and proceeds to compare its internal member
+// variables to those of the current DecimalSeparatorSpec instance
+// in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingDepSepSpec         *DecimalSeparatorSpec
+//     - A pointer to an instance of DecimalSeparatorSpec. The
+//       internal member variable data values in this instance will
+//       be compared to those in the current instance of
+//       DecimalSeparatorSpec. The results of this comparison will
+//       be returned to the calling functions as a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingDepSepSpec' are equivalent in all
+//       respects to those contained in the current instance of
+//       DecimalSeparatorSpec, this return value will be set to
+//       'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) Equal(
+	incomingDepSepSpec *DecimalSeparatorSpec) bool {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	return decimalSepSpecElectron{}.ptr().
+		equal(
+			decSeparatorSpec,
+			incomingDepSepSpec)
 }

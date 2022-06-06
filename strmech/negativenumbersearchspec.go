@@ -376,6 +376,17 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) Empty() {
 // processing flags and prepare the current instance of
 // NegativeNumberSearchSpec for a new number string parsing operation.
 //
+// This method will only reset the internal processing flags:
+//  NegativeNumberSearchSpec.foundFirstNumericDigitInNumStr
+//  NegativeNumberSearchSpec.foundNegNumSignSymbols
+//  NegativeNumberSearchSpec.foundLeadingNegNumSign
+//  NegativeNumberSearchSpec.foundLeadingNegNumSignIndex
+//  NegativeNumberSearchSpec.foundTrailingNegNumSign
+//  NegativeNumberSearchSpec.foundTrailingNegNumSignIndex
+//
+// This method will not alter the Negative Number Sign Symbols
+// configured for the current instance of DecimalSeparatorSpec.
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -406,14 +417,42 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) EmptyProcessingFlags() {
 }
 
 // Equal - Receives a pointer to another instance of
-// NegativeNumberSearchSpec and proceeds to compare the member
-// variables to those of the current NegativeNumberSearchSpec
-// instance in order to determine if they are equivalent.
+// NegativeNumberSearchSpec and proceeds to compare its internal
+// member variables to those of the current
+// NegativeNumberSearchSpec instance in order to determine if they
+// are equivalent.
 //
 // A boolean flag showing the result of this comparison is
 // returned. If the member variables for both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNegNumSearchSpec   *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec. The
+//       internal member variable data values in this instance will
+//       be compared to those in the current instance of
+//       NegativeNumberSearchSpec. The results of this comparison
+//       will be returned to the calling functions as a boolean
+//       value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingNegNumSearchSpec' are equivalent
+//       in all respects to those contained in the current instance
+//       of NegativeNumberSearchSpec, this return value will be set
+//       to 'true'.
+//
+//       Otherwise, this method will return 'false'.
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) Equal(
 	incomingNegNumSearchSpec *NegativeNumberSearchSpec) bool {
