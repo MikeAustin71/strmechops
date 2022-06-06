@@ -14,13 +14,13 @@ type decimalSepSearchNanobot struct {
 }
 
 // copyIn - Copies all data from input parameter
-// 'incomingDecSepSearchSpec' to input parameter
-// 'targetDecSepSearchSpec'. Both instances are of type
+// 'incomingDecSepSpec' to input parameter
+// 'targetDecSepSpec'. Both instances are of type
 // DecimalSeparatorSpec.
 //
 // IMPORTANT
 // -----------------------------------------------------------------
-// Be advised that the data fields in 'targetDecSepSearchSpec' will
+// Be advised that the data fields in 'targetDecSepSpec' will
 // be deleted and overwritten.
 //
 //
@@ -28,30 +28,30 @@ type decimalSepSearchNanobot struct {
 //
 // Input Parameters
 //
-//  targetDecSepSearchSpec        *DecimalSeparatorSpec
+//  targetDecSepSpec           *DecimalSeparatorSpec
 //     - A pointer to a DecimalSeparatorSpec instance. All the
 //       member variable data fields in this object will be
 //       replaced by data values copied from input parameter
-//       'incomingDecSepSearchSpec'.
+//       'incomingDecSepSpec'.
 //
-//       'targetDecSepSearchSpec' is the target of this copy
+//       'targetDecSepSpec' is the target of this copy
 //       operation.
 //
 //
-//  incomingDecSepSearchSpec      *DecimalSeparatorSpec
+//  incomingDecSepSpec         *DecimalSeparatorSpec
 //     - A pointer to another DecimalSeparatorSpec instance. All
 //       the member variable data values from this object will
 //       be copied to corresponding member variables in
-//       'targetDecSepSearchSpec'.
+//       'targetDecSepSpec'.
 //
-//       'incomingDecSepSearchSpec' is the source for this copy
+//       'incomingDecSepSpec' is the source for this copy
 //       operation.
 //
-//       If 'incomingDecSepSearchSpec' is determined to be invalid,
+//       If 'incomingDecSepSpec' is determined to be invalid,
 //       an error will be returned.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
+//  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
@@ -79,8 +79,8 @@ type decimalSepSearchNanobot struct {
 //       attached at the beginning of the error message.
 //
 func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
-	targetDecSepSearchSpec *DecimalSeparatorSpec,
-	incomingDecSepSearchSpec *DecimalSeparatorSpec,
+	targetDecSepSpec *DecimalSeparatorSpec,
+	incomingDecSepSpec *DecimalSeparatorSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -107,7 +107,7 @@ func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
 
 	}
 
-	if targetDecSepSearchSpec == nil {
+	if targetDecSepSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'targetNegNumSearchSpec' is a nil pointer!\n",
@@ -116,7 +116,7 @@ func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
 		return err
 	}
 
-	if incomingDecSepSearchSpec == nil {
+	if incomingDecSepSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter 'incomingNegNumSearchSpec' is a nil pointer!\n",
@@ -131,13 +131,13 @@ func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
 
 	_,
 		err2 = decSepSpecAtom.testValidityOfDecSepSearchSpec(
-		incomingDecSepSearchSpec,
+		incomingDecSepSpec,
 		nil)
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Validation of input parameter 'incomingDecSepSearchSpec' failed!\n"+
+			"Error: Validation of input parameter 'incomingDecSepSpec' failed!\n"+
 			"This instance of DecimalSeparatorSpec is invalid.\n"+
 			"Validation error message reads as follows:\n"+
 			"%v\n",
@@ -148,36 +148,192 @@ func (decSepSearchNanobot *decimalSepSearchNanobot) copyIn(
 	}
 
 	decSepSpecAtom.empty(
-		targetDecSepSearchSpec)
+		targetDecSepSpec)
 
 	lenDecSepChars :=
-		len(incomingDecSepSearchSpec.decimalSeparatorChars)
+		len(incomingDecSepSpec.decimalSeparatorChars)
 
 	if lenDecSepChars == 0 {
-		incomingDecSepSearchSpec.decimalSeparatorChars = nil
-		targetDecSepSearchSpec.decimalSeparatorChars = nil
+
+		incomingDecSepSpec.decimalSeparatorChars = nil
+		targetDecSepSpec.decimalSeparatorChars = nil
+
 	} else {
-		targetDecSepSearchSpec.decimalSeparatorChars =
+
+		targetDecSepSpec.decimalSeparatorChars =
 			make([]rune, lenDecSepChars)
 
 		for i := 0; i < lenDecSepChars; i++ {
 
-			targetDecSepSearchSpec.decimalSeparatorChars[i] =
-				incomingDecSepSearchSpec.decimalSeparatorChars[i]
+			targetDecSepSpec.decimalSeparatorChars[i] =
+				incomingDecSepSpec.decimalSeparatorChars[i]
 
 		}
 	}
 
-	targetDecSepSearchSpec.foundFirstNumericDigitInNumStr =
-		incomingDecSepSearchSpec.foundFirstNumericDigitInNumStr
+	targetDecSepSpec.foundFirstNumericDigitInNumStr =
+		incomingDecSepSpec.foundFirstNumericDigitInNumStr
 
-	targetDecSepSearchSpec.foundDecimalSeparatorSymbols =
-		incomingDecSepSearchSpec.foundDecimalSeparatorSymbols
+	targetDecSepSpec.foundDecimalSeparatorSymbols =
+		incomingDecSepSpec.foundDecimalSeparatorSymbols
 
-	targetDecSepSearchSpec.foundDecimalSeparatorIndex =
-		incomingDecSepSearchSpec.foundDecimalSeparatorIndex
+	targetDecSepSpec.foundDecimalSeparatorIndex =
+		incomingDecSepSpec.foundDecimalSeparatorIndex
 
 	return err
+}
+
+// copyOut - Returns a deep copy of the input parameter
+// 'depSecSpec', a pointer to an instance of
+// DecimalSeparatorSpec.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The input parameter 'depSecSpec' is determined to be
+// invalid, this method will return an error.
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  depSecSpec           *DecimalSeparatorSpec
+//     - A pointer to an instance of DecimalSeparatorSpec. A
+//       deep copy of the internal member variables will be created
+//       and returned in a new instance of DecimalSeparatorSpec.
+//
+//       If the member variable data values encapsulated by
+//       'depSecSpec' are found to be invalid, this method will
+//       return an error
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  copyOfNegNumSearchSpec     DecimalSeparatorSpec
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'depSecSpec' will be created and returned
+//       in a new instance of DecimalSeparatorSpec.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (decSepSearchNanobot *decimalSepSearchNanobot) copyOut(
+	decSepSpec *DecimalSeparatorSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	copyOfDecSepSpec DecimalSeparatorSpec,
+	err error) {
+
+	if decSepSearchNanobot.lock == nil {
+		decSepSearchNanobot.lock = new(sync.Mutex)
+	}
+
+	decSepSearchNanobot.lock.Lock()
+
+	defer decSepSearchNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"decimalSepSearchNanobot."+
+			"copyOut()",
+		"")
+
+	if err != nil {
+
+		return copyOfDecSepSpec, err
+
+	}
+
+	if decSepSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'decSepSpec' is a nil pointer!\n",
+			ePrefix.String())
+
+		return copyOfDecSepSpec, err
+	}
+
+	var err2 error
+
+	decSepSpecAtom := decimalSeparatorSpecAtom{}
+
+	_,
+		err2 = decSepSpecAtom.testValidityOfDecSepSearchSpec(
+		decSepSpec,
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Validation of input parameter 'decSepSpec' failed!\n"+
+			"This instance of DecimalSeparatorSpec is invalid.\n"+
+			"Validation error message reads as follows:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return copyOfDecSepSpec, err
+	}
+
+	decSepSpecAtom.empty(
+		&copyOfDecSepSpec)
+
+	lenDecSepChars :=
+		len(decSepSpec.decimalSeparatorChars)
+
+	if lenDecSepChars == 0 {
+		decSepSpec.decimalSeparatorChars = nil
+		copyOfDecSepSpec.decimalSeparatorChars = nil
+
+	} else {
+
+		copyOfDecSepSpec.decimalSeparatorChars =
+			make([]rune, lenDecSepChars)
+
+		for i := 0; i < lenDecSepChars; i++ {
+
+			copyOfDecSepSpec.decimalSeparatorChars[i] =
+				decSepSpec.decimalSeparatorChars[i]
+
+		}
+	}
+
+	copyOfDecSepSpec.foundFirstNumericDigitInNumStr =
+		decSepSpec.foundFirstNumericDigitInNumStr
+
+	copyOfDecSepSpec.foundDecimalSeparatorSymbols =
+		decSepSpec.foundDecimalSeparatorSymbols
+
+	copyOfDecSepSpec.foundDecimalSeparatorIndex =
+		decSepSpec.foundDecimalSeparatorIndex
+
+	return copyOfDecSepSpec, err
 }
 
 // ptr - Returns a pointer to a new instance of

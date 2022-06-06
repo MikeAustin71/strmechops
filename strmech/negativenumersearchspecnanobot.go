@@ -249,7 +249,8 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 }
 
 // copyOut - Returns a deep copy of the input parameter
-// 'negNumSearchSpec'.
+// 'negNumSearchSpec'. a pointer to an instance of
+// NegativeNumberSearchSpec.
 //
 // ----------------------------------------------------------------
 //

@@ -30,7 +30,7 @@ import (
 //
 // Examples of Negative Number Sign Symbols:
 //
-//   "-" - The Minus Sign ('-'). Dpending on the country or culture
+//   "-"   The Minus Sign ('-'). Dpending on the country or culture
 //         Minus Signs could be positioned before or after a string
 //         of numeric digits.
 //               -127.54
@@ -39,7 +39,7 @@ import (
 //               127.54 -
 //
 //
-//   "(-)" - These three characters are often used in Europe and
+//   "(-)"   These three characters are often used in Europe and
 //           the United Kingdom to classify a numeric value as
 //           negative.
 //               (-) 127.54
@@ -47,7 +47,7 @@ import (
 //               127.54(-)
 //               127.54 (-)
 //
-//   "()" - Opposing parenthesis characters are frequently used in
+//   "()"   Opposing parenthesis characters are frequently used in
 //          the United States to classify numeric values as
 //          negative.
 //               (127.54)
@@ -260,13 +260,13 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) CopyIn(
 //
 // Return Values
 //
-//  NegativeNumberSearchSpec
+//  copyOfNegNumSearchSpec     NegativeNumberSearchSpec
 //     - If this method completes successfully and no errors are
 //       encountered, this parameter will return a deep copy of the
 //       current NegativeNumberSearchSpec instance.
 //
 //
-//  error
+//  err                        error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
