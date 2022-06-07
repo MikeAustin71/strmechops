@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -71,6 +72,8 @@ type DecimalSeparatorSpec struct {
 // DecimalSeparatorSpec ('incomingDecSepSpec') to the data fields
 // of the current DecimalSeparatorSpec instance
 // ('decSeparatorSpec').
+//
+// ----------------------------------------------------------------
 //
 // IMPORTANT
 // All the data fields in current DecimalSeparatorSpec instance
@@ -860,6 +863,171 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 			decSeparatorSpec,
 			ePrefix.XCpy(
 				"decSeparatorSpec"))
+
+	return err
+}
+
+// SetDecimalSeparatorStr - Sets the Decimal Separator Symbols for
+// the current instance of DecimalSeparatorSpec.
+//
+// Decimal Separators are comprised of a text character or
+// characters and are used to separate integer digits from
+// fractional digits in floating point numeric values.
+//
+// This type performs two major functions.
+//
+// First, it is used by number string parsing functions to search
+// for decimal separators within a number string or string of
+// numeric digits. Number string parsing functions are designed to
+// convert strings of numeric text characters into numeric values.
+//
+// Second, the DecimalSeparatorSpec type is used to format number
+// strings. Number string formatting functions likewise use the
+// Decimal Separator Specification to separate integer and
+// fractional numeric digits when formatting a number string
+// comprised of a floating point numeric value presentation ond
+// display.
+//
+// The specific characters used as decimal separators vary by
+// country and culture.
+//
+// For example, in the United States, the decimal point or period
+// ('.') serves as the decimal separator. Example: 127.54
+//
+// In various European countries, the comma (',') is used as a
+// decimal separator. Example: 127,54
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+// All the data fields in current DecimalSeparatorSpec instance
+// ('decSeparatorSpec') will be deleted and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  decSeparator               string
+//     - This string contains the character or characters which
+//       will be configured as the Decimal Separator Symbol or
+//       Symbols for the current instance of DecimalSeparatorSpec,
+//       the Decimal Separator Specification.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
+	decSeparator string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"SetDecimalSeparatorStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	decSepRunes := []rune(decSeparator)
+
+	lenDecSepRunes := len(decSepRunes)
+
+	if lenDecSepRunes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'decSeparator' is invalid!"+
+			"'decSeparator' is an empty string with a length of zero.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	decimalSeparatorSpecAtom{}.ptr().
+		empty(decSeparatorSpec)
+
+	decSeparatorSpec.decimalSeparatorChars =
+		make([]rune, lenDecSepRunes)
+
+	for i := 0; i < lenDecSepRunes; i++ {
+
+		decSeparatorSpec.decimalSeparatorChars[i] =
+			decSepRunes[i]
+
+	}
 
 	return err
 }
