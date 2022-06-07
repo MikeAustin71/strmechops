@@ -571,6 +571,52 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 	return string(decSeparatorSpec.decimalSeparatorChars)
 }
 
+// GetFoundDecimalSeparatorIndex - This integer value is set
+// internally during a number string parsing operation.
+//
+// As such it is almost exclusively used by Number String parsing
+// functions. Users will typically have little or no use for this
+// boolean processing flag.
+//
+// Internal Processing flags like internal member variable
+// 'foundDecimalSeparatorIndex' are used by Number String parsing
+// functions to identify a Decimal Separator Symbol or Symbols in
+// strings of numeric digits called 'Number Strings'. Number String
+// parsing functions review strings of text characters containing
+// numeric digits and convert those numeric digits to numeric
+// values.
+//
+// If the Decimal Separator character or characters configured for
+// the current instance of DecimalSeparatorSpec is located in a
+// Number String during a number string parsing operation, this
+// 'foundDecimalSeparatorIndex' will store the zero based string
+// index marking the beginning of the Decimal Separator character
+// or characters within the Number String.
+//
+// The value of this index is only valid if another internal
+// processing flag, 'foundDecimalSeparatorSymbols' is set to
+// 'true'. For more informatino on 'foundDecimalSeparatorSymbols'
+// see method:
+//    DecimalSeparatorSpec.GetFoundDecimalSeparatorSymbols()
+//
+// This method returns the internal processing status flag
+// 'foundDecimalSeparatorIndex' identifying the zero based index
+// location of the first Decimal Separator character in a Number
+// String.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundDecimalSeparatorIndex() int {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	return decSeparatorSpec.foundDecimalSeparatorIndex
+}
+
 // GetFoundDecimalSeparatorSymbols - This boolean flag is set internally
 // during a number string parsing operation.
 //
@@ -599,7 +645,6 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 // 'foundDecimalSeparatorSymbols' indicating whether the Decimal
 // Separator character or characters has been located in a number
 // string parsing operation.
-//
 //
 func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundDecimalSeparatorSymbols() bool {
 
