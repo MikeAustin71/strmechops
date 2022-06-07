@@ -595,7 +595,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 //
 // The value of this index is only valid if another internal
 // processing flag, 'foundDecimalSeparatorSymbols' is set to
-// 'true'. For more informatino on 'foundDecimalSeparatorSymbols'
+// 'true'. For more information on 'foundDecimalSeparatorSymbols'
 // see method:
 //    DecimalSeparatorSpec.GetFoundDecimalSeparatorSymbols()
 //
@@ -700,4 +700,60 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundFirstNumericDigit() bool {
 	defer decSeparatorSpec.lock.Unlock()
 
 	return decSeparatorSpec.foundFirstNumericDigitInNumStr
+}
+
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current DecimalSeparatorSpec instance
+// to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid, this method
+// returns a boolean value of 'true'.
+//
+// This method is functionally equivalent to
+// DecimalSeparatorSpec.IsValidInstanceError() with the sole
+// exceptions being that this method takes no input parameters and
+// returns a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If any of the internal member data variables contained in
+//       the current instance of DecimalSeparatorSpec are found to
+//       be invalid, this method will return a boolean value of
+//       'false'.
+//
+//       If all internal member data variables contained in the
+//       current instance of DecimalSeparatorSpec are found to be
+//       valid, this method returns a boolean value of 'true'.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstance() bool {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	isValid,
+		_ := decimalSeparatorSpecAtom{}.ptr().
+		testValidityOfDecSepSearchSpec(
+			decSeparatorSpec,
+			nil)
+
+	return isValid
 }
