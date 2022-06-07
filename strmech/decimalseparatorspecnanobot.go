@@ -171,9 +171,6 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyIn(
 		}
 	}
 
-	targetDecSepSpec.foundFirstNumericDigitInNumStr =
-		incomingDecSepSpec.foundFirstNumericDigitInNumStr
-
 	targetDecSepSpec.foundDecimalSeparatorSymbols =
 		incomingDecSepSpec.foundDecimalSeparatorSymbols
 
@@ -323,9 +320,6 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyOut(
 
 		}
 	}
-
-	copyOfDecSepSpec.foundFirstNumericDigitInNumStr =
-		decSepSpec.foundFirstNumericDigitInNumStr
 
 	copyOfDecSepSpec.foundDecimalSeparatorSymbols =
 		decSepSpec.foundDecimalSeparatorSymbols

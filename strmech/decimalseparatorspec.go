@@ -55,8 +55,6 @@ type DecimalSeparatorSpec struct {
 	// functions review strings of text characters containing numeric
 	// digits and convert those numeric digits to numeric values.
 
-	foundFirstNumericDigitInNumStr bool // Indicates first numeric digit in
-	//                                       the number string has been found
 	foundDecimalSeparatorSymbols bool // Indicates that the decimal separator
 	//                                       characters have been found in the
 	//                                       number string.
@@ -662,49 +660,6 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundDecimalSeparatorSymbols() 
 	return decSeparatorSpec.foundDecimalSeparatorSymbols
 }
 
-// GetFoundFirstNumericDigit - This boolean flag is set internally
-// during a number string parsing operation.
-//
-// As such it is almost exclusively used by Number String parsing
-// functions. Users will typically have little or no use for this
-// boolean processing flag.
-//
-// Internal Processing flags like internal member variable
-// 'foundFirstNumericDigitInNumStr' are used by Number String
-// parsing functions to identify a Decimal Separator Symbol or
-// Symbols in strings of numeric digits called 'Number Strings'.
-// Number String parsing functions review strings of text
-// characters containing numeric digits and convert those numeric
-// digits to numeric values.
-//
-// If the first numeric digit in a numeric value has been
-// identified in a Number String parsing operation, the internal
-// member variable 'foundFirstNumericDigitInNumStr' is set to the
-// boolean value of 'true'. Again This member variable is typically
-// set and managed by Number String parsing functions.
-//
-// If the first numeric digit has not yet been located in the
-// parsing operation, 'foundFirstNumericDigitInNumStr' is set to
-// 'false'.
-//
-// This method returns the internal processing status flag
-// 'foundFirstNumericDigitInNumStr' indicating whether the first
-// numeric digit has been located in a number string parsing
-// operation.
-//
-func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundFirstNumericDigit() bool {
-
-	if decSeparatorSpec.lock == nil {
-		decSeparatorSpec.lock = new(sync.Mutex)
-	}
-
-	decSeparatorSpec.lock.Lock()
-
-	defer decSeparatorSpec.lock.Unlock()
-
-	return decSeparatorSpec.foundFirstNumericDigitInNumStr
-}
-
 // IsValidInstance - Performs a diagnostic review of the data
 // values encapsulated in the current DecimalSeparatorSpec instance
 // to determine if they are valid.
@@ -871,6 +826,31 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 // string for the presence of a Decimal Separator Symbol or
 // Symbols specified by the current instance of
 // DecimalSeparatorSpec.
+//
+// This method is typically called by Number String parsing
+// functions.
+//
+// Number String parsing functions search for a Decimal Separator
+// Symbol or Symbols in strings of numeric digits called
+// 'Number Strings'. Number String parsing functions review strings
+// of text characters containing numeric digits and convert those
+// numeric digits to numeric values. If a Decimal Separator Symbol
+// or Symbols are located in a Number String the digits to the
+// the right of the Decimal Separator are considered fractional
+// numeric values and the digits to the left are considered integer
+// numeric values.
+//
+// If the Decimal Separator specified by the current instance of
+// DecimalSeparatorSpec is located in a Target Search String, this
+// method will return a boolean flag signalling success and the last
+// zero based string index of the Decimal Separator found in the
+// Target Search String.
+//
+// This method will also configure member variables used as
+// internal processing flags for the current instance of
+// DecimalSeparatorSpec:
+//    DecimalSeparatorSpec.foundDecimalSeparatorSymbols
+//    DecimalSeparatorSpec.foundDecimalSeparatorIndex
 //
 //
 // -----------------------------------------------------------------
@@ -1119,6 +1099,11 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 		// Found Decimal Separator Chars
 		// Exit Method Here!
 		if j >= lenDecimalSeparatorChars {
+
+			decSeparatorSpec.foundDecimalSeparatorSymbols = true
+
+			decSeparatorSpec.foundDecimalSeparatorIndex =
+				startingSearchIndex
 
 			lastIndex = i
 			foundDecimalSeparatorSymbols = true

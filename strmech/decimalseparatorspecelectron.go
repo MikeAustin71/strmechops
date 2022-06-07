@@ -48,8 +48,6 @@ func (decSepSpecElectron *decimalSepSpecElectron) emptyProcessingFlags(
 
 	defer decSepSpecElectron.lock.Unlock()
 
-	decSepSpec.foundFirstNumericDigitInNumStr = false
-
 	decSepSpec.foundDecimalSeparatorSymbols = false
 
 	decSepSpec.foundDecimalSeparatorIndex = -1
@@ -95,11 +93,7 @@ func (decSepSpecElectron *decimalSepSpecElectron) equal(
 		return areEqual
 	}
 
-	if decSepSpec01.foundFirstNumericDigitInNumStr !=
-		decSepSpec02.foundFirstNumericDigitInNumStr {
-
-		return areEqual
-	}
+	areEqual = false
 
 	if decSepSpec01.foundDecimalSeparatorSymbols !=
 		decSepSpec02.foundDecimalSeparatorSymbols {
