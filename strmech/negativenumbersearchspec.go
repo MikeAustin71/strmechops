@@ -1795,7 +1795,11 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	var err2 error
 
-	err2 = negNumSearchSpec.IsValidInstanceError(
+	negNumSignAtom := negNumSearchSpecAtom{}
+
+	_,
+		err2 = negNumSignAtom.testValidityOfNegNumSearchSpec(
+		negNumSearchSpec,
 		nil)
 
 	if err2 != nil {
@@ -1813,8 +1817,6 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			err
 	}
 
-	negNumSignAtom := negNumSearchSpecAtom{}
-
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.Before() {
 
 		foundNegNumSignSymbols,
@@ -1825,7 +1827,8 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 				targetSearchString,
 				foundFirstNumericDigitInNumStr,
 				startingSearchIndex,
-				ePrefix)
+				ePrefix.XCpy(
+					"negNumSearchSpec"))
 
 	} else if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
 

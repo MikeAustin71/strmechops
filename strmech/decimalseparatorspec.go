@@ -867,6 +867,200 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 	return err
 }
 
+// SearchForDecimalSeparator - Searches a target text character
+// string for the presence of a Decimal Separator Symbol or
+// Symbols.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
+	targetSearchString *TargetSearchStringDto,
+	alreadyFoundDecimalSeparator bool,
+	startingSearchIndex int,
+	errorPrefix interface{}) (
+	foundDecimalSeparatorSymbols bool,
+	lastIndex int,
+	err error) {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DecimalSeparatorSpec."+
+			"SearchForDecimalSeparator()",
+		"")
+
+	if err != nil {
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+	}
+
+	foundDecimalSeparatorSymbols = alreadyFoundDecimalSeparator
+
+	lastIndex = -1
+
+	// There can be only one Decimal Separator.
+	// If a Decimal Separator was already found,
+	// there is no point in testing for this one.
+	if alreadyFoundDecimalSeparator {
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+	}
+
+	// foundDecimalSeparatorSymbols is equal to 'false'
+
+	if targetSearchString == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetSearchString' is invalid!\n"+
+			"'targetSearchString' is a nil pointer.\n",
+			ePrefix.String())
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+
+	}
+
+	lenTargetStr := len(targetSearchString.CharsToSearch)
+
+	if lenTargetStr == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetSearchString' is invalid!\n"+
+			"'targetSearchString' is empty and has a zero length.\n",
+			ePrefix.String())
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+
+	}
+
+	sMechPreon := strMechPreon{}
+
+	var err2 error
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		targetSearchString.CharsToSearch,
+		nil)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'targetSearchString' is invalid!\n"+
+			"This rune array contains invalid characters.\n"+
+			"'targetSearchString' returned the following validation\n"+
+			"error:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+	}
+
+	if startingSearchIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'startingSearchIndex' is invalid!\n"+
+			"'startingSearchIndex' has a value less than zero.\n"+
+			"startingSearchIndex = '%v'\n",
+			ePrefix.String(),
+			startingSearchIndex)
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+	}
+
+	if startingSearchIndex >= lenTargetStr {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'startingSearchIndex' is invalid!\n"+
+			"'startingSearchIndex' is greater than the last index in"+
+			"the Target Search String.\n"+
+			"startingSearchIndex = '%v'\n"+
+			"Last Index in Target Search String = '%v'\n",
+			ePrefix.String(),
+			startingSearchIndex,
+			lenTargetStr-1)
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+	}
+
+	lastIndex = startingSearchIndex
+
+	// decSeparatorSpec has already been validated
+	lenDecimalSeparatorChars :=
+		len(decSeparatorSpec.decimalSeparatorChars)
+
+	j := 0
+
+	effectiveSearchStrLen := lenTargetStr - startingSearchIndex
+
+	if effectiveSearchStrLen < lenDecimalSeparatorChars {
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+	}
+
+	for i := startingSearchIndex; i < lenTargetStr; i++ {
+
+		if targetSearchString.CharsToSearch[i] !=
+			decSeparatorSpec.decimalSeparatorChars[j] {
+
+			return foundDecimalSeparatorSymbols,
+				lastIndex,
+				err
+
+		}
+
+		// Chars are equal
+		j++
+
+		// Found Decimal Separator Chars
+		// Exit Method Here!
+		if j >= lenDecimalSeparatorChars {
+
+			lastIndex = i
+			foundDecimalSeparatorSymbols = true
+
+			return foundDecimalSeparatorSymbols,
+				lastIndex,
+				err
+
+		}
+
+	}
+
+	// Failed to find Decimal Separators
+	return foundDecimalSeparatorSymbols,
+		lastIndex,
+		err
+}
+
 // SetDecimalSeparatorRunes - Sets the Decimal Separator Symbols
 // for the current instance of DecimalSeparatorSpec.
 //
