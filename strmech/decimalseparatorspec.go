@@ -869,18 +869,115 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 
 // SearchForDecimalSeparator - Searches a target text character
 // string for the presence of a Decimal Separator Symbol or
-// Symbols.
+// Symbols specified by the current instance of
+// DecimalSeparatorSpec.
 //
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
+//  targetSearchString         *TargetSearchStringDto
+//     - A pointer to a TargetSearchStringDto. Type
+//       TargetSearchStringDto contains the string of text
+//       characters which will be searched for the presence of a
+//       Decimal Separator Symbol or Symbols specified by the
+//       current instance of DecimalSeparatorSpec.
 //
+//			  type TargetSearchStringDto struct {
+//                 CharsToSearch []rune
+//			  }
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  foundDecimalSeparatorSymbols bool
+//     - A boolean status flag which signals the search of a target
+//       character string located the Decimal Separator Symbol or
+//       Symbols specified by the current instance of
+//       DecimalSeparatorSpec.
+//
+//       If the search operation successfully located the Decimal
+//       Separator Symbol(s), the return parameter will be set to
+//       'true'.
+//
+//       If the search operation failed to locate the specified
+//       Decimal Separator Symbol(s), this return parameter will be
+//       set to 'false'.
+//
+//
+//  lastIndex                    int
+//     - If the search operation successfully located the specified
+//       Decimal Separator Symbol(s), the return parameter will be
+//       set to the index in the target search string
+//       ('targetSearchString') occupied by the last text character
+//       in the Decimal Separator Symbol(s).
+//         Example:
+//           Target Search String: "0123.56"
+//           Decimal Separator Symbol: "."
+//           lastIndex = 4
+//
+//
+//  err                          error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	targetSearchString *TargetSearchStringDto,
-	alreadyFoundDecimalSeparator bool,
 	startingSearchIndex int,
 	errorPrefix interface{}) (
 	foundDecimalSeparatorSymbols bool,
@@ -910,21 +1007,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			err
 	}
 
-	foundDecimalSeparatorSymbols = alreadyFoundDecimalSeparator
+	foundDecimalSeparatorSymbols = false
 
 	lastIndex = -1
-
-	// There can be only one Decimal Separator.
-	// If a Decimal Separator was already found,
-	// there is no point in testing for this one.
-	if alreadyFoundDecimalSeparator {
-
-		return foundDecimalSeparatorSymbols,
-			lastIndex,
-			err
-	}
-
-	// foundDecimalSeparatorSymbols is equal to 'false'
 
 	if targetSearchString == nil {
 
@@ -1016,15 +1101,6 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 		len(decSeparatorSpec.decimalSeparatorChars)
 
 	j := 0
-
-	effectiveSearchStrLen := lenTargetStr - startingSearchIndex
-
-	if effectiveSearchStrLen < lenDecimalSeparatorChars {
-
-		return foundDecimalSeparatorSymbols,
-			lastIndex,
-			err
-	}
 
 	for i := startingSearchIndex; i < lenTargetStr; i++ {
 
