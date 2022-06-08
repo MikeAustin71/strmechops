@@ -477,6 +477,55 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) Equal(
 		incomingNegNumSearchSpec)
 }
 
+// GetFoundFirstNumericDigit - This boolean flag is set internally
+// during a number string parsing operation.
+//
+// As such it is almost exclusively used by Number String parsing
+// functions. Users will typically have little or no use for this
+// boolean processing flag.
+//
+// Internal Processing flags like internal member variable
+// 'foundFirstNumericDigitInNumStr' are used by Number String
+// parsing functions to identify a Negative Number Sign Symbol or
+// Symbols in strings of numeric digits called 'Number Strings'.
+// Number String parsing functions review strings of text
+// characters containing numeric digits and convert those numeric
+// digits to numeric values.
+//
+// If the first numeric digit in a numeric value has been
+// identified in the number string parsing operation, the internal
+// member variable 'foundFirstNumericDigitInNumStr' is set to the
+// boolean value of 'true'. This member variable is typically set
+// by the number string parsing routine.
+//
+// If the first numeric digit has not yet been located in the
+// parsing operation, 'foundFirstNumericDigitInNumStr' is set to
+// 'false'.
+//
+// This method returns the internal processing status flag
+// ('foundFirstNumericDigitInNumStr') indicating whether the first
+// numeric digit has been located in the number string parsing
+// operation.
+//
+// Type NegativeNumberSearchSpec uses this flag internally to
+// determine if searches for Leading Negative Number Sign Symbols
+// are required. If the First Numeric Digit in a number string has
+// already been located, then Leading Negative Number Sign Symbols
+// are not present in the number string.
+//
+func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundFirstNumericDigit() bool {
+
+	if negNumSearchSpec.lock == nil {
+		negNumSearchSpec.lock = new(sync.Mutex)
+	}
+
+	negNumSearchSpec.lock.Lock()
+
+	defer negNumSearchSpec.lock.Unlock()
+
+	return negNumSearchSpec.foundFirstNumericDigitInNumStr
+}
+
 // GetFoundLeadingNegNumSign - This boolean flag is set internally
 // during a number string parsing operation.
 //
@@ -546,43 +595,6 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundLeadingNegNumSignIndex
 	defer negNumSearchSpec.lock.Unlock()
 
 	return negNumSearchSpec.foundLeadingNegNumSignIndex
-}
-
-// GetFoundFirstNumericDigit - This boolean flag is set internally
-// during a number string parsing operation.
-//
-// If the first numeric digit in a numeric value has been
-// identified in the string parsing operation, the internal member
-// variable 'foundFirstNumericDigitInNumStr' is set to the boolean
-// value of 'true'. This member variable is typically set by the
-// number string parsing routine.
-//
-// If the first numeric digit has not yet been located in the
-// parsing operation, 'foundFirstNumericDigitInNumStr' is set to
-// 'false'.
-//
-// This method returns the status flag
-// ('foundFirstNumericDigitInNumStr') indicating whether the first
-// numeric digit has been located in the number string parsing
-// operation.
-//
-// Type NegativeNumberSearchSpec uses this flag internally to
-// determine if searches for Leading Negative Number Sign Symbols
-// are required. If the First Numeric Digit in a number string has
-// already been located, then Leading Negative Number Sign Symbols
-// are not present in the number string.
-//
-func (negNumSearchSpec *NegativeNumberSearchSpec) GetFoundFirstNumericDigit() bool {
-
-	if negNumSearchSpec.lock == nil {
-		negNumSearchSpec.lock = new(sync.Mutex)
-	}
-
-	negNumSearchSpec.lock.Lock()
-
-	defer negNumSearchSpec.lock.Unlock()
-
-	return negNumSearchSpec.foundFirstNumericDigitInNumStr
 }
 
 // GetFoundNegNumSignSymbols - This processing flag is set during a
@@ -889,11 +901,12 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstanceError(
 // Specification.
 //
 // All internal member variables in the returned instance of
-// NegativeNumberSearchSpec are configured using the input parameter
-// 'leadingNegNumSignSymbols'.
+// NegativeNumberSearchSpec are configured using the input
+// parameter 'leadingNegNumSignSymbols'.
 //
-// Leading Negative Number symbols are used by many countries
-// including the US and Canada. Examples: -123.45  -6,432
+// Leading Negative Number Sign Symbols are used by many countries
+// including the United States and Canada.
+//   Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegativeNumberSearchSpec.NewLeadingNegNumSearchStr()
@@ -1032,8 +1045,9 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchRunes(
 // NegativeNumberSearchSpec are configured using the input parameter
 // 'leadingNegNumSignSymbols'.
 //
-// Leading Negative Number symbols are used by many countries
-// including the US and Canada. Examples: -123.45  -6,432
+// Leading Negative Number Sign Symbols are used by many countries
+// including the United States and Canada.
+//   Examples: -123.45  -6,432
 //
 // This method is identical in function to the method:
 //  NegativeNumberSearchSpec.NewLeadingNegNumSearchRunes()
@@ -1174,9 +1188,11 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchStr(
 // In certain nations and cultures, a pair of symbols is used to
 // designate a numeric value as negative. These pairs of symbols
 // are described here as a Leading and Trailing Negative Number
-// Sign Specification. As an example, the US and Canada use
-// parentheses "()" to indicate negative numeric values.
-//    Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
+// Sign Specifications. As an example, in the United States and
+// Canada, opposing parentheses "()" are used to indicate negative
+// numeric values.
+//
+//   Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
 //
 // This method is identical in function to method:
 //    NegativeNumberSearchSpec.NewLeadingAndTrailingNegNumSearchStr()
@@ -1330,9 +1346,11 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 // In certain nations and cultures, a pair of symbols is used to
 // designate a numeric value as negative. These pairs of symbols
 // are described here as a Leading and Trailing Negative Number
-// Sign Specification. As an example, in the US and Canada
-// parentheses "()" are used to indicate negative numeric
-// values. Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
+// Sign Specifications. As an example, in the United States and
+// Canada, opposing parentheses "()" are used to indicate negative
+// numeric values.
+//
+//   Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
 //
 // This method is identical in function to method:
 //    NegativeNumberSearchSpec.NewLeadingAndTrailingNegNumSearchRunes()
@@ -1481,7 +1499,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 // NegativeNumberSearchSpec are configured using the input parameter
 // 'trailingNegNumSignSymbols'.
 //
-// Trailing negative number symbols are used by various European
+// Trailing Negative Number Symbols are positioned to the right of
+// numeric digits within a Number String.
+//
+// Trailing Negative Number Symbols are used by various European
 // Union countries. Examples:  127.45-   654-
 //
 // This method is identical in function to method:
@@ -1751,11 +1772,120 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 }
 
 // SearchForNegNumSignSymbols - This method is typically called by
-// a number string parsing routine attempting to determine if the
+// Number String Parsing functions attempting to determine if the
 // characters in a search string match the Negative Number Sign
-// Symbol defined by this current instance of
+// Symbols defined by this current instance of
 // NegativeNumberSearchSpec.
 //
+// Number String parsing functions will attempt to identify a
+// Negative Number Sign Symbol or Symbols in strings of numeric
+// digits called 'Number Strings'. Number String parsing functions
+// review strings of text characters containing numeric digits and
+// convert those numeric digits to numeric values. The presence or
+// absence of Negative Number Sign Symbols determines whether a
+// numeric value is positive or negative.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetSearchString              *TargetSearchStringDto
+//     - A pointer to a TargetSearchStringDto. Type
+//       TargetSearchStringDto contains the string of text
+//       characters which will be searched for the presence of a
+//       Leading Negative Number Sign Symbols specified by
+//       the current instance of NegativeNumberSearchSpec.
+//
+//			  type TargetSearchStringDto struct {
+//                 CharsToSearch []rune
+//			  }
+//
+//
+//  foundFirstNumericDigitInNumStr  bool
+//     - This boolean value serves as a status flag signaling
+//       whether the first numeric digit in a number string
+//       has already been located. When set to 'true',
+//       it signals that the first numeric digit in a Number
+//       String has already been located.
+//
+//
+//  startingSearchIndex             int
+//     - The 'startingSearchIndex' parameter specifies the zero
+//       based index in the Target Search Characters String
+//       ('targetSearchString') from which the search for Negative
+//       Number Symbols will commence.
+//
+//       If this value is less than zero or greater than the
+//       length of 'targetSearchString' minus one, an error will be
+//       returned.
+//
+//
+//  errPrefDto                      *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  foundNegNumSignSymbols          bool
+//     - If this method completes successfully, this parameter will
+//       signal whether the search for Negative Number Sign
+//       Symbols was successful.
+//
+//       A return value of 'false' signals that the search for
+//       Negative Number Sign Symbols was unsuccessful and Negative
+//       Number Sign Symbols were NOT located in the Target Search
+//       String.
+//
+//       A return value of 'true' signals that Negative Number
+//       Sign Symbols were located in the Target Search String and
+//       the search operation was therefore successful.
+//
+//
+//  lastIndex                       int
+//       If the search for Negative Number Sign Symbols was
+//       unsuccessful, the value of 'lastIndex' will be set to
+//       'startingSearchIndex'.
+//
+//       However, if Negative Number Sign Symbols were located in
+//       the Target Search String, the value of 'lastIndex' will be
+//       set to the index in the Target Search String
+//       ('targetSearchString') occupied by the last character of
+//       the Negative Number Sign Symbols.
+//
+//         Example:
+//
+//           Target Search String: "xx(-)567890"
+//
+//           Leading Negative Number Sign Symbols (3-characters):
+//                   "(-)"
+//
+//           Note: "(-)" is a negative number sign used in the UK.
+//
+//           lastIndex = 4  The ")" in Target Search String.
+//
+//
+//
+//  err                             error
+//     - If the method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	targetSearchString *TargetSearchStringDto,
@@ -1797,6 +1927,8 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	negNumSignAtom := negNumSearchSpecAtom{}
 
+	negNumSearchNanobot := negNumSignSearchNanobot{}
+
 	_,
 		err2 = negNumSignAtom.testValidityOfNegNumSearchSpec(
 		negNumSearchSpec,
@@ -1822,7 +1954,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		foundNegNumSignSymbols,
 			lastIndex,
 			err =
-			negNumSignAtom.leadingNegSignSymSearch(
+			negNumSearchNanobot.leadingNegSignSymSearch(
 				negNumSearchSpec,
 				targetSearchString,
 				foundFirstNumericDigitInNumStr,
@@ -1832,8 +1964,58 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	} else if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
 
+		foundNegNumSignSymbols,
+			lastIndex,
+			err =
+			negNumSearchNanobot.trailingNegSignSymSearch(
+				negNumSearchSpec,
+				targetSearchString,
+				foundFirstNumericDigitInNumStr,
+				startingSearchIndex,
+				ePrefix.XCpy(
+					"negNumSearchSpec"))
+
 	} else {
 		// Must be: NSignSymPos.BeforeAndAfter()
+
+		if !foundFirstNumericDigitInNumStr {
+
+			foundNegNumSignSymbols,
+				lastIndex,
+				err =
+				negNumSearchNanobot.leadingNegSignSymSearch(
+					negNumSearchSpec,
+					targetSearchString,
+					foundFirstNumericDigitInNumStr,
+					startingSearchIndex,
+					ePrefix.XCpy(
+						"negNumSearchSpec"))
+
+		} else {
+			// foundFirstNumericDigitInNumStr == true
+			foundNegNumSignSymbols,
+				lastIndex,
+				err =
+				negNumSearchNanobot.trailingNegSignSymSearch(
+					negNumSearchSpec,
+					targetSearchString,
+					foundFirstNumericDigitInNumStr,
+					startingSearchIndex,
+					ePrefix.XCpy(
+						"negNumSearchSpec"))
+
+		}
+
+		if negNumSearchSpec.foundLeadingNegNumSign &&
+			negNumSearchSpec.foundTrailingNegNumSign {
+
+			foundNegNumSignSymbols = true
+
+		} else {
+
+			foundNegNumSignSymbols = false
+
+		}
 
 	}
 

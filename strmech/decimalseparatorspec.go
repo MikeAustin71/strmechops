@@ -369,7 +369,6 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
 // DecimalSeparatorSpec for a new number string parsing operation.
 //
 // This method will only reset the internal processing flags:
-//   DecimalSeparatorSpec.foundFirstNumericDigitInNumStr
 //   DecimalSeparatorSpec.foundDecimalSeparatorSymbols
 //   DecimalSeparatorSpec.foundDecimalSeparatorIndex
 //
@@ -853,6 +852,16 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //    DecimalSeparatorSpec.foundDecimalSeparatorIndex
 //
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Before starting the first iteration of a search for a Decimal
+// Separator, make certain you clear all the internal processing
+// flags for this instance of DecimalSeparatorSpec. Call method:
+//    DecimalSeparatorSpec.EmptyProcessingFlags()
+//
+//
 // -----------------------------------------------------------------
 //
 // Input Parameters
@@ -939,7 +948,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //       Decimal Separator Symbol(s), the return parameter will be
 //       set to the index in the target search string
 //       ('targetSearchString') occupied by the last text character
-//       in the Decimal Separator Symbol(s).
+//       in the specified Decimal Separator Symbol(s).
 //         Example:
 //           Target Search String: "0123.56"
 //           Decimal Separator Symbol: "."
@@ -1074,6 +1083,19 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			err
 	}
 
+	// Nothing to do. Already Found the Decimal
+	// Separator on a previous cycle.
+	if decSeparatorSpec.foundDecimalSeparatorSymbols == true {
+
+		foundDecimalSeparatorSymbols = true
+		lastIndex = startingSearchIndex
+
+		return foundDecimalSeparatorSymbols,
+			lastIndex,
+			err
+
+	}
+
 	lastIndex = startingSearchIndex
 
 	// decSeparatorSpec has already been validated
@@ -1162,6 +1184,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 // ----------------------------------------------------------------
 //
 // IMPORTANT
+//
 // All the data fields in current DecimalSeparatorSpec instance
 // ('decSeparatorSpec') will be deleted and overwritten.
 //
