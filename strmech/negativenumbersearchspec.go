@@ -7,8 +7,13 @@ import (
 )
 
 // NegativeNumberSearchSpec - Negative Number Search Specification.
-// This type is designed for use by number string parsing
-// functions. These functions review a string of text characters
+// This type is designed for use by Number String Parsing
+// functions.
+//
+// As used here, a Number String is a string of text characters
+// which contain numeric digit characters.
+//
+// These parsing functions review a string of text characters
 // searching for numeric digits. The numeric digits are extracted
 // to form numeric values. Number string parsing functions
 // therefore convert numeric text characters to valid numeric
@@ -18,7 +23,7 @@ import (
 // parameters for identifying negative numeric values within number
 // strings when extracting or parsing numeric digits.
 //
-// Parsing functions used in converting strings of numeric
+// Number String Parsing functions used in converting strings of numeric
 // characters into numeric values assume that those values are
 // positive unless a Negative Number Sign Symbol or Symbols are
 // present in the number string.
@@ -1950,6 +1955,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	}
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.Before() {
+		// NSignSymPos.Before()
 
 		foundNegNumSignSymbols,
 			lastIndex,
@@ -1963,6 +1969,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 					"negNumSearchSpec"))
 
 	} else if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
+		// NSignSymPos.After()
 
 		foundNegNumSignSymbols,
 			lastIndex,

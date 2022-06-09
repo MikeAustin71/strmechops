@@ -8,7 +8,7 @@ import (
 
 type NegNumSearchSpecCollection struct {
 	negNumSearchSpecsCol []NegativeNumberSearchSpec
-	targetSearchString   TargetSearchStringDto
+	targetSearchString   *TargetSearchStringDto
 	lock                 *sync.Mutex
 }
 
@@ -1068,6 +1068,85 @@ func (negNumSignCol *NegNumSearchSpecCollection) GetNegNumSearchSpecCollection(
 	return negNumSearchSpecCol, err
 }
 
+// New - Returns an unpopulated or empty instance of
+// NegNumSearchSpecCollection.
+//
+// NegNumSearchSpecCollection or Negative Number Sign Search
+// Collection is a collection of NegativeNumberSearchSpec objects.
+//
+// NegativeNumberSearchSpec or Negative Number Search
+// Specifications are used to define Negative Number Sign Symbols
+// used in identifying negative numeric values in Number Strings.
+//
+// A Number String is a string of text characters which contain
+// numeric digit characters.
+//
+// The NegNumSearchSpecCollection is primarily used by Number
+// String parsing functions. These functions review a string of
+// text characters searching for numeric digits. The numeric digits
+// are extracted to form numeric values. Number string parsing
+// functions therefore convert numeric text characters to valid
+// numeric values. A key feature of this conversion is the
+// classification of these resulting numeric values as either
+// positive or negative values. If properly configured Negative
+// Number Sign Symbols are found in the Number String, the
+// resulting numeric value is classified as negative. If Negative
+// Number Sign Symbols are NOT found in the Number String, the
+// resulting numeric value is classified as positive.
+//
+// The NegNumSearchSpecCollection allows the user to configure
+// multiple Negative Number Sign Symbol objects. If any one of the
+// configured Negative Number Sign Symbols is found in a number
+// string, the parsing function will classify the numeric value as
+// negative.
+//
+// This method will return a new instance of
+// NegNumSearchSpecCollection with an unpopulated or empty
+// collection. Thereafter, the user is responsible for calling one
+// or more of the 'Add' methods in order to populate the
+// collection.
+//
+// The 'Add' methods are listed as follows:
+//  NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
+//  NegNumSearchSpecCollection.AddLeadingNegNumSearchStr()
+//  NegNumSearchSpecCollection.AddLeadingNegNumSearchRunes()
+//  NegNumSearchSpecCollection.AddLeadingAndTrailingNegNumSearchRunes()
+//  NegNumSearchSpecCollection.AddLeadingAndTrailingNegNumSearchStr()
+//  NegNumSearchSpecCollection.AddTrailingNegNumSearchRunes()
+//  NegNumSearchSpecCollection.AddTrailingNegNumSearchStr()
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  NegNumSearchSpecCollection
+//     - This method returns an unpopulated or empty instance of
+//       NegNumSearchSpecCollection. Thereafter, it is up to the
+//       user to add custom NegativeNumberSearchSpec objects.
+//
+func (negNumSignCol NegNumSearchSpecCollection) New() NegNumSearchSpecCollection {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	newNegNumSearchCol := NegNumSearchSpecCollection{}
+
+	return newNegNumSearchCol
+}
+
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
@@ -1143,7 +1222,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 			lastIndex,
 			err2 = negNumSignCol.negNumSearchSpecsCol[i].
 			SearchForNegNumSignSymbols(
-				&negNumSignCol.targetSearchString,
+				negNumSignCol.targetSearchString,
 				foundFirstNumericDigitInNumStr,
 				startingSearchIndex,
 				nil)
