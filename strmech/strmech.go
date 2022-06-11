@@ -1510,9 +1510,8 @@ func (sMech *StrMech) ExtractNumberRunes(
 	rawNumStrRunes []rune,
 	startSearchIndex int,
 	characterSearchLength int,
-	leadingNegativeSignChars []rune,
-	trailingNegativeSignChars []rune,
-	decimalSeparatorChars []rune,
+	negativeNumSearchSpecs NegNumSearchSpecCollection,
+	decimalSeparatorSpec DecimalSeparatorSpec,
 	errorPrefix interface{}) (
 	intRunes []rune,
 	fractionalRunes []rune,
@@ -1554,11 +1553,11 @@ func (sMech *StrMech) ExtractNumberRunes(
 		nextTargetSearchIndex,
 		err = strMechMolecule{}.ptr().extractNumRunes(
 		rawNumStrRunes,
+		"numberStr",
 		startSearchIndex,
 		characterSearchLength,
-		leadingNegativeSignChars,
-		trailingNegativeSignChars,
-		decimalSeparatorChars,
+		negativeNumSearchSpecs,
+		decimalSeparatorSpec,
 		ePrefix)
 
 	return intRunes,

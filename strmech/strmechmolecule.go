@@ -36,8 +36,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	rawNumStrRunesName string,
 	startSearchIndex int,
 	characterSearchLength int,
-	negativeNumberSignChars []NegativeNumberSearchSpec,
-	decimalSeparatorChars []rune,
+	negativeNumSearchSpecs NegNumSearchSpecCollection,
+	decimalSeparatorSpec DecimalSeparatorSpec,
 	ePrefDto *ePref.ErrPrefixDto) (
 	intRunes []rune,
 	fractionalRunes []rune,

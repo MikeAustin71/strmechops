@@ -1,0 +1,139 @@
+//  May Use Capital 'X' has currency place holder.
+
+//
+// Sources:
+//  https://gist.github.com/bzerangue/5484121
+//  http://symbologic.info/currency.htm
+//  http://www.xe.com/symbols.php
+//  https://www.countrycode.org/
+//  https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
+//  https://www.codeproject.com/articles/78175/international-number-formats
+//  https://www.thefinancials.com/Default.aspx?SubSectionID=curformat
+//  https://en.wikipedia.org/wiki/List_of_circulating_currencies - Symbols with decoding
+//  https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+//  https://fastspring.com/blog/how-to-format-30-currencies-from-countries-all-over-the-world/
+//  https://en.wikipedia.org/wiki/Decimal_separator
+//  https://en.wikipedia.org/wiki/ISO_4217   Currency Codes
+//  https://english.stackexchange.com/questions/124797/how-to-write-negative-currency-in-text
+//  https://freeformatter.com/i18n-standards-code-snippets.html
+//  https://www.evertype.com/standards/euro/formats.html
+//  https://www.unicode.org/charts/PDF/U20A0.pdf
+//  https://www.rapidtables.com/code/text/unicode-characters.html
+//  https://en.wikipedia.org/wiki/Currency_symbol
+//  https://www.ip2currency.com/currency-symbol
+//  https://www.xe.com/iso4217.php#U
+//  https://unicode-table.com/en
+//  https://www.languageediting.com/format-numbers-eu-vs-us/
+/
+//  positiveValueFmt           string
+//     - A string specifying the number string format to be used in
+//       formatting positive numeric values in text strings. Valid
+//       formats for positive numeric values (NOT Currency) are listed
+//       as follows:
+//               "+NUMFIELD"
+//               "+ NUMFIELD"
+//               "NUMFIELD+"
+//               "NUMFIELD +"
+//               "NUMFIELD"
+//               "+127.54"
+//               "+ 127.54"
+//               "127.54+"
+//               "127.54 +"
+//               "127.54" THE DEFAULT Positive Value Format
+//
+//       Positive Value Formatting Terminology:
+//
+//        "NUMFIELD" - Placeholder for a number field. A number field has
+//                     a string length which is equal to or greater than
+//                     the actual numeric value string length. Actual
+//                     numeric values are right justified within number
+//                     fields for text displays.
+//
+//          "127.54" - Place holder for the numeric value of a number
+//                     string. This place holder signals that the
+//                     actual length of the numeric value including
+//                     formatting characters and symbols such  as
+//                     Thousands Separators, Decimal Separators and
+//                     Currency Symbols.
+//
+//               "+" - The Plus Sign ('+'). If present in the format string,
+//                     the plus sign ('+') specifies  where the plus sign will
+//                     be placed for positive numeric values.
+//
+//    Absence of "+" - The absence of a plus sign ('+') means that the positive
+//                     numeric value will be displayed in text with out a
+//                     plus sign ('+'). This is the default for positive number
+//                     formatting.
+//
+//
+//  negativeValueFmt           string
+//     - A string specifying the number string format to be used in
+//       formatting negative numeric values in text strings. Valid
+//       formats for negative numeric values (NOT Currency) are listed
+//       as follows:
+//
+//               -127.54   The Default Negative Value Format String
+//               - 127.54
+//               127.54-
+//               127.54 -
+//               (-) 127.54
+//               (-)127.54
+//               127.54(-)
+//               127.54 (-)
+//               (127.54)
+//               ( 127.54 )
+//               (127.54)
+//               ( 127.54 )
+//               -127.54
+//               - 127.54
+//               127.54-
+//               127.54 -
+//               (-) 127.54
+//               (-)127.54
+//               127.54(-)
+//               127.54 (-)
+//               (127.54)
+//               ( 127.54 )
+//               (127.54)
+//               ( 127.54 )
+//               -NUMFIELD
+//               - NUMFIELD
+//               NUMFIELD-
+//               NUMFIELD -
+//               (-) NUMFIELD
+//               (-)NUMFIELD
+//               NUMFIELD(-)
+//               NUMFIELD (-)
+//               (NUMFIELD)
+//               ( NUMFIELD )
+//               (NUMFIELD)
+//               ( NUMFIELD )
+//
+//       Negative Value Formatting Terminology:
+//
+//        "NUMFIELD" - Placeholder for a number field. A number field has
+//                     a string length which is equal to or greater than
+//                     the actual numeric value string length. Actual
+//                     numeric values are right justified within number
+//                     fields for text displays.
+//
+//          "127.54" - Place holder for the numeric value of a number
+//                     string. This place holder signals that the
+//                     actual length of the numeric value including
+//                     formatting characters and symbols such  as
+//                     Thousands Separators, Decimal Separators and
+//                     Currency Symbols.
+//
+//               "-" - The Minus Sign ('-'). If present in the format string,
+//                     the minus sign ('-') specifies where the minus sign will
+//                     be positioned in the text string containing the negative
+//                     numeric value.
+//
+//             "(-)" - These three characters are often used in Europe and the
+//                     United Kingdom to classify a numeric value as negative.
+//
+//              "()" - Opposing parenthesis characters are frequently used in
+//                     the United States of America to classify a numeric value
+//                     as negative.
+//
+//
