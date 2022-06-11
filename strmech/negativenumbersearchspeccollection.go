@@ -1068,6 +1068,63 @@ func (negNumSignCol *NegNumSearchSpecCollection) GetNegNumSearchSpecCollection(
 	return negNumSearchSpecCol, err
 }
 
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current NegNumSearchSpecCollection instance
+// to determine if they are valid.
+//
+// If any data element evaluates as invalid, this method will
+// return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid, this method
+// returns a boolean value of 'true'.
+//
+// This method is functionally equivalent to
+// NegNumSearchSpecCollection.IsValidInstanceError() with the sole
+// exceptions being that this method takes no input parameters and
+// returns a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If any of the internal member data variables contained in
+//       the current instance of NegNumSearchSpecCollection are found to
+//       be invalid, this method will return a boolean value of
+//       'false'.
+//
+//       If all internal member data variables contained in the
+//       current instance of NegNumSearchSpecCollection are found to be
+//       valid, this method returns a boolean value of 'true'.
+//
+func (negNumSignCol *NegNumSearchSpecCollection) IsValidInstance() bool {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	negNumSearchColAtom := negNumSearchSpecCollectionAtom{}
+
+	isValid,
+		_ := negNumSearchColAtom.testValidityOfNegNumSearchCol(
+		negNumSignCol,
+		nil)
+
+	return isValid
+}
+
 // New - Returns an unpopulated or empty instance of
 // NegNumSearchSpecCollection.
 //

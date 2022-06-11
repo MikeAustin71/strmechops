@@ -6,17 +6,17 @@ import (
 	"sync"
 )
 
-// negNumSearchSpecColectionAtom - Provides helper methods for type
+// negNumSearchSpecCollectionAtom - Provides helper methods for type
 // NegNumSearchSpecCollection.
 //
-type negNumSearchSpecColectionAtom struct {
+type negNumSearchSpecCollectionAtom struct {
 	lock *sync.Mutex
 }
 
 // ptr - Returns a pointer to a new instance of
 // negNumSearchColAtom.
 //
-func (negNumSearchColAtom negNumSearchSpecColectionAtom) ptr() *negNumSearchSpecColectionAtom {
+func (negNumSearchColAtom negNumSearchSpecCollectionAtom) ptr() *negNumSearchSpecCollectionAtom {
 
 	if negNumSearchColAtom.lock == nil {
 		negNumSearchColAtom.lock = new(sync.Mutex)
@@ -26,7 +26,7 @@ func (negNumSearchColAtom negNumSearchSpecColectionAtom) ptr() *negNumSearchSpec
 
 	defer negNumSearchColAtom.lock.Unlock()
 
-	return &negNumSearchSpecColectionAtom{
+	return &negNumSearchSpecCollectionAtom{
 		lock: new(sync.Mutex),
 	}
 }
@@ -95,7 +95,7 @@ func (negNumSearchColAtom negNumSearchSpecColectionAtom) ptr() *negNumSearchSpec
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (negNumSearchColAtom *negNumSearchSpecColectionAtom) testValidityOfNegNumSearchCol(
+func (negNumSearchColAtom *negNumSearchSpecCollectionAtom) testValidityOfNegNumSearchCol(
 	negNumSearchCol *NegNumSearchSpecCollection,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isValid bool,
@@ -108,7 +108,7 @@ func (negNumSearchColAtom *negNumSearchSpecColectionAtom) testValidityOfNegNumSe
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"negNumSearchSpecColectionAtom."+
+		"negNumSearchSpecCollectionAtom."+
 			"testValidityOfNegNumSearchCol()",
 		"")
 
