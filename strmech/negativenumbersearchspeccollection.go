@@ -1147,16 +1147,15 @@ func (negNumSignCol NegNumSearchSpecCollection) New() NegNumSearchSpecCollection
 	return newNegNumSearchCol
 }
 
-// NewUnitedStates - Returns an instance of
-// NegNumSearchSpecCollection. This Negative Number Search
-// Specification collection is configured with negative number
-// signs commonly used in the United States.
+// NewUS - Returns an instance of NegNumSearchSpecCollection. This
+// Negative Number Search Specification collection is configured
+// with negative number signs commonly used in the United States.
 //
 // This configuration includes two negative number signs:
 //   1. Leading Minus Sign   -123.45
 //   2. Opposing Parentheses  (123.45)
 //
-func (negNumSignCol NegNumSearchSpecCollection) NewUnitedStates(
+func (negNumSignCol NegNumSearchSpecCollection) NewUS(
 	errorPrefix interface{}) (
 	newNegNumSearchCol NegNumSearchSpecCollection,
 	err error) {
