@@ -6,6 +6,10 @@ import (
 	"sync"
 )
 
+// RuneArrayCollection - A collection of Rune Array Dto objects.
+//
+// Esentially, this is a collection or an array of rune arrays.
+//
 type RuneArrayCollection struct {
 	RuneArrayDtoCol []RuneArrayDto
 
