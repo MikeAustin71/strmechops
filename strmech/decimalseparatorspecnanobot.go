@@ -119,7 +119,7 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyIn(
 	if incomingDecSepSpec == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'incomingNegNumSearchSpec' is a nil pointer!\n",
+			"ERROR: Input parameter 'incomingNegNumSearchSpec' is a 'nil' pointer!\n",
 			ePrefix.String())
 
 		return err

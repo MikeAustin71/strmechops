@@ -13,6 +13,67 @@ type negNumSearchSpecCollectionAtom struct {
 	lock *sync.Mutex
 }
 
+// empty - Receives a pointer to an instance of
+// NegNumSearchSpecCollection and proceeds to reset the data values
+// for member values to their initial or zero values.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the member variable data values contained in input parameter
+// 'negNumSearchCol' will be deleted and reset to their zero
+// values.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  negNumSearchCol           *NegNumSearchSpecCollection
+//     - A pointer to an instance of NegNumSearchSpecCollection. All
+//       the internal member variables contained in this instance
+//       will be deleted and reset to their zero values.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (negNumSearchColAtom *negNumSearchSpecCollectionAtom) empty(
+	negNumSearchCol *NegNumSearchSpecCollection) {
+
+	if negNumSearchColAtom.lock == nil {
+		negNumSearchColAtom.lock = new(sync.Mutex)
+	}
+
+	negNumSearchColAtom.lock.Lock()
+
+	defer negNumSearchColAtom.lock.Unlock()
+
+	if negNumSearchCol == nil {
+		return
+	}
+
+	lenNegNumSearchCol := len(negNumSearchCol.negNumSearchSpecsCol)
+
+	if lenNegNumSearchCol > 0 {
+
+		for i := 0; i < lenNegNumSearchCol; i++ {
+			negNumSearchCol.negNumSearchSpecsCol[i].Empty()
+		}
+	}
+
+	negNumSearchCol.negNumSearchSpecsCol = nil
+
+	negNumSearchCol.targetSearchString = nil
+
+	return
+}
+
 // ptr - Returns a pointer to a new instance of
 // negNumSearchColAtom.
 //

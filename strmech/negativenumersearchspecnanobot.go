@@ -515,15 +515,15 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 //       Symbols specified by 'negNumSignSpec'.
 //
 //
-//  targetSearchString              *TargetSearchStringDto
-//     - A pointer to a TargetSearchStringDto. Type
-//       TargetSearchStringDto contains the string of text
+//  targetSearchString              *RuneArrayDto
+//     - A pointer to a RuneArrayDto. Type
+//       RuneArrayDto contains the string of text
 //       characters which will be searched for the presence of a
 //       Leading Negative Number Sign Symbols specified by
 //       'negNumSignSpec', an instance of NegativeNumberSearchSpec.
 //
-//			  type TargetSearchStringDto struct {
-//                 CharsToSearch []rune
+//			  type RuneArrayDto struct {
+//                 CharsArray []rune
 //			  }
 //
 //
@@ -621,7 +621,7 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) leadingNegSignSymSearch(
 	negNumSearchSpec *NegativeNumberSearchSpec,
-	targetSearchString *TargetSearchStringDto,
+	targetSearchString *RuneArrayDto,
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -730,13 +730,13 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) leadingNegSignSymSearch(
 			err
 	}
 
-	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsToSearch)
+	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsArray)
 
 	if lenNegNumSignTargetSearchChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
-			"'targetSearchString.CharsToSearch' has an array length of zero.\n"+
+			"'targetSearchString.CharsArray' has an array length of zero.\n"+
 			"There are no target search characters in which to search\n"+
 			"for Negative Number Sign symbols.\n",
 			ePrefix.String())
@@ -801,7 +801,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) leadingNegSignSymSearch(
 	for i := startingSearchIndex; i < lenNegNumSignTargetSearchChars; i++ {
 
 		if negNumSearchSpec.leadingNegNumSignSymbols[j] !=
-			targetSearchString.CharsToSearch[i] {
+			targetSearchString.CharsArray[i] {
 
 			// The Leading Negative Number Symbols were
 			// NOT found in this search string.
@@ -1367,15 +1367,15 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 //       Symbols specified by 'negNumSignSpec'.
 //
 //
-//  targetSearchString              *TargetSearchStringDto
-//     - A pointer to a TargetSearchStringDto. Type
-//       TargetSearchStringDto contains the string of text
+//  targetSearchString              *RuneArrayDto
+//     - A pointer to a RuneArrayDto. Type
+//       RuneArrayDto contains the string of text
 //       characters which will be searched for the presence of a
 //       Trailing Negative Number Sign Symbols specified by
 //       'negNumSignSpec', an instance of NegativeNumberSearchSpec.
 //
-//			  type TargetSearchStringDto struct {
-//                 CharsToSearch []rune
+//			  type RuneArrayDto struct {
+//                 CharsArray []rune
 //			  }
 //
 //
@@ -1474,7 +1474,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) trailingNegSignSymSearch(
 	negNumSearchSpec *NegativeNumberSearchSpec,
-	targetSearchString *TargetSearchStringDto,
+	targetSearchString *RuneArrayDto,
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -1583,13 +1583,13 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) trailingNegSignSymSearch(
 			err
 	}
 
-	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsToSearch)
+	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsArray)
 
 	if lenNegNumSignTargetSearchChars == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
-			"'targetSearchString.CharsToSearch' has an array length of zero.\n"+
+			"'targetSearchString.CharsArray' has an array length of zero.\n"+
 			"There are no target search characters in which to search\n"+
 			"for Negative Number Sign symbols.\n",
 			ePrefix.String())
@@ -1654,7 +1654,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) trailingNegSignSymSearch(
 	for i := startingSearchIndex; i < lenNegNumSignTargetSearchChars; i++ {
 
 		if negNumSearchSpec.trailingNegNumSignSymbols[j] !=
-			targetSearchString.CharsToSearch[i] {
+			targetSearchString.CharsArray[i] {
 
 			// The Trailing Negative Number Symbols were
 			// NOT found in this search string.

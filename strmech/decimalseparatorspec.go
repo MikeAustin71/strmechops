@@ -866,15 +866,15 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //
 // Input Parameters
 //
-//  targetSearchString         *TargetSearchStringDto
-//     - A pointer to a TargetSearchStringDto. Type
-//       TargetSearchStringDto contains the string of text
+//  targetSearchString         *RuneArrayDto
+//     - A pointer to a RuneArrayDto. Type
+//       RuneArrayDto contains the string of text
 //       characters which will be searched for the presence of a
 //       Decimal Separator Symbol or Symbols specified by the
 //       current instance of DecimalSeparatorSpec.
 //
-//			  type TargetSearchStringDto struct {
-//                 CharsToSearch []rune
+//			  type RuneArrayDto struct {
+//                 CharsArray []rune
 //			  }
 //
 //
@@ -966,7 +966,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //       the beginning of the error message.
 //
 func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
-	targetSearchString *TargetSearchStringDto,
+	targetSearchString *RuneArrayDto,
 	startingSearchIndex int,
 	errorPrefix interface{}) (
 	foundDecimalSeparatorSymbols bool,
@@ -1013,7 +1013,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	}
 
-	lenTargetStr := len(targetSearchString.CharsToSearch)
+	lenTargetStr := len(targetSearchString.CharsArray)
 
 	if lenTargetStr == 0 {
 
@@ -1033,7 +1033,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	var err2 error
 	_,
 		err2 = sMechPreon.testValidityOfRuneCharArray(
-		targetSearchString.CharsToSearch,
+		targetSearchString.CharsArray,
 		nil)
 
 	if err2 != nil {
@@ -1106,7 +1106,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	for i := startingSearchIndex; i < lenTargetStr; i++ {
 
-		if targetSearchString.CharsToSearch[i] !=
+		if targetSearchString.CharsArray[i] !=
 			decSeparatorSpec.decimalSeparatorChars[j] {
 
 			return foundDecimalSeparatorSymbols,

@@ -8,7 +8,7 @@ import (
 
 type NegNumSearchSpecCollection struct {
 	negNumSearchSpecsCol []NegativeNumberSearchSpec
-	targetSearchString   *TargetSearchStringDto
+	targetSearchString   *RuneArrayDto
 	lock                 *sync.Mutex
 }
 
@@ -932,6 +932,50 @@ func (negNumSignCol *NegNumSearchSpecCollection) AddTrailingNegNumSearchStr(
 	return err
 }
 
+// Empty - Resets all internal member variables for the current
+// instance of NegNumSearchSpecCollection to their initial or zero
+// values.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of
+// NegNumSearchSpecCollection.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (negNumSignCol *NegNumSearchSpecCollection) Empty() {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	negNumSearchSpecCollectionAtom{}.ptr().empty(
+		negNumSignCol)
+
+	negNumSignCol.lock.Unlock()
+
+	negNumSignCol.lock = nil
+
+	return
+}
+
 // GetNumberOfNegNumSearchSpecs - Returns the number of elements in
 // the Negative Number Search Specification Collection maintained
 // by the current instance of NegNumSearchSpecCollection.
@@ -1418,7 +1462,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 
 	}
 
-	if len(negNumSignCol.targetSearchString.CharsToSearch) == 0 {
+	if len(negNumSignCol.targetSearchString.CharsArray) == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Internal Member Variable 'targetSearchString' is empty and invalid!\n"+
@@ -1607,13 +1651,13 @@ func (negNumSignCol *NegNumSearchSpecCollection) SetTargetSearchString(
 		return err
 	}
 
-	negNumSignCol.targetSearchString.CharsToSearch = nil
+	negNumSignCol.targetSearchString.CharsArray = nil
 
-	negNumSignCol.targetSearchString.CharsToSearch =
+	negNumSignCol.targetSearchString.CharsArray =
 		make([]rune, lenOfTargetSearchStr)
 
 	for i := 0; i < lenOfTargetSearchStr; i++ {
-		negNumSignCol.targetSearchString.CharsToSearch[i] =
+		negNumSignCol.targetSearchString.CharsArray[i] =
 			targetSearchString[i]
 	}
 

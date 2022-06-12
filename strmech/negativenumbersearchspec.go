@@ -1795,15 +1795,15 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //
 // Input Parameters
 //
-//  targetSearchString              *TargetSearchStringDto
-//     - A pointer to a TargetSearchStringDto. Type
-//       TargetSearchStringDto contains the string of text
+//  targetSearchString              *RuneArrayDto
+//     - A pointer to a RuneArrayDto. Type
+//       RuneArrayDto contains the string of text
 //       characters which will be searched for the presence of a
 //       Leading Negative Number Sign Symbols specified by
 //       the current instance of NegativeNumberSearchSpec.
 //
-//			  type TargetSearchStringDto struct {
-//                 CharsToSearch []rune
+//			  type RuneArrayDto struct {
+//                 CharsArray []rune
 //			  }
 //
 //
@@ -1893,7 +1893,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //       the beginning of the error message.
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
-	targetSearchString *TargetSearchStringDto,
+	targetSearchString *RuneArrayDto,
 	foundFirstNumericDigitInNumStr bool,
 	startingSearchIndex int,
 	errorPrefix interface{}) (

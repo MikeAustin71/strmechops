@@ -36,7 +36,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	rawNumStrRunesName string,
 	startSearchIndex int,
 	characterSearchLength int,
-	negativeNumSearchSpecs NegNumSearchSpecCollection,
+	negativeNumSearchSpecsCol NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
 	ePrefDto *ePref.ErrPrefixDto) (
 	intRunes []rune,
@@ -186,14 +186,11 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		characterSearchLength = lenRawNumRunes
 	}
 
-	lenNegNumSignChars := len(negativeNumberSignChars)
+	err = negativeNumSearchSpecsCol.IsValidInstanceError(
+		ePrefix.XCpy(
+			"negativeNumSearchSpecsCol is invalid!"))
 
-	if lenNegNumSignChars == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'negativeNumberSignChars' is invalid.\n"+
-			"'negativeNumberSignChars' has an array length of zero!\n",
-			ePrefix.String())
+	if err != nil {
 
 		return intRunes,
 			fractionalRunes,
@@ -203,62 +200,18 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	for i := 0; i < lenNegNumSignChars; i++ {
+	err = decimalSeparatorSpec.IsValidInstanceError(
+		ePrefix.XCpy(
+			"decimalSeparatorSpec is invalid!"))
 
-		err2 = negativeNumberSignChars[i].IsValidInstanceError(
-			nil)
+	if err != nil {
 
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter negativeNumberSignChars[%v] is invalid.\n"+
-				"The following validation error was returned:\n"+
-				"%v\n",
-				ePrefix.String(),
-				i,
-				err2.Error())
-
-			return intRunes,
-				fractionalRunes,
-				numberSign,
-				digitsFound,
-				nextTargetSearchIndex,
-				err
-
-		}
-	}
-
-	lenDecSepChars := len(decimalSeparatorChars)
-
-	if lenDecSepChars == 0 {
-
-		decimalSeparatorChars = make([]rune, 1)
-		lenDecSepChars = 1
-
-	} else {
-
-		_,
-			err2 = sMechPreon.testValidityOfRuneCharArray(
-			decimalSeparatorChars,
-			nil)
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'decimalSeparatorChars' is invalid.\n"+
-				"A validity test on this rune array produced the following error:\n"+
-				"%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return intRunes,
-				fractionalRunes,
-				numberSign,
-				digitsFound,
-				nextTargetSearchIndex,
-				err
-		}
-
+		return intRunes,
+			fractionalRunes,
+			numberSign,
+			digitsFound,
+			nextTargetSearchIndex,
+			err
 	}
 
 	sMechQuark := strMechQuark{}
