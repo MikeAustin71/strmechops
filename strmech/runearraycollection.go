@@ -237,6 +237,41 @@ func (runeArrayCol *RuneArrayCollection) GetNumberOfRuneArrayDtos() int {
 	return len(runeArrayCol.RuneArrayDtoCol)
 }
 
+// IsNOP - Stands for 'Is No Operation'.
+//
+// If the Rune Array Dto Collection for the current instance of
+// RuneArrayCollection is empty (has a length of zero), it signals
+// that this instance is an empty placeholder that performs no
+// operations.
+//
+// If the current instance of RuneArrayCollection is classified as
+// 'No Operation', this method returns 'true'.
+//
+// Otherwise, this method returns 'false' signaling that the
+// current instance of RuneArrayCollection if fully populated,
+// functional and ready to perform assigned tasks.
+//
+func (runeArrayCol *RuneArrayCollection) IsNOP() bool {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	if len(runeArrayCol.RuneArrayDtoCol) == 0 {
+
+		// This instance is a NOP
+		return true
+	}
+
+	// This instance is NOT a NOP.
+	// Open for business and ready for action.
+	return false
+}
+
 // IsValidInstance - Returns a boolean value signaling whether the
 // current instance of RuneArrayCollection is valid.
 //
