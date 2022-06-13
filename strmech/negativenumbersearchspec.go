@@ -1815,7 +1815,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //       String has already been located.
 //
 //
-//  startingSearchIndex             int
+//  startingSearchIndex              int
 //     - The 'startingSearchIndex' parameter specifies the zero
 //       based index in the Target Search Characters String
 //       ('targetSearchString') from which the search for Negative
@@ -1826,24 +1826,59 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //       returned.
 //
 //
-//  errPrefDto                      *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  foundNegNumSignSymbols          bool
+//  foundNegNumSignSymbols           bool
 //     - If this method completes successfully, this parameter will
 //       signal whether the search for Negative Number Sign
 //       Symbols was successful.
@@ -1858,27 +1893,26 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //       the search operation was therefore successful.
 //
 //
-//  lastIndex                       int
+//  lastSearchIndex                 int
 //       If the search for Negative Number Sign Symbols was
-//       unsuccessful, the value of 'lastIndex' will be set to
-//       'startingSearchIndex'.
+//       unsuccessful, the value of 'lastSearchIndex' will be set
+//       to 'startingSearchIndex'.
 //
 //       However, if Negative Number Sign Symbols were located in
-//       the Target Search String, the value of 'lastIndex' will be
-//       set to the index in the Target Search String
+//       the Target Search String, the value of 'lastSearchIndex'
+//       will be set to the index in the Target Search String
 //       ('targetSearchString') occupied by the last character of
 //       the Negative Number Sign Symbols.
 //
 //         Example:
 //
 //           Target Search String: "xx(-)567890"
-//
+//           Starting Search Index: 0
 //           Leading Negative Number Sign Symbols (3-characters):
 //                   "(-)"
-//
 //           Note: "(-)" is a negative number sign used in the UK.
 //
-//           lastIndex = 4  The ")" in Target Search String.
+//           lastSearchIndex = 4  The ")" in Target Search String.
 //
 //
 //
@@ -1898,7 +1932,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	startingSearchIndex int,
 	errorPrefix interface{}) (
 	foundNegNumSignSymbols bool,
-	lastIndex int,
+	lastSearchIndex int,
 	err error) {
 
 	if negNumSearchSpec.lock == nil {
@@ -1912,7 +1946,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	var ePrefix *ePref.ErrPrefixDto
 
 	foundNegNumSignSymbols = false
-	lastIndex = startingSearchIndex
+	lastSearchIndex = startingSearchIndex
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1924,7 +1958,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	if err != nil {
 
 		return foundNegNumSignSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 	}
 
@@ -1950,7 +1984,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			err2.Error())
 
 		return foundNegNumSignSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 	}
 
@@ -1958,7 +1992,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		// NSignSymPos.Before()
 
 		foundNegNumSignSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err =
 			negNumSearchNanobot.leadingNegSignSymSearch(
 				negNumSearchSpec,
@@ -1972,7 +2006,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		// NSignSymPos.After()
 
 		foundNegNumSignSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err =
 			negNumSearchNanobot.trailingNegSignSymSearch(
 				negNumSearchSpec,
@@ -1988,7 +2022,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		if !foundFirstNumericDigitInNumStr {
 
 			foundNegNumSignSymbols,
-				lastIndex,
+				lastSearchIndex,
 				err =
 				negNumSearchNanobot.leadingNegSignSymSearch(
 					negNumSearchSpec,
@@ -2001,7 +2035,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		} else {
 			// foundFirstNumericDigitInNumStr == true
 			foundNegNumSignSymbols,
-				lastIndex,
+				lastSearchIndex,
 				err =
 				negNumSearchNanobot.trailingNegSignSymSearch(
 					negNumSearchSpec,
@@ -2027,7 +2061,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	}
 
 	return foundNegNumSignSymbols,
-		lastIndex,
+		lastSearchIndex,
 		err
 }
 
