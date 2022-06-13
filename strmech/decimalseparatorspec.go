@@ -426,7 +426,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) EmptyProcessingFlags() {
 //       internal member variable data values in this instance will
 //       be compared to those in the current instance of
 //       DecimalSeparatorSpec. The results of this comparison will
-//       be returned to the calling functions as a boolean value.
+//       be returned to the calling function as a boolean value.
 //
 //
 // ------------------------------------------------------------------------

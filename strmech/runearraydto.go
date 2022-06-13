@@ -331,6 +331,76 @@ func (charsArrayDto *RuneArrayDto) Empty() {
 	charsArrayDto.lock = nil
 }
 
+// Equal - Receives a pointer to another instance of RuneArrayDto
+// and proceeds to compare its internal member variables to those
+// of the current RuneArrayDto instance in order to determine if
+// they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingRuneArrayDto       *RuneArrayDto
+//     - A pointer to an external instance of RuneArrayDto. The
+//       internal member variable data values in this instance will
+//       be compared to those in the current instance of
+//       RuneArrayDto. The results of this comparison will
+//       be returned to the calling function as a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingRuneArrayDto' are equivalent in
+//       all respects to those contained in the current instance of
+//       RuneArrayDto, this return value will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (charsArrayDto *RuneArrayDto) Equal(
+	incomingRuneArrayDto *RuneArrayDto) bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	if incomingRuneArrayDto == nil {
+		return false
+	}
+
+	lenOfCharsArray := len(charsArrayDto.CharsArray)
+
+	if lenOfCharsArray !=
+		len(incomingRuneArrayDto.CharsArray) {
+
+		return false
+	}
+
+	for i := 0; i < lenOfCharsArray; i++ {
+
+		if charsArrayDto.CharsArray[i] !=
+			incomingRuneArrayDto.CharsArray[i] {
+			return false
+		}
+
+	}
+
+	return true
+}
+
 // GetRuneArrayLength - Returns the length of the internal
 // rune array, 'CharsArray' as an integer value.
 //
