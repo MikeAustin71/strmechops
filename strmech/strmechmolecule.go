@@ -32,9 +32,9 @@ func (sMechMolecule strMechMolecule) ptr() *strMechMolecule {
 // extractNumRunes - Receives an array of runes and extracts the
 // numeric digits as text characters.
 func (sMechMolecule *strMechMolecule) extractNumRunes(
-	rawNumStrRunes []rune,
-	rawNumStrRunesName string,
-	startSearchIndex int,
+	targetSearchString RuneArrayDto,
+	targetSearchStringName string,
+	startingSearchIndex int,
 	characterSearchLength int,
 	negativeNumSearchSpecsCol NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
@@ -42,8 +42,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	intRunes []rune,
 	fractionalRunes []rune,
 	numberSign int,
-	digitsFound int,
 	nextTargetSearchIndex int,
+	remainderNumStrRunes RuneArrayDto,
 	err error) {
 
 	if sMechMolecule.lock == nil {
@@ -63,33 +63,35 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		"")
 
 	if err != nil {
+
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	if len(rawNumStrRunesName) == 0 {
-		rawNumStrRunesName = "rawNumStrRunes"
+	if len(targetSearchStringName) == 0 {
+		targetSearchStringName = "targetSearchString"
 	}
 
-	lenRawNumRunes := len(rawNumStrRunes)
+	actualTargetStrLength := targetSearchString.GetRuneArrayLength()
 
-	if lenRawNumRunes == 0 {
+	if actualTargetStrLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'rawNumStrRunes' is invalid.\n"+
-			"'rawNumStrRunes' has an array length of zero!\n",
+			"Error: Input parameter 'targetSearchString' is invalid.\n"+
+			"'targetSearchString' has an array length of zero!\n",
 			ePrefix.String())
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
+
 	}
 
 	sMechPreon := strMechPreon{}
@@ -97,275 +99,223 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	_,
 		err2 = sMechPreon.testValidityOfRuneCharArray(
-		rawNumStrRunes,
+		targetSearchString.CharsArray,
 		nil)
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter '%v' is invalid.\n"+
+			"'%v' should contain valid characters.\n"+
 			"A validity test on this rune array produced the following error:\n"+
 			"%v\n",
 			ePrefix.String(),
-			rawNumStrRunesName,
+			targetSearchStringName,
+			targetSearchStringName,
 			err2.Error())
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	if startSearchIndex == -1 {
-		startSearchIndex = 0
-	}
-
-	if startSearchIndex < 0 {
+	if startingSearchIndex < 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startSearchIndex' is invalid.\n"+
-			"'startSearchIndex' has a value less than zero!\n"+
-			"startSearchIndex = '%v'\n",
+			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
+			"'startingSearchIndex' has a value less than zero!\n"+
+			"startingSearchIndex = '%v'\n",
 			ePrefix.String(),
-			startSearchIndex)
+			startingSearchIndex)
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	if startSearchIndex >= lenRawNumRunes {
+	if startingSearchIndex >= actualTargetStrLength {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startSearchIndex' is invalid.\n"+
-			"'startSearchIndex' has a value greater than the last index\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
+			"'startingSearchIndex' has a value greater than the last index\n"+
 			"of %v!\n"+
-			"startSearchIndex = '%v'\n"+
+			"startingSearchIndex = '%v'\n"+
 			"%v last index = %v\n",
 			ePrefix.String(),
-			rawNumStrRunesName,
-			startSearchIndex,
-			rawNumStrRunesName,
-			lenRawNumRunes-1)
+			targetSearchStringName,
+			startingSearchIndex,
+			targetSearchStringName,
+			actualTargetStrLength-1)
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	if characterSearchLength == -1 {
-		characterSearchLength = lenRawNumRunes
+	if characterSearchLength < 0 {
+		characterSearchLength = actualTargetStrLength
 	}
 
-	if characterSearchLength < 1 {
+	if characterSearchLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'characterSearchLength' is invalid.\n"+
-			"'characterSearchLength' has a value less than one (1)!\n"+
-			"characterSearchLength = '%v'\n",
-			ePrefix.String(),
-			characterSearchLength)
+			"'characterSearchLength' has a value of zero.\n",
+			ePrefix.String())
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	if characterSearchLength > lenRawNumRunes {
-		characterSearchLength = lenRawNumRunes
+	adjustedCharacterSearchLength :=
+		characterSearchLength + startingSearchIndex
+
+	if adjustedCharacterSearchLength > actualTargetStrLength {
+		adjustedCharacterSearchLength = actualTargetStrLength
 	}
 
-	err = negativeNumSearchSpecsCol.IsValidInstanceError(
-		ePrefix.XCpy(
-			"negativeNumSearchSpecsCol is invalid!"))
+	err2 = negativeNumSearchSpecsCol.IsValidInstanceError(
+		nil)
 
-	if err != nil {
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'negativeNumSearchSpecsCol' is invalid!\n"+
+			"The following validation error was returned:\n"+
+			"%v\n",
+			ePrefix.XCpy(
+				"negativeNumSearchSpecsCol"),
+			err2.Error())
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	err = decimalSeparatorSpec.IsValidInstanceError(
-		ePrefix.XCpy(
-			"decimalSeparatorSpec is invalid!"))
+	err2 = decimalSeparatorSpec.IsValidInstanceError(
+		nil)
 
-	if err != nil {
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'decimalSeparatorSpec' is invalid!\n"+
+			"The following validation error was returned:\n"+
+			"%v\n",
+			ePrefix.XCpy(
+				"decimalSeparatorSpec"),
+			err2.Error())
 
 		return intRunes,
 			fractionalRunes,
 			numberSign,
-			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
-	sMechQuark := strMechQuark{}
+	foundFirstNumericDigit := false
+	foundNonZeroNumericDigits := false
+	foundDecimalSeparators := false
+	foundNegativeSignSymbols := false
+	lastSearchIndex := 0
 
-	var relativeStartIndex int
+	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
 
-	rawNumStrRunes,
-		relativeStartIndex,
-		lenRawNumRunes,
-		err = sMechQuark.createCharacterSearchRunes(
-		rawNumStrRunes,
-		rawNumStrRunesName,
-		startSearchIndex,
-		characterSearchLength,
-		ePrefix)
+		if targetSearchString.CharsArray[i] >= '0' &&
+			targetSearchString.CharsArray[i] <= '9' {
 
-	if err != nil {
+			foundFirstNumericDigit = true
 
-		return intRunes,
-			fractionalRunes,
-			numberSign,
-			digitsFound,
-			nextTargetSearchIndex,
-			err
+			if targetSearchString.CharsArray[i] > '0' {
+				foundNonZeroNumericDigits = true
+			}
 
-	}
+			if !foundDecimalSeparators {
 
-	haveFirstNumericDigit := false
-	haveDecimalSeparators := false
-	haveNonZeroNumericDigits := false
-	haveNegativeSignChars := false
-
-	for i := 0; i < lenRawNumRunes; i++ {
-
-		if rawNumStrRunes[i] == 0 {
-			continue
-		}
-
-		if rawNumStrRunes[i] >= '0' &&
-			rawNumStrRunes[i] <= '9' {
-
-			haveFirstNumericDigit = true
-
-			haveNonZeroNumericDigits = true
-
-			digitsFound++
-
-			if !haveDecimalSeparators {
 				intRunes =
-					append(intRunes, rawNumStrRunes[i])
+					append(intRunes,
+						targetSearchString.CharsArray[i])
+
 			} else {
+
 				fractionalRunes =
-					append(fractionalRunes, rawNumStrRunes[i])
+					append(fractionalRunes,
+						targetSearchString.CharsArray[i])
 			}
 
 			continue
 		}
 
 		// Check for Negative Number Sign Symbol
-		if rawNumStrRunes[i] == leadingNegativeSignChars[0] &&
-			i+lenLeadingNegativeSignChars-1 < lenRawNumRunes &&
-			!haveNegativeSignChars &&
-			!haveFirstNumericDigit &&
-			!haveDecimalSeparators {
+		if !foundNegativeSignSymbols {
 
-			haveNegativeSignChars = true
+			foundNegativeSignSymbols,
+				lastSearchIndex,
+				err = negativeNumSearchSpecsCol.
+				SearchForNegNumSignSymbols(
+					&targetSearchString,
+					foundFirstNumericDigit,
+					i,
+					ePrefix)
 
-			for j := 0; j < lenLeadingNegativeSignChars; j++ {
-				if rawNumStrRunes[i+j] != leadingNegativeSignChars[j] {
-					haveNegativeSignChars = false
-				}
+			if foundNegativeSignSymbols {
+				i = lastSearchIndex
+				continue
 			}
-
-			if haveNegativeSignChars {
-				i += lenLeadingNegativeSignChars - 1
-			}
-
-			continue
-		} // End of Negative Number Sign Symbol test
-
-		if rawNumStrRunes[i] == decimalSeparatorChars[0] &&
-			!haveDecimalSeparators &&
-			i+lenDecSepChars-1 < lenRawNumRunes {
-
-			haveDecimalSeparators = true
-
-			for j := 0; j < lenDecSepChars; j++ {
-
-				if rawNumStrRunes[i+j] != decimalSeparatorChars[j] {
-					haveTrailingNegativeSignChars = false
-				}
-			}
-
-			if haveTrailingNegativeSignChars {
-				i += lenDecSepChars - 1
-			}
-
-			continue
 		}
 
-	}
+		if !foundDecimalSeparators {
+			// Search for Decimal Separators
 
-	isNegativeNum := false
+			foundDecimalSeparators,
+				lastSearchIndex,
+				err = decimalSeparatorSpec.SearchForDecimalSeparator(
+				&targetSearchString,
+				i,
+				ePrefix.XCpy(
+					"targetSearchString"))
 
-	isZeroNum := false
+			if err != nil {
 
-	if !haveNonZeroNumericDigits {
+				return intRunes,
+					fractionalRunes,
+					numberSign,
+					nextTargetSearchIndex,
+					remainderNumStrRunes,
+					err
 
-		isZeroNum = true
-
-	} else {
-
-		isNegativeNum = true
-
-		if !haveNegativeSignChars &&
-			!haveTrailingNegativeSignChars {
-
-			isNegativeNum = false
-
-		} else if haveNegativeSignChars &&
-			haveTrailingNegativeSignChars {
-
-			isNegativeNum = true
-
-		} else if haveNegativeSignChars &&
-			!haveTrailingNegativeSignChars {
-
-			for i := 0; i < lenTrailingNegativeSignChars; i++ {
-				if trailingNegativeSignChars[i] != 0 {
-					isNegativeNum = false
-					break
-				} else {
-					isNegativeNum = true
-				}
 			}
 
-		} else if !haveNegativeSignChars &&
-			haveTrailingNegativeSignChars {
+			if foundDecimalSeparators {
 
-			for i := 0; i < lenLeadingNegativeSignChars; i++ {
-				if leadingNegativeSignChars[i] != 0 {
-					isNegativeNum = false
-					break
-				} else {
-					isNegativeNum = true
-				}
+				i = lastSearchIndex
+
+				continue
 			}
 		}
 	}
 
-	if isZeroNum {
+	if !foundNonZeroNumericDigits {
+
 		numberSign = 0
 
-	} else if isNegativeNum {
+	} else if foundNegativeSignSymbols {
 
 		numberSign = -1
 
@@ -375,8 +325,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	}
 
-	if intRunes == nil &&
-		digitsFound > 0 {
+	if !foundNonZeroNumericDigits {
 		intRunes = make([]rune, 1)
 		intRunes[0] = '0'
 	}
@@ -384,8 +333,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	return intRunes,
 		fractionalRunes,
 		numberSign,
-		digitsFound,
 		nextTargetSearchIndex,
+		remainderNumStrRunes,
 		err
 }
 

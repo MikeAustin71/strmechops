@@ -827,6 +827,34 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 		return foundRuneArrayDtoChars, lastSearchIndex, err
 	}
 
+	if startingSearchIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
+			"'startingSearchIndex' has a value less than zero.\n"+
+			"startingSearchIndex = '%v'\n",
+			ePrefix.String(),
+			startingSearchIndex)
+
+		return foundRuneArrayDtoChars, lastSearchIndex, err
+	}
+
+	if startingSearchIndex >= lenOfTargetSearchStr {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
+			"'startingSearchIndex' has a value greater than the last\n"+
+			"index in 'targetSearchString.CharsArray'.\n"+
+			"Last Index in targetSearchString.CharsArray = '%v'\n"+
+			"startingSearchIndex = '%v'\n",
+			ePrefix.String(),
+			lenOfTargetSearchStr-1,
+			startingSearchIndex)
+
+		return foundRuneArrayDtoChars, lastSearchIndex, err
+
+	}
+
 	j := 0
 
 	for i := startingSearchIndex; i < lenOfTargetSearchStr; i++ {

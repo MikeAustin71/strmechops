@@ -866,7 +866,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //
 // Input Parameters
 //
-//  targetSearchString         *RuneArrayDto
+//  targetSearchString           *RuneArrayDto
 //     - A pointer to a RuneArrayDto. Type
 //       RuneArrayDto contains the string of text
 //       characters which will be searched for the presence of a
@@ -878,7 +878,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //			  }
 //
 //
-//  errorPrefix                interface{}
+//  errorPrefix                  interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
@@ -943,7 +943,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //       set to 'false'.
 //
 //
-//  lastIndex                    int
+//  lastSearchIndex              int
 //     - If the search operation successfully located the specified
 //       Decimal Separator Symbol(s), the return parameter will be
 //       set to the index in the target search string
@@ -970,7 +970,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	startingSearchIndex int,
 	errorPrefix interface{}) (
 	foundDecimalSeparatorSymbols bool,
-	lastIndex int,
+	lastSearchIndex int,
 	err error) {
 
 	if decSeparatorSpec.lock == nil {
@@ -992,13 +992,13 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	if err != nil {
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 	}
 
 	foundDecimalSeparatorSymbols = false
 
-	lastIndex = -1
+	lastSearchIndex = -1
 
 	if targetSearchString == nil {
 
@@ -1008,7 +1008,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			ePrefix.String())
 
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 
 	}
@@ -1023,7 +1023,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			ePrefix.String())
 
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 
 	}
@@ -1048,7 +1048,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			err2.Error())
 
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 	}
 
@@ -1062,7 +1062,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			startingSearchIndex)
 
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 	}
 
@@ -1079,7 +1079,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			lenTargetStr-1)
 
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 	}
 
@@ -1088,15 +1088,15 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	if decSeparatorSpec.foundDecimalSeparatorSymbols == true {
 
 		foundDecimalSeparatorSymbols = true
-		lastIndex = startingSearchIndex
+		lastSearchIndex = startingSearchIndex
 
 		return foundDecimalSeparatorSymbols,
-			lastIndex,
+			lastSearchIndex,
 			err
 
 	}
 
-	lastIndex = startingSearchIndex
+	lastSearchIndex = startingSearchIndex
 
 	// decSeparatorSpec has already been validated
 	lenDecimalSeparatorChars :=
@@ -1110,7 +1110,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			decSeparatorSpec.decimalSeparatorChars[j] {
 
 			return foundDecimalSeparatorSymbols,
-				lastIndex,
+				lastSearchIndex,
 				err
 
 		}
@@ -1127,11 +1127,11 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			decSeparatorSpec.foundDecimalSeparatorIndex =
 				startingSearchIndex
 
-			lastIndex = i
+			lastSearchIndex = i
 			foundDecimalSeparatorSymbols = true
 
 			return foundDecimalSeparatorSymbols,
-				lastIndex,
+				lastSearchIndex,
 				err
 
 		}
@@ -1140,7 +1140,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	// Failed to find Decimal Separators
 	return foundDecimalSeparatorSymbols,
-		lastIndex,
+		lastSearchIndex,
 		err
 }
 
