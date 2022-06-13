@@ -18,9 +18,9 @@ import (
 // character searches by passing pointers to the RuneArrayDto.
 //
 type RuneArrayDto struct {
-	CharsArray []rune
-
-	lock *sync.Mutex
+	CharsArray  []rune
+	Description string
+	lock        *sync.Mutex
 }
 
 // CopyIn - Copies the internal rune array from an incoming
@@ -326,6 +326,8 @@ func (charsArrayDto *RuneArrayDto) Empty() {
 
 	charsArrayDto.CharsArray = nil
 
+	charsArrayDto.Description = ""
+
 	charsArrayDto.lock.Unlock()
 
 	charsArrayDto.lock = nil
@@ -405,6 +407,28 @@ func (charsArrayDto *RuneArrayDto) Equal(
 	return true
 }
 
+// GetRuneArrayDescription - Returns the optional description
+// string associated with the current instance of RuneArrayDto.
+//
+// Users have the option of configuring a text string to describe
+// the function or purpose of the text characters configured for
+// the current instance of RuneArrayDto.
+//
+// This method returns that text description.
+//
+func (charsArrayDto *RuneArrayDto) GetRuneArrayDescription() string {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return charsArrayDto.Description
+}
+
 // GetRuneArrayLength - Returns the length of the internal
 // rune array, 'CharsArray' as an integer value.
 //
@@ -468,6 +492,13 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 //
 //       If this array is empty or has a zero length, an error will
 //       be returned.
+//
+//
+//  description                string
+//
+//     - Users have the option of configuring a text string to
+//       describe the function or purpose of the text characters
+//       configured for the returned instance of RuneArrayDto.
 //
 //
 //  errorPrefix                interface{}
@@ -538,6 +569,7 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 //
 func (charsArrayDto RuneArrayDto) NewRuneArray(
 	charArray []rune,
+	description string,
 	errorPrefix interface{}) (
 	newRuneArrayDto RuneArrayDto,
 	err error) {
@@ -581,6 +613,8 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 		newRuneArrayDto.CharsArray[i] =
 			charArray[i]
 	}
+
+	newRuneArrayDto.Description = description
 
 	return newRuneArrayDto, err
 }
@@ -957,4 +991,27 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 	}
 
 	return err
+}
+
+// SetRuneArrayDescription - Sets the internal member variable
+// string, 'RuneArrayDto.Description'.
+//
+// Users have the option of configuring a text string to describe
+// the function or purpose of the text characters configured for
+// the current instance of RuneArrayDto.
+//
+// This method sets that description string.
+//
+func (charsArrayDto *RuneArrayDto) SetRuneArrayDescription(
+	description string) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	charsArrayDto.Description = description
 }
