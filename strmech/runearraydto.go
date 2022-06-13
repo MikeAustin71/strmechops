@@ -683,13 +683,13 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //       parameter will be set to 'false'.
 //
 //        Example-1:
-//          Target Search String: "Xray-4 is the callsign"
+//          Target Search String: "Xray-4 is the call sign"
 //          Starting Search Index: 0
 //          Current RuneArrayDto Instance: "Xray"
 //          foundRuneArrayDtoChars = 'true'
 //
 //        Example-2:
-//          Target Search String: "Coyote-4 is the callsign"
+//          Target Search String: "Coyote-4 is the call sign"
 //          Starting Search Index: 0
 //          Current RuneArrayDto Instance: "Xray"
 //          foundRuneArrayDtoChars = 'false'
@@ -710,14 +710,14 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //       input parameter 'startingSearchIndex'.
 //
 //        Example-1:
-//          Target Search String: "Xray-4 is the callsign"
+//          Target Search String: "Xray-4 is the call sign"
 //          Starting Search Index: 0
 //          Current RuneArrayDto Instance: "Xray"
 //          foundRuneArrayDtoChars = 'true'
 //          lastSearchIndex = 3 (The 'y' in "Xray")
 //
 //        Example-2:
-//          Target Search String: "Coyote-4 is the callsign"
+//          Target Search String: "Coyote-4 is the call sign"
 //          Starting Search Index: 0
 //          Current RuneArrayDto Instance: "Xray"
 //          foundRuneArrayDtoChars = 'false'
