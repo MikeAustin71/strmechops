@@ -1407,7 +1407,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -1428,7 +1428,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -1440,7 +1440,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -1713,7 +1713,7 @@ func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -1734,7 +1734,7 @@ func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -1746,7 +1746,7 @@ func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -1824,7 +1824,7 @@ func TestStrMech_ExtractNumberRunes_03(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -1845,7 +1845,7 @@ func TestStrMech_ExtractNumberRunes_03(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -1857,7 +1857,7 @@ func TestStrMech_ExtractNumberRunes_03(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -1935,7 +1935,7 @@ func TestStrMech_ExtractNumberRunes_04(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -1956,7 +1956,7 @@ func TestStrMech_ExtractNumberRunes_04(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -1968,7 +1968,7 @@ func TestStrMech_ExtractNumberRunes_04(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -2046,7 +2046,7 @@ func TestStrMech_ExtractNumberRunes_05(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -2067,7 +2067,7 @@ func TestStrMech_ExtractNumberRunes_05(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -2079,7 +2079,7 @@ func TestStrMech_ExtractNumberRunes_05(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -2157,7 +2157,7 @@ func TestStrMech_ExtractNumberRunes_06(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -2178,7 +2178,7 @@ func TestStrMech_ExtractNumberRunes_06(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -2190,7 +2190,7 @@ func TestStrMech_ExtractNumberRunes_06(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -2268,7 +2268,7 @@ func TestStrMech_ExtractNumberRunes_07(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -2289,7 +2289,7 @@ func TestStrMech_ExtractNumberRunes_07(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -2301,7 +2301,7 @@ func TestStrMech_ExtractNumberRunes_07(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
@@ -2379,7 +2379,7 @@ func TestStrMech_ExtractNumberRunes_08(t *testing.T) {
 
 	sMech := StrMech{}
 
-	intRunes,
+	integerDigits,
 		fracRunes,
 		numberSign,
 		digitsFound,
@@ -2400,7 +2400,7 @@ func TestStrMech_ExtractNumberRunes_08(t *testing.T) {
 
 	areEqual := sMechPreon.equalRuneArrays(
 		expectedIntRunes,
-		intRunes)
+		integerDigits)
 
 	if !areEqual {
 
@@ -2412,7 +2412,7 @@ func TestStrMech_ExtractNumberRunes_08(t *testing.T) {
 			"  Actual Integer Runes = '%v'\n",
 			ePrefix.String(),
 			string(expectedIntRunes),
-			string(intRunes))
+			string(integerDigits))
 
 		return
 
