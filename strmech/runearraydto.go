@@ -17,10 +17,31 @@ import (
 // For example, this rune array can be used to carry out text
 // character searches by passing pointers to the RuneArrayDto.
 //
+// Each instance is capable of performing two types of text
+// character searches:
+//   (1) Linear Target Character Search
+//        Each Character in the Target String must match each
+//        corresponding character in the RuneArrayDto instance.
+//        Linear Target Character Search Type is the default
+//        setting for RuneArrayDto.
+//
+//   (2) Single Target Character Search
+//       A single character in the Target String must mach any
+//       character is the RuneArrayDto rune array. A single
+//       character in the Target String is therefore compared
+//       against all individual characters in the RuneArrayDto
+//       instance searching for the first case of a match.
+//
+// Reference method: RuneArrayDto.SetCharacterSearchType()
+//
 type RuneArrayDto struct {
-	CharsArray  []rune
-	Description string
-	lock        *sync.Mutex
+	CharsArray     []rune
+	Description    string
+	charSearchType CharacterSearchType // Two Possible Settings:
+	//                                     CharSearchType.LinearTargetChars()
+	//                                     CharSearchType.SingleTargetChar()
+	//                                     Default = CharSearchType.LinearTargetChars()
+	lock *sync.Mutex
 }
 
 // CopyIn - Copies the internal rune array from an incoming
@@ -327,6 +348,8 @@ func (charsArrayDto *RuneArrayDto) Empty() {
 	charsArrayDto.CharsArray = nil
 
 	charsArrayDto.Description = ""
+
+	charsArrayDto.charSearchType = CharSearchType.LinearTargetChars()
 
 	charsArrayDto.lock.Unlock()
 
@@ -882,6 +905,52 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	return foundRuneArrayDtoChars,
 		lastSearchIndex,
 		err
+}
+func (charsArrayDto *RuneArrayDto) SetCharacterSearchType(
+	charSearchType CharacterSearchType,
+	errorPrefix interface{}) (
+	err error) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"SetCharacterSearchType()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if charSearchType != CharSearchType.LinearTargetChars() &&
+		charSearchType != CharSearchType.SingleTargetChar() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'charSearchType' is invalid!\n"+
+			"'charSearchType' must be set to one of two enumerations:\n"+
+			"CharacterSearchType(0).LinearTargetChars()\n OR"+
+			"CharacterSearchType(0).LinearTargetChars()\n"+
+			"'charSearchType' string  value = '%v'\n"+
+			"'charSearchType' integer value = '%v'\n",
+			ePrefix.String(),
+			charSearchType.String(),
+			charSearchType.XValueInt())
+
+		return err
+	}
+
+	charsArrayDto.charSearchType = charSearchType
+
+	return err
 }
 
 // SetRuneArray - Deletes the internal rune array for the current
