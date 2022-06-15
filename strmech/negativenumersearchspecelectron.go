@@ -78,16 +78,16 @@ func (negNumSearchElectron *negNumSearchSpecElectron) equal(
 	sMechPreon := strMechPreon{}
 
 	areEqual := sMechPreon.equalRuneArrays(
-		negNumSearchSpec01.leadingNegNumSignSymbols,
-		negNumSearchSpec02.leadingNegNumSignSymbols)
+		negNumSearchSpec01.leadingNegNumSignSymbols.CharsArray,
+		negNumSearchSpec02.leadingNegNumSignSymbols.CharsArray)
 
 	if !areEqual {
 		return false
 	}
 
 	areEqual = sMechPreon.equalRuneArrays(
-		negNumSearchSpec01.trailingNegNumSignSymbols,
-		negNumSearchSpec02.trailingNegNumSignSymbols)
+		negNumSearchSpec01.trailingNegNumSignSymbols.CharsArray,
+		negNumSearchSpec02.trailingNegNumSignSymbols.CharsArray)
 
 	if !areEqual {
 		return false

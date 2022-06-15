@@ -228,6 +228,11 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearCharacterSearch(
 
 	}
 
+	if targetSearchLength == -1 {
+
+		targetSearchLength = actualLenTargetSearchString
+	}
+
 	adjustedCharSearchLength :=
 		targetStartingSearchIndex + targetSearchLength
 
@@ -516,6 +521,11 @@ func (runeDtoNanobot *runeArrayDtoNanobot) singleCharacterSearch(
 			searchType,
 			err
 
+	}
+
+	if targetSearchLength == -1 {
+
+		targetSearchLength = actualLenTargetSearchString
 	}
 
 	adjustedCharSearchLength :=

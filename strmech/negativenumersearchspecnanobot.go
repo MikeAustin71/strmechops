@@ -161,14 +161,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 		NSignSymPos.Before() {
 
 		lenLeadingNegNumSignSymbols =
-			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols)
+			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
 
-		targetNegNumSearchSpec.leadingNegNumSignSymbols =
+		targetNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray =
 			make([]rune, lenLeadingNegNumSignSymbols)
 
 		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
-			targetNegNumSearchSpec.leadingNegNumSignSymbols[i] =
-				incomingNegNumSearchSpec.leadingNegNumSignSymbols[i]
+			targetNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i] =
+				incomingNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i]
 		}
 
 		targetNegNumSearchSpec.foundLeadingNegNumSign =
@@ -181,14 +181,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 		NSignSymPos.BeforeAndAfter() {
 
 		lenTrailingNegNumSignSymbols =
-			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols)
+			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
 
-		targetNegNumSearchSpec.trailingNegNumSignSymbols =
+		targetNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray =
 			make([]rune, lenTrailingNegNumSignSymbols)
 
 		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
-			targetNegNumSearchSpec.trailingNegNumSignSymbols[i] =
-				incomingNegNumSearchSpec.trailingNegNumSignSymbols[i]
+			targetNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i] =
+				incomingNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i]
 		}
 
 		targetNegNumSearchSpec.foundTrailingNegNumSign =
@@ -203,14 +203,15 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 
 		// Leading data elements
 		lenLeadingNegNumSignSymbols =
-			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols)
+			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
 
-		targetNegNumSearchSpec.leadingNegNumSignSymbols =
+		targetNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray =
 			make([]rune, lenLeadingNegNumSignSymbols)
 
 		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
-			targetNegNumSearchSpec.leadingNegNumSignSymbols[i] =
-				incomingNegNumSearchSpec.leadingNegNumSignSymbols[i]
+
+			targetNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i] =
+				incomingNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i]
 		}
 
 		targetNegNumSearchSpec.foundLeadingNegNumSign =
@@ -221,14 +222,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 
 		// Trailing Data Elements
 		lenTrailingNegNumSignSymbols =
-			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols)
+			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
 
-		targetNegNumSearchSpec.trailingNegNumSignSymbols =
+		targetNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray =
 			make([]rune, lenTrailingNegNumSignSymbols)
 
 		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
-			targetNegNumSearchSpec.trailingNegNumSignSymbols[i] =
-				incomingNegNumSearchSpec.trailingNegNumSignSymbols[i]
+			targetNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i] =
+				incomingNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i]
 		}
 
 		targetNegNumSearchSpec.foundTrailingNegNumSign =
@@ -244,6 +245,26 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 
 	targetNegNumSearchSpec.foundNegNumSignSymbols =
 		incomingNegNumSearchSpec.foundNegNumSignSymbols
+
+	err =
+		targetNegNumSearchSpec.leadingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"targetNegNumSearchSpec.leadingNegNumSignSymbols"))
+
+	if err != nil {
+
+		return err
+
+	}
+
+	err =
+		targetNegNumSearchSpec.trailingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"targetNegNumSearchSpec.trailingNegNumSignSymbols"))
 
 	return err
 }
@@ -376,14 +397,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 		NSignSymPos.Before() {
 
 		lenLeadingNegNumSignSymbols =
-			len(negNumSearchSpec.leadingNegNumSignSymbols)
+			len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
 
-		copyOfNegNumSearchSpec.leadingNegNumSignSymbols =
+		copyOfNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray =
 			make([]rune, lenLeadingNegNumSignSymbols)
 
 		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
-			copyOfNegNumSearchSpec.leadingNegNumSignSymbols[i] =
-				negNumSearchSpec.leadingNegNumSignSymbols[i]
+			copyOfNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i] =
+				negNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i]
 		}
 
 		copyOfNegNumSearchSpec.foundLeadingNegNumSign =
@@ -396,14 +417,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 		NSignSymPos.BeforeAndAfter() {
 
 		lenTrailingNegNumSignSymbols =
-			len(negNumSearchSpec.trailingNegNumSignSymbols)
+			len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
 
-		copyOfNegNumSearchSpec.trailingNegNumSignSymbols =
+		copyOfNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray =
 			make([]rune, lenTrailingNegNumSignSymbols)
 
 		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
-			copyOfNegNumSearchSpec.trailingNegNumSignSymbols[i] =
-				negNumSearchSpec.trailingNegNumSignSymbols[i]
+			copyOfNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i] =
+				negNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i]
 		}
 
 		copyOfNegNumSearchSpec.foundTrailingNegNumSign =
@@ -418,14 +439,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 
 		// Leading data elements
 		lenLeadingNegNumSignSymbols =
-			len(negNumSearchSpec.leadingNegNumSignSymbols)
+			len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
 
-		copyOfNegNumSearchSpec.leadingNegNumSignSymbols =
+		copyOfNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray =
 			make([]rune, lenLeadingNegNumSignSymbols)
 
 		for i := 0; i < lenLeadingNegNumSignSymbols; i++ {
-			copyOfNegNumSearchSpec.leadingNegNumSignSymbols[i] =
-				negNumSearchSpec.leadingNegNumSignSymbols[i]
+			copyOfNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i] =
+				negNumSearchSpec.leadingNegNumSignSymbols.CharsArray[i]
 		}
 
 		copyOfNegNumSearchSpec.foundLeadingNegNumSign =
@@ -436,14 +457,14 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 
 		// Trailing Data Elements
 		lenTrailingNegNumSignSymbols =
-			len(negNumSearchSpec.trailingNegNumSignSymbols)
+			len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
 
-		copyOfNegNumSearchSpec.trailingNegNumSignSymbols =
+		copyOfNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray =
 			make([]rune, lenTrailingNegNumSignSymbols)
 
 		for i := 0; i < lenTrailingNegNumSignSymbols; i++ {
-			copyOfNegNumSearchSpec.trailingNegNumSignSymbols[i] =
-				negNumSearchSpec.trailingNegNumSignSymbols[i]
+			copyOfNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i] =
+				negNumSearchSpec.trailingNegNumSignSymbols.CharsArray[i]
 		}
 
 		copyOfNegNumSearchSpec.foundTrailingNegNumSign =
@@ -459,6 +480,26 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 
 	copyOfNegNumSearchSpec.foundNegNumSignSymbols =
 		negNumSearchSpec.foundNegNumSignSymbols
+
+	err =
+		copyOfNegNumSearchSpec.leadingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"copyOfNegNumSearchSpec.leadingNegNumSignSymbols"))
+
+	if err != nil {
+
+		return copyOfNegNumSearchSpec, err
+
+	}
+
+	err =
+		copyOfNegNumSearchSpec.trailingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"copyOfNegNumSearchSpec.trailingNegNumSignSymbols"))
 
 	return copyOfNegNumSearchSpec, err
 }
@@ -479,361 +520,6 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 	return &negNumSignSearchNanobot{
 		lock: new(sync.Mutex),
 	}
-}
-
-// leadingNegSignSymSearch - Performs a search for Leading Negative
-// Number Sign Symbols in a number string. The text characters to
-// be searched are passed via input parameter 'targetSearchString'.
-//
-// Leading Negative Number Symbols are positioned to the left of
-// numeric digits within a Number String.
-//
-// Leading Negative Number Symbols are used by various countries
-// including the United States and Canada.
-//     Examples:  -127.45   -654
-//
-// This method is almost exclusively used by Number String parsing
-// functions.
-//
-// Number String parsing functions will attempt to identify a
-// Negative Number Sign Symbol or Symbols in strings of numeric
-// digits called 'Number Strings'. Number String parsing functions
-// review strings of text characters containing numeric digits and
-// convert those numeric digits to numeric values. The presence or
-// absence of Negative Number Sign Symbols determines whether a
-// numeric value is positive or negative.
-//
-//
-// -----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  negNumSignSpec                  *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec. The
-//       Target Search String ('targetSearchString') will examined
-//       in an attempt to locate Leading Negative Number Sign
-//       Symbols specified by 'negNumSignSpec'.
-//
-//
-//  targetSearchString              *RuneArrayDto
-//     - A pointer to a RuneArrayDto. Type
-//       RuneArrayDto contains the string of text
-//       characters which will be searched for the presence of a
-//       Leading Negative Number Sign Symbols specified by
-//       'negNumSignSpec', an instance of NegativeNumberSearchSpec.
-//
-//			  type RuneArrayDto struct {
-//                 CharsArray []rune
-//			  }
-//
-//
-//  foundFirstNumericDigitInNumStr  bool
-//     - This boolean value serves as a status flag signaling
-//       whether the first numeric digit in a number string
-//       has already been located. If this is set to 'true',
-//       this method will take no action and exit without
-//       error. The reason for this behavior is based on the
-//       logic:
-//          Once the first Numeric Digit is discovered in
-//          a Number String parsing operation, it is
-//          impossible to find valid Leading Negative
-//          Number Symbols. By definition, Leading Negative
-//          Number Symbols always occur before the first
-//          numeric digit in a number string.
-//
-//
-//  startingSearchIndex             int
-//     - The 'startingSearchIndex' parameter specifies the zero
-//       based index in the Target Search Characters String
-//       ('targetSearchString') from which the search for Leading
-//       Negative Number Symbols will commence.
-//
-//       If this value is less than zero or greater than the
-//       length of 'targetSearchString' minus one, an error will be
-//       returned.
-//
-//
-//  errPrefDto                      *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  foundNegNumSignSymbols          bool
-//     - If this method completes successfully, this parameter will
-//       signal whether the search for Leading Negative Number
-//       Symbols was successful.
-//
-//       A return value of 'false' signals that the search for
-//       Leading Negative Number Symbols was unsuccessful and
-//       the Symbols were NOT located in the Target Search
-//       Characters.
-//
-//       A return value of 'true' signals that the Leading
-//       Negative Number Symbols were located in the Target Search
-//       Characters and the search was therefore successful.
-//
-//
-//  lastIndex                       int
-//       If the search for Leading Negative Number Symbols was
-//       unsuccessful, the value of 'lastIndex' will be set to
-//       'startingSearchIndex'.
-//
-//       However, if the Leading Negative Number Symbols are
-//       located in the Target Search Characters, the value of
-//       'lastIndex' will be set to the index in the Target Search
-//       String ('targetSearchString') occupied by the last text
-//       character in the specified Leading Negative Number Sign
-//       Symbols.
-//
-//         Example:
-//
-//           Target Search String: "xx(-)567890"
-//
-//           Leading Negative Number Sign Symbols (3-characters):
-//                   "(-)"
-//
-//           Note: "(-)" is a negative number sign used in the UK.
-//
-//           lastIndex = 4  The ")" in Target Search String.
-//
-//
-//  err                             error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (negNumSearchNanobot *negNumSignSearchNanobot) leadingNegSignSymSearch(
-	negNumSearchSpec *NegativeNumberSearchSpec,
-	targetSearchString *RuneArrayDto,
-	foundFirstNumericDigitInNumStr bool,
-	startingSearchIndex int,
-	errPrefDto *ePref.ErrPrefixDto) (
-	foundNegNumSignSymbols bool,
-	lastIndex int,
-	err error) {
-
-	if negNumSearchNanobot.lock == nil {
-		negNumSearchNanobot.lock = new(sync.Mutex)
-	}
-
-	negNumSearchNanobot.lock.Lock()
-
-	defer negNumSearchNanobot.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	foundNegNumSignSymbols = false
-
-	// This assumes startingSearchIndex has
-	// already been validated
-	lastIndex = startingSearchIndex
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"negNumSignSearchNanobot."+
-			"leadingNegSignSymSearch()",
-		"")
-
-	if err != nil {
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if negNumSearchSpec == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	var err2 error
-	negNumSignAtom := negNumSearchSpecAtom{}
-
-	_,
-		err2 = negNumSignAtom.testValidityOfNegNumSearchSpec(
-		negNumSearchSpec,
-		nil)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: The current instance of NegativeNumberSearchSpec (negNumSearchSpec)\n"+
-			"is invalid. The Number String parsing operation has been aborted.\n"+
-			"Validation checks returned the following error for this intance of\n"+
-			"NegativeNumberSearchSpec:\n"+
-			"%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if targetSearchString == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchString' is a nil pointer!\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	if negNumSearchSpec.foundFirstNumericDigitInNumStr {
-
-		// Nothing to do. Already found the first
-		// numeric digit. Further, Leading Neg Num Sign
-		// search is pointless.
-		//
-		// Once the first Numeric Digit is discovered in
-		// a Number String parsing operation, it is
-		// impossible to find valid Leading Negative
-		// Number Symbols.
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	if negNumSearchSpec.foundLeadingNegNumSign == true {
-
-		foundNegNumSignSymbols = true
-
-		// Nothing to do.Found Leading Neg Num Sign
-		// Symbols on a previous cycle.
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsArray)
-
-	if lenNegNumSignTargetSearchChars == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
-			"'targetSearchString.CharsArray' has an array length of zero.\n"+
-			"There are no target search characters in which to search\n"+
-			"for Negative Number Sign symbols.\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if startingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"startingSearchIndex has a length less than zero.\n"+
-			"startingSearchIndex length = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if startingSearchIndex >= lenNegNumSignTargetSearchChars {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"startingSearchIndex has a length less than zero.\n"+
-			"startingSearchIndex length = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	lenLeadingNegNumSymbols := len(negNumSearchSpec.leadingNegNumSignSymbols)
-
-	if lenLeadingNegNumSymbols == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NegativeNumberSearchSpec is invalid!\n"+
-			"No Leading Negative Number Sign Symbols have been previously\n"+
-			"configured. The length of the negNumSearchSpec.leadingNegNumSignSymbols"+
-			"array is zero. The array is empty.\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	// Set internal processing flag
-	// foundFirstNumericDigitInNumStr
-	negNumSearchSpec.foundFirstNumericDigitInNumStr =
-		foundFirstNumericDigitInNumStr
-
-	j := 0
-
-	for i := startingSearchIndex; i < lenNegNumSignTargetSearchChars; i++ {
-
-		if negNumSearchSpec.leadingNegNumSignSymbols[j] !=
-			targetSearchString.CharsArray[i] {
-
-			// The Leading Negative Number Symbols were
-			// NOT found in this search string.
-			return foundNegNumSignSymbols,
-				lastIndex,
-				err
-
-		}
-
-		j++
-
-		if j >= lenLeadingNegNumSymbols {
-			// Search Was SUCCESSFUL!
-			// Found the Neg Num Sign Symbol
-			lastIndex = i
-
-			negNumSearchSpec.foundLeadingNegNumSign = true
-
-			negNumSearchSpec.foundLeadingNegNumSignIndex =
-				startingSearchIndex
-
-			foundNegNumSignSymbols = true
-
-			return foundNegNumSignSymbols,
-				lastIndex,
-				err
-		}
-	}
-
-	return foundNegNumSignSymbols,
-		lastIndex,
-		err
 }
 
 // setLeadingNegNumSearchSpec - Receives an instance of
@@ -970,7 +656,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSearchSpec.leadingNegNumSignSymbols,
+		&negNumSearchSpec.leadingNegNumSignSymbols.CharsArray,
 		&leadingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
@@ -979,6 +665,12 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 	if err != nil {
 		return err
 	}
+
+	err = negNumSearchSpec.leadingNegNumSignSymbols.SetCharacterSearchType(
+		CharSearchType.LinearTargetChars(),
+		ePrefix.XCpy(
+			"negNumSearchSpec.leadingNegNumSignSymbols"+
+				"<-CharSearchType.LinearTargetChars()"))
 
 	negNumSearchSpec.negNumSignPosition = NSignSymPos.Before()
 
@@ -1161,7 +853,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSearchSpec.leadingNegNumSignSymbols,
+		&negNumSearchSpec.leadingNegNumSignSymbols.CharsArray,
 		&leadingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
@@ -1172,7 +864,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSearchSpec.trailingNegNumSignSymbols,
+		&negNumSearchSpec.trailingNegNumSignSymbols.CharsArray,
 		&trailingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
@@ -1183,6 +875,24 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 	}
 
 	negNumSearchSpec.negNumSignPosition = NSignSymPos.BeforeAndAfter()
+
+	err = negNumSearchSpec.leadingNegNumSignSymbols.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetChars(),
+			ePrefix.XCpy(
+				"negNumSearchSpec.leadingNegNumSignSymbols"+
+					"<-CharSearchType.LinearTargetChars()"))
+
+	if err != nil {
+		return err
+	}
+
+	err = negNumSearchSpec.trailingNegNumSignSymbols.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetChars(),
+			ePrefix.XCpy(
+				"negNumSearchSpec.trailingNegNumSignSymbols"+
+					"<-CharSearchType.LinearTargetChars()"))
 
 	return err
 }
@@ -1319,7 +1029,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 	}
 
 	err = sMechPreon.copyRuneArrays(
-		&negNumSearchSpec.trailingNegNumSignSymbols,
+		&negNumSearchSpec.trailingNegNumSignSymbols.CharsArray,
 		&trailingNegNumSignSymbols,
 		true,
 		ePrefix.XCpy(
@@ -1331,360 +1041,12 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 
 	negNumSearchSpec.negNumSignPosition = NSignSymPos.After()
 
+	err = negNumSearchSpec.trailingNegNumSignSymbols.
+		SetCharacterSearchType(
+			CharSearchType.LinearTargetChars(),
+			ePrefix.XCpy(
+				"negNumSearchSpec.trailingNegNumSignSymbols"+
+					"<-CharSearchType.LinearTargetChars()"))
+
 	return err
-}
-
-// trailingNegSignSymSearch - Performs a search for Trailing Negative
-// Number Sign Symbols in a number string. The text characters to
-// be searched are passed via input parameter 'targetSearchString'.
-//
-// Trailing Negative Number Symbols are positioned to the right of
-// numeric digits within a Number String.
-//
-// Trailing Negative Number Symbols are used by various European
-// Union countries. Examples:  127.45-   654-
-//
-// This method is almost exclusively used by Number String parsing
-// functions.
-//
-// Number String parsing functions will attempt to identify a
-// Negative Number Sign Symbol or Symbols in strings of numeric
-// digits called 'Number Strings'. Number String parsing functions
-// review strings of text characters containing numeric digits and
-// convert those numeric digits to numeric values. The presence or
-// absence of Negative Number Sign Symbols determines whether a
-// numeric value is positive or negative.
-//
-//
-// -----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  negNumSignSpec                  *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec. The
-//       Target Search String ('targetSearchString') will examined
-//       in an attempt to locate Trailing Negative Number Sign
-//       Symbols specified by 'negNumSignSpec'.
-//
-//
-//  targetSearchString              *RuneArrayDto
-//     - A pointer to a RuneArrayDto. Type
-//       RuneArrayDto contains the string of text
-//       characters which will be searched for the presence of a
-//       Trailing Negative Number Sign Symbols specified by
-//       'negNumSignSpec', an instance of NegativeNumberSearchSpec.
-//
-//			  type RuneArrayDto struct {
-//                 CharsArray []rune
-//			  }
-//
-//
-//
-//  foundFirstNumericDigitInNumStr  bool
-//     - This boolean value serves as a status flag signaling
-//       whether the first numeric digit in a number string
-//       has already been located. If this is set to 'true',
-//       this method will take no action and exit without
-//       error. The reason for this behavior is based on the
-//       logic:
-//          Once the first Numeric Digit is discovered in
-//          a Number String parsing operation, it is
-//          impossible to find valid Trailing Negative
-//          Number Symbols. By definition, Trailing Negative
-//          Number Symbols always occur before the first
-//          numeric digit in a number string.
-//
-//
-//  startingSearchIndex             int
-//     - The 'startingSearchIndex' parameter specifies the zero
-//       based index in the Target Search Characters String
-//       ('targetSearchString') from which the search for Trailing
-//       Negative Number Symbols will commence.
-//
-//       If this value is less than zero or greater than the
-//       length of 'targetSearchString' minus one, an error will be
-//       returned.
-//
-//
-//  errPrefDto                      *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  foundNegNumSignSymbols          bool
-//     - If this method completes successfully, this parameter will
-//       signal whether the search for Trailing Negative Number
-//       Symbols was successful.
-//
-//       A return value of 'false' signals that the search for
-//       Trailing Negative Number Symbols was unsuccessful and
-//       the Symbols were NOT located in the Target Search
-//       Characters.
-//
-//       A return value of 'true' signals that the Trailing
-//       Negative Number Symbols were located in the Target Search
-//       Characters and the search was therefore successful.
-//
-//
-//  lastIndex                       int
-//       If the search for Trailing Negative Number Symbols was
-//       unsuccessful, the value of 'lastIndex' will be set to
-//       'startingSearchIndex'.
-//
-//       However, if the Trailing Negative Number Symbols are
-//       located in the Target Search Characters, the value of
-//       'lastIndex' will be set to the index in the Target Search
-//       String ('targetSearchString') occupied by the last text
-//       character in the specified Trailing Negative Number Sign
-//       Symbols.
-//
-//         Example:
-//
-//           Target Search String: "xx(-)567890"
-//
-//           Trailing Negative Number Sign Symbols (3-characters):
-//                   "(-)"
-//
-//           Note: "(-)" is a negative number sign used in the UK.
-//
-//           lastIndex = 4  The ")" in Target Search String.
-//
-//
-//  err                             error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (negNumSearchNanobot *negNumSignSearchNanobot) trailingNegSignSymSearch(
-	negNumSearchSpec *NegativeNumberSearchSpec,
-	targetSearchString *RuneArrayDto,
-	foundFirstNumericDigitInNumStr bool,
-	startingSearchIndex int,
-	errPrefDto *ePref.ErrPrefixDto) (
-	foundNegNumSignSymbols bool,
-	lastIndex int,
-	err error) {
-
-	if negNumSearchNanobot.lock == nil {
-		negNumSearchNanobot.lock = new(sync.Mutex)
-	}
-
-	negNumSearchNanobot.lock.Lock()
-
-	defer negNumSearchNanobot.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	foundNegNumSignSymbols = false
-
-	// This assumes startingSearchIndex has
-	// already been validated
-	lastIndex = startingSearchIndex
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"negNumSignSearchNanobot."+
-			"trailingNegSignSymSearch()",
-		"")
-
-	if err != nil {
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if negNumSearchSpec == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	var err2 error
-	negNumSignAtom := negNumSearchSpecAtom{}
-
-	_,
-		err2 = negNumSignAtom.testValidityOfNegNumSearchSpec(
-		negNumSearchSpec,
-		nil)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: The current instance of NegativeNumberSearchSpec (negNumSearchSpec)\n"+
-			"is invalid. The Number String parsing operation has been aborted.\n"+
-			"Validation checks returned the following error for this intance of\n"+
-			"NegativeNumberSearchSpec:\n"+
-			"%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if targetSearchString == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchString' is a nil pointer!\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	if negNumSearchSpec.foundFirstNumericDigitInNumStr {
-
-		// Nothing to do. Already found the first
-		// numeric digit. Further, Trailing Neg Num Sign
-		// search is pointless.
-		//
-		// Once the first Numeric Digit is discovered in
-		// a Number String parsing operation, it is
-		// impossible to find valid Trailing Negative
-		// Number Symbols.
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	if negNumSearchSpec.foundTrailingNegNumSign == true {
-
-		foundNegNumSignSymbols = true
-
-		// Nothing to do.Found Trailing Neg Num Sign
-		// Symbols on a previous cycle.
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	lenNegNumSignTargetSearchChars := len(targetSearchString.CharsArray)
-
-	if lenNegNumSignTargetSearchChars == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
-			"'targetSearchString.CharsArray' has an array length of zero.\n"+
-			"There are no target search characters in which to search\n"+
-			"for Negative Number Sign symbols.\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if startingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"startingSearchIndex has a length less than zero.\n"+
-			"startingSearchIndex length = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	if startingSearchIndex >= lenNegNumSignTargetSearchChars {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"startingSearchIndex has a length less than zero.\n"+
-			"startingSearchIndex length = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	lenTrailingNegNumSymbols := len(negNumSearchSpec.trailingNegNumSignSymbols)
-
-	if lenTrailingNegNumSymbols == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of NegativeNumberSearchSpec is invalid!\n"+
-			"No Trailing Negative Number Sign Symbols have been previously\n"+
-			"configured. The length of the negNumSearchSpec.trailingNegNumSignSymbols"+
-			"array is zero. The array is empty.\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-	}
-
-	// Set internal processing flag
-	// foundFirstNumericDigitInNumStr
-	negNumSearchSpec.foundFirstNumericDigitInNumStr =
-		foundFirstNumericDigitInNumStr
-
-	j := 0
-
-	for i := startingSearchIndex; i < lenNegNumSignTargetSearchChars; i++ {
-
-		if negNumSearchSpec.trailingNegNumSignSymbols[j] !=
-			targetSearchString.CharsArray[i] {
-
-			// The Trailing Negative Number Symbols were
-			// NOT found in this search string.
-			return foundNegNumSignSymbols,
-				lastIndex,
-				err
-
-		}
-
-		j++
-
-		if j >= lenTrailingNegNumSymbols {
-			// Search Was SUCCESSFUL!
-			// Found the Neg Num Sign Symbol
-			lastIndex = i
-
-			negNumSearchSpec.foundTrailingNegNumSign = true
-
-			negNumSearchSpec.foundTrailingNegNumSignIndex =
-				startingSearchIndex
-
-			foundNegNumSignSymbols = true
-
-			return foundNegNumSignSymbols,
-				lastIndex,
-				err
-		}
-	}
-
-	return foundNegNumSignSymbols,
-		lastIndex,
-		err
 }

@@ -61,8 +61,8 @@ func (negNumSearchAtom *negNumSearchSpecAtom) empty(
 	}
 
 	negNumSearchSpec.negNumSignPosition = NSignSymPos.None()
-	negNumSearchSpec.leadingNegNumSignSymbols = nil
-	negNumSearchSpec.trailingNegNumSignSymbols = nil
+	negNumSearchSpec.leadingNegNumSignSymbols.Empty()
+	negNumSearchSpec.trailingNegNumSignSymbols.Empty()
 
 	negNumSearchSpecElectron{}.ptr().
 		emptyProcessingFlags(negNumSearchSpec)
@@ -208,7 +208,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.Before() {
 
-		if len(negNumSearchSpec.trailingNegNumSignSymbols) > 0 {
+		if len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray) > 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
@@ -220,7 +220,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		}
 
-		if len(negNumSearchSpec.leadingNegNumSignSymbols) == 0 {
+		if len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray) == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
@@ -233,7 +233,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		_,
 			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.leadingNegNumSignSymbols,
+			negNumSearchSpec.leadingNegNumSignSymbols.CharsArray,
 			nil)
 
 		if err2 != nil {
@@ -249,6 +249,17 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 			return isValid, err
 		}
 
+		err = negNumSearchSpec.leadingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"negNumSearchSpec.leadingNegNumSignSymbols"))
+
+		if err != nil {
+
+			return isValid, err
+		}
+
 		isValid = true
 
 		return isValid, err
@@ -256,7 +267,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
 
-		if len(negNumSearchSpec.leadingNegNumSignSymbols) > 0 {
+		if len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray) > 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
@@ -268,7 +279,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		}
 
-		if len(negNumSearchSpec.trailingNegNumSignSymbols) == 0 {
+		if len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray) == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
@@ -282,7 +293,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		_,
 			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.trailingNegNumSignSymbols,
+			negNumSearchSpec.trailingNegNumSignSymbols.CharsArray,
 			nil)
 
 		if err2 != nil {
@@ -298,6 +309,17 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 			return isValid, err
 		}
 
+		err = negNumSearchSpec.trailingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"negNumSearchSpec.trailingNegNumSignSymbols"))
+
+		if err != nil {
+
+			return isValid, err
+		}
+
 		isValid = true
 
 		return isValid, err
@@ -305,7 +327,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.BeforeAndAfter() {
 
-		if len(negNumSearchSpec.leadingNegNumSignSymbols) == 0 {
+		if len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray) == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
@@ -319,7 +341,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		_,
 			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.leadingNegNumSignSymbols,
+			negNumSearchSpec.leadingNegNumSignSymbols.CharsArray,
 			nil)
 
 		if err2 != nil {
@@ -336,7 +358,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		}
 
-		if len(negNumSearchSpec.trailingNegNumSignSymbols) == 0 {
+		if len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray) == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: This instance of 'NegativeNumberSearchSpec' is invalid!\n"+
@@ -350,7 +372,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		_,
 			err2 = sMechPreon.testValidityOfRuneCharArray(
-			negNumSearchSpec.trailingNegNumSignSymbols,
+			negNumSearchSpec.trailingNegNumSignSymbols.CharsArray,
 			nil)
 
 		if err2 != nil {
@@ -362,6 +384,28 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 				"%v\n",
 				ePrefix.String(),
 				err2.Error())
+
+			return isValid, err
+		}
+
+		err = negNumSearchSpec.leadingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"negNumSearchSpec.leadingNegNumSignSymbols"))
+
+		if err != nil {
+
+			return isValid, err
+		}
+
+		err = negNumSearchSpec.trailingNegNumSignSymbols.
+			SetCharacterSearchType(
+				CharSearchType.LinearTargetChars(),
+				ePrefix.XCpy(
+					"negNumSearchSpec.leadingNegNumSignSymbols"))
+
+		if err != nil {
 
 			return isValid, err
 		}
