@@ -783,10 +783,13 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //
 func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	targetSearchString *RuneArrayDto,
-	startingSearchIndex int,
+	targetStartingSearchIndex int,
+	targetSearchLength int,
 	errorPrefix interface{}) (
 	foundRuneArrayDtoChars bool,
-	lastSearchIndex int,
+	lastTargetSearchIndex int,
+	lastTestStingIndex int,
+	searchType CharacterSearchType,
 	err error) {
 
 	if charsArrayDto.lock == nil {
@@ -801,7 +804,9 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	foundRuneArrayDtoChars = false
 
-	lastSearchIndex = startingSearchIndex
+	lastTargetSearchIndex = targetStartingSearchIndex
+
+	lastTestStingIndex = -1
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -811,99 +816,62 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 		"")
 
 	if err != nil {
-		return foundRuneArrayDtoChars, lastSearchIndex, err
+
+		return foundRuneArrayDtoChars,
+			lastTargetSearchIndex,
+			lastTestStingIndex,
+			searchType,
+			err
+
 	}
 
-	if targetSearchString == nil {
+	if charsArrayDto.charSearchType != CharSearchType.LinearTargetChars() &&
+		charsArrayDto.charSearchType != CharSearchType.SingleTargetChar() {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchString' is invalid!\n"+
-			"'targetSearchString' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return foundRuneArrayDtoChars, lastSearchIndex, err
-	}
-
-	lenOfTargetSearchStr := len(targetSearchString.CharsArray)
-
-	if lenOfTargetSearchStr == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchString' is invalid!\n"+
-			"'targetSearchString' text characters is an empty array.\n"+
-			"The length of targetSearchString.CharsArray is zero.\n",
-			ePrefix.String())
-
-		return foundRuneArrayDtoChars, lastSearchIndex, err
-	}
-
-	lenOfRuneArrayDto := len(charsArrayDto.CharsArray)
-
-	if lenOfRuneArrayDto == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The current instance of RuneArrayDto is invalid!\n"+
-			"Internal member variable 'CharsArray' has a length of zero."+
-			"The text character rune array is empty.\n",
-			ePrefix.String())
-
-		return foundRuneArrayDtoChars, lastSearchIndex, err
-	}
-
-	if startingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"'startingSearchIndex' has a value less than zero.\n"+
-			"startingSearchIndex = '%v'\n",
+			"ERROR: The current instance of RuneArrayDto is invalid!\n"+
+			"The Character Search Type is invalid. Character Search Type\n"+
+			"must be set to one of two enumeration values:\n"+
+			"  CharSearchType.LinearTargetChars() or CharSearchType.SingleTargetChar()\n"+
+			"The Character Search Type for this instance of RuneArrayDto is"+
+			" Character Search Type   String Name: %v\n"+
+			" Character Search Type Integer Value: %v\n",
 			ePrefix.String(),
-			startingSearchIndex)
+			charsArrayDto.charSearchType.String(),
+			charsArrayDto.charSearchType.XValueInt())
 
-		return foundRuneArrayDtoChars, lastSearchIndex, err
+		return foundRuneArrayDtoChars,
+			lastTargetSearchIndex,
+			lastTestStingIndex,
+			searchType,
+			err
 	}
 
-	if startingSearchIndex >= lenOfTargetSearchStr {
+	runeArrayNanobot := runeArrayDtoNanobot{}
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'startingSearchIndex' is invalid!\n"+
-			"'startingSearchIndex' has a value greater than the last\n"+
-			"index in 'targetSearchString.CharsArray'.\n"+
-			"Last Index in targetSearchString.CharsArray = '%v'\n"+
-			"startingSearchIndex = '%v'\n",
-			ePrefix.String(),
-			lenOfTargetSearchStr-1,
-			startingSearchIndex)
+	if charsArrayDto.charSearchType == CharSearchType.LinearTargetChars() {
 
-		return foundRuneArrayDtoChars, lastSearchIndex, err
+		return runeArrayNanobot.linearCharacterSearch(
+			charsArrayDto,
+			"RuneArrayDto",
+			targetSearchString,
+			"targetSearchString",
+			targetStartingSearchIndex,
+			"targetStartingSearchIndex",
+			targetSearchLength,
+			"targetSearchLength",
+			ePrefix.XCpy(
+				"charsArrayDto"))
 
 	}
 
-	j := 0
-
-	for i := startingSearchIndex; i < lenOfTargetSearchStr; i++ {
-
-		if charsArrayDto.CharsArray[j] !=
-			targetSearchString.CharsArray[i] {
-
-			// The current instance RuneArrayDto text string
-			// WAS NOT FOUND in the Target Search String
-			return foundRuneArrayDtoChars, lastSearchIndex, err
-		}
-
-		// We found a matching character
-		j++
-
-		if j > lenOfRuneArrayDto {
-			// Search Was SUCCESSFUL!
-			// Found the Neg Num Sign Symbol
-			foundRuneArrayDtoChars = true
-			lastSearchIndex = i
-			return foundRuneArrayDtoChars, lastSearchIndex, err
-		}
-	}
+	// Must Be
+	// charsArrayDto.charSearchType == CharSearchType.SingleTargetChar()
 
 	return foundRuneArrayDtoChars,
-		lastSearchIndex,
+		lastTargetSearchIndex,
+		lastTestStingIndex,
+		searchType,
 		err
 }
 func (charsArrayDto *RuneArrayDto) SetCharacterSearchType(
