@@ -80,9 +80,7 @@ func (numStrKernel *NumberStrKernel) AddIntegerDigit(
 		return err
 	}
 
-	numStrKernel.integerDigits.CharsArray =
-		append(numStrKernel.integerDigits.CharsArray,
-			integerDigit)
+	numStrKernel.integerDigits.AddChar(integerDigit)
 
 	numStrKernel.hasIntegerDigits = true
 
@@ -135,9 +133,8 @@ func (numStrKernel *NumberStrKernel) AddFractionalDigit(
 		return err
 	}
 
-	numStrKernel.fractionalDigits.CharsArray =
-		append(numStrKernel.fractionalDigits.CharsArray,
-			fractionalDigit)
+	numStrKernel.fractionalDigits.AddChar(
+		fractionalDigit)
 
 	numStrKernel.hasFractionalDigits = true
 

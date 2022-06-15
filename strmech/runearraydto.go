@@ -44,6 +44,35 @@ type RuneArrayDto struct {
 	lock *sync.Mutex
 }
 
+// AddChar - Adds a single text character of type rune to the end
+// of the rune array (RuneArrayDto.CharsArray) encapsulated by the
+// current instance of RuneArrayDto
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  charToAdd                  rune
+//     - The text character which will be appended to the end of
+//       the rune array encapsulated by the current instance of
+//       RuneArrayDto.
+//
+func (charsArrayDto *RuneArrayDto) AddChar(
+	charToAdd rune) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	charsArrayDto.CharsArray =
+		append(charsArrayDto.CharsArray, charToAdd)
+}
+
 // CopyIn - Copies the internal rune array from an incoming
 // instance of RuneArrayDto ('incomingChars') to the internal
 // rune array of the current RuneArrayDto instance
