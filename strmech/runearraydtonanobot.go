@@ -297,7 +297,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 	targetSearchLength int,
 	targetSearchLengthName string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	searchResultsDto CharSearchResultsDto,
+	searchResults CharSearchResultsDto,
 	err error) {
 
 	if runeDtoNanobot.lock == nil {
@@ -310,16 +310,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	searchResultsDto.Empty()
-
-	searchResultsDto.SearchType =
-		CharSearchType.LinearEndOfString()
-
-	searchResultsDto.TestStrDescription1 =
-		testSearchString.Description
-
-	searchResultsDto.TargetStringStartingIndex =
-		targetStartingSearchIndex
+	searchResults.Empty()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -330,7 +321,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 
 	if err != nil {
 
-		return searchResultsDto, err
+		return searchResults, err
 
 	}
 
@@ -345,12 +336,22 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			ePrefix.String(),
 			testSearchStringName)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
-	lenTestSearchString := len(testSearchString.CharsArray)
+	searchResults.SearchType =
+		CharSearchType.LinearEndOfString()
 
-	if lenTestSearchString == 0 {
+	searchResults.TestStrDescription1 =
+		testSearchString.Description1
+
+	searchResults.TestStrDescription2 =
+		testSearchString.Description2
+
+	searchResults.TestStrLength =
+		len(testSearchString.CharsArray)
+
+	if searchResults.TestStrLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter '%v' is invalid!\n"+
@@ -361,7 +362,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			testSearchStringName,
 			testSearchStringName)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
 	if len(targetSearchStringName) == 0 {
@@ -375,7 +376,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			ePrefix.String(),
 			targetSearchStringName)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
 	if len(targetStartingSearchIndexName) == 0 {
@@ -386,9 +387,16 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 		targetStartingSearchIndexName = "targetSearchLength"
 	}
 
-	actualLenTargetSearchString := len(targetSearchString.CharsArray)
+	searchResults.TargetStringDescription1 =
+		targetSearchString.Description1
 
-	if actualLenTargetSearchString == 0 {
+	searchResults.TargetStringDescription2 =
+		targetSearchString.Description2
+
+	searchResults.TargetStringLength =
+		len(targetSearchString.CharsArray)
+
+	if searchResults.TargetStringLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter '%v' is invalid!\n"+
@@ -399,7 +407,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			targetSearchStringName,
 			targetSearchStringName)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
 	if targetStartingSearchIndex < 0 {
@@ -414,10 +422,10 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			targetStartingSearchIndexName,
 			targetStartingSearchIndex)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
-	if targetStartingSearchIndex >= actualLenTargetSearchString {
+	if targetStartingSearchIndex >= searchResults.TargetStringLength {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is invalid!\n"+
@@ -430,12 +438,15 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			targetStartingSearchIndexName,
 			targetSearchStringName,
 			targetSearchStringName,
-			actualLenTargetSearchString-1,
+			searchResults.TargetStringSearchLength-1,
 			targetStartingSearchIndexName,
 			targetStartingSearchIndex)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
+
+	searchResults.TargetStringStartingSearchIndex =
+		targetStartingSearchIndex
 
 	if targetSearchLength < -1 {
 
@@ -449,7 +460,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			targetSearchStringName,
 			targetStartingSearchIndex)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
 	if targetSearchLength == 0 {
@@ -461,51 +472,66 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
 			targetSearchLengthName,
 			targetSearchLengthName)
 
-		return searchResultsDto, err
+		return searchResults, err
 	}
 
 	if targetSearchLength == -1 {
 
-		targetSearchLength = actualLenTargetSearchString
+		targetSearchLength = searchResults.TargetStringLength
 	}
 
-	adjustedCharSearchLength :=
-		targetStartingSearchIndex + targetSearchLength
+	searchResults.TargetStringSearchLength = targetSearchLength
 
-	if adjustedCharSearchLength > actualLenTargetSearchString {
-		adjustedCharSearchLength = actualLenTargetSearchString
+	searchResults.TargetStringSearchLength =
+		searchResults.TargetStringStartingSearchIndex +
+			searchResults.TargetStringSearchLength
+
+	if searchResults.TargetStringSearchLength > searchResults.TargetStringLength {
+		searchResults.TargetStringSearchLength =
+			searchResults.TargetStringLength
 	}
 
 	j := 0
 
-	for i := targetStartingSearchIndex; i < adjustedCharSearchLength; i++ {
+	searchResults.TestStrStartingIndex = j
+
+	for i := searchResults.TargetStringStartingSearchIndex; i < searchResults.TargetStringSearchLength; i++ {
 
 		if testSearchString.CharsArray[j] !=
 			targetSearchString.CharsArray[i] {
 
 			// Search Failed. No Match!
 			// Exit Here!
-			return searchResultsDto, err
+			return searchResults, err
+		}
+
+		if searchResults.TargetStringFirstFoundIndex < 0 {
+			searchResults.TargetStringFirstFoundIndex = i
 		}
 
 		// We found a matching char
+		if searchResults.TestStringFirstFoundIndex < 0 {
+
+			searchResults.TestStringFirstFoundIndex = j
+		}
+
 		j++
 
-		if j == lenTestSearchString {
+		if j == searchResults.TestStrLength {
 			// Search Was SUCCESSFUL!
 			// All characters found!
 			// EXIT HERE!
 
-			searchResultsDto.FoundSearchTarget = true
-			searchResultsDto.LastFoundTargetSearchStrIndex = i
-			searchResultsDto.LastFoundTestStrIndex = j - 1
+			searchResults.FoundSearchTarget = true
+			searchResults.TargetStringLastFoundIndex = i
+			searchResults.TestStrLastFoundIndex = j - 1
 
-			return searchResultsDto, err
+			return searchResults, err
 		}
 
 	}
 
-	return searchResultsDto, err
+	return searchResults, err
 }
 
 // ptr - Returns a pointer to a new instance of
