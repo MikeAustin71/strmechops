@@ -10,7 +10,7 @@ type runeArrayDtoNanobot struct {
 	lock *sync.Mutex
 }
 
-func (runeDtoNanobot *runeArrayDtoNanobot) linearCharacterSearch(
+func (runeDtoNanobot *runeArrayDtoNanobot) linearTargetStartingIndexSearch(
 	testSearchString *RuneArrayDto,
 	testSearchStringName string,
 	targetSearchString *RuneArrayDto,
@@ -45,7 +45,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearCharacterSearch(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"runeArrayDtoNanobot."+
-			"linearCharacterSearch()",
+			"linearTargetStartingIndexSearch()",
 		"")
 
 	if err != nil {
@@ -285,6 +285,227 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearCharacterSearch(
 		lastTestStingIndex,
 		searchType,
 		err
+}
+
+func (runeDtoNanobot *runeArrayDtoNanobot) linearEndOfStringSearch(
+	testSearchString *RuneArrayDto,
+	testSearchStringName string,
+	targetSearchString *RuneArrayDto,
+	targetSearchStringName string,
+	targetStartingSearchIndex int,
+	targetStartingSearchIndexName string,
+	targetSearchLength int,
+	targetSearchLengthName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	searchResultsDto CharSearchResultsDto,
+	err error) {
+
+	if runeDtoNanobot.lock == nil {
+		runeDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	runeDtoNanobot.lock.Lock()
+
+	defer runeDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	searchResultsDto.Empty()
+
+	searchResultsDto.SearchType =
+		CharSearchType.LinearEndOfString()
+
+	searchResultsDto.TestStrDescription1 =
+		testSearchString.Description
+
+	searchResultsDto.TargetStringStartingIndex =
+		targetStartingSearchIndex
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoNanobot."+
+			"linearEndOfStringSearch()",
+		"")
+
+	if err != nil {
+
+		return searchResultsDto, err
+
+	}
+
+	if len(testSearchStringName) == 0 {
+		testSearchStringName = "testSearchString"
+	}
+
+	if testSearchString == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			testSearchStringName)
+
+		return searchResultsDto, err
+	}
+
+	lenTestSearchString := len(testSearchString.CharsArray)
+
+	if lenTestSearchString == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' is invalid!\n"+
+			"The rune array encapsulated by '%v' is empty\n"+
+			"Length of %v.CharsArray is Zero (0).\n",
+			ePrefix.String(),
+			testSearchStringName,
+			testSearchStringName,
+			testSearchStringName)
+
+		return searchResultsDto, err
+	}
+
+	if len(targetSearchStringName) == 0 {
+		targetSearchStringName = "targetSearchString"
+	}
+
+	if targetSearchString == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			targetSearchStringName)
+
+		return searchResultsDto, err
+	}
+
+	if len(targetStartingSearchIndexName) == 0 {
+		targetStartingSearchIndexName = "targetStartingSearchIndex"
+	}
+
+	if len(targetSearchLengthName) == 0 {
+		targetStartingSearchIndexName = "targetSearchLength"
+	}
+
+	actualLenTargetSearchString := len(targetSearchString.CharsArray)
+
+	if actualLenTargetSearchString == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' is invalid!\n"+
+			"The rune array encapsulated by '%v' is empty\n"+
+			"Length of %v.CharsArray is Zero (0).\n",
+			ePrefix.String(),
+			targetSearchStringName,
+			targetSearchStringName,
+			targetSearchStringName)
+
+		return searchResultsDto, err
+	}
+
+	if targetStartingSearchIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter %v is invalid!\n"+
+			"%v is less than zero (0)\n"+
+			"%v = '%v'\n",
+			ePrefix.String(),
+			targetStartingSearchIndexName,
+			targetStartingSearchIndexName,
+			targetStartingSearchIndexName,
+			targetStartingSearchIndex)
+
+		return searchResultsDto, err
+	}
+
+	if targetStartingSearchIndex >= actualLenTargetSearchString {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid!\n"+
+			"%v has a value greater than the last\n"+
+			"index in '%v.CharsArray'.\n"+
+			"Last Index in %v.CharsArray = '%v'\n"+
+			"%v = '%v'\n",
+			ePrefix.String(),
+			targetStartingSearchIndexName,
+			targetStartingSearchIndexName,
+			targetSearchStringName,
+			targetSearchStringName,
+			actualLenTargetSearchString-1,
+			targetStartingSearchIndexName,
+			targetStartingSearchIndex)
+
+		return searchResultsDto, err
+	}
+
+	if targetSearchLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid!\n"+
+			"%v has a value less than minus one (-1)\n"+
+			"%v = '%v'\n",
+			ePrefix.String(),
+			targetSearchLengthName,
+			targetSearchLengthName,
+			targetSearchStringName,
+			targetStartingSearchIndex)
+
+		return searchResultsDto, err
+	}
+
+	if targetSearchLength == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid!\n"+
+			"%v has a value of Zero (0)\n",
+			ePrefix.String(),
+			targetSearchLengthName,
+			targetSearchLengthName)
+
+		return searchResultsDto, err
+	}
+
+	if targetSearchLength == -1 {
+
+		targetSearchLength = actualLenTargetSearchString
+	}
+
+	adjustedCharSearchLength :=
+		targetStartingSearchIndex + targetSearchLength
+
+	if adjustedCharSearchLength > actualLenTargetSearchString {
+		adjustedCharSearchLength = actualLenTargetSearchString
+	}
+
+	j := 0
+
+	for i := targetStartingSearchIndex; i < adjustedCharSearchLength; i++ {
+
+		if testSearchString.CharsArray[j] !=
+			targetSearchString.CharsArray[i] {
+
+			// Search Failed. No Match!
+			// Exit Here!
+			return searchResultsDto, err
+		}
+
+		// We found a matching char
+		j++
+
+		if j == lenTestSearchString {
+			// Search Was SUCCESSFUL!
+			// All characters found!
+			// EXIT HERE!
+
+			searchResultsDto.FoundSearchTarget = true
+			searchResultsDto.LastFoundTargetSearchStrIndex = i
+			searchResultsDto.LastFoundTestStrIndex = j - 1
+
+			return searchResultsDto, err
+		}
+
+	}
+
+	return searchResultsDto, err
 }
 
 // ptr - Returns a pointer to a new instance of
