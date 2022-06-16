@@ -2010,6 +2010,18 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 		// NSignSymPos.Before()
 
+		err = negNumSearchSpec.leadingNegNumSignSymbols.SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy("negNumSearchSpec.leadingNegNumSignSymbols"))
+
+		if err != nil {
+
+			return foundNegNumSignSymbols,
+				negNumSignPosition,
+				lastTargetSearchIndex,
+				err
+		}
+
 		if negNumSearchSpec.foundLeadingNegNumSign {
 			foundNegNumSignSymbols = true
 			lastTargetSearchIndex =
@@ -2070,7 +2082,20 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	}
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
+
 		// NSignSymPos.After()
+
+		err = negNumSearchSpec.trailingNegNumSignSymbols.SetCharacterSearchType(
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy("negNumSearchSpec.trailingNegNumSignSymbols"))
+
+		if err != nil {
+
+			return foundNegNumSignSymbols,
+				negNumSignPosition,
+				lastTargetSearchIndex,
+				err
+		}
 
 		if negNumSearchSpec.foundTrailingNegNumSign {
 			foundNegNumSignSymbols = true
@@ -2132,6 +2157,30 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	}
 
 	// Must be: NSignSymPos.BeforeAndAfter()
+
+	err = negNumSearchSpec.leadingNegNumSignSymbols.SetCharacterSearchType(
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy("negNumSearchSpec.leadingNegNumSignSymbols"))
+
+	if err != nil {
+
+		return foundNegNumSignSymbols,
+			negNumSignPosition,
+			lastTargetSearchIndex,
+			err
+	}
+
+	err = negNumSearchSpec.trailingNegNumSignSymbols.SetCharacterSearchType(
+		CharSearchType.LinearTargetStartingIndex(),
+		ePrefix.XCpy("negNumSearchSpec.trailingNegNumSignSymbols"))
+
+	if err != nil {
+
+		return foundNegNumSignSymbols,
+			negNumSignPosition,
+			lastTargetSearchIndex,
+			err
+	}
 
 	if !foundFirstNumericDigitInNumStr {
 		// Must be 'BEFORE' NumStr
