@@ -251,7 +251,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		err = negNumSearchSpec.leadingNegNumSignSymbols.
 			SetCharacterSearchType(
-				CharSearchType.LinearTargetChars(),
+				CharSearchType.LinearTargetStartingIndex(),
 				ePrefix.XCpy(
 					"negNumSearchSpec.leadingNegNumSignSymbols"))
 
@@ -311,7 +311,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		err = negNumSearchSpec.trailingNegNumSignSymbols.
 			SetCharacterSearchType(
-				CharSearchType.LinearTargetChars(),
+				CharSearchType.LinearTargetStartingIndex(),
 				ePrefix.XCpy(
 					"negNumSearchSpec.trailingNegNumSignSymbols"))
 
@@ -390,7 +390,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		err = negNumSearchSpec.leadingNegNumSignSymbols.
 			SetCharacterSearchType(
-				CharSearchType.LinearTargetChars(),
+				CharSearchType.LinearTargetStartingIndex(),
 				ePrefix.XCpy(
 					"negNumSearchSpec.leadingNegNumSignSymbols"))
 
@@ -401,7 +401,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 		err = negNumSearchSpec.trailingNegNumSignSymbols.
 			SetCharacterSearchType(
-				CharSearchType.LinearTargetChars(),
+				CharSearchType.LinearTargetStartingIndex(),
 				ePrefix.XCpy(
 					"negNumSearchSpec.leadingNegNumSignSymbols"))
 

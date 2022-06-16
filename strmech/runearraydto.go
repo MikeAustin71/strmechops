@@ -38,9 +38,9 @@ type RuneArrayDto struct {
 	CharsArray     []rune
 	Description    string
 	charSearchType CharacterSearchType // Two Possible Settings:
-	//                                     CharSearchType.LinearTargetChars()
+	//                                     CharSearchType.LinearTargetStartingIndex()
 	//                                     CharSearchType.SingleTargetChar()
-	//                                     Default = CharSearchType.LinearTargetChars()
+	//                                     Default = CharSearchType.LinearTargetStartingIndex()
 	lock *sync.Mutex
 }
 
@@ -378,7 +378,7 @@ func (charsArrayDto *RuneArrayDto) Empty() {
 
 	charsArrayDto.Description = ""
 
-	charsArrayDto.charSearchType = CharSearchType.LinearTargetChars()
+	charsArrayDto.charSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	charsArrayDto.lock.Unlock()
 
@@ -854,14 +854,14 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	}
 
-	if charsArrayDto.charSearchType != CharSearchType.LinearTargetChars() &&
+	if charsArrayDto.charSearchType != CharSearchType.LinearTargetStartingIndex() &&
 		charsArrayDto.charSearchType != CharSearchType.SingleTargetChar() {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: The current instance of RuneArrayDto is invalid!\n"+
 			"The Character Search Type is invalid. Character Search Type\n"+
 			"must be set to one of two enumeration values:\n"+
-			"  CharSearchType.LinearTargetChars() or CharSearchType.SingleTargetChar()\n"+
+			"  CharSearchType.LinearTargetStartingIndex() or CharSearchType.SingleTargetChar()\n"+
 			"The Character Search Type for this instance of RuneArrayDto is"+
 			" Character Search Type   String Name: %v\n"+
 			" Character Search Type Integer Value: %v\n",
@@ -878,7 +878,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	runeArrayNanobot := runeArrayDtoNanobot{}
 
-	if charsArrayDto.charSearchType == CharSearchType.LinearTargetChars() {
+	if charsArrayDto.charSearchType == CharSearchType.LinearTargetStartingIndex() {
 
 		return runeArrayNanobot.linearCharacterSearch(
 			charsArrayDto,
@@ -929,13 +929,13 @@ func (charsArrayDto *RuneArrayDto) SetCharacterSearchType(
 		return err
 	}
 
-	if charSearchType != CharSearchType.LinearTargetChars() &&
+	if charSearchType != CharSearchType.LinearTargetStartingIndex() &&
 		charSearchType != CharSearchType.SingleTargetChar() {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'charSearchType' is invalid!\n"+
 			"'charSearchType' must be set to one of two enumerations:\n"+
-			"CharacterSearchType(0).LinearTargetChars()\n OR"+
-			"CharacterSearchType(0).LinearTargetChars()\n"+
+			"CharacterSearchType(0).LinearTargetStartingIndex()\n OR"+
+			"CharacterSearchType(0).LinearTargetStartingIndex()\n"+
 			"'charSearchType' string  value = '%v'\n"+
 			"'charSearchType' integer value = '%v'\n",
 			ePrefix.String(),

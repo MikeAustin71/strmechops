@@ -39,7 +39,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearCharacterSearch(
 	foundRuneArrayDtoChars = false
 	lastTargetSearchIndex = targetStartingSearchIndex
 	lastTestStingIndex = -1
-	searchType = CharSearchType.LinearTargetChars()
+	searchType = CharSearchType.LinearTargetStartingIndex()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -268,7 +268,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) linearCharacterSearch(
 			foundRuneArrayDtoChars = true
 			lastTargetSearchIndex = i
 			lastTestStingIndex = j - 1
-			searchType = CharSearchType.LinearTargetChars()
+			searchType = CharSearchType.LinearTargetStartingIndex()
 
 			return foundRuneArrayDtoChars,
 				lastTargetSearchIndex,
