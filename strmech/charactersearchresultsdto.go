@@ -39,14 +39,16 @@ type CharSearchResultsDto struct {
 	TestStrLength int // The Length of the Test String used in
 	//                   this search operation.
 
-	TestStrStartingIndex int // The index at which the Test String
-	//                          comparison started.
+	TestStrStartingIndex int // The Test String beginning index used in the
+	//                          the search operation. Usually zero.
 
-	TestStringFirstFoundIndex int // The index of the first Test String
-	//                               character found in the target string.
+	TestStringFirstFoundIndex int // The index number in Test String of the first
+	//                               test character to be located in the Target
+	//                               Search String.
 
-	TestStrLastFoundIndex int // The index number of the last Test String
-	//                           Character found in Target String.
+	TestStrLastFoundIndex int // The index number in the Test String occupied
+	//                           by the last Test Character to be located in the
+	//                           Target Search String.
 
 	TestStrDescription1 string // Optional description string describing
 	//                            Test Characters used in this search

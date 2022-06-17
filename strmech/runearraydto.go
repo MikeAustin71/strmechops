@@ -822,9 +822,10 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'charSearchType' is invalid!\n"+
-			"'charSearchType' must be set to one of two enumerations:\n"+
+			"'charSearchType' must be set to one of three enumerations:\n"+
 			"CharacterSearchType(0).LinearTargetStartingIndex()\n OR"+
-			"CharacterSearchType(0).LinearTargetStartingIndex()\n"+
+			"CharacterSearchType(0).SingleTargetChar()\n"+
+			"CharacterSearchType(0).LinearEndOfString()\n"+
 			"'charSearchType' string  value = '%v'\n"+
 			"'charSearchType' integer value = '%v'\n",
 			ePrefix.String(),
@@ -990,14 +991,14 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //
 func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	targetSearchString *RuneArrayDto,
+	targetSearchStringName string,
 	targetStartingSearchIndex int,
+	targetStartingSearchIndexName string,
 	targetSearchLength int,
+	targetSearchLengthName string,
 	errorPrefix interface{}) (
-	foundRuneArrayDtoChars bool,
-	lastTargetSearchIndex int,
-	lastTestStingIndex int,
-	searchType CharacterSearchType,
-	err error) {
+	CharSearchResultsDto,
+	error) {
 
 	if charsArrayDto.lock == nil {
 		charsArrayDto.lock = new(sync.Mutex)
@@ -1008,12 +1009,10 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	defer charsArrayDto.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	foundRuneArrayDtoChars = false
-
-	lastTargetSearchIndex = targetStartingSearchIndex
-
-	lastTestStingIndex = -1
+	errorResults := CharSearchResultsDto{}
+	errorResults.Empty()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1024,11 +1023,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	if err != nil {
 
-		return foundRuneArrayDtoChars,
-			lastTargetSearchIndex,
-			lastTestStingIndex,
-			searchType,
-			err
+		return errorResults, err
 
 	}
 
@@ -1048,39 +1043,23 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 			charsArrayDto.charSearchType.String(),
 			charsArrayDto.charSearchType.XValueInt())
 
-		return foundRuneArrayDtoChars,
-			lastTargetSearchIndex,
-			lastTestStingIndex,
-			searchType,
-			err
+		return errorResults, err
 	}
 
 	runeArrayNanobot := runeArrayDtoNanobot{}
 
-	if charsArrayDto.charSearchType == CharSearchType.LinearTargetStartingIndex() {
+	return runeArrayNanobot.characterSearchExecutor(
+		charsArrayDto,
+		"RuneArrayDto",
+		targetSearchString,
+		targetSearchStringName,
+		targetStartingSearchIndex,
+		targetStartingSearchIndexName,
+		targetSearchLength,
+		targetSearchLengthName,
+		charsArrayDto.charSearchType,
+		ePrefix)
 
-		return runeArrayNanobot.linearTargetStartingIndexSearch(
-			charsArrayDto,
-			"RuneArrayDto",
-			targetSearchString,
-			"targetSearchString",
-			targetStartingSearchIndex,
-			"targetStartingSearchIndex",
-			targetSearchLength,
-			"targetSearchLength",
-			ePrefix.XCpy(
-				"charsArrayDto"))
-
-	}
-
-	// Must Be
-	// charsArrayDto.charSearchType == CharSearchType.SingleTargetChar()
-
-	return foundRuneArrayDtoChars,
-		lastTargetSearchIndex,
-		lastTestStingIndex,
-		searchType,
-		err
 }
 
 // SetCharacterSearchType - Sets the internal member variable used
