@@ -67,13 +67,28 @@ type CharSearchResultsDto struct {
 	//                            containing the Test String which was
 	//                            found in Target Search String
 
-	numSignPosition NumSignSymbolPosition // Used in searches involving
+	NumSignValue NumericSignValueType // An enumeration value classifying the
+	//                                   number sign.
+	//                                     NumSignVal.None()
+	//                                     NumSignVal.Negative()
+	//                                     NumSignVal.Zero()
+	//                                     NumSignVal.Positive()
+
+	NumSignPosition NumSignSymbolPosition // Used in searches involving
 	//                                       positive and negative number
 	//                                       signs.
+	//                                        NSignSymPos.None()
+	//                                        NSignSymPos.Before()
+	//                                        NSignSymPos.After()
+	//                                        NSignSymPos.BeforeAndAfter()
 
 	SearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
 	//                                was used to conduct this search.
+	//                                 CharSearchType.None()
+	//                                 CharSearchType.LinearTargetStartingIndex() - Default
+	//                                 CharSearchType.SingleTargetChar()
+	//                                 CharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }
@@ -116,7 +131,9 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 
 	charSearchResults.CollectionTestObjIndex = -1
 
-	charSearchResults.numSignPosition = NSignSymPos.None()
+	charSearchResults.NumSignValue = NumSignVal.None()
+
+	charSearchResults.NumSignPosition = NSignSymPos.None()
 
 	// Set to default Search Type
 	charSearchResults.SearchType =

@@ -21,7 +21,10 @@ import (
 // character searches:
 //   (1) Linear Target Character Search
 //        Each Character in the Target String must match each
-//        corresponding character in the RuneArrayDto instance.
+//        corresponding character in the RuneArrayDto instance
+//        beginning at the specified Target String Starting
+//        Index.
+//
 //        Linear Target Character Search Type is the default
 //        setting for RuneArrayDto.
 //
@@ -30,7 +33,9 @@ import (
 //       character is the RuneArrayDto rune array. A single
 //       character in the Target String is therefore compared
 //       against all individual characters in the RuneArrayDto
-//       instance searching for the first case of a match.
+//       instance searching for the first case of a match. Only
+//       one designated character in the Target String is included
+//       in the search operation.
 //
 //   (3) LinearEndOfString
 //       Designates the search type as a Linear End Of String Search.
@@ -70,9 +75,10 @@ type RuneArrayDto struct {
 	CharsArray     []rune
 	Description1   string
 	Description2   string
-	charSearchType CharacterSearchType // Two Possible Settings:
+	charSearchType CharacterSearchType // Three Possible Settings:
 	//                                     CharSearchType.LinearTargetStartingIndex()
 	//                                     CharSearchType.SingleTargetChar()
+	//                                     CharSearchType.LinearEndOfString()
 	//                                     Default = CharSearchType.LinearTargetStartingIndex()
 	lock *sync.Mutex
 }
