@@ -40,6 +40,9 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 
 	searchResults.Empty()
 
+	searchResults.TargetStringLastSearchIndex =
+		targetStartingSearchIndex
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -238,6 +241,9 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 			searchResults.TargetStringLength
 
 	}
+
+	searchResults.TargetStringLastSearchIndex =
+		searchResults.TargetStringStartingSearchIndex
 
 	runeDtoElectron := runeArrayDtoElectron{}
 

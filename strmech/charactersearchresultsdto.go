@@ -28,6 +28,13 @@ type CharSearchResultsDto struct {
 	//                                by the last character in the Test
 	//                                String.
 
+	TargetStringLastSearchIndex int // The index in Target Search String
+	//                                 occupied by the last character searched.
+	//                                 If the Search Target was found this
+	//                                 value is equal to the 'TargetStringLastFoundIndex'.
+	//                                 If the Search Target was NOT found this
+	//                                 value is equal to the 'TargetStringStartingSearchIndex'
+
 	TargetStringDescription1 string // First optional description string
 	//                                  describing the Target Search String
 	//                                  used in this search
@@ -40,7 +47,7 @@ type CharSearchResultsDto struct {
 	//                   this search operation.
 
 	TestStrStartingIndex int // The Test String beginning index used in the
-	//                          the search operation. Usually zero.
+	//                          search operation. Usually zero.
 
 	TestStringFirstFoundIndex int // The index number in Test String of the first
 	//                               test character to be located in the Target
@@ -59,6 +66,10 @@ type CharSearchResultsDto struct {
 	CollectionTestObjIndex int // The collection index of the object
 	//                            containing the Test String which was
 	//                            found in Target Search String
+
+	numSignPosition NumSignSymbolPosition // Used in searches involving
+	//                                       positive and negative number
+	//                                       signs.
 
 	SearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
@@ -85,6 +96,8 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 
 	charSearchResults.TargetStringLastFoundIndex = -1
 
+	charSearchResults.TargetStringLastSearchIndex = -1
+
 	charSearchResults.TargetStringDescription1 = ""
 
 	charSearchResults.TargetStringDescription2 = ""
@@ -102,6 +115,8 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 	charSearchResults.TestStrDescription2 = ""
 
 	charSearchResults.CollectionTestObjIndex = -1
+
+	charSearchResults.numSignPosition = NSignSymPos.None()
 
 	// Set to default Search Type
 	charSearchResults.SearchType =

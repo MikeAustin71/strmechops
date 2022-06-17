@@ -1815,8 +1815,8 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //       String has already been located.
 //
 //
-//  startingTargetSearchIndex       int
-//     - The 'startingTargetSearchIndex' parameter specifies the
+//  targetStartingSearchIndex       int
+//     - The 'targetStartingSearchIndex' parameter specifies the
 //       zero based index in the Target Search Characters String
 //       ('targetSearchString') from which the search for Negative
 //       Number Symbols will commence.
@@ -1943,12 +1943,10 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	targetSearchString *RuneArrayDto,
 	foundFirstNumericDigitInNumStr bool,
-	startingTargetSearchIndex int,
+	targetStartingSearchIndex int,
 	errorPrefix interface{}) (
-	foundNegNumSignSymbols bool,
-	negNumSignPosition NumSignSymbolPosition,
-	lastTargetSearchIndex int,
-	err error) {
+	CharSearchResultsDto,
+	error) {
 
 	if negNumSearchSpec.lock == nil {
 		negNumSearchSpec.lock = new(sync.Mutex)
@@ -1960,9 +1958,14 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	foundNegNumSignSymbols = false
-	lastTargetSearchIndex = startingTargetSearchIndex
-	negNumSignPosition = negNumSearchSpec.negNumSignPosition
+	var err error
+
+	searchResults := CharSearchResultsDto{}
+
+	searchResults.Empty()
+
+	searchResults.TargetStringLastSearchIndex =
+		targetStartingSearchIndex
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1973,10 +1976,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	if err != nil {
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
+		return searchResults, err
 	}
 
 	var err2 error
@@ -1998,17 +1998,15 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			ePrefix.String(),
 			err2.Error())
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
+		return searchResults, err
 	}
 
-	lenNegNumSymbols := len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
+	lenLeadingNegNumChars := len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.Before() {
 
 		// NSignSymPos.Before()
+		searchResults.numSignPosition = NSignSymPos.Before()
 
 		err = negNumSearchSpec.leadingNegNumSignSymbols.SetCharacterSearchType(
 			CharSearchType.LinearTargetStartingIndex(),
@@ -2016,147 +2014,116 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 		if err != nil {
 
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			return searchResults, err
 		}
 
 		if negNumSearchSpec.foundLeadingNegNumSign {
-			foundNegNumSignSymbols = true
-			lastTargetSearchIndex =
-				negNumSearchSpec.foundLeadingNegNumSignIndex +
-					lenNegNumSymbols - 1
 
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			searchResults.FoundSearchTarget = true
+
+			searchResults.TargetStringLastSearchIndex =
+				negNumSearchSpec.foundLeadingNegNumSignIndex +
+					lenLeadingNegNumChars - 1
+
+			return searchResults, err
 		}
 
 		if foundFirstNumericDigitInNumStr {
 
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
-
+			return searchResults, err
 		}
 
-		foundNegNumSignSymbols,
-			lastTargetSearchIndex,
-			_,
-			_,
+		searchResults,
 			err =
 			negNumSearchSpec.leadingNegNumSignSymbols.SearchForTextCharacterString(
 				targetSearchString,
-				startingTargetSearchIndex,
+				"targetSearchString",
+				targetStartingSearchIndex,
+				"targetSearchStringStartingIndex",
 				-1,
+				"targetSearchLength",
 				ePrefix.XCpy(
 					"negNumSearchSpec-Before"))
 
+		searchResults.numSignPosition = NSignSymPos.Before()
+
 		if err != nil {
-
-			foundNegNumSignSymbols = false
-			lastTargetSearchIndex = startingTargetSearchIndex
-
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			return searchResults, err
 
 		}
 
-		if foundNegNumSignSymbols {
+		if searchResults.FoundSearchTarget {
 			negNumSearchSpec.foundNegNumSignSymbols = true
 			negNumSearchSpec.foundLeadingNegNumSign = true
 			negNumSearchSpec.foundLeadingNegNumSignIndex =
-				startingTargetSearchIndex
+				searchResults.TargetStringFirstFoundIndex
 		}
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
-
+		return searchResults, err
 	}
+
+	lenTrailingNegNumChars := len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
 
 	if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
 
 		// NSignSymPos.After()
+		searchResults.numSignPosition = NSignSymPos.After()
 
 		err = negNumSearchSpec.trailingNegNumSignSymbols.SetCharacterSearchType(
 			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy("negNumSearchSpec.trailingNegNumSignSymbols"))
 
 		if err != nil {
-
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			return searchResults, err
 		}
 
 		if negNumSearchSpec.foundTrailingNegNumSign {
-			foundNegNumSignSymbols = true
-			lastTargetSearchIndex =
-				negNumSearchSpec.foundTrailingNegNumSignIndex +
-					lenNegNumSymbols - 1
 
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			searchResults.FoundSearchTarget = true
+
+			searchResults.TargetStringLastSearchIndex =
+				negNumSearchSpec.foundTrailingNegNumSignIndex +
+					lenTrailingNegNumChars - 1
+
+			return searchResults, err
 		}
 
 		if !foundFirstNumericDigitInNumStr {
 
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
-
+			return searchResults, err
 		}
 
-		foundNegNumSignSymbols,
-			lastTargetSearchIndex,
-			_,
-			_,
+		searchResults,
 			err =
 			negNumSearchSpec.trailingNegNumSignSymbols.SearchForTextCharacterString(
 				targetSearchString,
-				startingTargetSearchIndex,
+				"targetSearchString",
+				targetStartingSearchIndex,
+				"targetSearchStringStartingIndex",
 				-1,
+				"targetSearchLength",
 				ePrefix.XCpy(
 					"negNumSearchSpec-After"))
 
+		searchResults.numSignPosition = NSignSymPos.After()
+
 		if err != nil {
-
-			foundNegNumSignSymbols = false
-			lastTargetSearchIndex = startingTargetSearchIndex
-
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			return searchResults, err
 
 		}
 
-		if foundNegNumSignSymbols {
+		if searchResults.FoundSearchTarget {
 			negNumSearchSpec.foundNegNumSignSymbols = true
 			negNumSearchSpec.foundTrailingNegNumSign = true
 			negNumSearchSpec.foundTrailingNegNumSignIndex =
-				startingTargetSearchIndex
+				searchResults.TargetStringFirstFoundIndex
 		}
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
-
+		return searchResults, err
 	}
 
 	// Must be: NSignSymPos.BeforeAndAfter()
+	searchResults.numSignPosition = NSignSymPos.BeforeAndAfter()
 
 	err = negNumSearchSpec.leadingNegNumSignSymbols.SetCharacterSearchType(
 		CharSearchType.LinearTargetStartingIndex(),
@@ -2164,10 +2131,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	if err != nil {
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
+		return searchResults, err
 	}
 
 	err = negNumSearchSpec.trailingNegNumSignSymbols.SetCharacterSearchType(
@@ -2176,10 +2140,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	if err != nil {
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
+		return searchResults, err
 	}
 
 	if !foundFirstNumericDigitInNumStr {
@@ -2187,72 +2148,61 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		// Look for Leading Neg Num Symbols
 
 		if negNumSearchSpec.foundLeadingNegNumSign {
-			foundNegNumSignSymbols = true
-			lastTargetSearchIndex =
-				negNumSearchSpec.foundLeadingNegNumSignIndex +
-					lenNegNumSymbols - 1
 
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
+			searchResults.FoundSearchTarget = true
+
+			searchResults.TargetStringLastSearchIndex =
+				negNumSearchSpec.foundLeadingNegNumSignIndex +
+					lenLeadingNegNumChars - 1
+
+			return searchResults, err
 		}
 
-		foundNegNumSignSymbols,
-			lastTargetSearchIndex,
-			_,
-			_,
+		searchResults,
 			err =
 			negNumSearchSpec.leadingNegNumSignSymbols.SearchForTextCharacterString(
 				targetSearchString,
-				startingTargetSearchIndex,
+				"targetSearchString",
+				targetStartingSearchIndex,
+				"targetSearchStringStartingIndex",
 				-1,
+				"targetSearchLength",
 				ePrefix.XCpy(
 					"negNumSearchSpec-Before"))
 
+		searchResults.numSignPosition = NSignSymPos.Before()
+
 		if err != nil {
 
-			foundNegNumSignSymbols = false
-			lastTargetSearchIndex = startingTargetSearchIndex
-
-			return foundNegNumSignSymbols,
-				negNumSignPosition,
-				lastTargetSearchIndex,
-				err
-
+			return searchResults, err
 		}
 
-		if foundNegNumSignSymbols {
+		if searchResults.FoundSearchTarget {
 
 			negNumSearchSpec.foundNegNumSignSymbols = true
 			negNumSearchSpec.foundLeadingNegNumSign = true
 			negNumSearchSpec.foundLeadingNegNumSignIndex =
-				startingTargetSearchIndex
+				searchResults.TargetStringFirstFoundIndex
 
 			// Need BOTH Before and After finds
-			foundNegNumSignSymbols = false
+			searchResults.FoundSearchTarget = false
 		}
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
-
+		return searchResults, err
 	}
 
-	// MUST BE 'AFTER'
+	// MUST BE 'AFTER' of BeforeAndAfter
 	// foundFirstNumericDigitInNumStr MUST EQUAL 'true'
 	if !negNumSearchSpec.foundLeadingNegNumSign {
 
 		// Need BOTH Leading Sign and Trailing Sign
 		// for a 'FOUND' condition.
-		foundNegNumSignSymbols = false
+		searchResults.FoundSearchTarget = false
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
+		searchResults.TargetStringLastSearchIndex =
+			searchResults.TargetStringStartingSearchIndex
 
+		return searchResults, err
 	}
 
 	//  NSignSymPos.BeforeAndAfter()
@@ -2260,52 +2210,43 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	//  Look For Trailing Neg Num Symbols
 
 	if negNumSearchSpec.foundTrailingNegNumSign {
-		foundNegNumSignSymbols = true
-		lastTargetSearchIndex =
-			negNumSearchSpec.foundTrailingNegNumSignIndex +
-				lenNegNumSymbols - 1
 
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
+		searchResults.FoundSearchTarget = true
+
+		searchResults.TargetStringLastSearchIndex =
+			negNumSearchSpec.foundTrailingNegNumSignIndex +
+				lenTrailingNegNumChars - 1
+
+		return searchResults, err
 	}
 
-	foundNegNumSignSymbols,
-		lastTargetSearchIndex,
-		_,
-		_,
+	searchResults,
 		err =
 		negNumSearchSpec.trailingNegNumSignSymbols.SearchForTextCharacterString(
 			targetSearchString,
-			startingTargetSearchIndex,
+			"targetSearchString",
+			targetStartingSearchIndex,
+			"targetSearchStringStartingIndex",
 			-1,
+			"targetSearchLength",
 			ePrefix.XCpy(
 				"negNumSearchSpec-Before&After"))
 
+	searchResults.numSignPosition = NSignSymPos.BeforeAndAfter()
+
 	if err != nil {
 
-		foundNegNumSignSymbols = false
-		lastTargetSearchIndex = startingTargetSearchIndex
-
-		return foundNegNumSignSymbols,
-			negNumSignPosition,
-			lastTargetSearchIndex,
-			err
-
+		return searchResults, err
 	}
 
-	if foundNegNumSignSymbols {
+	if searchResults.FoundSearchTarget {
 		negNumSearchSpec.foundNegNumSignSymbols = true
 		negNumSearchSpec.foundTrailingNegNumSign = true
 		negNumSearchSpec.foundTrailingNegNumSignIndex =
-			startingTargetSearchIndex
+			searchResults.TargetStringFirstFoundIndex
 	}
 
-	return foundNegNumSignSymbols,
-		negNumSignPosition,
-		lastTargetSearchIndex,
-		err
+	return searchResults, err
 }
 
 // SetFoundNegNumSignSymbols - Sets the processing flag describing
