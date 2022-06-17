@@ -134,25 +134,40 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 //    the Test String, a 'Match' or successful search outcome will
 //    be declared.
 //
-//    The search will proceed from left to right in the Target
-//    String. Each Target String Character will be compared to all
-//    characters in the Test String looking for the first matching
-//    Test String Character. The search will terminate when a
-//    matching character is first identified or when the end of the
-//    Target String is encountered.
+//    The search operation is limited to a single designated Target
+//    Search String character. Each and everyone of the Test String
+//    Characters will be compared to this single designated Target
+//    String Search Character. The search operation will terminate
+//    when a matching character is first identified in the Test
+//    String or when the end of the Test String is encountered.
 //
+//      Example #1
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 5
+//         Test String: "ZFXyURJK"
 //
-//      Example
+//    In this example of a Single Target Character Search, the
+//    search will begin and end at Target Search String index
+//    number 5. Since one of the Test String Characters ('X')
+//    matches the 'X' character at index number 5 in the Target
+//    Search String, the search operation is classified as a
+//    success. A matching character was found.
+//
+//      Example #2
 //                                 1         2         3
 //                Index  0123456789012345678901234567890
 //       Target String: "Hey, Xray-4 is the call sign."
 //       Target String Starting Index: 0
 //         Test String: "ZFXyURJK"
 //
-//    In this example of a Single Target Character Search, the
-//    search will terminate at Target String index numbers 5
-//    because it is the first Target String index to match one
-//    of the Test String Characters ('X').
+//    In this second example of a Single Target Character Search,
+//    the search will begin and end at Target Search String index
+//    number 0. Since NONE of the Test String Characters matches
+//    the the 'H' character at index number 0 in the Target Search
+//    String, the search operation is classified as a failure. No
+//    matching character was found.
 //
 //
 // LinearEndOfString           (2)
@@ -269,33 +284,49 @@ func (charSearchType CharacterSearchType) LinearTargetStartingIndex() CharacterS
 	return CharacterSearchType(0)
 }
 
-// SingleTargetChar - Signals that a single character in the Target
-// Search String will be compared to all characters in the Test
-// String.
+// SingleTargetChar - Designates the search type as a Single Target
+// Character Search Type. This means that a single character in the
+// Target Search String will be compared to all characters in the
+// Test String.
 //
 // If a single Target String character equals any character in the
 // Test String, a 'Match' or successful search outcome will be
 // declared.
 //
-// The search will proceed from left to right in the Target String.
-// Each Target String Character will be compared to all characters
-// in the Test String looking for the first matching Test String
-// Character. The search will terminate when a matching character
-// is first identified or when the end of the Target String is
-// encountered.
+//    The search operation is limited to a single designated Target
+//    Search String character. Each and everyone of the Test String
+//    Characters will be compared to this single designated Target
+//    String Search Character. The search operation will terminate
+//    when a matching character is first identified in the Test
+//    String or when the end of the Test String is encountered.
 //
+//      Example #1
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 5
+//         Test String: "ZFXyURJK"
 //
-//   Example
-//                              1         2         3
-//             Index  0123456789012345678901234567890
-//    Target String: "Hey, Xray-4 is the call sign."
-//    Target String Starting Index: 0
-//      Test String: "ZFXyURJK"
+//    In this example of a Single Target Character Search, the
+//    search will begin and end at Target Search String index
+//    number 5. Since one of the Test String Characters ('X')
+//    matches the 'X' character at index number 5 in the Target
+//    Search String, the search operation is classified as a
+//    success. A matching character was found.
 //
-// In this example of a Single Target Character Search, the search
-// will terminate at Target String index numbers 5 because it is
-// the first Target String index to match one of the Test String
-// Characters ('X').
+//      Example #2
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 0
+//         Test String: "ZFXyURJK"
+//
+//    In this second example of a Single Target Character Search,
+//    the search will begin and end at Target Search String index
+//    number 0. Since NONE of the Test String Characters matches
+//    the the 'H' character at index number 0 in the Target Search
+//    String, the search operation is classified as a failure. No
+//    matching character was found.
 //
 // This method is part of the standard enumeration.
 //

@@ -17,7 +17,7 @@ import (
 // For example, this rune array can be used to carry out text
 // character searches by passing pointers to the RuneArrayDto.
 //
-// Each instance is capable of performing two types of text
+// Each instance is capable of performing three types of text
 // character searches:
 //   (1) Linear Target Character Search
 //        Each Character in the Target String must match each
@@ -31,6 +31,38 @@ import (
 //       character in the Target String is therefore compared
 //       against all individual characters in the RuneArrayDto
 //       instance searching for the first case of a match.
+//
+//   (3) LinearEndOfString
+//       Designates the search type as a Linear End Of String Search.
+//       With this type of search operation, the entire Target Search
+//       String will be searched from left to right for the
+//       first occurrence of the Test String.
+//
+//       The search will begin the Target String Starting Index and
+//       proceed left to right until (1) an instance of the entire
+//       Test String is located or (2) the end of the Target Search
+//       String is encountered.
+//
+//       This is a linear search, so a 'Match' requires that each
+//       character in Target Search String must correspond to a
+//       matching character in the Test String.
+//
+//            Example
+//                                       1         2         3
+//                      Index  0123456789012345678901234567890
+//             Target String: "Hey, Xray-4 is the call sign."
+//             Target String Starting Index: 0
+//               Test String: "Xray-4"
+//
+//       In this example of a Linear End of String Search, the search
+//       operation will begin comparing corresponding characters in
+//       the Target Search String and the Test String beginning at
+//       index zero. The comparison will fail at index zero, but the
+//       search algorithm will continue attempting to find the Test
+//       String at indexes 1,2, 3 & 4. The Test String will be found
+//       beginning at index number 5 and the search algorithm will
+//       terminate at that point with a successful outcome or 'Match'
+//       result.
 //
 // Reference method: RuneArrayDto.SetCharacterSearchType()
 //
