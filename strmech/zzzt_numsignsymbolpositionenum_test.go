@@ -10,10 +10,10 @@ func TestNumSignSymbolPosition_XParseString000100(t *testing.T) {
 	testStr := "Before"
 
 	nStrSymPos,
-		err := NSignSymPos.XParseString(testStr, true)
+		err := NumSignSymPos.XParseString(testStr, true)
 
 	if err != nil {
-		t.Errorf("Error returned by NSignSymPos.XParseString(testStr, true).\n"+
+		t.Errorf("Error returned by NumSignSymPos.XParseString(testStr, true).\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -115,10 +115,10 @@ func TestNumSignSymbolPosition_XParseString000500(t *testing.T) {
 	testStr := "before"
 
 	nStrSymPos,
-		err := NSignSymPos.XParseString(testStr, false)
+		err := NumSignSymPos.XParseString(testStr, false)
 
 	if err != nil {
-		t.Errorf("Error returned by NSignSymPos.XParseString(testStr, true).\n"+
+		t.Errorf("Error returned by NumSignSymPos.XParseString(testStr, true).\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -251,7 +251,7 @@ func TestNumSignSymbolPosition_XValue_000100(t *testing.T) {
 
 	currValue := nStrSymPos.XValue()
 
-	if currValue != NSignSymPos.Before() {
+	if currValue != NumSignSymPos.Before() {
 		t.Errorf("Error: Expected return of object='NumSignSymbolPosition(0).Before()'.\n"+
 			"Instead, object integer value = '%v'\n",
 			currValue.XValueInt())

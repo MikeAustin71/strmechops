@@ -73,8 +73,8 @@ var mapNumericSymbolLocationLwrCaseStringToCode = map[string]NumericSymbolLocati
 //
 //
 // For easy access to these enumeration values, use the global
-// constant NSymLocation.
-//   Example: NSymLocation.Before()
+// constant NumSymLocation.
+//   Example: NumSymLocation.Before()
 //
 // Otherwise you will need to use the formal syntax.
 //   Example: NumericSymbolLocation(0).Before()
@@ -342,23 +342,23 @@ func (nSymLocation NumericSymbolLocation) XValueInt() int {
 	return int(nSymLocation)
 }
 
-// NSymLocation - public global constant of type
+// NumSymLocation - public global constant of type
 // NumericSymbolLocation.
 //
 // This variable serves as an easier, shorthand technique for
 // accessing NumericSymbolLocation values.
 //
 // For easy access to these enumeration values, use this global
-// constant NSymLocation.
-//   Example: NSymLocation.Before()
+// constant NumSymLocation.
+//   Example: NumSymLocation.Before()
 //
 // Otherwise you will need to use the formal syntax.
 //   Example: NumericSymbolLocation(0).Before()
 //
 // Usage:
-// NSymLocation.None(),
-// NSymLocation.Before(),
-// NSymLocation.Interior(),
-// NSymLocation.After(),
+// NumSymLocation.None(),
+// NumSymLocation.Before(),
+// NumSymLocation.Interior(),
+// NumSymLocation.After(),
 //
-const NSymLocation = NumericSymbolLocation(0)
+const NumSymLocation = NumericSymbolLocation(0)

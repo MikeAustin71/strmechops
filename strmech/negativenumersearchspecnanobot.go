@@ -158,7 +158,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 		lenTrailingNegNumSignSymbols int
 
 	if targetNegNumSearchSpec.negNumSignPosition ==
-		NSignSymPos.Before() {
+		NumSignSymPos.Before() {
 
 		lenLeadingNegNumSignSymbols =
 			len(incomingNegNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
@@ -178,7 +178,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 			incomingNegNumSearchSpec.foundLeadingNegNumSignIndex
 
 	} else if targetNegNumSearchSpec.negNumSignPosition ==
-		NSignSymPos.BeforeAndAfter() {
+		NumSignSymPos.BeforeAndAfter() {
 
 		lenTrailingNegNumSignSymbols =
 			len(incomingNegNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
@@ -199,7 +199,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 
 	} else {
 		// Must be targetNegNumSearchSpec.negNumSignPosition ==
-		//            NSignSymPos.After()
+		//            NumSignSymPos.After()
 
 		// Leading data elements
 		lenLeadingNegNumSignSymbols =
@@ -394,7 +394,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 		lenTrailingNegNumSignSymbols int
 
 	if copyOfNegNumSearchSpec.negNumSignPosition ==
-		NSignSymPos.Before() {
+		NumSignSymPos.Before() {
 
 		lenLeadingNegNumSignSymbols =
 			len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
@@ -414,7 +414,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 			negNumSearchSpec.foundLeadingNegNumSignIndex
 
 	} else if copyOfNegNumSearchSpec.negNumSignPosition ==
-		NSignSymPos.BeforeAndAfter() {
+		NumSignSymPos.BeforeAndAfter() {
 
 		lenTrailingNegNumSignSymbols =
 			len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray)
@@ -435,7 +435,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 
 	} else {
 		// Must be copyOfNegNumSearchSpec.negNumSignPosition ==
-		//            NSignSymPos.After()
+		//            NumSignSymPos.After()
 
 		// Leading data elements
 		lenLeadingNegNumSignSymbols =
@@ -672,7 +672,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 			"negNumSearchSpec.leadingNegNumSignSymbols"+
 				"<-CharSearchType.LinearTargetStartingIndex()"))
 
-	negNumSearchSpec.negNumSignPosition = NSignSymPos.Before()
+	negNumSearchSpec.negNumSignPosition = NumSignSymPos.Before()
 
 	return err
 }
@@ -874,7 +874,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 		return err
 	}
 
-	negNumSearchSpec.negNumSignPosition = NSignSymPos.BeforeAndAfter()
+	negNumSearchSpec.negNumSignPosition = NumSignSymPos.BeforeAndAfter()
 
 	err = negNumSearchSpec.leadingNegNumSignSymbols.
 		SetCharacterSearchType(
@@ -1039,7 +1039,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 		return err
 	}
 
-	negNumSearchSpec.negNumSignPosition = NSignSymPos.After()
+	negNumSearchSpec.negNumSignPosition = NumSignSymPos.After()
 
 	err = negNumSearchSpec.trailingNegNumSignSymbols.
 		SetCharacterSearchType(

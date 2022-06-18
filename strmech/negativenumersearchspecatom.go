@@ -60,7 +60,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) empty(
 		return
 	}
 
-	negNumSearchSpec.negNumSignPosition = NSignSymPos.None()
+	negNumSearchSpec.negNumSignPosition = NumSignSymPos.None()
 	negNumSearchSpec.leadingNegNumSignSymbols.Empty()
 	negNumSearchSpec.trailingNegNumSignSymbols.Empty()
 
@@ -206,7 +206,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 
 	var err2 error
 
-	if negNumSearchSpec.negNumSignPosition == NSignSymPos.Before() {
+	if negNumSearchSpec.negNumSignPosition == NumSignSymPos.Before() {
 
 		if len(negNumSearchSpec.trailingNegNumSignSymbols.CharsArray) > 0 {
 
@@ -265,7 +265,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 		return isValid, err
 	}
 
-	if negNumSearchSpec.negNumSignPosition == NSignSymPos.After() {
+	if negNumSearchSpec.negNumSignPosition == NumSignSymPos.After() {
 
 		if len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray) > 0 {
 
@@ -325,7 +325,7 @@ func (negNumSearchAtom *negNumSearchSpecAtom) testValidityOfNegNumSearchSpec(
 		return isValid, err
 	}
 
-	if negNumSearchSpec.negNumSignPosition == NSignSymPos.BeforeAndAfter() {
+	if negNumSearchSpec.negNumSignPosition == NumSignSymPos.BeforeAndAfter() {
 
 		if len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray) == 0 {
 

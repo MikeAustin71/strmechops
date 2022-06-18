@@ -68,7 +68,7 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 //
 //
 // For easy access to these enumeration values, use the global constant
-// NSignSymPos. Example: NSignSymPos.Before()
+// NumSignSymPos. Example: NumSignSymPos.Before()
 //
 // Otherwise you will need to use the formal syntax.
 // Example: NumSignSymbolPosition(0).Before()
@@ -334,16 +334,16 @@ func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 	return int(nSignSymPos)
 }
 
-// NSignSymPos - public global constant of type
+// NumSignSymPos - public global constant of type
 // NumSignSymbolPosition.
 //
 // This variable serves as an easier, shorthand technique for
 // accessing NumSignSymbolPosition values.
 //
 // Usage:
-// NSignSymPos.None(),
-// NSignSymPos.Before(),
-// NSignSymPos.After(),
-// NSignSymPos.BeforeAndAfter(),
+// NumSignSymPos.None(),
+// NumSignSymPos.Before(),
+// NumSignSymPos.After(),
+// NumSignSymPos.BeforeAndAfter(),
 //
-const NSignSymPos = NumSignSymbolPosition(0)
+const NumSignSymPos = NumSignSymbolPosition(0)

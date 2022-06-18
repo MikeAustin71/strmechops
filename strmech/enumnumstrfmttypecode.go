@@ -162,8 +162,8 @@ var mNumStrFmtTypeCodeLwrCaseStringToCode = map[string]NumStrFormatTypeCode{
 //
 //
 // For easy access to these enumeration values, use the global
-// constant 'NStrFmtType'.
-//     Example: NStrFmtType.SignedNumber()
+// constant 'NumStrFmtType'.
+//     Example: NumStrFmtType.SignedNumber()
 //
 // Otherwise you will need to use the formal syntax.
 //     Example: NumStrFormatTypeCode(0).SignedNumber()
@@ -587,28 +587,28 @@ func (nStrValSpec NumStrFormatTypeCode) XValueInt() int {
 	return int(nStrValSpec)
 }
 
-// NStrFmtType - public global variable of type
+// NumStrFmtType - public global variable of type
 // NumStrFormatTypeCode.
 //
 // This variable serves as an easier, shorthand
 // technique for accessing NumStrFormatTypeCode values.
 //
 // For easy access to these enumeration values, use the
-// global variable 'NStrFmtType'.
-//  Example: NStrFmtType.SignedNumber()
+// global variable 'NumStrFmtType'.
+//  Example: NumStrFmtType.SignedNumber()
 //
 // Otherwise you will need to use the formal syntax.
 //  Example: NumStrFormatTypeCode(0).SignedNumber()
 //
 // Usage:
-//  NStrFmtType.None()
-//  NStrFmtType.AbsoluteValue()
-//  NStrFmtType.Binary()
-//  NStrFmtType.CountryCulture()
-//  NStrFmtType.Currency()
-//  NStrFmtType.Binary()
-//  NStrFmtType.Hexadecimal()
-//  NStrFmtType.Octal()
-//  NStrFmtType.ScientificNotation()
+//  NumStrFmtType.None()
+//  NumStrFmtType.AbsoluteValue()
+//  NumStrFmtType.Binary()
+//  NumStrFmtType.CountryCulture()
+//  NumStrFmtType.Currency()
+//  NumStrFmtType.Binary()
+//  NumStrFmtType.Hexadecimal()
+//  NumStrFmtType.Octal()
+//  NumStrFmtType.ScientificNotation()
 //
-const NStrFmtType = NumStrFormatTypeCode(0)
+const NumStrFmtType = NumStrFormatTypeCode(0)

@@ -20,11 +20,7 @@ type runeArrayDtoElectron struct {
 // level function.
 //
 func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
-	testSearchString *RuneArrayDto,
-	testSearchStringName string,
-	targetSearchString *RuneArrayDto,
-	targetSearchStringName string,
-	searchResults CharSearchResultsDto,
+	inputParms CharSearchInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	CharSearchResultsDto,
 	error) {
@@ -39,6 +35,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	searchResults := CharSearchResultsDto{}
+	searchResults.Empty()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -48,43 +46,21 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 		"")
 
 	if err != nil {
-
-		return searchResults, err
-
-	}
-
-	if len(testSearchStringName) == 0 {
-		testSearchStringName = "testSearchString"
-	}
-
-	if testSearchString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			testSearchStringName)
-
 		return searchResults, err
 	}
 
-	if len(targetSearchStringName) == 0 {
-		targetSearchStringName = "targetSearchStringName"
-	}
+	err = searchResults.LoadBaseCharSearchInputParameters(
+		inputParms,
+		ePrefix)
 
-	if targetSearchString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			targetSearchStringName)
-
+	if err != nil {
 		return searchResults, err
 	}
 
 	j := 0
 	k := 0
 
-	searchResults.TestStrStartingIndex = 0
+	searchResults.TestStringStartingIndex = 0
 
 	for i := searchResults.TargetStringStartingSearchIndex; i < searchResults.TargetStringSearchLength; i++ {
 
@@ -93,15 +69,15 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 		for true {
 
-			if testSearchString.CharsArray[j] !=
-				targetSearchString.CharsArray[k] {
+			if inputParms.TestString.CharsArray[j] !=
+				inputParms.TargetSearchString.CharsArray[k] {
 
 				break
 			}
 
 			j++
 
-			if j == searchResults.TestStrLength {
+			if j == searchResults.TestStringLength {
 
 				// Search Was SUCCESSFUL!
 				// All Test characters found!
@@ -109,18 +85,18 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 				searchResults.FoundSearchTarget = true
 
-				searchResults.TestStrStartingIndex = 0
+				searchResults.TestStringStartingIndex = 0
 
 				searchResults.TestStringFirstFoundIndex = 0
 
-				searchResults.TestStrLastFoundIndex =
-					searchResults.TestStrLength - 1
+				searchResults.TestStringLastFoundIndex =
+					searchResults.TestStringLength - 1
 
 				searchResults.TargetStringLastFoundIndex = k
 
 				searchResults.TargetStringFirstFoundIndex =
 					searchResults.TargetStringLastFoundIndex -
-						searchResults.TestStrLength +
+						searchResults.TestStringLength +
 						1
 
 				return searchResults, err
@@ -140,11 +116,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 // linearTargetStartingIndexSearch
 func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
-	testSearchString *RuneArrayDto,
-	testSearchStringName string,
-	targetSearchString *RuneArrayDto,
-	targetSearchStringName string,
-	searchResults CharSearchResultsDto,
+	inputParms CharSearchInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	CharSearchResultsDto,
 	error) {
@@ -159,6 +131,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	searchResults := CharSearchResultsDto{}
+	searchResults.Empty()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -173,31 +147,11 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 	}
 
-	if len(testSearchStringName) == 0 {
-		testSearchStringName = "testSearchString"
-	}
+	err = searchResults.LoadBaseCharSearchInputParameters(
+		inputParms,
+		ePrefix)
 
-	if testSearchString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			testSearchStringName)
-
-		return searchResults, err
-	}
-
-	if len(targetSearchStringName) == 0 {
-		targetSearchStringName = "targetSearchStringName"
-	}
-
-	if targetSearchString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			targetSearchStringName)
-
+	if err != nil {
 		return searchResults, err
 	}
 
@@ -205,8 +159,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 	for i := searchResults.TargetStringStartingSearchIndex; i < searchResults.TargetStringSearchLength; i++ {
 
-		if testSearchString.CharsArray[j] !=
-			targetSearchString.CharsArray[i] {
+		if inputParms.TestString.CharsArray[j] !=
+			inputParms.TargetSearchString.CharsArray[i] {
 
 			searchResults.FoundSearchTarget = false
 
@@ -217,7 +171,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 		j++
 
-		if j == searchResults.TestStrLength {
+		if j == searchResults.TestStringLength {
 
 			// Search Was SUCCESSFUL!
 			// All Test Characters found!
@@ -225,18 +179,18 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 			searchResults.FoundSearchTarget = true
 
-			searchResults.TestStrStartingIndex = 0
+			searchResults.TestStringStartingIndex = 0
 
 			searchResults.TestStringFirstFoundIndex = 0
 
-			searchResults.TestStrLastFoundIndex =
-				searchResults.TestStrLength - 1
+			searchResults.TestStringLastFoundIndex =
+				searchResults.TestStringLength - 1
 
 			searchResults.TargetStringLastFoundIndex = i
 
 			searchResults.TargetStringFirstFoundIndex =
 				searchResults.TargetStringLastFoundIndex -
-					searchResults.TestStrLength +
+					searchResults.TestStringLength +
 					1
 
 			return searchResults, err
@@ -330,7 +284,7 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 	targetChar :=
 		targetSearchString.CharsArray[searchResults.TargetStringStartingSearchIndex]
 
-	for j := 0; j < searchResults.TestStrLength; j++ {
+	for j := 0; j < searchResults.TestStringLength; j++ {
 
 		if testSearchString.CharsArray[j] == targetChar {
 			// Search SUCCESSFUL! SINGLE CHARACTER MATCH!
@@ -338,11 +292,11 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 
 			searchResults.FoundSearchTarget = true
 
-			searchResults.TestStrStartingIndex = 0
+			searchResults.TestStringStartingIndex = 0
 
 			searchResults.TestStringFirstFoundIndex = j
 
-			searchResults.TestStrLastFoundIndex = j
+			searchResults.TestStringLastFoundIndex = j
 
 			searchResults.TargetStringLastFoundIndex =
 				searchResults.TargetStringStartingSearchIndex

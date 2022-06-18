@@ -22,7 +22,7 @@ func TestNumericSymbolLocation_XParseString_000100(t *testing.T) {
 		return
 	}
 
-	if numSymLocation != NSymLocation.None() {
+	if numSymLocation != NumSymLocation.None() {
 		t.Errorf("Error: Expected return of object='numSymLocation.None()'.\n"+
 			"Instead, object integer value = '%v'\n",
 			numSymLocation.XValueInt())
@@ -47,7 +47,7 @@ func TestNumericSymbolLocation_XParseString_000200(t *testing.T) {
 		return
 	}
 
-	if numSymLocation != NSymLocation.Before() {
+	if numSymLocation != NumSymLocation.Before() {
 		t.Errorf("Error: Expected return of object='numSymLocation.Before()'.\n"+
 			"Instead, object integer value = '%v'\n",
 			numSymLocation.XValueInt())
@@ -72,7 +72,7 @@ func TestNumericSymbolLocation_XParseString_000300(t *testing.T) {
 		return
 	}
 
-	if numSymLocation != NSymLocation.Interior() {
+	if numSymLocation != NumSymLocation.Interior() {
 		t.Errorf("Error: Expected return of object='numSymLocation.Interior()'.\n"+
 			"Instead, object integer value = '%v'\n",
 			numSymLocation.XValueInt())
@@ -97,7 +97,7 @@ func TestNumericSymbolLocation_XParseString_000400(t *testing.T) {
 		return
 	}
 
-	if numSymLocation != NSymLocation.After() {
+	if numSymLocation != NumSymLocation.After() {
 		t.Errorf("Error: Expected return of object='numSymLocation.After()'.\n"+
 			"Instead, object integer value = '%v'\n",
 			numSymLocation.XValueInt())
@@ -122,7 +122,7 @@ func TestNumericSymbolLocation_XParseString_000500(t *testing.T) {
 		return
 	}
 
-	if numSymLocation != NSymLocation.None() {
+	if numSymLocation != NumSymLocation.None() {
 		t.Errorf("Error - Case Insensitive Search\n"+
 			"Expected return of object='numSymLocation.None()'.\n"+
 			"Instead, object integer value = '%v'\n",
@@ -335,7 +335,7 @@ func TestNumericSymbolLocation_XValue_000100(t *testing.T) {
 
 	curValue := nSignSymDisMode.XValue()
 
-	if curValue != NSymLocation.None() {
+	if curValue != NumSymLocation.None() {
 		t.Errorf("Error:\n"+
 			"Expected return of object='NumericSymbolLocation(0).None()'.\n"+
 			"Instead, object integer value = '%v'\n",
@@ -350,7 +350,7 @@ func TestNumericSymbolLocation_XValue_000200(t *testing.T) {
 
 	curValue := nSignSymDisMode.XValue()
 
-	if curValue != NSymLocation.Before() {
+	if curValue != NumSymLocation.Before() {
 		t.Errorf("Error:\n"+
 			"Expected return of object='NumericSymbolLocation(0).Before()'.\n"+
 			"Instead, object integer value = '%v'\n",
@@ -365,7 +365,7 @@ func TestNumericSymbolLocation_XValue_000300(t *testing.T) {
 
 	curValue := nSignSymDisMode.XValue()
 
-	if curValue != NSymLocation.Interior() {
+	if curValue != NumSymLocation.Interior() {
 		t.Errorf("Error:\n"+
 			"Expected return of object='NumericSymbolLocation(0).Interior()'.\n"+
 			"Instead, object integer value = '%v'\n",
@@ -380,7 +380,7 @@ func TestNumericSymbolLocation_XValue_000400(t *testing.T) {
 
 	curValue := nSignSymDisMode.XValue()
 
-	if curValue != NSymLocation.After() {
+	if curValue != NumSymLocation.After() {
 		t.Errorf("Error:\n"+
 			"Expected return of object='NumericSymbolLocation(0).After()'.\n"+
 			"Instead, object integer value = '%v'\n",

@@ -1028,12 +1028,7 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //
 //
 func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
-	targetSearchString *RuneArrayDto,
-	targetSearchStringName string,
-	targetStartingSearchIndex int,
-	targetStartingSearchIndexName string,
-	targetSearchLength int,
-	targetSearchLengthName string,
+	inputParms CharSearchInputParametersDto,
 	errorPrefix interface{}) (
 	CharSearchResultsDto,
 	error) {
@@ -1065,37 +1060,41 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	}
 
-	if !charsArrayDto.charSearchType.XIsValid() {
+	err = inputParms.ValidateCharSearchType(
+		ePrefix)
 
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The current instance of RuneArrayDto is invalid!\n"+
-			"The Character Search Type is invalid. Character Search Type\n"+
-			"must be set to one of these enumeration values:\n"+
-			"  CharacterSearchType(0).LinearTargetStartingIndex()\n"+
-			"  CharacterSearchType(0).SingleTargetChar()\n"+
-			"  CharacterSearchType(0).LinearEndOfString()\n"+
-			"The Character Search Type for this instance of RuneArrayDto is"+
-			" Character Search Type   String Name: %v\n"+
-			" Character Search Type Integer Value: %v\n",
-			ePrefix.String(),
-			charsArrayDto.charSearchType.String(),
-			charsArrayDto.charSearchType.XValueInt())
+	if err != nil {
 
 		return errorResults, err
+
+	}
+
+	inputParms.TestString = charsArrayDto
+
+	inputParms.TestStringStartingIndex = 0
+
+	if len(inputParms.TestStringName) == 0 {
+		inputParms.TestStringName = "RuneArrayDto"
+	}
+
+	if len(inputParms.TestStringLengthName) == 0 {
+		inputParms.TestStringLengthName =
+			"RuneArrayDto Length"
+	}
+
+	err = inputParms.ValidateTestString(
+		ePrefix)
+
+	if err != nil {
+
+		return errorResults, err
+
 	}
 
 	runeArrayNanobot := runeArrayDtoNanobot{}
 
 	return runeArrayNanobot.characterSearchExecutor(
-		charsArrayDto,
-		"RuneArrayDto",
-		targetSearchString,
-		targetSearchStringName,
-		targetStartingSearchIndex,
-		targetStartingSearchIndexName,
-		targetSearchLength,
-		targetSearchLengthName,
-		charsArrayDto.charSearchType,
+		inputParms,
 		ePrefix)
 
 }
