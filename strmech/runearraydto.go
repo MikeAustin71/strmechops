@@ -257,6 +257,15 @@ func (charsArrayDto *RuneArrayDto) CopyIn(
 			incomingChars.CharsArray[i]
 	}
 
+	charsArrayDto.Description1 =
+		incomingChars.Description1
+
+	charsArrayDto.Description2 =
+		incomingChars.Description2
+
+	charsArrayDto.charSearchType =
+		incomingChars.charSearchType
+
 	return err
 }
 
@@ -495,6 +504,21 @@ func (charsArrayDto *RuneArrayDto) Equal(
 			return false
 		}
 
+	}
+
+	if charsArrayDto.Description1 !=
+		incomingRuneArrayDto.Description1 {
+		return false
+	}
+
+	if charsArrayDto.Description2 !=
+		incomingRuneArrayDto.Description2 {
+		return false
+	}
+
+	if charsArrayDto.charSearchType !=
+		incomingRuneArrayDto.charSearchType {
+		return false
 	}
 
 	return true
@@ -1080,6 +1104,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 				charsArrayDto.charSearchType.String(),
 				charsArrayDto.charSearchType.XValueInt())
 			return errorResults, err
+
 		} else {
 
 			// Default to RuneArrayDto Character Search Type
@@ -1090,8 +1115,6 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	}
 
 	testInputParms.TestString = charsArrayDto
-
-	testInputParms.TestStringStartingIndex = 0
 
 	if len(testInputParms.TestStringName) == 0 {
 		testInputParms.TestStringName = "RuneArrayDto"

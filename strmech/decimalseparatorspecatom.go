@@ -80,7 +80,7 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) empty(
 		return
 	}
 
-	decSepSpec.decimalSeparatorChars = nil
+	decSepSpec.decimalSeparatorChars.Empty()
 
 	decimalSepSpecElectron{}.ptr().
 		emptyProcessingFlags(decSepSpec)
@@ -188,12 +188,12 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) testValidityOfDecSepSearchSpec(
 		return isValid, err
 	}
 
-	if len(decSepSpec.decimalSeparatorChars) == 0 {
+	if decSepSpec.decimalSeparatorChars.GetRuneArrayLength() == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'DecimalSeparatorSpec' is invalid!\n"+
 			"The length of the Decimal Separators Character Array is zero.\n"+
-			"len(decSepSpec.decimalSeparatorChars) == 0\n",
+			".decimalSeparatorChars.GetRuneArrayLength() == 0\n",
 			ePrefix.String())
 
 		return isValid, err
@@ -205,7 +205,7 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) testValidityOfDecSepSearchSpec(
 
 	_,
 		err2 = sMechPreon.testValidityOfRuneCharArray(
-		decSepSpec.decimalSeparatorChars,
+		decSepSpec.decimalSeparatorChars.CharsArray,
 		nil)
 
 	if err2 != nil {

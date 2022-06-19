@@ -233,7 +233,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	foundNonZeroNumericDigits := false
 	foundDecimalSeparators := false
 	foundNegativeSignSymbols := false
-	lastSearchIndex := 0
 
 	targetInputParms := CharSearchTargetInputParametersDto{}.New()
 
@@ -245,6 +244,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	targetInputParms.TargetStringSearchLength = -1
 
 	var negNumSearchResults CharSearchResultsDto
+	var decimalSepSearchResults CharSearchResultsDto
 
 	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
 
@@ -299,13 +299,11 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		if !foundDecimalSeparators {
 			// Search for Decimal Separators
 
-			foundDecimalSeparators,
-				lastSearchIndex,
+			decimalSepSearchResults,
 				err = decimalSeparatorSpec.SearchForDecimalSeparator(
-				&targetSearchString,
-				i,
+				targetInputParms,
 				ePrefix.XCpy(
-					"targetSearchString"))
+					"targetInputParms"))
 
 			if err != nil {
 
@@ -318,9 +316,11 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			}
 
-			if foundDecimalSeparators {
+			if decimalSepSearchResults.FoundSearchTarget {
 
-				i = lastSearchIndex
+				foundDecimalSeparators = true
+
+				i = decimalSepSearchResults.TargetStringLastSearchIndex
 
 				continue
 			}

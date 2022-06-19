@@ -43,9 +43,9 @@ import (
 // characters.
 //
 type DecimalSeparatorSpec struct {
-	decimalSeparatorChars []rune // Contains the character or characters
-	//                                        which comprise the Decimal
-	//                                        Separator.
+	decimalSeparatorChars RuneArrayDto // Contains the character or characters
+	//                                    which comprise the Decimal
+	//                                    Separator.
 
 	// Processing flags
 	//
@@ -512,7 +512,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorRunes() []rune 
 
 	defer decSeparatorSpec.lock.Unlock()
 
-	return decSeparatorSpec.decimalSeparatorChars
+	return decSeparatorSpec.decimalSeparatorChars.CharsArray
 }
 
 // GetDecimalSeparatorStr - Returns the currently configured Decimal Separator
@@ -568,7 +568,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 
 	defer decSeparatorSpec.lock.Unlock()
 
-	return string(decSeparatorSpec.decimalSeparatorChars)
+	return string(decSeparatorSpec.decimalSeparatorChars.CharsArray)
 }
 
 // GetFoundDecimalSeparatorIndex - This integer value is set
@@ -966,12 +966,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 //       the beginning of the error message.
 //
 func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
-	targetSearchString *RuneArrayDto,
-	startingSearchIndex int,
+	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
-	foundDecimalSeparatorSymbols bool,
-	lastSearchIndex int,
-	err error) {
+	CharSearchResultsDto,
+	error) {
 
 	if decSeparatorSpec.lock == nil {
 		decSeparatorSpec.lock = new(sync.Mutex)
@@ -983,6 +981,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	var err error
+
+	decimalSearchResults := CharSearchResultsDto{}.New()
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -991,157 +993,119 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 		"")
 
 	if err != nil {
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
+		return decimalSearchResults, err
 	}
-
-	foundDecimalSeparatorSymbols = false
-
-	lastSearchIndex = -1
-
-	if targetSearchString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchString' is invalid!\n"+
-			"'targetSearchString' is a nil pointer.\n",
-			ePrefix.String())
-
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
-
-	}
-
-	lenTargetStr := len(targetSearchString.CharsArray)
-
-	if lenTargetStr == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetSearchString' is invalid!\n"+
-			"'targetSearchString' is empty and has a zero length.\n",
-			ePrefix.String())
-
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
-
-	}
-
-	sMechPreon := strMechPreon{}
 
 	var err2 error
 	_,
+		err2 = decimalSeparatorSpecAtom{}.ptr().
+		testValidityOfDecSepSearchSpec(
+			decSeparatorSpec,
+			ePrefix.XCpy(
+				"decSeparatorSpec"))
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: The current instance of DecimalSeparatorSpec\n"+
+			"is invalid. The Search operation has been aborted.\n"+
+			"Validation checks returned the following error for this intance of\n"+
+			"DecimalSeparatorSpec:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return decimalSearchResults, err
+	}
+
+	err = targetInputParms.ValidateTargetParameters(
+		ePrefix.XCpy(
+			"targetInputParms invalid!"))
+
+	if err != nil {
+		return decimalSearchResults, err
+	}
+
+	sMechPreon := strMechPreon{}
+	_,
 		err2 = sMechPreon.testValidityOfRuneCharArray(
-		targetSearchString.CharsArray,
+		targetInputParms.TargetString.CharsArray,
 		nil)
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'targetSearchString' is invalid!\n"+
+			"Error: Input Parameter '%v' is invalid!\n"+
 			"This rune array contains invalid characters.\n"+
-			"'targetSearchString' returned the following validation\n"+
+			"'%v' returned the following validation\n"+
 			"error:\n"+
 			"%v\n",
 			ePrefix.String(),
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringName,
 			err2.Error())
 
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
+		return decimalSearchResults, err
 	}
 
-	if startingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'startingSearchIndex' is invalid!\n"+
-			"'startingSearchIndex' has a value less than zero.\n"+
-			"startingSearchIndex = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex)
-
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
-	}
-
-	if startingSearchIndex >= lenTargetStr {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'startingSearchIndex' is invalid!\n"+
-			"'startingSearchIndex' is greater than the last index in"+
-			"the Target Search String.\n"+
-			"startingSearchIndex = '%v'\n"+
-			"Last Index in Target Search String = '%v'\n",
-			ePrefix.String(),
-			startingSearchIndex,
-			lenTargetStr-1)
-
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
-	}
+	testInputParms := CharSearchTestInputParametersDto{}.New()
+	testInputParms.TestStringLength =
+		decSeparatorSpec.decimalSeparatorChars.GetRuneArrayLength()
 
 	// Nothing to do. Already Found the Decimal
 	// Separator on a previous cycle.
 	if decSeparatorSpec.foundDecimalSeparatorSymbols == true {
 
-		foundDecimalSeparatorSymbols = true
-		lastSearchIndex = startingSearchIndex
+		decimalSearchResults.FoundSearchTarget = true
+		decimalSearchResults.FoundSearchTargetOnPreviousSearch = true
 
-		return foundDecimalSeparatorSymbols,
-			lastSearchIndex,
-			err
+		decimalSearchResults.TargetStringFirstFoundIndex =
+			decSeparatorSpec.foundDecimalSeparatorIndex
+
+		decimalSearchResults.TargetStringLastFoundIndex =
+			decSeparatorSpec.foundDecimalSeparatorIndex +
+				testInputParms.TestStringLength - 1
+
+		return decimalSearchResults, err
+	}
+	testInputParms.TestStringName = "testString"
+	testInputParms.TestStringLengthName = "testStringLength"
+	testInputParms.TestStringStartingIndex = 0
+	testInputParms.TestStringDescription1 = "Decimal Separator"
+	testInputParms.CollectionTestObjIndex = -1
+	testInputParms.NumSymbolClass = NumSymClass.DecimalSeparator()
+	testInputParms.CharSearchType = CharSearchType.LinearTargetStartingIndex()
+
+	err = testInputParms.ValidateTestParameters(
+		ePrefix.XCpy("testInputParms"))
+
+	if err != nil {
+		return decimalSearchResults, err
+	}
+
+	decimalSearchResults.Empty()
+
+	decimalSearchResults,
+		err =
+		decSeparatorSpec.decimalSeparatorChars.SearchForTextCharacterString(
+			targetInputParms,
+			testInputParms,
+			ePrefix.XCpy(
+				"negNumSearchSpec-Before"))
+
+	if err != nil {
+		return decimalSearchResults, err
+	}
+
+	if decimalSearchResults.FoundSearchTarget {
+
+		decSeparatorSpec.foundDecimalSeparatorSymbols = true
+
+		decSeparatorSpec.foundDecimalSeparatorIndex =
+			decimalSearchResults.TargetStringFirstFoundIndex
 
 	}
 
-	lastSearchIndex = startingSearchIndex
-
-	// decSeparatorSpec has already been validated
-	lenDecimalSeparatorChars :=
-		len(decSeparatorSpec.decimalSeparatorChars)
-
-	j := 0
-
-	for i := startingSearchIndex; i < lenTargetStr; i++ {
-
-		if targetSearchString.CharsArray[i] !=
-			decSeparatorSpec.decimalSeparatorChars[j] {
-
-			return foundDecimalSeparatorSymbols,
-				lastSearchIndex,
-				err
-
-		}
-
-		// Chars are equal
-		j++
-
-		// Found Decimal Separator Chars
-		// Exit Method Here!
-		if j >= lenDecimalSeparatorChars {
-
-			decSeparatorSpec.foundDecimalSeparatorSymbols = true
-
-			decSeparatorSpec.foundDecimalSeparatorIndex =
-				startingSearchIndex
-
-			lastSearchIndex = i
-			foundDecimalSeparatorSymbols = true
-
-			return foundDecimalSeparatorSymbols,
-				lastSearchIndex,
-				err
-
-		}
-
-	}
-
-	// Failed to find Decimal Separators
-	return foundDecimalSeparatorSymbols,
-		lastSearchIndex,
-		err
+	return decimalSearchResults, err
 }
 
 // SetDecimalSeparatorRunes - Sets the Decimal Separator Symbols
@@ -1321,18 +1285,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorRunes(
 		return err
 	}
 
-	decimalSeparatorSpecAtom{}.ptr().
-		empty(decSeparatorSpec)
-
-	decSeparatorSpec.decimalSeparatorChars =
-		make([]rune, lenDecSepRunes)
-
-	for i := 0; i < lenDecSepRunes; i++ {
-
-		decSeparatorSpec.decimalSeparatorChars[i] =
-			decSeparator[i]
-
-	}
+	err = decSeparatorSpec.decimalSeparatorChars.SetRuneArray(
+		decSeparator,
+		ePrefix.XCpy("decSeparatorSpec"))
 
 	return err
 }
@@ -1495,15 +1450,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SetDecimalSeparatorStr(
 	decimalSeparatorSpecAtom{}.ptr().
 		empty(decSeparatorSpec)
 
-	decSeparatorSpec.decimalSeparatorChars =
-		make([]rune, lenDecSepRunes)
-
-	for i := 0; i < lenDecSepRunes; i++ {
-
-		decSeparatorSpec.decimalSeparatorChars[i] =
-			decSepRunes[i]
-
-	}
+	err = decSeparatorSpec.decimalSeparatorChars.SetRuneArray(
+		decSepRunes,
+		ePrefix.XCpy(
+			"decSeparatorSpec<-decSepRunes"))
 
 	return err
 }

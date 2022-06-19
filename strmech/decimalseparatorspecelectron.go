@@ -86,8 +86,8 @@ func (decSepSpecElectron *decimalSepSpecElectron) equal(
 
 	areEqual = strMechPreon{}.ptr().
 		equalRuneArrays(
-			decSepSpec01.decimalSeparatorChars,
-			decSepSpec02.decimalSeparatorChars)
+			decSepSpec01.decimalSeparatorChars.CharsArray,
+			decSepSpec02.decimalSeparatorChars.CharsArray)
 
 	if !areEqual {
 		return areEqual

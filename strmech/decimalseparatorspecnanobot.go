@@ -151,31 +151,20 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyIn(
 		targetDecSepSpec)
 
 	lenDecSepChars :=
-		len(incomingDecSepSpec.decimalSeparatorChars)
+		len(incomingDecSepSpec.decimalSeparatorChars.CharsArray)
 
 	if lenDecSepChars == 0 {
 
-		incomingDecSepSpec.decimalSeparatorChars = nil
-		targetDecSepSpec.decimalSeparatorChars = nil
+		incomingDecSepSpec.decimalSeparatorChars.Empty()
+		targetDecSepSpec.decimalSeparatorChars.Empty()
 
 	} else {
 
-		targetDecSepSpec.decimalSeparatorChars =
-			make([]rune, lenDecSepChars)
-
-		for i := 0; i < lenDecSepChars; i++ {
-
-			targetDecSepSpec.decimalSeparatorChars[i] =
-				incomingDecSepSpec.decimalSeparatorChars[i]
-
-		}
+		err = targetDecSepSpec.decimalSeparatorChars.CopyIn(
+			&incomingDecSepSpec.decimalSeparatorChars,
+			ePrefix.XCpy(
+				"targetDecSepSpec<-incomingDecSepSpec"))
 	}
-
-	targetDecSepSpec.foundDecimalSeparatorSymbols =
-		incomingDecSepSpec.foundDecimalSeparatorSymbols
-
-	targetDecSepSpec.foundDecimalSeparatorIndex =
-		incomingDecSepSpec.foundDecimalSeparatorIndex
 
 	return err
 }
@@ -302,23 +291,20 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyOut(
 		&copyOfDecSepSpec)
 
 	lenDecSepChars :=
-		len(decSepSpec.decimalSeparatorChars)
+		len(decSepSpec.decimalSeparatorChars.CharsArray)
 
 	if lenDecSepChars == 0 {
-		decSepSpec.decimalSeparatorChars = nil
-		copyOfDecSepSpec.decimalSeparatorChars = nil
+		decSepSpec.decimalSeparatorChars.Empty()
+		copyOfDecSepSpec.decimalSeparatorChars.Empty()
 
 	} else {
 
-		copyOfDecSepSpec.decimalSeparatorChars =
-			make([]rune, lenDecSepChars)
-
-		for i := 0; i < lenDecSepChars; i++ {
-
-			copyOfDecSepSpec.decimalSeparatorChars[i] =
-				decSepSpec.decimalSeparatorChars[i]
-
-		}
+		copyOfDecSepSpec.decimalSeparatorChars,
+			err =
+			decSepSpec.decimalSeparatorChars.CopyOut(
+				ePrefix.XCpy(
+					"copyOfDecSepSpec.decimalSeparatorChars<-" +
+						"decSepSpec.decimalSeparatorChars"))
 	}
 
 	copyOfDecSepSpec.foundDecimalSeparatorSymbols =
