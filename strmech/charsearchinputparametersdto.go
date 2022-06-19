@@ -113,13 +113,24 @@ type CharSearchInputParametersDto struct {
 	//                                     NumSignVal.Zero()
 	//                                     NumSignVal.Positive()
 
-	NumSignPosition NumSignSymbolPosition // Used in searches involving
+	PrimaryNumSignPosition NumSignSymbolPosition // Used in searches involving
 	//                                       positive and negative number
-	//                                       signs.
+	//                                       signs. This is the Primary
+	//                                       Type Code for Number Signs.
+	//                                       Cases involving 'Leading' and
+	//                                       'Trailing' symbols also make
+	//                                       use of the 'NumSignSubPosition'.
 	//                                        NumSignSymPos.None()
 	//                                        NumSignSymPos.Before()
 	//                                        NumSignSymPos.After()
 	//                                        NumSignSymPos.BeforeAndAfter()
+
+	SecondaryNumSignPosition NumSignSymbolPosition // Used in searches involving
+	//                                                signs which occur both before
+	//                                                and after the numeric value.
+	//                                                 NumSignSymPos.None()
+	//                                                 NumSignSymPos.Before()
+	//                                                 NumSignSymPos.After()
 
 	CharSearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
@@ -128,6 +139,11 @@ type CharSearchInputParametersDto struct {
 	//                                 CharSearchType.LinearTargetStartingIndex() - Default
 	//                                 CharSearchType.SingleTargetChar()
 	//                                 CharSearchType.LinearEndOfString()
+
+	FoundFirstNumericDigitInNumStr bool // When set to 'true' this signals
+	//                                     that the first numeric digit has
+	//                                     been identified in a string of text
+	//                                     characters.
 
 	lock *sync.Mutex
 }
@@ -188,9 +204,13 @@ func (searchInputParms *CharSearchInputParametersDto) Empty() {
 
 	searchInputParms.NumSignValue = NumSignVal.None()
 
-	searchInputParms.NumSignPosition = NumSignSymPos.None()
+	searchInputParms.PrimaryNumSignPosition = NumSignSymPos.None()
+
+	searchInputParms.SecondaryNumSignPosition = NumSignSymPos.None()
 
 	searchInputParms.CharSearchType = CharSearchType.None()
+
+	searchInputParms.FoundFirstNumericDigitInNumStr = false
 
 	searchInputParms.lock.Unlock()
 

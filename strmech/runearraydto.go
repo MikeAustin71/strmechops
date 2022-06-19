@@ -1065,7 +1065,27 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	if err != nil {
 
-		return errorResults, err
+		if !charsArrayDto.charSearchType.XIsValid() {
+			err = fmt.Errorf("%v\n"+
+				"Error: Both Input Parameters Search Type and\n"+
+				"RuneArrayDto Search Type are invalid.\n"+
+				"The Search Operation is Terminating!\n"+
+				"Input Parameters Search Type String  = '%v'\n"+
+				"Input Parameters Search Type Integer = '%v'\n"+
+				"RuneArrayDto Search Type String  = '%v'\n"+
+				"RuneArrayDto Search Type Integer = '%v'\n",
+				ePrefix.String(),
+				inputParms.CharSearchType.String(),
+				inputParms.CharSearchType.XValueInt(),
+				charsArrayDto.charSearchType.String(),
+				charsArrayDto.charSearchType.XValueInt())
+			return errorResults, err
+		} else {
+
+			// Default to RuneArrayDto Character Search Type
+			inputParms.CharSearchType =
+				charsArrayDto.charSearchType
+		}
 
 	}
 
@@ -1080,6 +1100,10 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	if len(inputParms.TestStringLengthName) == 0 {
 		inputParms.TestStringLengthName =
 			"RuneArrayDto Length"
+	}
+
+	if inputParms.TestStringStartingIndex < 0 {
+		inputParms.TestStringStartingIndex = 0
 	}
 
 	err = inputParms.ValidateTestString(

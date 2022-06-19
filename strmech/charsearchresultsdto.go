@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
 
@@ -11,6 +10,9 @@ type CharSearchResultsDto struct {
 	//                        String character or characters
 	//                        were found in the Target Search
 	//                        String.
+
+	FoundSearchTargetOnPreviousSearch bool // The Search Target was located
+	//                                        on a previous search operation.
 
 	TargetStringLength int // Actual Full Length of the Target Search
 	//                        String
@@ -109,13 +111,20 @@ type CharSearchResultsDto struct {
 	//                                     NumSignVal.Zero()
 	//                                     NumSignVal.Positive()
 
-	NumSignPosition NumSignSymbolPosition // Used in searches involving
+	PrimaryNumSignPosition NumSignSymbolPosition // Used in searches involving
 	//                                       positive and negative number
 	//                                       signs.
 	//                                        NumSignSymPos.None()
 	//                                        NumSignSymPos.Before()
 	//                                        NumSignSymPos.After()
 	//                                        NumSignSymPos.BeforeAndAfter()
+
+	SecondaryNumSignPosition NumSignSymbolPosition // Used in searches involving
+	//                                                signs which occur both before
+	//                                                and after the numeric value.
+	//                                                 NumSignSymPos.None()
+	//                                                 NumSignSymPos.Before()
+	//                                                 NumSignSymPos.After()
 
 	CharSearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
@@ -124,6 +133,11 @@ type CharSearchResultsDto struct {
 	//                                 CharSearchType.LinearTargetStartingIndex() - Default
 	//                                 CharSearchType.SingleTargetChar()
 	//                                 CharSearchType.LinearEndOfString()
+
+	FoundFirstNumericDigitInNumStr bool // When set to 'true' this signals
+	//                                     that the first numeric digit has
+	//                                     been identified in a string of text
+	//                                     characters.
 
 	lock *sync.Mutex
 }
@@ -137,6 +151,8 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 	charSearchResults.lock.Lock()
 
 	charSearchResults.FoundSearchTarget = false
+
+	charSearchResults.FoundSearchTargetOnPreviousSearch = false
 
 	charSearchResults.TargetStringLength = -1
 
@@ -176,19 +192,38 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 
 	charSearchResults.NumSignValue = NumSignVal.None()
 
-	charSearchResults.NumSignPosition = NumSignSymPos.None()
+	charSearchResults.PrimaryNumSignPosition = NumSignSymPos.None()
+
+	charSearchResults.SecondaryNumSignPosition = NumSignSymPos.None()
 
 	charSearchResults.CharSearchType =
 		CharSearchType.None()
+
+	charSearchResults.FoundFirstNumericDigitInNumStr = false
 
 	charSearchResults.lock.Unlock()
 
 	charSearchResults.lock = nil
 }
 
+// LoadBaseCharSearchInputParameters - Loads primary search input parameters
+// into the member variables for the current instance of CharSearchResultsDto
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// No validity checking is performed on CharSearchInputParametersDto
+// input paramters. It is wise to call one or both of the following
+// input parameters validation methods BEFORE calling this method
+// 'LoadBaseCharSearchInputParameters':
+//
+//   CharSearchInputParametersDto.ValidateTargetSearchString()
+//   CharSearchInputParametersDto.ValidateTestString()
+//
 func (charSearchResults *CharSearchResultsDto) LoadBaseCharSearchInputParameters(
-	inputParms CharSearchInputParametersDto,
-	errorPrefix interface{}) error {
+	inputParms CharSearchInputParametersDto) {
 
 	if charSearchResults.lock == nil {
 		charSearchResults.lock = new(sync.Mutex)
@@ -197,34 +232,6 @@ func (charSearchResults *CharSearchResultsDto) LoadBaseCharSearchInputParameters
 	charSearchResults.lock.Lock()
 
 	defer charSearchResults.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"RuneArrayDto."+
-			"SetCharacterSearchType()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	err = inputParms.ValidateTestString(
-		ePrefix)
-
-	if err != nil {
-		return err
-	}
-
-	err = inputParms.ValidateTargetSearchString(
-		ePrefix)
-
-	if err != nil {
-		return err
-	}
 
 	charSearchResults.TestStringLength =
 		inputParms.TestStringLength
@@ -271,8 +278,17 @@ func (charSearchResults *CharSearchResultsDto) LoadBaseCharSearchInputParameters
 	charSearchResults.NumSignValue =
 		inputParms.NumSignValue
 
+	charSearchResults.PrimaryNumSignPosition =
+		inputParms.PrimaryNumSignPosition
+
+	charSearchResults.SecondaryNumSignPosition =
+		inputParms.SecondaryNumSignPosition
+
 	charSearchResults.CharSearchType =
 		inputParms.CharSearchType
 
-	return err
+	charSearchResults.FoundFirstNumericDigitInNumStr =
+		inputParms.FoundFirstNumericDigitInNumStr
+
+	return
 }
