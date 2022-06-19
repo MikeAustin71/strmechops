@@ -643,13 +643,20 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 //       be returned.
 //
 //
-//  description                string
+//  description1               string
 //
 //     - Users have the option of configuring a text string to
 //       describe the function or purpose of the text characters
-//       configured for the returned instance of RuneArrayDto.
+//       configured for the returned instance of RuneArrayDto. This
+//       parameter configures the first of two description strings.
 //
 //
+//  description2               string
+//
+//     - Users have the option of configuring a text string to
+//       describe the function or purpose of the text characters
+//       configured for the returned instance of RuneArrayDto. This
+//       parameter configures the second of two description strings.
 //
 //
 //  charSearchType             CharacterSearchType
@@ -842,7 +849,8 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 //
 func (charsArrayDto RuneArrayDto) NewRuneArray(
 	charArray []rune,
-	description string,
+	description1 string,
+	description2 string,
 	charSearchType CharacterSearchType,
 	errorPrefix interface{}) (
 	newRuneArrayDto RuneArrayDto,
@@ -905,7 +913,9 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 			charArray[i]
 	}
 
-	newRuneArrayDto.Description1 = description
+	newRuneArrayDto.Description1 = description1
+
+	newRuneArrayDto.Description2 = description2
 
 	newRuneArrayDto.charSearchType = charSearchType
 
