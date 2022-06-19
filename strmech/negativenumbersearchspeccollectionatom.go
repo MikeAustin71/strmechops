@@ -69,7 +69,9 @@ func (negNumSearchColAtom *negNumSearchSpecCollectionAtom) empty(
 
 	negNumSearchCol.negNumSearchSpecsCol = nil
 
-	negNumSearchCol.targetSearchString = nil
+	negNumSearchCol.foundNegNumSign = false
+
+	negNumSearchCol.foundNegNumSignColIndex = -1
 
 	return
 }

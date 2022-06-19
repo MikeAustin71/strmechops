@@ -235,6 +235,17 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	foundNegativeSignSymbols := false
 	lastSearchIndex := 0
 
+	targetInputParms := CharSearchTargetInputParametersDto{}.New()
+
+	targetInputParms.TargetString = &targetSearchString
+	targetInputParms.TargetStringName = "targetSearchString"
+	targetInputParms.TargetStringLength = actualTargetStrLength
+	targetInputParms.TargetStringLengthName = "targetSearchStringLength"
+	targetInputParms.TargetStringStartingSearchIndexName = "targetStartingSearchIndex"
+	targetInputParms.TargetStringSearchLength = -1
+
+	var negNumSearchResults CharSearchResultsDto
+
 	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
 
 		if targetSearchString.CharsArray[i] >= '0' &&
@@ -265,17 +276,22 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		// Check for Negative Number Sign Symbol
 		if !foundNegativeSignSymbols {
 
-			foundNegativeSignSymbols,
-				lastSearchIndex,
+			targetInputParms.TargetStringStartingSearchIndex =
+				i
+
+			negNumSearchResults,
 				err = negativeNumSearchSpecsCol.
 				SearchForNegNumSignSymbols(
-					&targetSearchString,
 					foundFirstNumericDigit,
-					i,
+					targetInputParms,
 					ePrefix)
 
+			foundNegativeSignSymbols =
+				negNumSearchResults.FoundSearchTarget
+
 			if foundNegativeSignSymbols {
-				i = lastSearchIndex
+				i =
+					negNumSearchResults.TargetStringLastSearchIndex
 				continue
 			}
 		}

@@ -20,7 +20,8 @@ type runeArrayDtoElectron struct {
 // level function.
 //
 func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
-	inputParms CharSearchInputParametersDto,
+	targetInputParms CharSearchTargetInputParametersDto,
+	testInputParms CharSearchTestInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	CharSearchResultsDto,
 	error) {
@@ -35,8 +36,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	searchResults := CharSearchResultsDto{}
-	searchResults.Empty()
+	searchResults := CharSearchResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -49,13 +49,27 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 		return searchResults, err
 	}
 
-	err = searchResults.LoadBaseCharSearchInputParameters(
-		inputParms,
-		ePrefix)
+	err = targetInputParms.ValidateTargetParameters(
+		ePrefix.XCpy(
+			"targetInputParms"))
 
 	if err != nil {
 		return searchResults, err
 	}
+
+	err = testInputParms.ValidateTestParameters(
+		ePrefix.XCpy(
+			"testInputParms"))
+
+	if err != nil {
+		return searchResults, err
+	}
+
+	searchResults.LoadTargetBaseInputParameters(
+		targetInputParms)
+
+	searchResults.LoadTestBaseInputParameters(
+		testInputParms)
 
 	j := 0
 	k := 0
@@ -69,8 +83,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 		for true {
 
-			if inputParms.TestString.CharsArray[j] !=
-				inputParms.TargetSearchString.CharsArray[k] {
+			if testInputParms.TestString.CharsArray[j] !=
+				targetInputParms.TargetString.CharsArray[k] {
 
 				break
 			}
@@ -116,7 +130,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 // linearTargetStartingIndexSearch
 func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
-	inputParms CharSearchInputParametersDto,
+	targetInputParms CharSearchTargetInputParametersDto,
+	testInputParms CharSearchTestInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	CharSearchResultsDto,
 	error) {
@@ -131,8 +146,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	searchResults := CharSearchResultsDto{}
-	searchResults.Empty()
+	searchResults := CharSearchResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -147,20 +161,34 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 	}
 
-	err = searchResults.LoadBaseCharSearchInputParameters(
-		inputParms,
-		ePrefix)
+	err = targetInputParms.ValidateTargetParameters(
+		ePrefix.XCpy(
+			"targetInputParms"))
 
 	if err != nil {
 		return searchResults, err
 	}
 
+	err = testInputParms.ValidateTestParameters(
+		ePrefix.XCpy(
+			"testInputParms"))
+
+	if err != nil {
+		return searchResults, err
+	}
+
+	searchResults.LoadTargetBaseInputParameters(
+		targetInputParms)
+
+	searchResults.LoadTestBaseInputParameters(
+		testInputParms)
+
 	j := 0
 
 	for i := searchResults.TargetStringStartingSearchIndex; i < searchResults.TargetStringSearchLength; i++ {
 
-		if inputParms.TestString.CharsArray[j] !=
-			inputParms.TargetSearchString.CharsArray[i] {
+		if testInputParms.TestString.CharsArray[j] !=
+			targetInputParms.TargetString.CharsArray[i] {
 
 			searchResults.FoundSearchTarget = false
 

@@ -1028,7 +1028,8 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //
 //
 func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
-	inputParms CharSearchInputParametersDto,
+	targetInputParms CharSearchTargetInputParametersDto,
+	testInputParms CharSearchTestInputParametersDto,
 	errorPrefix interface{}) (
 	CharSearchResultsDto,
 	error) {
@@ -1044,8 +1045,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	errorResults := CharSearchResultsDto{}
-	errorResults.Empty()
+	errorResults := CharSearchResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1060,7 +1060,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	}
 
-	err = inputParms.ValidateCharSearchType(
+	err = testInputParms.ValidateCharSearchType(
 		ePrefix)
 
 	if err != nil {
@@ -1075,38 +1075,38 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 				"RuneArrayDto Search Type String  = '%v'\n"+
 				"RuneArrayDto Search Type Integer = '%v'\n",
 				ePrefix.String(),
-				inputParms.CharSearchType.String(),
-				inputParms.CharSearchType.XValueInt(),
+				testInputParms.CharSearchType.String(),
+				testInputParms.CharSearchType.XValueInt(),
 				charsArrayDto.charSearchType.String(),
 				charsArrayDto.charSearchType.XValueInt())
 			return errorResults, err
 		} else {
 
 			// Default to RuneArrayDto Character Search Type
-			inputParms.CharSearchType =
+			testInputParms.CharSearchType =
 				charsArrayDto.charSearchType
 		}
 
 	}
 
-	inputParms.TestString = charsArrayDto
+	testInputParms.TestString = charsArrayDto
 
-	inputParms.TestStringStartingIndex = 0
+	testInputParms.TestStringStartingIndex = 0
 
-	if len(inputParms.TestStringName) == 0 {
-		inputParms.TestStringName = "RuneArrayDto"
+	if len(testInputParms.TestStringName) == 0 {
+		testInputParms.TestStringName = "RuneArrayDto"
 	}
 
-	if len(inputParms.TestStringLengthName) == 0 {
-		inputParms.TestStringLengthName =
+	if len(testInputParms.TestStringLengthName) == 0 {
+		testInputParms.TestStringLengthName =
 			"RuneArrayDto Length"
 	}
 
-	if inputParms.TestStringStartingIndex < 0 {
-		inputParms.TestStringStartingIndex = 0
+	if testInputParms.TestStringStartingIndex < 0 {
+		testInputParms.TestStringStartingIndex = 0
 	}
 
-	err = inputParms.ValidateTestString(
+	err = testInputParms.ValidateTestParameters(
 		ePrefix)
 
 	if err != nil {
@@ -1118,7 +1118,8 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	runeArrayNanobot := runeArrayDtoNanobot{}
 
 	return runeArrayNanobot.characterSearchExecutor(
-		inputParms,
+		targetInputParms,
+		testInputParms,
 		ePrefix)
 
 }

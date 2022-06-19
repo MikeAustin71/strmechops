@@ -10,7 +10,8 @@ type runeArrayDtoNanobot struct {
 }
 
 func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
-	inputParms CharSearchInputParametersDto,
+	targetInputParms CharSearchTargetInputParametersDto,
+	testInputParms CharSearchTestInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (CharSearchResultsDto, error) {
 
 	if runeDtoNanobot.lock == nil {
@@ -42,7 +43,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 
 	}
 
-	err = inputParms.ValidateTestString(
+	err = testInputParms.ValidateTestParameters(
 		ePrefix)
 
 	if err != nil {
@@ -51,16 +52,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 
 	}
 
-	err = inputParms.ValidateCharSearchType(
-		ePrefix)
-
-	if err != nil {
-
-		return searchResults, err
-
-	}
-
-	err = inputParms.ValidateTargetSearchString(
+	err = targetInputParms.ValidateTargetParameters(
 		ePrefix)
 
 	if err != nil {
@@ -74,7 +66,8 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 	if searchResults.CharSearchType == CharSearchType.LinearEndOfString() {
 
 		return runeDtoElectron.linearEndOfStringSearch(
-			inputParms,
+			targetInputParms,
+			testInputParms,
 			ePrefix)
 
 	}
@@ -82,7 +75,8 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 	if searchResults.CharSearchType == CharSearchType.LinearTargetStartingIndex() {
 
 		return runeDtoElectron.linearTargetStartingIndexSearch(
-			inputParms,
+			targetInputParms,
+			testInputParms,
 			ePrefix)
 	}
 

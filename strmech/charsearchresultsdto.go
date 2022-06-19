@@ -206,24 +206,56 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 	charSearchResults.lock = nil
 }
 
-// LoadBaseCharSearchInputParameters - Loads primary search input parameters
-// into the member variables for the current instance of CharSearchResultsDto
+// New - Returns a new and uninitialized instance of
+// CharSearchResultsDto
 //
-//
-// ----------------------------------------------------------------
-//
-// IMPORTANT
-//
-// No validity checking is performed on CharSearchInputParametersDto
-// input paramters. It is wise to call one or both of the following
-// input parameters validation methods BEFORE calling this method
-// 'LoadBaseCharSearchInputParameters':
-//
-//   CharSearchInputParametersDto.ValidateTargetSearchString()
-//   CharSearchInputParametersDto.ValidateTestString()
-//
-func (charSearchResults *CharSearchResultsDto) LoadBaseCharSearchInputParameters(
-	inputParms CharSearchInputParametersDto) {
+func (charSearchResults CharSearchResultsDto) New() CharSearchResultsDto {
+
+	if charSearchResults.lock == nil {
+		charSearchResults.lock = new(sync.Mutex)
+	}
+
+	charSearchResults.lock.Lock()
+
+	defer charSearchResults.lock.Unlock()
+
+	newEmptySearchResults := CharSearchResultsDto{}
+
+	newEmptySearchResults.Empty()
+
+	return newEmptySearchResults
+}
+
+func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
+	targetInputParms CharSearchTargetInputParametersDto) {
+
+	if charSearchResults.lock == nil {
+		charSearchResults.lock = new(sync.Mutex)
+	}
+
+	charSearchResults.lock.Lock()
+
+	defer charSearchResults.lock.Unlock()
+
+	charSearchResults.TargetStringLength =
+		targetInputParms.TargetStringLength
+
+	charSearchResults.TargetStringSearchLength =
+		targetInputParms.TargetStringAdjustedSearchLength
+
+	charSearchResults.TargetStringStartingSearchIndex =
+		targetInputParms.TargetStringStartingSearchIndex
+
+	charSearchResults.TargetStringDescription1 =
+		targetInputParms.TargetStringDescription1
+
+	charSearchResults.TargetStringDescription2 =
+		targetInputParms.TargetStringDescription2
+
+}
+
+func (charSearchResults *CharSearchResultsDto) LoadTestBaseInputParameters(
+	testInputParms CharSearchTestInputParametersDto) {
 
 	if charSearchResults.lock == nil {
 		charSearchResults.lock = new(sync.Mutex)
@@ -234,61 +266,42 @@ func (charSearchResults *CharSearchResultsDto) LoadBaseCharSearchInputParameters
 	defer charSearchResults.lock.Unlock()
 
 	charSearchResults.TestStringLength =
-		inputParms.TestStringLength
+		testInputParms.TestStringLength
 
 	charSearchResults.TestStringStartingIndex =
-		inputParms.TestStringStartingIndex
+		testInputParms.TestStringStartingIndex
 
 	charSearchResults.TestStringDescription1 =
-		inputParms.TestStringDescription1
+		testInputParms.TestStringDescription1
 
 	charSearchResults.TestStringDescription2 =
-		inputParms.TestStringDescription2
-
-	charSearchResults.TargetStringLength =
-		inputParms.TargetSearchStringLength
-
-	charSearchResults.TargetStringSearchLength =
-		inputParms.TargetStringAdjustedSearchLength
-
-	charSearchResults.TargetStringStartingSearchIndex =
-		inputParms.TargetStringStartingSearchIndex
-
-	charSearchResults.TargetStringDescription1 =
-		inputParms.TargetStringDescription1
-
-	charSearchResults.TargetStringDescription2 =
-		inputParms.TargetStringDescription2
+		testInputParms.TestStringDescription2
 
 	charSearchResults.CollectionTestObjIndex =
-		inputParms.CollectionTestObjIndex
+		testInputParms.CollectionTestObjIndex
 
 	charSearchResults.NumValueType =
-		inputParms.NumValueType
+		testInputParms.NumValueType
 
 	charSearchResults.NumStrFormatType =
-		inputParms.NumStrFormatType
+		testInputParms.NumStrFormatType
 
 	charSearchResults.NumSymLocation =
-		inputParms.NumSymLocation
+		testInputParms.NumSymLocation
 
 	charSearchResults.NumSymbolClass =
-		inputParms.NumSymbolClass
+		testInputParms.NumSymbolClass
 
 	charSearchResults.NumSignValue =
-		inputParms.NumSignValue
+		testInputParms.NumSignValue
 
 	charSearchResults.PrimaryNumSignPosition =
-		inputParms.PrimaryNumSignPosition
+		testInputParms.PrimaryNumSignPosition
 
 	charSearchResults.SecondaryNumSignPosition =
-		inputParms.SecondaryNumSignPosition
+		testInputParms.SecondaryNumSignPosition
 
 	charSearchResults.CharSearchType =
-		inputParms.CharSearchType
+		testInputParms.CharSearchType
 
-	charSearchResults.FoundFirstNumericDigitInNumStr =
-		inputParms.FoundFirstNumericDigitInNumStr
-
-	return
 }

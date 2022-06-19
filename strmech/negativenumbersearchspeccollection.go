@@ -7,8 +7,16 @@ import (
 )
 
 type NegNumSearchSpecCollection struct {
-	negNumSearchSpecsCol []NegativeNumberSearchSpec
-	lock                 *sync.Mutex
+	negNumSearchSpecsCol []NegativeNumberSearchSpec // The Collection of negative number sign
+	//                                                 search specification objects.
+
+	foundNegNumSign bool // When set to 'true' this signals that the current search
+	//                      operation has located a valid negative number sign.
+
+	foundNegNumSignColIndex int // The Collection index at which a negative number sign
+	//                             symbol was found during the current search operation.
+
+	lock *sync.Mutex
 }
 
 // AddLeadingNegNumSearchRunes - Adds a Leading Negative Number search
@@ -1424,14 +1432,22 @@ func (negNumSignCol NegNumSearchSpecCollection) NewUS(
 	return newNegNumSearchCol, err
 }
 
+// SearchForNegNumSignSymbols - Performs a Negative Number Sign
+// Symbol search on a single index in a Target Search String.
+//
+// Before beginning a search operation, call method:
+// NegNumSearchSpecCollection.SetupForNegativeNumberSignSearch()
+//
+// This will prepare the current instance of
+// NegNumSearchSpecCollection to conduct a Negative Number Sign
+// Symbol search operation on an entire Target Search String.
+//
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
-	targetSearchString *RuneArrayDto,
 	foundFirstNumericDigitInNumStr bool,
-	startingSearchIndex int,
+	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
-	foundNegNumSignSymbols bool,
-	lastIndex int,
-	err error) {
+	CharSearchResultsDto,
+	error) {
 
 	if negNumSignCol.lock == nil {
 		negNumSignCol.lock = new(sync.Mutex)
@@ -1442,10 +1458,9 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	defer negNumSignCol.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	foundNegNumSignSymbols = false
-
-	lastIndex = startingSearchIndex
+	errorSearchResults := CharSearchResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1456,22 +1471,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 
 	if err != nil {
 
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
-	}
-
-	if len(targetSearchString.CharsArray) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'targetSearchString' is empty and invalid!\n"+
-			"'targetSearchString' has an array length of zero.\n",
-			ePrefix.String())
-
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
+		return errorSearchResults, err
 
 	}
 
@@ -1486,46 +1486,70 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 			"for Negative Number Sign symbols.\n",
 			ePrefix.String())
 
-		return foundNegNumSignSymbols,
-			lastIndex,
-			err
-
+		return errorSearchResults, err
 	}
 
 	var err2 error
 
+	var searchResults CharSearchResultsDto
+
 	for i := 0; i < lenNegNumSpecsCol; i++ {
 
-		foundNegNumSignSymbols,
-			lastIndex,
+		searchResults,
 			err2 = negNumSignCol.negNumSearchSpecsCol[i].
 			SearchForNegNumSignSymbols(
-				targetSearchString,
 				foundFirstNumericDigitInNumStr,
-				startingSearchIndex,
+				targetInputParms,
 				nil)
 
 		if err2 != nil {
 			err = fmt.Errorf("%v\n"+
-				"Error returned by negNumSearchSpecsCol[%v].\n"+
-				"SearchForNegNumSignSymbols(). Error text follows:\n"+
+				"Error returned by Negative Number Search Specifiation Collection\n"+
+				"negNumSearchSpecsCol[%v].SearchForNegNumSignSymbols().\n"+
+				" Error text follows:\n"+
 				"%v\n",
 				ePrefix,
 				i,
 				err2.Error())
 
-			return foundNegNumSignSymbols,
-				lastIndex,
-				err
-
+			return searchResults, err
 		}
 
-		if foundNegNumSignSymbols {
+		if searchResults.FoundSearchTarget {
+
+			negNumSignCol.foundNegNumSign = true
+
+			negNumSignCol.foundNegNumSignColIndex =
+				searchResults.CollectionTestObjIndex
+
 			break
 		}
 	}
 
-	return foundNegNumSignSymbols,
-		lastIndex,
-		err
+	return searchResults, err
+}
+
+// SetupForNegativeNumberSignSearch - Prepares the current instance
+// of NegNumSearchSpecCollection for a search operation.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// Call this method each time before calling:
+//   NegNumSearchSpecCollection.SearchForNegNumSignSymbols()
+//
+func (negNumSignCol *NegNumSearchSpecCollection) SetupForNegativeNumberSignSearch() {
+
+	if negNumSignCol.lock == nil {
+		negNumSignCol.lock = new(sync.Mutex)
+	}
+
+	negNumSignCol.lock.Lock()
+
+	defer negNumSignCol.lock.Unlock()
+
+	negNumSignCol.foundNegNumSign = false
+
+	negNumSignCol.foundNegNumSignColIndex = -1
 }
