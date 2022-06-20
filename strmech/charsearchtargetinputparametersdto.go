@@ -7,56 +7,78 @@ import (
 )
 
 type CharSearchTargetInputParametersDto struct {
-	TargetString *RuneArrayDto // A pointer to the RuneArrayDto containing
-	//                            the Target Search String text characters.
+	TargetString *RuneArrayDto
+	// A pointer to the RuneArrayDto containing the Target
+	// Search String text characters used in the search
+	// algorithm. Target Characters are compared against
+	// Test Characters to determine if a 'Match' condition
+	// exists.
 
-	TargetStringName string // The label or name of the TargetString
-	//                               parameter.
+	TargetStringName string
+	// The label or name of the 'TargetString' parameter.
+	// Used in error and informational messages.
 
-	TargetStringLength int // Actual Full Length of the Target Search
-	//                              String.
+	TargetStringLength int
+	// Actual number of text characters in the entire
+	// Target Search String ('TargetString').
 
-	TargetStringLengthName string // The label or name of the
-	//                                     TargetStringLength parameter.
+	TargetStringLengthName string
+	// The label or name of the 'TargetStringLength' parameter.
+	// Used in error and informational messages.
 
-	TargetStringStartingSearchIndex int // The index at which the search
-	//                               	   operation commenced.
+	TargetStringStartingSearchIndex int
+	// The index in 'TargetString' at which the search
+	// operation begins.
 
-	TargetStringStartingSearchIndexName string // The label or name of the
-	//                                            TargetStringStartingSearchIndex
-	//                                            parameter.
+	TargetStringStartingSearchIndexName string
+	// The label or name of the
+	// TargetStringStartingSearchIndex parameter.
+	// Used in error and informational messages.
 
-	TargetStringSearchLength int // The actual number of characters within
-	//                              Target Search String that are included
-	//                              in the search specification.
+	TargetStringSearchLength int
+	// The actual number of characters within the Target
+	// Search String that are included in the search
+	// operation. This value may be less than the actual
+	// length of the Target Search String.
 
-	TargetStringSearchLengthName string // The label or name of the
-	//                                     TargetStringSearchLength parameter.
+	TargetStringSearchLengthName string
+	// The label or name of the TargetStringSearchLength
+	// parameter. Used in error and informational
+	// messages.
 
-	TargetStringAdjustedSearchLength int // The adjusted Target String Search Length
-	//                                   guaranteed to be equal to or less than
-	//                                   the actual Target String Length.
+	TargetStringAdjustedSearchLength int
+	// The adjusted or corrected Target String Search
+	// Length. This value is guaranteed to be equal to or
+	// less than the actual Target String Length.
 
-	TargetStringDescription1 string // First optional description string
-	//                                  describing the Target Search String
-	//                                  used in this search
+	TargetStringDescription1 string
+	// First of two optional description strings
+	// describing the Target Search String in the context
+	// of the current search operation.
 
-	TargetStringDescription2 string // Second Optional description string
-	//                                  describing the Target Search String
-	//                                  used in this search
+	TargetStringDescription2 string
+	// Second of two optional description strings
+	// describing the Target Search String in the context
+	// of the current search operation.
 
-	FoundFirstNumericDigitInNumStr bool // When set to 'true' this signals
-	//                                     that the first numeric digit has
-	//                                     been identified in a string of text
-	//                                     characters.
+	FoundFirstNumericDigitInNumStr bool
+	// When set to 'true' this signals that the first
+	// numeric digit has been identified in the text
+	// characters specified by 'TargetString'
 
-	TextCharSearchType CharacterSearchType // An enumeration value signaling
-	//                                the type of search algorithm which
-	//                                was used to conduct this search.
-	//                                 TextCharSearchType.None()
-	//                                 TextCharSearchType.LinearTargetStartingIndex() - Default
-	//                                 TextCharSearchType.SingleTargetChar()
-	//                                 TextCharSearchType.LinearEndOfString()
+	TextCharSearchType CharacterSearchType
+	// Optional. An enumeration value signaling the type
+	// of text character search algorithm used to conduct
+	// this search operation. When set to a valid value,
+	// this specification will override the search
+	// specification contained in the Test Input
+	// Parameters Data Transfer Object.
+	//
+	// Valid CharSearch Type values are listed as follows:
+	//  TextCharSearchType.None() - Invalid Value
+	//  TextCharSearchType.LinearTargetStartingIndex() - Default
+	//  TextCharSearchType.SingleTargetChar()
+	//  TextCharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }
