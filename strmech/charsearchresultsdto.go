@@ -5,139 +5,190 @@ import (
 )
 
 type CharSearchResultsDto struct {
-	FoundSearchTarget bool // Signals a successful search
-	//                        outcome. If 'true' the Test
-	//                        String character or characters
-	//                        were found in the Target Search
-	//                        String.
+	FoundSearchTarget bool
+	// Signals a successful search outcome. If set to
+	// 'true' the Test String character or characters were
+	// found in the Target Search String.
 
-	FoundSearchTargetOnPreviousSearch bool // The Search Target was located
-	//                                        on a previous search operation.
+	FoundSearchTargetOnPreviousSearch bool
+	// Signals that the Search Target was located in a previous
+	// search operation.
 
-	TargetStringLength int // Actual Full Length of the Target Search
-	//                        String
+	FoundFirstNumericDigitInNumStr bool
+	//            - When set to 'true' this signals that the search
+	//              operation has already identified the first numeric
+	//              digit in a string of text characters.
 
-	TargetStringSearchLength int // The actual number of characters within
-	//                              Target Search String that are included
-	//                              in the search specification.
+	TargetStringLength int
+	// Actual number of text characters in the entire
+	// Target Search String ('TargetString').
 
-	TargetStringStartingSearchIndex int // The index at which the search
-	//                               	   operation commenced.
+	TargetStringSearchLength int
+	// The actual number of characters within the Target
+	// Search String that are included in the search
+	// operation. This value may be less than the actual
+	// length of the Target Search String.
 
-	TargetStringFirstFoundIndex int // The first character position in the
-	//                                 Target Search String occupied by the
-	//                                 first character in the Test String.
+	TargetStringStartingSearchIndex int
+	// The index in 'TargetString' at which the search
+	// operation begins.
 
-	TargetStringLastFoundIndex int // The last character position in
-	//                                the Target Search String occupied
-	//                                by the last character in the Test
-	//                                String.
+	TargetStringFirstFoundIndex int
+	// The index of the first character position in the
+	// Target Search String occupied by the first
+	// character in the Test String.
 
-	TargetStringLastSearchIndex int // The index in Target Search String
-	//                                 occupied by the last character searched.
-	//                                 If the Search Target was found this
-	//                                 value is equal to the 'TargetStringLastFoundIndex'.
-	//                                 If the Search Target was NOT found this
-	//                                 value is equal to the 'TargetStringStartingSearchIndex'
+	TargetStringLastFoundIndex int
+	// The last character position in the Target Search
+	// String occupied by the last character in the Test
+	// String.
 
-	TargetStringDescription1 string // First optional description string
-	//                                  describing the Target Search String
-	//                                  used in this search
+	TargetStringLastSearchIndex int
+	// The index in Target Search String occupied by the
+	// last Target character searched. If the Search
+	// Target was found, this value is equal to the
+	// 'TargetStringLastFoundIndex'. If the Search Target
+	// was NOT found this value is equal to the
+	// 'TargetStringStartingSearchIndex'. This value is
+	// useful in computing the next index to be searched
+	// in the Target String.
 
-	TargetStringDescription2 string // Second Optional description string
-	//                                  describing the Target Search String
-	//                                  used in this search
+	TargetStringDescription1 string
+	// First of two optional description strings
+	// describing the Target Search String in the context
+	// of the current search operation.
 
-	TestStringLength int // The Length of the Test String used in
-	//                      this search operation.
+	TargetStringDescription2 string
+	// Second of two optional description strings
+	// describing the Target Search String in the context
+	// of the current search operation.
 
-	TestStringStartingIndex int // The Test String beginning index used in the
-	//                             search operation. Usually zero.
+	TestStringLength int
+	// Actual number of text characters in the entire Test
+	// String ('TestString').
 
-	TestStringFirstFoundIndex int // The index number in Test String of the first
-	//                               test character to be located in the Target
-	//                               Search String.
+	TestStringStartingIndex int
+	// The starting index in the Test String where the
+	// search operation will begin.
 
-	TestStringLastFoundIndex int // The index number in the Test String occupied
-	//                              by the last Test Character to be located in the
-	//                              Target Search String.
+	TestStringFirstFoundIndex int
+	// The index number in Test String of the first test
+	// character to be located in the Target Search String.
 
-	TestStringDescription1 string // Optional description string describing
-	//                               Test Characters used in this search
+	TestStringLastFoundIndex int
+	// The index number in the Test String occupied by the
+	// last Test Character to be located in the Target
+	// String.
 
-	TestStringDescription2 string // Optional description string describing
-	//                               Test Characters used in the search
+	TestStringDescription1 string
+	// First of two optional description strings
+	// describing the Test String in the context of the
+	// current search operation.
 
-	CollectionTestObjIndex int // The collection index of the object
-	//                            containing the Test String which was
-	//                            found in Target Search String
+	TestStringDescription2 string
+	// Second of two optional description strings
+	// describing the Test String in the context of the
+	// current search operation.
 
-	NumValueType NumericValueType // Specifies the numeric value
-	//                               as an integer or floating point value.
-	//                                 NumValType.None(),
-	//                                 NumValType.FloatingPoint(),
-	//                                 NumValType.Integer(),
+	CollectionTestObjIndex int
+	// If the Test String object resides in a collection
+	// of Test String objects, this parameter will record
+	// the array index of the current Test String object
+	// in the collection.
 
-	NumStrFormatType NumStrFormatTypeCode // Specifies Output Format Type for
-	//                                       a numeric value.
-	//                                         NumStrFmtType.None()
-	//                                         NumStrFmtType.AbsoluteValue()
-	//                                         NumStrFmtType.Binary()
-	//                                         NumStrFmtType.CountryCulture()
-	//                                         NumStrFmtType.Currency()
-	//                                         NumStrFmtType.Binary()
-	//                                         NumStrFmtType.Hexadecimal()
-	//                                         NumStrFmtType.Octal()
-	//                                         NumStrFmtType.ScientificNotation()
+	NumValueType NumericValueType
+	// Optional. This enumeration value specifies the type
+	// of numeric value for this Test Parameter as either
+	// an integer or floating point value.
+	//
+	// Possible values are listed as follows:
+	//  NumValType.None()
+	//  NumValType.FloatingPoint()
+	//  NumValType.Integer()
 
-	NumSymLocation NumericSymbolLocation // Specifies the relative location of a
-	//                                        numeric symbol.
-	//                                          NumSymLocation.None(),
-	//                                          NumSymLocation.Before(),
-	//                                          NumSymLocation.Interior(),
-	//                                          NumSymLocation.After(),
+	NumStrFormatType NumStrFormatTypeCode
+	// Optional. This enumeration value specifies the
+	// Output Format Type for a number.
+	//
+	// Possible values are listed as follows:
+	//  NumStrFmtType.None()
+	//  NumStrFmtType.AbsoluteValue()
+	//  NumStrFmtType.Binary()
+	//  NumStrFmtType.CountryCulture()
+	//  NumStrFmtType.Currency()
+	//  NumStrFmtType.Binary()
+	//  NumStrFmtType.Hexadecimal()
+	//  NumStrFmtType.Octal()
+	//  NumStrFmtType.ScientificNotation()
 
-	NumSymbolClass NumericSymbolClass // Number Symbol Classification
-	//                                      NumSymClass.None(),
-	//                                      NumSymClass.NumberSign(),
-	//                                      NumSymClass.CurrencySign(),
-	//                                      NumSymClass.IntegerSeparator(),
-	//                                      NumSymClass.DecimalSeparator(),
+	NumSymLocation NumericSymbolLocation
+	// Optional. This enumeration value specifies the
+	// relative location of a numeric symbol.
+	//
+	// Possible values are listed as follows:
+	//  NumSymLocation.None()
+	//  NumSymLocation.Before()
+	//  NumSymLocation.Interior()
+	//  NumSymLocation.After()
 
-	NumSignValue NumericSignValueType // An enumeration value classifying the
-	//                                   number sign.
-	//                                     NumSignVal.None()
-	//                                     NumSignVal.Negative()
-	//                                     NumSignVal.Zero()
-	//                                     NumSignVal.Positive()
+	NumSymbolClass NumericSymbolClass
+	// Optional. This enumeration value specifies the
+	// Number Symbol Classification for a text character.
+	//
+	// Possible values are listed as follows:
+	//  NumSymClass.None()
+	//  NumSymClass.NumberSign()
+	//  NumSymClass.CurrencySign()
+	//  NumSymClass.IntegerSeparator()
+	//  NumSymClass.DecimalSeparator()
 
-	PrimaryNumSignPosition NumSignSymbolPosition // Used in searches involving
-	//                                       positive and negative number
-	//                                       signs.
-	//                                        NumSignSymPos.None()
-	//                                        NumSignSymPos.Before()
-	//                                        NumSignSymPos.After()
-	//                                        NumSignSymPos.BeforeAndAfter()
+	NumSignValue NumericSignValueType
+	// Optional. This enumeration value specifies the
+	// number sign value.
+	//
+	// Possible values are listed as follows:
+	//  NumSignVal.None()
+	//  NumSignVal.Negative()
+	//  NumSignVal.Zero()
+	//  NumSignVal.Positive()
 
-	SecondaryNumSignPosition NumSignSymbolPosition // Used in searches involving
-	//                                                signs which occur both before
-	//                                                and after the numeric value.
-	//                                                 NumSignSymPos.None()
-	//                                                 NumSignSymPos.Before()
-	//                                                 NumSignSymPos.After()
+	PrimaryNumSignPosition NumSignSymbolPosition
+	// Optional This enumeration value specifies the
+	// relative position of positive and negative number
+	// sign symbols in a number string. This is the
+	// Primary Type Code for Number Signs. Cases involving
+	// both 'Leading' and 'Trailing' symbols also make use
+	// of the 'SecondaryNumSignPosition'.
+	//
+	// Possible values are listed as follows:
+	//  NumSignSymPos.None()
+	//  NumSignSymPos.Before()
+	//  NumSignSymPos.After()
+	//  NumSignSymPos.BeforeAndAfter()
 
-	TextCharSearchType CharacterSearchType // An enumeration value signaling
-	//                                the type of search algorithm which
-	//                                was used to conduct this search.
-	//                                 TextCharSearchType.None()
-	//                                 TextCharSearchType.LinearTargetStartingIndex() - Default
-	//                                 TextCharSearchType.SingleTargetChar()
-	//                                 TextCharSearchType.LinearEndOfString()
+	SecondaryNumSignPosition NumSignSymbolPosition
+	// Optional. This enumeration value specifies the
+	// relative position of positive and negative number
+	// sign symbols in a number string. This value is used
+	// in searches involving number signs which occur both
+	// before and after the numeric value.
+	//
+	// Possible values are listed as follows:
+	//  NumSignSymPos.None()
+	//  NumSignSymPos.Before()
+	//  NumSignSymPos.After()
+	//  NumSignSymPos.BeforeAndAfter()
 
-	FoundFirstNumericDigitInNumStr bool // When set to 'true' this signals
-	//                                     that the first numeric digit has
-	//                                     been identified in a string of text
-	//                                     characters.
+	TextCharSearchType CharacterSearchType
+	// Required. An enumeration value signaling the type
+	// of text character search algorithm used to conduct
+	// this search operation.
+	//
+	// Possible values are listed as follows:
+	//  TextCharSearchType.None() - Invalid value
+	//  TextCharSearchType.LinearTargetStartingIndex() - Default
+	//  TextCharSearchType.SingleTargetChar()
+	//  TextCharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }
@@ -236,6 +287,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 	charSearchResults.lock.Lock()
 
 	defer charSearchResults.lock.Unlock()
+
+	charSearchResults.FoundFirstNumericDigitInNumStr =
+		targetInputParms.FoundFirstNumericDigitInNumStr
 
 	charSearchResults.TargetStringLength =
 		targetInputParms.TargetStringLength

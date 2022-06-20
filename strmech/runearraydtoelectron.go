@@ -630,7 +630,7 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //     	        was NOT found this value is equal to the
 //    	        'TargetStringStartingSearchIndex'. This value is
 //   	        useful in computing the next index to be searched
-//  	        in the Target String/
+//  	        in the Target String.
 //
 //       	TargetStringDescription1            string
 //            - First of two optional description strings
@@ -768,6 +768,12 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //       	     TextCharSearchType.LinearTargetStartingIndex() - Default
 //       	     TextCharSearchType.SingleTargetChar()
 //       	     TextCharSearchType.LinearEndOfString()
+//
+//          FoundFirstNumericDigitInNumStr bool
+//            - When set to 'true' this signals that the search
+//              operation has already identified the first numeric
+//              digit in a string of text characters.
+//
 //       }
 //
 //

@@ -403,7 +403,7 @@ func (numStrKernel *NumberStrKernel) Empty() {
 //
 // Return Values
 //
-// 	copyOfIntegerDigits     RuneArrayDto
+// 	copyOfIntegerDigits        RuneArrayDto
 //     - If this method completes successfully, this parameter will
 //       return an instance of RuneArrayDto populated with a deep
 //       copy of the integer numeric digits contained in the
