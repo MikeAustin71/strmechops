@@ -63,7 +63,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 
 	runeDtoElectron := runeArrayDtoElectron{}
 
-	if searchResults.CharSearchType == CharSearchType.LinearEndOfString() {
+	if searchResults.TextCharSearchType == CharSearchType.LinearEndOfString() {
 
 		return runeDtoElectron.linearEndOfStringSearch(
 			targetInputParms,
@@ -72,7 +72,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 
 	}
 
-	if searchResults.CharSearchType == CharSearchType.LinearTargetStartingIndex() {
+	if searchResults.TextCharSearchType == CharSearchType.LinearTargetStartingIndex() {
 
 		return runeDtoElectron.linearTargetStartingIndexSearch(
 			targetInputParms,
@@ -80,9 +80,13 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 			ePrefix)
 	}
 
-	if searchResults.CharSearchType == CharSearchType.SingleTargetChar() {
+	if searchResults.TextCharSearchType == CharSearchType.SingleTargetChar() {
 
-		return searchResults, err
+		return runeDtoElectron.singleCharacterSearch(
+			targetInputParms,
+			testInputParms,
+			ePrefix)
+
 	}
 
 	return searchResults, err

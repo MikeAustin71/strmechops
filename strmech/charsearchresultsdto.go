@@ -126,13 +126,13 @@ type CharSearchResultsDto struct {
 	//                                                 NumSignSymPos.Before()
 	//                                                 NumSignSymPos.After()
 
-	CharSearchType CharacterSearchType // An enumeration value signaling
+	TextCharSearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
 	//                                was used to conduct this search.
-	//                                 CharSearchType.None()
-	//                                 CharSearchType.LinearTargetStartingIndex() - Default
-	//                                 CharSearchType.SingleTargetChar()
-	//                                 CharSearchType.LinearEndOfString()
+	//                                 TextCharSearchType.None()
+	//                                 TextCharSearchType.LinearTargetStartingIndex() - Default
+	//                                 TextCharSearchType.SingleTargetChar()
+	//                                 TextCharSearchType.LinearEndOfString()
 
 	FoundFirstNumericDigitInNumStr bool // When set to 'true' this signals
 	//                                     that the first numeric digit has
@@ -196,7 +196,7 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 
 	charSearchResults.SecondaryNumSignPosition = NumSignSymPos.None()
 
-	charSearchResults.CharSearchType =
+	charSearchResults.TextCharSearchType =
 		CharSearchType.None()
 
 	charSearchResults.FoundFirstNumericDigitInNumStr = false
@@ -301,7 +301,7 @@ func (charSearchResults *CharSearchResultsDto) LoadTestBaseInputParameters(
 	charSearchResults.SecondaryNumSignPosition =
 		testInputParms.SecondaryNumSignPosition
 
-	charSearchResults.CharSearchType =
-		testInputParms.CharSearchType
+	charSearchResults.TextCharSearchType =
+		testInputParms.TextCharSearchType
 
 }

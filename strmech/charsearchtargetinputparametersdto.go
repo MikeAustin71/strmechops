@@ -7,7 +7,8 @@ import (
 )
 
 type CharSearchTargetInputParametersDto struct {
-	TargetString *RuneArrayDto
+	TargetString *RuneArrayDto // A pointer to the RuneArrayDto containing
+	//                            the Target Search String text characters.
 
 	TargetStringName string // The label or name of the TargetString
 	//                               parameter.
@@ -49,13 +50,13 @@ type CharSearchTargetInputParametersDto struct {
 	//                                     been identified in a string of text
 	//                                     characters.
 
-	CharSearchType CharacterSearchType // An enumeration value signaling
+	TextCharSearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
 	//                                was used to conduct this search.
-	//                                 CharSearchType.None()
-	//                                 CharSearchType.LinearTargetStartingIndex() - Default
-	//                                 CharSearchType.SingleTargetChar()
-	//                                 CharSearchType.LinearEndOfString()
+	//                                 TextCharSearchType.None()
+	//                                 TextCharSearchType.LinearTargetStartingIndex() - Default
+	//                                 TextCharSearchType.SingleTargetChar()
+	//                                 TextCharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }
@@ -92,7 +93,7 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) Empty() {
 
 	targetSearchParms.FoundFirstNumericDigitInNumStr = false
 
-	targetSearchParms.CharSearchType = CharSearchType.None()
+	targetSearchParms.TextCharSearchType = CharSearchType.None()
 
 	targetSearchParms.lock.Unlock()
 
@@ -140,7 +141,7 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateTargetParam
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"CharSearchInputParametersDto."+
+		"CharSearchTargetInputParametersDto."+
 			"ValidateTargetSearchString()",
 		"")
 
@@ -280,6 +281,54 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateTargetParam
 
 		targetSearchParms.TargetStringAdjustedSearchLength =
 			targetSearchParms.TargetStringLength
+
+	}
+
+	return err
+}
+func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateCharSearchType(
+	errorPrefix interface{}) error {
+
+	if targetSearchParms.lock == nil {
+		targetSearchParms.lock = new(sync.Mutex)
+	}
+
+	targetSearchParms.lock.Lock()
+
+	defer targetSearchParms.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchTargetInputParametersDto."+
+			"ValidateCharSearchType()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if !targetSearchParms.TextCharSearchType.XIsValid() {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The Character Search Type is invalid!\n"+
+			"Character Search Type must be set to one of these\n"+
+			"enumeration values:\n"+
+			"  CharacterSearchType(0).LinearTargetStartingIndex()\n"+
+			"  CharacterSearchType(0).SingleTargetChar()\n"+
+			"  CharacterSearchType(0).LinearEndOfString()\n"+
+			"The invalid Input Character Search Type is currently\n"+
+			"configured as:\n"+
+			" Character Search Type   String Name: %v\n"+
+			" Character Search Type Integer Value: %v\n",
+			ePrefix.String(),
+			targetSearchParms.TextCharSearchType.String(),
+			targetSearchParms.TextCharSearchType.XValueInt())
 
 	}
 

@@ -7,9 +7,9 @@ import (
 )
 
 type CharSearchTestInputParametersDto struct {
-	TestString *RuneArrayDto // The Rune Array containing the Test
-	//                          Characters to be used in a search
-	//                          algorithm.
+	TestString *RuneArrayDto // A pointer to the Rune Array containing
+	//                          the Test Characters to be used in a text
+	//                          character search algorithm.
 
 	TestStringName string // The label or name of the TestString.
 
@@ -53,17 +53,17 @@ type CharSearchTestInputParametersDto struct {
 
 	NumSymLocation NumericSymbolLocation // Specifies the relative location of a
 	//                                        numeric symbol.
-	//                                          NumSymLocation.None(),
-	//                                          NumSymLocation.Before(),
-	//                                          NumSymLocation.Interior(),
-	//                                          NumSymLocation.After(),
+	//                                          NumSymLocation.None()
+	//                                          NumSymLocation.Before()
+	//                                          NumSymLocation.Interior()
+	//                                          NumSymLocation.After()
 
 	NumSymbolClass NumericSymbolClass // Number Symbol Classification
-	//                                      NumSymClass.None(),
-	//                                      NumSymClass.NumberSign(),
-	//                                      NumSymClass.CurrencySign(),
-	//                                      NumSymClass.IntegerSeparator(),
-	//                                      NumSymClass.DecimalSeparator(),
+	//                                      NumSymClass.None()
+	//                                      NumSymClass.NumberSign()
+	//                                      NumSymClass.CurrencySign()
+	//                                      NumSymClass.IntegerSeparator()
+	//                                      NumSymClass.DecimalSeparator()
 
 	NumSignValue NumericSignValueType // An enumeration value classifying the
 	//                                   number sign.
@@ -78,7 +78,7 @@ type CharSearchTestInputParametersDto struct {
 	//                                       Type Code for Number Signs.
 	//                                       Cases involving 'Leading' and
 	//                                       'Trailing' symbols also make
-	//                                       use of the 'NumSignSubPosition'.
+	//                                       use of the 'SecondaryNumSignPosition'.
 	//                                        NumSignSymPos.None()
 	//                                        NumSignSymPos.Before()
 	//                                        NumSignSymPos.After()
@@ -91,13 +91,13 @@ type CharSearchTestInputParametersDto struct {
 	//                                                 NumSignSymPos.Before()
 	//                                                 NumSignSymPos.After()
 
-	CharSearchType CharacterSearchType // An enumeration value signaling
+	TextCharSearchType CharacterSearchType // An enumeration value signaling
 	//                                the type of search algorithm which
 	//                                was used to conduct this search.
-	//                                 CharSearchType.None()
-	//                                 CharSearchType.LinearTargetStartingIndex() - Default
-	//                                 CharSearchType.SingleTargetChar()
-	//                                 CharSearchType.LinearEndOfString()
+	//                                 TextCharSearchType.None()
+	//                                 TextCharSearchType.LinearTargetStartingIndex() - Default
+	//                                 TextCharSearchType.SingleTargetChar()
+	//                                 TextCharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }
@@ -252,7 +252,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateCharSearch
 
 	}
 
-	if !testSearchInputParms.CharSearchType.XIsValid() {
+	if !testSearchInputParms.TextCharSearchType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: The Character Search Type is invalid!\n"+
@@ -266,8 +266,8 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateCharSearch
 			" Character Search Type   String Name: %v\n"+
 			" Character Search Type Integer Value: %v\n",
 			ePrefix.String(),
-			testSearchInputParms.CharSearchType.String(),
-			testSearchInputParms.CharSearchType.XValueInt())
+			testSearchInputParms.TextCharSearchType.String(),
+			testSearchInputParms.TextCharSearchType.XValueInt())
 
 	}
 

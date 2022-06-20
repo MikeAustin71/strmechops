@@ -222,8 +222,8 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 // ----------------------------------------------------------------
 //
 // For easy access to these enumeration values, use the global
-// constant 'CharSearchType'.
-//     Example: CharSearchType.Integer()
+// constant 'TextCharSearchType'.
+//     Example: TextCharSearchType.Integer()
 //
 // Otherwise you will need to use the formal syntax.
 //     Example: CharacterSearchType(0).Integer()
@@ -645,15 +645,15 @@ func (charSearchType CharacterSearchType) XValueInt() int {
 //
 // For easy access to these enumeration values, use the global
 // variable CharSearchType.
-//  Example: CharSearchType.LinearEndOfString()
+//  Example: TextCharSearchType.LinearEndOfString()
 //
 // Otherwise you will need to use the formal syntax.
 //  Example: CharacterSearchType(0).LinearEndOfString()
 //
 // Usage:
-//  CharSearchType.None(),
-//  CharSearchType.LinearTargetStartingIndex(),
-//  CharSearchType.SingleTargetChar(),
-//  CharSearchType.LinearEndOfString(),
+//  TextCharSearchType.None(),
+//  TextCharSearchType.LinearTargetStartingIndex(),
+//  TextCharSearchType.SingleTargetChar(),
+//  TextCharSearchType.LinearEndOfString(),
 //
 const CharSearchType = CharacterSearchType(-1)

@@ -1073,7 +1073,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	testInputParms.TestStringDescription1 = "Decimal Separator"
 	testInputParms.CollectionTestObjIndex = -1
 	testInputParms.NumSymbolClass = NumSymClass.DecimalSeparator()
-	testInputParms.CharSearchType = CharSearchType.LinearTargetStartingIndex()
+	testInputParms.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	err = testInputParms.ValidateTestParameters(
 		ePrefix.XCpy("testInputParms"))

@@ -670,7 +670,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 		CharSearchType.LinearTargetStartingIndex(),
 		ePrefix.XCpy(
 			"negNumSearchSpec.leadingNegNumSignSymbols"+
-				"<-CharSearchType.LinearTargetStartingIndex()"))
+				"<-TextCharSearchType.LinearTargetStartingIndex()"))
 
 	negNumSearchSpec.negNumSignPosition = NumSignSymPos.Before()
 
@@ -881,7 +881,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy(
 				"negNumSearchSpec.leadingNegNumSignSymbols"+
-					"<-CharSearchType.LinearTargetStartingIndex()"))
+					"<-TextCharSearchType.LinearTargetStartingIndex()"))
 
 	if err != nil {
 		return err
@@ -892,7 +892,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy(
 				"negNumSearchSpec.trailingNegNumSignSymbols"+
-					"<-CharSearchType.LinearTargetStartingIndex()"))
+					"<-TextCharSearchType.LinearTargetStartingIndex()"))
 
 	return err
 }
@@ -1046,7 +1046,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 			CharSearchType.LinearTargetStartingIndex(),
 			ePrefix.XCpy(
 				"negNumSearchSpec.trailingNegNumSignSymbols"+
-					"<-CharSearchType.LinearTargetStartingIndex()"))
+					"<-TextCharSearchType.LinearTargetStartingIndex()"))
 
 	return err
 }

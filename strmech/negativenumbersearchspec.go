@@ -2014,7 +2014,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		// NumSignSymPos.Before()
 		testInputParms.PrimaryNumSignPosition = NumSignSymPos.Before()
 		testInputParms.SecondaryNumSignPosition = NumSignSymPos.None()
-		testInputParms.CharSearchType = CharSearchType.LinearTargetStartingIndex()
+		testInputParms.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 		testInputParms.TestStringName = "LeadingNegNumSign"
 		testInputParms.TestStringLengthName = "LeadingNegNumSignLength"
 		testInputParms.TestStringStartingIndex = 0
@@ -2078,7 +2078,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		// NumSignSymPos.After()
 		testInputParms.PrimaryNumSignPosition = NumSignSymPos.After()
 		testInputParms.PrimaryNumSignPosition = NumSignSymPos.None()
-		testInputParms.CharSearchType = CharSearchType.LinearTargetStartingIndex()
+		testInputParms.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 		testInputParms.TestStringName = "TrailingNegNumSign"
 		testInputParms.TestStringLengthName = "TrailingNegNumSignLength"
 		testInputParms.TestStringStartingIndex = 0
@@ -2139,7 +2139,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 	// Must be: NumSignSymPos.BeforeAndAfter()
 	testInputParms.PrimaryNumSignPosition = NumSignSymPos.BeforeAndAfter()
-	testInputParms.CharSearchType = CharSearchType.LinearTargetStartingIndex()
+	testInputParms.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	if !foundFirstNumericDigitInNumStr {
 		// Must be 'BEFORE' NumStr
