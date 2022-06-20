@@ -10,24 +10,24 @@ import (
 // 'maps'.
 
 var mapNumSignValueTypeCodeToString = map[NumericSignValueType]string{
-	NumericSignValueType(0): "None",
-	NumericSignValueType(1): "Negative",
-	NumericSignValueType(2): "Zero",
-	NumericSignValueType(3): "Positive",
+	NumericSignValueType(-2): "None",
+	NumericSignValueType(-1): "Negative",
+	NumericSignValueType(0):  "Zero",
+	NumericSignValueType(1):  "Positive",
 }
 
 var mapNumSignValueTypeStringToCode = map[string]NumericSignValueType{
-	"None":     NumericSignValueType(0),
-	"Negative": NumericSignValueType(1),
-	"Zero":     NumericSignValueType(2),
-	"Positive": NumericSignValueType(3),
+	"None":     NumericSignValueType(-2),
+	"Negative": NumericSignValueType(-1),
+	"Zero":     NumericSignValueType(0),
+	"Positive": NumericSignValueType(1),
 }
 
 var mapNumSignValueTypeLwrCaseStringToCode = map[string]NumericSignValueType{
-	"none":     NumericSignValueType(0),
-	"negative": NumericSignValueType(1),
-	"zero":     NumericSignValueType(2),
-	"positive": NumericSignValueType(3),
+	"none":     NumericSignValueType(-2),
+	"negative": NumericSignValueType(-1),
+	"zero":     NumericSignValueType(0),
+	"positive": NumericSignValueType(1),
 }
 
 // NumericSignValueType - An enumeration of numeric sign values.
@@ -45,26 +45,28 @@ var mapNumSignValueTypeLwrCaseStringToCode = map[string]NumericSignValueType{
 // names effectively represent an enumeration of numeric sign
 // value types. These methods are listed as follows:
 //
-//  None            (0) - Signals that 'NumericSignValueType' has
+//
+// ----------------------------------------------------------------
+//
+// Method        Integer
+//  Name          Value
+// ------        -------
+//
+//  None           (-2) - Signals that 'NumericSignValueType' has
 //                        not been initialized and therefore has
 //                        no value. This is an error condition.
 //
-//  Negative        (1) - Signals that the numeric value is
+//  Negative       (-1) - Signals that the numeric value is
 //                        negative meaning that it has a value
 //                        less than zero.
 //
-//  Zero            (2) - Signals that the numeric value is zero.
+//  Zero            (0) - Signals that the numeric value is zero.
 //
-//  Positive        (3) - Signals that the numeric value is
+//  Positive        (1) - Signals that the numeric value is
 //                        greater than zero.
 //
-// Note that these numeric equivalent values (0 - 3) are styled for
-// data management purposes. In arithmetic calculations, numeric
-// sign values are typically represented as integer values:
-//         Negative= -1, Zero= 0 and/ Positive= 1.
-//
 // To convert enumeration values for use in numeric computations,
-// call the utility method, XArithmeticValue().
+// call the utility method, XArithmeticValue() or XValueInt.
 //
 // For easy access to these enumeration values, use the global
 // constant NumSignVal. Example: NumSignVal.Positive()
@@ -92,7 +94,7 @@ func (nSignValue NumericSignValueType) None() NumericSignValueType {
 
 	defer lockNumericSignValueType.Unlock()
 
-	return NumericSignValueType(0)
+	return NumericSignValueType(-2)
 }
 
 // Negative - Signals that the numeric value is negative meaning
@@ -104,7 +106,7 @@ func (nSignValue NumericSignValueType) Negative() NumericSignValueType {
 
 	defer lockNumericSignValueType.Unlock()
 
-	return NumericSignValueType(1)
+	return NumericSignValueType(-1)
 }
 
 // Zero - Signals that the numeric value is zero.
@@ -115,7 +117,7 @@ func (nSignValue NumericSignValueType) Zero() NumericSignValueType {
 
 	defer lockNumericSignValueType.Unlock()
 
-	return NumericSignValueType(2)
+	return NumericSignValueType(0)
 }
 
 // Positive - Signals that the numeric value is greater than zero.
@@ -126,7 +128,7 @@ func (nSignValue NumericSignValueType) Positive() NumericSignValueType {
 
 	defer lockNumericSignValueType.Unlock()
 
-	return NumericSignValueType(3)
+	return NumericSignValueType(1)
 }
 
 // String - Returns a string with the name of the enumeration associated
@@ -205,12 +207,7 @@ func (nSignValue NumericSignValueType) XArithmeticValue() int {
 
 	defer lockNumericSignValueType.Unlock()
 
-	if nSignValue > 3 ||
-		nSignValue < 1 {
-		return -99
-	}
-
-	return int(nSignValue) - 2
+	return int(nSignValue)
 }
 
 // XIsPositiveOrNegative - There are cases where it is valuable to
@@ -235,8 +232,35 @@ func (nSignValue NumericSignValueType) XIsPositiveOrNegative() bool {
 
 	defer lockNumericSignValueType.Unlock()
 
-	if nSignValue == 1 ||
-		nSignValue == 3 {
+	if nSignValue == -1 ||
+		nSignValue == 1 {
+		return true
+	}
+
+	return false
+}
+
+// XIsZero - There are cases where it is valuable to know whether
+// the numeric sign value is zero or not.
+//
+// This method answers that question by returning a boolean value.
+// If the returned value is 'true' it signals that the current
+// NumericSignValueType type is equal to zero:
+//
+//           NumericSignValueType(0).Zero()
+//
+// If the NumericSignValueType is equal to any value other than the
+// zero, a value of 'false' is returned.
+//
+// Specifically, this means that if the NumericSignValueType value is
+// is non-zero a boolean value of 'false' is returned.
+//
+func (nSignValue NumericSignValueType) XIsZero() bool {
+	lockNumericSignValueType.Lock()
+
+	defer lockNumericSignValueType.Unlock()
+
+	if nSignValue == 0 {
 		return true
 	}
 

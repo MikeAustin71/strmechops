@@ -254,7 +254,7 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //
 // TERMINOLOGY
 //
-//  Character Search algorithims using the Character Search Type
+//  Character Search algorithms using the Character Search Type
 //  ('CharacterSearchType') rely on a framework consisting of a
 //  'Target Search String' and a 'Test String'.
 //
@@ -272,7 +272,7 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //  A comparison of text characters contained in the Target Search
 //  String and the Test String serves as the basis for determining
 //  a 'Match' condition or successful outcome from a text character
-//  serach algorithm. The specific criterion for determining a
+//  search algorithm. The specific criterion for determining a
 //  'Match' condition vary between the different Character Search
 //  Types.
 //
