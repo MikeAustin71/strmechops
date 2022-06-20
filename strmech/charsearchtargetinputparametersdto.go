@@ -8,7 +8,7 @@ import (
 
 // CharSearchTargetInputParametersDto - Target Input Parameters are
 // more easily understood in the context of text character search
-// operation.
+// operations.
 //
 // ----------------------------------------------------------------
 //
@@ -16,11 +16,11 @@ import (
 //
 // Text Character Search algorithms typically perform comparisons
 // between two strings or groups of text characters to determine
-// the search outcome. A successful search outcome usualy involves
-// finding one or more text characters from one string inside of a
-// second string. A successful search outcome if often referred to
+// the search outcome. A successful search outcome usually involves
+// finding one or more text characters from one string inside a
+// second string. A successful search outcome is often referred to
 // as a 'Match' condition because characters in one string were
-// compared and matched with characters in a another string.
+// compared and matched with characters in another string.
 //
 // Character Search algorithms using the Character Search Type
 // ('CharacterSearchType') rely on a framework consisting of a

@@ -6,6 +6,51 @@ import (
 	"sync"
 )
 
+// CharSearchTestInputParametersDto - Test Input Parameters are
+// more easily understood in the context of text character search
+// operations.
+//
+// ----------------------------------------------------------------
+//
+// TERMINOLOGY
+//
+// Text Character Search algorithms typically perform comparisons
+// between two strings or groups of text characters to determine
+// the search outcome. A successful search outcome usually involves
+// finding one or more text characters from one string inside a
+// second string. A successful search outcome is often referred to
+// as a 'Match' condition because characters in one string were
+// compared and matched with characters in another string.
+//
+// Character Search algorithms using the Character Search Type
+// ('CharacterSearchType') rely on a framework consisting of a
+// 'Target Search String' and a 'Test String'.
+//
+//    Target String        - A string character or characters which
+//                           will be searched for the occurrence of
+//                           another predefined character or
+//                           characters referred to as a Test
+//                           String.
+//
+//
+//    Test String          - A string character or characters which
+//                           will be used to search for matching
+//                           characters in a Target Search String.
+//
+// A comparison of text characters contained in the Target Search
+// String and the Test String serves as the basis for determining
+// a 'Match' condition or successful outcome from a text character
+// search algorithm. The specific criterion for determining a
+// 'Match' condition vary between the different Character Search
+// Types.
+//
+// ----------------------------------------------------------------
+//
+// The Character Search Test Input Parameters Data Transfer
+// Object type (CharSearchTestInputParametersDto) is used to
+// transmit Test String input parameters to methods performing
+// search operations.
+//
 type CharSearchTestInputParametersDto struct {
 	TestString *RuneArrayDto
 	// A pointer to the Rune Array Data Transfer

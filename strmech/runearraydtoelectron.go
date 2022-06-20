@@ -254,17 +254,17 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //
 // TERMINOLOGY
 //
-//  Text Character Search algorithms typically perform comparisons
-//  between two strings or groups of text characters to determine
-// the search outcome. A successful search outcome usualy involves
+// Text Character Search algorithms typically perform comparisons
+// between two strings or groups of text characters to determine
+// the search outcome. A successful search outcome usual involves
 // finding one or more text characters from one string inside of a
-// second string. A successful search outcome if often referred to
+// second string. A successful search outcome is often referred to
 // as a 'Match' condition because characters in one string were
 // compared and matched with characters in a another string.
 //
-//  Character Search algorithms using the Character Search Type
-//  ('CharacterSearchType') rely on a framework consisting of a
-//  'Target Search String' and a 'Test String'.
+// Character Search algorithms using the Character Search Type
+// ('CharacterSearchType') rely on a framework consisting of a
+// 'Target Search String' and a 'Test String'.
 //
 //    Target String        - A string character or characters which
 //                           will be searched for the occurrence of
@@ -277,12 +277,12 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //                           will be used to search for matching
 //                           characters in a Target Search String.
 //
-//  A comparison of text characters contained in the Target Search
-//  String and the Test String serves as the basis for determining
-//  a 'Match' condition or successful outcome from a text character
-//  search algorithm. The specific criterion for determining a
-//  'Match' condition vary between the different Character Search
-//  Types.
+// A comparison of text characters contained in the Target Search
+// String and the Test String serves as the basis for determining
+// a 'Match' condition or successful outcome from a text character
+// search algorithm. The specific criterion for determining a
+// 'Match' condition vary between the different Character Search
+// Types.
 //
 // ----------------------------------------------------------------
 //
