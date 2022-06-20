@@ -7,97 +7,140 @@ import (
 )
 
 type CharSearchTestInputParametersDto struct {
-	TestString *RuneArrayDto // A pointer to the Rune Array containing
-	//                          the Test Characters to be used in a text
-	//                          character search algorithm.
+	TestString *RuneArrayDto
+	// A pointer to the Rune Array Data Transfer
+	// Object containing the Test Characters to be
+	// used in a text character search algorithm.
+	// Target Characters are compared against Test
+	// Characters to determine if a 'Match' condition
+	// exists.
 
-	TestStringName string // The label or name of the TestString.
+	TestStringName string
+	// The label or name of the 'TestString' parameter.
+	// Used in error and informational messages.
 
-	TestStringLength int // The Length of the Test String used in
-	//                      this search operation.
+	TestStringLength int
+	// Actual number of text characters in the entire Test
+	// String ('TestString').
 
-	TestStringLengthName string // The label or name of the TestStringLength
-	//                              parameter.
+	TestStringLengthName string
+	// The label or name of the 'TestStringLength'
+	// parameter. Used in error and informational
+	// messages.
 
-	TestStringStartingIndex int // The starting index for the Test
-	//                              String. Search Comparisons will begin
-	//                              at this point in the Test String.
+	TestStringStartingIndex int
+	// The starting index in the Test String where the
+	// search operation will begin.
 
-	TestStringDescription1 string // Optional description string describing
-	//                               Test Characters used in this search
+	TestStringDescription1 string
+	// First of two optional description strings
+	// describing the Test String in the context of the
+	// current search operation.
 
-	TestStringDescription2 string // Optional description string describing
-	//                               Test Characters used in the search
+	TestStringDescription2 string
+	// Second of two optional description strings
+	// describing the Test String in the context of the
+	// current search operation.
 
-	CollectionTestObjIndex int // The collection index of the object
-	//                            containing the Test String which was
-	//                            found in Target Search String
+	CollectionTestObjIndex int
+	// If the Test String object resides in a collection
+	// of Test String objects, this parameter will record
+	// the array index of the current Test String object
+	// in the collection.
 
-	NumValueType NumericValueType // Specifies the numeric value
-	//                               as an integer or floating point value.
-	//                                 NumValType.None(),
-	//                                 NumValType.FloatingPoint(),
-	//                                 NumValType.Integer(),
+	NumValueType NumericValueType
+	// Optional. This enumeration value specifies the type
+	// of numeric value for this Test Parameter as either
+	// an integer or floating point value.
+	//
+	// Possible values are listed as follows:
+	//  NumValType.None()
+	//  NumValType.FloatingPoint()
+	//  NumValType.Integer()
 
-	NumStrFormatType NumStrFormatTypeCode // Specifies Output Format Type for
-	//                                       a numeric value.
-	//                                         NumStrFmtType.None()
-	//                                         NumStrFmtType.AbsoluteValue()
-	//                                         NumStrFmtType.Binary()
-	//                                         NumStrFmtType.CountryCulture()
-	//                                         NumStrFmtType.Currency()
-	//                                         NumStrFmtType.Binary()
-	//                                         NumStrFmtType.Hexadecimal()
-	//                                         NumStrFmtType.Octal()
-	//                                         NumStrFmtType.ScientificNotation()
+	NumStrFormatType NumStrFormatTypeCode
+	// Optional. This enumeration value specifies the
+	// Output Format Type for a number.
+	//
+	// Possible values are listed as follows:
+	//  NumStrFmtType.None()
+	//  NumStrFmtType.AbsoluteValue()
+	//  NumStrFmtType.Binary()
+	//  NumStrFmtType.CountryCulture()
+	//  NumStrFmtType.Currency()
+	//  NumStrFmtType.Binary()
+	//  NumStrFmtType.Hexadecimal()
+	//  NumStrFmtType.Octal()
+	//  NumStrFmtType.ScientificNotation()
 
-	NumSymLocation NumericSymbolLocation // Specifies the relative location of a
-	//                                        numeric symbol.
-	//                                          NumSymLocation.None()
-	//                                          NumSymLocation.Before()
-	//                                          NumSymLocation.Interior()
-	//                                          NumSymLocation.After()
+	NumSymLocation NumericSymbolLocation
+	// Optional. This enumeration value specifies the
+	// relative location of a numeric symbol.
+	//
+	// Possible values are listed as follows:
+	//  NumSymLocation.None()
+	//  NumSymLocation.Before()
+	//  NumSymLocation.Interior()
+	//  NumSymLocation.After()
 
-	NumSymbolClass NumericSymbolClass // Number Symbol Classification
-	//                                      NumSymClass.None()
-	//                                      NumSymClass.NumberSign()
-	//                                      NumSymClass.CurrencySign()
-	//                                      NumSymClass.IntegerSeparator()
-	//                                      NumSymClass.DecimalSeparator()
+	NumSymbolClass NumericSymbolClass
+	// Optional. This enumeration value specifies the
+	// Number Symbol Classification for a text character.
+	//
+	// Possible values are listed as follows:
+	//  NumSymClass.None()
+	//  NumSymClass.NumberSign()
+	//  NumSymClass.CurrencySign()
+	//  NumSymClass.IntegerSeparator()
+	//  NumSymClass.DecimalSeparator()
 
-	NumSignValue NumericSignValueType // An enumeration value classifying the
-	//                                   number sign.
-	//                                     NumSignVal.None()
-	//                                     NumSignVal.Negative()
-	//                                     NumSignVal.Zero()
-	//                                     NumSignVal.Positive()
+	NumSignValue NumericSignValueType
+	// Optional. This enumeration value specifies the
+	// number sign value.
+	//
+	// Possible values are listed as follows:
+	//  NumSignVal.None()
+	//  NumSignVal.Negative()
+	//  NumSignVal.Zero()
+	//  NumSignVal.Positive()
 
-	PrimaryNumSignPosition NumSignSymbolPosition // Used in searches involving
-	//                                       positive and negative number
-	//                                       signs. This is the Primary
-	//                                       Type Code for Number Signs.
-	//                                       Cases involving 'Leading' and
-	//                                       'Trailing' symbols also make
-	//                                       use of the 'SecondaryNumSignPosition'.
-	//                                        NumSignSymPos.None()
-	//                                        NumSignSymPos.Before()
-	//                                        NumSignSymPos.After()
-	//                                        NumSignSymPos.BeforeAndAfter()
+	PrimaryNumSignPosition NumSignSymbolPosition
+	// Optional This enumeration value specifies the
+	// relative position of positive and negative number
+	// sign symbols in a number string. This is the
+	// Primary Type Code for Number Signs. Cases involving
+	// both 'Leading' and 'Trailing' symbols also make use
+	// of the 'SecondaryNumSignPosition'.
+	//
+	// Possible values are listed as follows:
+	//  NumSignSymPos.None()
+	//  NumSignSymPos.Before()
+	//  NumSignSymPos.After()
+	//  NumSignSymPos.BeforeAndAfter()
 
-	SecondaryNumSignPosition NumSignSymbolPosition // Used in searches involving
-	//                                                signs which occur both before
-	//                                                and after the numeric value.
-	//                                                 NumSignSymPos.None()
-	//                                                 NumSignSymPos.Before()
-	//                                                 NumSignSymPos.After()
+	SecondaryNumSignPosition NumSignSymbolPosition
+	// Optional. This enumeration value specifies the
+	// relative position of positive and negative number
+	// sign symbols in a number string. This value is used
+	// in searches involving number signs which occur both
+	// before and after the numeric value.
+	//
+	// Possible values are listed as follows:
+	//  NumSignSymPos.None()
+	//  NumSignSymPos.Before()
+	//  NumSignSymPos.After()
+	//  NumSignSymPos.BeforeAndAfter()
 
-	TextCharSearchType CharacterSearchType // An enumeration value signaling
-	//                                the type of search algorithm which
-	//                                was used to conduct this search.
-	//                                 TextCharSearchType.None()
-	//                                 TextCharSearchType.LinearTargetStartingIndex() - Default
-	//                                 TextCharSearchType.SingleTargetChar()
-	//                                 TextCharSearchType.LinearEndOfString()
+	TextCharSearchType CharacterSearchType
+	// Required. An enumeration value signaling the type
+	// of text character search algorithm used to conduct
+	// this search operation.
+	//
+	// Possible values are listed as follows:
+	//  TextCharSearchType.None() - Invalid value
+	//  TextCharSearchType.LinearTargetStartingIndex() - Default
+	//  TextCharSearchType.SingleTargetChar()
+	//  TextCharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }

@@ -425,10 +425,11 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //
 //       type CharSearchTestInputParametersDto struct {
 //       	TestString                          *RuneArrayDto
-//            - A pointer to the Rune Array containing the Test
-//              Characters to be used in a text character search
-//              algorithm. Target Characters are compared against
-//              Test Characters to determine if a 'Match' condition
+//            - A pointer to the Rune Array Data Transfer
+//              Object containing the Test Characters to be
+//              used in a text character search algorithm.
+//              Target Characters are compared against Test
+//              Characters to determine if a 'Match' condition
 //              exists.
 //
 //       	TestStringName                      string
