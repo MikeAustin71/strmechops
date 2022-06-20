@@ -161,32 +161,13 @@ func (nSignValue NumericSignValueType) String() string {
 	return result
 }
 
-// XArithmeticValue - The integer values assigned to the
-// NumericSignValueType enumeration are styled for data management.
+// XArithmeticValue - Returns the arithmetic value of the current
+// NumericSignValueType instance.
 //
-// As such integer values for the enumeration are assigned as
-// follows: None = 0, Negative = 1, Zero = 2 and Positive = 3.
-// These values are useful for data management purpose but do not
-// conform to the conventional values assigned as numeric sign
-// values for purposes of arithmetic calculations.
-//
-// With arithmetic calculations, numeric sign values are typically
-// represented as integer values with Negative= -1, Zero= 0 and
-// Positive = +1.
-//
-// The purpose of this method is to convert enumeration values to
-// conventional numeric sign values for use in arithmetic
-// calculations.
-//
-// If the value of the current NumericSignValueType is invalid and
-// not equal to Negative, Zero or Positive, this method will return
-// an integer value of -99.
-//
-// If the value of the current NumericSignValueType is valid, the
-// following integer values will be returned:
-//     Negative == -1
-//     Zero     ==  0
-//     Positive ==  1
+// NumericSignValueType(0).Positive() = +1
+// NumericSignValueType(0).Zero() = 0
+// NumericSignValueType(0).Negative() = -1
+// NumericSignValueType(0).None() = -2
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
@@ -196,7 +177,7 @@ func (nSignValue NumericSignValueType) String() string {
 // Usage
 //
 //  nSignVal := NumericSignValueType(0).Positive()
-//  // nSignVal now has integer value of '3'
+//  // nSignVal now has integer value of '1'
 //
 //  numericSignValue := nSignVal.XArithmeticValue()
 //  // numericSignValue has an integer value of '1'
@@ -253,7 +234,7 @@ func (nSignValue NumericSignValueType) XIsPositiveOrNegative() bool {
 // zero, a value of 'false' is returned.
 //
 // Specifically, this means that if the NumericSignValueType value is
-// is non-zero a boolean value of 'false' is returned.
+// non-zero a boolean value of 'false' is returned.
 //
 func (nSignValue NumericSignValueType) XIsZero() bool {
 	lockNumericSignValueType.Lock()
@@ -294,8 +275,8 @@ func (nSignValue NumericSignValueType) XIsValid() bool {
 
 	defer lockNumericSignValueType.Unlock()
 
-	if nSignValue > 3 ||
-		nSignValue < 1 {
+	if nSignValue > 1 ||
+		nSignValue < -1 {
 		return false
 	}
 
@@ -364,7 +345,7 @@ func (nSignValue NumericSignValueType) XParseString(
 	ePrefix := "NumericSignValueType.XParseString() "
 
 	if len(valueString) < 4 {
-		return NumericSignValueType(0),
+		return NumericSignValueType(-2),
 			fmt.Errorf(ePrefix+"\n"+
 				"Input parameter 'valueString' is INVALID!\n"+
 				"String length is less than '4'.\n"+
@@ -380,7 +361,7 @@ func (nSignValue NumericSignValueType) XParseString(
 			mapNumSignValueTypeStringToCode[valueString]
 
 		if !ok {
-			return NumericSignValueType(0),
+			return NumericSignValueType(-2),
 				fmt.Errorf(ePrefix+
 					"\n'valueString' did NOT MATCH a valid NumericSignValueType Value.\n"+
 					"valueString='%v'\n", valueString)
@@ -392,7 +373,7 @@ func (nSignValue NumericSignValueType) XParseString(
 			mapNumSignValueTypeLwrCaseStringToCode[strings.ToLower(valueString)]
 
 		if !ok {
-			return NumericSignValueType(0),
+			return NumericSignValueType(-2),
 				fmt.Errorf(ePrefix+
 					"\n'valueString' did NOT MATCH a valid NumericSignValueType Value.\n"+
 					"valueString='%v'\n", valueString)
@@ -449,4 +430,4 @@ func (nSignValue NumericSignValueType) XValueInt() int {
 // NumSignVal.Zero(),
 // NumSignVal.Positive(),
 //
-const NumSignVal = NumericSignValueType(0)
+const NumSignVal = NumericSignValueType(-2)

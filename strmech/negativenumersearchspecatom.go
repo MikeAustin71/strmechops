@@ -12,7 +12,7 @@ type negNumSearchSpecAtom struct {
 
 // empty - Receives a pointer to an instance of
 // NegativeNumberSearchSpec and proceeds to reset the data values
-// for member values to their initial or zero values.
+// for member variables to their initial or zero values.
 //
 //
 // ----------------------------------------------------------------
