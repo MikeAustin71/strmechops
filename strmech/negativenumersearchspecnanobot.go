@@ -16,7 +16,9 @@ type negNumSignSearchNanobot struct {
 // NegativeNumberSearchSpec.
 //
 // IMPORTANT
+//
 // -----------------------------------------------------------------
+//
 // Be advised that the data fields in 'targetNegNumSearchSpec' will be
 // overwritten.
 //

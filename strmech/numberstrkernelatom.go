@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// numberStrKernelAtom - Provides helper methods for type
+// NumberStrKernel.
+//
 type numberStrKernelAtom struct {
 	lock *sync.Mutex
 }
@@ -119,7 +122,8 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of NumberStrKernel is invalid!"+
-			"Both Integer Digits and Fractional Digits are empty.\n",
+			"Both Integer Digits and Fractional Digits are empty"+
+			"and contain zero digits.\n",
 			ePrefix.String())
 
 		return isValid, err
@@ -130,8 +134,8 @@ func (numStrKernelAtom *numberStrKernelAtom) testValidityOfNumStrKernel(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of NumberStrKernel is invalid!"+
-			"The Fractional Digits have valid numeric digits."+
-			"However, Integer Digits is empty and has a zero length.\n",
+			"The Fractional Digits rune array contains valid numeric digits."+
+			"However, the Integer Digits rune array is empty and has a zero length.\n",
 			ePrefix.String())
 
 		return isValid, err

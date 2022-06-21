@@ -2,6 +2,9 @@ package strmech
 
 import "sync"
 
+// numberStrKernelElectron - Provides helper methods for type
+// NumberStrKernel.
+//
 type numberStrKernelElectron struct {
 	lock *sync.Mutex
 }
