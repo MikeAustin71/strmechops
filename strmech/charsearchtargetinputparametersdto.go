@@ -415,6 +415,61 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Empty() {
 	searchTargetInputParmsDto.lock = nil
 }
 
+// Equal - Receives a pointer to another instance of
+// CharSearchTargetInputParametersDto and proceeds to compare its
+// internal member variables to those of the current
+// CharSearchTargetInputParametersDto instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTargetInputParms   *CharSearchTargetInputParametersDto
+//     - A pointer to an instance of
+//       CharSearchTargetInputParametersDto. The internal member
+//       variable data values in this instance will be compared to
+//       those in the current instance of
+//       CharSearchTargetInputParametersDto. The results of this
+//       comparison will be returned to the calling functions as a
+//       boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingTargetInputParms' are equivalent
+//       in all respects to those contained in the current instance
+//       of CharSearchTargetInputParametersDto, this return value
+//       will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Equal(
+	incomingTargetInputParms *CharSearchTargetInputParametersDto) bool {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+
+	return charSearchTargetInputParametersDtoElectron{}.ptr().
+		equal(searchTargetInputParmsDto,
+			incomingTargetInputParms)
+}
+
 // New - Returns a new, uninitialized instance of
 // CharSearchTargetInputParametersDto.
 //
