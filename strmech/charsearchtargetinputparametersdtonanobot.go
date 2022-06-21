@@ -132,11 +132,7 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 	targetInputParmsElectron.empty(
 		destinationTargetInputParms)
 
-	if sourceTargetInputParms.TargetString == nil {
-
-		destinationTargetInputParms.TargetString = nil
-
-	} else {
+	if sourceTargetInputParms.TargetString != nil {
 
 		err = destinationTargetInputParms.TargetString.CopyIn(
 			sourceTargetInputParms.TargetString,
@@ -146,7 +142,6 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 		if err != nil {
 			return err
 		}
-
 	}
 
 	destinationTargetInputParms.TargetStringName =
@@ -285,11 +280,7 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 		return deepCopyTargetInputParms, err
 	}
 
-	if targetInputParms.TargetString == nil {
-
-		deepCopyTargetInputParms.TargetString = nil
-
-	} else {
+	if targetInputParms.TargetString != nil {
 
 		err = deepCopyTargetInputParms.TargetString.CopyIn(
 			targetInputParms.TargetString,
