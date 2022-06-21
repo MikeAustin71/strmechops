@@ -128,57 +128,190 @@ type CharSearchTargetInputParametersDto struct {
 	lock *sync.Mutex
 }
 
-func (targetSearchParms *CharSearchTargetInputParametersDto) Empty() {
+// CopyIn - Copies the data fields from an incoming instance of
+// CharSearchTargetInputParametersDto ('sourceTargetInputParms') to
+// the data fields of the current
+// CharSearchTargetInputParametersDto instance
+// ('searchTargetInputParmsDto').
+//
+// IMPORTANT
+// All the data fields in current
+// CharSearchTargetInputParametersDto instance
+// ('searchTargetInputParmsDto') will be modified and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  sourceTargetInputParms     *CharSearchTargetInputParametersDto
+//     - A pointer to an instance of
+//       CharSearchTargetInputParametersDto. This method will NOT
+//       change the values of internal member variables contained
+//       in this instance.
+//
+//       All data values in this CharSearchTargetInputParametersDto
+//       instance will be copied to current
+//       CharSearchTargetInputParametersDto instance
+//       ('searchTargetInputParmsDto').
+//
+//       If parameter 'sourceTargetInputParms' is determined to be
+//       invalid, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) CopyIn(
+	sourceTargetInputParms *CharSearchTargetInputParametersDto,
+	errorPrefix interface{}) (
+	err error) {
 
-	if targetSearchParms.lock == nil {
-		targetSearchParms.lock = new(sync.Mutex)
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
 	}
 
-	targetSearchParms.lock.Lock()
+	searchTargetInputParmsDto.lock.Lock()
 
-	targetSearchParms.TargetString = nil
+	defer searchTargetInputParmsDto.lock.Unlock()
 
-	targetSearchParms.TargetStringName = ""
+	var ePrefix *ePref.ErrPrefixDto
 
-	targetSearchParms.TargetStringLength = -1
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchTargetInputParametersDto."+
+			"CopyIn()",
+		"")
 
-	targetSearchParms.TargetStringLengthName = ""
+	if err != nil {
+		return err
+	}
 
-	targetSearchParms.TargetStringStartingSearchIndex = -1
+	targetInputParmsNanobot := charSearchTargetInputParametersDtoNanobot{}
 
-	targetSearchParms.TargetStringStartingSearchIndexName = ""
+	err =
+		targetInputParmsNanobot.copyIn(
+			searchTargetInputParmsDto,
+			sourceTargetInputParms,
+			ePrefix.XCpy(
+				"searchTargetInputParmsDto<-"+
+					"sourceTargetInputParms"))
 
-	targetSearchParms.TargetStringSearchLength = -2
+	return err
+}
 
-	targetSearchParms.TargetStringSearchLengthName = ""
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchTargetInputParametersDto to their initial
+// or zero states.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of
+// CharSearchTargetInputParametersDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Empty() {
 
-	targetSearchParms.TargetStringAdjustedSearchLength = -2
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
 
-	targetSearchParms.TargetStringDescription1 = ""
+	searchTargetInputParmsDto.lock.Lock()
 
-	targetSearchParms.TargetStringDescription2 = ""
+	charSearchTargetInputParametersDtoElectron{}.ptr().
+		empty(searchTargetInputParmsDto)
 
-	targetSearchParms.FoundFirstNumericDigitInNumStr = false
+	searchTargetInputParmsDto.lock.Unlock()
 
-	targetSearchParms.TextCharSearchType = CharSearchType.None()
-
-	targetSearchParms.lock.Unlock()
-
-	targetSearchParms.lock = nil
+	searchTargetInputParmsDto.lock = nil
 }
 
 // New - Returns a new, uninitialized instance of
 // CharSearchTargetInputParametersDto.
 //
-func (targetSearchParms CharSearchTargetInputParametersDto) New() CharSearchTargetInputParametersDto {
+func (searchTargetInputParmsDto CharSearchTargetInputParametersDto) New() CharSearchTargetInputParametersDto {
 
-	if targetSearchParms.lock == nil {
-		targetSearchParms.lock = new(sync.Mutex)
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
 	}
 
-	targetSearchParms.lock.Lock()
+	searchTargetInputParmsDto.lock.Lock()
 
-	defer targetSearchParms.lock.Unlock()
+	defer searchTargetInputParmsDto.lock.Unlock()
 
 	newEmptyTargetInputParms := CharSearchTargetInputParametersDto{}
 
@@ -191,16 +324,16 @@ func (targetSearchParms CharSearchTargetInputParametersDto) New() CharSearchTarg
 // and related member variables contained in the current instance
 // of CharSearchTargetInputParametersDto.
 //
-func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateTargetParameters(
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateTargetParameters(
 	errorPrefix interface{}) error {
 
-	if targetSearchParms.lock == nil {
-		targetSearchParms.lock = new(sync.Mutex)
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
 	}
 
-	targetSearchParms.lock.Lock()
+	searchTargetInputParmsDto.lock.Lock()
 
-	defer targetSearchParms.lock.Unlock()
+	defer searchTargetInputParmsDto.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -218,65 +351,65 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateTargetParam
 
 	}
 
-	if len(targetSearchParms.TargetStringName) == 0 {
-		targetSearchParms.TargetStringName =
+	if len(searchTargetInputParmsDto.TargetStringName) == 0 {
+		searchTargetInputParmsDto.TargetStringName =
 			"TargetString"
 	}
 
-	if targetSearchParms.TargetString == nil {
+	if searchTargetInputParmsDto.TargetString == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter '%v' is a nil pointer!\n",
 			ePrefix.String(),
-			targetSearchParms.TargetStringName)
+			searchTargetInputParmsDto.TargetStringName)
 
 		return err
 	}
 
-	if len(targetSearchParms.TargetStringLengthName) == 0 {
-		targetSearchParms.TargetStringLengthName =
+	if len(searchTargetInputParmsDto.TargetStringLengthName) == 0 {
+		searchTargetInputParmsDto.TargetStringLengthName =
 			"TargetStringLength"
 	}
 
-	targetSearchParms.TargetStringLength =
-		len(targetSearchParms.TargetString.CharsArray)
+	searchTargetInputParmsDto.TargetStringLength =
+		len(searchTargetInputParmsDto.TargetString.CharsArray)
 
-	if targetSearchParms.TargetStringLength == 0 {
+	if searchTargetInputParmsDto.TargetStringLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter '%v' is invalid!\n"+
 			"The rune array encapsulated by '%v' is empty\n"+
 			"Length of %v.CharsArray is Zero (0).\n",
 			ePrefix.String(),
-			targetSearchParms.TargetStringLengthName,
-			targetSearchParms.TargetStringName,
-			targetSearchParms.TargetStringName)
+			searchTargetInputParmsDto.TargetStringLengthName,
+			searchTargetInputParmsDto.TargetStringName,
+			searchTargetInputParmsDto.TargetStringName)
 
 		return err
 	}
 
-	if len(targetSearchParms.TargetStringStartingSearchIndexName) == 0 {
-		targetSearchParms.TargetStringStartingSearchIndexName =
+	if len(searchTargetInputParmsDto.TargetStringStartingSearchIndexName) == 0 {
+		searchTargetInputParmsDto.TargetStringStartingSearchIndexName =
 			"TargetStringStartingSearchIndex"
 	}
 
-	if targetSearchParms.TargetStringStartingSearchIndex < 0 {
+	if searchTargetInputParmsDto.TargetStringStartingSearchIndex < 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: Input parameter %v is invalid!\n"+
 			"%v is less than zero (0)\n"+
 			"%v = '%v'\n",
 			ePrefix.String(),
-			targetSearchParms.TargetStringStartingSearchIndexName,
-			targetSearchParms.TargetStringStartingSearchIndexName,
-			targetSearchParms.TargetStringStartingSearchIndexName,
-			targetSearchParms.TargetStringStartingSearchIndex)
+			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
+			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
+			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
+			searchTargetInputParmsDto.TargetStringStartingSearchIndex)
 
 		return err
 	}
 
-	if targetSearchParms.TargetStringStartingSearchIndex >=
-		targetSearchParms.TargetStringLength {
+	if searchTargetInputParmsDto.TargetStringStartingSearchIndex >=
+		searchTargetInputParmsDto.TargetStringLength {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is invalid!\n"+
@@ -285,84 +418,84 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateTargetParam
 			"Last Index in %v.CharsArray = '%v'\n"+
 			"%v = '%v'\n",
 			ePrefix.String(),
-			targetSearchParms.TargetStringStartingSearchIndexName,
-			targetSearchParms.TargetStringStartingSearchIndexName,
-			targetSearchParms.TargetStringName,
-			targetSearchParms.TargetStringName,
-			targetSearchParms.TargetStringLength-1,
-			targetSearchParms.TargetStringStartingSearchIndexName,
-			targetSearchParms.TargetStringStartingSearchIndex)
+			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
+			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
+			searchTargetInputParmsDto.TargetStringName,
+			searchTargetInputParmsDto.TargetStringName,
+			searchTargetInputParmsDto.TargetStringLength-1,
+			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
+			searchTargetInputParmsDto.TargetStringStartingSearchIndex)
 
 		return err
 	}
 
-	if len(targetSearchParms.TargetStringSearchLengthName) == 0 {
-		targetSearchParms.TargetStringSearchLengthName =
+	if len(searchTargetInputParmsDto.TargetStringSearchLengthName) == 0 {
+		searchTargetInputParmsDto.TargetStringSearchLengthName =
 			"TargetStringSearchLength"
 	}
 
-	if targetSearchParms.TargetStringSearchLength < -1 {
+	if searchTargetInputParmsDto.TargetStringSearchLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is invalid!\n"+
 			"%v has a value less than minus one (-1)\n"+
 			"%v = '%v'\n",
 			ePrefix.String(),
-			targetSearchParms.TargetStringSearchLengthName,
-			targetSearchParms.TargetStringSearchLengthName,
-			targetSearchParms.TargetStringName,
-			targetSearchParms.TargetStringSearchLength)
+			searchTargetInputParmsDto.TargetStringSearchLengthName,
+			searchTargetInputParmsDto.TargetStringSearchLengthName,
+			searchTargetInputParmsDto.TargetStringName,
+			searchTargetInputParmsDto.TargetStringSearchLength)
 
 		return err
 	}
 
-	if targetSearchParms.TargetStringSearchLength == 0 {
+	if searchTargetInputParmsDto.TargetStringSearchLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is invalid!\n"+
 			"%v has a value of Zero (0)\n",
 			ePrefix.String(),
-			targetSearchParms.TargetStringSearchLengthName,
-			targetSearchParms.TargetStringSearchLengthName)
+			searchTargetInputParmsDto.TargetStringSearchLengthName,
+			searchTargetInputParmsDto.TargetStringSearchLengthName)
 
 	}
 
-	if targetSearchParms.TargetStringSearchLength == -1 {
+	if searchTargetInputParmsDto.TargetStringSearchLength == -1 {
 
-		targetSearchParms.TargetStringAdjustedSearchLength =
-			targetSearchParms.TargetStringLength -
-				targetSearchParms.TargetStringStartingSearchIndex
+		searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
+			searchTargetInputParmsDto.TargetStringLength -
+				searchTargetInputParmsDto.TargetStringStartingSearchIndex
 	} else {
 
-		targetSearchParms.TargetStringAdjustedSearchLength =
-			targetSearchParms.TargetStringSearchLength
+		searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
+			searchTargetInputParmsDto.TargetStringSearchLength
 
 	}
 
-	targetSearchParms.TargetStringAdjustedSearchLength =
-		targetSearchParms.TargetStringStartingSearchIndex +
-			targetSearchParms.TargetStringAdjustedSearchLength
+	searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
+		searchTargetInputParmsDto.TargetStringStartingSearchIndex +
+			searchTargetInputParmsDto.TargetStringAdjustedSearchLength
 
-	if targetSearchParms.TargetStringAdjustedSearchLength >
-		targetSearchParms.TargetStringLength {
+	if searchTargetInputParmsDto.TargetStringAdjustedSearchLength >
+		searchTargetInputParmsDto.TargetStringLength {
 
-		targetSearchParms.TargetStringAdjustedSearchLength =
-			targetSearchParms.TargetStringLength
+		searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
+			searchTargetInputParmsDto.TargetStringLength
 
 	}
 
 	return err
 }
-func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateCharSearchType(
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateCharSearchType(
 	errorPrefix interface{}) error {
 
-	if targetSearchParms.lock == nil {
-		targetSearchParms.lock = new(sync.Mutex)
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
 	}
 
-	targetSearchParms.lock.Lock()
+	searchTargetInputParmsDto.lock.Lock()
 
-	defer targetSearchParms.lock.Unlock()
+	defer searchTargetInputParmsDto.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -380,7 +513,7 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateCharSearchT
 
 	}
 
-	if !targetSearchParms.TextCharSearchType.XIsValid() {
+	if !searchTargetInputParmsDto.TextCharSearchType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: The Character Search Type is invalid!\n"+
@@ -394,8 +527,8 @@ func (targetSearchParms *CharSearchTargetInputParametersDto) ValidateCharSearchT
 			" Character Search Type   String Name: %v\n"+
 			" Character Search Type Integer Value: %v\n",
 			ePrefix.String(),
-			targetSearchParms.TextCharSearchType.String(),
-			targetSearchParms.TextCharSearchType.XValueInt())
+			searchTargetInputParmsDto.TextCharSearchType.String(),
+			searchTargetInputParmsDto.TextCharSearchType.XValueInt())
 
 	}
 
