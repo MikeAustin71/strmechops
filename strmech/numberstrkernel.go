@@ -597,6 +597,59 @@ func (numStrKernel *NumberStrKernel) Empty() {
 	return
 }
 
+// Equal - Receives a pointer to another instance of
+// NumberStrKernel and proceeds to compare its internal member
+// variables to those of the current NumberStrKernel instance in
+// order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNumStrKernel       *NumberStrKernel
+//     - A pointer to an external instance of NumberStrKernel. The
+//       internal member variable data values in this instance will
+//       be compared to those in the current instance of
+//       NumberStrKernel. The results of this comparison will
+//       be returned to the calling function as a boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingNumStrKernel' are equivalent in
+//       all respects to those contained in the current instance of
+//       NumberStrKernel, this return value will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (numStrKernel *NumberStrKernel) Equal(
+	incomingNumStrKernel *NumberStrKernel) bool {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	numStrKernelElectron := numberStrKernelElectron{}
+
+	return numStrKernelElectron.equal(
+		numStrKernel,
+		incomingNumStrKernel)
+}
+
 // GetIntegerDigits - Returns an instance of RuneArrayDto
 // containing a deep copy of the integer digits rune array
 // encapsulated by the current instance of NumberStrKernel.

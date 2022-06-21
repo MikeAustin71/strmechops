@@ -66,6 +66,66 @@ func (numStrKernelElectron *numberStrKernelElectron) empty(
 	numStrKernel.isNonZeroValue = false
 }
 
+// equal - Receives a pointer to two instances of
+// NumberStrKernel and proceeds to compare their member
+// variables in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+func (numStrKernelElectron *numberStrKernelElectron) equal(
+	numStrKernel1 *NumberStrKernel,
+	numStrKernel2 *NumberStrKernel) bool {
+
+	if numStrKernelElectron.lock == nil {
+		numStrKernelElectron.lock = new(sync.Mutex)
+	}
+
+	numStrKernelElectron.lock.Lock()
+
+	defer numStrKernelElectron.lock.Unlock()
+
+	if numStrKernel1 == nil ||
+		numStrKernel2 == nil {
+
+		return false
+	}
+
+	if !numStrKernel1.integerDigits.Equal(
+		&numStrKernel2.integerDigits) {
+
+		return false
+	}
+
+	if !numStrKernel1.fractionalDigits.Equal(
+		&numStrKernel2.fractionalDigits) {
+
+		return false
+	}
+
+	if numStrKernel1.numericValueType !=
+		numStrKernel2.numericValueType {
+
+		return false
+	}
+
+	if numStrKernel1.numberSign !=
+		numStrKernel2.numberSign {
+
+		return false
+	}
+
+	if numStrKernel1.isNonZeroValue !=
+		numStrKernel2.isNonZeroValue {
+
+		return false
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // numberStrKernelElectron.
 //
