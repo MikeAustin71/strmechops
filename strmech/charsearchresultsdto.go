@@ -53,7 +53,7 @@ import (
 // results or outcome of a search operation.
 //
 // Methods performing elements of the text character search
-// operation use this wrapper type to encapsulte and return key
+// operation use this wrapper type to encapsulate and return key
 // data variables describing the search outcome.
 //
 type CharSearchResultsDto struct {

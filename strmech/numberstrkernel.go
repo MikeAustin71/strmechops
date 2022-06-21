@@ -15,20 +15,21 @@ type NumberStrKernel struct {
 	// of the numeric value represented by this instance of
 	// NumberStrKernel.
 
-	hasIntegerDigits bool
-	// If set to 'true', this signals that 'integerDigits' contains
-	// numeric characters.
-
 	fractionalDigits RuneArrayDto
 	// An array of numeric digits constituting the fractional
 	// portion of the numeric value represented by this instance of
 	// NumberStrKernel.
 
-	hasFractionalDigits bool
-	// If set to 'true', this signals that the numeric value
-	// represented by this instance of NumberStrKernel contains
-	// fractional numeric digits and constitutes a floating point
-	// numeric value.
+	numericValueType NumericValueType
+	// This enumeration value specifies the type of numeric value
+	// contained in the current instance of NumberStrKernel. The
+	// contained numeric value is classified either as an integer
+	// or a floating point value.
+	//
+	// Possible enumeration values are listed as follows:
+	//  NumValType.None()
+	//  NumValType.FloatingPoint()
+	//  NumValType.Integer()
 
 	numberSign NumericSignValueType
 	// An enumeration specifying the number sign associated with the
@@ -164,7 +165,12 @@ func (numStrKernel *NumberStrKernel) AddIntegerDigit(
 
 	numStrKernel.integerDigits.AddChar(integerDigit)
 
-	numStrKernel.hasIntegerDigits = true
+	if numStrKernel.numericValueType !=
+		NumValType.FloatingPoint() {
+
+		numStrKernel.numericValueType =
+			NumValType.Integer()
+	}
 
 	if integerDigit != '0' {
 		numStrKernel.isNonZeroValue = true
@@ -293,7 +299,12 @@ func (numStrKernel *NumberStrKernel) AddFractionalDigit(
 	numStrKernel.fractionalDigits.AddChar(
 		fractionalDigit)
 
-	numStrKernel.hasFractionalDigits = true
+	if numStrKernel.numericValueType !=
+		NumValType.FloatingPoint() {
+
+		numStrKernel.numericValueType =
+			NumValType.FloatingPoint()
+	}
 
 	if fractionalDigit != '0' {
 		numStrKernel.isNonZeroValue = true

@@ -53,16 +53,14 @@ func (numStrKernelElectron *numberStrKernelElectron) empty(
 
 	numStrKernel.integerDigits.Empty()
 
-	numStrKernel.hasIntegerDigits = false
-
 	numStrKernel.fractionalDigits.Empty()
 
-	numStrKernel.hasFractionalDigits = false
+	numStrKernel.numericValueType =
+		NumValType.None()
 
 	numStrKernel.numberSign = NumSignVal.None()
 
 	numStrKernel.isNonZeroValue = false
-
 }
 
 // ptr - Returns a pointer to a new instance of
