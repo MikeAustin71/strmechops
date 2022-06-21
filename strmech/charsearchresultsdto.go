@@ -329,6 +329,19 @@ func (charSearchResults CharSearchResultsDto) New() CharSearchResultsDto {
 	return newEmptySearchResults
 }
 
+// LoadTargetBaseInputParameters - Receives Target String data from
+// input parameter 'targetInputParms' and proceeds to transfer key
+// data for the search operation to the current instance of
+// CharSearchResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method assumes that the input data elements contained in
+// 'testInputParms' have been validated.
+//
 func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 	targetInputParms CharSearchTargetInputParametersDto) {
 
@@ -360,6 +373,19 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 
 }
 
+// LoadTestBaseInputParameters - Receives Target String data from
+// input parameter 'testInputParms' and proceeds to transfer key
+// data for the search operation to the current instance of
+// CharSearchResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method assumes that the input data elements contained in
+// 'testInputParms' have been validated.
+//
 func (charSearchResults *CharSearchResultsDto) LoadTestBaseInputParameters(
 	testInputParms CharSearchTestInputParametersDto) {
 

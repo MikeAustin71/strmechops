@@ -132,7 +132,7 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 //    follows because the character at staring index number zero
 //    (0) 'H', does NOT match the first character in the Test
 //    String 'Xray'. The search operation will therefore terminate
-//    immediately after the comparision between first characters
+//    immediately after the comparison between first characters
 //    'H' and 'X' fails to produce a match.
 //
 //    NOTE: Linear Target Starting Index is the default search
@@ -299,7 +299,7 @@ func (charSearchType CharacterSearchType) None() CharacterSearchType {
 // follows because the character at staring index number zero
 // (0) 'H', does NOT match the first character in the Test
 // String 'Xray'. The search operation will therefore terminate
-// immediately after the comparision between first characters
+// immediately after the comparison between first characters
 // 'H' and 'X' fails to produce a match.
 //
 //
