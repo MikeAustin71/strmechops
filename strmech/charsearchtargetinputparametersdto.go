@@ -93,7 +93,7 @@ type CharSearchTargetInputParametersDto struct {
 	// length of the Target Search String. If this value
 	// is set to -1, the search length will be configured
 	// for to include the last index in 'TargetString'. In
-	// other words the serach will proceed to the end of
+	// other words the search will proceed to the end of
 	// 'TargetString'.
 
 	TargetStringSearchLengthName string
@@ -589,6 +589,71 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) GetFormatte
 	return strBuilder.String(), err
 }
 
+// IsValidInstance - Performs a diagnostic review of the member
+// variable data values encapsulated in the current instance of
+// CharSearchTargetInputParametersDto to determine if they are
+// valid.
+//
+// If all data element evaluate as valid, this method returns
+// 'true'. If any data element is invalid, this method returns
+// 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Be Advised
+//
+// In addition to performing validation diagnostics on input
+// parameter the current instance of
+// CharSearchTargetInputParametersDto, this method will proceed to
+// set all empty member variable labels or name strings to their
+// default values.
+//
+// Type CharSearchTargetInputParametersDto contains a number of
+// string variables which are used to label, name or otherwise
+// describe other operational member variables. These labels are
+// used for error or informational messages. If any of these label
+// strings are empty when this method is called, those empty label
+// strings will be set to their default values.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If all data elements encapsulated by the current instance
+//       of CharSearchTargetInputParametersDto are valid, this
+//       returned boolean value is set to 'true'. If any data
+//       values are invalid, this return parameter is set to
+//       'false'.
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) IsValidInstance() (
+	isValid bool) {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+
+	isValid,
+		_ = charSearchTargetInputParametersDtoAtom{}.ptr().
+		testValidityOfTargetInputParms(
+			searchTargetInputParmsDto,
+			nil)
+
+	return isValid
+}
+
 // New - Returns a new, uninitialized instance of
 // CharSearchTargetInputParametersDto.
 //
@@ -686,9 +751,10 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 //
 // Type CharSearchTargetInputParametersDto contains a number of
 // string variables which are used to label, name or otherwise
-// describe other operational member variables. If any of these
-// label strings are empty when this method is called, those empty
-// label strings will be set to their default values.
+// describe other operational member variables. These labels are
+// used for error or informational messages. If any of these label
+// strings are empty when this method is called, those empty label
+// strings will be set to their default values.
 //
 //
 // ----------------------------------------------------------------

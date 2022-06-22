@@ -1069,7 +1069,9 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 //  error
 //     - If any of the internal member data variables contained in
 //       the current instance of TextFieldSpecLabel are found to be
-//       invalid, this method will return an error.
+//       invalid, this method will return an error. If the member
+//       data variables are determined to be valid, this error
+//       return parameter will be set to 'nil'.
 //
 //       If an error message is returned, the text value of input
 //       parameter 'errorPrefix' (error prefix) will be inserted or
