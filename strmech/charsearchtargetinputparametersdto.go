@@ -90,7 +90,11 @@ type CharSearchTargetInputParametersDto struct {
 	// The actual number of characters within the Target
 	// Search String that are included in the search
 	// operation. This value may be less than the actual
-	// length of the Target Search String.
+	// length of the Target Search String. If this value
+	// is set to -1, the search length will be configured
+	// for to include the last index in 'TargetString'. In
+	// other words the serach will proceed to the end of
+	// 'TargetString'.
 
 	TargetStringSearchLengthName string
 	// The label or name of the TargetStringSearchLength
@@ -666,9 +670,92 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 	return strBuilder.String()
 }
 
-// ValidateTargetParameters - Validates the Target Search String
-// and related member variables contained in the current instance
-// of CharSearchTargetInputParametersDto.
+// ValidateTargetParameters - Validates internal member variables
+// contained in the current instance of
+// CharSearchTargetInputParametersDto.
+//
+// ----------------------------------------------------------------
+//
+// Be Advised
+//
+// In addition to performing validation diagnostics on input
+// parameter the current instance of
+// CharSearchTargetInputParametersDto, this method will proceed to
+// set all empty member variable labels or name strings to their
+// default values.
+//
+// Type CharSearchTargetInputParametersDto contains a number of
+// string variables which are used to label, name or otherwise
+// describe other operational member variables. If any of these
+// label strings are empty when this method is called, those empty
+// label strings will be set to their default values.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If any of the internal member data variables contained in
+//       the current instance of CharSearchTargetInputParametersDto
+//       are found to be invalid, this method will return an error.
+//       If the member data variables are determined to be valid,
+//       this error return parameter will be set to 'nil'.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateTargetParameters(
 	errorPrefix interface{}) error {
@@ -688,7 +775,7 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateTar
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"CharSearchTargetInputParametersDto."+
-			"ValidateTargetSearchString()",
+			"ValidateTargetParameters()",
 		"")
 
 	if err != nil {
@@ -697,146 +784,19 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateTar
 
 	}
 
-	if len(searchTargetInputParmsDto.TargetInputParametersName) == 0 {
-		searchTargetInputParmsDto.TargetInputParametersName =
-			"TargetInputParameters"
-	}
+	targetInputParmsAtom :=
+		charSearchTargetInputParametersDtoAtom{}
 
-	if len(searchTargetInputParmsDto.TargetStringName) == 0 {
-		searchTargetInputParmsDto.TargetStringName =
-			"TargetString"
-	}
-
-	if searchTargetInputParmsDto.TargetString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			searchTargetInputParmsDto.TargetStringName)
-
-		return err
-	}
-
-	if len(searchTargetInputParmsDto.TargetStringLengthName) == 0 {
-		searchTargetInputParmsDto.TargetStringLengthName =
-			"TargetStringLength"
-	}
-
-	searchTargetInputParmsDto.TargetStringLength =
-		len(searchTargetInputParmsDto.TargetString.CharsArray)
-
-	if searchTargetInputParmsDto.TargetStringLength == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is invalid!\n"+
-			"The rune array encapsulated by '%v' is empty\n"+
-			"Length of %v.CharsArray is Zero (0).\n",
-			ePrefix.String(),
-			searchTargetInputParmsDto.TargetStringLengthName,
-			searchTargetInputParmsDto.TargetStringName,
-			searchTargetInputParmsDto.TargetStringName)
-
-		return err
-	}
-
-	if len(searchTargetInputParmsDto.TargetStringStartingSearchIndexName) == 0 {
-		searchTargetInputParmsDto.TargetStringStartingSearchIndexName =
-			"TargetStringStartingSearchIndex"
-	}
-
-	if searchTargetInputParmsDto.TargetStringStartingSearchIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter %v is invalid!\n"+
-			"%v is less than zero (0)\n"+
-			"%v = '%v'\n",
-			ePrefix.String(),
-			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
-			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
-			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
-			searchTargetInputParmsDto.TargetStringStartingSearchIndex)
-
-		return err
-	}
-
-	if searchTargetInputParmsDto.TargetStringStartingSearchIndex >=
-		searchTargetInputParmsDto.TargetStringLength {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v is invalid!\n"+
-			"%v has a value greater than the last\n"+
-			"index in '%v.CharsArray'.\n"+
-			"Last Index in %v.CharsArray = '%v'\n"+
-			"%v = '%v'\n",
-			ePrefix.String(),
-			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
-			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
-			searchTargetInputParmsDto.TargetStringName,
-			searchTargetInputParmsDto.TargetStringName,
-			searchTargetInputParmsDto.TargetStringLength-1,
-			searchTargetInputParmsDto.TargetStringStartingSearchIndexName,
-			searchTargetInputParmsDto.TargetStringStartingSearchIndex)
-
-		return err
-	}
-
-	if len(searchTargetInputParmsDto.TargetStringSearchLengthName) == 0 {
-		searchTargetInputParmsDto.TargetStringSearchLengthName =
-			"TargetStringSearchLength"
-	}
-
-	if searchTargetInputParmsDto.TargetStringSearchLength < -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v is invalid!\n"+
-			"%v has a value less than minus one (-1)\n"+
-			"%v = '%v'\n",
-			ePrefix.String(),
-			searchTargetInputParmsDto.TargetStringSearchLengthName,
-			searchTargetInputParmsDto.TargetStringSearchLengthName,
-			searchTargetInputParmsDto.TargetStringName,
-			searchTargetInputParmsDto.TargetStringSearchLength)
-
-		return err
-	}
-
-	if searchTargetInputParmsDto.TargetStringSearchLength == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v is invalid!\n"+
-			"%v has a value of Zero (0)\n",
-			ePrefix.String(),
-			searchTargetInputParmsDto.TargetStringSearchLengthName,
-			searchTargetInputParmsDto.TargetStringSearchLengthName)
-
-	}
-
-	if searchTargetInputParmsDto.TargetStringSearchLength == -1 {
-
-		searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
-			searchTargetInputParmsDto.TargetStringLength -
-				searchTargetInputParmsDto.TargetStringStartingSearchIndex
-	} else {
-
-		searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
-			searchTargetInputParmsDto.TargetStringSearchLength
-
-	}
-
-	searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
-		searchTargetInputParmsDto.TargetStringStartingSearchIndex +
-			searchTargetInputParmsDto.TargetStringAdjustedSearchLength
-
-	if searchTargetInputParmsDto.TargetStringAdjustedSearchLength >
-		searchTargetInputParmsDto.TargetStringLength {
-
-		searchTargetInputParmsDto.TargetStringAdjustedSearchLength =
-			searchTargetInputParmsDto.TargetStringLength
-
-	}
+	_,
+		err = targetInputParmsAtom.
+		testValidityOfTargetInputParms(
+			searchTargetInputParmsDto,
+			ePrefix.XCpy(
+				"searchTargetInputParmsDto"))
 
 	return err
 }
+
 func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateCharSearchType(
 	errorPrefix interface{}) error {
 

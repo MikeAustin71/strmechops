@@ -563,6 +563,55 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 	return err
 }
 
+// emptyTargetStrings - Receives a pointer to an instance of
+// CharSearchTargetInputParametersDto and proceeds to reset the
+// internal member variable 'TargetString' to its zero or
+// uninitialized state.
+//
+// Since member variable 'TargetString' is a pointer to an
+// instance of RuneArrayDto, the 'TargetString' pointer is reset to
+// 'nil'. This step is taken in order to preserve data sharing in
+// case another object also holds a pointer to that same instance
+// of RuneArrayDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetInputParms1          *CharSearchTargetInputParametersDto
+//     - Pointer to an instance of
+//       CharSearchTargetInputParametersDto. The internal member
+//       variable, 'TargetString', will be reset to a value of
+//       'nil'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron) emptyTargetStrings(
+	targetInputParms *CharSearchTargetInputParametersDto) {
+
+	if searchTargetInputParmsElectron.lock == nil {
+		searchTargetInputParmsElectron.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsElectron.lock.Lock()
+
+	defer searchTargetInputParmsElectron.lock.Unlock()
+
+	if targetInputParms == nil {
+		return
+	}
+
+	targetInputParms.TargetString = nil
+
+	return
+}
+
 // equalTargetStrings - Compares the Target Strings from two
 // instances of CharSearchTargetInputParametersDto to determine if
 // they are equivalent.
@@ -573,7 +622,6 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 // If both TargetString member variables are equal in all respects,
 // this method returns a boolean value of 'true'. Otherwise, a
 // value of 'false' is returned to the calling routine.
-//
 //
 //
 // ------------------------------------------------------------------------
@@ -603,7 +651,7 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 //  bool
 //     - If the comparison of target strings in parameters
 //       'targetInputParms1' and 'targetInputParms2' show that the
-//       internal member varaiables 'TargetString' are equivalent,
+//       internal member variables 'TargetString' are equivalent,
 //       this method will return a boolean value of 'true'.
 //
 //       If the two target strings are NOT equal, this method will
