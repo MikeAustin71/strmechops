@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -52,6 +53,11 @@ import (
 // search operations.
 //
 type CharSearchTargetInputParametersDto struct {
+	TargetInputParametersName string
+	// The Name, Label or descriptive Tag associated with this
+	// instance of CharSearchTargetInputParametersDto. If empty,
+	// this string will be defaulted to "TargetInputParameters"
+
 	TargetString *RuneArrayDto
 	// A pointer to the RuneArrayDto containing the Target
 	// Search String text characters used in the search
@@ -470,6 +476,55 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Equal(
 			incomingTargetInputParms)
 }
 
+// GetFormattedText - Returns a formatted text string detailing all
+// member variables and their values for the current instance of
+// CharSearchTargetInputParametersDto.
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) GetFormattedText(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchTargetInputParametersDto."+
+			"GetFormattedText()",
+		"")
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchTargetInputParametersDtoNanobot{}.ptr().
+		getFormattedText(
+			searchTargetInputParmsDto,
+			ePrefix.XCpy(
+				"strBuilder<-Formatted Text"))
+
+	if err != nil {
+		return "", err
+	}
+
+	return strBuilder.String(), err
+}
+
 // New - Returns a new, uninitialized instance of
 // CharSearchTargetInputParametersDto.
 //
@@ -519,6 +574,11 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateTar
 
 		return err
 
+	}
+
+	if len(searchTargetInputParmsDto.TargetInputParametersName) == 0 {
+		searchTargetInputParmsDto.TargetInputParametersName =
+			"TargetInputParameters"
 	}
 
 	if len(searchTargetInputParmsDto.TargetStringName) == 0 {

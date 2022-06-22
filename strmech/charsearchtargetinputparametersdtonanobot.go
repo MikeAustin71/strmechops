@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -143,6 +144,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 			return err
 		}
 	}
+
+	destinationTargetInputParms.TargetInputParametersName =
+		sourceTargetInputParms.TargetInputParametersName
 
 	destinationTargetInputParms.TargetStringName =
 		sourceTargetInputParms.TargetStringName
@@ -293,6 +297,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	}
 
+	deepCopyTargetInputParms.TargetInputParametersName =
+		targetInputParms.TargetInputParametersName
+
 	deepCopyTargetInputParms.TargetStringName =
 		targetInputParms.TargetStringName
 
@@ -330,6 +337,404 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 		targetInputParms.TextCharSearchType
 
 	return deepCopyTargetInputParms, err
+}
+
+// getFormattedText - Returns formatted text output detailing the
+// member variable values contained in the 'targetInputParms'
+// instance of CharSearchTargetInputParametersDto.
+//
+func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) getFormattedText(
+	targetInputParms *CharSearchTargetInputParametersDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strings.Builder,
+	error) {
+
+	if searchTargetInputParmsNanobot.lock == nil {
+		searchTargetInputParmsNanobot.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsNanobot.lock.Lock()
+
+	defer searchTargetInputParmsNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(512)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"charSearchTargetInputParametersDtoNanobot."+
+			"getFormattedText()",
+		"")
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	if targetInputParms == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'targetInputParms' is a nil pointer!\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	// Total available Length of Output Line
+	const maxFieldLen = 70
+
+	// Max Label Field Length = 36
+	const maxLabelFieldLen = 36
+
+	targetParmsElectron :=
+		charSearchTargetInputParametersDtoElectron{}
+
+	txtStrParam :=
+		targetInputParms.TargetInputParametersName
+
+	// Title Marquee
+
+	err =
+		targetParmsElectron.buildFormattedMarqueeTitle(
+			"=",
+			"CharSearchTargetInputParametersDto",
+			txtStrParam,
+			maxFieldLen,
+			&strBuilder,
+			ePrefix.XCpy(
+				""))
+
+	var colonSpacer *TextFieldSpecLabel
+
+	colonSpacer,
+		err = TextFieldSpecLabel{}.NewPtrTextLabel(
+		": ",
+		-1,
+		TxtJustify.Left(),
+		ePrefix.XCpy(
+			"colonSpacer"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	err =
+		targetParmsElectron.buildFormattedTargetString(
+			maxLabelFieldLen,
+			colonSpacer,
+			targetInputParms,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy("Target String"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringName
+
+	txtStrParam = targetInputParms.TargetStringName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringName is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringName",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringName"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringLength
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			targetInputParms.TargetStringLength)
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringLength is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringLength",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringLength"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringLengthName
+
+	txtStrParam = targetInputParms.TargetStringLengthName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringLengthName is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringLengthName",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringLengthName"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringStartingSearchIndex
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			targetInputParms.TargetStringStartingSearchIndex)
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringStartingSearchIndex is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringStartingSearchIndex",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringStartingSearchIndex"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringStartingSearchIndexName
+
+	txtStrParam =
+		targetInputParms.TargetStringStartingSearchIndexName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringStartingSearchIndexName is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringStartingSearchIndexName",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringStartingSearchIndexName"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringSearchLength
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			targetInputParms.TargetStringSearchLength)
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringSearchLength is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringSearchLength",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringSearchLength"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringSearchLengthName
+
+	txtStrParam =
+		targetInputParms.TargetStringSearchLengthName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringSearchLengthName is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringSearchLengthName",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringSearchLengthName"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringAdjustedSearchLength
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			targetInputParms.TargetStringAdjustedSearchLength)
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringAdjustedSearchLength is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringAdjustedSearchLength",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringAdjustedSearchLength"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringDescription1
+	txtStrParam = targetInputParms.TargetStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription1 is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringDescription1",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringDescription1"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TargetStringDescription2
+	txtStrParam = targetInputParms.TargetStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription2 is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TargetStringDescription2",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TargetStringDescription2"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// FoundFirstNumericDigitInNumStr
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			targetInputParms.FoundFirstNumericDigitInNumStr)
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "FoundFirstNumericDigitInNumStr is EMPTY!"
+	}
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"FoundFirstNumericDigitInNumStr",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"FoundFirstNumericDigitInNumStr"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TextCharSearchType
+	searchType := targetInputParms.TextCharSearchType
+
+	if !searchType.XIsValid() {
+		searchType = CharSearchType.None()
+	}
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			searchType.String())
+
+	err = targetParmsElectron.
+		buildFormattedParameterText(
+			"TextCharSearchType",
+			maxLabelFieldLen,
+			colonSpacer,
+			txtStrParam,
+			-1,
+			&strBuilder,
+			ePrefix.XCpy(
+				"TextCharSearchType"))
+
+	return strBuilder, err
 }
 
 // ptr - Returns a pointer to a new instance of
