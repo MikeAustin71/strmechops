@@ -563,95 +563,53 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 	return err
 }
 
-// empty - Receives a pointer to an instance of
-// CharSearchTargetInputParametersDto and proceeds to reset the
-// data values for member variables to their initial or zero
-// values.
+// equalTargetStrings - Compares the Target Strings from two
+// instances of CharSearchTargetInputParametersDto to determine if
+// they are equivalent.
 //
+// If both TargetString member variables are 'nil' pointers, this
+// method classifies them as equivalent.
 //
-// ----------------------------------------------------------------
+// If both TargetString member variables are equal in all respects,
+// this method returns a boolean value of 'true'. Otherwise, a
+// value of 'false' is returned to the calling routine.
 //
-// IMPORTANT
-//
-// All the member variable data values contained in input parameter
-// 'targetInputParms' will be deleted and reset to their zero
-// values.
 //
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetInputParms           *CharSearchTargetInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTargetInputParametersDto. All the internal
-//       member variables contained in this instance will be
-//       deleted and reset to their zero values.
+//  targetInputParms1          *CharSearchTargetInputParametersDto
+//     - An instance of CharSearchTargetInputParametersDto. If the
+//       internal member variable, 'TargetString', will be compared
+//       to the same internal member variable ('TargetString') in
+//       parameter 'targetInputParms2' to determine if the two
+//       target strings are equivalent.
+//
+//
+//  targetInputParms2          *CharSearchTargetInputParametersDto
+//     - An instance of CharSearchTargetInputParametersDto. If the
+//       internal member variable, 'TargetString', will be compared
+//       to the same internal member variable ('TargetString') in
+//       parameter 'targetInputParms1' to determine if the two
+//       target strings are equivalent.
 //
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
+//  bool
+//     - If the comparison of target strings in parameters
+//       'targetInputParms1' and 'targetInputParms2' show that the
+//       internal member varaiables 'TargetString' are equivalent,
+//       this method will return a boolean value of 'true'.
 //
-func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron) empty(
-	targetInputParms *CharSearchTargetInputParametersDto) {
-
-	if searchTargetInputParmsElectron.lock == nil {
-		searchTargetInputParmsElectron.lock = new(sync.Mutex)
-	}
-
-	searchTargetInputParmsElectron.lock.Lock()
-
-	defer searchTargetInputParmsElectron.lock.Unlock()
-
-	if targetInputParms == nil {
-		return
-	}
-
-	targetInputParms.TargetInputParametersName = ""
-
-	targetInputParms.TargetString = nil
-
-	targetInputParms.TargetStringName = ""
-
-	targetInputParms.TargetStringLength = -1
-
-	targetInputParms.TargetStringLengthName = ""
-
-	targetInputParms.TargetStringStartingSearchIndex = -1
-
-	targetInputParms.TargetStringStartingSearchIndexName = ""
-
-	targetInputParms.TargetStringSearchLength = -2
-
-	targetInputParms.TargetStringSearchLengthName = ""
-
-	targetInputParms.TargetStringAdjustedSearchLength = -1
-
-	targetInputParms.TargetStringDescription1 = ""
-
-	targetInputParms.TargetStringDescription2 = ""
-
-	targetInputParms.FoundFirstNumericDigitInNumStr = false
-
-	targetInputParms.TextCharSearchType = CharSearchType.None()
-
-	return
-}
-
-// equal - Receives a pointer to two instances of
-// charSearchTargetInputParametersDtoElectron and proceeds to
-// compare their member variables in order to determine if they are
-// equivalent.
+//       If the two target strings are NOT equal, this method will
+//       return a boolean value of 'false' to the calling function.
 //
-// A boolean flag showing the result of this comparison is
-// returned. If the member variables for both instances are equal
-// in all respects, this flag is set to 'true'. Otherwise, this
-// method returns 'false'.
-//
-func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron) equal(
+func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron) equalTargetStrings(
 	targetInputParms1 *CharSearchTargetInputParametersDto,
 	targetInputParms2 *CharSearchTargetInputParametersDto) bool {
 
@@ -666,6 +624,12 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 	if targetInputParms1 == nil ||
 		targetInputParms2 == nil {
 		return false
+	}
+
+	if targetInputParms1.TargetString == nil &&
+		targetInputParms2.TargetString == nil {
+
+		return true
 	}
 
 	if targetInputParms1.TargetString == nil &&
@@ -687,87 +651,6 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 			targetInputParms2.TargetString) {
 			return false
 		}
-	}
-
-	// Target Strings are equal. However, both
-	// pointers may be nil
-
-	if targetInputParms1.TargetStringName !=
-		targetInputParms2.TargetStringName {
-
-		return false
-	}
-
-	if targetInputParms1.TargetInputParametersName !=
-		targetInputParms2.TargetInputParametersName {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringLength !=
-		targetInputParms2.TargetStringLength {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringLengthName !=
-		targetInputParms2.TargetStringLengthName {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringStartingSearchIndex !=
-		targetInputParms2.TargetStringStartingSearchIndex {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringStartingSearchIndexName !=
-		targetInputParms2.TargetStringStartingSearchIndexName {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringSearchLength !=
-		targetInputParms2.TargetStringSearchLength {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringSearchLengthName !=
-		targetInputParms2.TargetStringSearchLengthName {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringAdjustedSearchLength !=
-		targetInputParms2.TargetStringAdjustedSearchLength {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringDescription1 !=
-		targetInputParms2.TargetStringDescription1 {
-
-		return false
-	}
-
-	if targetInputParms1.TargetStringDescription2 !=
-		targetInputParms2.TargetStringDescription2 {
-
-		return false
-	}
-
-	if targetInputParms1.FoundFirstNumericDigitInNumStr !=
-		targetInputParms2.FoundFirstNumericDigitInNumStr {
-
-		return false
-	}
-
-	if targetInputParms1.TextCharSearchType !=
-		targetInputParms2.TextCharSearchType {
-
-		return false
 	}
 
 	return true

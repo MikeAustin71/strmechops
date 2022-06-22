@@ -413,7 +413,7 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Empty() {
 
 	searchTargetInputParmsDto.lock.Lock()
 
-	charSearchTargetInputParametersDtoElectron{}.ptr().
+	charSearchTargetInputParametersDtoAtom{}.ptr().
 		empty(searchTargetInputParmsDto)
 
 	searchTargetInputParmsDto.lock.Unlock()
@@ -471,8 +471,68 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Equal(
 
 	defer searchTargetInputParmsDto.lock.Unlock()
 
-	return charSearchTargetInputParametersDtoElectron{}.ptr().
+	return charSearchTargetInputParametersDtoAtom{}.ptr().
 		equal(searchTargetInputParmsDto,
+			incomingTargetInputParms)
+}
+
+// EqualTargetStrings - Receives a pointer to another instance of
+// CharSearchTargetInputParametersDto and proceeds to compare the
+// internal member variable 'TargetString' to the same internal
+// member variable 'TargetString' contained in the current
+// CharSearchTargetInputParametersDto instance in order to
+// determine if the two 'TargetString' member variables are
+// equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the 'TargetString' member variables for both
+// instances are equal in all respects, this flag is set to 'true'.
+// Otherwise, this method returns a boolean value of 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTargetInputParms   *CharSearchTargetInputParametersDto
+//     - A pointer to an instance of
+//       CharSearchTargetInputParametersDto. The internal member
+//       variable 'TargetString' contained in this instance will be
+//       compared to the same member variable 'TargetString'
+//       contained in the current instance of
+//       CharSearchTargetInputParametersDto. The results of this
+//       comparison will be returned to the calling functions as a
+//       boolean value.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable 'TargetString' contained
+//       in input parameter 'incomingTargetInputParms' is
+//       equivalent in all respects to the same member variable
+//       'TargetString' contained in the current instance of
+//       CharSearchTargetInputParametersDto, this return value
+//       will be set to 'true'.
+//
+//       Otherwise, this method will return a boolean value of
+//       'false'.
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) EqualTargetStrings(
+	incomingTargetInputParms *CharSearchTargetInputParametersDto) bool {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+
+	return charSearchTargetInputParametersDtoElectron{}.ptr().
+		equalTargetStrings(searchTargetInputParmsDto,
 			incomingTargetInputParms)
 }
 

@@ -128,9 +128,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 		return err
 	}
 
-	targetInputParmsElectron := charSearchTargetInputParametersDtoElectron{}
+	targetInputParmsAtom := charSearchTargetInputParametersDtoAtom{}
 
-	targetInputParmsElectron.empty(
+	targetInputParmsAtom.empty(
 		destinationTargetInputParms)
 
 	if sourceTargetInputParms.TargetString != nil {
