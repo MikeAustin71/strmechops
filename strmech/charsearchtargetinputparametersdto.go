@@ -545,6 +545,67 @@ func (searchTargetInputParmsDto CharSearchTargetInputParametersDto) New() CharSe
 	return newEmptyTargetInputParms
 }
 
+// String - Returns a formatted text string detailing all the
+// internal member variables in the current instance of
+// CharSearchTargetInputParametersDto and their values.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() string {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchTargetInputParametersDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchTargetInputParametersDto.String()",
+			err.Error())
+
+		return errOut
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchTargetInputParametersDtoNanobot{}.ptr().
+		getFormattedText(
+			searchTargetInputParmsDto,
+			ePrefix.XCpy(
+				"strBuilder"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
+}
+
 // ValidateTargetParameters - Validates the Target Search String
 // and related member variables contained in the current instance
 // of CharSearchTargetInputParametersDto.
