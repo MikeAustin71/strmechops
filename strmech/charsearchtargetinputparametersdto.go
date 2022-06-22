@@ -602,11 +602,10 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) GetFormatte
 //
 // Be Advised
 //
-// In addition to performing validation diagnostics on input
-// parameter the current instance of
-// CharSearchTargetInputParametersDto, this method will proceed to
-// set all empty member variable labels or name strings to their
-// default values.
+// In addition to performing validation diagnostics on the current
+// instance of CharSearchTargetInputParametersDto, this method will
+// proceed to set all empty member variable labels or name strings
+// to their default values.
 //
 // Type CharSearchTargetInputParametersDto contains a number of
 // string variables which are used to label, name or otherwise
@@ -743,11 +742,10 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 //
 // Be Advised
 //
-// In addition to performing validation diagnostics on input
-// parameter the current instance of
-// CharSearchTargetInputParametersDto, this method will proceed to
-// set all empty member variable labels or name strings to their
-// default values.
+// In addition to performing validation diagnostics on the current
+// instance of CharSearchTargetInputParametersDto, this method will
+// proceed to set all empty member variable labels or name strings
+// to their default values.
 //
 // Type CharSearchTargetInputParametersDto contains a number of
 // string variables which are used to label, name or otherwise
