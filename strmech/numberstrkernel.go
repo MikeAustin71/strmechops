@@ -696,6 +696,18 @@ func (numStrKernel *NumberStrKernel) EmptyIntegerDigits() {
 //
 // ----------------------------------------------------------------
 //
+// BE ADVISED
+//
+// This method differs from method
+// NumberStrKernel.EqualNumericDigits() in that this method
+// includes all internal member variables in the comparison.
+//
+// In method NumberStrKernel.EqualNumericDigits() only the integer
+// and fractional numeric digits are included in the comparison.
+//
+//
+// ----------------------------------------------------------------
+//
 // Input Parameters
 //
 //  incomingNumStrKernel       *NumberStrKernel
@@ -734,6 +746,195 @@ func (numStrKernel *NumberStrKernel) Equal(
 	return numStrKernelElectron.equal(
 		numStrKernel,
 		incomingNumStrKernel)
+}
+
+// EqualFractionalDigits - Receives a pointer to another instance
+// of NumberStrKernel and proceeds to compare the fractional digits
+// contained in both instances. This necessarily involves a
+// comparison of the internal member variables,
+// 'NumberStrKernel.fractionalDigits'.
+//
+// If the fractional digits contained in both instances are
+// equivalent, this method returns a boolean value of 'true'.
+// Otherwise, a value of 'false' is returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNumStrKernel       *NumberStrKernel
+//     - A pointer to an external instance of NumberStrKernel. The
+//       internal member variable 'fractionalDigits' will be
+//       compared to 'fractionalDigits' member variable in the
+//       current instance of NumberStrKernel. If the fractional
+//       digits in both instances are equivalent, a boolean value
+//       of 'true' will be returned to the calling function.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the fractional digits contained in input parameter
+//       'incomingNumStrKernel' are equivalent in all respects to
+//       those contained in the current instance of
+//       NumberStrKernel, this return value will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (numStrKernel *NumberStrKernel) EqualFractionalDigits(
+	incomingNumStrKernel *NumberStrKernel) bool {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	if incomingNumStrKernel == nil {
+
+		return false
+	}
+
+	return numStrKernel.fractionalDigits.EqualCharArrays(
+		&incomingNumStrKernel.fractionalDigits)
+}
+
+// EqualIntegerDigits - Receives a pointer to another instance of
+// NumberStrKernel and proceeds to compare the integer digits
+// contained in both instances. This necessarily involves a
+// comparison of the internal member variables,
+// 'NumberStrKernel.integerDigits'.
+//
+// If the integer digits contained in both instances are equivalent,
+// this method returns a boolean value of 'true'. Otherwise, a
+// value of 'false' is returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNumStrKernel       *NumberStrKernel
+//     - A pointer to an external instance of NumberStrKernel. The
+//       internal member variable 'integerDigits' will be compared
+//       to the 'integerDigits' member variable in the current
+//       instance of NumberStrKernel. If the integer digits in both
+//       instances are equivalent, a boolean value of 'true' will
+//       be returned to the calling function.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the integer digits contained in input parameter
+//       'incomingNumStrKernel' are equivalent in all respects to
+//       those contained in the current instance of
+//       NumberStrKernel, this return value will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (numStrKernel *NumberStrKernel) EqualIntegerDigits(
+	incomingNumStrKernel *NumberStrKernel) bool {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	if incomingNumStrKernel == nil {
+
+		return false
+	}
+
+	return numStrKernel.integerDigits.EqualCharArrays(
+		&incomingNumStrKernel.integerDigits)
+}
+
+// EqualNumericDigits - Receives a pointer to another instance of
+// NumberStrKernel and proceeds to compare the integer and
+// fractional digits contained in both instances. This necessarily
+// involves a comparison of the internal member variables,
+// 'NumberStrKernel.integerDigits' and
+// 'NumberStrKernel.fractionalDigits'.
+//
+// If the integer and fractional digits contained in both instances
+// are equivalent, this method returns a boolean value of 'true'.
+// Otherwise, a value of 'false' is returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// This method differs from method NumberStrKernel.Equal() in that
+// only numeric digits are included in the comparison for
+// NumberStrKernel.EqualNumericDigits().
+//
+// In method NumberStrKernel.Equal() all internal member variable
+// data values are included in the comparison.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNumStrKernel       *NumberStrKernel
+//     - A pointer to an external instance of NumberStrKernel. The
+//       internal member variables 'integerDigits' and
+//       'fractionalDigits' will be compared to their counterparts
+//       in the current instance of NumberStrKernel. If both the
+//       integer digits and the fractional digits are equivalent,
+//       a boolean value of 'true' will be returned to the calling
+//       function.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the integer and fractional digits contained in input
+//       parameter 'incomingNumStrKernel' are equivalent in all
+//       respects to those contained in the current instance of
+//       NumberStrKernel, this return value will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (numStrKernel *NumberStrKernel) EqualNumericDigits(
+	incomingNumStrKernel *NumberStrKernel) bool {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	if incomingNumStrKernel == nil {
+
+		return false
+	}
+
+	areEqual := numStrKernel.integerDigits.EqualCharArrays(
+		&incomingNumStrKernel.integerDigits)
+
+	if !areEqual {
+		return false
+	}
+
+	return numStrKernel.fractionalDigits.EqualCharArrays(
+		&incomingNumStrKernel.fractionalDigits)
 }
 
 // GetIntegerDigits - Returns an instance of RuneArrayDto
