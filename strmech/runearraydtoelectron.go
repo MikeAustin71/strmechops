@@ -10,6 +10,49 @@ type runeArrayDtoElectron struct {
 	lock *sync.Mutex
 }
 
+// emptyCharsArray - Empties or deletes all the characters residing
+// in the internal member variable 'CharsArray' contained in the
+// instance of RuneArrayDto passed as input parameter
+// 'RuneArrayDto'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeArrayDto               *RuneArrayDto
+//     - A pointer to an instance of RuneArrayDto. All
+//       the characters contained in the internal member rune array
+//       'CharsArray' will be deleted. The internal member rune
+//       array will then be set to a value of 'nil'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (runeDtoElectron *runeArrayDtoElectron) emptyCharsArray(
+	runeArrayDto *RuneArrayDto) {
+
+	if runeDtoElectron.lock == nil {
+		runeDtoElectron.lock = new(sync.Mutex)
+	}
+
+	runeDtoElectron.lock.Lock()
+
+	defer runeDtoElectron.lock.Unlock()
+
+	if runeArrayDto == nil {
+		return
+	}
+
+	runeArrayDto.CharsArray = nil
+
+	return
+}
+
 // linearEndOfStringSearch - This low level function executes a
 // string search operation proceeds through the entire length of
 // Target Search String.

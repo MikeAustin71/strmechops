@@ -97,6 +97,13 @@ type RuneArrayDto struct {
 //       the rune array encapsulated by the current instance of
 //       RuneArrayDto.
 //
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (charsArrayDto *RuneArrayDto) AddChar(
 	charToAdd rune) {
 
@@ -420,15 +427,14 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 //
 func (charsArrayDto *RuneArrayDto) Empty() {
 
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
 	charsArrayDto.lock.Lock()
 
-	charsArrayDto.CharsArray = nil
-
-	charsArrayDto.Description1 = ""
-
-	charsArrayDto.Description2 = ""
-
-	charsArrayDto.charSearchType = CharSearchType.LinearTargetStartingIndex()
+	runeArrayDtoAtom{}.ptr().empty(
+		charsArrayDto)
 
 	charsArrayDto.lock.Unlock()
 
