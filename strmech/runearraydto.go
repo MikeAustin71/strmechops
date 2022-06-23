@@ -1965,7 +1965,7 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 
 // SetRuneArrayFromString - Receives a string as an input parameter
 // and proceeds to populate the internal rune array with new
-// charater data for the current instance of RuneArrayDto.
+// character data for the current instance of RuneArrayDto.
 //
 //
 // ----------------------------------------------------------------
