@@ -786,7 +786,7 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 //  string
 //     - This method returns a string of characters extracted from
 //       the internal member variable rune array
-//       'charsArrayDto.CharsArray'.
+//       'RuneArrayDto.CharsArray'.
 //
 func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 
@@ -797,10 +797,6 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 	charsArrayDto.lock.Lock()
 
 	defer charsArrayDto.lock.Unlock()
-
-	if len(charsArrayDto.CharsArray) == 0 {
-		return ""
-	}
 
 	return string(charsArrayDto.CharsArray)
 }
@@ -2088,4 +2084,39 @@ func (charsArrayDto *RuneArrayDto) SetRuneArrayFromString(
 			charArray,
 			ePrefix.XCpy(
 				"charsArrayDto"))
+}
+
+// String - Returns the internal rune array maintained by this
+// instance of RuneArrayDto as a string.
+//
+// This method implements the Stringer interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns a string of characters extracted from
+//       the internal member variable rune array
+//       'RuneArrayDto.CharsArray'.
+//
+func (charsArrayDto *RuneArrayDto) String() string {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	return string(charsArrayDto.CharsArray)
 }
