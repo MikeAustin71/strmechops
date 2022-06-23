@@ -597,6 +597,92 @@ func (numStrKernel *NumberStrKernel) Empty() {
 	return
 }
 
+// EmptyFractionalDigits - Sets the Fractional Digits rune array
+// to 'nil'. This effectively deletes the previous fractional
+// digits stored in that array.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the text characters contained in the member variable
+// NumberStrKernel.fractionalDigits will be deleted. The
+// NumberStrKernel.fractionalDigits rune array will set to a value
+// of 'nil'.
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (numStrKernel *NumberStrKernel) EmptyFractionalDigits() {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	numStrKernel.fractionalDigits.EmptyCharsArray()
+
+	return
+}
+
+// EmptyIntegerDigits - Sets the Integer Digits rune array
+// to 'nil'. This effectively deletes the previous integer
+// digits stored in that array.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the text characters contained in the member variable
+// NumberStrKernel.integerDigits will be deleted. The
+// NumberStrKernel.integerDigits rune array will set to a value of
+// 'nil'.
+//
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (numStrKernel *NumberStrKernel) EmptyIntegerDigits() {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	numStrKernel.integerDigits.EmptyCharsArray()
+
+	return
+}
+
 // Equal - Receives a pointer to another instance of
 // NumberStrKernel and proceeds to compare its internal member
 // variables to those of the current NumberStrKernel instance in
