@@ -762,6 +762,49 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 	return newCharsArray
 }
 
+// GetCharacterString - Returns a string populated with the text
+// characters taken from the rune array internal member variable
+// contained in the current instance of RuneArrayDto.
+//
+// This method is identical in functionality to method:
+//  RuneArrayDto.String()
+//
+// RuneArrayDto.String() implements the Stringer interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns a string of characters extracted from
+//       the internal member variable rune array
+//       'charsArrayDto.CharsArray'.
+//
+func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	if len(charsArrayDto.CharsArray) == 0 {
+		return ""
+	}
+
+	return string(charsArrayDto.CharsArray)
+}
+
 // NewFromString - Creates and returns a new instance of
 // RuneArrayDto using a string input parameter.
 //
