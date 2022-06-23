@@ -1055,15 +1055,6 @@ func (charsArrayDto RuneArrayDto) NewFromString(
 		return newRuneArrayDto, err
 	}
 
-	if len(stringChars) == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'stringChars' is invalid!\n"+
-			"'stringChars' is empty and has a length of zero.\n",
-			ePrefix.String())
-
-		return newRuneArrayDto, err
-	}
-
 	if !charSearchType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
@@ -1081,17 +1072,14 @@ func (charsArrayDto RuneArrayDto) NewFromString(
 		return newRuneArrayDto, err
 	}
 
-	runeChars := []rune(stringChars)
+	charArray := []rune(stringChars)
 
-	lenOfCharArray := len(runeChars)
-
-	newRuneArrayDto.CharsArray =
-		make([]rune, lenOfCharArray)
-
-	for i := 0; i < lenOfCharArray; i++ {
-		newRuneArrayDto.CharsArray[i] =
-			runeChars[i]
-	}
+	err = runeArrayDtoElectron{}.ptr().
+		setRuneArray(
+			&newRuneArrayDto,
+			charArray,
+			ePrefix.XCpy(
+				"newRuneArrayDto"))
 
 	newRuneArrayDto.Description1 = description1
 
@@ -1352,17 +1340,6 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 		return newRuneArrayDto, err
 	}
 
-	lenOfCharArray := len(charArray)
-
-	if lenOfCharArray == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'charArray' is invalid!\n"+
-			"'charArray' is empty and has a length of zero.\n",
-			ePrefix.String())
-
-		return newRuneArrayDto, err
-	}
-
 	if !charSearchType.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
@@ -1380,12 +1357,15 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 		return newRuneArrayDto, err
 	}
 
-	newRuneArrayDto.CharsArray =
-		make([]rune, lenOfCharArray)
+	err = runeArrayDtoElectron{}.ptr().
+		setRuneArray(
+			&newRuneArrayDto,
+			charArray,
+			ePrefix.XCpy(
+				"newRuneArrayDto"))
 
-	for i := 0; i < lenOfCharArray; i++ {
-		newRuneArrayDto.CharsArray[i] =
-			charArray[i]
+	if err != nil {
+		return newRuneArrayDto, err
 	}
 
 	newRuneArrayDto.Description1 = description1
@@ -1875,12 +1855,9 @@ func (charsArrayDto *RuneArrayDto) SetDescription2(
 //
 // IMPORTANT
 //
-// All pre-existing data in the current instance of RuneArrayDto
-// will be deleted by this method.
-//
-// The pre-existing data in the internal rune array member
-// variable, 'CharsArray' will be deleted and overwritten with new
-// data.
+// For the current instance of RuneArrayDto, all pre-existing data
+// in the internal rune array member variable, 'CharsArray' will be
+// deleted and overwritten with new data.
 //
 //
 // ----------------------------------------------------------------
@@ -1888,8 +1865,9 @@ func (charsArrayDto *RuneArrayDto) SetDescription2(
 // Input Parameters
 //
 //  charArray                  []rune
-//     - An array of runes used to populate a new instance of
-//       RuneArrayDto which is returned to the calling function.
+//     - An array of runes used to populate the internal member
+//       variable rune array for the current instance of
+//       RuneArrayDto.
 //
 //       If this array is empty or has a zero length, an error will
 //       be returned.
@@ -1957,8 +1935,7 @@ func (charsArrayDto *RuneArrayDto) SetDescription2(
 //
 func (charsArrayDto *RuneArrayDto) SetRuneArray(
 	charArray []rune,
-	errorPrefix interface{}) (
-	err error) {
+	errorPrefix interface{}) error {
 
 	if charsArrayDto.lock == nil {
 		charsArrayDto.lock = new(sync.Mutex)
@@ -1969,6 +1946,7 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 	defer charsArrayDto.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1981,24 +1959,133 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 		return err
 	}
 
-	lenOfCharArray := len(charArray)
+	return runeArrayDtoElectron{}.ptr().
+		setRuneArray(
+			charsArrayDto,
+			charArray,
+			ePrefix.XCpy(
+				"charsArrayDto"))
+}
 
-	if lenOfCharArray == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'charArray' is invalid!\n"+
-			"'charArray' is empty and has a length of zero.\n",
-			ePrefix.String())
+// SetRuneArrayFromString - Receives a string as an input parameter
+// and proceeds to populate the internal rune array with new
+// charater data for the current instance of RuneArrayDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// For the current instance of RuneArrayDto, all pre-existing data
+// in the internal rune array member variable, 'CharsArray' will be
+// deleted and overwritten with new data.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  charString                 string
+//     - An string of characters which will be used to populate
+//       the internal member variable rune array for the current
+//       instance of RuneArrayDto.
+//
+//       If this array is empty or has a zero length, an error will
+//       be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (charsArrayDto *RuneArrayDto) SetRuneArrayFromString(
+	charString string,
+	errorPrefix interface{}) error {
 
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"SetRuneArrayFromString()",
+		"")
+
+	if err != nil {
 		return err
 	}
 
-	charsArrayDto.CharsArray =
-		make([]rune, lenOfCharArray)
+	charArray := []rune(charString)
 
-	for i := 0; i < lenOfCharArray; i++ {
-		charsArrayDto.CharsArray[i] =
-			charArray[i]
-	}
-
-	return err
+	return runeArrayDtoElectron{}.ptr().
+		setRuneArray(
+			charsArrayDto,
+			charArray,
+			ePrefix.XCpy(
+				"charsArrayDto"))
 }

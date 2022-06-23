@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -873,4 +874,134 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 	}
 
 	return searchResults, err
+}
+
+// setRuneArray - Receives a pointer to an instance of
+// RuneArrayDto ('runeArrayDto') and a rune array ('newChars').
+// This method then proceeds to copy the 'newChars' rune array
+// to the internal member variable rune array ('CharsArray')
+// maintained by the 'runeArrayDto' instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// For the input parameter 'runeArrayDto', all pre-existing data in
+// the internal rune array member variable, 'charArray' will be
+// deleted and overwritten with new data.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeArrayDto               *RuneArrayDto
+//     - A pointer to an instance of RuneArrayDto. The internal
+//       rune array maintained by this instance, 'CharsArray',
+//       will be deleted and overwritten.
+//
+//       New data taken from input parameter, 'charArray', will
+//       then be copied to 'runeArrayDto.CharsArray'
+//
+//
+//  charArray                  []rune
+//     - An array of runes used to populate the internal member
+//       variable rune array for the 'runeArrayDto' instance of
+//       RuneArrayDto.
+//
+//       If this array is empty or has a zero length, an error will
+//       be returned.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (runeDtoElectron *runeArrayDtoElectron) setRuneArray(
+	runeArrayDto *RuneArrayDto,
+	newChars []rune,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if runeDtoElectron.lock == nil {
+		runeDtoElectron.lock = new(sync.Mutex)
+	}
+
+	runeDtoElectron.lock.Lock()
+
+	defer runeDtoElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	searchResults := CharSearchResultsDto{}
+
+	searchResults.Empty()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"runeArrayDtoElectron."+
+			"setRuneArray()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if runeArrayDto == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'runeArrayDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenOfNewCharsArray := len(newChars)
+
+	if lenOfNewCharsArray == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'newChars' is invalid!\n"+
+			"'newChars' is empty and has a length of zero.",
+			ePrefix.String())
+
+		return err
+	}
+
+	runeArrayDto.CharsArray =
+		make([]rune, lenOfNewCharsArray)
+
+	for i := 0; i < lenOfNewCharsArray; i++ {
+		runeArrayDto.CharsArray[i] =
+			newChars[i]
+	}
+
+	return err
 }
