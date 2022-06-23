@@ -651,9 +651,9 @@ func (charSearchType CharacterSearchType) XValueInt() int {
 //  Example: CharacterSearchType(0).LinearEndOfString()
 //
 // Usage:
-//  TextCharSearchType.None(),
-//  TextCharSearchType.LinearTargetStartingIndex(),
-//  TextCharSearchType.SingleTargetChar(),
-//  TextCharSearchType.LinearEndOfString(),
+//  CharSearchType.None(),
+//  CharSearchType.LinearTargetStartingIndex(),
+//  CharSearchType.SingleTargetChar(),
+//  CharSearchType.LinearEndOfString(),
 //
 const CharSearchType = CharacterSearchType(-1)

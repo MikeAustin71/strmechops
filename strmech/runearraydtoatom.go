@@ -36,7 +36,7 @@ type runeArrayDtoAtom struct {
 //
 //  NONE
 //
-func (runeDtoAtom runeArrayDtoAtom) empty(
+func (runeDtoAtom *runeArrayDtoAtom) empty(
 	runeArrayDto *RuneArrayDto) {
 
 	if runeDtoAtom.lock == nil {
@@ -61,6 +61,60 @@ func (runeDtoAtom runeArrayDtoAtom) empty(
 	runeArrayDto.charSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	return
+}
+
+// equal - Receives a pointer to two instances of
+// RuneArrayDto and proceeds to compare their member variables in
+// order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+func (runeDtoAtom *runeArrayDtoAtom) equal(
+	runeArrayDto1 *RuneArrayDto,
+	runeArrayDto2 *RuneArrayDto) bool {
+
+	if runeDtoAtom.lock == nil {
+		runeDtoAtom.lock = new(sync.Mutex)
+	}
+
+	runeDtoAtom.lock.Lock()
+
+	defer runeDtoAtom.lock.Unlock()
+
+	if runeArrayDto1 == nil ||
+		runeArrayDto2 == nil {
+
+		return false
+	}
+
+	areEqual := runeArrayDtoElectron{}.ptr().
+		equalCharArrays(
+			runeArrayDto1,
+			runeArrayDto2)
+
+	if !areEqual {
+		return false
+	}
+
+	if runeArrayDto1.Description1 !=
+		runeArrayDto2.Description1 {
+		return false
+	}
+
+	if runeArrayDto1.Description2 !=
+		runeArrayDto2.Description2 {
+		return false
+	}
+
+	if runeArrayDto1.charSearchType !=
+		runeArrayDto2.charSearchType {
+		return false
+	}
+
+	return true
 }
 
 // ptr - Returns a pointer to a new instance of

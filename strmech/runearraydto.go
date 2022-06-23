@@ -72,14 +72,29 @@ import (
 // Reference method: RuneArrayDto.SetCharacterSearchType()
 //
 type RuneArrayDto struct {
-	CharsArray     []rune
-	Description1   string
-	Description2   string
-	charSearchType CharacterSearchType // Three Possible Settings:
-	//                                     TextCharSearchType.LinearTargetStartingIndex()
-	//                                     TextCharSearchType.SingleTargetChar()
-	//                                     TextCharSearchType.LinearEndOfString()
-	//                                     Default = TextCharSearchType.LinearTargetStartingIndex()
+	CharsArray []rune
+	// An array of runes used to store text characters.
+
+	Description1 string
+	// Optional. A name, label or narrative text used to describe
+	// the current instance of RuneArrayDto.
+
+	Description2 string
+	// Optional. A name, label or narrative text used to describe
+	// the current instance of RuneArrayDto.
+
+	charSearchType CharacterSearchType
+	// Defines the type of text character search which will be
+	// performed on the text characters contained in member
+	// variable 'CharsArray'. This enumeration value has four
+	// possible settings:
+	//     CharSearchType.LinearTargetStartingIndex() - Invalid
+	//     CharSearchType.LinearTargetStartingIndex() - Default, Valid
+	//     CharSearchType.SingleTargetChar()  - Valid
+	//     CharSearchType.LinearEndOfString() - Valid
+	// This variable may only be set by calling method:
+	//   RuneArrayDto.SetCharacterSearchType
+
 	lock *sync.Mutex
 }
 
@@ -402,15 +417,16 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 	return copyOfRuneArrayDto, err
 }
 
-// Empty - Resets the internal member variable rune array to 'nil'.
+// Empty - Resets all internal member variables for the current
+// instance of RuneArrayDto to their initial or zero values.
 //
 // ----------------------------------------------------------------
 //
 // IMPORTANT
 //
-// This method will delete the pre-existing characters in the
-// internal rune array for the current instance of RuneArrayDto.
-//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of RuneArrayDto.
+///
 //
 // ------------------------------------------------------------------------
 //
@@ -439,6 +455,48 @@ func (charsArrayDto *RuneArrayDto) Empty() {
 	charsArrayDto.lock.Unlock()
 
 	charsArrayDto.lock = nil
+}
+
+// EmptyCharsArray - This method will empty or delete the contents
+// of the internal rune array maintained by the current instance of
+// RuneArrayDto.
+//
+// Only the rune array will be deleted and overwritten. All other
+// internal member variables will remain unchanged.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all pre-existing characters contained in
+// the internal member variable 'RuneArrayDto.CharsArray'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (charsArrayDto *RuneArrayDto) EmptyCharsArray() {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	runeArrayDtoElectron{}.ptr().emptyCharsArray(
+		charsArrayDto)
 }
 
 // Equal - Receives a pointer to another instance of RuneArrayDto
@@ -487,47 +545,72 @@ func (charsArrayDto *RuneArrayDto) Equal(
 
 	defer charsArrayDto.lock.Unlock()
 
-	if incomingRuneArrayDto == nil {
-		return false
+	return runeArrayDtoAtom{}.ptr().equal(
+		charsArrayDto,
+		incomingRuneArrayDto)
+}
+
+// EqualCharArrays - Compares the current instance of RuneArrayDto
+// to another instance ('incomingRuneArrayDto') in order to
+// determine whether their internal character rune arrays are
+// equivalent. Basically, this is a comparison between the text
+// characters encapsulated by 'incomingRuneArrayDto' and the
+// current instance of RuneArrayDto, 'charsArrayDto'.
+//
+// This method will compare the member variables 'CharArrays'
+// contained within the two instances of RuneArrayDto. If both
+// instances of RuneArrayDto have equivalent member variable
+// 'CharArrays', this method will return a boolean value of
+// 'true'.
+//
+// If the rune arrays differ in any respect, this method will
+// return a value of 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingRuneArrayDto       *RuneArrayDto
+//     - A pointer to an instance of RuneArrayDto. The text
+//       characters contained in internal member variable
+//       rune array, 'CharsArray', will be compared to those
+//       contained in the current instance of RuneArrayDto,
+//       'charsArrayDto'. If they are equal in all respects,
+//       this method will return a boolean value of 'true'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - This boolean flag will transmit the results of a
+//       comparison between the character rune arrays contained in
+//       input parameter 'incomingRuneArrayDto' and the current
+//       instance of RunArrayDto. If the comparison shows that the
+//       member variables 'CharsArray' are equivalent in all
+//       respects, this return value will be set to 'true'.
+//
+//       If the member variable 'CharsArray' differs in any way
+//       between instances 'incomingRuneArrayDto' and the current
+//       instance of RuneArrayDto, this will return 'false'.
+//
+func (charsArrayDto *RuneArrayDto) EqualCharArrays(
+	incomingRuneArrayDto *RuneArrayDto) bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
 	}
 
-	lenOfCharsArray := len(charsArrayDto.CharsArray)
+	charsArrayDto.lock.Lock()
 
-	if lenOfCharsArray !=
-		len(incomingRuneArrayDto.CharsArray) {
+	defer charsArrayDto.lock.Unlock()
 
-		return false
-	}
-
-	if lenOfCharsArray == 0 {
-		return true
-	}
-
-	for i := 0; i < lenOfCharsArray; i++ {
-
-		if charsArrayDto.CharsArray[i] !=
-			incomingRuneArrayDto.CharsArray[i] {
-			return false
-		}
-
-	}
-
-	if charsArrayDto.Description1 !=
-		incomingRuneArrayDto.Description1 {
-		return false
-	}
-
-	if charsArrayDto.Description2 !=
-		incomingRuneArrayDto.Description2 {
-		return false
-	}
-
-	if charsArrayDto.charSearchType !=
-		incomingRuneArrayDto.charSearchType {
-		return false
-	}
-
-	return true
+	return runeArrayDtoElectron{}.ptr().
+		equalCharArrays(
+			charsArrayDto,
+			incomingRuneArrayDto)
 }
 
 // GetCharSearchType - Returns the value of internal member
@@ -1626,14 +1709,48 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 }
 
 // SetCharacterSearchType - Sets the internal member variable used
-// to track the Character Search Type.
+// to track the Text Character Search Type.
+//
+// ----------------------------------------------------------------
+//
+// TERMINOLOGY
+//
+// Text Character Search algorithms typically perform comparisons
+// between two strings or groups of text characters to determine
+// the search outcome. A successful search outcome usually involves
+// finding one or more text characters from one string inside a
+// second string. A successful search outcome is often referred to
+// as a 'Match' condition because characters in one string were
+// compared and matched with characters in another string.
+//
+// Character Search algorithms using the Character Search Type
+// ('CharacterSearchType') rely on a framework consisting of a
+// 'Target Search String' and a 'Test String'.
+//
+//    Target String        - A string character or characters which
+//                           will be searched for the occurrence of
+//                           another predefined character or
+//                           characters referred to as a Test
+//                           String.
+//
+//
+//    Test String          - A string character or characters which
+//                           will be used to search for matching
+//                           characters in a Target Search String.
+//
+// A comparison of text characters contained in the Target Search
+// String and the Test String serves as the basis for determining
+// a 'Match' condition or successful outcome from a text character
+// search algorithm. The specific criterion for determining a
+// 'Match' condition vary between the different Character Search
+// Types.
 //
 // Character Search Type is a series of enumeration values
 // specifying the type of text character search algorithm applied
 // by the current instance of RuneArrayDto.
 //
-// The Character Search Type must be set to one of the following
-// enumeration values:
+// For this method, the Character Search Type must be set to one of
+// the following enumeration values:
 //
 //  TextCharSearchType.LinearTargetStartingIndex()
 //  TextCharSearchType.SingleTargetChar()

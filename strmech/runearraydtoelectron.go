@@ -53,6 +53,100 @@ func (runeDtoElectron *runeArrayDtoElectron) emptyCharsArray(
 	return
 }
 
+// equalCharArrays - Receives pointers to two instances of
+// RuneArrayDto and proceeds to compare the internal rune arrays
+// contained in the two instances.
+//
+// If the internal member variables 'CharsArray' presented by
+// the two instances of RuneArrayDto are equal in all respects,
+// this method will return a boolean value of 'true'.
+//
+// If the two rune arrays are unequal, this method will return a
+// boolean value of 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeArrayDto1              *RuneArrayDto
+//     - A pointer to first of two instances of RuneArrayDto. The
+//       text characters contained in internal member variable
+//       rune array, 'CharsArray', will be compared to those
+//       contained in the second instance of RuneArrayDto,
+//       'runeArrayDto2'. If they are equal in all respects,
+//       this method will return a boolean value of 'true'.
+//
+//
+//  runeArrayDto2              *RuneArrayDto
+//     - A pointer to the second of two instances of RuneArrayDto.
+//       The text characters contained in internal member variable
+//       rune array, 'CharsArray', will be compared to those
+//       contained in the first instance of RuneArrayDto,
+//       'runeArrayDto1'. If they are equal in all respects,
+//       this method will return a boolean value of 'true'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - This boolean flag will transmit the results of a
+//       comparison between the character rune arrays contained in
+//       input parameters 'runeArrayDto1' and 'runeArrayDto2'. If
+//       the comparison shows that the member variables
+//       'CharsArray' are equivalent in all respects, this return
+//       value will be set to 'true'.
+//
+//       If the member variable 'CharsArray' differs in any way
+//       between instances 'runeArrayDto1' and 'runeArrayDto2',
+//       this will return 'false'.
+//
+func (runeDtoElectron *runeArrayDtoElectron) equalCharArrays(
+	runeArrayDto1 *RuneArrayDto,
+	runeArrayDto2 *RuneArrayDto) bool {
+
+	if runeDtoElectron.lock == nil {
+		runeDtoElectron.lock = new(sync.Mutex)
+	}
+
+	runeDtoElectron.lock.Lock()
+
+	defer runeDtoElectron.lock.Unlock()
+
+	if runeArrayDto1 == nil ||
+		runeArrayDto2 == nil {
+
+		return false
+	}
+
+	lenOfCharsArray := len(runeArrayDto1.CharsArray)
+
+	if lenOfCharsArray !=
+		len(runeArrayDto2.CharsArray) {
+
+		return false
+	}
+
+	// Length of Character Arrays
+	// MUST be equal
+	if lenOfCharsArray == 0 {
+		return true
+	}
+
+	for i := 0; i < lenOfCharsArray; i++ {
+
+		if runeArrayDto1.CharsArray[i] !=
+			runeArrayDto2.CharsArray[i] {
+			return false
+		}
+
+	}
+
+	return true
+}
+
 // linearEndOfStringSearch - This low level function executes a
 // string search operation proceeds through the entire length of
 // Target Search String.
