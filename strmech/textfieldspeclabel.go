@@ -1006,7 +1006,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 
 // IsValidInstanceError - Performs a diagnostic review of the data
 // values encapsulated in the current TextFieldSpecLabel instance
-// to determine if they are valid.
+// to determine if they are all valid.
 //
 // If any data element evaluates as invalid, this method will
 // return an error.
