@@ -654,7 +654,27 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) IsValidInst
 }
 
 // New - Returns a new, uninitialized instance of
-// CharSearchTargetInputParametersDto.
+// CharSearchTargetInputParametersDto. All member variables are
+// guaranteed to be set to their zero or uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//
+//  CharSearchTargetInputParametersDto
+//     - This method will return an empty or uninitialized instance
+//       of type CharSearchTargetInputParametersDto. All member
+//       variables are guaranteed to be set to their or
+//       uninitialized states.
 //
 func (searchTargetInputParmsDto CharSearchTargetInputParametersDto) New() CharSearchTargetInputParametersDto {
 
@@ -671,6 +691,211 @@ func (searchTargetInputParmsDto CharSearchTargetInputParametersDto) New() CharSe
 	newEmptyTargetInputParms.Empty()
 
 	return newEmptyTargetInputParms
+}
+
+// NewTargetString - Returns a new, instance of
+// CharSearchTargetInputParametersDto populated from input
+// parameters for Target String, Target Input Parameters Name,
+// Target String Starting Search Index and Target String Search
+// Length.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetString                    *RuneArrayDto
+//     - A pointer to an instance of RuneArrayDto. 'targetString'
+//       contains a rune array internal member variable which
+//       specifies the target string to be used a text character
+//       search operation.
+//
+//
+//  targetInputParametersName       string
+//     - Optional label, name or descriptive text associated
+//       with the newly created instance of
+//       CharSearchTargetInputParametersDto returned by this
+//       method.
+//
+//
+//  targetStringStartingSearchIndex int
+//     - An integer containing the index number within
+//       'targetString' where the text character search operation
+//       will begin.
+//
+//
+//  targetStringSearchLength        int
+//     - The number of characters which will be searched in
+//       'targetString'.
+//
+//       Set this parameter to a value of minus one (-1) to ensure
+//       that the search operation proceeds from the Starting
+//       Search Index to the end of the string in 'targetString'.
+//
+//
+//  errorPrefix                     interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//
+//  newTargetInputParms        CharSearchTargetInputParametersDto
+//  If this method completes successfully, it will return a new
+//  instance of CharSearchTargetInputParametersDto populated with
+//  new values for Target String, Target String Starting Search
+//  Index and Target String Search Length.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (searchTargetInputParmsDto CharSearchTargetInputParametersDto) NewTargetString(
+	targetString *RuneArrayDto,
+	targetInputParametersName string,
+	targetStringStartingSearchIndex int,
+	targetStringSearchLength int,
+	errorPrefix interface{}) (
+	newTargetInputParms CharSearchTargetInputParametersDto,
+	err error) {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchTargetInputParametersDto."+
+			"NewTargetString()",
+		"")
+
+	if err != nil {
+		return newTargetInputParms, err
+	}
+
+	if targetString == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'targetString' is a nil pointer!\n",
+			ePrefix.String())
+
+		return newTargetInputParms, err
+	}
+
+	if targetString.GetRuneArrayLength() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'targetString' is empty\n"+
+			"and a length of zero!\n",
+			ePrefix.String())
+
+		return newTargetInputParms, err
+	}
+
+	if targetStringStartingSearchIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'targetStringStartingSearchIndex' is invalid!\n"+
+			"'targetStringStartingSearchIndex' has a value less than zero (0).\n"+
+			"targetStringStartingSearchIndex = '%v'\n",
+			ePrefix.String(),
+			targetStringStartingSearchIndex)
+
+		return newTargetInputParms, err
+	}
+
+	if targetStringSearchLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'targetStringSearchLength' is invalid!\n"+
+			"'targetStringSearchLength' has a value less than minus one (-1).\n"+
+			"targetStringSearchLength = '%v'\n",
+			ePrefix.String(),
+			targetStringSearchLength)
+
+		return newTargetInputParms, err
+	}
+
+	newEmptyTargetInputParms := CharSearchTargetInputParametersDto{}
+
+	newEmptyTargetInputParms.Empty()
+
+	newEmptyTargetInputParms.TargetString = targetString
+
+	newEmptyTargetInputParms.TargetInputParametersName =
+		targetInputParametersName
+
+	newEmptyTargetInputParms.TargetStringStartingSearchIndex =
+		targetStringStartingSearchIndex
+
+	newEmptyTargetInputParms.TargetStringSearchLength =
+		targetStringSearchLength
+
+	_,
+		err = charSearchTargetInputParametersDtoAtom{}.ptr().
+		testValidityOfTargetInputParms(
+			&newEmptyTargetInputParms,
+			ePrefix.XCpy(
+				"newEmptyTargetInputParms"))
+
+	return newEmptyTargetInputParms, err
 }
 
 // String - Returns a formatted text string detailing all the
