@@ -6,6 +6,8 @@ import (
 	"sync"
 )
 
+// Lock lockCharacterSearchType before accessing these maps!
+
 var mCharacterSearchTypeCodeToString = map[CharacterSearchType]string{
 	CharacterSearchType(-1): "None",
 	CharacterSearchType(0):  "LinearTargetStartingIndex",
@@ -45,6 +47,7 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 // ----------------------------------------------------------------
 //
 // TERMINOLOGY
+//
 //    The Character Search Type relies on a framework consisting of
 //    a 'Target Search String' and a 'Test String'.
 //
@@ -82,7 +85,7 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 //
 // None                       (-1)
 //  - Signals that the Character Search Type is empty and not
-//    initialized. This is an error condition.
+//    initialized. This is an invalid or error condition.
 //
 //
 // LinearTargetStartingIndex   (0)
@@ -181,7 +184,7 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 //    In this second example of a Single Target Character Search,
 //    the search will begin and end at Target Search String index
 //    number 0. Since NONE of the Test String Characters matches
-//    the the 'H' character at index number 0 in the Target Search
+//    the 'H' character at index number 0 in the Target Search
 //    String, the search operation is classified as a failure. No
 //    matching character was found.
 //
@@ -449,7 +452,7 @@ func (charSearchType CharacterSearchType) String() string {
 // CharacterSearchType value is valid.
 //
 // Be advised, the enumeration value "None" is considered NOT
-// VALID.
+// VALID. "None" represents an error condition.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
@@ -503,8 +506,8 @@ func (charSearchType CharacterSearchType) XIsValid() bool {
 // caseSensitive   bool
 //     - If 'true' the search for enumeration names will be
 //       case-sensitive and will require an exact match. Therefore,
-//       'lineartargetchars' will NOT match the enumeration name,
-//       'LinearTargetStartingIndex'.
+//       'linearstartingindex' will NOT match the enumeration name,
+//       'LinearStartingIndex'.
 //
 //       A case-sensitive search will match any of the following
 //       strings:
@@ -519,8 +522,8 @@ func (charSearchType CharacterSearchType) XIsValid() bool {
 //           "EndOfString"
 //
 //       If 'false', a case-insensitive search is conducted for the
-//       enumeration name. In this example, 'lineartargetchars'
-//       WILL MATCH the enumeration name, 'LinearTargetStartingIndex'.
+//       enumeration name. In this example, 'linearstartingindex'
+//       WILL MATCH the enumeration name, 'LinearStartingIndex'.
 //
 //       A case-insensitive search will match any of the following
 //       lower case names:
@@ -645,10 +648,12 @@ func (charSearchType CharacterSearchType) XValueInt() int {
 //
 // For easy access to these enumeration values, use the global
 // variable CharSearchType.
-//  Example: TextCharSearchType.LinearEndOfString()
+//
+//   Example: CharSearchType.LinearEndOfString()
 //
 // Otherwise you will need to use the formal syntax.
-//  Example: CharacterSearchType(0).LinearEndOfString()
+//
+//   Example: CharacterSearchType(0).LinearEndOfString()
 //
 // Usage:
 //  CharSearchType.None(),
