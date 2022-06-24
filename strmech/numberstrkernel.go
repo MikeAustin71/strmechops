@@ -1064,7 +1064,9 @@ func (numStrKernel *NumberStrKernel) GetIntegerDigits(
 //  []rune
 //     - This method returns a rune array consisting of the integer
 //       digits portion of the numeric value represented by the
-//       current instance of NumberStrKernel.
+//       current instance of NumberStrKernel. This source rune
+//       array is identified as internal member variable
+//       'NumberStrKernel.integerDigits'.
 //
 func (numStrKernel *NumberStrKernel) GetIntegerRuneArray() []rune {
 
@@ -1077,6 +1079,42 @@ func (numStrKernel *NumberStrKernel) GetIntegerRuneArray() []rune {
 	defer numStrKernel.lock.Unlock()
 
 	return numStrKernel.integerDigits.GetRuneArray()
+}
+
+// GetIntegerString - Converts the integer rune array contained in
+// the current instance of NumberStrKernel to a string and returns
+// it to the calling function.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns a string consisting of the integer
+//       digits portion of the numeric value represented by the
+//       current instance of NumberStrKernel. This source of these
+//       integer digits is identified as internal member variable
+//       'NumberStrKernel.integerDigits'.
+//
+func (numStrKernel *NumberStrKernel) GetIntegerString() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return numStrKernel.integerDigits.GetCharacterString()
 }
 
 // GetFractionalDigits - Returns an instance of RuneArrayDto
@@ -1193,6 +1231,29 @@ func (numStrKernel *NumberStrKernel) GetFractionalDigits(
 	return copyOfFractionalDigits, err
 }
 
+// GetFractionalRuneArray - A deep copy of the fractional digits
+// rune array encapsulated by the current instance of
+// NumberStrKernel.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  []rune
+//     - This method returns a rune array consisting of the
+//       fractional digits portion of the numeric value represented
+//       by the current instance of NumberStrKernel.  This source
+//       rune array is identified as internal member variable
+//       'NumberStrKernel.fractionalDigits'.
+//
 func (numStrKernel *NumberStrKernel) GetFractionalRuneArray() []rune {
 
 	if numStrKernel.lock == nil {
@@ -1204,6 +1265,42 @@ func (numStrKernel *NumberStrKernel) GetFractionalRuneArray() []rune {
 	defer numStrKernel.lock.Unlock()
 
 	return numStrKernel.fractionalDigits.GetRuneArray()
+}
+
+// GetFractionalString - Converts the fractional rune array
+// contained in the current instance of NumberStrKernel to a string
+// and returns it to the calling function.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method returns a string consisting of the fractional
+//       digits portion of the numeric value represented by the
+//       current instance of NumberStrKernel. This source of these
+//       fractional digits is identified as internal member
+//       variable 'NumberStrKernel.fractionalDigits'.
+//
+func (numStrKernel *NumberStrKernel) GetFractionalString() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return numStrKernel.fractionalDigits.GetCharacterString()
 }
 
 // GetNumberSign - Returns the Number Sign associated with the

@@ -855,6 +855,9 @@ func (charsArrayDto *RuneArrayDto) GetRuneArray() []rune {
 // characters taken from the rune array internal member variable
 // contained in the current instance of RuneArrayDto.
 //
+// The internal member variable is identified as
+//   RuneArrayDto.CharsArray
+//
 // This method is identical in functionality to method:
 //  RuneArrayDto.String()
 //
