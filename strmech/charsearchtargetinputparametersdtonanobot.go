@@ -5,6 +5,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
+	"time"
 )
 
 // charSearchTargetInputParametersDtoNanobot - Provides helper methods for type
@@ -391,54 +392,115 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	// Max Label Field Length = 36
 	const maxLabelFieldLen = 36
 
-	targetParmsElectron :=
-		charSearchTargetInputParametersDtoElectron{}
-
 	txtStrParam :=
 		targetInputParms.TargetInputParametersName
 
+	textSpecNanoBot := textSpecificationNanobot{}
+
 	// Title Marquee
 
-	err =
-		targetParmsElectron.buildFormattedMarqueeTitle(
-			"=",
-			"CharSearchTargetInputParametersDto",
-			txtStrParam,
-			maxFieldLen,
+	err = textSpecNanoBot.buildFormattedMarqueeTitle(
+		"=",
+		"CharSearchTargetInputParametersDto",
+		TxtJustify.Center(),
+		txtStrParam,
+		TxtJustify.Center(),
+		time.Now(),
+		"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		TxtJustify.Center(),
+		maxFieldLen,
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// Build Formatted Target String
+
+	txtStrLabel := "Target String"
+
+	lenTxtStrParam := 0
+
+	if targetInputParms.TargetString != nil {
+
+		if targetInputParms.TargetString.GetRuneArrayLength() > 0 {
+			txtStrParam =
+				targetInputParms.TargetString.GetCharacterString()
+		} else {
+
+			txtStrParam = "Target String is EMPTY!"
+
+		}
+	} else {
+		// targetInputParms.TargetString == nil
+		txtStrParam = "Target String is a nil pointer (Not Set)!"
+	}
+
+	lenTxtStrParam = len(txtStrParam)
+
+	if lenTxtStrParam >= (maxFieldLen - maxLabelFieldLen - 2) {
+		// We need two Lines of Text
+
+		err = textSpecNanoBot.buildFormattedSingleTextField(
+			"",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			": ",
+			"\n",
 			&strBuilder,
 			ePrefix.XCpy(
-				""))
+				"Target String Label"))
 
-	var colonSpacer *TextFieldSpecLabel
+		if err != nil {
 
-	colonSpacer,
-		err = TextFieldSpecLabel{}.NewPtrTextLabel(
-		": ",
-		-1,
-		TxtJustify.Left(),
-		ePrefix.XCpy(
-			"colonSpacer"))
+			return strBuilder, err
+		}
 
-	if err != nil {
+		// Now write target string on second line
 
-		return strBuilder, err
-	}
-
-	err =
-		targetParmsElectron.buildFormattedTargetString(
-			maxLabelFieldLen,
-			colonSpacer,
-			targetInputParms,
+		err = textSpecNanoBot.buildFormattedSingleTextField(
+			" ",
+			txtStrParam,
 			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
 			&strBuilder,
-			ePrefix.XCpy("Target String"))
+			ePrefix.XCpy(
+				"Target String Parameter"))
 
-	if err != nil {
+		if err != nil {
 
-		return strBuilder, err
+			return strBuilder, err
+		}
+
+	} else {
+		// We need only one line of text
+		err = textSpecNanoBot.buildFormattedSingleParameterText(
+			"",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			": ",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			&strBuilder,
+			ePrefix)
+
+		if err != nil {
+
+			return strBuilder, err
+		}
 	}
-
 	// TargetStringName
+
+	txtStrLabel = "TargetStringName"
 
 	txtStrParam = targetInputParms.TargetStringName
 
@@ -446,16 +508,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringName is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringName",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringName"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -463,6 +528,8 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringLength
+
+	txtStrLabel = "TargetStringLength"
 
 	txtStrParam =
 		fmt.Sprintf("%v",
@@ -472,16 +539,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringLength is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringLength",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringLength"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -490,22 +560,27 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	// TargetStringLengthName
 
+	txtStrLabel = "TargetStringLengthName"
+
 	txtStrParam = targetInputParms.TargetStringLengthName
 
 	if len(txtStrParam) == 0 {
 		txtStrParam = "TargetStringLengthName is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringLengthName",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringLengthName"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -513,6 +588,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringStartingSearchIndex
+	txtStrLabel = "TargetStringStartingSearchIndex"
 
 	txtStrParam =
 		fmt.Sprintf("%v",
@@ -522,16 +598,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringStartingSearchIndex is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringStartingSearchIndex",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringStartingSearchIndex"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -539,6 +618,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringStartingSearchIndexName
+	txtStrLabel = "TargetStringStartingSearchIndexName"
 
 	txtStrParam =
 		targetInputParms.TargetStringStartingSearchIndexName
@@ -547,16 +627,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringStartingSearchIndexName is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringStartingSearchIndexName",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringStartingSearchIndexName"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -564,6 +647,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringSearchLength
+	txtStrLabel = "TargetStringSearchLength"
 
 	txtStrParam =
 		fmt.Sprintf("%v",
@@ -573,16 +657,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringSearchLength is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringSearchLength",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringSearchLength"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -590,6 +677,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringSearchLengthName
+	txtStrLabel = "TargetStringSearchLengthName"
 
 	txtStrParam =
 		targetInputParms.TargetStringSearchLengthName
@@ -598,16 +686,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringSearchLengthName is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringSearchLengthName",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringSearchLengthName"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -615,6 +706,8 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringAdjustedSearchLength
+
+	txtStrLabel = "TargetStringAdjustedSearchLength"
 
 	txtStrParam =
 		fmt.Sprintf("%v",
@@ -624,16 +717,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "TargetStringAdjustedSearchLength is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringAdjustedSearchLength",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringAdjustedSearchLength"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -641,22 +737,27 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringDescription1
+	txtStrLabel = "TargetStringDescription1"
+
 	txtStrParam = targetInputParms.TargetStringDescription1
 
 	if len(txtStrParam) == 0 {
 		txtStrParam = "TargetStringDescription1 is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringDescription1",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringDescription1"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -664,22 +765,28 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TargetStringDescription2
+
+	txtStrLabel = "TargetStringDescription2"
+
 	txtStrParam = targetInputParms.TargetStringDescription2
 
 	if len(txtStrParam) == 0 {
 		txtStrParam = "TargetStringDescription2 is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TargetStringDescription2",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TargetStringDescription2"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -687,6 +794,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// FoundFirstNumericDigitInNumStr
+	txtStrLabel = "FoundFirstNumericDigitInNumStr"
 
 	txtStrParam =
 		fmt.Sprintf("%v",
@@ -696,16 +804,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrParam = "FoundFirstNumericDigitInNumStr is EMPTY!"
 	}
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"FoundFirstNumericDigitInNumStr",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"FoundFirstNumericDigitInNumStr"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	if err != nil {
 
@@ -713,6 +824,8 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	// TextCharSearchType
+	txtStrLabel = "TextCharSearchType"
+
 	searchType := targetInputParms.TextCharSearchType
 
 	if !searchType.XIsValid() {
@@ -723,16 +836,19 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		fmt.Sprintf("%v",
 			searchType.String())
 
-	err = targetParmsElectron.
-		buildFormattedParameterText(
-			"TextCharSearchType",
-			maxLabelFieldLen,
-			colonSpacer,
-			txtStrParam,
-			-1,
-			&strBuilder,
-			ePrefix.XCpy(
-				"TextCharSearchType"))
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		": ",
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
 
 	return strBuilder, err
 }

@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+// TextFormatUtility - Provides helper methods used in formatting
+// text strings for output to files, displays and text
+// presentations.
+//
 type TextFormatUtility struct {
 	lock *sync.Mutex
 }
