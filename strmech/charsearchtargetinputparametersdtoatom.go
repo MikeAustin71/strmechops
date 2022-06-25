@@ -240,7 +240,7 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberStrKernelAtom.
+// charSearchTargetInputParametersDtoAtom.
 //
 func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *charSearchTargetInputParametersDtoAtom {
 

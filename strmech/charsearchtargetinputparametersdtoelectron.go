@@ -259,7 +259,7 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"charSearchTargetInputParametersDtoElectron."+
-			"buildFormattedParameterText()",
+			"buildFormattedSingleParameterText()",
 		"")
 
 	if err != nil {
@@ -412,7 +412,7 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"charSearchTargetInputParametersDtoElectron."+
-			"buildFormattedParameterText()",
+			"buildFormattedSingleParameterText()",
 		"")
 
 	if err != nil {
@@ -579,7 +579,7 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 //
 // Input Parameters
 //
-//  targetInputParms1          *CharSearchTargetInputParametersDto
+//  targetInputParms           *CharSearchTargetInputParametersDto
 //     - Pointer to an instance of
 //       CharSearchTargetInputParametersDto. The internal member
 //       variable, 'TargetString', will be reset to a value of
@@ -692,20 +692,12 @@ func (searchTargetInputParmsElectron *charSearchTargetInputParametersDtoElectron
 		return false
 	}
 
-	if targetInputParms1.TargetString != nil &&
-		targetInputParms2.TargetString != nil {
-
-		if !targetInputParms1.TargetString.Equal(
-			targetInputParms2.TargetString) {
-			return false
-		}
-	}
-
-	return true
+	return targetInputParms1.TargetString.Equal(
+		targetInputParms2.TargetString)
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberStrKernelElectron.
+// charSearchTargetInputParametersDtoElectron.
 //
 func (searchTargetInputParmsElectron charSearchTargetInputParametersDtoElectron) ptr() *charSearchTargetInputParametersDtoElectron {
 

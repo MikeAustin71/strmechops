@@ -738,7 +738,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 }
 
 // ptr - Returns a pointer to a new instance of
-// numberStrKernelNanobot.
+// charSearchTargetInputParametersDtoNanobot.
 //
 func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) ptr() *charSearchTargetInputParametersDtoNanobot {
 
