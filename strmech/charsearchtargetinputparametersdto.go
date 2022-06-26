@@ -235,7 +235,6 @@ type CharSearchTargetInputParametersDto struct {
 func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) CopyIn(
 	sourceTargetInputParms *CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) error {
-
 	if searchTargetInputParmsDto.lock == nil {
 		searchTargetInputParmsDto.lock = new(sync.Mutex)
 	}

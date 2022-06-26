@@ -9,8 +9,9 @@ import (
 )
 
 // TextFieldSpecFiller - The Filler Text Field Specification is a
-// single character which is replicated for the entire length of
-// the Filler Text Field.
+// single character or character sequence which is replicated
+// multiple times to create the entire length of the Filler Text
+// Field.
 //
 // Text Field Specifications are designed to be configured within a
 // line of text. Those lines of text can then be formatted for text

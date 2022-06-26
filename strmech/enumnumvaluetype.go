@@ -172,13 +172,13 @@ func (numValType NumericValueType) Integer() NumericValueType {
 	return NumericValueType(2)
 }
 
-// String - Returns a string with the name of the enumeration associated
-// with this current instance of 'NumericValueType'.
+// String - Returns a string with the name of the enumeration
+// associated with this current instance of 'NumericValueType'.
 //
-// This is a standard utility method and is not part of the valid enumerations
-// for this type.
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Usage
 //

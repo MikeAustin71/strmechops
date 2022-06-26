@@ -134,8 +134,8 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 //
 // Type NumberRoundingType is styled as an enumeration. Since the
 // Go Programming Language does not directly support enumerations,
-// the 'NumberRoundingType' type has been adapted to function in a
-// manner similar to classic enumerations.
+// type NumberRoundingType has been adapted to function in a manner
+// similar to classic enumerations.
 //
 // NumberRoundingType is declared as a type 'int' and includes two
 // types of methods:
@@ -146,7 +146,7 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 // Enumeration methods have names which collectively represent an
 // enumeration of different rounding methodologies and procedures
 // which may be applied to numeric rounding operations.
-//    Examples:
+//    Examples Of Enumeration Method Names:
 //        HalfUpWithNegNums()
 //        HalfDownWithNegNums()
 //        HalfAwayFromZero()
@@ -159,7 +159,7 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 //
 //  Utility methods make up the second type of method included in
 //  NumberRoundingType. These methods are NOT part of the
-//  enumeration but instead provide need supporting services. All
+//  enumeration but instead provide needed supporting services. All
 //  utility methods, with the sole exception of method String(),
 //  have names beginning with 'X' to separate them from standard
 //  enumeration methods.
@@ -168,6 +168,7 @@ var mNumberRoundingTypeLwrCaseStringToCode = map[string]NumberRoundingType{
 //      XParseString()
 //      XValue()
 //      XValueInt()
+//
 //  The utility method 'String()' supports the Stringer Interface
 //  and is not part of the standard enumeration.
 //
@@ -708,6 +709,20 @@ func (numRoundingType NumberRoundingType) Truncate() NumberRoundingType {
 	return NumberRoundingType(10)
 }
 
+// String - Returns a string with the name of the enumeration
+// associated with this current instance of 'NumberRoundingType'.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+//
+// ----------------------------------------------------------------
+//
+// Usage
+//
+// t:= NumberRoundingType(0).Floor()
+// str := t.String()
+//     str is now equal to 'Floor'
+//
 func (numRoundingType NumberRoundingType) String() string {
 
 	lockNumberRoundingType.Lock()
@@ -776,7 +791,6 @@ func (numRoundingType NumberRoundingType) XIsValid() bool {
 	}
 
 	return true
-
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -836,7 +850,8 @@ func (numRoundingType NumberRoundingType) XIsValid() bool {
 //           "truncate"
 //
 //
-// ------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -910,8 +925,8 @@ func (numRoundingType NumberRoundingType) XParseString(
 	return numberRoundingType, nil
 }
 
-// XValue - This method returns the enumeration value of the current
-// NumberRoundingType instance.
+// XValue - This method returns the enumeration value of the
+// current NumberRoundingType instance.
 //
 // This is a standard utility method and is NOT part of the valid
 // enumerations for this type.

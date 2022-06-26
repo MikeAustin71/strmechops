@@ -8,8 +8,9 @@ import (
 	"sync"
 )
 
-// TextFieldSpecSpacer - The Text Field Specification for one or
-// more white space characters.
+// TextFieldSpecSpacer - The Text Field Specification is used to
+// create a Text Field consisting of one or more white space
+// characters.
 //
 // Text Field Specifications are designed to be configured within a
 // line of text. Those lines of text can then be formatted for text

@@ -1664,14 +1664,15 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 //
 //  textJustification          TextJustify
 //     - An enumeration which specifies the justification of the
-//       'textLabel' within the field specified by 'fieldLen'.
+//       'textLabel' string within the text field specified by
+//       'fieldLen'.
 //
 //       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//       a text label, field length and a Text Justification object
+//       of type TextJustify. This is because text labels with a
+//       field length equal to or less than the length of the text
+//       label never use text justification. In these cases, text
+//       justification is completely ignored.
 //
 //       If the field length is greater than the length of the text
 //       label, text justification must be equal to one of these
