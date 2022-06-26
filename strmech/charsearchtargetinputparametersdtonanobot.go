@@ -27,7 +27,7 @@ type charSearchTargetInputParametersDtoNanobot struct {
 // Be advised that the data fields in 'destinationTargetInputParms'
 // will be overwritten.
 //
-// No validation is performed on 'sourceTargetInputParms'.
+// Also, NO validation is performed on 'sourceTargetInputParms'.
 //
 //
 // -----------------------------------------------------------------
@@ -191,15 +191,15 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 }
 
 // copyOut - Returns a deep copy of the input parameter
-// 'targetInputParms'. a pointer to an instance of
+// 'targetInputParms', a pointer to an instance of
 // CharSearchTargetInputParametersDto.
 //
 // ----------------------------------------------------------------
 //
 // IMPORTANT
 //
-// The input parameter 'targetInputParms' is determined to be invalid,
-// this method will return an error.
+//
+// NO validation is performed on 'targetInputParms'.
 //
 // ------------------------------------------------------------------------
 //
