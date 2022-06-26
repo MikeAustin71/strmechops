@@ -272,9 +272,17 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) CopyIn(
 // CopyOut - Returns a deep copy of the current
 // CharSearchTargetInputParametersDto instance.
 //
-// If the current CharSearchTargetInputParametersDto instance
-// contains invalid member variables, this method will return an
-// error.
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// NO data validation is performed on the current instance of
+// CharSearchTargetInputParametersDto prior to the creation of
+// the deep copy returned to the calling function.
+//
+// It may be necessary to call the validation method
+//   CharSearchTargetInputParametersDto.IsValidInstanceError()
+// before calling this method.
 //
 //
 // ----------------------------------------------------------------
