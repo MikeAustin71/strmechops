@@ -144,10 +144,16 @@ type CharSearchTargetInputParametersDto struct {
 // CharSearchTargetInputParametersDto instance
 // ('searchTargetInputParmsDto').
 //
+// ----------------------------------------------------------------
+//
 // IMPORTANT
+//
 // All the data fields in current
 // CharSearchTargetInputParametersDto instance
 // ('searchTargetInputParmsDto') will be modified and overwritten.
+//
+// Also, NO data validation is performed on input parameter
+// 'sourceTargetInputParms'.
 //
 //
 // ----------------------------------------------------------------
@@ -164,9 +170,6 @@ type CharSearchTargetInputParametersDto struct {
 //       instance will be copied to current
 //       CharSearchTargetInputParametersDto instance
 //       ('searchTargetInputParmsDto').
-//
-//       If parameter 'sourceTargetInputParms' is determined to be
-//       invalid, an error will be returned.
 //
 //
 //  errorPrefix                interface{}
@@ -231,8 +234,7 @@ type CharSearchTargetInputParametersDto struct {
 //
 func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) CopyIn(
 	sourceTargetInputParms *CharSearchTargetInputParametersDto,
-	errorPrefix interface{}) (
-	err error) {
+	errorPrefix interface{}) error {
 
 	if searchTargetInputParmsDto.lock == nil {
 		searchTargetInputParmsDto.lock = new(sync.Mutex)
@@ -243,6 +245,7 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) CopyIn(
 	defer searchTargetInputParmsDto.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -257,15 +260,13 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) CopyIn(
 
 	targetInputParmsNanobot := charSearchTargetInputParametersDtoNanobot{}
 
-	err =
-		targetInputParmsNanobot.copyIn(
-			searchTargetInputParmsDto,
-			sourceTargetInputParms,
-			ePrefix.XCpy(
-				"searchTargetInputParmsDto<-"+
-					"sourceTargetInputParms"))
+	return targetInputParmsNanobot.copyIn(
+		searchTargetInputParmsDto,
+		sourceTargetInputParms,
+		ePrefix.XCpy(
+			"searchTargetInputParmsDto<-"+
+				"sourceTargetInputParms"))
 
-	return err
 }
 
 // CopyOut - Returns a deep copy of the current

@@ -199,6 +199,139 @@ type CharSearchTestInputParametersDto struct {
 	lock *sync.Mutex
 }
 
+// CopyIn - Copies the data fields from an incoming instance of
+// CharSearchTestInputParametersDto ('sourceTestInputParms') to
+// the data fields of the current
+// CharSearchTestInputParametersDto instance
+// ('searchTestInputParmsDto').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current
+// CharSearchTestInputParametersDto instance
+// ('testSearchInputParms') will be modified and overwritten.
+//
+// Also, NO data validation is performed on input parameter
+// 'sourceTestInputParms'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  sourceTestInputParms     *CharSearchTestInputParametersDto
+//     - A pointer to an instance of
+//       CharSearchTestInputParametersDto. This method will NOT
+//       change the values of internal member variables contained
+//       in this instance.
+//
+//       All data values in this CharSearchTestInputParametersDto
+//       instance will be copied to current
+//       CharSearchTestInputParametersDto instance
+//       ('searchTestInputParmsDto').
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
+	sourceTestInputParms *CharSearchTestInputParametersDto,
+	errorPrefix interface{}) error {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	defer testSearchInputParms.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchInputParametersDto."+
+			"ValidateTestString()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	testInputParamsNanobot := charSearchTestInputParametersDtoNanobot{}
+
+	return testInputParamsNanobot.
+		copyIn(
+			testSearchInputParms,
+			sourceTestInputParms,
+			ePrefix.XCpy(
+				"testSearchInputParms"+
+					"<-sourceTestInputParms"))
+}
+
 func (testSearchInputParms CharSearchTestInputParametersDto) New() CharSearchTestInputParametersDto {
 
 	if testSearchInputParms.lock == nil {
