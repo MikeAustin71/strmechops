@@ -8,15 +8,14 @@ import (
 )
 
 // TextFormatUtility - Provides helper methods used in formatting
-// text strings for output to files, displays and text
-// presentations.
+// text strings for files, screen displays and text presentations.
 //
 type TextFormatUtility struct {
 	lock *sync.Mutex
 }
 
 // GetFormattedMarqueeTitle - Builds formatted output text for a
-// marquee with title.
+// marquee with titles.
 //
 // The marquee format consists of:
 //
@@ -33,7 +32,7 @@ type TextFormatUtility struct {
 //    Blank Line
 //    [SPACE]==============================================[SPACE]
 //                           Title 1
-//                     Title 2 (If available)
+//                     Title 2 (Optional)
 //           Monday 2006-01-02 15:04:05.000000000 -0700 MST
 //    [SPACE]==============================================[SPACE]
 //    Blank Line

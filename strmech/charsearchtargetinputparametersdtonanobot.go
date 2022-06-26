@@ -502,6 +502,35 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 			return strBuilder, err
 		}
 	}
+
+	// TargetInputParametersName
+	txtStrLabel = "TargetInputParametersName"
+
+	txtStrParam = targetInputParms.TargetInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetInputParametersName is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
 	// TargetStringName
 
 	txtStrLabel = "TargetStringName"
@@ -538,10 +567,6 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	txtStrParam =
 		fmt.Sprintf("%v",
 			targetInputParms.TargetStringLength)
-
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringLength is EMPTY!"
-	}
 
 	err = textSpecNanoBot.buildFormattedSingleParameterText(
 		"",

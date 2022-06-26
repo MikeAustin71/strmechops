@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
+	"time"
 )
 
 // charSearchTestInputParametersDtoNanobot - Provides helper methods for type
@@ -362,6 +364,621 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 		testInputParms.TextCharSearchType
 
 	return deepCopyTestInputParms, err
+}
+
+// getFormattedText - Returns formatted text output detailing the
+// member variable values contained in the 'testInputParms'
+// instance of charSearchTestInputParametersDtoNanobot.
+//
+func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getFormattedText(
+	testInputParms *CharSearchTestInputParametersDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strings.Builder,
+	error) {
+
+	if searchTestInputParmsNanobot.lock == nil {
+		searchTestInputParmsNanobot.lock = new(sync.Mutex)
+	}
+
+	searchTestInputParmsNanobot.lock.Lock()
+
+	defer searchTestInputParmsNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(512)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"charSearchTestInputParametersDtoNanobot."+
+			"getFormattedText()",
+		"")
+
+	if err != nil {
+
+		return strBuilder, err
+
+	}
+
+	if testInputParms == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'testInputParms' is a nil pointer!\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	// Total available Length of Output Line
+	const maxFieldLen = 70
+
+	// Max Label Field Length = 36
+	const maxLabelFieldLen = 24
+
+	txtStrParam :=
+		testInputParms.TestInputParametersName
+
+	textSpecNanoBot := textSpecificationNanobot{}
+	// Title Marquee
+
+	err = textSpecNanoBot.buildFormattedMarqueeTitle(
+		"=",
+		"CharSearchTestInputParametersDto",
+		TxtJustify.Center(),
+		txtStrParam,
+		TxtJustify.Center(),
+		time.Now(),
+		"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		TxtJustify.Center(),
+		maxFieldLen,
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	colonSpace := ": "
+
+	// TestInputParametersName
+	txtStrLabel := "TestInputParametersName"
+
+	txtStrParam = testInputParms.TestInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestInputParametersName is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// Build Formatted Test String
+
+	txtStrLabel = "Test String"
+
+	lenTxtStrParam := 0
+
+	if testInputParms.TestString != nil {
+
+		if testInputParms.TestString.GetRuneArrayLength() > 0 {
+			txtStrParam =
+				testInputParms.TestString.GetCharacterString()
+		} else {
+
+			txtStrParam = "Test String is EMPTY!"
+
+		}
+	} else {
+		// testInputParms.TestString == nil
+		txtStrParam = "Test String has a nil pointer (Not Set)!"
+	}
+
+	lenTxtStrParam = len(txtStrParam)
+
+	if lenTxtStrParam >= (maxFieldLen - maxLabelFieldLen - 2) {
+		// We need two Lines of Text
+
+		err = textSpecNanoBot.buildFormattedSingleTextField(
+			"",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			&strBuilder,
+			ePrefix.XCpy(
+				"Test String Label"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		// Now write test string on second line
+
+		err = textSpecNanoBot.buildFormattedSingleTextField(
+			" ",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			&strBuilder,
+			ePrefix.XCpy(
+				"Test String Parameter"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+	} else {
+		// We need only one line of text
+		err = textSpecNanoBot.buildFormattedSingleParameterText(
+			"",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			&strBuilder,
+			ePrefix)
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+	}
+
+	// TestStringName
+
+	txtStrLabel = "TestStringName"
+
+	txtStrParam = testInputParms.TestStringName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringName is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TestStringLength
+
+	txtStrLabel = "TestStringLength"
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			testInputParms.TestStringLength)
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TestStringLengthName
+	txtStrLabel = "TestStringLengthName"
+
+	txtStrParam = testInputParms.TestStringLengthName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringLengthName is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TestStringStartingIndex
+
+	txtStrLabel = "TestStringStartingIndex"
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			testInputParms.TestStringStartingIndex)
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TestStringStartingIndexName
+	txtStrLabel = "TestStringStartingIndexName"
+
+	txtStrParam = testInputParms.TestStringStartingIndexName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringStartingIndexName is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TestStringDescription1
+	txtStrLabel = "TestStringDescription1"
+
+	txtStrParam = testInputParms.TestStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription1 is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TestStringDescription2
+	txtStrLabel = "TestStringDescription2"
+
+	txtStrParam = testInputParms.TestStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription2 is EMPTY!"
+	}
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-2,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// CollectionTestObjIndex
+
+	txtStrLabel = "CollectionTestObjIndex"
+
+	txtStrParam =
+		fmt.Sprintf("%v",
+			testInputParms.CollectionTestObjIndex)
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// NumValueType
+
+	txtStrLabel = "NumValueType"
+
+	if !testInputParms.NumValueType.XIsValid() {
+		testInputParms.NumValueType = NumValType.None()
+	}
+
+	txtStrParam = testInputParms.NumValueType.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// NumStrFormatType
+
+	txtStrLabel = "NumStrFormatType"
+
+	if !testInputParms.NumStrFormatType.XIsValid() {
+		testInputParms.NumStrFormatType = NumStrFmtType.None()
+	}
+
+	txtStrParam = testInputParms.NumStrFormatType.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// NumSymLocation
+
+	txtStrLabel = "NumSymLocation"
+
+	if !testInputParms.NumSymLocation.XIsValid() {
+		testInputParms.NumSymLocation = NumSymLocation.None()
+	}
+
+	txtStrParam = testInputParms.NumSymLocation.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// NumSymbolClass
+
+	txtStrLabel = "NumSymbolClass"
+
+	if !testInputParms.NumSymbolClass.XIsValid() {
+		testInputParms.NumSymbolClass = NumSymClass.None()
+	}
+
+	txtStrParam = testInputParms.NumSymbolClass.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// NumSignValue
+
+	txtStrLabel = "NumSignValue"
+
+	if !testInputParms.NumSignValue.XIsValid() {
+		testInputParms.NumSignValue = NumSignVal.None()
+	}
+
+	txtStrParam = testInputParms.NumSignValue.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// SecondaryNumSignPosition
+
+	txtStrLabel = "SecondaryNumSignPosition"
+
+	if !testInputParms.SecondaryNumSignPosition.XIsValid() {
+		testInputParms.SecondaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	txtStrParam = testInputParms.SecondaryNumSignPosition.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// TextCharSearchType
+
+	txtStrLabel = "TextCharSearchType"
+
+	if !testInputParms.TextCharSearchType.XIsValid() {
+		testInputParms.TextCharSearchType =
+			CharSearchType.None()
+	}
+
+	txtStrParam = testInputParms.TextCharSearchType.String()
+
+	err = textSpecNanoBot.buildFormattedSingleParameterText(
+		"",
+		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		&strBuilder,
+		ePrefix)
+
+	return strBuilder, err
 }
 
 // ptr - Returns a pointer to a new instance of
