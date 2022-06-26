@@ -52,6 +52,11 @@ import (
 // search operations.
 //
 type CharSearchTestInputParametersDto struct {
+	TestInputParametersName string
+	// The Name, Label or descriptive Tag associated with this
+	// instance of CharSearchTestInputParametersDto. If empty,
+	// this string will be defaulted to "TestInputParameters"
+
 	TestString *RuneArrayDto
 	// A pointer to the Rune Array Data Transfer
 	// Object containing the Test Characters to be
@@ -76,6 +81,10 @@ type CharSearchTestInputParametersDto struct {
 	TestStringStartingIndex int
 	// The starting index in the Test String where the
 	// search operation will begin.
+
+	TestStringStartingIndexName string
+	// The label or name of the TestStringStartingIndex
+	// parameter. Used in error and informational messages.
 
 	TestStringDescription1 string
 	// First of two optional description strings
@@ -182,10 +191,10 @@ type CharSearchTestInputParametersDto struct {
 	// this search operation.
 	//
 	// Possible values are listed as follows:
-	//  TextCharSearchType.None() - Invalid value
-	//  TextCharSearchType.LinearTargetStartingIndex() - Default
-	//  TextCharSearchType.SingleTargetChar()
-	//  TextCharSearchType.LinearEndOfString()
+	//  CharSearchType.None() - Invalid value
+	//  CharSearchType.LinearTargetStartingIndex() - Default
+	//  CharSearchType.SingleTargetChar()
+	//  CharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }
@@ -234,6 +243,11 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParame
 
 		return err
 
+	}
+
+	if len(testSearchInputParms.TestInputParametersName) == 0 {
+		testSearchInputParms.TestInputParametersName =
+			"TestInputParameters"
 	}
 
 	if len(testSearchInputParms.TestStringName) == 0 {
@@ -288,22 +302,27 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParame
 
 	}
 
+	if len(testSearchInputParms.TestStringStartingIndexName) == 0 {
+		testSearchInputParms.TestStringStartingIndexName =
+			"TestStringStartingIndex"
+	}
+
 	if testSearchInputParms.TestStringStartingIndex >=
 		testSearchInputParms.TestStringLength {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' Starting Index is invalid!\n"+
-			"The '%v' Starting Index is greater than the last index\n"+
+			"ERROR: Input parameter '%v' is invalid!\n"+
+			"The '%v' starting index value is greater than the last index\n"+
 			"in the '%v' character array.\n"+
-			"%v Last String Index = '%v'.\n"+
+			"%v Last Character Index = '%v'.\n"+
 			"%v Starting Index = '%v'\n",
 			ePrefix.String(),
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringName,
+			testSearchInputParms.TestStringStartingIndexName,
+			testSearchInputParms.TestStringStartingIndexName,
 			testSearchInputParms.TestStringName,
 			testSearchInputParms.TestStringName,
 			testSearchInputParms.TestStringLength-1,
-			testSearchInputParms.TestStringName,
+			testSearchInputParms.TestStringStartingIndexName,
 			testSearchInputParms.TestStringStartingIndex)
 
 		return err

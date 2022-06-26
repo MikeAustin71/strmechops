@@ -93,9 +93,8 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 }
 
 // equal - Receives a pointer to two instances of
-// charSearchTargetInputParametersDtoAtom and proceeds to
-// compare their member variables in order to determine if they are
-// equivalent.
+// CharSearchTargetInputParametersDto and proceeds to compare their
+// member variables in order to determine if they are equivalent.
 //
 // A boolean flag showing the result of this comparison is
 // returned. If the member variables for both instances are equal
@@ -127,7 +126,7 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 //
 //  bool
 //     - If the comparison of 'targetInputParms1' and
-//       'targetInputParms2' show that all internal member
+//       'targetInputParms2' shows that all internal member
 //       variables are equivalent, this method will return a
 //       boolean value of 'true'.
 //
@@ -151,6 +150,12 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 		return false
 	}
 
+	if targetInputParms1.TargetInputParametersName !=
+		targetInputParms2.TargetInputParametersName {
+
+		return false
+	}
+
 	targetInputParmsElectron := charSearchTargetInputParametersDtoElectron{}
 
 	if !targetInputParmsElectron.equalTargetStrings(
@@ -160,12 +165,6 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.TargetStringName !=
 		targetInputParms2.TargetStringName {
-
-		return false
-	}
-
-	if targetInputParms1.TargetInputParametersName !=
-		targetInputParms2.TargetInputParametersName {
 
 		return false
 	}

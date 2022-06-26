@@ -483,6 +483,11 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //
 //       type CharSearchTargetInputParametersDto struct {
 //
+//          TargetInputParametersName           string
+//            - The Name, Label or descriptive Tag associated with this
+//              instance of CharSearchTargetInputParametersDto. If empty,
+//              this string will be defaulted to "TargetInputParameters"
+//
 //       	TargetString                        *RuneArrayDto
 //            - A pointer to the RuneArrayDto containing the Target
 //              Search String text characters used in the search
@@ -570,6 +575,11 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //       of the following member variable data elements.
 //
 //       type CharSearchTestInputParametersDto struct {
+//          TestInputParametersName             string
+//            - The Name, Label or descriptive Tag associated with this
+//              instance of CharSearchTestInputParametersDto. If empty,
+//              this string will be defaulted to "TestInputParameters"
+//
 //       	TestString                          *RuneArrayDto
 //            - A pointer to the Rune Array Data Transfer
 //              Object containing the Test Characters to be
@@ -594,6 +604,10 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //       	TestStringStartingIndex             int
 //            - The starting index in the Test String where the
 //              search operation will begin.
+//
+//          TestStringStartingIndexName         string
+//            - The label or name of the TestStringStartingIndex
+//              parameter. Used in error and informational messages.
 //
 //       	TestStringDescription1              string
 //            - First of two optional description strings
@@ -700,10 +714,10 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //              this search operation.
 //
 //              Possible values are listed as follows:
-//       	     TextCharSearchType.None() - Invalid value
-//       	     TextCharSearchType.LinearTargetStartingIndex() - Default
-//       	     TextCharSearchType.SingleTargetChar()
-//       	     TextCharSearchType.LinearEndOfString()
+//       	     CharSearchType.None() - Invalid value
+//       	     CharSearchType.LinearTargetStartingIndex() - Default
+//       	     CharSearchType.SingleTargetChar()
+//       	     CharSearchType.LinearEndOfString()
 //       }
 //
 //
@@ -745,6 +759,11 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //            - The Search Target was located in a previous search
 //              operation.
 //
+//          TargetInputParametersName string
+//            - The Name, Label or descriptive Tag associated with an
+//              instance of CharSearchTargetInputParametersDto.
+//
+//
 //       	TargetStringLength                  int
 //            - Actual number of text characters in the entire
 //              Target Search String ('TargetString').
@@ -769,6 +788,32 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //              String occupied by the last character in the Test
 //       	    String.
 //
+//              If the character search operation is successful, it
+//              means that all the characters configured in the
+//              Test Search String were found in the Target Search
+//              String. In that case, 'TargetStringLastFoundIndex'
+//              will be set to the index in Target Search String
+//              occupied by the last character in the Test String.
+//
+//              If the search operation is unsuccessful,
+//              'TargetStringLastFoundIndex' is set to the value of
+//              'TargetStringStartingSearchIndex'.
+//
+//               Example-1:
+//                 Target Search String: "Xray-4 is the call sign"
+//                 Starting Search Index: 0
+//                 Test String: "Xray"
+//                 FoundSearchTarget = 'true'
+//                 TargetStringLastFoundIndex = 3 (The 'y' in "Xray")
+//
+//               Example-2:
+//                 Target Search String: "Coyote-4 is the call sign"
+//                 Starting Search Index: 0
+//                 Current RuneArrayDto Instance: "Xray"
+//                 foundRuneArrayDtoChars = 'false'
+//                 TargetStringLastFoundIndex = 0 (Starting Search Index)
+//
+//
 //       	TargetStringLastSearchIndex int
 //      	  - The index in Target Search String occupied by the
 //        	    last Target character searched. If the Search
@@ -788,6 +833,10 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //            - Second of two optional description strings
 //              describing the Target Search String in the context
 //              of the current search operation.
+//
+//          TestInputParametersName string
+//            - The Name, Label or descriptive Tag associated with an
+//              instance of CharSearchTestInputParametersDto.
 //
 //       	TestStringLength                    int
 //            - Actual number of text characters in the entire Test

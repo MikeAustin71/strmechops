@@ -27,6 +27,8 @@ type charSearchTargetInputParametersDtoNanobot struct {
 // Be advised that the data fields in 'destinationTargetInputParms'
 // will be overwritten.
 //
+// No validation is performed on 'sourceTargetInputParms'.
+//
 //
 // -----------------------------------------------------------------
 //
@@ -417,6 +419,8 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		return strBuilder, err
 	}
 
+	colonSpace := ": "
+
 	// Build Formatted Target String
 
 	txtStrLabel := "Target String"
@@ -435,7 +439,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		}
 	} else {
 		// targetInputParms.TargetString == nil
-		txtStrParam = "Target String is a nil pointer (Not Set)!"
+		txtStrParam = "Target String has a nil pointer (Not Set)!"
 	}
 
 	lenTxtStrParam = len(txtStrParam)
@@ -448,7 +452,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 			txtStrLabel,
 			maxLabelFieldLen,
 			TxtJustify.Right(),
-			": ",
+			colonSpace,
 			"\n",
 			&strBuilder,
 			ePrefix.XCpy(
@@ -484,7 +488,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 			txtStrLabel,
 			maxLabelFieldLen,
 			TxtJustify.Right(),
-			": ",
+			colonSpace,
 			txtStrParam,
 			-1,
 			TxtJustify.Left(),
@@ -513,7 +517,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -544,7 +548,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -573,7 +577,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -603,7 +607,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -632,7 +636,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -662,7 +666,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -691,7 +695,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -722,7 +726,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -750,7 +754,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -779,7 +783,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -809,7 +813,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),
@@ -841,7 +845,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		txtStrLabel,
 		maxLabelFieldLen,
 		TxtJustify.Right(),
-		": ",
+		colonSpace,
 		txtStrParam,
 		-1,
 		TxtJustify.Left(),

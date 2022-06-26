@@ -130,10 +130,10 @@ type CharSearchTargetInputParametersDto struct {
 	// Parameters Data Transfer Object.
 	//
 	// Valid CharSearch Type values are listed as follows:
-	//  TextCharSearchType.None() - Invalid Value
-	//  TextCharSearchType.LinearTargetStartingIndex() - Default
-	//  TextCharSearchType.SingleTargetChar()
-	//  TextCharSearchType.LinearEndOfString()
+	//  CharSearchType.None() - Invalid Value
+	//  CharSearchType.LinearTargetStartingIndex() - Default
+	//  CharSearchType.SingleTargetChar()
+	//  CharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }

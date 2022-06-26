@@ -67,9 +67,13 @@ type CharSearchResultsDto struct {
 	// search operation.
 
 	FoundFirstNumericDigitInNumStr bool
-	//            - When set to 'true' this signals that the search
-	//              operation has already identified the first numeric
-	//              digit in a string of text characters.
+	// When set to 'true' this signals that the search
+	// operation has already identified the first numeric
+	// digit in a string of text characters.
+
+	TargetInputParametersName string
+	// The Name, Label or descriptive Tag associated with an
+	// instance of CharSearchTargetInputParametersDto.
 
 	TargetStringLength int
 	// Actual number of text characters in the entire
@@ -114,6 +118,10 @@ type CharSearchResultsDto struct {
 	// Second of two optional description strings
 	// describing the Target Search String in the context
 	// of the current search operation.
+
+	TestInputParametersName string
+	// The Name, Label or descriptive Tag associated with an
+	// instance of CharSearchTestInputParametersDto.
 
 	TestStringLength int
 	// Actual number of text characters in the entire Test
@@ -353,6 +361,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 
 	defer charSearchResults.lock.Unlock()
 
+	charSearchResults.TargetInputParametersName =
+		targetInputParms.TargetInputParametersName
+
 	charSearchResults.FoundFirstNumericDigitInNumStr =
 		targetInputParms.FoundFirstNumericDigitInNumStr
 
@@ -396,6 +407,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTestBaseInputParameters(
 	charSearchResults.lock.Lock()
 
 	defer charSearchResults.lock.Unlock()
+
+	charSearchResults.TestInputParametersName =
+		testInputParms.TestInputParametersName
 
 	charSearchResults.TestStringLength =
 		testInputParms.TestStringLength
