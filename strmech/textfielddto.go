@@ -42,6 +42,10 @@ type TextFieldDto struct {
 	// If this parameter is submitted with a value less than
 	// minus one (-1) or greater than 1-million (1,000,000), an
 	// error will be returned.
+	//
+	// NOTE: If TextFieldType is set to 'Filler' or 'Spacer',
+	// 'FieldLength' will be used to specify the number of Filler
+	// or Spacer characters in the line.
 
 	FieldJustify TextJustify
 	// An enumeration which specifies the justification of the
@@ -70,16 +74,17 @@ type TextFieldDto struct {
 	//     TxtJustify.Center()
 
 	FieldType TextFieldType
-	// This enumeration value specifies the type of Text Field
-	// Specification which will to configure the final text field
-	// output.
+	// Required. This enumeration value specifies the type of Text
+	// Field Specification which will to configure the final text
+	// field output. If this parameter is invalid, an error will be
+	// generated.
 	//
 	// Possible values are listed as follows:
-	//  TxtFieldType.None() - Invalid
-	//  TxtFieldType.Label()
-	//  TxtFieldType.DateTime()
-	//  TxtFieldType.Filler()
-	//  TxtFieldType.Spacer()
+	//  TxtFieldType.None()     - Invalid
+	//  TxtFieldType.Label()    - Valid
+	//  TxtFieldType.DateTime() - Valid
+	//  TxtFieldType.Filler()   - Valid
+	//  TxtFieldType.Spacer()   - Valid
 
 	RightMarginStr string
 	// The contents of the string will be used as the right margin
