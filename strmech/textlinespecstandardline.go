@@ -1490,7 +1490,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //      time value will be used to populate the Text Field.
 //
 //
-//	   ParamValueDateTimeFormat string
+//	   FieldDateTimeFormat string
 //      If this Text Field is designated as a 'DateTime' Field, this
 //      string will be used to format the Date/Time.
 //
@@ -1772,8 +1772,8 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 
 		} else if item.FieldType == TxtFieldType.DateTime() {
 
-			if len(item.DateTimeFormat) == 0 {
-				item.DateTimeFormat =
+			if len(item.FieldDateTimeFormat) == 0 {
+				item.FieldDateTimeFormat =
 					textSpecificationMolecule{}.ptr().
 						getDefaultDateTimeFormat()
 			}
@@ -1782,7 +1782,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 				err = newStdLine.AddTextFieldDateTime(
 				item.FieldDateTime,
 				item.FieldLength,
-				item.DateTimeFormat,
+				item.FieldDateTimeFormat,
 				item.FieldJustify,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -1918,28 +1918,30 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //         " " + "Inflation Rate" + ": " + "8.3%"+"\n"
 //
 //    type TextLabelParameterValueFieldDto struct {
+//
 //     LeftMarginStr string
 //      The contents of the string will be used as the left margin
 //      for the Label Field.
 //
-//      If no left margin is required, set 'LeftMarginStr' to a zero
-//      length or empty string, and no left margin will be created.
+//      If no left margin is required, set 'LeftMarginStr' to a
+//      zero length or empty string, and no left margin will be
+//      created.
 //
 //     ParamLabelStr string
 //      This string represents the contents of the Parameter Label.
 //      If this string is empty (has a zero (0) length), it will be
 //      skipped an ignored.
 //
-//      The 'ParamLabelStr' field should be used to provide narrative
-//      text describing the Parameter Value displayed in the
-//      'ParamValueStrStr' field.
+//      The 'ParamLabelStr' field should be used to provide
+//      narrative text describing the Parameter Value displayed in
+//      the 'ParamValueStr' field.
 //
 //     ParamLabelLength int
-//      Used to format 'ParamLabelStr' field. This is the length of the
-//      text field in which the 'ParamLabelStr' will be displayed. If
-//      'ParamLabelLength' is less than the length of the
-//      'ParamLabelStr' string, it will be automatically set equal to
-//      the 'ParamLabelStr' string length.
+//      Used to format 'ParamLabelStr' field. This is the length of
+//      the text field in which the 'ParamLabelStr' will be
+//      displayed. If 'ParamLabelLength' is less than the length of
+//      the 'ParamLabelStr' string, it will be automatically set
+//      equal to the 'ParamLabelStr' string length.
 //
 //      To automatically set the value of 'ParamLabelLength' to the
 //      length of 'ParamLabelStr', set this parameter to a value of
@@ -1980,34 +1982,36 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //      for the 'ParamLabelStr' Field.
 //
 //      If no Parameter Label right margin is required, set
-//      'ParamLabelRightMarginStr' to a zero length or empty string,
-//      and no Parameter Label right margin will be created.
+//      'ParamLabelRightMarginStr' to a zero length or empty
+//      string, and no Parameter Label right margin will be
+//      created.
 //
 //     ParamValueDateTime time.Time
-//      If 'ParamValueDateTime' is populated with a value greater than
-//      zero, the Parameter value will be formatted as at Date/Time
-//      value using the 'ParamValueDateTimeFormat' string.
+//      If 'ParamValueDateTime' is populated with a value greater
+//      than zero, the Parameter value will be formatted as a
+//      Date/Time value using the 'ParamValueDateTimeFormat'
+//      string.
 //
-//      If 'ParamValueDateTime' is set equal to zero, this field will be
-//      skipped and ignored and the 'ParamValueStr' field will be used
-//      to construct the Parameter value.
+//      If 'ParamValueDateTime' is set equal to zero, this field
+//      will be skipped and ignored and the 'ParamValueStr' field
+//      will be used to construct the Parameter value.
 //
 //     ParamValueDateTimeFormat string
-//      If 'ParamValueDateTime' is set to a value greater than zero, this
-//      field will be used to format 'ParamValueDateTime' as a string for
-//      text output.
+//      If 'ParamValueDateTime' is set to a value greater than
+//      zero, this field will be used to format
+//      'ParamValueDateTime' as a string for text output.
 //
 //      If 'ParamValueDateTime' is set to a value greater than zero
-//      and this 'ParamValueDateTimeFormat' string is empty (has a zero
-//      length), a default Date/Time format string will be applied
-//      as follows:
+//      and this 'ParamValueDateTimeFormat' string is empty (has a
+//      zero length), a default Date/Time format string will be
+//      applied as follows:
 //              "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //     ParamValueStr string
 //      The Parameter Value formatted as a string. If
 //      'ParamValueDateTime' is set equal to zero (0),
 //      'ParamValueStr' will be used to populate the Parameter
-//       Value field. This string will be formatted as a
+//      Value field. This string will be formatted as a
 //       TextFieldSpecLabel and formatted for text output.
 //
 //     ParamValueLength int
@@ -3045,10 +3049,17 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 //
 // Input Parameters
 //
-//  NONE
+//  incomingStdLine    *TextLineSpecStandardLine
+//     - A pointer to an incoming instance of
+//       TextLineSpecStandardLine. This method will compare all
+//       member variable data values in this instance against those
+//       contained in the current instance of
+//       TextLineSpecStandardLine. If the data values in both
+//       instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //

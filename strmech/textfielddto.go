@@ -26,7 +26,7 @@ type TextFieldDto struct {
 	// If this Text Field is designated as a 'DateTime' Field, this
 	// time value will be used to populate the Text Field.
 
-	DateTimeFormat string
+	FieldDateTimeFormat string
 	// If this Text Field is designated as a 'DateTime' Field, this
 	// string will be used to format the Date/Time.
 	//

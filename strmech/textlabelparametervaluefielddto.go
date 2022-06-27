@@ -1,6 +1,8 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 	"time"
 )
@@ -40,7 +42,7 @@ type TextLabelParameterValueFieldDto struct {
 	//
 	// The 'ParamLabelStr' field should be used to provide narrative
 	// text describing the Parameter Value displayed in the
-	// 'ParamValueStrStr' field.
+	// 'ParamValueStr' field.
 
 	ParamLabelLength int
 	// Used to format 'ParamLabelStr' field. This is the length of the
@@ -94,7 +96,7 @@ type TextLabelParameterValueFieldDto struct {
 
 	ParamValueDateTime time.Time
 	// If 'ParamValueDateTime' is populated with a value greater
-	// than zero, the Parameter value will be formatted as at
+	// than zero, the Parameter value will be formatted as a
 	// Date/Time value using the 'ParamValueDateTimeFormat' string.
 	//
 	// If 'ParamValueDateTime' is set equal to zero, this field
@@ -184,7 +186,107 @@ type TextLabelParameterValueFieldDto struct {
 	lock *sync.Mutex
 }
 
-func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyIn() {
+// CopyIn - Copies the data fields from an incoming instance of
+// TextLabelParameterValueFieldDto ('incomingTxtLabelParamDto') to
+// the data fields of the current TextLabelParameterValueFieldDto
+// instance ('txtLabelParamValueDto').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current TextLabelParameterValueFieldDto
+// instance ('txtLabelParamValueDto') will be deleted and
+// overwritten.
+//
+// Also, NO validation checking is performed on input parameter
+// 'incomingTxtLabelParamDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLabelParamDto     *TextLabelParameterValueFieldDto
+//     - A pointer to an instance of
+//       TextLabelParameterValueFieldDto. This method will NOT
+//       change the data values of member variables contained in
+//       this instance.
+//
+//       All data values in this TextLabelParameterValueFieldDto
+//       instance will be copied to the current
+//       TextLabelParameterValueFieldDto instance
+//       ('txtLabelParamValueDto').
+//
+//       No validation checking is performed on
+//       'incomingTxtLabelParamDto'.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//                      containing error prefix and error context
+//                      information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyIn(
+	incomingTxtLabelParamDto *TextLabelParameterValueFieldDto,
+	errorPrefix interface{}) error {
 
 	if txtLabelParamValueDto.lock == nil {
 		txtLabelParamValueDto.lock = new(sync.Mutex)
@@ -194,6 +296,66 @@ func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyIn() {
 
 	defer txtLabelParamValueDto.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLabelParameterValueFieldDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if incomingTxtLabelParamDto == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'incomingTxtLabelParamDto' is invalid!\n"+
+			"'incomingTxtLabelParamDto' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtLabelParamValueDto.LeftMarginStr =
+		incomingTxtLabelParamDto.LeftMarginStr
+
+	txtLabelParamValueDto.ParamLabelStr =
+		incomingTxtLabelParamDto.ParamLabelStr
+
+	txtLabelParamValueDto.ParamLabelLength =
+		incomingTxtLabelParamDto.ParamLabelLength
+
+	txtLabelParamValueDto.ParamLabelJustify =
+		incomingTxtLabelParamDto.ParamLabelJustify
+
+	txtLabelParamValueDto.ParamLabelRightMarginStr =
+		incomingTxtLabelParamDto.ParamLabelRightMarginStr
+
+	txtLabelParamValueDto.ParamValueDateTime =
+		incomingTxtLabelParamDto.ParamValueDateTime
+
+	txtLabelParamValueDto.ParamValueDateTimeFormat =
+		incomingTxtLabelParamDto.ParamValueDateTimeFormat
+
+	txtLabelParamValueDto.ParamValueStr =
+		incomingTxtLabelParamDto.ParamValueStr
+
+	txtLabelParamValueDto.ParamValueLength =
+		incomingTxtLabelParamDto.ParamValueLength
+
+	txtLabelParamValueDto.ParamValueJustify =
+		incomingTxtLabelParamDto.ParamValueJustify
+
+	txtLabelParamValueDto.ParamValueRightMarginStr =
+		incomingTxtLabelParamDto.ParamValueRightMarginStr
+
+	txtLabelParamValueDto.LineTerminator =
+		incomingTxtLabelParamDto.LineTerminator
+
+	return err
 }
 
 // CopyOut - Returns a deep copy of the current
@@ -360,4 +522,131 @@ func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) Empty() {
 
 	txtLabelParamValueDto.lock = nil
 
+}
+
+// Equal - Receives a pointer to another instance of
+// TextLabelParameterValueFieldDto and proceeds to compare the member
+// variables to those of the current TextLabelParameterValueFieldDto
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLabelParamDto   *TextLabelParameterValueFieldDto
+//     - A pointer to an incoming instance of
+//       TextLabelParameterValueFieldDto. This method will compare
+//       all member variable data values in this instance against
+//       those contained in the current instance of
+//       TextLabelParameterValueFieldDto. If the data values in
+//       both instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingTxtLabelParamDto' are equal in all respects to
+//       those contained in the current instance of
+//       TextLabelParameterValueFieldDto, this method will return a
+//       boolean value of 'true'. Otherwise a value of 'false' will
+//       be returned to the calling function.
+//
+func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) Equal(
+	incomingTxtLabelParamDto *TextLabelParameterValueFieldDto) bool {
+
+	if txtLabelParamValueDto.lock == nil {
+		txtLabelParamValueDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelParamValueDto.lock.Lock()
+
+	defer txtLabelParamValueDto.lock.Unlock()
+
+	if incomingTxtLabelParamDto == nil {
+		return false
+	}
+
+	if txtLabelParamValueDto.LeftMarginStr !=
+		incomingTxtLabelParamDto.LeftMarginStr {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamLabelStr !=
+		incomingTxtLabelParamDto.ParamLabelStr {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamLabelLength !=
+		incomingTxtLabelParamDto.ParamLabelLength {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamLabelJustify !=
+		incomingTxtLabelParamDto.ParamLabelJustify {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamLabelRightMarginStr !=
+		incomingTxtLabelParamDto.ParamLabelRightMarginStr {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamValueDateTime !=
+		incomingTxtLabelParamDto.ParamValueDateTime {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamValueDateTimeFormat !=
+		incomingTxtLabelParamDto.ParamValueDateTimeFormat {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamValueStr !=
+		incomingTxtLabelParamDto.ParamValueStr {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamValueLength !=
+		incomingTxtLabelParamDto.ParamValueLength {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamValueJustify !=
+		incomingTxtLabelParamDto.ParamValueJustify {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.ParamValueRightMarginStr !=
+		incomingTxtLabelParamDto.ParamValueRightMarginStr {
+
+		return false
+	}
+
+	if txtLabelParamValueDto.LineTerminator !=
+		incomingTxtLabelParamDto.LineTerminator {
+
+		return false
+	}
+
+	return true
 }

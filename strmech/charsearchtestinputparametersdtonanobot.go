@@ -427,15 +427,15 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	var txtFieldDto TextFieldDto
 
 	txtFieldDto = TextFieldDto{
-		LeftMarginStr:  "",
-		FieldDateTime:  time.Time{},
-		DateTimeFormat: "",
-		FieldText:      "",
-		FieldLength:    1,
-		FieldJustify:   0,
-		FieldType:      TxtFieldType.BlankLine(),
-		RightMarginStr: "",
-		LineTerminator: "",
+		LeftMarginStr:       "",
+		FieldDateTime:       time.Time{},
+		FieldDateTimeFormat: "",
+		FieldText:           "",
+		FieldLength:         1,
+		FieldJustify:        0,
+		FieldType:           TxtFieldType.BlankLine(),
+		RightMarginStr:      "",
+		LineTerminator:      "",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
@@ -443,30 +443,30 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	// Filler Line '========='
 
 	txtFieldDto = TextFieldDto{
-		LeftMarginStr:  " ",
-		FieldDateTime:  time.Time{},
-		DateTimeFormat: "",
-		FieldText:      "=",
-		FieldLength:    maxFieldLen - 2,
-		FieldJustify:   TxtJustify.Left(),
-		FieldType:      TxtFieldType.Filler(),
-		RightMarginStr: " ",
-		LineTerminator: "\n",
+		LeftMarginStr:       " ",
+		FieldDateTime:       time.Time{},
+		FieldDateTimeFormat: "",
+		FieldText:           "=",
+		FieldLength:         maxFieldLen - 2,
+		FieldJustify:        TxtJustify.Left(),
+		FieldType:           TxtFieldType.Filler(),
+		RightMarginStr:      " ",
+		LineTerminator:      "\n",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
 	// Title Line 1
 	txtFieldDto = TextFieldDto{
-		LeftMarginStr:  "",
-		FieldDateTime:  time.Time{},
-		DateTimeFormat: "",
-		FieldText:      "CharSearchTestInputParametersDto",
-		FieldLength:    maxFieldLen,
-		FieldJustify:   TxtJustify.Center(),
-		FieldType:      TxtFieldType.Label(),
-		RightMarginStr: "",
-		LineTerminator: "\n",
+		LeftMarginStr:       "",
+		FieldDateTime:       time.Time{},
+		FieldDateTimeFormat: "",
+		FieldText:           "CharSearchTestInputParametersDto",
+		FieldLength:         maxFieldLen,
+		FieldJustify:        TxtJustify.Center(),
+		FieldType:           TxtFieldType.Label(),
+		RightMarginStr:      "",
+		LineTerminator:      "\n",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
@@ -477,15 +477,15 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	if len(txtStrParam) > 0 {
 		// Title Line 2
 		txtFieldDto = TextFieldDto{
-			LeftMarginStr:  "",
-			FieldDateTime:  time.Time{},
-			DateTimeFormat: "",
-			FieldText:      txtStrParam,
-			FieldLength:    maxFieldLen,
-			FieldJustify:   TxtJustify.Center(),
-			FieldType:      TxtFieldType.Label(),
-			RightMarginStr: "",
-			LineTerminator: "\n",
+			LeftMarginStr:       "",
+			FieldDateTime:       time.Time{},
+			FieldDateTimeFormat: "",
+			FieldText:           txtStrParam,
+			FieldLength:         maxFieldLen,
+			FieldJustify:        TxtJustify.Center(),
+			FieldType:           TxtFieldType.Label(),
+			RightMarginStr:      "",
+			LineTerminator:      "\n",
 		}
 
 		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
@@ -494,45 +494,45 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	// TitLe Line 2 or 3 Date/Time
 	txtFieldDto = TextFieldDto{
-		LeftMarginStr:  "",
-		FieldDateTime:  time.Now(),
-		DateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		FieldText:      "",
-		FieldLength:    maxFieldLen,
-		FieldJustify:   TxtJustify.Center(),
-		FieldType:      TxtFieldType.DateTime(),
-		RightMarginStr: "",
-		LineTerminator: "\n",
+		LeftMarginStr:       "",
+		FieldDateTime:       time.Now(),
+		FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		FieldText:           "",
+		FieldLength:         maxFieldLen,
+		FieldJustify:        TxtJustify.Center(),
+		FieldType:           TxtFieldType.DateTime(),
+		RightMarginStr:      "",
+		LineTerminator:      "\n",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
 	// Filler Line '========='
 	txtFieldDto = TextFieldDto{
-		LeftMarginStr:  " ",
-		FieldDateTime:  time.Time{},
-		DateTimeFormat: "",
-		FieldText:      "=",
-		FieldLength:    maxFieldLen - 2,
-		FieldJustify:   TxtJustify.Left(),
-		FieldType:      TxtFieldType.Filler(),
-		RightMarginStr: " ",
-		LineTerminator: "\n",
+		LeftMarginStr:       " ",
+		FieldDateTime:       time.Time{},
+		FieldDateTimeFormat: "",
+		FieldText:           "=",
+		FieldLength:         maxFieldLen - 2,
+		FieldJustify:        TxtJustify.Left(),
+		FieldType:           TxtFieldType.Filler(),
+		RightMarginStr:      " ",
+		LineTerminator:      "\n",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
 	// Blank Line
 	txtFieldDto = TextFieldDto{
-		LeftMarginStr:  "",
-		FieldDateTime:  time.Time{},
-		DateTimeFormat: "",
-		FieldText:      "",
-		FieldLength:    1,
-		FieldJustify:   0,
-		FieldType:      TxtFieldType.BlankLine(),
-		RightMarginStr: "",
-		LineTerminator: "",
+		LeftMarginStr:       "",
+		FieldDateTime:       time.Time{},
+		FieldDateTimeFormat: "",
+		FieldText:           "",
+		FieldLength:         1,
+		FieldJustify:        0,
+		FieldType:           TxtFieldType.BlankLine(),
+		RightMarginStr:      "",
+		LineTerminator:      "",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
@@ -612,29 +612,29 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		// We need two Lines of Text
 
 		txtFieldDto = TextFieldDto{
-			LeftMarginStr:  " ",
-			FieldDateTime:  time.Time{},
-			DateTimeFormat: "",
-			FieldText:      txtStrLabel,
-			FieldLength:    maxLabelFieldLen,
-			FieldJustify:   TxtJustify.Right(),
-			FieldType:      TxtFieldType.Label(),
-			RightMarginStr: colonSpace,
-			LineTerminator: "\n",
+			LeftMarginStr:       " ",
+			FieldDateTime:       time.Time{},
+			FieldDateTimeFormat: "",
+			FieldText:           txtStrLabel,
+			FieldLength:         maxLabelFieldLen,
+			FieldJustify:        TxtJustify.Right(),
+			FieldType:           TxtFieldType.Label(),
+			RightMarginStr:      colonSpace,
+			LineTerminator:      "\n",
 		}
 
 		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
 		txtFieldDto = TextFieldDto{
-			LeftMarginStr:  " ",
-			FieldDateTime:  time.Time{},
-			DateTimeFormat: "",
-			FieldText:      txtStrParam,
-			FieldLength:    -1,
-			FieldJustify:   TxtJustify.Left(),
-			FieldType:      TxtFieldType.Label(),
-			RightMarginStr: "",
-			LineTerminator: "\n",
+			LeftMarginStr:       " ",
+			FieldDateTime:       time.Time{},
+			FieldDateTimeFormat: "",
+			FieldText:           txtStrParam,
+			FieldLength:         -1,
+			FieldJustify:        TxtJustify.Left(),
+			FieldType:           TxtFieldType.Label(),
+			RightMarginStr:      "",
+			LineTerminator:      "\n",
 		}
 
 		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
