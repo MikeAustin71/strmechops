@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+// TextFieldDto - The Text Field Data Transfer Object specifies the
+// parameters necessary to construct a formatted line of text
+// consisting of a left margin, a text field, a right margin and a
+// line termination sequence.
+//
 type TextFieldDto struct {
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
