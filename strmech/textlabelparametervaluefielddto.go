@@ -93,32 +93,32 @@ type TextLabelParameterValueFieldDto struct {
 	// and no Parameter Label right margin will be created.
 
 	ParamValueDateTime time.Time
-	// If 'ParamValueDateTime' is populated with a value greater than
-	// zero, the Parameter value will be formatted as at Date/Time
-	// value using the 'DateTimeFormat' string.
+	// If 'ParamValueDateTime' is populated with a value greater
+	// than zero, the Parameter value will be formatted as at
+	// Date/Time value using the 'ParamValueDateTimeFormat' string.
 	//
-	// If 'ParamValueDateTime' is set equal to zero, this field will be
-	// skipped and ignored and the 'ParamValueStr' field will be used
-	// to construct the Parameter value.
+	// If 'ParamValueDateTime' is set equal to zero, this field
+	// will be skipped and ignored and the 'ParamValueStr' field
+	// will be used to construct the Parameter value.
 	//
 
-	DateTimeFormat string
-	// If 'ParamValueDateTime' is set to a value greater than zero, this
-	// field will be used to format 'ParamValueDateTime' as a string for
-	// text output.
+	ParamValueDateTimeFormat string
+	// If 'ParamValueDateTime' is set to a value greater than zero,
+	// this field will be used to format 'ParamValueDateTime' as a
+	// string for text output.
 	//
 	// If 'ParamValueDateTime' is set to a value greater than zero
-	// and this 'DateTimeFormat' string is empty (has a zero
-	// length), a default Date/Time format string will be applied
-	// as follows:
+	// and this 'ParamValueDateTimeFormat' string is empty (has a
+	// zero length), a default Date/Time format string will be
+	// applied as follows:
 	//         "2006-01-02 15:04:05.000000000 -0700 MST"
 
 	ParamValueStr string
 	// The Parameter Value formatted as a string. If
-	// 'ParamValueDateTime' is set equal to zero (0), 'ParamValueStr' will
-	// be used to populate the Parameter Value field. This string
-	// will be formatted as a TextFieldSpecLabel and formatted for
-	// text output.
+	// 'ParamValueDateTime' is set equal to zero (0),
+	// 'ParamValueStr' will be used to populate the Parameter Value
+	// field. This string will be formatted as a TextFieldSpecLabel
+	// and formatted for text output.
 
 	ParamValueLength int
 	// Used to format Parameter Value Text Field. This is the
@@ -138,8 +138,8 @@ type TextLabelParameterValueFieldDto struct {
 
 	ParamValueJustify TextJustify
 	// An enumeration which specifies the justification of the
-	// Parameter Value Text Field string within the text field specified by
-	// 'ParamValueLength'.
+	// Parameter Value Text Field string within the text field
+	// specified by 'ParamValueLength'.
 	//
 	// Text justification can only be evaluated in the context of
 	// a text string, field length and a Text Justification object
@@ -162,13 +162,13 @@ type TextLabelParameterValueFieldDto struct {
 	//     TxtJustify.Right()
 	//     TxtJustify.Center()
 
-	ParamRightMarginStr string
+	ParamValueRightMarginStr string
 	// The contents of the string will be used as the right margin
 	// for the Parameter Value text field.
 	//
-	// If no right margin is required, set 'ParamRightMarginStr' to
-	// a zero length or empty string, and no right margin will be
-	// created.
+	// If no right margin is required, set
+	// 'ParamValueRightMarginStr' to a zero length or empty string,
+	// and no right margin will be created.
 
 	LineTerminator string
 	// This string holds the character or characters which will be
@@ -182,4 +182,182 @@ type TextLabelParameterValueFieldDto struct {
 	// characters will be created.
 
 	lock *sync.Mutex
+}
+
+func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyIn() {
+
+	if txtLabelParamValueDto.lock == nil {
+		txtLabelParamValueDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelParamValueDto.lock.Lock()
+
+	defer txtLabelParamValueDto.lock.Unlock()
+
+}
+
+// CopyOut - Returns a deep copy of the current
+// TextLabelParameterValueFieldDto instance.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method does NOT perform validation checks on the current
+// instance of TextLabelParameterValueFieldDto before creating and
+// returning the deep copy of this instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  TextLabelParameterValueFieldDto
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current TextLabelParameterValueFieldDto instance.
+//
+func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyOut() TextLabelParameterValueFieldDto {
+
+	if txtLabelParamValueDto.lock == nil {
+		txtLabelParamValueDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelParamValueDto.lock.Lock()
+
+	defer txtLabelParamValueDto.lock.Unlock()
+
+	var newCopyTxtLabelParamDto TextLabelParameterValueFieldDto
+
+	newCopyTxtLabelParamDto.LeftMarginStr =
+		txtLabelParamValueDto.LeftMarginStr
+
+	newCopyTxtLabelParamDto.ParamLabelStr =
+		txtLabelParamValueDto.ParamLabelStr
+
+	newCopyTxtLabelParamDto.ParamLabelLength =
+		txtLabelParamValueDto.ParamLabelLength
+
+	newCopyTxtLabelParamDto.ParamLabelJustify =
+		txtLabelParamValueDto.ParamLabelJustify
+
+	newCopyTxtLabelParamDto.ParamLabelRightMarginStr =
+		txtLabelParamValueDto.ParamLabelRightMarginStr
+
+	newCopyTxtLabelParamDto.ParamValueDateTime =
+		txtLabelParamValueDto.ParamValueDateTime
+
+	newCopyTxtLabelParamDto.ParamValueDateTimeFormat =
+		txtLabelParamValueDto.ParamValueDateTimeFormat
+
+	newCopyTxtLabelParamDto.ParamValueStr =
+		txtLabelParamValueDto.ParamValueStr
+
+	newCopyTxtLabelParamDto.ParamValueLength =
+		txtLabelParamValueDto.ParamValueLength
+
+	newCopyTxtLabelParamDto.ParamValueJustify =
+		txtLabelParamValueDto.ParamValueJustify
+
+	newCopyTxtLabelParamDto.ParamValueRightMarginStr =
+		txtLabelParamValueDto.ParamValueRightMarginStr
+
+	newCopyTxtLabelParamDto.LineTerminator =
+		txtLabelParamValueDto.LineTerminator
+
+	return newCopyTxtLabelParamDto
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of TextLabelParameterValueFieldDto to their zero or
+// uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextLabelParameterValueFieldDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) Empty() {
+
+	if txtLabelParamValueDto.lock == nil {
+		txtLabelParamValueDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelParamValueDto.lock.Lock()
+
+	txtLabelParamValueDto.LeftMarginStr = ""
+
+	txtLabelParamValueDto.ParamLabelStr = ""
+
+	txtLabelParamValueDto.ParamLabelLength = 0
+
+	txtLabelParamValueDto.ParamLabelJustify = TxtJustify.None()
+
+	txtLabelParamValueDto.ParamLabelRightMarginStr = ""
+
+	txtLabelParamValueDto.ParamValueDateTime = time.Time{}
+
+	txtLabelParamValueDto.ParamValueDateTimeFormat = ""
+
+	txtLabelParamValueDto.ParamValueStr = ""
+
+	txtLabelParamValueDto.ParamValueLength = 0
+
+	txtLabelParamValueDto.ParamValueJustify = TxtJustify.None()
+
+	txtLabelParamValueDto.ParamValueRightMarginStr = ""
+
+	txtLabelParamValueDto.LineTerminator = ""
+
+	txtLabelParamValueDto.ParamLabelStr = ""
+
+	txtLabelParamValueDto.ParamLabelLength = 0
+
+	txtLabelParamValueDto.ParamLabelJustify = TxtJustify.None()
+
+	txtLabelParamValueDto.ParamLabelRightMarginStr = ""
+
+	txtLabelParamValueDto.ParamValueDateTime = time.Time{}
+
+	txtLabelParamValueDto.ParamValueDateTimeFormat = ""
+
+	txtLabelParamValueDto.ParamValueStr = ""
+
+	txtLabelParamValueDto.ParamValueLength = 0
+
+	txtLabelParamValueDto.ParamValueJustify = TxtJustify.None()
+
+	txtLabelParamValueDto.ParamValueRightMarginStr = ""
+
+	txtLabelParamValueDto.LineTerminator = ""
+
+	txtLabelParamValueDto.lock.Unlock()
+
+	txtLabelParamValueDto.lock = nil
+
 }

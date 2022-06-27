@@ -31,7 +31,7 @@ type TextFieldDto struct {
 	// string will be used to format the Date/Time.
 	//
 	// If 'FieldDateTime' is set to a value greater than zero and
-	// this 'DateTimeFormat' string is empty (has a zero length), a
+	// this 'ParamValueDateTimeFormat' string is empty (has a zero length), a
 	// default Date/Time format string will be applied as follows:
 	//         "2006-01-02 15:04:05.000000000 -0700 MST"
 

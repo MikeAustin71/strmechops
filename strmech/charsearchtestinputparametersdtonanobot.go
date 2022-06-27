@@ -573,11 +573,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -661,11 +661,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 			ParamLabelJustify:        TxtJustify.Right(),
 			ParamLabelRightMarginStr: colonSpace,
 			ParamValueDateTime:       time.Time{},
-			DateTimeFormat:           "",
+			ParamValueDateTimeFormat: "",
 			ParamValueStr:            txtStrParam,
 			ParamValueLength:         -1,
 			ParamValueJustify:        TxtJustify.Left(),
-			ParamRightMarginStr:      "",
+			ParamValueRightMarginStr: "",
 			LineTerminator:           "\n",
 		}
 
@@ -691,11 +691,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -718,11 +718,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -746,11 +746,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -773,11 +773,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -801,11 +801,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -829,11 +829,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -853,11 +853,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -880,11 +880,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -909,11 +909,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -938,11 +938,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -967,11 +967,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -996,11 +996,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -1025,11 +1025,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -1054,11 +1054,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -1084,11 +1084,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 
@@ -1114,11 +1114,11 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		ParamLabelJustify:        TxtJustify.Right(),
 		ParamLabelRightMarginStr: colonSpace,
 		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
+		ParamValueDateTimeFormat: "",
 		ParamValueStr:            txtStrParam,
 		ParamValueLength:         -1,
 		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
+		ParamValueRightMarginStr: "",
 		LineTerminator:           "\n",
 	}
 

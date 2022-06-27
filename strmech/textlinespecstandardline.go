@@ -1490,7 +1490,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //      time value will be used to populate the Text Field.
 //
 //
-//	   DateTimeFormat string
+//	   ParamValueDateTimeFormat string
 //      If this Text Field is designated as a 'DateTime' Field, this
 //      string will be used to format the Date/Time.
 //
@@ -1986,19 +1986,19 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //     ParamValueDateTime time.Time
 //      If 'ParamValueDateTime' is populated with a value greater than
 //      zero, the Parameter value will be formatted as at Date/Time
-//      value using the 'DateTimeFormat' string.
+//      value using the 'ParamValueDateTimeFormat' string.
 //
 //      If 'ParamValueDateTime' is set equal to zero, this field will be
 //      skipped and ignored and the 'ParamValueStr' field will be used
 //      to construct the Parameter value.
 //
-//     DateTimeFormat string
+//     ParamValueDateTimeFormat string
 //      If 'ParamValueDateTime' is set to a value greater than zero, this
 //      field will be used to format 'ParamValueDateTime' as a string for
 //      text output.
 //
 //      If 'ParamValueDateTime' is set to a value greater than zero
-//      and this 'DateTimeFormat' string is empty (has a zero
+//      and this 'ParamValueDateTimeFormat' string is empty (has a zero
 //      length), a default Date/Time format string will be applied
 //      as follows:
 //              "2006-01-02 15:04:05.000000000 -0700 MST"
@@ -2052,11 +2052,11 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //          TxtJustify.Right()
 //          TxtJustify.Center()
 //
-//     ParamRightMarginStr string
+//     ParamValueRightMarginStr string
 //      The contents of the string will be used as the right margin
 //      for the Parameter Value text field.
 //
-//      If no right margin is required, set 'ParamRightMarginStr' to
+//      If no right margin is required, set 'ParamValueRightMarginStr' to
 //      a zero length or empty string, and no right margin will be
 //      created.
 //
@@ -2228,8 +2228,8 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 
 		if !item.ParamValueDateTime.IsZero() {
 
-			if len(item.DateTimeFormat) == 0 {
-				item.DateTimeFormat =
+			if len(item.ParamValueDateTimeFormat) == 0 {
+				item.ParamValueDateTimeFormat =
 					textSpecificationMolecule{}.ptr().
 						getDefaultDateTimeFormat()
 			}
@@ -2238,7 +2238,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 				err = newStdLine.AddTextFieldDateTime(
 				item.ParamValueDateTime,
 				item.ParamValueLength,
-				item.DateTimeFormat,
+				item.ParamValueDateTimeFormat,
 				item.ParamValueJustify,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -2283,15 +2283,15 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 		}
 
 		// Process Parameter Right Margin String
-		if len(item.ParamRightMarginStr) > 0 {
+		if len(item.ParamValueRightMarginStr) > 0 {
 			_,
 				err = newStdLine.AddTextFieldLabel(
-				item.ParamRightMarginStr,
+				item.ParamValueRightMarginStr,
 				-1,
 				TxtJustify.Left(),
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"dtos[%v].ParamRightMarginStr",
+						"dtos[%v].ParamValueRightMarginStr",
 						idx)))
 
 			if err != nil {
@@ -2926,21 +2926,40 @@ func (stdLine *TextLineSpecStandardLine) DeleteTextField(
 					indexId)))
 }
 
-// Empty - Deletes all the text fields stored as an array of
-// ITextFieldSpecification pointers within the current
-// TextLineSpecStandardLine instance. In addition, this method
-// will set 'numOfStdLines', 'turnLIneTerminatorOff' and
-// 'newLineChars' will be set to their initial or zero values.
-//
-// After calling 'Empty', the caller CAN NOT reuse this instance of
-// TextLineSpecStandardLine. All the internal member variables
-// will have to be re-initialized.
+// Empty - Resets all internal member variables for the current
+// instance of TextLineSpecStandardLine to their zero or
+// uninitialized states. This method will leave the current
+// instance of TextLineSpecStandardLine in an invalid state and
+// unavailable for immediate reuse.
 //
 // To empty and reuse this TextLineSpecStandardLine instance,
 // reference method TextLineSpecStandardLine.EmptyTextFields.
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextLineSpecStandardLine. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
 //
 func (stdLine *TextLineSpecStandardLine) Empty() {
 
@@ -2972,6 +2991,29 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 // variables 'numOfStdLines', 'turnLIneTerminatorOff' or
 // 'newLineChars'.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all Text Fields contained in the
+// internal member variable array, 'textFields', for the current
+// instance of TextLineSpecStandardLine. 'textFields' will be
+// reset to 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 
 	if stdLine.lock == nil {
@@ -2997,6 +3039,26 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 // returned. If the member variables of both instances are equal in
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingStdLine' are equal in all respects to
+//       those contained in the current instance of
+//       TextLineSpecStandardLine, this method will return a
+//       boolean value of 'true'. Otherwise a value of 'false' will
+//       be returned to the calling function.
 //
 func (stdLine *TextLineSpecStandardLine) Equal(
 	incomingStdLine *TextLineSpecStandardLine) bool {
