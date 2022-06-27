@@ -15,6 +15,7 @@ var mTextFieldTypeCodeToString = map[TextFieldType]string{
 	TextFieldType(2): "DateTime",
 	TextFieldType(3): "Filler",
 	TextFieldType(4): "Spacer",
+	TextFieldType(5): "BlankLine",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
@@ -25,6 +26,7 @@ var mTextFieldTypeStringToCode = map[string]TextFieldType{
 	"Date":      TextFieldType(2),
 	"Filler":    TextFieldType(3),
 	"Spacer":    TextFieldType(4),
+	"BlankLine": TextFieldType(5),
 }
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 	"none":      TextFieldType(0),
@@ -34,13 +36,14 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 	"date":      TextFieldType(2),
 	"filler":    TextFieldType(3),
 	"spacer":    TextFieldType(4),
+	"blankline": TextFieldType(5),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
 // codes used to identify a Text Field Specification like
 // TextFieldSpecLabel, TextFieldSpecDateTime, TextFieldSpecFiller
 // or TextFieldSpecSpacer. Using this enumeration to identify Text
-// Field Specifiations when passing parameters to methods enhances
+// Field Specifications when passing parameters to methods enhances
 // flexibility and efficiency in text formatting operations.
 //
 // ----------------------------------------------------------------
@@ -152,6 +155,10 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //
 //    The Spacer Text Field Specification is used to create a Text
 //    Field consisting of one or more white space characters (" ").
+//
+// BlankLine                    5
+//  - Identifies a type TextLineSpecBlankLines which is used to
+//    generate Blank Lines of text.
 //
 //
 // ----------------------------------------------------------------
@@ -265,6 +272,22 @@ func (txtFieldType TextFieldType) Spacer() TextFieldType {
 	return TextFieldType(4)
 }
 
+// BlankLine - Identifies a Blank Line Specification as a type
+// TextLineSpecBlankLines.
+//
+// A Blank Line Specification is used to create one or more blank
+// lines of text. This type commonly employs the new line
+// character "\n" to generate blank or empty text lines.
+//
+func (txtFieldType TextFieldType) BlankLine() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(5)
+}
+
 // String - Returns a string with the name of the enumeration
 // associated with this current instance of 'TextFieldType'.
 //
@@ -325,7 +348,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 	defer lockTextFieldType.Unlock()
 
 	if txtFieldType < 1 ||
-		txtFieldType > 4 {
+		txtFieldType > 5 {
 
 		return false
 	}

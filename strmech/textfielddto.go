@@ -57,9 +57,12 @@ type TextFieldDto struct {
 	// minus one (-1) or greater than 1-million (1,000,000), an
 	// error will be returned.
 	//
-	// NOTE: If TextFieldType is set to 'Filler' or 'Spacer',
+	// If TextFieldType is set to 'Filler' or 'Spacer',
 	// 'FieldLength' will be used to specify the number of Filler
 	// or Spacer characters in the line.
+	//
+	// If TextFieldType is set to 'BlankLine', 'FieldLength' will
+	// be used to specify the number of blank lines created.
 
 	FieldJustify TextJustify
 	// An enumeration which specifies the justification of the
@@ -94,11 +97,12 @@ type TextFieldDto struct {
 	// generated.
 	//
 	// Possible values are listed as follows:
-	//  TxtFieldType.None()     - Invalid
-	//  TxtFieldType.Label()    - Valid
-	//  TxtFieldType.DateTime() - Valid
-	//  TxtFieldType.Filler()   - Valid
-	//  TxtFieldType.Spacer()   - Valid
+	//   TxtFieldType.None()      - Invalid
+	//   TxtFieldType.Label()     - Valid
+	//   TxtFieldType.DateTime()  - Valid
+	//   TxtFieldType.Filler()    - Valid
+	//   TxtFieldType.Spacer()    - Valid
+	//   TxtFieldType.BlankLine() - Valid
 
 	RightMarginStr string
 	// The contents of the string will be used as the right margin

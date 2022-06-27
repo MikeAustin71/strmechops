@@ -1467,6 +1467,128 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //       will be written to this instance of strings.Builder.
 //
 //
+//  dtos                       []TextFieldDto
+//  - An array of TextFieldDto objects. The Text Field Data
+//    Transfer object is a structure used to transmit Text Field
+//    parameters required for constructing formatted lines of text.
+//
+//    Example Layout
+//         " " + "Inflation Rates" + " " + "\n"
+//
+//    type TextFieldDto struct {
+//
+//	   LeftMarginStr string
+//      The contents of the string will be used as the left margin
+//      for the Text Field.
+//
+//      If no left margin is required, set 'LeftMarginStr' to a zero
+//      length or empty string, and no left margin will be created.
+//
+//
+//	   FieldDateTime time.Time
+//      If this Text Field is designated as a 'DateTime' Field, this
+//      time value will be used to populate the Text Field.
+//
+//
+//	   DateTimeFormat string
+//      If this Text Field is designated as a 'DateTime' Field, this
+//      string will be used to format the Date/Time.
+//
+//
+//	   FieldText string
+//      The Text Field string or contents. If this string is empty
+//      (has a zero (0) length) and is designated as a Label, Filler
+//      or Spacer Text Field, an error will be generated.
+//
+//      This string represents the contents of the Text Field.
+//
+//
+//	   FieldLength int
+//      Used to format Label Text Fields. This is the length of the
+//      text field in which the 'FieldText' will be displayed. If
+//      'FieldLength' is less than the length of the 'FieldText'
+//      string, it will be automatically set equal to the
+//      'FieldText' string length.
+//
+//      To automatically set the value of 'FieldLength' to the
+//      length of 'FieldText', set this parameter to a value of
+//      minus one (-1).
+//
+//      If this parameter is submitted with a value less than
+//      minus one (-1) or greater than 1-million (1,000,000), an
+//      error will be returned.
+//
+//      If TextFieldType is set to 'Filler' or 'Spacer',
+//      'FieldLength' will be used to specify the number of Filler
+//      or Spacer characters in the line.
+//
+//      If TextFieldType is set to 'BlankLine', 'FieldLength' will
+//      be used to specify the number of blank lines created.
+//
+//
+//	   FieldJustify TextJustify
+//      An enumeration which specifies the justification of the
+//      'FieldText' string within the text field specified by
+//      'FieldLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text label, field length and a Text Justification object
+//      of type TextJustify. This is because text labels with a
+//      field length equal to or less than the length of the text
+//      label never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the text
+//      label, text justification must be equal to one of these
+//      three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//
+//	   FieldType TextFieldType
+//      Required. This enumeration value specifies the type of Text
+//      Field Specification which will to configure the final text
+//      field output. If this parameter is invalid, an error will be
+//      generated.
+//
+//      Possible values are listed as follows:
+//       TxtFieldType.None()      - Invalid
+//       TxtFieldType.Label()     - Valid
+//       TxtFieldType.DateTime()  - Valid
+//       TxtFieldType.Filler()    - Valid
+//       TxtFieldType.Spacer()    - Valid
+//       TxtFieldType.BlankLine() - Valid
+//
+//
+//	   RightMarginStr string
+//      The contents of the string will be used as the right margin
+//      for the Text Field.
+//
+//      If no right margin is required, set 'RightMarginStr' to a
+//      zero length or empty string, and no right margin will be
+//      created.
+//
+//	   LineTerminator string
+//      This string holds the character or characters which will be
+//      used to terminate the formatted line of text output.
+//
+//      The most common usage sets this string to a new line
+//      character ("\n").
+//
+//      If no Line Terminator is required, set 'lineTerminator' to
+//      a zero length or empty string and no line termination
+//      characters will be created.
+//    }
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -1513,116 +1635,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //       the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 //
-//  dtos                       ...TextFieldDto
-//  - One or more instances of TextFieldDto. The Text Field Data
-//    Transfer object is a structure used to transmit Text Field
-//    parameters required for constructing formatted lines of text.
-//
-//    Example Layout
-//         " " + "Inflation Rates" + " " + "\n"
-//
-//    type TextFieldDto struct {
-//
-//	   LeftMarginStr string
-//      The contents of the string will be used as the left margin
-//      for the Text Field.
-//
-//      If no left margin is required, set 'LeftMarginStr' to a zero
-//      length or empty string, and no left margin will be created.
-//
-//	   FieldDateTime time.Time
-//      If this Text Field is designated as a 'DateTime' Field, this
-//      time value will be used to populate the Text Field.
-//
-//	   DateTimeFormat string
-//      If this Text Field is designated as a 'DateTime' Field, this
-//      string will be used to format the Date/Time.
-//
-//	   FieldText string
-//      The Text Field string or contents. If this string is empty
-//      (has a zero (0) length) and is designated as a Label, Filler
-//      or Spacer Text Field, an error will be generated.
-//
-//      This string represents the contents of the Text Field.
-//
-//	   FieldLength int
-//      Used to format Label Text Fields. This is the length of the
-//      text field in which the 'FieldText' will be displayed. If
-//      'FieldLength' is less than the length of the 'FieldText'
-//      string, it will be automatically set equal to the
-//      'FieldText' string length.
-//
-//      To automatically set the value of 'FieldLength' to the
-//      length of 'FieldText', set this parameter to a value of
-//      minus one (-1).
-//
-//      If this parameter is submitted with a value less than
-//      minus one (-1) or greater than 1-million (1,000,000), an
-//      error will be returned.
-//
-//      NOTE: If TextFieldType is set to 'Filler' or 'Spacer',
-//      'FieldLength' will be used to specify the number of Filler
-//      or Spacer characters in the line.
-//
-//	   FieldJustify TextJustify
-//      An enumeration which specifies the justification of the
-//      'FieldText' string within the text field specified by
-//      'FieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
-//
-//	   FieldType TextFieldType
-//      Required. This enumeration value specifies the type of Text
-//      Field Specification which will to configure the final text
-//      field output. If this parameter is invalid, an error will be
-//      generated.
-//
-//      Possible values are listed as follows:
-//       TxtFieldType.None()     - Invalid
-//       TxtFieldType.Label()    - Valid
-//       TxtFieldType.DateTime() - Valid
-//       TxtFieldType.Filler()   - Valid
-//       TxtFieldType.Spacer()   - Valid
-//
-//	   RightMarginStr string
-//      The contents of the string will be used as the right margin
-//      for the Text Field.
-//
-//      If no right margin is required, set 'RightMarginStr' to a
-//      zero length or empty string, and no right margin will be
-//      created.
-//
-//	   LineTerminator string
-//      This string holds the character or characters which will be
-//      used to terminate the formatted line of text output.
-//
-//      The most common usage sets this string to a new line
-//      character ("\n").
-//
-//      If no Line Terminator is required, set 'lineTerminator' to
-//      a zero length or empty string and no line termination
-//      characters will be created.
-//    }
-//
 // ------------------------------------------------------------------------
 //
 // Return Values
@@ -1639,8 +1651,8 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //
 func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 	strBuilder *strings.Builder,
-	errorPrefix interface{},
-	dtos ...TextFieldDto) error {
+	dtos []TextFieldDto,
+	errorPrefix interface{}) error {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -1692,6 +1704,39 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 			return err
 		}
 
+		// Process Blank Lines First!
+		if item.FieldType == TxtFieldType.BlankLine() {
+
+			var blankLine TextLineSpecBlankLines
+
+			if item.FieldLength == 0 {
+				item.FieldLength = 1
+			}
+
+			blankLine,
+				err =
+				TextLineSpecBlankLines{}.NewDefaultBlankLines(
+					item.FieldLength,
+					ePrefix)
+
+			if err != nil {
+				return err
+			}
+
+			err = blankLine.TextBuilder(
+				strBuilder,
+				ePrefix.XCpy(
+					"strBuilder<-blankLine"))
+
+			if err != nil {
+				return err
+			}
+
+			newStdLine = TextLineSpecStandardLine{}.New()
+
+			continue
+		}
+
 		// Process Left Margin
 		if len(item.LeftMarginStr) > 0 {
 			_,
@@ -1709,6 +1754,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 			}
 		}
 
+		// Process Field Type
 		if item.FieldType == TxtFieldType.Label() {
 			_,
 				err = newStdLine.AddTextFieldLabel(
@@ -1767,8 +1813,8 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 			}
 
 		} else {
-			// MUST BE TxtFieldType.Spacer()
-
+			// item.FieldType MUST BE EQUAL TO
+			//   TxtFieldType.Spacer()
 			_,
 				err = newStdLine.AddTextFieldSpacer(
 				item.FieldLength,
@@ -1858,58 +1904,12 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //  strBuilder                 *strings.Builder
 //     - A pointer to an instance of strings.Builder. Formatted
 //       Text Lines created from the TextFieldDto input objects
-//       will be written to this strings.Builder instance.
+//       will be written to this instance of strings.Builder.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
-//
-//
-//  dtos                       ...TextLabelParameterValueFieldDto
-//  - One or more instances of TextLabelParameterValueFieldDto. The
-//    Text Label Parameter Value Field Data Transfer object is a
+//  dtos                       []TextLabelParameterValueFieldDto
+//  - An array of TextLabelParameterValueFieldDto objects. The Text
+//    Label Parameter Value Field Data Transfer object is a
 //    structure used to transmit Text Field parameters required for
 //    constructing formatted lines of text style as a parameter
 //    text descriptions field followed by a parameter value field.
@@ -2073,6 +2073,52 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //    }
 //
 //
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
 // ------------------------------------------------------------------------
 //
 // Return Values
@@ -2089,8 +2135,8 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //
 func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 	strBuilder *strings.Builder,
-	errorPrefix interface{},
-	dtos ...TextLabelParameterValueFieldDto) error {
+	dtos []TextLabelParameterValueFieldDto,
+	errorPrefix interface{}) error {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
