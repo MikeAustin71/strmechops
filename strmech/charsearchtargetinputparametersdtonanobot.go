@@ -425,11 +425,16 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
 	// Title Line 1
+
 	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  "",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
 		FieldText:      "CharSearchTargetInputParametersDto",
 		FieldLength:    maxFieldLen,
 		FieldJustify:   TxtJustify.Center(),
 		FieldType:      TxtFieldType.Label(),
+		RightMarginStr: "",
 		LineTerminator: "\n",
 	}
 
@@ -442,10 +447,14 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 		// Title Line 2
 		txtFieldDto = TextFieldDto{
+			LeftMarginStr:  "",
+			FieldDateTime:  time.Time{},
+			DateTimeFormat: "",
 			FieldText:      txtStrParam,
 			FieldLength:    maxFieldLen,
 			FieldJustify:   TxtJustify.Center(),
 			FieldType:      TxtFieldType.Label(),
+			RightMarginStr: "",
 			LineTerminator: "\n",
 		}
 
@@ -453,13 +462,17 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	}
 
-	// Title Line 3 Date/Time
+	// Title Line 2 or 3 Date/Time
 	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  "",
 		FieldDateTime:  time.Now(),
 		DateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		FieldText:      "",
 		FieldLength:    maxFieldLen,
 		FieldJustify:   TxtJustify.Center(),
 		FieldType:      TxtFieldType.DateTime(),
+		RightMarginStr: "",
+		LineTerminator: "\n",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
@@ -479,9 +492,17 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
+	// Blank Line
 	txtFieldDto = TextFieldDto{
-		FieldLength: 1,
-		FieldType:   TxtFieldType.BlankLine(),
+		LeftMarginStr:  "",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
+		FieldText:      "",
+		FieldLength:    1,
+		FieldJustify:   0,
+		FieldType:      TxtFieldType.BlankLine(),
+		RightMarginStr: "",
+		LineTerminator: "",
 	}
 
 	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
@@ -502,9 +523,41 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	colonSpace := ": "
 
+	var txtLabelParamField TextLabelParameterValueFieldDto
+
+	var txtLabelParamFields []TextLabelParameterValueFieldDto
+
+	// TargetInputParametersName
+	txtStrLabel := "TargetInputParametersName"
+
+	txtStrParam = targetInputParms.TargetInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetInputParametersName is EMPTY!"
+	}
+
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
+	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
+
 	// Build Formatted Target String
 
-	txtStrLabel := "Target String"
+	txtStrLabel = "Target String"
 
 	lenTxtStrParam := 0
 
@@ -524,10 +577,6 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	}
 
 	lenTxtStrParam = len(txtStrParam)
-
-	var txtLabelParamField TextLabelParameterValueFieldDto
-
-	var txtLabelParamFields []TextLabelParameterValueFieldDto
 
 	if lenTxtStrParam >= (maxFieldLen - maxLabelFieldLen - 3) {
 		// We need two Lines of Text
@@ -594,34 +643,6 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 			txtLabelParamField)
 
 	}
-
-	// TargetInputParametersName
-	txtStrLabel = "TargetInputParametersName"
-
-	txtStrParam = targetInputParms.TargetInputParametersName
-
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetInputParametersName is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		DateTimeFormat:           "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamRightMarginStr:      "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
 
 	// TargetStringName
 

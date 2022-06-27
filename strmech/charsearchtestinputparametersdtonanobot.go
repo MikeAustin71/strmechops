@@ -390,7 +390,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	strBuilder := strings.Builder{}
 
-	strBuilder.Grow(512)
+	strBuilder.Grow(1024)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -417,26 +417,131 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	// Total available Length of Output Line
 	const maxFieldLen = 70
 
-	// Max Label Field Length = 36
+	// Max Label Field Length = 24
 	const maxLabelFieldLen = 24
+
+	// Title Marquee
+
+	var txtFieldDtos []TextFieldDto
+
+	var txtFieldDto TextFieldDto
+
+	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  "",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
+		FieldText:      "",
+		FieldLength:    1,
+		FieldJustify:   0,
+		FieldType:      TxtFieldType.BlankLine(),
+		RightMarginStr: "",
+		LineTerminator: "",
+	}
+
+	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+	// Filler Line '========='
+
+	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  " ",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
+		FieldText:      "=",
+		FieldLength:    maxFieldLen - 2,
+		FieldJustify:   TxtJustify.Left(),
+		FieldType:      TxtFieldType.Filler(),
+		RightMarginStr: " ",
+		LineTerminator: "\n",
+	}
+
+	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+	// Title Line 1
+	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  "",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
+		FieldText:      "CharSearchTestInputParametersDto",
+		FieldLength:    maxFieldLen,
+		FieldJustify:   TxtJustify.Center(),
+		FieldType:      TxtFieldType.Label(),
+		RightMarginStr: "",
+		LineTerminator: "\n",
+	}
+
+	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
 	txtStrParam :=
 		testInputParms.TestInputParametersName
 
-	textSpecNanoBot := textSpecificationNanobot{}
-	// Title Marquee
+	if len(txtStrParam) > 0 {
+		// Title Line 2
+		txtFieldDto = TextFieldDto{
+			LeftMarginStr:  "",
+			FieldDateTime:  time.Time{},
+			DateTimeFormat: "",
+			FieldText:      txtStrParam,
+			FieldLength:    maxFieldLen,
+			FieldJustify:   TxtJustify.Center(),
+			FieldType:      TxtFieldType.Label(),
+			RightMarginStr: "",
+			LineTerminator: "\n",
+		}
 
-	err = textSpecNanoBot.buildFormattedMarqueeTitle(
-		"=",
-		"CharSearchTestInputParametersDto",
-		TxtJustify.Center(),
-		txtStrParam,
-		TxtJustify.Center(),
-		time.Now(),
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		TxtJustify.Center(),
-		maxFieldLen,
+		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+	}
+
+	// TitLe Line 2 or 3 Date/Time
+	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  "",
+		FieldDateTime:  time.Now(),
+		DateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		FieldText:      "",
+		FieldLength:    maxFieldLen,
+		FieldJustify:   TxtJustify.Center(),
+		FieldType:      TxtFieldType.DateTime(),
+		RightMarginStr: "",
+		LineTerminator: "\n",
+	}
+
+	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+	// Filler Line '========='
+	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  " ",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
+		FieldText:      "=",
+		FieldLength:    maxFieldLen - 2,
+		FieldJustify:   TxtJustify.Left(),
+		FieldType:      TxtFieldType.Filler(),
+		RightMarginStr: " ",
+		LineTerminator: "\n",
+	}
+
+	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+	// Blank Line
+	txtFieldDto = TextFieldDto{
+		LeftMarginStr:  "",
+		FieldDateTime:  time.Time{},
+		DateTimeFormat: "",
+		FieldText:      "",
+		FieldLength:    1,
+		FieldJustify:   0,
+		FieldType:      TxtFieldType.BlankLine(),
+		RightMarginStr: "",
+		LineTerminator: "",
+	}
+
+	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+	txtStdLine := TextLineSpecStandardLine{}
+
+	err = txtStdLine.BuildTextFieldLines(
 		&strBuilder,
+		txtFieldDtos,
 		ePrefix)
 
 	if err != nil {
@@ -444,7 +549,13 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		return strBuilder, err
 	}
 
+	txtFieldDtos = make([]TextFieldDto, 0)
+
 	colonSpace := ": "
+
+	var txtLabelParamField TextLabelParameterValueFieldDto
+
+	var txtLabelParamFields []TextLabelParameterValueFieldDto
 
 	// TestInputParametersName
 	txtStrLabel := "TestInputParametersName"
@@ -455,24 +566,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		txtStrParam = "TestInputParametersName is EMPTY!"
 	}
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// Build Formatted Test String
 
@@ -497,63 +608,70 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	lenTxtStrParam = len(txtStrParam)
 
-	if lenTxtStrParam >= (maxFieldLen - maxLabelFieldLen - 2) {
+	if lenTxtStrParam >= (maxFieldLen - maxLabelFieldLen - 3) {
 		// We need two Lines of Text
 
-		err = textSpecNanoBot.buildFormattedSingleTextField(
-			"",
-			txtStrLabel,
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			&strBuilder,
-			ePrefix.XCpy(
-				"Test String Label"))
-
-		if err != nil {
-
-			return strBuilder, err
+		txtFieldDto = TextFieldDto{
+			LeftMarginStr:  " ",
+			FieldDateTime:  time.Time{},
+			DateTimeFormat: "",
+			FieldText:      txtStrLabel,
+			FieldLength:    maxLabelFieldLen,
+			FieldJustify:   TxtJustify.Right(),
+			FieldType:      TxtFieldType.Label(),
+			RightMarginStr: colonSpace,
+			LineTerminator: "\n",
 		}
 
-		// Now write test string on second line
+		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
 
-		err = textSpecNanoBot.buildFormattedSingleTextField(
-			" ",
-			txtStrParam,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			&strBuilder,
-			ePrefix.XCpy(
-				"Test String Parameter"))
-
-		if err != nil {
-
-			return strBuilder, err
+		txtFieldDto = TextFieldDto{
+			LeftMarginStr:  " ",
+			FieldDateTime:  time.Time{},
+			DateTimeFormat: "",
+			FieldText:      txtStrParam,
+			FieldLength:    -1,
+			FieldJustify:   TxtJustify.Left(),
+			FieldType:      TxtFieldType.Label(),
+			RightMarginStr: "",
+			LineTerminator: "\n",
 		}
 
-	} else {
-		// We need only one line of text
-		err = textSpecNanoBot.buildFormattedSingleParameterText(
-			"",
-			txtStrLabel,
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			txtStrParam,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
+		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+
+		err = txtStdLine.BuildTextFieldLines(
 			&strBuilder,
+			txtFieldDtos,
 			ePrefix)
 
 		if err != nil {
 
 			return strBuilder, err
 		}
+
+		txtFieldDtos = make([]TextFieldDto, 0)
+
+	} else {
+		// We need only one line of text
+
+		txtLabelParamField = TextLabelParameterValueFieldDto{
+			LeftMarginStr:            " ",
+			ParamLabelStr:            txtStrLabel,
+			ParamLabelLength:         maxLabelFieldLen,
+			ParamLabelJustify:        TxtJustify.Right(),
+			ParamLabelRightMarginStr: colonSpace,
+			ParamValueDateTime:       time.Time{},
+			DateTimeFormat:           "",
+			ParamValueStr:            txtStrParam,
+			ParamValueLength:         -1,
+			ParamValueJustify:        TxtJustify.Left(),
+			ParamRightMarginStr:      "",
+			LineTerminator:           "\n",
+		}
+
+		txtLabelParamFields = append(
+			txtLabelParamFields,
+			txtLabelParamField)
 	}
 
 	// TestStringName
@@ -566,24 +684,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		txtStrParam = "TargetStringName is EMPTY!"
 	}
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TestStringLength
 
@@ -593,24 +711,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		fmt.Sprintf("%v",
 			testInputParms.TestStringLength)
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TestStringLengthName
 	txtStrLabel = "TestStringLengthName"
@@ -621,24 +739,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		txtStrParam = "TestStringLengthName is EMPTY!"
 	}
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TestStringStartingIndex
 
@@ -648,24 +766,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		fmt.Sprintf("%v",
 			testInputParms.TestStringStartingIndex)
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TestStringStartingIndexName
 	txtStrLabel = "TestStringStartingIndexName"
@@ -676,24 +794,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		txtStrParam = "TestStringStartingIndexName is EMPTY!"
 	}
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TestStringDescription1
 	txtStrLabel = "TestStringDescription1"
@@ -704,52 +822,48 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		txtStrParam = "TestStringDescription1 is EMPTY!"
 	}
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TestStringDescription2
 	txtStrLabel = "TestStringDescription2"
 
 	txtStrParam = testInputParms.TestStringDescription2
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TestStringDescription2 is EMPTY!"
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-2,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
-	}
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// CollectionTestObjIndex
 
@@ -759,24 +873,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		fmt.Sprintf("%v",
 			testInputParms.CollectionTestObjIndex)
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// NumValueType
 
@@ -788,24 +902,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.NumValueType.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// NumStrFormatType
 
@@ -817,24 +931,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.NumStrFormatType.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// NumSymLocation
 
@@ -846,24 +960,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.NumSymLocation.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// NumSymbolClass
 
@@ -875,24 +989,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.NumSymbolClass.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// NumSignValue
 
@@ -904,24 +1018,53 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.NumSignValue.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
+
+	// PrimaryNumSignPosition
+	txtStrLabel = "PrimaryNumSignPosition"
+
+	if !testInputParms.PrimaryNumSignPosition.XIsValid() {
+		testInputParms.PrimaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	txtStrParam = testInputParms.PrimaryNumSignPosition.String()
+
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
+	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// SecondaryNumSignPosition
 
@@ -934,24 +1077,24 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.SecondaryNumSignPosition.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		&strBuilder,
-		ePrefix)
-
-	if err != nil {
-
-		return strBuilder, err
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
 	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
 
 	// TextCharSearchType
 
@@ -964,18 +1107,28 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	txtStrParam = testInputParms.TextCharSearchType.String()
 
-	err = textSpecNanoBot.buildFormattedSingleParameterText(
-		"",
-		txtStrLabel,
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		txtStrParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
+	txtLabelParamField = TextLabelParameterValueFieldDto{
+		LeftMarginStr:            " ",
+		ParamLabelStr:            txtStrLabel,
+		ParamLabelLength:         maxLabelFieldLen,
+		ParamLabelJustify:        TxtJustify.Right(),
+		ParamLabelRightMarginStr: colonSpace,
+		ParamValueDateTime:       time.Time{},
+		DateTimeFormat:           "",
+		ParamValueStr:            txtStrParam,
+		ParamValueLength:         -1,
+		ParamValueJustify:        TxtJustify.Left(),
+		ParamRightMarginStr:      "",
+		LineTerminator:           "\n",
+	}
+
+	txtLabelParamFields = append(
+		txtLabelParamFields,
+		txtLabelParamField)
+
+	err = txtStdLine.BuildTextLabelParameterLines(
 		&strBuilder,
+		txtLabelParamFields,
 		ePrefix)
 
 	return strBuilder, err
