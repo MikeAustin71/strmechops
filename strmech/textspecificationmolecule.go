@@ -10,9 +10,9 @@ type textSpecificationMolecule struct {
 	lock *sync.Mutex
 }
 
-// getDefaultTimeFormat - Returns a string containing the default
+// getDefaultDateTimeFormat - Returns a string containing the default
 // format for text display and output of time values.
-func (txtSpecMolecule *textSpecificationMolecule) getDefaultTimeFormat() string {
+func (txtSpecMolecule *textSpecificationMolecule) getDefaultDateTimeFormat() string {
 
 	if txtSpecMolecule.lock == nil {
 		txtSpecMolecule.lock = new(sync.Mutex)

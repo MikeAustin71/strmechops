@@ -848,7 +848,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 	if len(timeFormat) == 0 {
 		timeFormat =
 			textSpecificationMolecule{}.ptr().
-				getDefaultTimeFormat()
+				getDefaultDateTimeFormat()
 	}
 
 	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}

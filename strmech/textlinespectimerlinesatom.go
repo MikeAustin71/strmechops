@@ -257,7 +257,7 @@ func (txtTimerLinesAtom *textLineSpecTimerLinesAtom) testValidityOfTxtSpecTimerL
 	if len(txtTimerLines.timeFormat) == 0 {
 		txtTimerLines.timeFormat =
 			textSpecificationMolecule{}.ptr().
-				getDefaultTimeFormat()
+				getDefaultDateTimeFormat()
 	}
 
 	txtTimerLinesElectron := textLineSpecTimerLinesElectron{}

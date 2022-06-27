@@ -5882,7 +5882,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) SetTimeFormat(
 
 		txtSpecTimerLines.timeFormat =
 			textSpecificationMolecule{}.ptr().
-				getDefaultTimeFormat()
+				getDefaultDateTimeFormat()
 
 	} else {
 

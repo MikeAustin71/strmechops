@@ -13,7 +13,7 @@ import (
 //
 // Example Layout
 //
-// [LEFT MARGIN][DESCRIPTIVE LABEL][RIGHT MARGIN][PARAM VALUE][RIGHT MARGIN]
+//         " " + "Inflation Rate" + ": " + "8.3%"+"\n"
 //
 // Be advised that the actual Parameter Value Text Field can be
 // populated with one of two values: a Date/Time Value or a Text
@@ -33,24 +33,24 @@ type TextLabelParameterValueFieldDto struct {
 	// If no left margin is required, set 'LeftMarginStr' to a zero
 	// length or empty string, and no left margin will be created.
 
-	ParamLabel string
+	ParamLabelStr string
 	// This string represents the contents of the Parameter Label.
 	// If this string is empty (has a zero (0) length), it will be
 	// skipped an ignored.
 	//
-	// The 'ParamLabel' field should be used to provide narrative
+	// The 'ParamLabelStr' field should be used to provide narrative
 	// text describing the Parameter Value displayed in the
 	// 'ParamValueStrStr' field.
 
 	ParamLabelLength int
-	// Used to format 'ParamLabel' field. This is the length of the
-	// text field in which the 'ParamLabel' will be displayed. If
+	// Used to format 'ParamLabelStr' field. This is the length of the
+	// text field in which the 'ParamLabelStr' will be displayed. If
 	// 'ParamLabelLength' is less than the length of the
-	// 'ParamLabel' string, it will be automatically set equal to
-	// the 'ParamLabel' string length.
+	// 'ParamLabelStr' string, it will be automatically set equal to
+	// the 'ParamLabelStr' string length.
 	//
 	// To automatically set the value of 'ParamLabelLength' to the
-	// length of 'ParamLabel', set this parameter to a value of
+	// length of 'ParamLabelStr', set this parameter to a value of
 	// minus one (-1).
 	//
 	// If 'ParamLabelLength' is submitted with a value less than
@@ -60,7 +60,7 @@ type TextLabelParameterValueFieldDto struct {
 
 	ParamLabelJustify TextJustify
 	// An enumeration which specifies the justification of the
-	// 'ParamLabel' string within the text field specified by
+	// 'ParamLabelStr' string within the text field specified by
 	// 'ParamLabelLength'.
 	//
 	// Text justification can only be evaluated in the context of
@@ -86,7 +86,7 @@ type TextLabelParameterValueFieldDto struct {
 
 	ParamLabelRightMarginStr string
 	// The contents of the string will be used as the right margin
-	// for the 'ParamLabel' Field.
+	// for the 'ParamLabelStr' Field.
 	//
 	// If no Parameter Label right margin is required, set
 	// 'ParamLabelRightMarginStr' to a zero length or empty string,
@@ -107,9 +107,10 @@ type TextLabelParameterValueFieldDto struct {
 	// field will be used to format 'ParamValueDateTime' as a string for
 	// text output.
 	//
-	// If 'ParamValueDateTime' is set to a value greater than zero and
-	// this string is empty (has a zero length), a default
-	// Date/Time format string will be applied as follows:
+	// If 'ParamValueDateTime' is set to a value greater than zero
+	// and this 'DateTimeFormat' string is empty (has a zero
+	// length), a default Date/Time format string will be applied
+	// as follows:
 	//         "2006-01-02 15:04:05.000000000 -0700 MST"
 
 	ParamValueStr string

@@ -396,7 +396,7 @@ func (textSpecNanobot *textSpecificationNanobot) buildFormattedMarqueeTitle(
 		if len(dateTimeFormat) == 0 {
 			dateTimeFormat =
 				textSpecificationMolecule{}.ptr().
-					getDefaultTimeFormat()
+					getDefaultDateTimeFormat()
 		}
 
 		_,

@@ -170,7 +170,7 @@ func (txtTimerLinesElectron *textLineSpecTimerLinesElectron) computeTimeDuration
 
 		timeFormat :=
 			textSpecificationMolecule{}.ptr().
-				getDefaultTimeFormat()
+				getDefaultDateTimeFormat()
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input time parameters 'startTime' and "+

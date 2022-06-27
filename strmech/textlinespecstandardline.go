@@ -1464,7 +1464,7 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //  strBuilder                 *strings.Builder
 //     - A pointer to an instance of strings.Builder. Formatted
 //       Text Lines created from the TextFieldDto input objects
-//       will be written to this strings.Builder instance.
+//       will be written to this instance of strings.Builder.
 //
 //
 //  errorPrefix                interface{}
@@ -1517,6 +1517,9 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //  - One or more instances of TextFieldDto. The Text Field Data
 //    Transfer object is a structure used to transmit Text Field
 //    parameters required for constructing formatted lines of text.
+//
+//    Example Layout
+//         " " + "Inflation Rates" + " " + "\n"
 //
 //    type TextFieldDto struct {
 //
@@ -1650,8 +1653,6 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	newStdLine := TextLineSpecStandardLine{}.New()
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1673,6 +1674,8 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 	}
 
 	var outputStr string
+
+	newStdLine := TextLineSpecStandardLine{}.New()
 
 	for idx, item := range dtos {
 
@@ -1722,6 +1725,12 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 			}
 
 		} else if item.FieldType == TxtFieldType.DateTime() {
+
+			if len(item.DateTimeFormat) == 0 {
+				item.DateTimeFormat =
+					textSpecificationMolecule{}.ptr().
+						getDefaultDateTimeFormat()
+			}
 
 			_,
 				err = newStdLine.AddTextFieldDateTime(
@@ -1827,6 +1836,461 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 
 		newStdLine = TextLineSpecStandardLine{}.New()
 	}
+
+	return err
+}
+
+// BuildTextLabelParameterLines - Generates multiple Standard Lines
+// of formatted text which are written to an instance of
+// strings.Builder passed in by the calling function.
+//
+// The parameters required to build the formatted lines of text
+// output are taken from one or more instances of
+// TextLabelParameterValueFieldDto which are passed in to this
+// variadic method.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of strings.Builder. Formatted
+//       Text Lines created from the TextFieldDto input objects
+//       will be written to this strings.Builder instance.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings containing
+//                      error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//
+//
+//  dtos                       ...TextLabelParameterValueFieldDto
+//  - One or more instances of TextLabelParameterValueFieldDto. The
+//    Text Label Parameter Value Field Data Transfer object is a
+//    structure used to transmit Text Field parameters required for
+//    constructing formatted lines of text style as a parameter
+//    text descriptions field followed by a parameter value field.
+//
+//    Example Layout
+//         " " + "Inflation Rate" + ": " + "8.3%"+"\n"
+//
+//    type TextLabelParameterValueFieldDto struct {
+//     LeftMarginStr string
+//      The contents of the string will be used as the left margin
+//      for the Label Field.
+//
+//      If no left margin is required, set 'LeftMarginStr' to a zero
+//      length or empty string, and no left margin will be created.
+//
+//     ParamLabelStr string
+//      This string represents the contents of the Parameter Label.
+//      If this string is empty (has a zero (0) length), it will be
+//      skipped an ignored.
+//
+//      The 'ParamLabelStr' field should be used to provide narrative
+//      text describing the Parameter Value displayed in the
+//      'ParamValueStrStr' field.
+//
+//     ParamLabelLength int
+//      Used to format 'ParamLabelStr' field. This is the length of the
+//      text field in which the 'ParamLabelStr' will be displayed. If
+//      'ParamLabelLength' is less than the length of the
+//      'ParamLabelStr' string, it will be automatically set equal to
+//      the 'ParamLabelStr' string length.
+//
+//      To automatically set the value of 'ParamLabelLength' to the
+//      length of 'ParamLabelStr', set this parameter to a value of
+//      minus one (-1).
+//
+//      If 'ParamLabelLength' is submitted with a value less than
+//      minus one (-1) or greater than 1-million (1,000,000), an
+//      error will be returned.
+//
+//     ParamLabelJustify TextJustify
+//      An enumeration which specifies the justification of the
+//      'ParamLabelStr' string within the text field specified by
+//      'ParamLabelLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text label, field length and a Text Justification object
+//      of type TextJustify. This is because text labels with a
+//      field length equal to or less than the length of the text
+//      label never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the text
+//      label, text justification must be equal to one of these
+//      three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//     ParamLabelRightMarginStr string
+//      The contents of the string will be used as the right margin
+//      for the 'ParamLabelStr' Field.
+//
+//      If no Parameter Label right margin is required, set
+//      'ParamLabelRightMarginStr' to a zero length or empty string,
+//      and no Parameter Label right margin will be created.
+//
+//     ParamValueDateTime time.Time
+//      If 'ParamValueDateTime' is populated with a value greater than
+//      zero, the Parameter value will be formatted as at Date/Time
+//      value using the 'DateTimeFormat' string.
+//
+//      If 'ParamValueDateTime' is set equal to zero, this field will be
+//      skipped and ignored and the 'ParamValueStr' field will be used
+//      to construct the Parameter value.
+//
+//     DateTimeFormat string
+//      If 'ParamValueDateTime' is set to a value greater than zero, this
+//      field will be used to format 'ParamValueDateTime' as a string for
+//      text output.
+//
+//      If 'ParamValueDateTime' is set to a value greater than zero
+//      and this 'DateTimeFormat' string is empty (has a zero
+//      length), a default Date/Time format string will be applied
+//      as follows:
+//              "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//     ParamValueStr string
+//      The Parameter Value formatted as a string. If
+//      'ParamValueDateTime' is set equal to zero (0),
+//      'ParamValueStr' will be used to populate the Parameter
+//       Value field. This string will be formatted as a
+//       TextFieldSpecLabel and formatted for text output.
+//
+//     ParamValueLength int
+//      Used to format Parameter Value Text Field. This is the
+//      string length of the text field in which the Parameter
+//      Value will be displayed. If 'ParamValueLength' is less than
+//      the length of the Parameter Value Text Field string, it will
+//      be automatically set equal to the Parameter Value Text Field
+//      string length.
+//
+//      To automatically set the value of 'ParamValueLength' to the
+//      length of the Parameter Value Text Field, set this parameter
+//      to a value of minus one (-1).
+//
+//      If 'ParamValueLength' is submitted with a value less than
+//      minus one (-1) or greater than 1-million (1,000,000), an
+//      error will be returned.
+//
+//     ParamValueJustify TextJustify
+//      An enumeration which specifies the justification of the
+//      Parameter Value Text Field string within the text field
+//      specified by 'ParamValueLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text string, field length and a Text Justification object
+//      of type TextJustify. This is because text strings with a
+//      field length equal to or less than the length of the text
+//      string never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the text
+//      string, text justification must be equal to one of these
+//      three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//     ParamRightMarginStr string
+//      The contents of the string will be used as the right margin
+//      for the Parameter Value text field.
+//
+//      If no right margin is required, set 'ParamRightMarginStr' to
+//      a zero length or empty string, and no right margin will be
+//      created.
+//
+//     LineTerminator string
+//      This string holds the character or characters which will be
+//      used to terminate the formatted line of text output.
+//
+//      The most common usage sets this string to a new line
+//      character ("\n").
+//
+//      If a Line Terminator is NOT required, set 'lineTerminator'
+//      to a zero length or empty string and no line termination
+//      characters will be created.
+//    }
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
+	strBuilder *strings.Builder,
+	errorPrefix interface{},
+	dtos ...TextLabelParameterValueFieldDto) error {
+
+	if stdLine.lock == nil {
+		stdLine.lock = new(sync.Mutex)
+	}
+
+	stdLine.lock.Lock()
+
+	defer stdLine.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"BuildTextFieldLines()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var outputStr string
+
+	newStdLine := TextLineSpecStandardLine{}.New()
+
+	for idx, item := range dtos {
+
+		// Process Left Margin
+		if len(item.LeftMarginStr) > 0 {
+			_,
+				err = newStdLine.AddTextFieldLabel(
+				item.LeftMarginStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].LeftMarginStr",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+		}
+
+		if len(item.ParamLabelStr) > 0 {
+			_,
+				err = newStdLine.AddTextFieldLabel(
+				item.ParamLabelStr,
+				item.ParamLabelLength,
+				item.ParamLabelJustify,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].ParamLabelStr",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+
+		}
+
+		if len(item.ParamLabelRightMarginStr) > 0 {
+			_,
+				err = newStdLine.AddTextFieldLabel(
+				item.ParamLabelRightMarginStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].ParamLabelRightMarginStr",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+
+		}
+
+		if !item.ParamValueDateTime.IsZero() {
+
+			if len(item.DateTimeFormat) == 0 {
+				item.DateTimeFormat =
+					textSpecificationMolecule{}.ptr().
+						getDefaultDateTimeFormat()
+			}
+
+			_,
+				err = newStdLine.AddTextFieldDateTime(
+				item.ParamValueDateTime,
+				item.ParamValueLength,
+				item.DateTimeFormat,
+				item.ParamValueJustify,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].ParamValueDateTime",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+
+		} else {
+			// item.ParamValueDateTime.IsZero() == true
+			// This MUST BE a Text Label
+
+			if len(item.ParamValueStr) == 0 {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: Input parameter dtos[%v].ParamValueStr is invalid!\n"+
+					"The DateTime Value is Zero and ParamValueStr is empty.\n"+
+					"dtos[%v].ParamValueStr has a string length of zero (0).\n",
+					ePrefix.String(),
+					idx,
+					idx)
+
+				return err
+			}
+
+			_,
+				err = newStdLine.AddTextFieldLabel(
+				item.ParamValueStr,
+				item.ParamValueLength,
+				item.ParamValueJustify,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].ParamValueStr",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+
+		}
+
+		// Process Parameter Right Margin String
+		if len(item.ParamRightMarginStr) > 0 {
+			_,
+				err = newStdLine.AddTextFieldLabel(
+				item.ParamRightMarginStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].ParamRightMarginStr",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+
+		}
+
+		// Process Line Termination Sequence
+		if len(item.LineTerminator) > 0 {
+
+			err = newStdLine.SetNewLineChars(
+				item.LineTerminator,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dtos[%v].LineTerminator",
+						idx)))
+
+			if err != nil {
+				return err
+			}
+
+			newStdLine.TurnAutoLineTerminationOn()
+
+		} else {
+
+			// len(item.LineTerminator) MUST EQUAL ZERO
+			newStdLine.TurnAutoLineTerminationOff()
+
+		}
+
+		outputStr,
+			err = newStdLine.GetFormattedText(
+			ePrefix.XCpy(
+				"outputStr<-newStdLine"))
+
+		if err != nil {
+			return err
+		}
+
+		strBuilder.WriteString(outputStr)
+
+		newStdLine = TextLineSpecStandardLine{}.New()
+
+	} // End Of for idx, item := range dtos
 
 	return err
 }

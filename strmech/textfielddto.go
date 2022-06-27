@@ -10,6 +10,10 @@ import (
 // consisting of a left margin, a text field, a right margin and a
 // line termination sequence.
 //
+// Example Layout
+//
+//         " " + "Inflation Rates" + " " + "\n"
+//
 type TextFieldDto struct {
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
@@ -25,6 +29,11 @@ type TextFieldDto struct {
 	DateTimeFormat string
 	// If this Text Field is designated as a 'DateTime' Field, this
 	// string will be used to format the Date/Time.
+	//
+	// If 'FieldDateTime' is set to a value greater than zero and
+	// this 'DateTimeFormat' string is empty (has a zero length), a
+	// default Date/Time format string will be applied as follows:
+	//         "2006-01-02 15:04:05.000000000 -0700 MST"
 
 	FieldText string
 	// The Text Field string or contents. If this string is empty
