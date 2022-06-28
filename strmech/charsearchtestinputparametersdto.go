@@ -798,6 +798,61 @@ func (testSearchInputParms CharSearchTestInputParametersDto) New() CharSearchTes
 	return newEmptyTestInputParms
 }
 
+// String - Returns a formatted text string detailing all the
+// internal member variables in the current instance of
+// CharSearchTestInputParametersDto and their values.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	defer testSearchInputParms.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchTestInputParametersDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchTestInputParametersDto.String()",
+			err.Error())
+
+		return errOut
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchTestInputParametersDtoNanobot{}.ptr().
+		getFormattedText(
+			testSearchInputParms,
+			ePrefix.XCpy(
+				"strBuilder<-Formatted Text"))
+
+	if err != nil {
+		return ""
+	}
+
+	return strBuilder.String()
+}
+
 // ValidateTestParameters - Validates the Test String and related
 // member variables contained in the current instance of
 // CharSearchInputParametersDto.
