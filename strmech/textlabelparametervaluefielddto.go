@@ -382,9 +382,8 @@ func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyIn(
 // Return Values
 //
 //  TextLabelParameterValueFieldDto
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLabelParameterValueFieldDto instance.
+//     - This method will return a deep copy of the current
+//       TextLabelParameterValueFieldDto instance.
 //
 func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyOut() TextLabelParameterValueFieldDto {
 
@@ -396,7 +395,7 @@ func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) CopyOut() TextLabe
 
 	defer txtLabelParamValueDto.lock.Unlock()
 
-	var newCopyTxtLabelParamDto TextLabelParameterValueFieldDto
+	newCopyTxtLabelParamDto := TextLabelParameterValueFieldDto{}
 
 	newCopyTxtLabelParamDto.LeftMarginStr =
 		txtLabelParamValueDto.LeftMarginStr
@@ -525,9 +524,10 @@ func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) Empty() {
 }
 
 // Equal - Receives a pointer to another instance of
-// TextLabelParameterValueFieldDto and proceeds to compare the member
-// variables to those of the current TextLabelParameterValueFieldDto
-// instance in order to determine if they are equivalent.
+// TextLabelParameterValueFieldDto and proceeds to compare the
+// member variables to those of the current instance of
+// TextLabelParameterValueFieldDto in order to determine if they
+// are equivalent.
 //
 // A boolean flag showing the result of this comparison is
 // returned. If the member variables of both instances are equal in
@@ -549,14 +549,14 @@ func (txtLabelParamValueDto *TextLabelParameterValueFieldDto) Empty() {
 //       method will return a boolean value of 'true'.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
 //  bool
 //     - If the member variable data values contained in input
-//       parameter 'incomingTxtLabelParamDto' are equal in all respects to
-//       those contained in the current instance of
+//       parameter 'incomingTxtLabelParamDto' are equal in all
+//       respects to those contained in the current instance of
 //       TextLabelParameterValueFieldDto, this method will return a
 //       boolean value of 'true'. Otherwise a value of 'false' will
 //       be returned to the calling function.
