@@ -541,6 +541,62 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EmptyTestString() 
 	return
 }
 
+// Equal - Receives a pointer to another instance of
+// CharSearchTestInputParametersDto and proceeds to compare its
+// internal member variables to those of the current
+// CharSearchTestInputParametersDto instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTestInputParms     *CharSearchTestInputParametersDto
+//     - A pointer to an instance of
+//       CharSearchTestInputParametersDto. The internal member
+//       variable data values in this instance will be compared to
+//       those in the current instance of
+//       CharSearchTestInputParametersDto. The results of this
+//       comparison will be returned to the calling functions as a
+//       boolean value.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingTestInputParms' are equivalent
+//       in all respects to those contained in the current instance
+//       of CharSearchTestInputParametersDto, this return value
+//       will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) Equal(
+	incomingTestInputParms *CharSearchTestInputParametersDto) bool {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	defer testSearchInputParms.lock.Unlock()
+
+	return charSearchTestInputParametersDtoAtom{}.ptr().
+		equal(
+			testSearchInputParms,
+			incomingTestInputParms)
+}
+
 // New - Returns a new uninitialized instance of
 // CharSearchTestInputParametersDto
 //
