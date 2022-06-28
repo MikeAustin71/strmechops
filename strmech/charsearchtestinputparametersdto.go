@@ -503,6 +503,44 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) Empty() {
 	testSearchInputParms.lock = nil
 }
 
+// EmptyTestString - Resets the Empty Test String contained in the
+// internal member variable 'TestString' to a nil value thereby
+// deleting the previous contents.
+//
+// The Test String stores the text character or characters used in
+// text character search operations. The Test String is configured
+// as an internal member variable of type RuneArrayDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) EmptyTestString() {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	defer testSearchInputParms.lock.Unlock()
+
+	charSearchTestInputParametersDtoElectron{}.ptr().
+		emptyTestStrings(testSearchInputParms)
+
+	return
+}
+
 // New - Returns a new uninitialized instance of
 // CharSearchTestInputParametersDto
 //

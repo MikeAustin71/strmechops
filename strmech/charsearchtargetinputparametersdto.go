@@ -433,6 +433,44 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) Empty() {
 	searchTargetInputParmsDto.lock = nil
 }
 
+// EmptyTargetString - Resets the Empty Target String contained in
+// the internal member variable 'TargetString' to a nil value
+// thereby deleting the previous contents.
+//
+// The Target String stores the text character or characters used
+// in text character search operations. The Target String is
+// configured as an internal member variable of type RuneArrayDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) EmptyTargetString() {
+
+	if searchTargetInputParmsDto.lock == nil {
+		searchTargetInputParmsDto.lock = new(sync.Mutex)
+	}
+
+	searchTargetInputParmsDto.lock.Lock()
+
+	defer searchTargetInputParmsDto.lock.Unlock()
+
+	charSearchTargetInputParametersDtoElectron{}.ptr().
+		emptyTargetStrings(searchTargetInputParmsDto)
+
+	return
+}
+
 // Equal - Receives a pointer to another instance of
 // CharSearchTargetInputParametersDto and proceeds to compare its
 // internal member variables to those of the current
