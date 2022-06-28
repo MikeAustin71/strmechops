@@ -423,6 +423,10 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyOut(
 	deepCopyTestInputParms CharSearchTestInputParametersDto,
 	err error) {
 
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
 	testSearchInputParms.lock.Lock()
 
 	defer testSearchInputParms.lock.Unlock()
@@ -454,6 +458,54 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyOut(
 	return deepCopyTestInputParms, err
 }
 
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchTestInputParametersDto to their zero or
+// uninitialized states. This method will leave the current
+// instance of CharSearchTestInputParametersDto in an invalid state
+// and unavailable for immediate reuse.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of CharSearchTestInputParametersDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) Empty() {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	charSearchTestInputParametersDtoAtom{}.ptr().
+		empty(testSearchInputParms)
+
+	testSearchInputParms.lock.Unlock()
+
+	testSearchInputParms.lock = nil
+}
+
+// New - Returns a new uninitialized instance of
+// CharSearchTestInputParametersDto
+//
 func (testSearchInputParms CharSearchTestInputParametersDto) New() CharSearchTestInputParametersDto {
 
 	if testSearchInputParms.lock == nil {

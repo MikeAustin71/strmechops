@@ -547,6 +547,28 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr(
 // Empty - Resets all internal member variables for the current
 // instance of TextFieldSpecLabel to their initial or zero states.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of TextFieldSpecLabel. All member variable data
+// values will be reset to their zero or uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 
 	if txtFieldLabel.lock == nil {
