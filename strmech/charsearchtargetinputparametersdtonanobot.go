@@ -53,8 +53,8 @@ type charSearchTargetInputParametersDtoNanobot struct {
 //       'sourceTargetInputParms' is the source for this copy
 //       operation.
 //
-//       If 'sourceTargetInputParms' is determined to be invalid,
-//       an error will be returned.
+//       No data validation is performed on
+//       'sourceTargetInputParms'.
 //
 //
 //  errPrefDto          *ePref.ErrPrefixDto
@@ -138,6 +138,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	if sourceTargetInputParms.TargetString != nil {
 
+		destinationTargetInputParms.TargetString =
+			&RuneArrayDto{}
+
 		err = destinationTargetInputParms.TargetString.CopyIn(
 			sourceTargetInputParms.TargetString,
 			ePrefix.XCpy("destinationTargetInputParms<-"+
@@ -210,9 +213,7 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 //       deep copy of the internal member variables will be created
 //       and returned in a new instance of CharSearchTargetInputParametersDto.
 //
-//       If the member variable data values encapsulated by
-//       'targetInputParms' are found to be invalid, this method will
-//       return an error
+//       No data validation is performed on 'targetInputParms'.
 //
 //
 //  errPrefDto                      *ePref.ErrPrefixDto
@@ -289,10 +290,14 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	if targetInputParms.TargetString != nil {
 
+		deepCopyTargetInputParms.TargetString =
+			&RuneArrayDto{}
+
 		err = deepCopyTargetInputParms.TargetString.CopyIn(
 			targetInputParms.TargetString,
-			ePrefix.XCpy("deepCopyTargetInputParms<-"+
-				"targetInputParms"))
+			ePrefix.XCpy(
+				"deepCopyTargetInputParms.TargetString<-"+
+					"targetInputParms.TargetString"))
 
 		if err != nil {
 			return deepCopyTargetInputParms, err

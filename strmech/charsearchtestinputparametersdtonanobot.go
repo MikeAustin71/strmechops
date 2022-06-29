@@ -22,15 +22,15 @@ type charSearchTestInputParametersDtoNanobot struct {
 //
 // IMPORTANT
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Be advised that the data fields in 'destinationTestInputParms'
 // will be overwritten.
 //
-// Also, NO validation is performed on 'sourceTestInputParms'.
+// Also, NO data validation is performed on 'sourceTestInputParms'.
 //
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -53,8 +53,7 @@ type charSearchTestInputParametersDtoNanobot struct {
 //       'sourceTestInputParms' is the source for this copy
 //       operation.
 //
-//       If 'sourceTestInputParms' is determined to be invalid,
-//       an error will be returned.
+//       No data validation is performed on 'sourceTestInputParms'.
 //
 //
 //  errPrefDto          *ePref.ErrPrefixDto
@@ -63,14 +62,14 @@ type charSearchTestInputParametersDtoNanobot struct {
 //       contains the name of the calling method or methods listed
 //       as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       Type ErrPrefixDto is included in the 'errpref' software
 //       package, "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -135,6 +134,9 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 		destinationTestInputParms)
 
 	if sourceTestInputParms.TestString != nil {
+
+		destinationTestInputParms.TestString =
+			&RuneArrayDto{}
 
 		err = destinationTestInputParms.TestString.CopyIn(
 			sourceTestInputParms.TestString,
@@ -208,8 +210,8 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 //
 // IMPORTANT
 //
-//
 // NO validation is performed on 'testInputParms'.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -220,9 +222,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 //       deep copy of the internal member variables will be created
 //       and returned in a new instance of CharSearchTestInputParametersDto.
 //
-//       If the member variable data values encapsulated by
-//       'testInputParms' are found to be invalid, this method will
-//       return an error
+//       No data validation is performed on 'testInputParms'.
 //
 //
 //  errPrefDto                      *ePref.ErrPrefixDto
@@ -231,8 +231,8 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 //       contains the name of the calling method or methods listed
 //       as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       Type ErrPrefixDto is included in the 'errpref' software
 //       package, "github.com/MikeAustin71/errpref".
@@ -301,6 +301,9 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 	}
 
 	if testInputParms.TestString != nil {
+
+		deepCopyTestInputParms.TestString =
+			&RuneArrayDto{}
 
 		err = deepCopyTestInputParms.TestString.CopyIn(
 			testInputParms.TestString,

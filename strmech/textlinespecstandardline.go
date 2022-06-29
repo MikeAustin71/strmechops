@@ -1717,7 +1717,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 
 			var blankLine TextLineSpecBlankLines
 
-			if item.FieldLength == 0 {
+			if item.FieldLength < 1 {
 				item.FieldLength = 1
 			}
 
@@ -1739,8 +1739,6 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 			if err != nil {
 				return err
 			}
-
-			newStdLine = TextLineSpecStandardLine{}.New()
 
 			continue
 		}

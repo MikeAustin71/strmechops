@@ -156,6 +156,11 @@ type CharSearchResultsDto struct {
 	// the array index of the current Test String object
 	// in the collection.
 
+	ReplacementString *RuneArrayDto
+	// A pointer to the Rune Array Data Transfer
+	// Object containing the Replacement Characters to be
+	// substituted for existing charcaters in a Target String.
+
 	NumValueType NumericValueType
 	// Optional. This enumeration value specifies the type
 	// of numeric value for this Test Parameter as either
