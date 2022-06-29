@@ -1225,8 +1225,8 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1241,16 +1241,16 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1272,7 +1272,7 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 //
 //  error
 //     - If any of the internal member data variables contained in
-//       the current instance of CharSearchTargetInputParametersDto
+//       the current instance of CharSearchTestInputParametersDto
 //       are found to be invalid, this method will return an error.
 //       If the member data variables are determined to be valid,
 //       this error return parameter will be set to 'nil'.
@@ -1321,6 +1321,54 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateTar
 	return err
 }
 
+// ValidateCharSearchType - Validates the member variable
+// 'TextCharSearchType'. This member variables contains the
+// Character Search Type enumeration value which specifies the type
+// of text character search algorithm which will be applied in text
+// character search operations.
+//
+// 'TextCharSearchType' is of type CharacterSearchType and is a
+// required parameter for all text character search operations.
+//
+// Possible enumeration values are listed as follows:
+//  CharSearchType.None()                      - Invalid Value
+//  CharSearchType.LinearTargetStartingIndex() - Valid - Default
+//  CharSearchType.SingleTargetChar()          - Valid
+//  CharSearchType.LinearEndOfString()         - Valid
+//
+// For more information, see the documentation for
+// type CharacterSearchType.
+//
+// The validation diagnostics performed by this method will return
+// an error if the current value of 'TextCharSearchType' is found
+// to be invalid.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the member variable 'TextCharSearchType' contained in
+//       the current instance of CharSearchTargetInputParametersDto
+//       is found to be invalid, this method will return an error.
+//
+//       If the member data variable 'TextCharSearchType' is found
+//       to be valid, this error return parameter will be set to
+//       'nil'.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+//
 func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) ValidateCharSearchType(
 	errorPrefix interface{}) error {
 

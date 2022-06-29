@@ -192,10 +192,10 @@ type CharSearchTestInputParametersDto struct {
 	// this search operation.
 	//
 	// Possible values are listed as follows:
-	//  CharSearchType.None() - Invalid value
-	//  CharSearchType.LinearTargetStartingIndex() - Default
-	//  CharSearchType.SingleTargetChar()
-	//  CharSearchType.LinearEndOfString()
+	//  CharSearchType.None()                      - Invalid Value
+	//  CharSearchType.LinearTargetStartingIndex() - Valid Default
+	//  CharSearchType.SingleTargetChar()          - Valid
+	//  CharSearchType.LinearEndOfString()         - Valid
 
 	lock *sync.Mutex
 }
@@ -853,9 +853,92 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 	return strBuilder.String()
 }
 
-// ValidateTestParameters - Validates the Test String and related
-// member variables contained in the current instance of
-// CharSearchInputParametersDto.
+// ValidateTestParameters - Validates internal member variables
+// contained in the current instance of
+// CharSearchTestInputParametersDto.
+//
+// ----------------------------------------------------------------
+//
+// Be Advised
+//
+// In addition to performing validation diagnostics on the current
+// instance of CharSearchTestInputParametersDto, this method will
+// proceed to set all empty member variable labels or name strings
+// to their default values.
+//
+// Type CharSearchTestInputParametersDto contains a number of
+// string variables which are used to label, name or otherwise
+// describe other operational member variables. These labels are
+// used for error or informational messages. If any of these label
+// strings are empty when this method is called, those empty label
+// strings will be set to their default values.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If any of the internal member data variables contained in
+//       the current instance of CharSearchTestInputParametersDto
+//       are found to be invalid, this method will return an error.
+//       If the member data variables are determined to be valid,
+//       this error return parameter will be set to 'nil'.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
 //
 func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParameters(
 	errorPrefix interface{}) error {
@@ -884,93 +967,64 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParame
 
 	}
 
-	if len(testSearchInputParms.TestInputParametersName) == 0 {
-		testSearchInputParms.TestInputParametersName =
-			"TestInputParameters"
-	}
-
-	if len(testSearchInputParms.TestStringName) == 0 {
-		testSearchInputParms.TestStringName = "TestString"
-	}
-
-	if testSearchInputParms.TestString == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			testSearchInputParms.TestStringName)
-
-		return err
-	}
-
-	if len(testSearchInputParms.TestStringLengthName) == 0 {
-		testSearchInputParms.TestStringLengthName =
-			"TestStringLengthName"
-	}
-
-	testSearchInputParms.TestStringLength =
-		len(testSearchInputParms.TestString.CharsArray)
-
-	if testSearchInputParms.TestStringLength == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is invalid!\n"+
-			"The rune array encapsulated by '%v' is empty\n"+
-			"Length of %v.CharsArray is Zero (0).\n",
-			ePrefix.String(),
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringName)
-
-		return err
-	}
-
-	if testSearchInputParms.TestStringStartingIndex < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' Starting Index is invalid!\n"+
-			"The '%v' Starting Index is less than Zero (0).\n"+
-			"%v Starting Index = '%v'.\n",
-			ePrefix.String(),
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringStartingIndex)
-
-		return err
-
-	}
-
-	if len(testSearchInputParms.TestStringStartingIndexName) == 0 {
-		testSearchInputParms.TestStringStartingIndexName =
-			"TestStringStartingIndex"
-	}
-
-	if testSearchInputParms.TestStringStartingIndex >=
-		testSearchInputParms.TestStringLength {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter '%v' is invalid!\n"+
-			"The '%v' starting index value is greater than the last index\n"+
-			"in the '%v' character array.\n"+
-			"%v Last Character Index = '%v'.\n"+
-			"%v Starting Index = '%v'\n",
-			ePrefix.String(),
-			testSearchInputParms.TestStringStartingIndexName,
-			testSearchInputParms.TestStringStartingIndexName,
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringName,
-			testSearchInputParms.TestStringLength-1,
-			testSearchInputParms.TestStringStartingIndexName,
-			testSearchInputParms.TestStringStartingIndex)
-
-		return err
-
-	}
+	_,
+		err = charSearchTestInputParametersDtoAtom{}.ptr().
+		testValidityOfTestInputParms(
+			testSearchInputParms,
+			ePrefix.XCpy(
+				"testSearchInputParms"))
 
 	return err
 }
 
+// ValidateCharSearchType - Validates the member variable
+// 'TextCharSearchType'. This member variables contains the
+// Character Search Type enumeration value which specifies the type
+// of text character search algorithm which will be applied in text
+// character search operations.
+//
+// 'TextCharSearchType' is of type CharacterSearchType and is a
+// required parameter for all text character search operations.
+//
+// Possible enumeration values are listed as follows:
+//  CharSearchType.None()                      - Invalid Value
+//  CharSearchType.LinearTargetStartingIndex() - Valid - Default
+//  CharSearchType.SingleTargetChar()          - Valid
+//  CharSearchType.LinearEndOfString()         - Valid
+//
+// For more information, see the documentation for
+// type CharacterSearchType.
+//
+// The validation diagnostics performed by this method will return
+// an error if the current value of 'TextCharSearchType' is found
+// to be invalid.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the member variable 'TextCharSearchType' contained in
+//       the current instance of CharSearchTestInputParametersDto
+//       is found to be invalid, this method will return an error.
+//
+//       If the member data variable 'TextCharSearchType' is found
+//       to be valid, this error return parameter will be set to
+//       'nil'.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+//
 func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateCharSearchType(
 	errorPrefix interface{}) error {
 

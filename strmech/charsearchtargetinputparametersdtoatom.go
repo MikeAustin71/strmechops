@@ -256,10 +256,10 @@ func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *
 	}
 }
 
-// testValidityOfNumStrKernel - Receives a pointer to an instance
-// of CharSearchTargetInputParametersDto, 'targetInputParms', and
-// performs a diagnostic analysis to determine if that instance is
-// valid in all respects.
+// testValidityOfTargetInputParms - Receives a pointer to an
+// instance of CharSearchTargetInputParametersDto,
+// 'targetInputParms', and performs a diagnostic analysis to
+// determine if that instance is valid in all respects.
 //
 // If the input parameter 'targetInputParms' is determined to be
 // invalid, this method will return a boolean flag ('isValid') of
@@ -270,7 +270,7 @@ func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *
 // will return a boolean flag ('isValid') of 'true' and the
 // returned error type ('err') will be set to 'nil'.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Be Advised
 //
@@ -286,7 +286,7 @@ func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *
 // label strings will be set to their default values.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -303,31 +303,33 @@ func (searchTargetInputParmsAtom charSearchTargetInputParametersDtoAtom) ptr() *
 //       contains the name of the calling method or methods listed
 //       as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       Type ErrPrefixDto is included in the 'errpref' software
 //       package, "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
 //  isValid                    bool
-//     - If input parameter 'targetInputParms' is judged to be valid in
-//       all respects, this return parameter will be set to 'true'.
+//     - If input parameter 'targetInputParms' is judged to be
+//       valid in all respects, this return parameter will be set
+//       to 'true'.
 //
-//     - If input parameter 'targetInputParms' is found to be invalid,
-//       this return parameter will be set to 'false'.
+//     - If input parameter 'targetInputParms' is found to be
+//       invalid, this return parameter will be set to 'false'.
 //
 //
 //  err                        error
-//     - If input parameter 'targetInputParms' is judged to be valid in
-//       all respects, this return parameter will be set to 'nil'.
+//     - If input parameter 'targetInputParms' is judged to be
+//       valid in all respects, this return parameter will be set
+//       to 'nil'.
 //
-//       If input parameter, 'targetInputParms' is found to be invalid,
-//       this return parameter will be configured with an
+//       If input parameter, 'targetInputParms' is found to be
+//       invalid, this return parameter will be configured with an
 //       appropriate error message.
 //
 //       If an error message is returned, the text value for input
