@@ -114,8 +114,8 @@ type TextFieldSpecLabel struct {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -130,16 +130,16 @@ type TextFieldSpecLabel struct {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -151,10 +151,11 @@ type TextFieldSpecLabel struct {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -217,8 +218,8 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -233,16 +234,16 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -254,10 +255,11 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -329,8 +331,8 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -345,16 +347,16 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -366,10 +368,11 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -448,8 +451,8 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -464,16 +467,16 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -485,10 +488,11 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -819,7 +823,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedStrLength() int {
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -1034,18 +1038,18 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 // return an error.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1060,16 +1064,16 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1081,10 +1085,11 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1244,7 +1249,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
 // TextFieldSpecLabel.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -1302,8 +1307,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1318,16 +1323,16 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1339,10 +1344,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1448,7 +1454,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 // returns a concrete instance of TextFieldSpecLabel.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -1512,8 +1518,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1528,16 +1534,16 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1549,10 +1555,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1658,7 +1665,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 // TextFieldSpecLabel instance.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -1717,8 +1724,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1733,16 +1740,16 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1754,10 +1761,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1863,7 +1871,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 // returns a pointer to a TextFieldSpecLabel instance.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -1927,8 +1935,8 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1943,16 +1951,16 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1964,10 +1972,11 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1988,7 +1997,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -2352,7 +2361,7 @@ func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
 //   TextFieldSpecLabel.SetTextJustification()
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -2379,8 +2388,8 @@ func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2395,16 +2404,16 @@ func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2416,10 +2425,11 @@ func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2488,7 +2498,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 // string as an input parameter.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -2505,8 +2515,8 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2521,16 +2531,16 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2542,10 +2552,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2635,7 +2646,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 //  TextFieldSpecLabel.SetFieldLength()
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -2671,8 +2682,8 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2687,16 +2698,16 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2708,10 +2719,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2726,7 +2738,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -2808,7 +2820,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 // for the current TextFieldSpecLabel instance (txtFieldLabel).
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -2866,8 +2878,8 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2882,16 +2894,16 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2903,10 +2915,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2921,7 +2934,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -2996,7 +3009,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 // for the current TextFieldSpecLabel instance (txtFieldLabel).
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -3055,8 +3068,8 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -3071,16 +3084,16 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3092,10 +3105,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -3185,7 +3199,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 // array of runes as an input parameter.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -3206,8 +3220,8 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -3222,16 +3236,16 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3243,10 +3257,11 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -3419,11 +3434,12 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
+//
 //
 //       1. nil - A nil value is valid and generates an empty
 //                collection of error prefix and error context
@@ -3434,16 +3450,16 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3455,10 +3471,11 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //

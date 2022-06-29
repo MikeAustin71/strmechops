@@ -240,8 +240,8 @@ type CharSearchTestInputParametersDto struct {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -256,16 +256,16 @@ type CharSearchTestInputParametersDto struct {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -277,7 +277,8 @@ type CharSearchTestInputParametersDto struct {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -359,8 +360,8 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -375,16 +376,16 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -396,7 +397,8 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -674,8 +676,8 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -690,16 +692,16 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -711,10 +713,11 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -861,7 +864,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstance() 
 // variables.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -912,7 +915,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstance() 
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
