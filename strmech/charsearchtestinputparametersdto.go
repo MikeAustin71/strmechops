@@ -780,6 +780,70 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) GetFormattedText(
 	return strBuilder.String(), err
 }
 
+// IsValidInstance - Performs a diagnostic review of the member
+// variable data values encapsulated in the current instance of
+// CharSearchTestInputParametersDto to determine if they are
+// valid.
+//
+// If all data element evaluate as valid, this method returns
+// 'true'. If any data element is invalid, this method returns
+// 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Be Advised
+//
+// In addition to performing validation diagnostics on the current
+// instance of CharSearchTestInputParametersDto, this method will
+// proceed to set all empty member variable labels or name strings
+// to their default values.
+//
+// Type CharSearchTestInputParametersDto contains a number of
+// string variables which are used to label, name or otherwise
+// describe other operational member variables. These labels are
+// used for error or informational messages. If any of these label
+// strings are empty when this method is called, those empty label
+// strings will be set to their default values.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If all data elements encapsulated by the current instance
+//       of CharSearchTestInputParametersDto are valid, this
+//       returned boolean value is set to 'true'. If any data
+//       values are invalid, this return parameter is set to
+//       'false'.
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstance() (
+	isValid bool) {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	defer testSearchInputParms.lock.Unlock()
+
+	isValid,
+		_ = charSearchTestInputParametersDtoAtom{}.ptr().
+		testValidityOfTestInputParms(
+			testSearchInputParms,
+			nil)
+
+	return isValid
+}
+
 // New - Returns a new uninitialized instance of
 // CharSearchTestInputParametersDto
 //
@@ -856,6 +920,10 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 // ValidateTestParameters - Validates internal member variables
 // contained in the current instance of
 // CharSearchTestInputParametersDto.
+//
+// This method is functionally equivalent to method:
+//   CharSearchTestInputParametersDto.IsValidInstanceError()
+//
 //
 // ----------------------------------------------------------------
 //

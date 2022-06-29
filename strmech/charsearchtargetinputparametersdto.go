@@ -1198,6 +1198,10 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 // contained in the current instance of
 // CharSearchTargetInputParametersDto.
 //
+// This method is functionally equivalent to method:
+//   CharSearchTargetInputParametersDto.IsValidInstanceError()
+//
+//
 // ----------------------------------------------------------------
 //
 // Be Advised
