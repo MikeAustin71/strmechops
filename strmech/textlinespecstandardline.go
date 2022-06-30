@@ -1498,8 +1498,13 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //
 //
 //	   FieldDateTimeFormat string
-//      If this Text Field is designated as a 'DateTime' Field, this
-//      string will be used to format the Date/Time.
+//      If this Text Field is designated as a 'DateTime' Field,
+//      this string will be used to format the Date/Time.
+//
+//      If this 'FieldDateTimeFormat' string is empty (has a zero
+//      length), a default Date/Time format string will be applied
+//      as follows:
+//         "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
 //	   FieldText string

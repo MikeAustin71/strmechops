@@ -184,16 +184,15 @@ type TextFieldDto struct {
 //                   error prefix information
 //
 //       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -209,7 +208,7 @@ type TextFieldDto struct {
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
