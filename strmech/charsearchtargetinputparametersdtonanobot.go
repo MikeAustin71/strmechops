@@ -393,57 +393,45 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		return strBuilder, err
 	}
 
+	const maxLineLen = 78
+
 	// Total available Length of Output Line
 	const maxFieldLen = 70
 
 	// Max Label Field Length = 36
 	const maxLabelFieldLen = 36
 
-	// Title Marquee
+	txtBuilder := TextStrBuilder{}
 
-	txtStdLine := TextLineSpecStandardLine{}
+	// Leading Title Marquee
+	var fmtrs []TextFormatterDto
+	// Blank Line
+	txtFmt := TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
 
-	var txtFieldDtos []TextFieldDto
-
-	var txtFieldDto TextFieldDto
-
-	txtFieldDto = TextFieldDto{
-		FieldLength: 1,
-		FieldType:   TxtFieldType.BlankLine(),
-	}
-
-	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
-
-	// Filler Line '========='
-	txtFieldDto = TextFieldDto{
-		LeftMarginStr:       " ",
-		FieldDateTime:       time.Time{},
-		FieldDateTimeFormat: "",
-		FieldText:           "=",
-		FieldLength:         maxFieldLen - 2,
-		FieldJustify:        TxtJustify.Left(),
-		FieldType:           TxtFieldType.Filler(),
-		RightMarginStr:      " ",
-		LineTerminator:      "\n",
-	}
-
-	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+	// Filler =======
+	// Marquee Top
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
 
 	// Title Line 1
-
-	txtFieldDto = TextFieldDto{
-		LeftMarginStr:       "",
-		FieldDateTime:       time.Time{},
-		FieldDateTimeFormat: "",
-		FieldText:           "CharSearchTargetInputParametersDto",
-		FieldLength:         maxFieldLen,
-		FieldJustify:        TxtJustify.Center(),
-		FieldType:           TxtFieldType.Label(),
-		RightMarginStr:      "",
-		LineTerminator:      "\n",
-	}
-
-	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "CharSearchTargetInputParametersDto"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
 
 	txtStrParam :=
 		targetInputParms.TargetInputParametersName
@@ -451,561 +439,403 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	if len(txtStrParam) > 0 {
 
 		// Title Line 2
-		txtFieldDto = TextFieldDto{
-			LeftMarginStr:       "",
-			FieldDateTime:       time.Time{},
-			FieldDateTimeFormat: "",
-			FieldText:           txtStrParam,
-			FieldLength:         maxFieldLen,
-			FieldJustify:        TxtJustify.Center(),
-			FieldType:           TxtFieldType.Label(),
-			RightMarginStr:      "",
-			LineTerminator:      "\n",
-		}
-
-		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+		txtFmt = TextFormatterDto{}
+		txtFmt.FormatType = TxtFieldType.Label()
+		txtFmt.Label.LeftMarginStr = ""
+		txtFmt.Label.FieldText = txtStrParam
+		txtFmt.Label.FieldLength = maxFieldLen
+		txtFmt.Label.FieldJustify = TxtJustify.Center()
+		txtFmt.Label.RightMarginStr = ""
+		txtFmt.Label.LineTerminator = "\n"
+		fmtrs = append(fmtrs, txtFmt)
 
 	}
 
-	// Title Line 2 or 3 Date/Time
-	txtFieldDto = TextFieldDto{
-		LeftMarginStr:       "",
-		FieldDateTime:       time.Now(),
-		FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		FieldText:           "",
-		FieldLength:         maxFieldLen,
-		FieldJustify:        TxtJustify.Center(),
-		FieldType:           TxtFieldType.DateTime(),
-		RightMarginStr:      "",
-		LineTerminator:      "\n",
-	}
-
-	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+	// Title Line  3 Date/Time
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.DateTime()
+	txtFmt.DateTime.LeftMarginStr = ""
+	txtFmt.DateTime.FieldDateTime = time.Now()
+	txtFmt.DateTime.FieldLength = maxFieldLen
+	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
+	txtFmt.DateTime.FieldDateTimeFormat =
+		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
+	txtFmt.DateTime.RightMarginStr = ""
+	txtFmt.DateTime.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
 
 	// Filler Line '========='
-	txtFieldDto = TextFieldDto{
-		LeftMarginStr:       " ",
-		FieldDateTime:       time.Time{},
-		FieldDateTimeFormat: "",
-		FieldText:           "=",
-		FieldLength:         maxFieldLen - 2,
-		FieldJustify:        TxtJustify.Left(),
-		FieldType:           TxtFieldType.Filler(),
-		RightMarginStr:      " ",
-		LineTerminator:      "\n",
-	}
+	// Marquee Bottom
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
 
-	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
+	// Trailing Blank Line
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
 
-	// Blank Line
-	txtFieldDto = TextFieldDto{
-		LeftMarginStr:       "",
-		FieldDateTime:       time.Time{},
-		FieldDateTimeFormat: "",
-		FieldText:           "",
-		FieldLength:         1,
-		FieldJustify:        0,
-		FieldType:           TxtFieldType.BlankLine(),
-		RightMarginStr:      "",
-		LineTerminator:      "",
-	}
-
-	txtFieldDtos = append(txtFieldDtos, txtFieldDto)
-
-	err = txtStdLine.BuildTextFieldLines(
+	err = txtBuilder.BuildTextFormatters(
 		&strBuilder,
-		txtFieldDtos,
-		ePrefix)
+		fmtrs,
+		ePrefix.XCpy(
+			"strBuilder<-Marquee Top"))
 
 	if err != nil {
 
 		return strBuilder, err
 	}
 
-	txtFieldDtos = make([]TextFieldDto, 0)
+	fmtrs = nil
 
 	// End Of Marquee
 
+	// Label Parameter Pairs
+
 	colonSpace := ": "
 
-	var txtLabelParamField TextLabelParameterValueFieldDto
-
-	var txtLabelParamFields []TextLabelParameterValueFieldDto
+	var labelParams []TextLabelValueStrings
 
 	// TargetInputParametersName
-	txtStrLabel := "TargetInputParametersName"
+	labelParam := TextLabelValueStrings{}
 
-	txtStrParam = targetInputParms.TargetInputParametersName
+	labelParam.ParamLabel = "TargetInputParametersName"
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetInputParametersName is EMPTY!"
+	labelParam.ParamValue =
+		targetInputParms.TargetInputParametersName
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "SearchResultsName is EMPTY!"
 	}
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
+	labelParams = append(labelParams, labelParam)
+
+	err = txtBuilder.BuildLabelsValues(
+		&strBuilder,
+		labelParams,
+		" ",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		-1,
+		TxtJustify.Left(),
+		" ",
+		"\n",
+		ePrefix.XCpy(
+			"labelParams #1"))
+
+	if err != nil {
+
+		return strBuilder, err
 	}
 
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = nil
 
 	// Build Formatted Target String
 
-	txtStrLabel = "Target String"
+	if targetInputParms.TargetString == nil {
+		labelParam = TextLabelValueStrings{}
 
-	lenTxtStrParam := 0
+		labelParam.ParamLabel = "TargetString"
 
-	if targetInputParms.TargetString != nil {
+		labelParam.ParamValue =
+			"Not Set. TargetString is a nil pointer"
 
-		if targetInputParms.TargetString.GetRuneArrayLength() > 0 {
-			txtStrParam =
-				targetInputParms.TargetString.GetCharacterString()
-		} else {
+		labelParams = append(labelParams, labelParam)
 
-			txtStrParam = "Target String is EMPTY!"
+	} else if targetInputParms.TargetString.
+		GetRuneArrayLength() == 0 {
 
-		}
+		labelParam = TextLabelValueStrings{}
+
+		labelParam.ParamLabel = "TargetString"
+
+		labelParam.ParamValue =
+			"TargetString is empty - zero characters"
+
+		labelParams = append(labelParams, labelParam)
+
+	} else if targetInputParms.TargetString.
+		GetRuneArrayLength() <=
+		(maxLineLen - maxLabelFieldLen - 3) {
+
+		labelParam = TextLabelValueStrings{}
+
+		labelParam.ParamLabel = "TargetString"
+
+		labelParam.ParamValue =
+			targetInputParms.TargetString.
+				GetCharacterString()
+
+		labelParams = append(labelParams, labelParam)
+
 	} else {
-		// targetInputParms.TargetString == nil
-		txtStrParam = "Target String has a nil pointer (Not Set)!"
-	}
+		// Must be
+		//  targetInputParms.TargetString.
+		//  	GetRuneArrayLength() >
+		//  	(maxLineLen - maxLabelFieldLen -3)
 
-	lenTxtStrParam = len(txtStrParam)
-
-	if lenTxtStrParam >= (maxFieldLen - maxLabelFieldLen - 3) {
-		// We need two Lines of Text
-
-		txtFieldDto = TextFieldDto{
-			LeftMarginStr:       " ",
-			FieldDateTime:       time.Time{},
-			FieldDateTimeFormat: "",
-			FieldText:           txtStrLabel,
-			FieldLength:         maxLabelFieldLen,
-			FieldJustify:        TxtJustify.Right(),
-			FieldType:           TxtFieldType.Label(),
-			RightMarginStr:      colonSpace,
-			LineTerminator:      "\n",
-		}
-
-		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
-
-		txtFieldDto = TextFieldDto{
-			LeftMarginStr:       " ",
-			FieldDateTime:       time.Time{},
-			FieldDateTimeFormat: "",
-			FieldText:           txtStrParam,
-			FieldLength:         -1,
-			FieldJustify:        TxtJustify.Left(),
-			FieldType:           TxtFieldType.Label(),
-			RightMarginStr:      "",
-			LineTerminator:      "\n",
-		}
-
-		txtFieldDtos = append(txtFieldDtos, txtFieldDto)
-
-		err = txtStdLine.BuildTextFieldLines(
+		err = txtBuilder.FieldsSingleLabel(
 			&strBuilder,
-			txtFieldDtos,
-			ePrefix)
+			" ",
+			"TargetString",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			ePrefix.XCpy(
+				"TargetString Label"))
 
 		if err != nil {
 
 			return strBuilder, err
 		}
 
-		txtFieldDtos = make([]TextFieldDto, 0)
+		err = txtBuilder.FieldsSingleLabel(
+			&strBuilder,
+			"  ",
+			targetInputParms.TargetString.GetCharacterString(),
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			ePrefix.XCpy(
+				"TargetString Param Value"))
 
-	} else {
+		if err != nil {
 
-		txtLabelParamField = TextLabelParameterValueFieldDto{
-			LeftMarginStr:            " ",
-			ParamLabelStr:            txtStrLabel,
-			ParamLabelLength:         maxLabelFieldLen,
-			ParamLabelJustify:        TxtJustify.Right(),
-			ParamLabelRightMarginStr: colonSpace,
-			ParamValueDateTime:       time.Time{},
-			ParamValueDateTimeFormat: "",
-			ParamValueStr:            txtStrParam,
-			ParamValueLength:         -1,
-			ParamValueJustify:        TxtJustify.Left(),
-			ParamValueRightMarginStr: "",
-			LineTerminator:           "\n",
+			return strBuilder, err
 		}
 
-		txtLabelParamFields = append(
-			txtLabelParamFields,
-			txtLabelParamField)
+		err = txtBuilder.LineBlank(
+			&strBuilder,
+			1,
+			ePrefix.XCpy(
+				"Blank Line After ReplacementString"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
 
 	}
 
 	// TargetStringName
+	labelParam = TextLabelValueStrings{}
 
-	txtStrLabel = "TargetStringName"
+	labelParam.ParamLabel = "TargetStringName"
 
-	txtStrParam = targetInputParms.TargetStringName
+	labelParam.ParamValue =
+		targetInputParms.TargetStringName
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringName is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringLength
+	labelParam = TextLabelValueStrings{}
 
-	txtStrLabel = "TargetStringLength"
+	labelParam.ParamLabel = "FoundSearchTarget"
 
-	txtStrParam =
-		fmt.Sprintf("%v",
-			targetInputParms.TargetStringLength)
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.TargetStringLength)
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringLengthName
+	labelParam = TextLabelValueStrings{}
 
-	txtStrLabel = "TargetStringLengthName"
+	labelParam.ParamLabel = "TargetStringLengthName"
 
-	txtStrParam = targetInputParms.TargetStringLengthName
+	labelParam.ParamValue =
+		targetInputParms.TargetStringLengthName
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringLengthName is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringStartingSearchIndex
-	txtStrLabel = "TargetStringStartingSearchIndex"
+	labelParam = TextLabelValueStrings{}
 
-	txtStrParam =
-		fmt.Sprintf("%v",
-			targetInputParms.TargetStringStartingSearchIndex)
+	labelParam.ParamLabel = "TargetStringStartingSearchIndex"
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringStartingSearchIndex is EMPTY!"
-	}
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.TargetStringStartingSearchIndex)
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringStartingSearchIndexName
-	txtStrLabel = "TargetStringStartingSearchIndexName"
+	labelParam = TextLabelValueStrings{}
 
-	txtStrParam =
+	labelParam.ParamLabel = "TargetStringStartingSearchIndexName"
+
+	labelParam.ParamValue =
 		targetInputParms.TargetStringStartingSearchIndexName
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringStartingSearchIndexName is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringSearchLength
-	txtStrLabel = "TargetStringSearchLength"
+	labelParam = TextLabelValueStrings{}
 
-	txtStrParam =
-		fmt.Sprintf("%v",
-			targetInputParms.TargetStringSearchLength)
+	labelParam.ParamLabel = "TargetStringSearchLength"
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringSearchLength is EMPTY!"
-	}
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.TargetStringSearchLength)
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringSearchLengthName
-	txtStrLabel = "TargetStringSearchLengthName"
+	labelParam = TextLabelValueStrings{}
 
-	txtStrParam =
+	labelParam.ParamLabel = "TargetStringSearchLengthName"
+
+	labelParam.ParamValue =
 		targetInputParms.TargetStringSearchLengthName
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringSearchLengthName is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringAdjustedSearchLength
+	labelParam = TextLabelValueStrings{}
 
-	txtStrLabel = "TargetStringAdjustedSearchLength"
+	labelParam.ParamLabel = "TargetStringAdjustedSearchLength"
 
-	txtStrParam =
-		fmt.Sprintf("%v",
-			targetInputParms.TargetStringAdjustedSearchLength)
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.TargetStringAdjustedSearchLength)
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringAdjustedSearchLength is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringDescription1
-	txtStrLabel = "TargetStringDescription1"
+	labelParam = TextLabelValueStrings{}
 
-	txtStrParam = targetInputParms.TargetStringDescription1
+	labelParam.ParamLabel = "TargetStringDescription1"
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringDescription1 is EMPTY!"
-	}
+	labelParam.ParamValue =
+		targetInputParms.TargetStringDescription1
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TargetStringDescription2
+	labelParam = TextLabelValueStrings{}
 
-	txtStrLabel = "TargetStringDescription2"
+	labelParam.ParamLabel = "TargetStringDescription2"
 
-	txtStrParam = targetInputParms.TargetStringDescription2
+	labelParam.ParamValue =
+		targetInputParms.TargetStringDescription2
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "TargetStringDescription2 is EMPTY!"
-	}
-
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
-
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// FoundFirstNumericDigitInNumStr
-	txtStrLabel = "FoundFirstNumericDigitInNumStr"
 
-	txtStrParam =
-		fmt.Sprintf("%v",
-			targetInputParms.FoundFirstNumericDigitInNumStr)
+	labelParam = TextLabelValueStrings{}
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "FoundFirstNumericDigitInNumStr is EMPTY!"
-	}
+	labelParam.ParamLabel = "FoundFirstNumericDigitInNumStr"
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.FoundFirstNumericDigitInNumStr)
 
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
 	// TextCharSearchType
-	txtStrLabel = "TextCharSearchType"
 
-	searchType := targetInputParms.TextCharSearchType
+	labelParam = TextLabelValueStrings{}
 
-	if !searchType.XIsValid() {
-		searchType = CharSearchType.None()
+	if !targetInputParms.TextCharSearchType.XIsValid() {
+		targetInputParms.TextCharSearchType = CharSearchType.None()
 	}
 
-	txtStrParam =
-		fmt.Sprintf("%v",
-			searchType.String())
+	labelParam.ParamLabel = "TextCharSearchType"
 
-	txtLabelParamField = TextLabelParameterValueFieldDto{
-		LeftMarginStr:            " ",
-		ParamLabelStr:            txtStrLabel,
-		ParamLabelLength:         maxLabelFieldLen,
-		ParamLabelJustify:        TxtJustify.Right(),
-		ParamLabelRightMarginStr: colonSpace,
-		ParamValueDateTime:       time.Time{},
-		ParamValueDateTimeFormat: "",
-		ParamValueStr:            txtStrParam,
-		ParamValueLength:         -1,
-		ParamValueJustify:        TxtJustify.Left(),
-		ParamValueRightMarginStr: "",
-		LineTerminator:           "\n",
-	}
+	labelParam.ParamValue =
+		targetInputParms.TextCharSearchType.String()
 
-	txtLabelParamFields = append(
-		txtLabelParamFields,
-		txtLabelParamField)
+	labelParams = append(labelParams, labelParam)
 
-	err = txtStdLine.BuildTextLabelParameterLines(
+	err = txtBuilder.BuildLabelsValues(
 		&strBuilder,
-		txtLabelParamFields,
-		ePrefix)
+		labelParams,
+		" ",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		-1,
+		TxtJustify.Left(),
+		" ",
+		"\n",
+		ePrefix.XCpy(
+			"labelParams #2"))
+
+	labelParams = nil
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// Trailing Title Marquee
+	fmtrs = nil
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Top
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title # 1
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "CharSearchTargetInputParametersDto"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title # 2
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "End of Parameter Listing"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Bottom
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Blank Line
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 2
+	fmtrs = append(fmtrs, txtFmt)
+
+	err = txtBuilder.BuildTextFormatters(
+		&strBuilder,
+		fmtrs,
+		ePrefix.XCpy(
+			"Marquee-Bottom"))
+	fmtrs = nil
 
 	return strBuilder, err
 }

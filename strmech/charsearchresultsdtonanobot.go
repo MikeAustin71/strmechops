@@ -530,7 +530,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	}
 
-	// Date Time
+	// Text Line 3 Date Time
 	txtFmt = TextFormatterDto{}
 	txtFmt.FormatType = TxtFieldType.DateTime()
 	txtFmt.DateTime.LeftMarginStr = ""
@@ -543,7 +543,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	txtFmt.DateTime.LineTerminator = "\n"
 	fmtrs = append(fmtrs, txtFmt)
 
-	// Filler =======
+	// Filler Line '========='
 	// Marquee Bottom
 	txtFmt = TextFormatterDto{}
 	txtFmt.FormatType = TxtFieldType.Filler()
@@ -554,7 +554,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	txtFmt.Filler.LineTerminator = "\n"
 	fmtrs = append(fmtrs, txtFmt)
 
-	// Blank Line
+	// Trailing Blank Line
 	txtFmt = TextFormatterDto{}
 	txtFmt.FormatType = TxtFieldType.BlankLine()
 	txtFmt.BlankLine.NumOfBlankLines = 1
@@ -572,6 +572,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	}
 
 	fmtrs = nil
+
+	// Label Parameter Pairs
 
 	colonSpace := ": "
 
@@ -591,6 +593,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	labelParams = append(labelParams, labelParam)
 
 	// Build FoundSearchTarget Parameter
+
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "FoundSearchTarget"
@@ -1098,6 +1101,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
+	fmtrs = nil
 
 	return strBuilder, err
 }
