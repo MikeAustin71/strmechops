@@ -571,6 +571,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 		return strBuilder, err
 	}
 
+	fmtrs = nil
+
 	colonSpace := ": "
 
 	var labelParams []TextLabelValueStrings
@@ -1035,81 +1037,67 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	}
 
 	// Trailing Title Marquee
+	fmtrs = nil
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.LineBlank(
+	// Filler =======
+	// Marquee Top
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title # 1
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "CharSearchResultsDto"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title # 2
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "End of Parameter Listing"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Bottom
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Blank Line
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 2
+	fmtrs = append(fmtrs, txtFmt)
+
+	err = txtBuilder.BuildTextFormatters(
 		&strBuilder,
-		1,
+		fmtrs,
 		ePrefix.XCpy(
-			"1-Trailing Blank Line"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.FieldsSingleFiller(
-		&strBuilder,
-		" ",
-		"=",
-		maxFieldLen-2,
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"Trailing Marquee-Top"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.FieldLabel(
-		&strBuilder,
-		"CharSearchResultsDto",
-		maxFieldLen,
-		TxtJustify.Center(),
-		"\n",
-		ePrefix.XCpy(
-			"Title-1"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.FieldLabel(
-		&strBuilder,
-		"End of Parameter Listing",
-		maxFieldLen,
-		TxtJustify.Center(),
-		"\n",
-		ePrefix.XCpy(
-			"Title-2"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.FieldsSingleFiller(
-		&strBuilder,
-		" ",
-		"=",
-		maxFieldLen-2,
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"Trailing Marquee-Bottom"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.LineBlank(
-		&strBuilder,
-		1,
-		ePrefix.XCpy(
-			"2-Trailing Blank Line"))
+			"Marquee-Bottom"))
 
 	return strBuilder, err
 }
