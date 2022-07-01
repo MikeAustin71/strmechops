@@ -866,16 +866,15 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 //                   error prefix information
 //
 //       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -891,7 +890,7 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -911,7 +910,7 @@ func (txtFillerField *TextFieldSpecFiller) GetFormattedStrLength() int {
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -1012,18 +1011,18 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
 // return an error.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1038,16 +1037,16 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1059,10 +1058,11 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstance() (
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1114,6 +1114,11 @@ func (txtFillerField *TextFieldSpecFiller) IsValidInstanceError(
 // variables contained in this new instance are set to their
 // uninitialized or zero values.
 //
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
+//
+// The Filler Text Field
 // Be advised that setting member variables to their zero values
 // means that the returned TextFieldSpecFiller instance is invalid.
 // Therefore, in order to use this TextFieldSpecFiller instance,
@@ -1157,6 +1162,10 @@ func (txtFillerField TextFieldSpecFiller) New() TextFieldSpecFiller {
 // TextFieldSpecFiller. All the member variables contained in
 // this new instance are set to their uninitialized or zero values.
 //
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
+//
 // Be advised that setting member variables to their zero values
 // means that the returned TextFieldSpecFiller instance is invalid.
 // Therefore, in order to use this TextFieldSpecFiller instance,
@@ -1198,6 +1207,10 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 
 // NewPtrTextFiller - Creates and returns a pointer to a new, fully
 // populated instance of TextFieldSpecFiller.
+//
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
 //
 // This method is identical to TextFieldSpecFiller.NewTextFiller()
 // with the sole exception being that this method returns a pointer
@@ -1256,8 +1269,8 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1272,16 +1285,16 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1293,10 +1306,11 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1322,12 +1336,12 @@ func (txtFillerField TextFieldSpecFiller) NewPtr() *TextFieldSpecFiller {
 // Example Usage
 //
 //  Example 1:
-//   Filler Characters Array = "-"
+//   Filler Characters = "-"
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "---"
 //
 //  Example 2:
-//   Filler Characters Array = "-*"
+//   Filler Characters = "-*"
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "-*-*-*"
 //
@@ -1375,6 +1389,10 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 
 // NewPtrTextFillerRune - Creates and returns a pointer to a new,
 // fully populated instance of TextFieldSpecFiller.
+//
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
 //
 // This method is identical to
 // TextFieldSpecFiller.NewTextFillerRune() with the sole exception
@@ -1429,8 +1447,8 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1445,16 +1463,16 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1466,10 +1484,11 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1495,12 +1514,12 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFiller(
 // Example Usage
 //
 //  Example 1:
-//   Filler Characters Array = '-'
+//   Filler Character = '-'
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "---"
 //
 //  Example 2:
-//   Filler Characters Array = '*'
+//   Filler Character = '*'
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "***"
 //
@@ -1548,6 +1567,10 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRune(
 
 // NewPtrTextFillerRuneArray - Creates and returns a pointer to a
 // new, fully populated instance of TextFieldSpecFiller.
+//
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
 //
 // This method is identical to
 // TextFieldSpecFiller.NewTextFillerRuneArray() with the sole
@@ -1608,8 +1631,8 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRune(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1624,16 +1647,16 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRune(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1645,10 +1668,11 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRune(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1727,6 +1751,10 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 // NewTextFiller - Creates and returns a new, concrete instance of
 // TextFieldSpecFiller.
 //
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
+//
 // This method is identical to
 // TextFieldSpecFiller.NewPtrTextFiller() with the sole exception
 // being that this method returns a concrete instance of
@@ -1790,8 +1818,8 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1806,16 +1834,16 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1827,10 +1855,11 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -1855,12 +1884,12 @@ func (txtFillerField TextFieldSpecFiller) NewPtrTextFillerRuneArray(
 // Example Usage
 //
 //  Example 1:
-//   Filler Characters Array = "-"
+//   Filler Characters = "-"
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "---"
 //
 //  Example 2:
-//   Filler Characters Array = "-*"
+//   Filler Characters = "-*"
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "-*-*-*"
 //
@@ -1909,6 +1938,10 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 // NewTextFillerRune - Creates and returns a new concrete instance
 // of TextFieldSpecFiller.
 //
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
+//
 // This method is identical to
 // TextFieldSpecFiller.NewPtrTextFillerRune() with the sole
 // exception being that this method returns a concrete instance of
@@ -1951,8 +1984,8 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 //                    fillerRepeatCount = 3
 //                    Final Text Filler Field = "---"
 //
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
+//       If 'fillerCharsRepeatCount' has a value less than one (1)
+//       or greater than one-million (1,000,000), an error will be
 //       returned.
 //
 //
@@ -1962,8 +1995,8 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1978,16 +2011,16 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1999,10 +2032,11 @@ func (txtFillerField TextFieldSpecFiller) NewTextFiller(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2081,6 +2115,10 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 // NewTextFillerRuneArray - Creates and returns a new concrete
 // instance of TextFieldSpecFiller.
 //
+// The Filler Text Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
+//
 // This method is identical to
 // TextFieldSpecFiller.NewPtrTextFillerRuneArray() with the sole
 // exception being that this method returns a concrete instance of
@@ -2140,8 +2178,8 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2156,16 +2194,16 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2177,10 +2215,11 @@ func (txtFillerField TextFieldSpecFiller) NewTextFillerRune(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2578,8 +2617,8 @@ func (txtFillerField *TextFieldSpecFiller) ReaderInitialize() {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2594,16 +2633,16 @@ func (txtFillerField *TextFieldSpecFiller) ReaderInitialize() {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2615,10 +2654,11 @@ func (txtFillerField *TextFieldSpecFiller) ReaderInitialize() {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2723,8 +2763,8 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 //                      fillerRepeatCount = 3
 //                      Final Text Filler Field = "---"
 //
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
+//       If 'fillerCharsRepeatCount' has a value less than one (1)
+//       or greater than one-million (1,000,000), an error will be
 //       returned.
 //
 //
@@ -2734,8 +2774,8 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2750,16 +2790,16 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2771,10 +2811,11 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2789,7 +2830,7 @@ func (txtFillerField *TextFieldSpecFiller) SetFillerCharsRepeatCount(
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -2901,8 +2942,8 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2917,16 +2958,16 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2938,10 +2979,11 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -2956,7 +2998,7 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFiller(
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -3074,8 +3116,8 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -3090,16 +3132,16 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3111,10 +3153,11 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -3129,7 +3172,7 @@ func (txtFillerField *TextFieldSpecFiller) SetTextFillerRune(
 //       the beginning of the error message.
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Example Usage
 //
@@ -3284,11 +3327,12 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
+//
 //
 //       1. nil - A nil value is valid and generates an empty
 //                collection of error prefix and error context
@@ -3299,16 +3343,16 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3320,10 +3364,11 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //

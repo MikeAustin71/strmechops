@@ -26,8 +26,12 @@ type TextStrBuilder struct {
 	lock *sync.Mutex
 }
 
-// DateTime - Formats a single date time and writes it to an
+// FieldDateTime - Formats a single date time and writes it to an
 // instance of strings.Builder.
+//
+// This single Date/Time element can be configured as a complete
+// line of text depending on the value applied to input parameter
+// 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -180,7 +184,7 @@ type TextStrBuilder struct {
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (txtStrBuildr *TextStrBuilder) DateTime(
+func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 	strBuilder *strings.Builder,
 	dateTime time.Time,
 	dateTimeFieldLength int,
@@ -204,7 +208,7 @@ func (txtStrBuildr *TextStrBuilder) DateTime(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextStrBuilder."+
-			"DateTime()",
+			"FieldDateTime()",
 		"")
 
 	if err != nil {
@@ -268,7 +272,235 @@ func (txtStrBuildr *TextStrBuilder) DateTime(
 	return err
 }
 
-// Label - Formats a single text label and writes the output string
+// FieldFiller - The Filler Text Field consists of a single
+// character or multiple character sequence which is replicated
+// some number of times to create the entire length of the Filler
+// Text Field.
+//
+//  Example 1:
+//   Filler Characters = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
+//
+// This single Filler Text Field can be configured as a complete
+// line of text depending on the value applied to input parameter
+// 'lineTerminator'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  fillerCharacters           string
+//     - A string containing the text characters which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from the filler characters
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharacters' is submitted as an empty or zero
+//       length string, this method will return an error.
+//
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       this text element into a valid line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text label field and no other text
+//       elements.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) FieldFiller(
+	strBuilder *strings.Builder,
+	fillerCharacters string,
+	fillerCharsRepeatCount int,
+	lineTerminator string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldLabel()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(fillerCharacters) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharacters' is invalid!\n"+
+			"'fillerCharacters' is an empty string with a string\n"+
+			"length of zero (0).\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	var txtFillerFieldSpec TextFieldSpecFiller
+
+	txtFillerFieldSpec,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix.XCpy(
+			"txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtFillerFieldSpec.TextBuilder(
+		strBuilder,
+		ePrefix.XCpy(
+			"strBuilder<-txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	if len(lineTerminator) > 0 {
+		strBuilder.WriteString(lineTerminator)
+	}
+
+	return err
+}
+
+// FieldLabel - Formats a single text label and writes the output string
 // to an instance of strings.Builder passed as an input parameter
 // by the calling function.
 //
@@ -413,7 +645,7 @@ func (txtStrBuildr *TextStrBuilder) DateTime(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (txtStrBuildr *TextStrBuilder) Label(
+func (txtStrBuildr *TextStrBuilder) FieldLabel(
 	strBuilder *strings.Builder,
 	labelText string,
 	labelFieldLength int,
@@ -436,7 +668,7 @@ func (txtStrBuildr *TextStrBuilder) Label(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextStrBuilder."+
-			"Label()",
+			"FieldLabel()",
 		"")
 
 	if err != nil {
@@ -499,6 +731,10 @@ func (txtStrBuildr *TextStrBuilder) Label(
 //
 // The three text elements consist of a left margin string, a
 // date/time text field and a right margin string.
+//
+// These three text elements can be configured as a complete line
+// of text depending on the value applied to input parameter
+// 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -597,7 +833,7 @@ func (txtStrBuildr *TextStrBuilder) Label(
 //
 //       If a text line is required, setting this string to include
 //       a new line character ('\n') will ensure that the three
-//       text elements formmated by this method as single text
+//       text elements formatted by this method as single text
 //       field will constitute a single line of text.
 //
 //       The most common usage sets this string to a new line
@@ -767,11 +1003,268 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 	return err
 }
 
+// FieldsSingleFiller - Designed to produce three text elements
+// consolidated and formatted as a single text field.
+//
+// The three text elements consist of a left margin string, a Text
+// Filler Field and a right margin string.
+//
+// These three text elements can be configured as a complete line
+// of text depending on the value applied to input parameter
+// 'lineTerminator'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of strings.Builder. A formatted
+//       string of text characters created by this method will be
+//       written to this instance of strings.Builder.
+//
+//
+//  leftMarginStr              string
+//     - The contents of the string will be used as the left margin
+//       for 'labelText field.
+//
+//       If no left margin is required, set 'LeftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
+//  fillerCharacters           string
+//     - A string containing the text characters which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from the filler characters
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharacters' is submitted as an empty or zero
+//       length string, this method will return an error.
+//
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  rightMarginStr             string
+//     - The contents of the string will be used as the right
+//       margin for the Text Filler Field.
+//
+//       If no right margin is required, set 'RightMarginStr' to a
+//       zero length or empty string, and no right margin will be
+//       created.
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       this text element into a valid line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text label field and no other text
+//       elements.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
+	strBuilder *strings.Builder,
+	leftMarginStr string,
+	fillerCharacters string,
+	fillerCharsRepeatCount int,
+	rightMarginStr string,
+	lineTerminator string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldsSingleFiller()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(fillerCharacters) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharacters' is invalid!\n"+
+			"'fillerCharacters' is an empty string with a string\n"+
+			"length of zero (0).\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if len(leftMarginStr) > 0 {
+		strBuilder.WriteString(leftMarginStr)
+	}
+
+	var txtFillerFieldSpec TextFieldSpecFiller
+
+	txtFillerFieldSpec,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix.XCpy(
+			"txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtFillerFieldSpec.TextBuilder(
+		strBuilder,
+		ePrefix.XCpy(
+			"strBuilder<-txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	if len(rightMarginStr) > 0 {
+		strBuilder.WriteString(leftMarginStr)
+	}
+
+	if len(lineTerminator) > 0 {
+		strBuilder.WriteString(lineTerminator)
+	}
+
+	return err
+}
+
 // FieldsSingleLabel - Is designed to produce three text elements
 // consolidated and formatted as a single text field.
 //
 // The three text elements consist of a left margin string, a text
 // label and a right margin string.
+//
+// These three text elements can be configured as a complete line
+// of text depending on the value applied to input parameter
+// 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -864,7 +1357,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 //
 //       If a text line is required, setting this string to include
 //       a new line character ('\n') will ensure that the three
-//       text elements formmated by this method as single text
+//       text elements formatted by this method as single text
 //       field will constitute a single line of text.
 //
 //       The most common usage sets this string to a new line
@@ -961,7 +1454,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextStrBuilder."+
-			"Label()",
+			"FieldsSingleLabel()",
 		"")
 
 	if err != nil {
@@ -1027,6 +1520,377 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 	return err
 }
 
+// FieldsLabelParameterDateTime - Is designed to produce five text
+// elements consolidated and formatted as a single text field.
+//
+// The five text elements consist of a left margin string, a
+// parameter text label field, a parameter label right margin
+// string, a parameter Date/Time value , and a parameter Date/Time
+// value right margin string.
+//
+// These five text elements can be configured as a complete line of
+// text depending on the value applied to input parameter
+// 'lineTerminator'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                      *strings.Builder
+//     - A pointer to an instance of strings.Builder. A formatted
+//       string of text characters created by this method will be
+//       written to this instance of strings.Builder.
+//
+//
+//  leftMarginStr                   string
+//     - The contents of the string will be used as the left margin
+//       for the 'paramLabelStr' field.
+//
+//       If no left margin is required, set 'LeftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
+//  paramLabelStr                   string
+//     - This strings holds the text characters which will be
+//       formatted as a Parameter Text Label. The 'paramLabelStr'
+//       field provides a narrative text description of the
+//       Parameter Date/Time Value field, 'paramDateTimeValue'.
+//
+//       This text label, 'paramLabelStr', will be positioned to
+//       the immediate right of the left margin string,
+//       'leftMarginStr'.
+//
+//       If 'paramLabelStr' is submitted as a zero length or empty
+//       string, it will be skipped or ignored and no error will be
+//       generated.
+//
+//
+//  paramLabelFieldLength           int
+//     - Used to format the Text Label Field, 'paramLabelStr'. This
+//       is the length of the text field in which the formatted
+//       'paramLabelStr' string will be displayed. If
+//       'paramLabelFieldLength' is less than the length of the
+//       'paramLabelStr' string, it will be automatically set equal
+//       to the 'paramLabelStr' string length.
+//
+//       To automatically set the value of 'paramLabelFieldLength'
+//       to the length of 'paramLabelStr', set this parameter to a
+//       value of  minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
+//
+//
+//  paramLabelTextJustify           TextJustify
+//      An enumeration value specifying the justification of the
+//      'paramLabelStr' string within the text field specified by
+//      'paramLabelFieldLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text label, field length and a Text Justification object
+//      of type TextJustify. This is because text labels with a
+//      field length equal to or less than the length of the text
+//      label never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the text
+//      label, text justification must be equal to one of these
+//      three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//
+//  paramLabelRightMarginStr        string
+//     - The contents of the string will be used as the right
+//       margin for the 'paramLabelStr' field.
+//
+//       If no right margin is required, set
+//       'paramLabelRightMarginStr' to a zero length or empty
+//       string, and no right margin will be created.
+//
+//
+//  paramDateTimeValue              time.Time
+//     - This strings holds the text characters which will be
+//       formatted as a Parameter Text Label. The 'paramDateTimeValue'
+//       field contains actual Parameter Value information.
+//
+//       This text label will be positioned to the immediate
+//       right of the Parameter Label Right Margin string,
+//       'paramLabelRightMarginStr'.
+//
+//       If 'paramDateTimeValue' is submitted as a zero length or empty
+//       string, an error will be returned.
+//
+//
+//  paramDateTimeFieldLength        int
+//     - Used to format the Text Label Field, 'paramDateTimeValue'. This
+//       is the length of the text field in which the formatted
+//       'paramDateTimeValue' string will be displayed. If
+//       'paramDateTimeFieldLength' is less than the length of the
+//       'paramDateTimeValue' string, it will be automatically set equal
+//       to the 'paramDateTimeValue' string length.
+//
+//       To automatically set the value of 'paramDateTimeFieldLength'
+//       to the length of 'paramDateTimeValue', set this parameter to a
+//       value of minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000), an
+//       error will be returned.
+//
+//
+//  paramDateTimeTextJustify        TextJustify
+//      An enumeration value specifying the justification of the
+//      'paramDateTimeValue' string within the text field specified by
+//      'paramDateTimeFieldLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text label, field length and a Text Justification object
+//      of type TextJustify. This is because text labels with a
+//      field length equal to or less than the length of the text
+//      label never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the text
+//      label, text justification must be equal to one of these
+//      three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//
+//  paramDateTimeRightMarginStr     string
+//     - The contents of the string will be used as the right
+//       margin for the 'paramDateTimeValue' field.
+//
+//       If no right margin is required, set
+//       'paramDateTimeRightMarginStr' to a zero length or empty
+//       string, and no right margin will be created.
+//
+//
+//  lineTerminator                  string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       these five text element into a single line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the five text
+//       elements formatted by this method as single text field
+//       will constitute a single line of text.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  errorPrefix                     interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                             error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
+	strBuilder *strings.Builder,
+	leftMarginStr string,
+	paramLabelStr string,
+	paramLabelFieldLength int,
+	paramLabelTextJustify TextJustify,
+	paramLabelRightMarginStr string,
+	paramDateTimeValue time.Time,
+	paramDateTimeFieldLength int,
+	paramDateTimeFormat string,
+	paramDateTimeTextJustify TextJustify,
+	paramDateTimeRightMarginStr string,
+	lineTerminator string,
+	errorPrefix interface{}) (
+	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldsLabelParameterDateTime()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if paramDateTimeValue.IsZero() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'paramDateTimeValue' is invalid!\n"+
+			"'paramDateTimeValue' has a value of zero (0).\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if len(leftMarginStr) > 0 {
+		strBuilder.WriteString(leftMarginStr)
+	}
+
+	if len(paramLabelStr) > 0 {
+
+		var paramLabelSpec TextFieldSpecLabel
+
+		paramLabelSpec,
+			err = TextFieldSpecLabel{}.NewTextLabel(
+			paramLabelStr,
+			paramLabelFieldLength,
+			paramLabelTextJustify,
+			ePrefix.XCpy(
+				"paramLabelSpec<-paramLabelStr"))
+
+		if err != nil {
+			return err
+		}
+
+		err = paramLabelSpec.TextBuilder(
+			strBuilder,
+			ePrefix.XCpy(
+				"strBuilder<-paramLabelSpec"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if len(paramLabelRightMarginStr) > 0 {
+		strBuilder.WriteString(paramLabelRightMarginStr)
+	}
+
+	var paramDateTimeSpec TextFieldSpecDateTime
+
+	paramDateTimeSpec,
+		err = TextFieldSpecDateTime{}.NewDateTimeField(
+		paramDateTimeValue,
+		paramDateTimeFieldLength,
+		paramDateTimeFormat,
+		paramDateTimeTextJustify,
+		ePrefix.XCpy(
+			"paramDateTimeSpec<-paramDateTimeValue"))
+
+	if err != nil {
+		return err
+	}
+
+	err = paramDateTimeSpec.TextBuilder(
+		strBuilder,
+		ePrefix.XCpy(
+			"strBuilder<-paramDateTimeSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	if len(paramDateTimeRightMarginStr) > 0 {
+		strBuilder.WriteString(paramDateTimeRightMarginStr)
+	}
+
+	if len(lineTerminator) > 0 {
+		strBuilder.WriteString(lineTerminator)
+	}
+
+	return err
+}
+
 // FieldsLabelParameterValue - Is designed to five text elements
 // consolidated and formatted as a single text field.
 //
@@ -1035,6 +1899,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 // string, a parameter value label field, and a parameter value
 // right margin string.
 //
+//
+// These five text elements can be configured as a complete line of
+// text depending on the value applied to input parameter
+// 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -1062,12 +1930,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //       field provides a text description of the Parameter Value
 //       field, 'paramValueStr'.
 //
-//       This text label will be positioned to the immediate
-//       right of the left margin string, 'leftMarginStr'.
+//       This text label, 'paramLabelStr', will be positioned to
+//       the immediate right of the left margin string,
+//       'leftMarginStr'.
 //
 //       If 'paramLabelStr' is submitted as a zero length or empty
-//       string, it will be skipped or ignored and noo error will
-//       be generated.
+//       string, it will be skipped or ignored and no error will be
+//       generated.
 //
 //
 //  paramLabelFieldLength      int
@@ -1196,7 +2065,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //
 //       If a text line is required, setting this string to include
 //       a new line character ('\n') will ensure that the five text
-//       elements formmated by this method as single text field
+//       elements formatted by this method as single text field
 //       will constitute a single line of text.
 //
 //       The most common usage sets this string to a new line
@@ -1277,7 +2146,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 	paramLabelRightMarginStr string,
 	paramValueStr string,
 	paramValueFieldLength int,
-	paramValuelTextJustify TextJustify,
+	paramValueTextJustify TextJustify,
 	paramValueRightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
@@ -1296,7 +2165,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextStrBuilder."+
-			"Label()",
+			"FieldsLabelParameterValue()",
 		"")
 
 	if err != nil {
@@ -1364,7 +2233,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 		err = TextFieldSpecLabel{}.NewTextLabel(
 		paramValueStr,
 		paramValueFieldLength,
-		paramValuelTextJustify,
+		paramValueTextJustify,
 		ePrefix.XCpy(
 			"paramValueSpec<-paramValueStr"))
 
@@ -1392,42 +2261,736 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 	return err
 }
 
+// LineSolid - Designed to produce one or more separate lines of
+// text.
+//
+// Each line consists of three text elements: a left margin
+// string, a Text Filler Field, and a right margin strings.
+//
+// These three text elements can be configured as independent
+// lines of text or concatenated together depending on the value
+// applied to input parameters 'interiorLineTerminator' and
+// 'finalLineTerminator'.
+//
+// This method is similar to method:
+//   TextStrBuilder.FieldsSingleFiller()
+//
+// However, this method is capable of producing multiple lines
+// of filler text.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of strings.Builder. A formatted
+//       string of text characters created by this method will be
+//       written to this instance of strings.Builder.
+//
+//
+//  leftMarginStr              string
+//     - The contents of the string will be used as the left margin
+//       for 'labelText field.
+//
+//       If no left margin is required, set 'LeftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
+//  fillerCharacters           string
+//     - A string containing the text characters which will be
+//       included in the Text Filler Field. The final Text Filler
+//       Field will be constructed from the filler characters
+//       repeated one or more times as specified by the
+//       'fillerCharsRepeatCount' parameter.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharacters' is submitted as an empty or zero
+//       length string, this method will return an error.
+//
+//
+//  fillerCharsRepeatCount     int
+//     - Controls the number of times 'fillerCharacters' is
+//       repeated when constructing the final Text Filler Field
+//       returned by this method. The actual length of the string
+//       which will populated the completed Text Filler Field is
+//       equal to the length of 'fillerCharacters' times the value
+//       of 'fillerCharsRepeatCount'.
+//
+//        Text Field Filler Length =
+//          Length of fillerCharacters X fillerCharsRepeatCount
+//
+//          Example #1: fillerCharacters = "-*"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "-*-*-*"
+//
+//          Example #2: fillerCharacters = "-"
+//                      fillerRepeatCount = 3
+//                      Final Text Filler Field = "---"
+//
+//       If 'fillerCharsRepeatCount' has a value less than one (1) or
+//       greater than one-million (1,000,000), an error will be
+//       returned.
+//
+//
+//  rightMarginStr             string
+//     - The contents of the string will be used as the right
+//       margin for the Text Filler Field.
+//
+//       If no right margin is required, set 'RightMarginStr' to a
+//       zero length or empty string, and no right margin will be
+//       created.
+//
+//
+//  interiorLineTerminator     string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       this text element into a valid line of text.
+//
+//       Be sure to coordinate 'interiorLineTerminator' with input
+//       parameter 'finalLineTerminator'. 'interiorLineTerminator'
+//       is applied after each line of text is generated.
+//       'finalLineTerminator' is applied after all lines of text
+//       have been generated.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text label field and no other text
+//       elements.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  numOfLines                 int
+//     - The number of times the combination of left margin string,
+//       Text Filler Field, right margin string and interior line
+//       terminator string will be repeated.
+//
+//       Essentially, this the repeat count for the Text Filler
+//       Lines.
+//
+//       If this value is less than one (+1), an error will be
+//       returned. Likewise, if this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  finalLineTerminator        string
+//     - After all the text lines have been generated according to
+//       input parameter 'numOfLines', this line termination
+//       sequence will be applied to the final text output string.
+//
+//       Be sure to coordinate 'finalLineTerminator' with input
+//       parameter 'interiorLineTerminator'.
+//
+//       'interiorLineTerminator' is applied after each line of
+//       text is generated. 'finalLineTerminator' is applied after
+//       all lines of text have been generated.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (txtStrBuildr *TextStrBuilder) LineSolid(
-	leftMargin string,
-	fillerCharacter string,
-	fillerRepeatCount int,
-	rightMargin string,
-	lineTerminator string,
 	strBuilder *strings.Builder,
+	leftMarginStr string,
+	fillerCharacters string,
+	fillerCharsRepeatCount int,
+	rightMarginStr string,
+	interiorLineTerminator string,
+	numOfLines int,
+	finalLineTerminator string,
 	errorPrefix interface{}) (
 	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"LineSolid()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if len(fillerCharacters) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharacters' is invalid!\n"+
+			"'fillerCharacters' is an empty string with a string\n"+
+			"length of zero (0).\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	if numOfLines < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfLines' is invalid!\n"+
+			"'numOfLines' has a value less than one (+1).\n"+
+			"numOfLines = '%v'\n",
+			ePrefix.String(),
+			numOfLines)
+
+		return err
+	}
+
+	if numOfLines > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfLines' is invalid!\n"+
+			"'numOfLines' has a value greater than one-million (1,000,000).\n"+
+			"numOfLines = '%v'\n",
+			ePrefix.String(),
+			numOfLines)
+
+		return err
+	}
+
+	var txtFillerFieldSpec TextFieldSpecFiller
+
+	txtFillerFieldSpec,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerCharacters,
+		fillerCharsRepeatCount,
+		ePrefix.XCpy(
+			"txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	for i := 0; i < numOfLines; i++ {
+
+		if len(leftMarginStr) > 0 {
+			strBuilder.WriteString(leftMarginStr)
+		}
+		err = txtFillerFieldSpec.TextBuilder(
+			strBuilder,
+			ePrefix.XCpy(
+				fmt.Sprintf("strBuilder<-txtFillerFieldSpec #%v",
+					i+1)))
+
+		if err != nil {
+			return err
+		}
+
+		if len(rightMarginStr) > 0 {
+			strBuilder.WriteString(leftMarginStr)
+		}
+
+		if len(interiorLineTerminator) > 0 {
+			strBuilder.WriteString(interiorLineTerminator)
+		}
+	}
+
+	if len(finalLineTerminator) > 0 {
+		strBuilder.WriteString(finalLineTerminator)
+	}
 
 	return err
 }
 
+// LineBlank - Designed to produce one or more blank or empty lines
+// of text. Each blank line will consist of a single new line
+// character, '/n'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of strings.Builder. A formatted
+//       string of text characters created by this method will be
+//       written to this instance of strings.Builder.
+//
+//
+//  numOfBlankLines            int
+//     - The number of blank lines which will be generated by this
+//       method.
+//
+//       If this value is less than one (+1), an error will be
+//       returned. Likewise, if this value is greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  errorPrefix                     interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                             error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (txtStrBuildr *TextStrBuilder) LineBlank(
+	strBuilder *strings.Builder,
 	numOfBlankLines int,
-	strBuilder *strings.Builder,
 	errorPrefix interface{}) (
 	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldsLabelParameterDateTime()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' has a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if numOfBlankLines < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfBlankLines' is invalid!\n"+
+			"'numOfBlankLines' has a value less than one (+1).\n"+
+			"numOfBlankLines = '%v'\n",
+			ePrefix.String(),
+			numOfBlankLines)
+
+		return err
+	}
+
+	if numOfBlankLines > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfBlankLines' is invalid!\n"+
+			"'numOfBlankLines' has a value greater than one-million (1,000,000).\n"+
+			"numOfBlankLines = '%v'\n",
+			ePrefix.String(),
+			numOfBlankLines)
+
+		return err
+	}
+
+	for i := 0; i < numOfBlankLines; i++ {
+
+		strBuilder.WriteString("\n")
+
+	}
 
 	return err
 }
 
-func (txtStrBuildr *TextStrBuilder) LinePlainText(
-	leftMargin string,
-	plainText string,
-	rightMargin string,
-	lineTerminator string,
-	strBuilder *strings.Builder,
-	errorPrefix interface{}) (
-	err error) {
-
-	return err
-}
-
+// LineTimerStartStop - Creates and returns a new instance of
+// the Start/Stop Time Lines which is configured with all the
+// parameters necessary to format and output a complete timer
+// event.
+//
+// The purpose of the Start/Stop Time Lines text display is to
+// capture all the essential elements of a timer event and
+// format that information for text display, file output or
+// printing.
+//
+// This method is designed to be used when both start time and
+// ending time for the timer event are known quantities.
+//
+// Sample Output
+//
+//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//  Elapsed Time: 55 Microseconds 0 Nanoseconds
+//                Total Elapsed Nanoseconds: 55,000
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMarginStr              string
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//       If leftMarginStr is submitted as an empty or zero length
+//       string, no error will be triggered and the left margin
+//       will simply be omitted.
+//
+//
+//  startTimeLabel             string
+//     - A string containing the text characters constituting the
+//       starting time text label.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'startTimeLabel' will be assigned a default value
+//       of "Start Time".
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  startTime                  time.Time
+//     - A time value which will be used in conjunction with
+//       'endTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'startTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  endTimeLabel               string
+//     - A string containing the text characters constituting the
+//       ending time text label.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'endTimeLabel' will be assigned a default value of
+//       "End Time".
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  endTime                    time.Time
+//     - A time value which will be used in conjunction with
+//       'startTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'endTime' will be defaulted to value of 'startTime'.
+//
+//
+//  timeFormat                 string
+//     - This string holds the time format parameters used to
+//       format starting time and ending time values for text
+//       display and output.
+//
+//       If this parameter is submitted as an empty string,
+//       parameter 'timeFormat' will be assigned a default value
+//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//
+//  timeDurationLabel          string
+//     - The text label used to describe the time duration or
+//       elapsed time computed from the 'startTime' and 'endTime'
+//       parameters.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'timeDurationLabel' will be assigned a default
+//       value of "Elapsed Time".
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  textLabelFieldLen          int
+//     - A user entered value which defines the length of the text
+//       field used by all three text labels, 'startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel'.
+//
+//       The length of the text fields which will be used to
+//       position and display the three text labels provided by
+//       input parameters 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel'.
+//
+//       If 'textLabelFieldLen' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  textLabelJustification         TextJustify
+//     - An enumeration which specifies the justification of the
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel' within the field length specified by
+//       'textLabelFieldLen'.
+//
+//       Label justification must be equal to one of these three
+//       valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       The abbreviated text justification enumeration syntax can
+//       also be used:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+//  rightMarginStr      string
+//     - This string contains the character or characters which
+//       will be used to separate the text labels ('startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel') from the output or
+//       data values displayed on the same line.
+//       Example:
+//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       Often this parameter is set to a single white space
+//       character (" ") or a colon plus white space character,
+//       (": ").
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'rightMarginStr' will be assigned a
+//       default value of  ": ". Example Output:
+//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('textLabelFieldLen') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//       If leftMarginStr is submitted as a zero length
+//       string, no error will be triggered. In this case, the left
+//       margin will simply be omitted.
+//
+//
+//  errorPrefix                     interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  *TextLineSpecTimerLines
+//     - If this method completes successfully, it will create and
+//       return a pointer to a new instance of
+//       TextLineSpecTimerLines which is fully configured with all
+//       the parameters necessary to format a complete timer event
+//       for text display, file output or printing.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
-	leftMargin string,
+	strBuilder *strings.Builder,
+	leftMarginStr string,
 	startTimeLabel string,
 	startTime time.Time,
 	endTimeLabel string,
@@ -1435,11 +2998,57 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 	timeFormat string,
 	timeDurationLabel string,
 	textLabelFieldLen int,
-	labelJustifiy TextJustify,
-	rightMargin string,
-	strBuilder *strings.Builder,
+	textLabelJustification TextJustify,
+	rightMarginStr string,
 	errorPrefix interface{}) (
 	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"LineTimerStartStop()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var timerLinesSpec *TextLineSpecTimerLines
+
+	timerLinesSpec,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		leftMarginStr,
+		startTimeLabel,
+		startTime,
+		endTimeLabel,
+		endTime,
+		timeFormat,
+		timeDurationLabel,
+		textLabelFieldLen,
+		textLabelJustification,
+		rightMarginStr,
+		ePrefix.XCpy(
+			"timerLinesSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	err = timerLinesSpec.TextBuilder(
+		strBuilder,
+		ePrefix.XCpy(
+			"strBuilder<-timerLinesSpec"))
 
 	return err
 }
