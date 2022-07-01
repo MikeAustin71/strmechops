@@ -2664,72 +2664,18 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 
 	}
 
-	if numOfLines < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numOfLines' is invalid!\n"+
-			"'numOfLines' has a value less than one (+1).\n"+
-			"numOfLines = '%v'\n",
-			ePrefix.String(),
-			numOfLines)
-
-		return err
-	}
-
-	if numOfLines > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numOfLines' is invalid!\n"+
-			"'numOfLines' has a value greater than one-million (1,000,000).\n"+
-			"numOfLines = '%v'\n",
-			ePrefix.String(),
-			numOfLines)
-
-		return err
-	}
-
-	var txtFillerFieldSpec TextFieldSpecFiller
-
-	txtFillerFieldSpec,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+	return textStrBuilderNanobot{}.ptr().lineSolidWithMargins(
+		strBuilder,
+		leftMarginStr,
 		fillerCharacters,
 		fillerCharsRepeatCount,
+		rightMarginStr,
+		interiorLineTerminator,
+		numOfLines,
+		finalLineTerminator,
 		ePrefix.XCpy(
-			"txtFillerFieldSpec"))
+			"strBuilder<-fillerCharacters"))
 
-	if err != nil {
-		return err
-	}
-
-	for i := 0; i < numOfLines; i++ {
-
-		if len(leftMarginStr) > 0 {
-			strBuilder.WriteString(leftMarginStr)
-		}
-		err = txtFillerFieldSpec.TextBuilder(
-			strBuilder,
-			ePrefix.XCpy(
-				fmt.Sprintf("strBuilder<-txtFillerFieldSpec #%v",
-					i+1)))
-
-		if err != nil {
-			return err
-		}
-
-		if len(rightMarginStr) > 0 {
-			strBuilder.WriteString(leftMarginStr)
-		}
-
-		if len(interiorLineTerminator) > 0 {
-			strBuilder.WriteString(interiorLineTerminator)
-		}
-	}
-
-	if len(finalLineTerminator) > 0 {
-		strBuilder.WriteString(finalLineTerminator)
-	}
-
-	return err
 }
 
 // LineBlank - Designed to produce one or more blank or empty lines
