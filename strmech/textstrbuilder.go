@@ -2043,72 +2043,34 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 
 	}
 
-	if len(leftMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
+	txtBuilderAtom := textStrBuilderAtom{}
+
+	err = txtBuilderAtom.fieldLabelWithMargins(
+		strBuilder,
+		leftMarginStr,
+		paramLabelStr,
+		paramLabelFieldLength,
+		paramLabelTextJustify,
+		paramLabelRightMarginStr,
+		"",
+		ePrefix.XCpy(
+			"strBuilder<-paramLabelStr"))
+
+	if err != nil {
+		return err
 	}
 
-	if len(paramLabelStr) > 0 {
-
-		var paramLabelSpec TextFieldSpecLabel
-
-		paramLabelSpec,
-			err = TextFieldSpecLabel{}.NewTextLabel(
-			paramLabelStr,
-			paramLabelFieldLength,
-			paramLabelTextJustify,
-			ePrefix.XCpy(
-				"paramLabelSpec<-paramLabelStr"))
-
-		if err != nil {
-			return err
-		}
-
-		err = paramLabelSpec.TextBuilder(
-			strBuilder,
-			ePrefix.XCpy(
-				"strBuilder<-paramLabelSpec"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if len(paramLabelRightMarginStr) > 0 {
-		strBuilder.WriteString(paramLabelRightMarginStr)
-	}
-
-	var paramDateTimeSpec TextFieldSpecDateTime
-
-	paramDateTimeSpec,
-		err = TextFieldSpecDateTime{}.NewDateTimeField(
+	err = txtBuilderAtom.fieldDateTimeWithMargins(
+		strBuilder,
+		"",
 		paramDateTimeValue,
 		paramDateTimeFieldLength,
 		paramDateTimeFormat,
 		paramDateTimeTextJustify,
+		paramDateTimeRightMarginStr,
+		lineTerminator,
 		ePrefix.XCpy(
-			"paramDateTimeSpec<-paramDateTimeValue"))
-
-	if err != nil {
-		return err
-	}
-
-	err = paramDateTimeSpec.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-paramDateTimeSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(paramDateTimeRightMarginStr) > 0 {
-		strBuilder.WriteString(paramDateTimeRightMarginStr)
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
+			"strBuilder<-paramDateTimeValue"))
 
 	return err
 }
