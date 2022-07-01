@@ -2682,6 +2682,9 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 // of text. Each blank line will consist of a single new line
 // character, '/n'.
 //
+// Consequently, the terms "blank lines" and "new lines" are
+// synonymous as used here.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -2790,46 +2793,13 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 		return err
 	}
 
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
+	return textStrBuilderElectron{}.ptr().lineBlank(
+		strBuilder,
+		numOfBlankLines,
+		ePrefix.XCpy(fmt.Sprintf(
+			"strBuilder<-numOfBlankLines=='%v'",
+			numOfBlankLines)))
 
-		return err
-	}
-
-	if numOfBlankLines < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numOfBlankLines' is invalid!\n"+
-			"'numOfBlankLines' has a value less than one (+1).\n"+
-			"numOfBlankLines = '%v'\n",
-			ePrefix.String(),
-			numOfBlankLines)
-
-		return err
-	}
-
-	if numOfBlankLines > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'numOfBlankLines' is invalid!\n"+
-			"'numOfBlankLines' has a value greater than one-million (1,000,000).\n"+
-			"numOfBlankLines = '%v'\n",
-			ePrefix.String(),
-			numOfBlankLines)
-
-		return err
-	}
-
-	for i := 0; i < numOfBlankLines; i++ {
-
-		strBuilder.WriteString("\n")
-
-	}
-
-	return err
 }
 
 // LineTimerStartStop - Creates and returns a new instance of
