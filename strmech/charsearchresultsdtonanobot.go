@@ -485,99 +485,86 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	// Leading Title Marquee
 
-	err = txtBuilder.LineBlank(
-		&strBuilder,
-		1,
-		ePrefix.XCpy(
-			"1-Leading Blank Line"))
+	var fmtrs []TextFormatterDto
 
-	if err != nil {
+	// Blank Line
+	txtFmt := TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
 
-		return strBuilder, err
-	}
+	// Filler =======
+	// Marquee Top
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.FieldsSingleFiller(
-		&strBuilder,
-		" ",
-		"=",
-		maxFieldLen-2,
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"Marquee-Top"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.FieldLabel(
-		&strBuilder,
-		"CharSearchResultsDto",
-		maxFieldLen,
-		TxtJustify.Center(),
-		"\n",
-		ePrefix.XCpy(
-			"Title-1"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
+	// Title # 1
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "CharSearchResultsDto"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
 
 	if len(searchResultsDto.SearchResultsName) > 0 {
-
-		err = txtBuilder.FieldLabel(
-			&strBuilder,
-			searchResultsDto.SearchResultsName,
-			maxFieldLen,
-			TxtJustify.Center(),
-			"\n",
-			ePrefix.XCpy(
-				"Title-2"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
+		// Title # 2
+		txtFmt = TextFormatterDto{}
+		txtFmt.FormatType = TxtFieldType.Label()
+		txtFmt.Label.LeftMarginStr = ""
+		txtFmt.Label.FieldText =
+			searchResultsDto.SearchResultsName
+		txtFmt.Label.FieldLength = maxFieldLen
+		txtFmt.Label.FieldJustify = TxtJustify.Center()
+		txtFmt.Label.RightMarginStr = ""
+		txtFmt.Label.LineTerminator = "\n"
+		fmtrs = append(fmtrs, txtFmt)
 
 	}
 
-	err = txtBuilder.FieldDateTime(
+	// Date Time
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.DateTime()
+	txtFmt.DateTime.LeftMarginStr = ""
+	txtFmt.DateTime.FieldDateTime = time.Now()
+	txtFmt.DateTime.FieldLength = maxFieldLen
+	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
+	txtFmt.DateTime.FieldDateTimeFormat =
+		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
+	txtFmt.DateTime.RightMarginStr = ""
+	txtFmt.DateTime.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Bottom
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Blank Line
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
+
+	err = txtBuilder.BuildTextFormatters(
 		&strBuilder,
-		time.Now(),
-		maxFieldLen,
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		TxtJustify.Center(),
-		"\n",
+		fmtrs,
 		ePrefix.XCpy(
-			"Title-3"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.FieldsSingleFiller(
-		&strBuilder,
-		" ",
-		"=",
-		maxFieldLen-2,
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"Marquee-Bottom"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	err = txtBuilder.LineBlank(
-		&strBuilder,
-		1,
-		ePrefix.XCpy(
-			"1-Trailing Blank Line"))
+			"strBuilder<-Marquee Top"))
 
 	if err != nil {
 

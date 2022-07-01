@@ -16,23 +16,23 @@ type TextFormatterDto struct {
 	//   TxtFieldType.Spacer()    - Valid
 	//   TxtFieldType.BlankLine() - Valid
 
-	TxtDateTime TextFieldDateTimeDto
+	DateTime TextFieldDateTimeDto
 	// A structure containing data elements necessary for the
 	// creation of Text Date/Time Fields.
 
-	TxtFiller TextFieldFillerDto
+	Filler TextFieldFillerDto
 	// A structure containing data elements necessary for the
 	// creation of Text Filler Fields.
 
-	TxtLabel TextFieldLabelDto
+	Label TextFieldLabelDto
 	// A structure containing data elements necessary for the
 	// creation of Text Label Fields.
 
-	TxtSpacer TextFieldSpacerDto
+	Spacer TextFieldSpacerDto
 	// A structure containing data elements necessary for the
 	// creation of Text Spacer Fields.
 
-	TxtBlankLine TextLineBlankDto
+	BlankLine TextLineBlankDto
 	// A structure containing data elements necessary for the
 	// creation of Blank Lines or New Lines.
 }

@@ -437,7 +437,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //       	//   TxtFieldType.Spacer()    - Valid
 //       	//   TxtFieldType.BlankLine() - Valid
 //
-//       	TxtDateTime TextFieldDateTimeDto
+//       	DateTime TextFieldDateTimeDto
 //       	// A structure containing data elements necessary for the
 //       	// creation of Text Date/Time Fields.
 //
@@ -531,7 +531,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //            	// characters will be created.
 //            }
 //
-//       	TxtFiller TextFieldFillerDto
+//       	Filler TextFieldFillerDto
 //       	// A structure containing data elements necessary for the
 //       	// creation of Text Filler Fields.
 //
@@ -606,7 +606,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //            }
 //
 //
-//       	TxtLabel TextFieldLabelDto
+//       	Label TextFieldLabelDto
 //       	// A structure containing data elements necessary for the
 //       	// creation of Text Label Fields.
 //
@@ -694,7 +694,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //            }
 //
 //
-//       	TxtSpacer TextFieldSpacerDto
+//       	Spacer TextFieldSpacerDto
 //       	// A structure containing data elements necessary for the
 //       	// creation of Text Spacer Fields.
 //
@@ -737,7 +737,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //            }
 //
 //
-//       	TxtBlankLine TextLineBlankDto
+//       	BlankLine TextLineBlankDto
 //       	// A structure containing data elements necessary for the
 //       	// creation of Blank Lines or New Lines.
 //
@@ -887,15 +887,15 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 
 			err = txtBuilderAtom.fieldLabelWithMargins(
 				strBuilder,
-				txtFormatters[i].TxtLabel.LeftMarginStr,
-				txtFormatters[i].TxtLabel.FieldText,
-				txtFormatters[i].TxtLabel.FieldLength,
-				txtFormatters[i].TxtLabel.FieldJustify,
-				txtFormatters[i].TxtLabel.RightMarginStr,
-				txtFormatters[i].TxtLabel.LineTerminator,
+				txtFormatters[i].Label.LeftMarginStr,
+				txtFormatters[i].Label.FieldText,
+				txtFormatters[i].Label.FieldLength,
+				txtFormatters[i].Label.FieldJustify,
+				txtFormatters[i].Label.RightMarginStr,
+				txtFormatters[i].Label.LineTerminator,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].TxtLabel.FieldText",
+						"strBuilder<-txtFormatters[%v].Label.FieldText",
 						i)))
 
 			if err != nil {
@@ -906,16 +906,16 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 
 			err = txtBuilderAtom.fieldDateTimeWithMargins(
 				strBuilder,
-				txtFormatters[i].TxtDateTime.LeftMarginStr,
-				txtFormatters[i].TxtDateTime.FieldDateTime,
-				txtFormatters[i].TxtDateTime.FieldLength,
-				txtFormatters[i].TxtDateTime.FieldDateTimeFormat,
-				txtFormatters[i].TxtDateTime.FieldJustify,
-				txtFormatters[i].TxtDateTime.RightMarginStr,
-				txtFormatters[i].TxtDateTime.LineTerminator,
+				txtFormatters[i].DateTime.LeftMarginStr,
+				txtFormatters[i].DateTime.FieldDateTime,
+				txtFormatters[i].DateTime.FieldLength,
+				txtFormatters[i].DateTime.FieldDateTimeFormat,
+				txtFormatters[i].DateTime.FieldJustify,
+				txtFormatters[i].DateTime.RightMarginStr,
+				txtFormatters[i].DateTime.LineTerminator,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].TxtDateTime.FieldDateTime",
+						"strBuilder<-txtFormatters[%v].DateTime.FieldDateTime",
 						i)))
 
 			if err != nil {
@@ -926,14 +926,14 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 
 			err = txtBuilderAtom.fieldFillerWithMargins(
 				strBuilder,
-				txtFormatters[i].TxtFiller.LeftMarginStr,
-				txtFormatters[i].TxtFiller.FillerCharacters,
-				txtFormatters[i].TxtFiller.FillerCharsRepeatCount,
-				txtFormatters[i].TxtFiller.RightMarginStr,
-				txtFormatters[i].TxtFiller.LineTerminator,
+				txtFormatters[i].Filler.LeftMarginStr,
+				txtFormatters[i].Filler.FillerCharacters,
+				txtFormatters[i].Filler.FillerCharsRepeatCount,
+				txtFormatters[i].Filler.RightMarginStr,
+				txtFormatters[i].Filler.LineTerminator,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].TxtFiller.FillerCharacters",
+						"strBuilder<-txtFormatters[%v].Filler.FillerCharacters",
 						i)))
 
 			if err != nil {
@@ -944,10 +944,10 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 
 			err = txtBuilderElectron.lineBlank(
 				strBuilder,
-				txtFormatters[i].TxtBlankLine.NumOfBlankLines,
+				txtFormatters[i].BlankLine.NumOfBlankLines,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].TxtBlankLine.NumOfBlankLines",
+						"strBuilder<-txtFormatters[%v].BlankLine.NumOfBlankLines",
 						i)))
 
 			if err != nil {
@@ -959,13 +959,13 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 
 			err = txtBuilderElectron.fieldSpacerWithMargins(
 				strBuilder,
-				txtFormatters[i].TxtSpacer.LeftMarginStr,
-				txtFormatters[i].TxtSpacer.FieldLength,
-				txtFormatters[i].TxtSpacer.RightMarginStr,
-				txtFormatters[i].TxtSpacer.LineTerminator,
+				txtFormatters[i].Spacer.LeftMarginStr,
+				txtFormatters[i].Spacer.FieldLength,
+				txtFormatters[i].Spacer.RightMarginStr,
+				txtFormatters[i].Spacer.LineTerminator,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].TxtSpacer.FieldLength",
+						"strBuilder<-txtFormatters[%v].Spacer.FieldLength",
 						i)))
 
 			if err != nil {
