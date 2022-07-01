@@ -8,13 +8,13 @@ import (
 	"sync"
 )
 
-// TextFieldSpecSpacer - The Text Field Specification is used to
-// create a Text Field consisting of one or more white space
-// characters.
+// TextFieldSpecSpacer - The Text Field Spacer Specification is
+// used to create a Text Field consisting of one or more white
+// space characters.
 //
-// Text Field Specifications are designed to be configured within a
-// line of text. Those lines of text can then be formatted for text
-// displays, file output or printing. The type
+// Text Field Specifications are designed to be configured within
+// a line of text. Those lines of text can then be formatted for
+// text displays, file output or printing. The type
 // TextLineSpecStandardLine can be used to compose a line of text
 // consisting of multiple Text Field Specifications like
 // TextFieldSpecSpacer. Text Field Specifications are therefore
