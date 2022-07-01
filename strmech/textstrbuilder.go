@@ -351,82 +351,40 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 
 	}
 
-	var paramLabelSpec TextFieldSpecLabel
+	txtBuilderAtom := textStrBuilderAtom{}
 
 	for idx, item := range paramLabelValues {
 
-		if len(leftMarginStr) > 0 {
-
-			strBuilder.WriteString(leftMarginStr)
-
-		}
-
-		if len(item.ParamLabel) == 0 {
-			item.ParamLabel = " "
-		}
-
-		paramLabelSpec,
-			err = TextFieldSpecLabel{}.NewTextLabel(
+		err = txtBuilderAtom.fieldLabelWithMargins(
+			strBuilder,
+			leftMarginStr,
 			item.ParamLabel,
 			paramLabelFieldLength,
 			paramLabelTextJustify,
+			paramLabelRightMarginStr,
+			"",
 			ePrefix.XCpy(fmt.Sprintf(
-				"paramLabelSpec<-item[%v].paramLabel",
+				"strBuilder<-item[%v].paramLabel",
 				idx)))
 
 		if err != nil {
 			return err
 		}
 
-		err = paramLabelSpec.TextBuilder(
+		err = txtBuilderAtom.fieldLabelWithMargins(
 			strBuilder,
-			ePrefix.XCpy(fmt.Sprintf(
-				"strBuilder<-item[%v].paramLabelStr",
-				idx)))
-
-		if err != nil {
-			return err
-		}
-
-		if len(paramLabelRightMarginStr) > 0 {
-			strBuilder.WriteString(paramLabelRightMarginStr)
-		}
-
-		if len(item.ParamValue) == 0 {
-			item.ParamValue = " "
-		}
-
-		var paramValueSpec TextFieldSpecLabel
-
-		paramValueSpec,
-			err = TextFieldSpecLabel{}.NewTextLabel(
+			"",
 			item.ParamValue,
 			paramValueFieldLength,
 			paramValueTextJustify,
-			ePrefix.XCpy(fmt.Sprintf(
-				"paramValueSpec<-item[%v].paramValue",
-				idx)))
-
-		if err != nil {
-			return err
-		}
-
-		err = paramValueSpec.TextBuilder(
-			strBuilder,
+			paramValueRightMarginStr,
+			lineTerminator,
 			ePrefix.XCpy(fmt.Sprintf(
 				"strBuilder<-item[%v].paramValue",
 				idx)))
 
 		if err != nil {
 			return err
-		}
-
-		if len(paramValueRightMarginStr) > 0 {
-			strBuilder.WriteString(paramValueRightMarginStr)
-		}
-
-		if len(lineTerminator) > 0 {
-			strBuilder.WriteString(lineTerminator)
 		}
 
 	}
@@ -643,41 +601,17 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 
 	}
 
-	if len(dateTimeFormat) == 0 {
-		dateTimeFormat =
-			textSpecificationMolecule{}.ptr().
-				getDefaultDateTimeFormat()
-	}
-
-	var txtDateTimeField TextFieldSpecDateTime
-
-	txtDateTimeField,
-		err = TextFieldSpecDateTime{}.NewDateTimeField(
+	return textStrBuilderAtom{}.ptr().fieldDateTimeWithMargins(
+		strBuilder,
+		"",
 		dateTime,
 		dateTimeFieldLength,
 		dateTimeFormat,
 		dateTimeTextJustify,
+		"",
+		lineTerminator,
 		ePrefix.XCpy(
-			"txtDateTimeField<-dateTime"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtDateTimeField.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-txtDateTimeField"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
-
-	return err
+			"strBuilder<-dateTime"))
 }
 
 // FieldFiller - The Filler Text Field consists of a single
@@ -879,33 +813,15 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 
 	}
 
-	var txtFillerFieldSpec TextFieldSpecFiller
-
-	txtFillerFieldSpec,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+	return textStrBuilderAtom{}.ptr().fieldFillerWithMargins(
+		strBuilder,
+		"",
 		fillerCharacters,
 		fillerCharsRepeatCount,
+		"",
+		lineTerminator,
 		ePrefix.XCpy(
-			"txtFillerFieldSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtFillerFieldSpec.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-txtFillerFieldSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
-
-	return err
+			"strBuilder<-fillerCharacters"))
 }
 
 // FieldLabel - Formats a single text label and writes the output string
@@ -1348,49 +1264,17 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 
 	}
 
-	if len(dateTimeFormat) == 0 {
-		dateTimeFormat =
-			textSpecificationMolecule{}.ptr().
-				getDefaultDateTimeFormat()
-	}
-
-	if len(leftMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
-	}
-
-	var txtDateTimeField TextFieldSpecDateTime
-
-	txtDateTimeField,
-		err = TextFieldSpecDateTime{}.NewDateTimeField(
+	return textStrBuilderAtom{}.ptr().fieldDateTimeWithMargins(
+		strBuilder,
+		leftMarginStr,
 		dateTime,
 		dateTimeFieldLength,
 		dateTimeFormat,
 		dateTimeTextJustify,
+		rightMarginStr,
+		lineTerminator,
 		ePrefix.XCpy(
-			"txtDateTimeField<-dateTime"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtDateTimeField.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-txtDateTimeField"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(rightMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
-
-	return err
+			"strBuilder<-dateTime"))
 }
 
 // FieldsSingleFiller - Designed to produce three text elements
@@ -1609,41 +1493,15 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 
 	}
 
-	if len(leftMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
-	}
-
-	var txtFillerFieldSpec TextFieldSpecFiller
-
-	txtFillerFieldSpec,
-		err = TextFieldSpecFiller{}.NewTextFiller(
+	return textStrBuilderAtom{}.ptr().fieldFillerWithMargins(
+		strBuilder,
+		leftMarginStr,
 		fillerCharacters,
 		fillerCharsRepeatCount,
+		rightMarginStr,
+		lineTerminator,
 		ePrefix.XCpy(
-			"txtFillerFieldSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtFillerFieldSpec.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-txtFillerFieldSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(rightMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
-
-	return err
+			"strBuilder<-fillerCharacters"))
 }
 
 // FieldsSingleLabel - Is designed to produce three text elements
@@ -2556,71 +2414,33 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 
 	}
 
-	if len(leftMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
+	txtBuilderAtom := textStrBuilderAtom{}
+
+	err = txtBuilderAtom.fieldLabelWithMargins(
+		strBuilder,
+		leftMarginStr,
+		paramLabelStr,
+		paramLabelFieldLength,
+		paramLabelTextJustify,
+		paramLabelRightMarginStr,
+		"",
+		ePrefix.XCpy(
+			"strBuilder<-paramLabelStr"))
+
+	if err != nil {
+		return err
 	}
 
-	if len(paramLabelStr) > 0 {
-
-		var paramLabelSpec TextFieldSpecLabel
-
-		paramLabelSpec,
-			err = TextFieldSpecLabel{}.NewTextLabel(
-			paramLabelStr,
-			paramLabelFieldLength,
-			paramLabelTextJustify,
-			ePrefix.XCpy(
-				"paramLabelSpec<-paramLabelStr"))
-
-		if err != nil {
-			return err
-		}
-
-		err = paramLabelSpec.TextBuilder(
-			strBuilder,
-			ePrefix.XCpy(
-				"strBuilder<-paramLabelSpec"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	if len(paramLabelRightMarginStr) > 0 {
-		strBuilder.WriteString(paramLabelRightMarginStr)
-	}
-
-	var paramValueSpec TextFieldSpecLabel
-
-	paramValueSpec,
-		err = TextFieldSpecLabel{}.NewTextLabel(
+	err = txtBuilderAtom.fieldLabelWithMargins(
+		strBuilder,
+		"",
 		paramValueStr,
 		paramValueFieldLength,
 		paramValueTextJustify,
+		paramValueRightMarginStr,
+		lineTerminator,
 		ePrefix.XCpy(
-			"paramValueSpec<-paramValueStr"))
-
-	if err != nil {
-		return err
-	}
-
-	err = paramValueSpec.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-paramValueSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(paramValueRightMarginStr) > 0 {
-		strBuilder.WriteString(paramValueRightMarginStr)
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
+			"strBuilder<-paramValueStr"))
 
 	return err
 }
