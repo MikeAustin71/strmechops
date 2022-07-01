@@ -1104,34 +1104,16 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 
 	}
 
-	var txtLabelSpec TextFieldSpecLabel
-
-	txtLabelSpec,
-		err = TextFieldSpecLabel{}.NewTextLabel(
+	return textStrBuilderAtom{}.ptr().fieldLabelWithMargins(
+		strBuilder,
+		"",
 		labelText,
 		labelFieldLength,
 		labelTextJustify,
+		"",
+		lineTerminator,
 		ePrefix.XCpy(
-			"txtLabelSpec<-labelText"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtLabelSpec.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-txtLabelSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
-
-	return err
+			"strBuilder<-labelText"))
 }
 
 // FieldsSingleDateTime - Is designed to produce three text
@@ -1890,42 +1872,16 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 
 	}
 
-	if len(leftMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
-	}
-
-	var txtLabelSpec TextFieldSpecLabel
-
-	txtLabelSpec,
-		err = TextFieldSpecLabel{}.NewTextLabel(
+	return textStrBuilderAtom{}.ptr().fieldLabelWithMargins(
+		strBuilder,
+		leftMarginStr,
 		labelText,
 		labelFieldLength,
 		labelTextJustify,
+		rightMarginStr,
+		lineTerminator,
 		ePrefix.XCpy(
-			"txtLabelSpec<-labelText"))
-
-	if err != nil {
-		return err
-	}
-
-	err = txtLabelSpec.TextBuilder(
-		strBuilder,
-		ePrefix.XCpy(
-			"strBuilder<-txtLabelSpec"))
-
-	if err != nil {
-		return err
-	}
-
-	if len(rightMarginStr) > 0 {
-		strBuilder.WriteString(leftMarginStr)
-	}
-
-	if len(lineTerminator) > 0 {
-		strBuilder.WriteString(lineTerminator)
-	}
-
-	return err
+			"strBuilder<-labelText"))
 }
 
 // FieldsLabelParameterDateTime - Is designed to produce five text
