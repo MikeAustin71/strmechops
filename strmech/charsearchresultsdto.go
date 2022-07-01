@@ -57,6 +57,10 @@ import (
 // data variables describing the search outcome.
 //
 type CharSearchResultsDto struct {
+	SearchResultsName string
+	// The Name, Label or descriptive Tag associated with the
+	// current instance of CharSearchResultsDto.
+
 	FoundSearchTarget bool
 	// Signals a successful search outcome. If set to
 	// 'true' the Test String character or characters were
@@ -159,7 +163,7 @@ type CharSearchResultsDto struct {
 	ReplacementString *RuneArrayDto
 	// A pointer to the Rune Array Data Transfer
 	// Object containing the Replacement Characters to be
-	// substituted for existing charcaters in a Target String.
+	// substituted for existing characters in a Target String.
 
 	NumValueType NumericValueType
 	// Optional. This enumeration value specifies the type
@@ -250,10 +254,10 @@ type CharSearchResultsDto struct {
 	// this search operation.
 	//
 	// Possible values are listed as follows:
-	//  TextCharSearchType.None() - Invalid value
-	//  TextCharSearchType.LinearTargetStartingIndex() - Default
-	//  TextCharSearchType.SingleTargetChar()
-	//  TextCharSearchType.LinearEndOfString()
+	//  CharSearchType.None() - Invalid value
+	//  CharSearchType.LinearTargetStartingIndex() - Default
+	//  CharSearchType.SingleTargetChar()
+	//  CharSearchType.LinearEndOfString()
 
 	lock *sync.Mutex
 }

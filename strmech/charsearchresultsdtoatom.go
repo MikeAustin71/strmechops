@@ -56,6 +56,8 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 		return
 	}
 
+	searchResultsDto.SearchResultsName = ""
+
 	searchResultsDto.FoundSearchTarget = false
 
 	searchResultsDto.FoundSearchTargetOnPreviousSearch = false
@@ -176,6 +178,12 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 
 	if searchResultsDto1 == nil ||
 		searchResultsDto2 == nil {
+		return false
+	}
+
+	if searchResultsDto1.SearchResultsName !=
+		searchResultsDto2.SearchResultsName {
+
 		return false
 	}
 
