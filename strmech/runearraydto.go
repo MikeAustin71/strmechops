@@ -88,7 +88,7 @@ type RuneArrayDto struct {
 	// performed on the text characters contained in member
 	// variable 'CharsArray'. This enumeration value has four
 	// possible settings:
-	//     CharSearchType.LinearTargetStartingIndex() - Invalid
+	//     CharSearchType.None() - Invalid
 	//     CharSearchType.LinearTargetStartingIndex() - Default, Valid
 	//     CharSearchType.SingleTargetChar()  - Valid
 	//     CharSearchType.LinearEndOfString() - Valid

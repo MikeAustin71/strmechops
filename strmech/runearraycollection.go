@@ -16,6 +16,92 @@ type RuneArrayCollection struct {
 	lock *sync.Mutex
 }
 
+// AddLatinAlphabetEnglish - Adds a RuneArrayDto to the Rune Array
+// Collection. This RuneArrayDto is populated with the Latin
+// Alphabet (English Version). The total number of characters
+// is 52 comprised of 26 lower case letters and 26 upper case
+// letters.
+//
+// An array of alphabetic characters in useful in search
+// operations looking for alphabetic characters classified as
+// delimiters.
+//
+func (runeArrayCol *RuneArrayCollection) AddLatinAlphabetEnglish() {
+
+	latinAlphabetRuneArray := []rune{
+		'a',
+		'b',
+		'c',
+		'd',
+		'e',
+		'f',
+		'g',
+		'h',
+		'i',
+		'j',
+		'k',
+		'l',
+		'm',
+		'n',
+		'o',
+		'p',
+		'q',
+		'r',
+		's',
+		't',
+		'u',
+		'v',
+		'w',
+		'x',
+		'y',
+		'z',
+		'A',
+		'B',
+		'C',
+		'D',
+		'E',
+		'F',
+		'G',
+		'H',
+		'I',
+		'J',
+		'K',
+		'L',
+		'M',
+		'N',
+		'O',
+		'P',
+		'Q',
+		'R',
+		'S',
+		'T',
+		'U',
+		'V',
+		'W',
+		'X',
+		'Y',
+		'Z'}
+
+	lenLatinAlphabet := len(latinAlphabetRuneArray)
+
+	runeArrayDto := RuneArrayDto{}
+
+	runeArrayDto.CharsArray = make([]rune, lenLatinAlphabet)
+
+	for i := 0; i < lenLatinAlphabet; i++ {
+		runeArrayDto.CharsArray[i] = latinAlphabetRuneArray[i]
+	}
+
+	runeArrayDto.charSearchType =
+		CharSearchType.SingleTargetChar()
+
+	runeArrayCol.RuneArrayDtoCol =
+		append(
+			runeArrayCol.RuneArrayDtoCol,
+			runeArrayDto)
+
+}
+
 // AddRuneArrayDto - Receives an instance of RuneArrayDto and
 // appends that instance to the RuneArrayDto Collection.
 //
