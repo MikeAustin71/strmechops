@@ -168,6 +168,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.TargetStringLastSearchIndex =
 		incomingSearchResultsDto.TargetStringLastSearchIndex
 
+	targetSearchResultsDto.TargetStringNextSearchIndex =
+		incomingSearchResultsDto.TargetStringNextSearchIndex
+
 	targetSearchResultsDto.TargetStringDescription1 =
 		incomingSearchResultsDto.TargetStringDescription1
 
@@ -367,6 +370,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 
 	copySearchResultsDto.TargetStringLastSearchIndex =
 		searchResultsDto.TargetStringLastSearchIndex
+
+	copySearchResultsDto.TargetStringNextSearchIndex =
+		searchResultsDto.TargetStringNextSearchIndex
 
 	copySearchResultsDto.TargetStringDescription1 =
 		searchResultsDto.TargetStringDescription1
@@ -753,6 +759,16 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchResultsDto.TargetStringLastSearchIndex)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build TargetStringNextSearchIndex
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "TargetStringNextSearchIndex"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchResultsDto.TargetStringNextSearchIndex)
 
 	labelParams = append(labelParams, labelParam)
 

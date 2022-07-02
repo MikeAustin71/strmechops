@@ -113,6 +113,23 @@ type CharSearchResultsDto struct {
 	// useful in computing the next index to be searched
 	// in the Target String.
 
+	TargetStringNextSearchIndex int
+	// The starting point for the next search operation.
+	// If the entire Target String was included in the
+	// last search, this value is set to -1.
+	//
+	//  Example-1:
+	//  String = "Hello"
+	//  String Length = 5
+	//  Last Search Index = 4
+	//  TargetStringNextSearchIndex = -1
+	//
+	//  Example-2:
+	//  String = "Hello"
+	//  String Length = 5
+	//  Last Search Index = 2
+	//  TargetStringNextSearchIndex = 3
+
 	TargetStringDescription1 string
 	// First of two optional description strings
 	// describing the Target Search String in the context

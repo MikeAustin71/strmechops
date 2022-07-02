@@ -1514,11 +1514,8 @@ func (sMech *StrMech) ExtractNumberRunes(
 	decimalSeparatorSpec DecimalSeparatorSpec,
 	numParsingTerminators RuneArrayCollection,
 	errorPrefix interface{}) (
-	intRunes []rune,
-	fractionalRunes []rune,
-	numberSign int,
-	digitsFound int,
-	nextTargetSearchIndex int,
+	searchResults CharSearchResultsDto,
+	numStrKernel NumberStrKernel,
 	remainderNumStrRunes RuneArrayDto,
 	err error) {
 
@@ -1540,20 +1537,14 @@ func (sMech *StrMech) ExtractNumberRunes(
 
 	if err != nil {
 
-		return intRunes,
-			fractionalRunes,
-			numberSign,
-			digitsFound,
-			nextTargetSearchIndex,
+		return searchResults,
+			numStrKernel,
 			remainderNumStrRunes,
 			err
 	}
 
-	intRunes,
-		fractionalRunes,
-		numberSign,
-		digitsFound,
-		nextTargetSearchIndex,
+	searchResults,
+		numStrKernel,
 		remainderNumStrRunes,
 		err = strMechMolecule{}.ptr().extractNumRunes(
 		rawNumStrRunes,
@@ -1565,11 +1556,8 @@ func (sMech *StrMech) ExtractNumberRunes(
 		numParsingTerminators,
 		ePrefix)
 
-	return intRunes,
-		fractionalRunes,
-		numberSign,
-		digitsFound,
-		nextTargetSearchIndex,
+	return searchResults,
+		numStrKernel,
 		remainderNumStrRunes,
 		err
 }
