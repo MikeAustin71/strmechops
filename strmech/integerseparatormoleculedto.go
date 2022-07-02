@@ -49,7 +49,7 @@ type integerSeparatorDtoMolecule struct {
 //
 // The complexity inherent in the IntegerSeparatorDto type, used as
 // an input parameter, is necessary in order to provide support for
-// multi-national and multi-cultural integer separation algorithms.
+// multinational and multi-cultural integer separation algorithms.
 // For more information on integer grouping sequence, reference the
 // source documentation for type, IntegerSeparatorDto.
 //
@@ -274,7 +274,7 @@ func (nStrIntSepMolecule *integerSeparatorDtoMolecule) applyIntSeparators(
 			copy(outRunes[outIdx:], nStrIntSeparator.intSeparatorChars)
 			outIdx = outIdx - lenIntSeparatorChars
 
-			// Is this this the last integer grouping index?
+			// Is this the last integer grouping index?
 			if currGroupCntIdx+1 > lastGroupCntIdx {
 
 				if nStrIntSeparator.restartIntGroupingSequence == true {
