@@ -429,6 +429,58 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 // member variable values contained in the 'searchResultsDto'
 // instance of CharSearchResultsDto.
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  searchResultsDto           *CharSearchResultsDto
+//     - A pointer to an instance of CharSearchResultsDto.
+//       Formatted text output will be generated listing the member
+//       variable names and their corresponding values. The
+//       formatted text can then be used for text displays, file
+//       output or printing.
+//
+//       No data validation is performed on this instance of
+//       CharSearchResultsDto.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for input parameter
+//       'searchResultsDto' . This formatted text can them be used
+//       for text displays, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	searchResultsDto *CharSearchResultsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -530,7 +582,18 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	}
 
-	// Text Line 3 Date Time
+	// Title Line 3
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "Parameter Listing"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Text Line 4 Date Time
 	txtFmt = TextFormatterDto{}
 	txtFmt.FormatType = TxtFieldType.DateTime()
 	txtFmt.DateTime.LeftMarginStr = ""
