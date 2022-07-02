@@ -737,37 +737,41 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 	return err
 }
 
-//func (runeArrayCol *RuneArrayCollection) SearchCollection(
-//	targetInputParms CharSearchTargetInputParametersDto,
-//	errorPrefix interface{}) (
-//	CharSearchResultsDto,
-//	error) {
-//
-//	if runeArrayCol.lock == nil {
-//		runeArrayCol.lock = new(sync.Mutex)
-//	}
-//
-//	runeArrayCol.lock.Lock()
-//
-//	defer runeArrayCol.lock.Unlock()
-//
-//	var ePrefix *ePref.ErrPrefixDto
-//	var err error
-//
-//	errorSearchResults := CharSearchResultsDto{}.New()
-//
-//	ePrefix,
-//		err = ePref.ErrPrefixDto{}.NewIEmpty(
-//		errorPrefix,
-//		"RuneArrayCollection."+
-//			"SearchCollection()",
-//		"")
-//
-//	if err != nil {
-//
-//		return errorSearchResults, err
-//
-//	}
-//
-//
-//}
+func (runeArrayCol *RuneArrayCollection) SearchCollection(
+	targetInputParms CharSearchTargetInputParametersDto,
+	errorPrefix interface{}) (
+	CharSearchResultsDto,
+	error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	errorSearchResults := CharSearchResultsDto{}.New()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"SearchCollection()",
+		"")
+
+	if err != nil {
+
+		return errorSearchResults, err
+
+	}
+
+	err = targetInputParms.IsValidInstanceError(
+		ePrefix.XCpy(
+			"targetInputParms"))
+
+	return errorSearchResults, err
+}

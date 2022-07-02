@@ -38,10 +38,12 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	characterSearchLength int,
 	negativeNumSearchSpecsCol NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
+	numParsingTerminators RuneArrayCollection,
 	ePrefDto *ePref.ErrPrefixDto) (
 	intRunes []rune,
 	fractionalRunes []rune,
 	numberSign int,
+	digitsFound int,
 	nextTargetSearchIndex int,
 	remainderNumStrRunes RuneArrayDto,
 	err error) {
@@ -67,6 +69,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -88,6 +91,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -117,6 +121,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -134,6 +139,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -156,6 +162,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -175,6 +182,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -203,6 +211,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -224,6 +233,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		return intRunes,
 			fractionalRunes,
 			numberSign,
+			digitsFound,
 			nextTargetSearchIndex,
 			remainderNumStrRunes,
 			err
@@ -236,6 +246,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	targetInputParms := CharSearchTargetInputParametersDto{}.New()
 
+	targetInputParms.TargetInputParametersName = "extractNumRunes"
 	targetInputParms.TargetString = &targetSearchString
 	targetInputParms.TargetStringName = "targetSearchString"
 	targetInputParms.TargetStringLength = actualTargetStrLength
@@ -245,6 +256,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	var negNumSearchResults CharSearchResultsDto
 	var decimalSepSearchResults CharSearchResultsDto
+	var parsingTerminationResults CharSearchResultsDto
 
 	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
 
@@ -273,11 +285,32 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			continue
 		}
 
+		// Check for Parsing Terminators
+		if !numParsingTerminators.IsNOP() {
+
+			targetInputParms.TargetStringStartingSearchIndex =
+				i
+
+			targetInputParms.TargetStringSearchLength = -1
+
+			parsingTerminationResults,
+				err = numParsingTerminators.SearchCollection(
+				targetInputParms,
+				ePrefix.XCpy(
+					"numParsingTerminators"))
+
+			if parsingTerminationResults.FoundSearchTarget {
+				break
+			}
+		}
+
 		// Check for Negative Number Sign Symbol
 		if !foundNegativeSignSymbols {
 
 			targetInputParms.TargetStringStartingSearchIndex =
 				i
+
+			targetInputParms.TargetStringSearchLength = -1
 
 			negNumSearchResults,
 				err = negativeNumSearchSpecsCol.
@@ -310,6 +343,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				return intRunes,
 					fractionalRunes,
 					numberSign,
+					digitsFound,
 					nextTargetSearchIndex,
 					remainderNumStrRunes,
 					err
@@ -344,11 +378,23 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	if !foundNonZeroNumericDigits {
 		intRunes = make([]rune, 1)
 		intRunes[0] = '0'
+	} else {
+
+		digitsFound =
+			len(intRunes) + len(fractionalRunes)
+	}
+
+	if nextTargetSearchIndex <
+		len(targetSearchString.CharsArray) {
+
+		remainderNumStrRunes.CharsArray =
+			targetSearchString.CharsArray[nextTargetSearchIndex:]
 	}
 
 	return intRunes,
 		fractionalRunes,
 		numberSign,
+		digitsFound,
 		nextTargetSearchIndex,
 		remainderNumStrRunes,
 		err

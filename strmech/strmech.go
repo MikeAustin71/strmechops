@@ -1507,17 +1507,19 @@ func (sMech *StrMech) ExtractNumericDigits(
 // from this array as text characters.
 //
 func (sMech *StrMech) ExtractNumberRunes(
-	rawNumStrRunes []rune,
+	rawNumStrRunes RuneArrayDto,
 	startSearchIndex int,
 	characterSearchLength int,
 	negativeNumSearchSpecs NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
+	numParsingTerminators RuneArrayCollection,
 	errorPrefix interface{}) (
 	intRunes []rune,
 	fractionalRunes []rune,
 	numberSign int,
 	digitsFound int,
 	nextTargetSearchIndex int,
+	remainderNumStrRunes RuneArrayDto,
 	err error) {
 
 	if sMech.stringDataMutex == nil {
@@ -1543,6 +1545,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 			numberSign,
 			digitsFound,
 			nextTargetSearchIndex,
+			remainderNumStrRunes,
 			err
 	}
 
@@ -1551,6 +1554,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 		numberSign,
 		digitsFound,
 		nextTargetSearchIndex,
+		remainderNumStrRunes,
 		err = strMechMolecule{}.ptr().extractNumRunes(
 		rawNumStrRunes,
 		"numberStr",
@@ -1558,6 +1562,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 		characterSearchLength,
 		negativeNumSearchSpecs,
 		decimalSeparatorSpec,
+		numParsingTerminators,
 		ePrefix)
 
 	return intRunes,
@@ -1565,6 +1570,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 		numberSign,
 		digitsFound,
 		nextTargetSearchIndex,
+		remainderNumStrRunes,
 		err
 }
 
