@@ -562,60 +562,65 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 
 	charSearchResults.lock.Lock()
 
-	charSearchResults.FoundSearchTarget = false
-
-	charSearchResults.FoundSearchTargetOnPreviousSearch = false
-
-	charSearchResults.TargetStringLength = -1
-
-	charSearchResults.TargetStringStartingSearchIndex = -1
-
-	charSearchResults.TargetStringFirstFoundIndex = -1
-
-	charSearchResults.TargetStringLastFoundIndex = -1
-
-	charSearchResults.TargetStringLastSearchIndex = -1
-
-	charSearchResults.TargetStringDescription1 = ""
-
-	charSearchResults.TargetStringDescription2 = ""
-
-	charSearchResults.TestStringLength = -1
-
-	charSearchResults.TestStringStartingIndex = -1
-
-	charSearchResults.TestStringFirstFoundIndex = -1
-
-	charSearchResults.TestStringLastFoundIndex = -1
-
-	charSearchResults.TestStringDescription1 = ""
-
-	charSearchResults.TestStringDescription2 = ""
-
-	charSearchResults.CollectionTestObjIndex = -1
-
-	charSearchResults.NumValueType = NumValType.None()
-
-	charSearchResults.NumStrFormatType = NumStrFmtType.None()
-
-	charSearchResults.NumSymLocation = NumSymLocation.None()
-
-	charSearchResults.NumSymbolClass = NumSymClass.None()
-
-	charSearchResults.NumSignValue = NumSignVal.None()
-
-	charSearchResults.PrimaryNumSignPosition = NumSignSymPos.None()
-
-	charSearchResults.SecondaryNumSignPosition = NumSignSymPos.None()
-
-	charSearchResults.TextCharSearchType =
-		CharSearchType.None()
-
-	charSearchResults.FoundFirstNumericDigitInNumStr = false
+	charSearchResultsDtoAtom{}.ptr().empty(
+		charSearchResults)
 
 	charSearchResults.lock.Unlock()
 
 	charSearchResults.lock = nil
+}
+
+// Equal - Receives a pointer to another instance of
+// CharSearchResultsDto and proceeds to compare the member
+// variables to those of the current CharSearchResultsDto
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingSearchResults    *CharSearchResultsDto
+//     - A pointer to an incoming instance of
+//       CharSearchResultsDto. This method will compare all member
+//       variable data values in this instance against those
+//       contained in the current instance of CharSearchResultsDto.
+//       If the data values in both instances are found to be equal
+//       in all respects, this method will return a boolean value
+//       of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingSearchResults' are equal in all
+//       respects to those contained in the current instance of
+//       CharSearchResultsDto, this method will return a boolean
+//       value of 'true'. Otherwise a value of 'false' will be
+//       returned to the calling function.
+//
+func (charSearchResults *CharSearchResultsDto) Equal(
+	incomingSearchResults *CharSearchResultsDto) bool {
+
+	if charSearchResults.lock == nil {
+		charSearchResults.lock = new(sync.Mutex)
+	}
+
+	charSearchResults.lock.Lock()
+
+	defer charSearchResults.lock.Unlock()
+
+	return charSearchResultsDtoAtom{}.ptr().equal(
+		charSearchResults,
+		incomingSearchResults)
 }
 
 // New - Returns a new and uninitialized instance of
