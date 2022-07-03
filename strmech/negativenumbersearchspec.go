@@ -1941,7 +1941,6 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchStr(
 //       the beginning of the error message.
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
-	foundFirstNumericDigitInNumStr bool,
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
 	CharSearchResultsDto,
@@ -2002,9 +2001,6 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		return searchResults, err
 	}
 
-	targetInputParms.FoundFirstNumericDigitInNumStr =
-		foundFirstNumericDigitInNumStr
-
 	testInputParms := CharSearchTestInputParametersDto{}.New()
 
 	lenLeadingNegNumChars := len(negNumSearchSpec.leadingNegNumSignSymbols.CharsArray)
@@ -2044,7 +2040,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			return searchResults, err
 		}
 
-		if foundFirstNumericDigitInNumStr {
+		if targetInputParms.FoundFirstNumericDigitInNumStr {
 			return searchResults, err
 		}
 
@@ -2109,7 +2105,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			return searchResults, err
 		}
 
-		if !foundFirstNumericDigitInNumStr {
+		if !targetInputParms.FoundFirstNumericDigitInNumStr {
 
 			return searchResults, err
 		}
@@ -2141,7 +2137,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 	testInputParms.PrimaryNumSignPosition = NumSignSymPos.BeforeAndAfter()
 	testInputParms.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
-	if !foundFirstNumericDigitInNumStr {
+	if !targetInputParms.FoundFirstNumericDigitInNumStr {
 		// Must be 'BEFORE' NumStr
 		// Look for Leading Neg Num Symbols
 

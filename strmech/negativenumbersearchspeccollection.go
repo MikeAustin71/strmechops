@@ -1443,7 +1443,6 @@ func (negNumSignCol NegNumSearchSpecCollection) NewUS(
 // Symbol search operation on an entire Target Search String.
 //
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
-	foundFirstNumericDigitInNumStr bool,
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
 	CharSearchResultsDto,
@@ -1498,7 +1497,6 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 		searchResults,
 			err2 = negNumSignCol.negNumSearchSpecsCol[i].
 			SearchForNegNumSignSymbols(
-				foundFirstNumericDigitInNumStr,
 				targetInputParms,
 				nil)
 
