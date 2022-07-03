@@ -58,22 +58,26 @@ import (
 //
 type CharSearchResultsDto struct {
 	SearchResultsName string
-	// The Name, Label or descriptive Tag associated with the
-	// current instance of CharSearchResultsDto.
+	// Optional. The Name, Label or descriptive Tag associated with
+	// the current instance of CharSearchResultsDto.
+
+	SearchResultsFunctionChain string
+	// Optional. A listing of the functions which led to the
+	// creation of this instance of CharSearchResultsDto.
 
 	FoundSearchTarget bool
-	// Signals a successful search outcome. If set to
-	// 'true' the Test String character or characters were
-	// found in the Target Search String.
+	// Signals a successful search outcome. If set to 'true' the
+	// Test String character or characters were found in the Target
+	// Search String.
 
 	FoundSearchTargetOnPreviousSearch bool
 	// Signals that the Search Target was located in a previous
 	// search operation.
 
 	FoundFirstNumericDigitInNumStr bool
-	// When set to 'true' this signals that the search
-	// operation has already identified the first numeric
-	// digit in a string of text characters.
+	// When set to 'true' this signals that the search operation
+	// has identified the first numeric digit in a string of text
+	// characters.
 
 	TargetInputParametersName string
 	// The Name, Label or descriptive Tag associated with an

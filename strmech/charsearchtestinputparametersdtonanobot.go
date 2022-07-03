@@ -605,27 +605,6 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
-		labelParams,
-		" ",
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		-1,
-		TxtJustify.Left(),
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"labelParams #1"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	labelParams = nil
-
 	// Build Formatted Test String
 
 	if testInputParms.TestString == nil {
@@ -635,18 +614,6 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 		labelParam.ParamValue =
 			"Not Set. TestString is a nil pointer"
-
-		labelParams = append(labelParams, labelParam)
-
-	} else if testInputParms.TestString.
-		GetRuneArrayLength() == 0 {
-
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "TestString"
-
-		labelParam.ParamValue =
-			"TestString is empty - zero characters"
 
 		labelParams = append(labelParams, labelParam)
 
@@ -662,6 +629,10 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 			testInputParms.TestString.
 				GetCharacterString()
 
+		if len(labelParam.ParamValue) == 0 {
+			labelParam.ParamValue = "TestString is Empty. Length==Zero."
+		}
+
 		labelParams = append(labelParams, labelParam)
 
 	} else {
@@ -669,6 +640,29 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		//  testInputParms.TestString.
 		//  	GetRuneArrayLength() >
 		//  	(maxLineLen - maxLabelFieldLen -3)
+
+		// Write existing Parameter Label-Value Pairs
+		// to string (strBuilder)
+		err = txtBuilder.BuildLabelsValues(
+			&strBuilder,
+			labelParams,
+			" ",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			-1,
+			TxtJustify.Left(),
+			" ",
+			"\n",
+			ePrefix.XCpy(
+				"labelParams #1"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		labelParams = nil
 
 		err = txtBuilder.FieldsSingleLabel(
 			&strBuilder,

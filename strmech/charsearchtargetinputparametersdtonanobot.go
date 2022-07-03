@@ -580,27 +580,6 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParams = append(labelParams, labelParam)
 
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
-		labelParams,
-		" ",
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		-1,
-		TxtJustify.Left(),
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"labelParams #1"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	labelParams = nil
-
 	// Build Formatted Target String
 
 	if targetInputParms.TargetString == nil {
@@ -610,18 +589,6 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 		labelParam.ParamValue =
 			"Not Set. TargetString is a nil pointer"
-
-		labelParams = append(labelParams, labelParam)
-
-	} else if targetInputParms.TargetString.
-		GetRuneArrayLength() == 0 {
-
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "TargetString"
-
-		labelParam.ParamValue =
-			"TargetString is empty - zero characters"
 
 		labelParams = append(labelParams, labelParam)
 
@@ -637,6 +604,10 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 			targetInputParms.TargetString.
 				GetCharacterString()
 
+		if len(labelParam.ParamValue) == 0 {
+			labelParam.ParamValue = "TargetString is Empty. Length==Zero."
+		}
+
 		labelParams = append(labelParams, labelParam)
 
 	} else {
@@ -644,6 +615,29 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		//  targetInputParms.TargetString.
 		//  	GetRuneArrayLength() >
 		//  	(maxLineLen - maxLabelFieldLen -3)
+
+		// Write existing Parameter Label-Value Pairs
+		// to string (strBuilder)
+		err = txtBuilder.BuildLabelsValues(
+			&strBuilder,
+			labelParams,
+			" ",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			ePrefix.XCpy(
+				"labelParams #1"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		labelParams = nil
 
 		err = txtBuilder.FieldsSingleLabel(
 			&strBuilder,
@@ -681,7 +675,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 			&strBuilder,
 			1,
 			ePrefix.XCpy(
-				"Blank Line After ReplacementString"))
+				"Blank Line After TargetString"))
 
 		if err != nil {
 
@@ -816,6 +810,8 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParams = append(labelParams, labelParam)
 
+	// Write existing Parameter Label-Value Pairs
+	// to string (strBuilder)
 	err = txtBuilder.BuildLabelsValues(
 		&strBuilder,
 		labelParams,
@@ -825,7 +821,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		colonSpace,
 		-1,
 		TxtJustify.Left(),
-		" ",
+		"",
 		"\n",
 		ePrefix.XCpy(
 			"labelParams #2"))

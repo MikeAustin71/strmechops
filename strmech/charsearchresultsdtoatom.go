@@ -58,6 +58,8 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 
 	searchResultsDto.SearchResultsName = ""
 
+	searchResultsDto.SearchResultsFunctionChain = ""
+
 	searchResultsDto.FoundSearchTarget = false
 
 	searchResultsDto.FoundSearchTargetOnPreviousSearch = false
@@ -183,6 +185,12 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 
 	if searchResultsDto1.SearchResultsName !=
 		searchResultsDto2.SearchResultsName {
+
+		return false
+	}
+
+	if searchResultsDto1.SearchResultsFunctionChain !=
+		searchResultsDto2.SearchResultsFunctionChain {
 
 		return false
 	}

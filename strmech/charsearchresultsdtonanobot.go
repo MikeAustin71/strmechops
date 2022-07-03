@@ -138,6 +138,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.SearchResultsName =
 		incomingSearchResultsDto.SearchResultsName
 
+	targetSearchResultsDto.SearchResultsFunctionChain =
+		incomingSearchResultsDto.SearchResultsFunctionChain
+
 	targetSearchResultsDto.FoundSearchTarget =
 		incomingSearchResultsDto.FoundSearchTarget
 
@@ -340,6 +343,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 
 	copySearchResultsDto.SearchResultsName =
 		searchResultsDto.SearchResultsName
+
+	copySearchResultsDto.SearchResultsFunctionChain =
+		searchResultsDto.SearchResultsFunctionChain
 
 	copySearchResultsDto.FoundSearchTarget =
 		searchResultsDto.FoundSearchTarget
@@ -642,7 +648,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	fmtrs = nil
 
-	// Label Parameter Pairs
+	// Configure Parameter Label-Value Pairs
 
 	colonSpace := ": "
 
@@ -660,6 +666,98 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	}
 
 	labelParams = append(labelParams, labelParam)
+
+	// Build SearchResultsFunctionChain
+
+	if len(searchResultsDto.SearchResultsFunctionChain) <=
+		maxFieldLen-3 {
+
+		labelParam := TextLabelValueStrings{}
+
+		labelParam.ParamLabel = "SearchResultsFunctionChain"
+
+		labelParam.ParamValue =
+			searchResultsDto.SearchResultsFunctionChain
+
+		if len(labelParam.ParamValue) == 0 {
+			labelParam.ParamValue = "SearchResultsFunctionChain is EMPTY!"
+		}
+
+		labelParams = append(labelParams, labelParam)
+
+	} else {
+		// MUST BE
+		// len(searchResultsDto.SearchResultsFunctionChain) >
+		//	maxFieldLen - 3
+
+		// Write existing Parameter Label-Value Pairs
+		// to string (strBuilder)
+		err = txtBuilder.BuildLabelsValues(
+			&strBuilder,
+			labelParams,
+			" ",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			ePrefix.XCpy(
+				"labelParams #1"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		labelParams = nil
+
+		err = txtBuilder.FieldsSingleLabel(
+			&strBuilder,
+			" ",
+			"SearchResultsFunctionChain",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			ePrefix.XCpy(
+				"SearchResultsFunctionChain Label"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		err = txtBuilder.FieldsSingleLabel(
+			&strBuilder,
+			"  ",
+			searchResultsDto.SearchResultsFunctionChain,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			ePrefix.XCpy(
+				"SearchResultsFunctionChain Param Value"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		err = txtBuilder.LineBlank(
+			&strBuilder,
+			1,
+			ePrefix.XCpy(
+				"Blank Line After "+
+					"SearchResultsFunctionChain"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+	}
 
 	// Build FoundSearchTarget Parameter
 
@@ -862,27 +960,6 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	labelParams = append(labelParams, labelParam)
 
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
-		labelParams,
-		" ",
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		-1,
-		TxtJustify.Left(),
-		" ",
-		"\n",
-		ePrefix.XCpy(
-			"labelParams #1"))
-
-	if err != nil {
-
-		return strBuilder, err
-	}
-
-	labelParams = nil
-
 	if searchResultsDto.ReplacementString == nil {
 		// Build ReplacementString nil message
 		labelParam = TextLabelValueStrings{}
@@ -891,18 +968,6 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 		labelParam.ParamValue =
 			"Not Set. ReplacementString is a nil pointer"
-
-		labelParams = append(labelParams, labelParam)
-
-	} else if searchResultsDto.ReplacementString.
-		GetRuneArrayLength() == 0 {
-
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "ReplacementString"
-
-		labelParam.ParamValue =
-			"ReplacementString is empty - zero characters"
 
 		labelParams = append(labelParams, labelParam)
 
@@ -918,6 +983,11 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 			searchResultsDto.ReplacementString.
 				GetCharacterString()
 
+		if len(labelParam.ParamValue) == 0 {
+			labelParam.ParamValue =
+				"ReplacementString is Empty. Length==Zero."
+		}
+
 		labelParams = append(labelParams, labelParam)
 
 	} else {
@@ -925,6 +995,29 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 		//  searchResultsDto.ReplacementString.
 		//  	GetRuneArrayLength() >
 		//  	(maxLineLen - maxLabelFieldLen -3)
+
+		// Write existing Parameter Label-Value Pairs
+		// to string (strBuilder)
+		err = txtBuilder.BuildLabelsValues(
+			&strBuilder,
+			labelParams,
+			" ",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			-1,
+			TxtJustify.Left(),
+			" ",
+			"\n",
+			ePrefix.XCpy(
+				"labelParams #1"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		labelParams = nil
 
 		err = txtBuilder.FieldsSingleLabel(
 			&strBuilder,
@@ -1099,6 +1192,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	labelParams = append(labelParams, labelParam)
 
+	// Write existing Parameter Label-Value Pairs
+	// to string (strBuilder)
 	err = txtBuilder.BuildLabelsValues(
 		&strBuilder,
 		labelParams,
