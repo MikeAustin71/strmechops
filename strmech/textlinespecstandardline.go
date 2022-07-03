@@ -2379,8 +2379,8 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 //       contained in this instance.
 //
 //       All data values in this TextLineSpecStandardLine instance
-//       will be copied to the current TextLineSpecStandardLine
-//       instance ('stdLine').
+//       ('incomingStdLine') will be copied to the current
+//       TextLineSpecStandardLine instance ('stdLine').
 //
 //       If 'incomingStdLine' contains invalid member variable data
 //       values, this method will return an error.
