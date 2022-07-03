@@ -1602,6 +1602,57 @@ func (numStrKernel *NumberStrKernel) GetNumberSignInt(
 	return numStrKernel.numberSign.XArithmeticValue(), err
 }
 
+// IsNonZeroValue - Returns 'true' if the value of the current
+// NumberStrKernel instance is non-zero.
+//
+// This means that the numeric value of the NumberStrKernel
+// instance is less than or greater than zero (0).
+//
+func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	lenArray := numStrKernel.
+		integerDigits.
+		GetRuneArrayLength()
+
+	for i := 0; i < lenArray; i++ {
+
+		if numStrKernel.integerDigits.CharsArray[i] > '0' &&
+			numStrKernel.integerDigits.CharsArray[i] <= '9' {
+
+			numStrKernel.isNonZeroValue = true
+
+			return true
+		}
+	}
+
+	lenArray = numStrKernel.
+		fractionalDigits.
+		GetRuneArrayLength()
+
+	for i := 0; i < lenArray; i++ {
+
+		if numStrKernel.fractionalDigits.CharsArray[i] > '0' &&
+			numStrKernel.fractionalDigits.CharsArray[i] <= '9' {
+
+			numStrKernel.isNonZeroValue = true
+
+			return true
+		}
+	}
+
+	numStrKernel.isNonZeroValue = false
+
+	return false
+}
+
 // SetNumberSign - Sets the Number Sign for the numeric value
 // represented by the current instance of NumberStrKernel.
 //

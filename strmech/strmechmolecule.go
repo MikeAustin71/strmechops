@@ -226,6 +226,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		targetInputParms)
 
 	searchResults.FoundFirstNumericDigitInNumStr = false
+	searchResults.SearchResultsName = "Extract Number Runes Results"
+
 	foundDecimalSeparators := false
 	foundNegativeSignSymbols := false
 
@@ -233,14 +235,15 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	var decimalSepSearchResults CharSearchResultsDto
 	var parsingTerminationResults CharSearchResultsDto
 
-	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
+	searchResults.TargetStringLastSearchIndex = 0
 
-		searchResults.TargetStringLastSearchIndex = i
+	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
 
 		if targetSearchString.CharsArray[i] >= '0' &&
 			targetSearchString.CharsArray[i] <= '9' {
 
 			searchResults.FoundFirstNumericDigitInNumStr = true
+
 			if !searchResults.FoundSearchTarget {
 				searchResults.FoundSearchTarget = true
 				searchResults.
@@ -280,6 +283,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				}
 			}
 
+			searchResults.TargetStringLastSearchIndex = i
+
 			continue
 		}
 
@@ -298,6 +303,11 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			if parsingTerminationResults.FoundSearchTarget {
 
+				i = parsingTerminationResults.
+					TargetStringLastSearchIndex
+
+				searchResults.TargetStringLastSearchIndex = i
+
 				if i+1 < actualTargetStrLength {
 
 					searchResults.
@@ -306,7 +316,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				} else {
 
 					searchResults.
-						TargetStringNextSearchIndex = i + 1
+						TargetStringNextSearchIndex = -1
 
 				}
 
@@ -333,8 +343,12 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				negNumSearchResults.FoundSearchTarget
 
 			if foundNegativeSignSymbols {
+
 				i =
 					negNumSearchResults.TargetStringLastSearchIndex
+
+				searchResults.TargetStringLastSearchIndex = i
+
 				continue
 			}
 		}
@@ -363,9 +377,13 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 				i = decimalSepSearchResults.TargetStringLastSearchIndex
 
+				searchResults.TargetStringLastSearchIndex = i
+
 				continue
 			}
 		}
+
+		searchResults.TargetStringLastSearchIndex = i
 	}
 
 	searchResults.TargetStringNextSearchIndex =
@@ -378,15 +396,16 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	}
 
 computeExitStats:
-	if numStrKernel.GetNumberOfNumericDigits() == 0 {
+	if !numStrKernel.IsNonZeroValue() {
 
 		numStrKernel.numberSign = NumSignVal.Zero()
 
 	} else if foundNegativeSignSymbols {
-
+		// MUST BE numStrKernel.IsNonZeroValue() == true
 		numStrKernel.numberSign = NumSignVal.Negative()
 
 	} else {
+		// MUST BE foundNonZeroNumericDigits == true
 		// Must be a positive number
 		numStrKernel.numberSign = NumSignVal.Positive()
 
