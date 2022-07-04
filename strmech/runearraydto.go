@@ -1535,93 +1535,92 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //  targetInputParms           CharSearchTargetInputParametersDto
 //     - This Dto, or Data Transfer Object, contains the input
 //       parameters and specifications associated with the Target
-//       Search String which will be used in completing the Single
-//       Target Character Search operation.
+//       Search String which will be used in completing the Linear
+//       Target Starting Index Search operation.
 //
 //       The CharSearchTargetInputParametersDto structure consists
 //       of the following member variable data elements.
 //
 //       type CharSearchTargetInputParametersDto struct {
 //
-//          TargetInputParametersName           string
-//            - The Name, Label or descriptive Tag associated with this
-//              instance of CharSearchTargetInputParametersDto. If empty,
-//              this string will be defaulted to "TargetInputParameters"
+//        TargetInputParametersName           string
+//         - The Name, Label or descriptive Tag associated with this
+//           instance of CharSearchTargetInputParametersDto. If empty,
+//           this string will be defaulted to "TargetInputParameters"
 //
-//       	TargetString                        *RuneArrayDto
-//            - A pointer to the RuneArrayDto containing the Target
-//              Search String text characters used in the search
-//              algorithm. Target Characters are compared against
-//              Test Characters to determine if a 'Match' condition
-//              exists.
+//        TargetString                        *RuneArrayDto
+//         - A pointer to the RuneArrayDto containing the Target
+//           Search String text characters used in the search
+//           algorithm. Target Characters are compared against
+//           Test Characters to determine if a 'Match' condition
+//           exists.
 //
-//       	TargetStringName                    string
-//            - The label or name of the 'TargetString' parameter.
-//              Used in error and informational messages.
+//        TargetStringName                    string
+//         - The label or name of the 'TargetString' parameter.
+//           Used in error and informational messages.
 //
-//       	TargetStringLength                  int
-//            - Actual number of text characters in the entire
-//              Target Search String ('TargetString').
+//        TargetStringLength                  int
+//         - Actual number of text characters in the entire
+//           Target Search String ('TargetString').
 //
-//       	TargetStringLengthName              string
-//            - The label or name of the 'TargetStringLength' parameter.
-//              Used in error and informational messages.
+//        TargetStringLengthName              string
+//         - The label or name of the 'TargetStringLength' parameter.
+//           Used in error and informational messages.
 //
-//       	TargetStringStartingSearchIndex     int
-//            - The index in 'TargetString' at which the search
-//              operation begins.
+//        TargetStringStartingSearchIndex     int
+//         - The index in 'TargetString' at which the search
+//           operation begins.
 //
-//       	TargetStringStartingSearchIndexName string
-//            - The label or name of the
-//              TargetStringStartingSearchIndex parameter.
-//              Used in error and informational messages.
+//        TargetStringStartingSearchIndexName string
+//         - The label or name of the
+//           TargetStringStartingSearchIndex parameter.
+//           Used in error and informational messages.
 //
-//       	TargetStringSearchLength            int
-//            - The actual number of characters within the Target
-//              Search String that are included in the search
-//              operation. This value may be less than the actual
-//              length of the Target Search String.
+//        TargetStringSearchLength            int
+//         - The actual number of characters within the Target
+//           Search String that are included in the search
+//           operation. This value may be less than the actual
+//           length of the Target Search String.
 //
-//       	TargetStringSearchLengthName        string
-//            - The label or name of the TargetStringSearchLength
-//              parameter. Used in error and informational
-//              messages.
+//        TargetStringSearchLengthName        string
+//         - The label or name of the TargetStringSearchLength
+//           parameter. Used in error and informational
+//           messages.
 //
-//       	TargetStringAdjustedSearchLength    int
-//            - The adjusted or corrected Target String Search
-//              Length. This value is guaranteed to be equal to or
-//              less than the actual Target String Length.
+//        TargetStringAdjustedSearchLength    int
+//         - The adjusted or corrected Target String Search
+//           Length. This value is guaranteed to be equal to or
+//           less than the actual Target String Length.
 //
-//       	TargetStringDescription1            string
-//            - First of two optional description strings
-//              describing the Target Search String in the context
-//              of the current search operation.
+//        TargetStringDescription1            string
+//         - First of two optional description strings
+//           describing the Target Search String in the context
+//           of the current search operation.
 //
-//       	TargetStringDescription2            string
-//            - Second of two optional description strings
-//              describing the Target Search String in the context
-//              of the current search operation.
+//        TargetStringDescription2            string
+//         - Second of two optional description strings
+//           describing the Target Search String in the context
+//           of the current search operation.
 //
-//       	FoundFirstNumericDigitInNumStr      bool
-//            - When set to 'true' this signals that the first
-//              numeric digit has been identified in the text
-//              characters specified by 'TargetString'
+//        FoundFirstNumericDigitInNumStr      bool
+//         - When set to 'true' this signals that the first
+//           numeric digit has been identified in the text
+//           characters specified by 'TargetString'
 //
 //
-//       	TextCharSearchType                  CharacterSearchType
-//            - Optional. An enumeration value signaling the type
-//              of text character search algorithm used to conduct
-//              this search operation. When set to a valid value,
-//              this specification will override the search
-//              specification contained in the Test Input
-//              Parameters Data Transfer Object.
+//        TextCharSearchType                  CharacterSearchType
+//         - Optional. An enumeration value signaling the type
+//           of text character search algorithm used to conduct
+//           this search operation. When set to a valid value,
+//           this specification will override the search
+//           specification contained in the Test Input
+//           Parameters Data Transfer Object.
 //
-//              Valid CharSearch Type values are listed as follows:
-//       	     TextCharSearchType.None() - Invalid Value
-//       	     TextCharSearchType.LinearTargetStartingIndex() - Default
-//       	     TextCharSearchType.SingleTargetChar()
-//       	     TextCharSearchType.LinearEndOfString()
-//
+//          Valid CharSearch Type values are listed as follows:
+//          TextCharSearchType.None() - Invalid Value
+//          TextCharSearchType.LinearTargetStartingIndex() - Default
+//          TextCharSearchType.SingleTargetChar()
+//          TextCharSearchType.LinearEndOfString()
 //       }
 //
 //
@@ -1678,236 +1677,256 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 // Return Values
 //
 //  CharSearchResultsDto
-//     - If this method completes successfully, a populated
-//       instance of this parameter will be returned to the calling
-//       function. This Dto or Data Transfer Object, contains the
-//       results of the text character search operation performed
-//       by this method.
+//     - If this method completes successfully, a fully populated
+//       instance of CharSearchResultsDto will be returned to the
+//       calling function.
 //
-//       The CharSearchResultsDto structure consists
+//       This structure contains information and data elements
+//       detailing the results of the text character search
+//       operation performed by this method.
+//
+//       The CharSearchTestInputParametersDto structure consists
 //       of the following member variable data elements.
 //
 //       type CharSearchResultsDto struct {
 //
-//       	FoundSearchTarget                   bool
-//            - Signals a successful search outcome. If set to
-//              'true' the Test String character or characters were
-//              found in the Target Search String.
+//        SearchResultsName string
+//         - Optional. The Name, Label or descriptive Tag associated with
+//           the current instance of CharSearchResultsDto.
 //
-//       	FoundSearchTargetOnPreviousSearch   bool
-//            - The Search Target was located in a previous search
-//              operation.
+//        SearchResultsFunctionChain string
+//         - Optional. A listing of the functions which led to the
+//           creation of this instance of CharSearchResultsDto.
 //
-//          TargetInputParametersName string
-//            - The Name, Label or descriptive Tag associated with an
-//              instance of CharSearchTargetInputParametersDto.
+//        FoundSearchTarget bool
+//         - Signals a successful search outcome. If set to 'true' the
+//           Test String character or characters were found in the Target
+//           Search String.
 //
+//        FoundSearchTargetOnPreviousSearch bool
+//         - Signals that the Search Target was located in a previous
+//           search operation.
 //
-//       	TargetStringLength                  int
-//            - Actual number of text characters in the entire
-//              Target Search String ('TargetString').
+//        FoundFirstNumericDigitInNumStr bool
+//         - When set to 'true' this signals that the search operation
+//           has identified the first numeric digit in a string of text
+//           characters.
 //
-//       	TargetStringSearchLength            int
-//            - The actual number of characters within the Target
-//              Search String that are included in the search
-//              operation. This value may be less than the actual
-//              length of the Target Search String.
+//        TargetInputParametersName string
+//         - The Name, Label or descriptive Tag associated with an
+//           instance of CharSearchTargetInputParametersDto.
 //
-//       	TargetStringStartingSearchIndex     int
-//            - The index in 'TargetString' at which the search
-//              operation begins.
+//        TargetStringLength int
+//         - Actual number of text characters in the entire
+//           Target Search String ('TargetString').
 //
-//       	TargetStringFirstFoundIndex         int
-//            - The index of the first character position in the
-//              Target Search String occupied by the first
-//              character in the Test String.
+//        TargetStringSearchLength int
+//         - The actual number of characters within the Target
+//           Search String that are included in the search
+//           operation. This value may be less than the actual
+//           length of the Target Search String.
 //
-//       	TargetStringLastFoundIndex          int
-//            - The last character position in the Target Search
-//              String occupied by the last character in the Test
-//       	    String.
+//        TargetStringAdjustedSearchLength int
+//         - The adjusted or corrected Target String Search
+//           Length. This value is guaranteed to be equal to or
+//           less than the actual Target String Length.
 //
-//              If the character search operation is successful, it
-//              means that all the characters configured in the
-//              Test Search String were found in the Target Search
-//              String. In that case, 'TargetStringLastFoundIndex'
-//              will be set to the index in Target Search String
-//              occupied by the last character in the Test String.
+//        TargetStringStartingSearchIndex int
+//         - The index in 'TargetString' at which the search
+//           operation begins.
 //
-//              If the search operation is unsuccessful,
-//              'TargetStringLastFoundIndex' is set to the value of
-//              'TargetStringStartingSearchIndex'.
+//        TargetStringFirstFoundIndex int
+//         - The index of the first character position in the
+//           Target Search String occupied by the first
+//           character in the Test String.
 //
-//               Example-1:
-//                 Target Search String: "Xray-4 is the call sign"
-//                 Starting Search Index: 0
-//                 Test String: "Xray"
-//                 FoundSearchTarget = 'true'
-//                 TargetStringLastFoundIndex = 3 (The 'y' in "Xray")
+//        TargetStringLastFoundIndex int
+//         - The last character position in the Target Search
+//           String occupied by the last character in the Test
+//           String.
 //
-//               Example-2:
-//                 Target Search String: "Coyote-4 is the call sign"
-//                 Starting Search Index: 0
-//                 Current RuneArrayDto Instance: "Xray"
-//                 foundRuneArrayDtoChars = 'false'
-//                 TargetStringLastFoundIndex = 0 (Starting Search Index)
+//        TargetStringLastSearchIndex int
+//         - The index in Target Search String occupied by the
+//           last Target character searched. If the Search
+//           Target was found, this value is equal to the
+//           'TargetStringLastFoundIndex'. If the Search Target
+//           was NOT found this value is equal to the
+//           'TargetStringStartingSearchIndex'. This value is
+//           useful in computing the next index to be searched
+//           in the Target String.
 //
-//       	TargetStringLastSearchIndex int
-//      	  - The index in Target Search String occupied by the
-//        	    last Target character searched. If the Search
-//       	    Target was found, this value is equal to the
-//      	    'TargetStringLastFoundIndex'. If the Search Target
-//     	        was NOT found this value is equal to the
-//    	        'TargetStringStartingSearchIndex'. This value is
-//   	        useful in computing the next index to be searched
-//  	        in the Target String.
+//        TargetStringNextSearchIndex int
+//         - The starting point for the next search operation.
+//           If the entire Target String was included in the
+//           last search, this value is set to -1.
 //
-//       	TargetStringDescription1            string
-//            - First of two optional description strings
-//              describing the Target Search String in the context
-//              of the current search operation.
+//            Example-1:
+//            String = "Hello"
+//            String Length = 5
+//            Last Search Index = 4
+//            TargetStringNextSearchIndex = -1
 //
-//       	TargetStringDescription2            string
-//            - Second of two optional description strings
-//              describing the Target Search String in the context
-//              of the current search operation.
+//            Example-2:
+//            String = "Hello"
+//            String Length = 5
+//            Last Search Index = 2
+//            TargetStringNextSearchIndex = 3
 //
-//          TestInputParametersName string
-//            - The Name, Label or descriptive Tag associated with an
-//              instance of CharSearchTestInputParametersDto.
+//        TargetStringDescription1 string
+//         - First of two optional description strings
+//           describing the Target Search String in the context
+//           of the current search operation.
 //
-//       	TestStringLength                    int
-//            - Actual number of text characters in the entire Test
-//              String ('TestString').
+//        TargetStringDescription2 string
+//         - Second of two optional description strings
+//           describing the Target Search String in the context
+//           of the current search operation.
 //
-//       	TestStringStartingIndex             int
-//            - The starting index in the Test String where the
-//              search operation will begin.
+//        TestInputParametersName string
+//         - The Name, Label or descriptive Tag associated with an
+//           instance of CharSearchTestInputParametersDto.
 //
-//       	TestStringFirstFoundIndex           int
-//      	  - The index number in Test String of the first test
-//              character to be located in the Target Search String.
+//        TestStringLength int
+//         - Actual number of text characters in the entire Test
+//           String ('TestString').
 //
-//       	TestStringLastFoundIndex            int
-//            - The index number in the Test String occupied by the
-//              last Test Character to be located in the Target
-//              String.
+//        TestStringStartingIndex int
+//         - The starting index in the Test String where the
+//           search operation will begin.
 //
-//       	TestStringDescription1              string
-//            - First of two optional description strings
-//              describing the Test String in the context of the
-//              current search operation.
+//        TestStringFirstFoundIndex int
+//         - The index number in Test String of the first test
+//           character to be located in the Target Search String.
 //
-//       	TestStringDescription2              string
-//            - Second of two optional description strings
-//              describing the Test String in the context of the
-//              current search operation.
+//        TestStringLastFoundIndex int
+//         - The index number in the Test String occupied by the
+//           last Test Character to be located in the Target
+//           String.
 //
-//       	CollectionTestObjIndex              int
-//            - If the Test String object resides in a collection
-//              of Test String objects, this parameter will record
-//              the array index of the current Test String object
-//              in the collection.
+//        TestStringDescription1 string
+//         - First of two optional description strings
+//           describing the Test String in the context of the
+//           current search operation.
 //
-//       	NumValueType                        NumericValueType
-//            - Optional. This enumeration value specifies the type
-//              of numeric value for this Test Parameter as either
-//              an integer or floating point value.
+//        TestStringDescription2 string
+//         - Second of two optional description strings
+//           describing the Test String in the context of the
+//           current search operation.
 //
-//              Possible values are listed as follows:
-//       	     NumValType.None()
-//       	     NumValType.FloatingPoint()
-//       	     NumValType.Integer()
+//        CollectionTestObjIndex int
+//         - If the Test String object resides in a collection
+//           of Test String objects, this parameter will record
+//           the array index of the current Test String object
+//           in the collection.
 //
-//       	NumStrFormatType                    NumStrFormatTypeCode
-//            - Optional. This enumeration value specifies the
-//              Output Format Type for a number.
+//        ReplacementString *RuneArrayDto
+//         - A pointer to the Rune Array Data Transfer Object
+//           containing the Replacement Characters to be
+//           substituted for existing characters in a Target
+//           String.
 //
-//              Possible values are listed as follows:
-//       	     NumStrFmtType.None()
-//       	     NumStrFmtType.AbsoluteValue()
-//       	     NumStrFmtType.Binary()
-//       	     NumStrFmtType.CountryCulture()
-//       	     NumStrFmtType.Currency()
-//       	     NumStrFmtType.Binary()
-//       	     NumStrFmtType.Hexadecimal()
-//       	     NumStrFmtType.Octal()
-//       	     NumStrFmtType.ScientificNotation()
+//        RemainderString *RuneArrayDto
+//         - A pointer to the Rune Array Data Transfer Object
+//           containing the remaining characters in a Target
+//           String which were NOT included in the search
+//           operation and which remain to be searched in future
+//           search operations. This string is also used in 'cut'
+//           operations where Target String is divided based on
+//           string delimiters.
 //
-//       	NumSymLocation                      NumericSymbolLocation
-//            - Optional. This enumeration value specifies the
-//              relative location of a numeric symbol.
+//        NumValueType NumericValueType
+//         - Optional. This enumeration value specifies the type
+//           of numeric value for this Test Parameter as either
+//           an integer or floating point value.
 //
-//              Possible values are listed as follows:
-//       	     NumSymLocation.None()
-//       	     NumSymLocation.Before()
-//       	     NumSymLocation.Interior()
-//       	     NumSymLocation.After()
+//           Possible values are listed as follows:
+//            NumValType.None()
+//            NumValType.FloatingPoint()
+//            NumValType.Integer()
 //
-//       	NumSymbolClass                      NumericSymbolClass
-//            - Optional. This enumeration value specifies the
-//              Number Symbol Classification for a text character.
+//        NumStrFormatType NumStrFormatTypeCode
+//         - Optional. This enumeration value specifies the
+//           Output Format Type for a number.
 //
-//              Possible values are listed as follows:
-//       	     NumSymClass.None()
-//       	     NumSymClass.NumberSign()
-//       	     NumSymClass.CurrencySign()
-//       	     NumSymClass.IntegerSeparator()
-//       	     NumSymClass.DecimalSeparator()
+//           Possible values are listed as follows:
+//            NumStrFmtType.None()
+//            NumStrFmtType.AbsoluteValue()
+//            NumStrFmtType.Binary()
+//            NumStrFmtType.CountryCulture()
+//            NumStrFmtType.Currency()
+//            NumStrFmtType.Binary()
+//            NumStrFmtType.Hexadecimal()
+//            NumStrFmtType.Octal()
+//            NumStrFmtType.ScientificNotation()
 //
-//       	NumSignValue                        NumericSignValueType
-//            - Optional. This enumeration value specifies the
-//              number sign value.
+//        NumSymLocation NumericSymbolLocation
+//         - Optional. This enumeration value specifies the
+//           relative location of a numeric symbol.
 //
-//              Possible values are listed as follows:
-//       	     NumSignVal.None()
-//       	     NumSignVal.Negative()
-//       	     NumSignVal.Zero()
-//       	     NumSignVal.Positive()
+//           Possible values are listed as follows:
+//            NumSymLocation.None()
+//            NumSymLocation.Before()
+//            NumSymLocation.Interior()
+//            NumSymLocation.After()
 //
-//       	PrimaryNumSignPosition              NumSignSymbolPosition
-//            - Optional This enumeration value specifies the
-//              relative position of positive and negative number
-//              sign symbols in a number string. This is the
-//              Primary Type Code for Number Signs. Cases involving
-//              both 'Leading' and 'Trailing' symbols also make use
-//              of the 'SecondaryNumSignPosition'.
+//        NumSymbolClass NumericSymbolClass
+//         - Optional. This enumeration value specifies the
+//           Number Symbol Classification for a text character.
 //
-//              Possible values are listed as follows:
-//       	     NumSignSymPos.None()
-//       	     NumSignSymPos.Before()
-//       	     NumSignSymPos.After()
-//       	     NumSignSymPos.BeforeAndAfter()
+//           Possible values are listed as follows:
+//            NumSymClass.None()
+//            NumSymClass.NumberSign()
+//            NumSymClass.CurrencySign()
+//            NumSymClass.IntegerSeparator()
+//            NumSymClass.DecimalSeparator()
 //
-//       	SecondaryNumSignPosition            NumSignSymbolPosition
-//            - Optional. This enumeration value specifies the
-//              relative position of positive and negative number
-//              sign symbols in a number string. This value is used
-//              in searches involving number signs which occur both
-//              before and after the numeric value.
+//        NumSignValue NumericSignValueType
+//         - Optional. This enumeration value specifies the
+//           number sign value.
 //
-//              Possible values are listed as follows:
-//       	     NumSignSymPos.None()
-//       	     NumSignSymPos.Before()
-//       	     NumSignSymPos.After()
-//       	     NumSignSymPos.BeforeAndAfter()
+//           Possible values are listed as follows:
+//            NumSignVal.None()
+//            NumSignVal.Negative()
+//            NumSignVal.Zero()
+//            NumSignVal.Positive()
 //
-//       	TextCharSearchType                  CharacterSearchType
-//            - Required. An enumeration value signaling the type
-//              of text character search algorithm used to conduct
-//              this search operation.
+//        PrimaryNumSignPosition NumSignSymbolPosition
+//         - Optional This enumeration value specifies the
+//           relative position of positive and negative number
+//           sign symbols in a number string. This is the
+//           Primary Type Code for Number Signs. Cases involving
+//           both 'Leading' and 'Trailing' symbols also make use
+//           of the 'SecondaryNumSignPosition'.
 //
-//              Possible values are listed as follows:
-//       	     TextCharSearchType.None() - Invalid value
-//       	     TextCharSearchType.LinearTargetStartingIndex() - Default
-//       	     TextCharSearchType.SingleTargetChar()
-//       	     TextCharSearchType.LinearEndOfString()
+//           Possible values are listed as follows:
+//            NumSignSymPos.None()
+//            NumSignSymPos.Before()
+//            NumSignSymPos.After()
+//            NumSignSymPos.BeforeAndAfter()
 //
-//          FoundFirstNumericDigitInNumStr bool
-//            - When set to 'true' this signals that the search
-//              operation has already identified the first numeric
-//              digit in a string of text characters.
+//        SecondaryNumSignPosition NumSignSymbolPosition
+//         - Optional. This enumeration value specifies the
+//           relative position of positive and negative number
+//           sign symbols in a number string. This value is used
+//           in searches involving number signs which occur both
+//           before and after the numeric value.
 //
+//           Possible values are listed as follows:
+//            NumSignSymPos.None()
+//            NumSignSymPos.Before()
+//            NumSignSymPos.After()
+//            NumSignSymPos.BeforeAndAfter()
+//
+//        TextCharSearchType CharacterSearchType
+//         - Required. An enumeration value signaling the type
+//           of text character search algorithm used to conduct
+//           this search operation.
+//
+//           Possible values are listed as follows:
+//            CharSearchType.None() - Invalid value
+//            CharSearchType.LinearTargetStartingIndex() - Default
+//            CharSearchType.SingleTargetChar()
+//            CharSearchType.LinearEndOfString()
 //       }
 //
 //
