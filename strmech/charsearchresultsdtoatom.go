@@ -104,6 +104,10 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 		emptyReplacementStrings(
 			searchResultsDto)
 
+	charSearchResultsDtoElectron{}.ptr().
+		emptyRemainderStrings(
+			searchResultsDto)
+
 	searchResultsDto.NumValueType = NumValType.None()
 
 	searchResultsDto.NumStrFormatType = NumStrFmtType.None()
@@ -317,6 +321,15 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 
 	areEqual := charSearchResultsDtoElectron{}.ptr().
 		equalReplacementStrings(
+			searchResultsDto1,
+			searchResultsDto2)
+
+	if !areEqual {
+		return false
+	}
+
+	areEqual = charSearchResultsDtoElectron{}.ptr().
+		equalRemainderStrings(
 			searchResultsDto1,
 			searchResultsDto2)
 

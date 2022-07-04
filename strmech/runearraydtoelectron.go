@@ -265,7 +265,402 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 	return searchResults, err
 }
 
-// linearTargetStartingIndexSearch
+// linearTargetStartingIndexSearch - Performs a Linear Target
+// Starting Index Search for Text Characters. This means that each
+// character in the Target Search String will be compared to each
+// corresponding character in the Test String beginning at a
+// specified starting index in the Target Search String.
+//
+// ----------------------------------------------------------------
+//
+// TERMINOLOGY
+//
+// Text Character Search algorithms typically perform comparisons
+// between two strings or groups of text characters to determine
+// the search outcome. A successful search outcome usually involves
+// finding one or more text characters from one string inside a
+// second string. A successful search outcome is often referred to
+// as a 'Match' condition because characters in one string were
+// compared and matched with characters in another string.
+//
+// Character Search algorithms using the Character Search Type
+// ('CharacterSearchType') rely on a framework consisting of a
+// 'Target Search String' and a 'Test String'.
+//
+//    Target String        - A string character or characters which
+//                           will be searched for the occurrence of
+//                           another predefined character or
+//                           characters referred to as a Test
+//                           String.
+//
+//
+//    Test String          - A string character or characters which
+//                           will be used to search for matching
+//                           characters in a Target Search String.
+//
+// A comparison of text characters contained in the Target Search
+// String and the Test String serves as the basis for determining
+// a 'Match' condition or successful outcome from a text character
+// search algorithm. The specific criterion for determining a
+// 'Match' condition vary between the different Character Search
+// Types.
+//
+// Character Search Type is a series of enumeration values
+// specifying the type of text character search algorithm applied
+// by the current instance of RuneArrayDto.
+//
+// For this method, the Character Search Type must be set to one of
+// the following enumeration values:
+//
+//  TextCharSearchType.LinearTargetStartingIndex()
+//  TextCharSearchType.SingleTargetChar()
+//  TextCharSearchType.LinearEndOfString()
+//
+//
+// ----------------------------------------------------------------
+//
+//
+// The Linear Starting Index Text Search will proceed for from left
+// to right in Test Character Sequence.
+//
+// If the Test Characters are NOT found in the Target Search
+// String beginning at the designated Target String Starting
+// Index, the search outcome will be unsuccessful, NO match
+// will be declared and the search operation will terminate.
+//
+// A 'Match', or successful search outcome, is defined as the
+// case where each character in the Target String matches each
+// corresponding character in the Test String beginning at the
+// designated Target String Starting Index.
+//
+//   Example 1
+//                             1         2         3
+//            Index  0123456789012345678901234567890
+//   Target String: "Hey, Xray-4 is the call sign."
+//   Target String Starting Index: 5
+//     Test String: "Xray"
+//
+// In this example of a Linear Target Starting Index Search, a
+// match between the Target String and Test String will be
+// declared, if and only if, the search begins at Target String
+// index number 5. If the search begins at an any index other
+// than 5, no match will be declared and the search will be
+// classified as unsuccessful.
+//
+//   Example 2
+//                             1         2         3
+//            Index  0123456789012345678901234567890
+//   Target String: "Hey, Xray-4 is the call sign."
+//   Target String Starting Index: 0
+//     Test String: "Xray"
+//
+// In this second example of a Linear Target Starting Index
+// Search, the search operation will fail, no match will be
+// found and the search operation will terminate. This result
+// follows because the character at staring index number zero
+// (0) 'H', does NOT match the first character in the Test
+// String 'Xray'. The search operation will therefore terminate
+// immediately after the comparison between first characters
+// 'H' and 'X' fails to produce a match.
+//
+//
+// -----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetInputParms           CharSearchTargetInputParametersDto
+//     - This Dto, or Data Transfer Object, contains the input
+//       parameters and specifications associated with the Target
+//       Search String which will be used in completing the Linear
+//       Target Starting Index Search operation.
+//
+//       The CharSearchTargetInputParametersDto structure consists
+//       of the following member variable data elements.
+//
+//       type CharSearchTargetInputParametersDto struct {
+//
+//        TargetInputParametersName           string
+//         - The Name, Label or descriptive Tag associated with this
+//           instance of CharSearchTargetInputParametersDto. If empty,
+//           this string will be defaulted to "TargetInputParameters"
+//
+//        TargetString                        *RuneArrayDto
+//         - A pointer to the RuneArrayDto containing the Target
+//           Search String text characters used in the search
+//           algorithm. Target Characters are compared against
+//           Test Characters to determine if a 'Match' condition
+//           exists.
+//
+//        TargetStringName                    string
+//         - The label or name of the 'TargetString' parameter.
+//           Used in error and informational messages.
+//
+//        TargetStringLength                  int
+//         - Actual number of text characters in the entire
+//           Target Search String ('TargetString').
+//
+//        TargetStringLengthName              string
+//         - The label or name of the 'TargetStringLength' parameter.
+//           Used in error and informational messages.
+//
+//        TargetStringStartingSearchIndex     int
+//         - The index in 'TargetString' at which the search
+//           operation begins.
+//
+//        TargetStringStartingSearchIndexName string
+//         - The label or name of the
+//           TargetStringStartingSearchIndex parameter.
+//           Used in error and informational messages.
+//
+//        TargetStringSearchLength            int
+//         - The actual number of characters within the Target
+//           Search String that are included in the search
+//           operation. This value may be less than the actual
+//           length of the Target Search String.
+//
+//        TargetStringSearchLengthName        string
+//         - The label or name of the TargetStringSearchLength
+//           parameter. Used in error and informational
+//           messages.
+//
+//        TargetStringAdjustedSearchLength    int
+//         - The adjusted or corrected Target String Search
+//           Length. This value is guaranteed to be equal to or
+//           less than the actual Target String Length.
+//
+//        TargetStringDescription1            string
+//         - First of two optional description strings
+//           describing the Target Search String in the context
+//           of the current search operation.
+//
+//        TargetStringDescription2            string
+//         - Second of two optional description strings
+//           describing the Target Search String in the context
+//           of the current search operation.
+//
+//        FoundFirstNumericDigitInNumStr      bool
+//         - When set to 'true' this signals that the first
+//           numeric digit has been identified in the text
+//           characters specified by 'TargetString'
+//
+//
+//        TextCharSearchType                  CharacterSearchType
+//         - Optional. An enumeration value signaling the type
+//           of text character search algorithm used to conduct
+//           this search operation. When set to a valid value,
+//           this specification will override the search
+//           specification contained in the Test Input
+//           Parameters Data Transfer Object.
+//
+//          Valid CharSearch Type values are listed as follows:
+//          TextCharSearchType.None() - Invalid Value
+//          TextCharSearchType.LinearTargetStartingIndex() - Default
+//          TextCharSearchType.SingleTargetChar()
+//          TextCharSearchType.LinearEndOfString()
+//       }
+//
+//
+//  testInputParms      CharSearchTestInputParametersDto
+//     - This Dto, or Data Transfer Object, contains the input
+//       parameters and specifications associated with the Test
+//       String which will be used in completing the Linear Target
+//       Starting Index Search operation. This algorithm compares
+//       text characters in the Target Search String
+//       ('targetInputParms') with those contained in the Test
+//       String specified below.
+//
+//       The CharSearchTestInputParametersDto structure consists
+//       of the following member variable data elements.
+//
+//       type CharSearchTestInputParametersDto struct {
+//
+//         TestInputParametersName string
+//          - The Name, Label or descriptive Tag associated with this
+//            instance of CharSearchTestInputParametersDto. If empty,
+//            this string will be defaulted to "TestInputParameters"
+//
+//         TestString *RuneArrayDto
+//          - A pointer to the Rune Array Data Transfer
+//            Object containing the Test Characters to be
+//            used in a text character search algorithm.
+//            Target Characters are compared against Test
+//            Characters to determine if a 'Match' condition
+//            exists.
+//
+//         TestStringName string
+//          - The label or name of the 'TestString' parameter.
+//            Used in error and informational messages.
+//
+//         TestStringLength int
+//          - Actual number of text characters in the entire Test
+//            String ('TestString').
+//
+//         TestStringLengthName string
+//          - The label or name of the 'TestStringLength'
+//            parameter. Used in error and informational
+//            messages.
+//
+//         TestStringStartingIndex int
+//          - The starting index in the Test String where the
+//            search operation will begin.
+//
+//         TestStringStartingIndexName string
+//          - The label or name of the TestStringStartingIndex
+//            parameter. Used in error and informational messages.
+//
+//         TestStringDescription1 string
+//          - First of two optional description strings
+//            describing the Test String in the context of the
+//            current search operation.
+//
+//         TestStringDescription2 string
+//          - Second of two optional description strings
+//            describing the Test String in the context of the
+//            current search operation.
+//
+//         CollectionTestObjIndex int
+//          - If the Test String object resides in a collection
+//            of Test String objects, this parameter will record
+//            the array index of the current Test String object
+//            in the collection.
+//
+//         NumValueType NumericValueType
+//          - Optional. This enumeration value specifies the type
+//            of numeric value for this Test Parameter as either
+//            an integer or floating point value.
+//
+//            Possible values are listed as follows:
+//             NumValType.None()
+//             NumValType.FloatingPoint()
+//             NumValType.Integer()
+//
+//         NumStrFormatType NumStrFormatTypeCode
+//          - Optional. This enumeration value specifies the
+//            Output Format Type for a number.
+//
+//            Possible values are listed as follows:
+//             NumStrFmtType.None()
+//             NumStrFmtType.AbsoluteValue()
+//             NumStrFmtType.Binary()
+//             NumStrFmtType.CountryCulture()
+//             NumStrFmtType.Currency()
+//             NumStrFmtType.Binary()
+//             NumStrFmtType.Hexadecimal()
+//             NumStrFmtType.Octal()
+//             NumStrFmtType.ScientificNotation()
+//
+//         NumSymLocation NumericSymbolLocation
+//          - Optional. This enumeration value specifies the
+//            relative location of a numeric symbol.
+//
+//            Possible values are listed as follows:
+//             NumSymLocation.None()
+//             NumSymLocation.Before()
+//             NumSymLocation.Interior()
+//             NumSymLocation.After()
+//
+//         NumSymbolClass NumericSymbolClass
+//          - Optional. This enumeration value specifies the
+//            Number Symbol Classification for a text character.
+//
+//            Possible values are listed as follows:
+//             NumSymClass.None()
+//             NumSymClass.NumberSign()
+//             NumSymClass.CurrencySign()
+//             NumSymClass.IntegerSeparator()
+//             NumSymClass.DecimalSeparator()
+//
+//         NumSignValue NumericSignValueType
+//          - Optional. This enumeration value specifies the
+//            number sign value.
+//
+//            Possible values are listed as follows:
+//             NumSignVal.None()
+//             NumSignVal.Negative()
+//             NumSignVal.Zero()
+//             NumSignVal.Positive()
+//
+//         PrimaryNumSignPosition NumSignSymbolPosition
+//         - Optional This enumeration value specifies the
+//           relative position of positive and negative number
+//           sign symbols in a number string. This is the
+//           Primary Type Code for Number Signs. Cases involving
+//           both 'Leading' and 'Trailing' symbols also make use
+//           of the 'SecondaryNumSignPosition'.
+//
+//           Possible values are listed as follows:
+//            NumSignSymPos.None()
+//            NumSignSymPos.Before()
+//            NumSignSymPos.After()
+//            NumSignSymPos.BeforeAndAfter()
+//
+//         SecondaryNumSignPosition NumSignSymbolPosition
+//          - Optional. This enumeration value specifies the
+//            relative position of positive and negative number
+//            sign symbols in a number string. This value is used
+//            in searches involving number signs which occur both
+//            before and after the numeric value.
+//
+//            Possible values are listed as follows:
+//             NumSignSymPos.None()
+//             NumSignSymPos.Before()
+//             NumSignSymPos.After()
+//             NumSignSymPos.BeforeAndAfter()
+//
+//         TextCharSearchType CharacterSearchType
+//         - Required. An enumeration value signaling the type
+//           of text character search algorithm used to conduct
+//           this search operation.
+//
+//           Possible values are listed as follows:
+//            CharSearchType.None()                      - Invalid Value
+//            CharSearchType.LinearTargetStartingIndex() - Valid Default
+//            CharSearchType.SingleTargetChar()          - Valid
+//            CharSearchType.LinearEndOfString()         - Valid
+//
+//       }
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  CharSearchResultsDto
+//     - If this method completes successfully, a fully populated
+//       instance of CharSearchResultsDto will be returned to the
+//       calling function.
+//
+//       This structure contains information and data elements
+//       detailing the results of the text character search
+//       operation performed by this method.
+//
+//       The CharSearchTestInputParametersDto structure consists
+//       of the following member variable data elements.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 	targetInputParms CharSearchTargetInputParametersDto,
 	testInputParms CharSearchTestInputParametersDto,

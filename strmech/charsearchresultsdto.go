@@ -183,9 +183,19 @@ type CharSearchResultsDto struct {
 	// in the collection.
 
 	ReplacementString *RuneArrayDto
-	// A pointer to the Rune Array Data Transfer
-	// Object containing the Replacement Characters to be
-	// substituted for existing characters in a Target String.
+	// A pointer to the Rune Array Data Transfer Object
+	// containing the Replacement Characters to be
+	// substituted for existing characters in a Target
+	// String.
+
+	RemainderString *RuneArrayDto
+	// A pointer to the Rune Array Data Transfer Object
+	// containing the remaining characters in a Target
+	// String which were NOT included in the search
+	// operation and which remain to be searched in future
+	// search operations. This string is also used in 'cut'
+	// operations where Target String is divided based on
+	// string delimiters.
 
 	NumValueType NumericValueType
 	// Optional. This enumeration value specifies the type
@@ -568,6 +578,108 @@ func (charSearchResults *CharSearchResultsDto) Empty() {
 	charSearchResults.lock.Unlock()
 
 	charSearchResults.lock = nil
+}
+
+// EmptyRemainderString - Resets the internal member variable
+// 'RemainderString' for the current instance of
+// CharSearchResultsDto to its zero or uninitialized state.
+//
+// Only the internal member variable
+// 'CharSearchResultsDto.RemainderString' is deleted and reset to a
+// value of 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method deletes the member variable data value contained in
+// 'CharSearchResultsDto.RemainderString' and resets this pointer
+// to 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (charSearchResults *CharSearchResultsDto) EmptyRemainderString() {
+
+	if charSearchResults.lock == nil {
+		charSearchResults.lock = new(sync.Mutex)
+	}
+
+	charSearchResults.lock.Lock()
+
+	charSearchResultsDtoAtom{}.ptr().empty(
+		charSearchResults)
+
+	charSearchResults.lock.Unlock()
+
+	charSearchResults.lock = nil
+
+	charSearchResultsDtoElectron{}.ptr().
+		emptyRemainderStrings(
+			charSearchResults)
+}
+
+// EmptyReplacementString - Resets the internal member variable
+// 'ReplacementString' for the current instance of
+// CharSearchResultsDto to its zero or uninitialized state.
+//
+// Only the internal member variable
+// CharSearchResultsDto.ReplacementString is deleted and reset to a
+// value of 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method deletes the member variable data value contained in
+// CharSearchResultsDto.ReplacementString and resets this pointer
+// to 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (charSearchResults *CharSearchResultsDto) EmptyReplacementString() {
+
+	if charSearchResults.lock == nil {
+		charSearchResults.lock = new(sync.Mutex)
+	}
+
+	charSearchResults.lock.Lock()
+
+	charSearchResultsDtoAtom{}.ptr().empty(
+		charSearchResults)
+
+	charSearchResults.lock.Unlock()
+
+	charSearchResults.lock = nil
+
+	charSearchResultsDtoElectron{}.ptr().
+		emptyReplacementStrings(
+			charSearchResults)
 }
 
 // Equal - Receives a pointer to another instance of

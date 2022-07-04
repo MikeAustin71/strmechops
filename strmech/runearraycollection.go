@@ -737,7 +737,7 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 	return err
 }
 
-func (runeArrayCol *RuneArrayCollection) SearchCollection(
+func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
 	CharSearchResultsDto,
@@ -760,18 +760,58 @@ func (runeArrayCol *RuneArrayCollection) SearchCollection(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayCollection."+
-			"SearchCollection()",
+			"SearchForTextCharacters()",
 		"")
 
 	if err != nil {
 
 		return errorSearchResults, err
+	}
 
+	lenRuneDtoCollection := len(runeArrayCol.RuneArrayDtoCol)
+
+	if lenRuneDtoCollection == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The Rune Array Collection is Empty!\n"+
+			"runeArrayCol.RuneArrayDtoCol has a length of zero.\n",
+			ePrefix.String())
+
+		return errorSearchResults, err
 	}
 
 	err = targetInputParms.IsValidInstanceError(
 		ePrefix.XCpy(
 			"targetInputParms"))
+
+	if err != nil {
+
+		return errorSearchResults, err
+	}
+
+	var dtoSearchResults CharSearchResultsDto
+
+	for i := 0; i < lenRuneDtoCollection; i++ {
+
+		dtoSearchResults,
+			err = runeArrayCol.RuneArrayDtoCol[i].
+			SearchForTextCharacterString(
+				targetInputParms,
+				ePrefix.XCpy(
+					fmt.Sprintf("runeArrayCol.RuneArrayDtoCol[%v]",
+						i)))
+
+		if err != nil {
+			return dtoSearchResults, err
+		}
+
+		if dtoSearchResults.FoundSearchTarget {
+
+			dtoSearchResults.CollectionTestObjIndex =
+				i
+
+			return dtoSearchResults, err
+		}
+	}
 
 	return errorSearchResults, err
 }

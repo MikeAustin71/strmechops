@@ -204,6 +204,25 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.CollectionTestObjIndex =
 		incomingSearchResultsDto.CollectionTestObjIndex
 
+	if incomingSearchResultsDto.RemainderString != nil {
+
+		targetSearchResultsDto.RemainderString =
+			&RuneArrayDto{}
+
+		err = targetSearchResultsDto.RemainderString.CopyIn(
+			incomingSearchResultsDto.RemainderString,
+			ePrefix.XCpy(
+				"targetSearchResultsDto.RemainderString"+
+					"<-incomingSearchResultsDto.RemainderString"))
+
+		if err != nil {
+
+			return err
+
+		}
+
+	}
+
 	if incomingSearchResultsDto.ReplacementString != nil {
 
 		targetSearchResultsDto.ReplacementString =
@@ -214,6 +233,13 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 			ePrefix.XCpy(
 				"targetSearchResultsDto.ReplacementString"+
 					"<-incomingSearchResultsDto.ReplacementString"))
+
+		if err != nil {
+
+			return err
+
+		}
+
 	}
 
 	targetSearchResultsDto.NumValueType =
@@ -409,6 +435,46 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 
 	copySearchResultsDto.CollectionTestObjIndex =
 		searchResultsDto.CollectionTestObjIndex
+
+	if searchResultsDto.RemainderString != nil {
+
+		copySearchResultsDto.RemainderString =
+			&RuneArrayDto{}
+
+		err = copySearchResultsDto.RemainderString.
+			CopyIn(
+				searchResultsDto.RemainderString,
+				ePrefix.XCpy(
+					"copySearchResultsDto.RemainderString<-"+
+						"searchResultsDto.RemainderString"))
+
+		if err != nil {
+
+			return copySearchResultsDto, err
+
+		}
+
+	}
+
+	if searchResultsDto.ReplacementString != nil {
+
+		copySearchResultsDto.ReplacementString =
+			&RuneArrayDto{}
+
+		err = copySearchResultsDto.ReplacementString.
+			CopyIn(
+				searchResultsDto.ReplacementString,
+				ePrefix.XCpy(
+					"copySearchResultsDto.ReplacementString<-"+
+						"searchResultsDto.ReplacementString"))
+
+		if err != nil {
+
+			return copySearchResultsDto, err
+
+		}
+
+	}
 
 	copySearchResultsDto.NumValueType =
 		searchResultsDto.NumValueType
@@ -960,6 +1026,114 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	labelParams = append(labelParams, labelParam)
 
+	// Build RemainderString
+
+	if searchResultsDto.RemainderString == nil {
+		// Build RemainderString nil message
+		labelParam = TextLabelValueStrings{}
+
+		labelParam.ParamLabel = "RemainderString"
+
+		labelParam.ParamValue =
+			"Not Set. RemainderString is a nil pointer"
+
+		labelParams = append(labelParams, labelParam)
+
+	} else if searchResultsDto.RemainderString.
+		GetRuneArrayLength() <=
+		(maxLineLen - maxLabelFieldLen - 3) {
+
+		labelParam = TextLabelValueStrings{}
+
+		labelParam.ParamLabel = "RemainderString"
+
+		labelParam.ParamValue =
+			searchResultsDto.RemainderString.
+				GetCharacterString()
+
+		if len(labelParam.ParamValue) == 0 {
+			labelParam.ParamValue =
+				"RemainderString is Empty. Length==Zero."
+		}
+
+		labelParams = append(labelParams, labelParam)
+
+	} else {
+		// Must be
+		//  searchResultsDto.RemainderString.
+		//  	GetRuneArrayLength() >
+		//  	(maxLineLen - maxLabelFieldLen -3)
+
+		// Write existing Parameter Label-Value Pairs
+		// to string (strBuilder)
+		err = txtBuilder.BuildLabelsValues(
+			&strBuilder,
+			labelParams,
+			" ",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			-1,
+			TxtJustify.Left(),
+			" ",
+			"\n",
+			ePrefix.XCpy(
+				"labelParams #1"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		labelParams = nil
+
+		err = txtBuilder.FieldsSingleLabel(
+			&strBuilder,
+			" ",
+			"RemainderString",
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			ePrefix.XCpy(
+				"RemainderString"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		err = txtBuilder.FieldsSingleLabel(
+			&strBuilder,
+			"  ",
+			searchResultsDto.RemainderString.GetCharacterString(),
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			ePrefix.XCpy(
+				"RemainderString"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+		err = txtBuilder.LineBlank(
+			&strBuilder,
+			1,
+			ePrefix.XCpy(
+				"Blank Line After RemainderString"))
+
+		if err != nil {
+
+			return strBuilder, err
+		}
+
+	}
+
+	// Build ReplacementString
+
 	if searchResultsDto.ReplacementString == nil {
 		// Build ReplacementString nil message
 		labelParam = TextLabelValueStrings{}
@@ -996,28 +1170,34 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 		//  	GetRuneArrayLength() >
 		//  	(maxLineLen - maxLabelFieldLen -3)
 
-		// Write existing Parameter Label-Value Pairs
-		// to string (strBuilder)
-		err = txtBuilder.BuildLabelsValues(
-			&strBuilder,
-			labelParams,
-			" ",
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			-1,
-			TxtJustify.Left(),
-			" ",
-			"\n",
-			ePrefix.XCpy(
-				"labelParams #1"))
+		// No need to do this if
+		// len(labelParams) == 0
+		if len(labelParams) > 0 {
 
-		if err != nil {
+			// Write existing Parameter Label-Value Pairs
+			// to string (strBuilder)
+			err = txtBuilder.BuildLabelsValues(
+				&strBuilder,
+				labelParams,
+				" ",
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				-1,
+				TxtJustify.Left(),
+				" ",
+				"\n",
+				ePrefix.XCpy(
+					"labelParams #1"))
 
-			return strBuilder, err
+			if err != nil {
+
+				return strBuilder, err
+			}
+
+			labelParams = nil
+
 		}
-
-		labelParams = nil
 
 		err = txtBuilder.FieldsSingleLabel(
 			&strBuilder,
