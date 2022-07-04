@@ -72,6 +72,8 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 
 	searchResultsDto.TargetStringSearchLength = -1
 
+	searchResultsDto.TargetStringAdjustedSearchLength = -1
+
 	searchResultsDto.TargetStringStartingSearchIndex = -1
 
 	searchResultsDto.TargetStringFirstFoundIndex = -1
@@ -231,6 +233,12 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 
 	if searchResultsDto1.TargetStringSearchLength !=
 		searchResultsDto2.TargetStringSearchLength {
+
+		return false
+	}
+
+	if searchResultsDto1.TargetStringAdjustedSearchLength !=
+		searchResultsDto2.TargetStringAdjustedSearchLength {
 
 		return false
 	}

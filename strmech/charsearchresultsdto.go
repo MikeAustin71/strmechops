@@ -94,6 +94,11 @@ type CharSearchResultsDto struct {
 	// operation. This value may be less than the actual
 	// length of the Target Search String.
 
+	TargetStringAdjustedSearchLength int
+	// The adjusted or corrected Target String Search
+	// Length. This value is guaranteed to be equal to or
+	// less than the actual Target String Length.
+
 	TargetStringStartingSearchIndex int
 	// The index in 'TargetString' at which the search
 	// operation begins.
@@ -789,6 +794,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 		targetInputParms.TargetStringLength
 
 	charSearchResults.TargetStringSearchLength =
+		targetInputParms.TargetStringSearchLength
+
+	charSearchResults.TargetStringAdjustedSearchLength =
 		targetInputParms.TargetStringAdjustedSearchLength
 
 	charSearchResults.TargetStringStartingSearchIndex =
