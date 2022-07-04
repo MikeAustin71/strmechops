@@ -792,8 +792,6 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 
 	for i := 0; i < lenRuneDtoCollection; i++ {
 
-		targetInputParms.CollectionTestObjIndex = i
-
 		dtoSearchResults,
 			err = runeArrayCol.RuneArrayDtoCol[i].
 			SearchForTextCharacterString(
@@ -805,8 +803,6 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 		if err != nil {
 			return dtoSearchResults, err
 		}
-
-		targetInputParms.CollectionTestObjIndex = -1
 
 		if dtoSearchResults.FoundSearchTarget {
 

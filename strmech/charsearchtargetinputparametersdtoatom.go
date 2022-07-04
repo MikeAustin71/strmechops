@@ -87,8 +87,6 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 
 	targetInputParms.FoundFirstNumericDigitInNumStr = false
 
-	targetInputParms.CollectionTestObjIndex = -1
-
 	targetInputParms.TextCharSearchType = CharSearchType.None()
 
 	return
@@ -227,12 +225,6 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.FoundFirstNumericDigitInNumStr !=
 		targetInputParms2.FoundFirstNumericDigitInNumStr {
-
-		return false
-	}
-
-	if targetInputParms1.CollectionTestObjIndex !=
-		targetInputParms2.CollectionTestObjIndex {
 
 		return false
 	}
