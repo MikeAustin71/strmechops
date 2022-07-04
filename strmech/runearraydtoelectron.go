@@ -1938,7 +1938,7 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //             NumStrFmtType.Octal()
 //             NumStrFmtType.ScientificNotation()
 //
-//         NumSymLocation NumericSymbolLocation
+//         NumSymbolLocation NumericSymbolLocation
 //          - Optional. This enumeration value specifies the
 //            relative location of a numeric symbol.
 //
@@ -2210,7 +2210,7 @@ func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
 //            NumStrFmtType.Octal()
 //            NumStrFmtType.ScientificNotation()
 //
-//        NumSymLocation NumericSymbolLocation
+//        NumSymbolLocation NumericSymbolLocation
 //         - Optional. This enumeration value specifies the
 //           relative location of a numeric symbol.
 //

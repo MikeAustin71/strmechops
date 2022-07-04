@@ -128,7 +128,7 @@ type CharSearchTestInputParametersDto struct {
 	//  NumStrFmtType.Octal()
 	//  NumStrFmtType.ScientificNotation()
 
-	NumSymLocation NumericSymbolLocation
+	NumSymbolLocation NumericSymbolLocation
 	// Optional. This enumeration value specifies the
 	// relative location of a numeric symbol.
 	//

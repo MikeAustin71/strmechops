@@ -251,8 +251,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.NumStrFormatType =
 		incomingSearchResultsDto.NumStrFormatType
 
-	targetSearchResultsDto.NumSymLocation =
-		incomingSearchResultsDto.NumSymLocation
+	targetSearchResultsDto.NumSymbolLocation =
+		incomingSearchResultsDto.NumSymbolLocation
 
 	targetSearchResultsDto.NumSymbolClass =
 		incomingSearchResultsDto.NumSymbolClass
@@ -488,8 +488,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 	copySearchResultsDto.NumStrFormatType =
 		searchResultsDto.NumStrFormatType
 
-	copySearchResultsDto.NumSymLocation =
-		searchResultsDto.NumSymLocation
+	copySearchResultsDto.NumSymbolLocation =
+		searchResultsDto.NumSymbolLocation
 
 	copySearchResultsDto.NumSymbolClass =
 		searchResultsDto.NumSymbolClass
@@ -1298,13 +1298,13 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	labelParam.ParamLabel = "NumSymLocation"
 
-	if !searchResultsDto.NumSymLocation.XIsValid() {
-		searchResultsDto.NumSymLocation =
+	if !searchResultsDto.NumSymbolLocation.XIsValid() {
+		searchResultsDto.NumSymbolLocation =
 			NumSymLocation.None()
 	}
 
 	labelParam.ParamValue =
-		searchResultsDto.NumSymLocation.String()
+		searchResultsDto.NumSymbolLocation.String()
 
 	labelParams = append(labelParams, labelParam)
 

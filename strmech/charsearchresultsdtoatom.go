@@ -114,7 +114,7 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 
 	searchResultsDto.NumStrFormatType = NumStrFmtType.None()
 
-	searchResultsDto.NumSymLocation = NumSymLocation.None()
+	searchResultsDto.NumSymbolLocation = NumSymLocation.None()
 
 	searchResultsDto.NumSymbolClass = NumSymClass.None()
 
@@ -357,8 +357,8 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 		return false
 	}
 
-	if searchResultsDto1.NumSymLocation !=
-		searchResultsDto2.NumSymLocation {
+	if searchResultsDto1.NumSymbolLocation !=
+		searchResultsDto2.NumSymbolLocation {
 
 		return false
 	}

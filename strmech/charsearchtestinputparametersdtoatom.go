@@ -85,7 +85,7 @@ func (searchTestInputParmsAtom charSearchTestInputParametersDtoAtom) empty(
 
 	testInputParms.NumStrFormatType = NumStrFmtType.None()
 
-	testInputParms.NumSymLocation = NumSymLocation.None()
+	testInputParms.NumSymbolLocation = NumSymLocation.None()
 
 	testInputParms.NumSymbolClass = NumSymClass.None()
 
@@ -221,8 +221,8 @@ func (searchTestInputParmsAtom charSearchTestInputParametersDtoAtom) equal(
 		return false
 	}
 
-	if testInputParms1.NumSymLocation !=
-		testInputParms2.NumSymLocation {
+	if testInputParms1.NumSymbolLocation !=
+		testInputParms2.NumSymbolLocation {
 
 		return false
 	}

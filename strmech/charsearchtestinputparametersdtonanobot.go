@@ -181,8 +181,8 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 	destinationTestInputParms.NumStrFormatType =
 		sourceTestInputParms.NumStrFormatType
 
-	destinationTestInputParms.NumSymLocation =
-		sourceTestInputParms.NumSymLocation
+	destinationTestInputParms.NumSymbolLocation =
+		sourceTestInputParms.NumSymbolLocation
 
 	destinationTestInputParms.NumSymbolClass =
 		sourceTestInputParms.NumSymbolClass
@@ -348,8 +348,8 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 	deepCopyTestInputParms.NumStrFormatType =
 		testInputParms.NumStrFormatType
 
-	deepCopyTestInputParms.NumSymLocation =
-		testInputParms.NumSymLocation
+	deepCopyTestInputParms.NumSymbolLocation =
+		testInputParms.NumSymbolLocation
 
 	deepCopyTestInputParms.NumSymbolClass =
 		testInputParms.NumSymbolClass
@@ -823,14 +823,14 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParam = TextLabelValueStrings{}
 
-	if !testInputParms.NumSymLocation.XIsValid() {
-		testInputParms.NumSymLocation = NumSymLocation.None()
+	if !testInputParms.NumSymbolLocation.XIsValid() {
+		testInputParms.NumSymbolLocation = NumSymLocation.None()
 	}
 
 	labelParam.ParamLabel = "NumSymLocation"
 
 	labelParam.ParamValue =
-		testInputParms.NumSymLocation.String()
+		testInputParms.NumSymbolLocation.String()
 
 	labelParams = append(labelParams, labelParam)
 

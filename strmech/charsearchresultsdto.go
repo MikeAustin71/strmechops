@@ -227,7 +227,7 @@ type CharSearchResultsDto struct {
 	//  NumStrFmtType.Octal()
 	//  NumStrFmtType.ScientificNotation()
 
-	NumSymLocation NumericSymbolLocation
+	NumSymbolLocation NumericSymbolLocation
 	// Optional. This enumeration value specifies the
 	// relative location of a numeric symbol.
 	//
@@ -858,8 +858,8 @@ func (charSearchResults *CharSearchResultsDto) LoadTestBaseInputParameters(
 	charSearchResults.NumStrFormatType =
 		testInputParms.NumStrFormatType
 
-	charSearchResults.NumSymLocation =
-		testInputParms.NumSymLocation
+	charSearchResults.NumSymbolLocation =
+		testInputParms.NumSymbolLocation
 
 	charSearchResults.NumSymbolClass =
 		testInputParms.NumSymbolClass
