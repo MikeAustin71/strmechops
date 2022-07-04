@@ -187,6 +187,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 	destinationTargetInputParms.FoundFirstNumericDigitInNumStr =
 		sourceTargetInputParms.FoundFirstNumericDigitInNumStr
 
+	destinationTargetInputParms.CollectionTestObjIndex =
+		sourceTargetInputParms.CollectionTestObjIndex
+
 	destinationTargetInputParms.TextCharSearchType =
 		sourceTargetInputParms.TextCharSearchType
 
@@ -340,6 +343,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	deepCopyTargetInputParms.FoundFirstNumericDigitInNumStr =
 		targetInputParms.FoundFirstNumericDigitInNumStr
+
+	deepCopyTargetInputParms.CollectionTestObjIndex =
+		targetInputParms.CollectionTestObjIndex
 
 	deepCopyTargetInputParms.TextCharSearchType =
 		targetInputParms.TextCharSearchType
@@ -792,6 +798,16 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		targetInputParms.FoundFirstNumericDigitInNumStr)
+
+	labelParams = append(labelParams, labelParam)
+
+	// CollectionTestObjIndex
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "CollectionTestObjIndex"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.CollectionTestObjIndex)
 
 	labelParams = append(labelParams, labelParam)
 

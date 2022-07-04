@@ -1974,6 +1974,13 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	testInputParms := CharSearchTestInputParametersDto{}
 
+	testInputParms.Empty()
+
+	if targetInputParms.CollectionTestObjIndex > -1 {
+		testInputParms.CollectionTestObjIndex =
+			targetInputParms.CollectionTestObjIndex
+	}
+
 	testInputParms.TestInputParametersName =
 		"RuneArrayDto"
 
