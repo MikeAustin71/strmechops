@@ -1607,6 +1607,11 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //           numeric digit has been identified in the text
 //           characters specified by 'TargetString'
 //
+//        CollectionTestObjIndex int
+//         - If the Test String object resides in a collection
+//           of Test String objects, this parameter will record
+//           the array index of the current Test String object
+//           in the collection.
 //
 //        TextCharSearchType                  CharacterSearchType
 //         - Optional. An enumeration value signaling the type
