@@ -566,7 +566,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	var labelParams []TextLabelValueStrings
 
-	// TargetInputParametersName
+	// Build TargetInputParametersName
 	labelParam := TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TargetInputParametersName"
@@ -575,7 +575,8 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		targetInputParms.TargetInputParametersName
 
 	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsName is EMPTY!"
+		labelParam.ParamValue =
+			"TargetInputParametersName is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)
@@ -692,6 +693,11 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	labelParam.ParamValue =
 		targetInputParms.TargetStringName
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue =
+			"TargetStringName is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
 	// TargetStringLength
@@ -711,6 +717,11 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue =
 		targetInputParms.TargetStringLengthName
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue =
+			"TargetStringLengthName is EMPTY!"
+	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -732,6 +743,11 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	labelParam.ParamValue =
 		targetInputParms.TargetStringStartingSearchIndexName
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue =
+			"TargetStringStartingSearchIndexName is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
 	// TargetStringSearchLength
@@ -751,6 +767,11 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue =
 		targetInputParms.TargetStringSearchLengthName
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue =
+			"TargetStringSearchLengthName is EMPTY!"
+	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -772,6 +793,11 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 	labelParam.ParamValue =
 		targetInputParms.TargetStringDescription1
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue =
+			"TargetStringDescription1 is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
 	// TargetStringDescription2
@@ -781,6 +807,11 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue =
 		targetInputParms.TargetStringDescription2
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue =
+			"TargetStringDescription2 is EMPTY!"
+	}
 
 	labelParams = append(labelParams, labelParam)
 

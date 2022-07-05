@@ -591,7 +591,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	var labelParams []TextLabelValueStrings
 
-	// TestInputParametersName
+	// Build TestInputParametersName
 	labelParam := TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestInputParametersName"
@@ -709,7 +709,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	}
 
-	// TestStringName
+	// Build TestStringName
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringName"
@@ -717,9 +717,13 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	labelParam.ParamValue =
 		testInputParms.TestStringName
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "TestStringName is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
-	// TestStringLength
+	// Build TestStringLength
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringLength"
@@ -729,7 +733,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// TestStringLengthName
+	// Build TestStringLengthName
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringLengthName"
@@ -737,9 +741,13 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	labelParam.ParamValue =
 		testInputParms.TestStringLengthName
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "TestStringLengthName is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
-	// TestStringStartingIndex
+	// Build TestStringStartingIndex
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringStartingIndex"
@@ -749,7 +757,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// TestStringStartingIndexName
+	// Build TestStringStartingIndexName
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringStartingIndexName"
@@ -757,9 +765,13 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	labelParam.ParamValue =
 		testInputParms.TestStringStartingIndexName
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "TestStringStartingIndexName is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
-	// TestStringDescription1
+	// Build TestStringDescription1
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringDescription1"
@@ -767,9 +779,13 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	labelParam.ParamValue =
 		testInputParms.TestStringDescription1
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "TestStringDescription1 is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
-	// TestStringDescription2
+	// Build TestStringDescription2
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "TestStringDescription2"
@@ -777,9 +793,13 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 	labelParam.ParamValue =
 		testInputParms.TestStringDescription2
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "TestStringDescription2 is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
-	// CollectionTestObjIndex
+	// Build CollectionTestObjIndex
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "CollectionTestObjIndex"
@@ -789,7 +809,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// NumValueType
+	// Build NumValueType
 
 	labelParam = TextLabelValueStrings{}
 
@@ -804,7 +824,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// NumStrFormatType
+	// Build NumStrFormatType
 
 	labelParam = TextLabelValueStrings{}
 
@@ -819,7 +839,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// NumSymLocation
+	// Build NumSymbolLocation
 
 	labelParam = TextLabelValueStrings{}
 
@@ -827,14 +847,14 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 		testInputParms.NumSymbolLocation = NumSymLocation.None()
 	}
 
-	labelParam.ParamLabel = "NumSymLocation"
+	labelParam.ParamLabel = "NumSymbolLocation"
 
 	labelParam.ParamValue =
 		testInputParms.NumSymbolLocation.String()
 
 	labelParams = append(labelParams, labelParam)
 
-	// NumSymbolClass
+	// Build NumSymbolClass
 
 	labelParam = TextLabelValueStrings{}
 
@@ -849,7 +869,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// NumSignValue
+	// Build NumSignValue
 
 	labelParam = TextLabelValueStrings{}
 
@@ -864,7 +884,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// PrimaryNumSignPosition
+	// Build PrimaryNumSignPosition
 
 	labelParam = TextLabelValueStrings{}
 
@@ -882,7 +902,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// SecondaryNumSignPosition
+	// Build SecondaryNumSignPosition
 
 	labelParam = TextLabelValueStrings{}
 
@@ -900,7 +920,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getF
 
 	labelParams = append(labelParams, labelParam)
 
-	// TextCharSearchType
+	// Build TextCharSearchType
 
 	labelParam = TextLabelValueStrings{}
 

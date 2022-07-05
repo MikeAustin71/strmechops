@@ -226,13 +226,17 @@ func (numValType NumericValueType) XIsValid() bool {
 
 	defer lockNumericValueType.Unlock()
 
-	if numValType < 1 {
-		return false
-	}
+	return numericValueTypeNanobot{}.ptr().
+		isValidNumericValueType(
+			numValType)
 
-	_, isValid := mNumericValueTypeCodeToString[numValType]
+	//if numValType < 1 {
+	//	return false
+	//}
+	//
+	//_, isValid := mNumericValueTypeCodeToString[numValType]
 
-	return isValid
+	// return isValid
 }
 
 // XParseString - Receives a string and attempts to match it with the
@@ -351,6 +355,37 @@ func (numValType NumericValueType) XParseString(
 	return numValueType, nil
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of NumericValueType.
+//
+// If the current instance of NumericValueType is invalid, this
+// method will always return a value of NumericValueType(0).None().
+//
+// Background
+//
+// Enumeration NumericValueType has an underlying type of integer
+// (int). This means the type could conceivably be set to any
+// integer value. This method ensures that all invalid
+// NumericValueType are consistently classified as 'None'
+// (NumericValueType(0).None()). Remember that 'None' is considered
+// an invalid value.
+//
+func (numValType NumericValueType) XReturnNoneIfInvalid() NumericValueType {
+
+	lockNumericValueType.Lock()
+
+	defer lockNumericValueType.Unlock()
+
+	isValid := numericValueTypeNanobot{}.ptr().
+		isValidNumericValueType(numValType)
+
+	if !isValid {
+		return NumericValueType(0).None()
+	}
+
+	return numValType
+}
+
 // XValue - This method returns the enumeration value of the current
 // NumericValueType instance.
 //
@@ -399,3 +434,47 @@ func (numValType NumericValueType) XValueInt() int {
 //  NumValType.Integer(),
 //
 const NumValType = NumericValueType(0)
+
+// numericValueTypeNanobot - Provides helper methods for
+// enumeration NumericValueType.
+//
+type numericValueTypeNanobot struct {
+	lock *sync.Mutex
+}
+
+func (enumNumValueType *numericValueTypeNanobot) isValidNumericValueType(
+	enumNumericValType NumericValueType) bool {
+
+	if enumNumValueType.lock == nil {
+		enumNumValueType.lock = new(sync.Mutex)
+	}
+
+	enumNumValueType.lock.Lock()
+
+	defer enumNumValueType.lock.Unlock()
+
+	if enumNumericValType < 1 ||
+		enumNumericValType > 2 {
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// charSearchTestInputParametersDtoElectron.
+//
+func (enumNumValueType numericValueTypeNanobot) ptr() *numericValueTypeNanobot {
+
+	if enumNumValueType.lock == nil {
+		enumNumValueType.lock = new(sync.Mutex)
+	}
+
+	enumNumValueType.lock.Lock()
+
+	defer enumNumValueType.lock.Unlock()
+
+	return &numericValueTypeNanobot{
+		lock: new(sync.Mutex),
+	}
+}
