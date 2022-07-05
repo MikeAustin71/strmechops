@@ -204,7 +204,7 @@ type CharSearchTestInputParametersDto struct {
 // CharSearchTestInputParametersDto ('sourceTestInputParms') to
 // the data fields of the current
 // CharSearchTestInputParametersDto instance
-// ('searchTestInputParmsDto').
+// ('testSearchInputParms').
 //
 // ----------------------------------------------------------------
 //
@@ -281,7 +281,7 @@ type CharSearchTestInputParametersDto struct {
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
