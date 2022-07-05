@@ -967,6 +967,117 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstanceErr
 	return err
 }
 
+// LoadTestConfigDto - Imports Character Search Test Configuration
+// data into the member variable data elements for the current
+// instance of CharSearchTestInputParametersDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textConfigDto       CharSearchTestConfigDto
+//     - An instance of CharSearchTestConfigDto containing Test
+//      Input Parameter configuration data. Data elements from
+//      'textConfigDto' will be copied to the current instance
+//      of CharSearchTestInputParametersDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
+	textConfigDto CharSearchTestConfigDto) {
+
+	if testSearchInputParms.lock == nil {
+		testSearchInputParms.lock = new(sync.Mutex)
+	}
+
+	testSearchInputParms.lock.Lock()
+
+	defer testSearchInputParms.lock.Unlock()
+
+	testSearchInputParms.TestInputParametersName =
+		textConfigDto.TestInputParametersName
+
+	testSearchInputParms.TestStringName =
+		textConfigDto.TestStringName
+
+	testSearchInputParms.TestStringLengthName =
+		textConfigDto.TestStringLengthName
+
+	testSearchInputParms.TestStringDescription1 =
+		textConfigDto.TestStringDescription1
+
+	testSearchInputParms.TestStringDescription2 =
+		textConfigDto.TestStringDescription2
+
+	testSearchInputParms.CollectionTestObjIndex =
+		textConfigDto.CollectionTestObjIndex
+
+	testSearchInputParms.NumValueType =
+		textConfigDto.NumValueType
+
+	if !testSearchInputParms.NumValueType.XIsValid() {
+		testSearchInputParms.NumValueType = NumValType.None()
+	}
+
+	testSearchInputParms.NumStrFormatType =
+		textConfigDto.NumStrFormatType
+
+	if !testSearchInputParms.NumStrFormatType.XIsValid() {
+		testSearchInputParms.NumStrFormatType = NumStrFmtType.None()
+	}
+
+	testSearchInputParms.NumSymbolLocation =
+		textConfigDto.NumSymbolLocation
+
+	if !testSearchInputParms.NumSymbolLocation.XIsValid() {
+		testSearchInputParms.NumSymbolLocation = NumSymLocation.None()
+	}
+
+	testSearchInputParms.NumSymbolClass =
+		textConfigDto.NumSymbolClass
+
+	if !testSearchInputParms.NumSymbolClass.XIsValid() {
+		testSearchInputParms.NumSymbolClass = NumSymClass.None()
+	}
+
+	testSearchInputParms.NumSignValue =
+		textConfigDto.NumSignValue
+
+	if !testSearchInputParms.NumSignValue.XIsValid() {
+		testSearchInputParms.NumSignValue = NumSignVal.None()
+	}
+
+	testSearchInputParms.PrimaryNumSignPosition =
+		textConfigDto.PrimaryNumSignPosition
+
+	if !testSearchInputParms.PrimaryNumSignPosition.XIsValid() {
+		testSearchInputParms.PrimaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	testSearchInputParms.SecondaryNumSignPosition =
+		textConfigDto.SecondaryNumSignPosition
+
+	if !testSearchInputParms.SecondaryNumSignPosition.XIsValid() {
+		testSearchInputParms.SecondaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	testSearchInputParms.TextCharSearchType =
+		textConfigDto.TextCharSearchType
+
+	if !testSearchInputParms.TextCharSearchType.XIsValid() {
+		testSearchInputParms.TextCharSearchType =
+			CharSearchType.None()
+	}
+
+}
+
 // New - Returns a new uninitialized instance of
 // CharSearchTestInputParametersDto
 //
