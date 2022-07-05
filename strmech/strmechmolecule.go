@@ -296,7 +296,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				i
 
 			parsingTerminationResults,
-				err = numParsingTerminators.SearchCollection(
+				err = numParsingTerminators.SearchForTextCharacters(
 				targetInputParms,
 				ePrefix.XCpy(
 					"numParsingTerminators"))
@@ -332,10 +332,12 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			targetInputParms.TargetStringSearchLength = -1
 
+			targetInputParms.FoundFirstNumericDigitInNumStr =
+				searchResults.FoundFirstNumericDigitInNumStr
+
 			negNumSearchResults,
 				err = negativeNumSearchSpecsCol.
 				SearchForNegNumSignSymbols(
-					searchResults.FoundFirstNumericDigitInNumStr,
 					targetInputParms,
 					ePrefix)
 

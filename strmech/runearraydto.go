@@ -1947,6 +1947,7 @@ func (charsArrayDto RuneArrayDto) NewRuneArray(
 //
 func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	targetInputParms CharSearchTargetInputParametersDto,
+	testConfigDto CharSearchTestConfigDto,
 	errorPrefix interface{}) (
 	CharSearchResultsDto,
 	error) {
@@ -1983,6 +1984,9 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	testInputParms.TestInputParametersName =
 		"RuneArrayDto"
+
+	testInputParms.LoadTestConfigDto(
+		testConfigDto)
 
 	testInputParms.TextCharSearchType =
 		CharSearchType.None()

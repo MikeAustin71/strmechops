@@ -790,12 +790,15 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 
 	var dtoSearchResults CharSearchResultsDto
 
+	testConfigDto := CharSearchTestConfigDto{}.New()
+
 	for i := 0; i < lenRuneDtoCollection; i++ {
 
 		dtoSearchResults,
 			err = runeArrayCol.RuneArrayDtoCol[i].
 			SearchForTextCharacterString(
 				targetInputParms,
+				testConfigDto,
 				ePrefix.XCpy(
 					fmt.Sprintf("runeArrayCol.RuneArrayDtoCol[%v]",
 						i)))

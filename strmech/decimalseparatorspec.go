@@ -1055,7 +1055,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	// Separator on a previous cycle.
 	if decSeparatorSpec.foundDecimalSeparatorSymbols == true {
 
-		decimalSearchResults.FoundSearchTarget = true
+		decimalSearchResults.FoundSearchTarget = false
 		decimalSearchResults.FoundSearchTargetOnPreviousSearch = true
 
 		decimalSearchResults.TargetStringFirstFoundIndex =
@@ -1067,20 +1067,15 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 		return decimalSearchResults, err
 	}
-	testInputParms.TestStringName = "testString"
-	testInputParms.TestStringLengthName = "testStringLength"
-	testInputParms.TestStringStartingIndex = 0
-	testInputParms.TestStringDescription1 = "Decimal Separator"
-	testInputParms.CollectionTestObjIndex = -1
-	testInputParms.NumSymbolClass = NumSymClass.DecimalSeparator()
-	testInputParms.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
-	err = testInputParms.ValidateTestParameters(
-		ePrefix.XCpy("testInputParms"))
-
-	if err != nil {
-		return decimalSearchResults, err
-	}
+	testConfigDto := CharSearchTestConfigDto{}.New()
+	testConfigDto.TestStringName = "testString"
+	testConfigDto.TestStringLengthName = "testStringLength"
+	testConfigDto.TestStringStartingIndex = 0
+	testConfigDto.TestStringDescription1 = "Decimal Separator"
+	testConfigDto.CollectionTestObjIndex = -1
+	testConfigDto.NumSymbolClass = NumSymClass.DecimalSeparator()
+	testConfigDto.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	decimalSearchResults.Empty()
 
@@ -1088,7 +1083,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 		err =
 		decSeparatorSpec.decimalSeparatorChars.SearchForTextCharacterString(
 			targetInputParms,
-			testInputParms,
+			testConfigDto,
 			ePrefix.XCpy(
 				"negNumSearchSpec-Before"))
 
