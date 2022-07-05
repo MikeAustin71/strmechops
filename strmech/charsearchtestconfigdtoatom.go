@@ -62,6 +62,164 @@ func (searchTestConfigAtom *charSearchTestConfigDtoAtom) empty(
 	return
 }
 
+// equal - Receives a pointer to two instances of
+// CharSearchTestConfigDto and proceeds to compare their
+// member variables in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  searchTestCfgDto1          *CharSearchTestConfigDto
+//     - An instance of CharSearchTestConfigDto.
+//       Internal member variables from 'searchTestCfgDto1' will be
+//       compared to those of 'searchTestCfgDto2' to determine if
+//       both instances are equivalent.
+//
+//
+//  searchTestCfgDto2          *CharSearchTestConfigDto
+//     - An instance of CharSearchTestConfigDto.
+//       Internal member variables from 'searchTestCfgDto2' will be
+//       compared to those of 'searchTestCfgDto1' to determine if
+//       both instances are equivalent.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the comparison of 'searchTestCfgDto1' and
+//       'searchTestCfgDto2' shows that all internal member
+//       variables are equivalent, this method will return a
+//       boolean value of 'true'.
+//
+//       If the two instances are NOT equal, this method will
+//       return a boolean value of 'false' to the calling function.
+//
+func (searchTestConfigAtom *charSearchTestConfigDtoAtom) equal(
+	searchTestCfgDto1 *CharSearchTestConfigDto,
+	searchTestCfgDto2 *CharSearchTestConfigDto) bool {
+
+	if searchTestConfigAtom.lock == nil {
+		searchTestConfigAtom.lock = new(sync.Mutex)
+	}
+
+	searchTestConfigAtom.lock.Lock()
+
+	defer searchTestConfigAtom.lock.Unlock()
+
+	if searchTestCfgDto1 == nil ||
+		searchTestCfgDto2 == nil {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestInputParametersName !=
+		searchTestCfgDto2.TestInputParametersName {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestStringName !=
+		searchTestCfgDto2.TestStringName {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestStringLengthName !=
+		searchTestCfgDto2.TestStringLengthName {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestStringStartingIndex !=
+		searchTestCfgDto2.TestStringStartingIndex {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestStringStartingIndexName !=
+		searchTestCfgDto2.TestStringStartingIndexName {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestStringDescription1 !=
+		searchTestCfgDto2.TestStringDescription1 {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TestStringDescription2 !=
+		searchTestCfgDto2.TestStringDescription2 {
+
+		return false
+	}
+
+	if searchTestCfgDto1.CollectionTestObjIndex !=
+		searchTestCfgDto2.CollectionTestObjIndex {
+
+		return false
+	}
+
+	if searchTestCfgDto1.NumValueType !=
+		searchTestCfgDto2.NumValueType {
+
+		return false
+	}
+
+	if searchTestCfgDto1.NumStrFormatType !=
+		searchTestCfgDto2.NumStrFormatType {
+
+		return false
+	}
+
+	if searchTestCfgDto1.NumSymbolLocation !=
+		searchTestCfgDto2.NumSymbolLocation {
+
+		return false
+	}
+
+	if searchTestCfgDto1.NumSymbolClass !=
+		searchTestCfgDto2.NumSymbolClass {
+
+		return false
+	}
+
+	if searchTestCfgDto1.NumSignValue !=
+		searchTestCfgDto2.NumSignValue {
+
+		return false
+	}
+
+	if searchTestCfgDto1.PrimaryNumSignPosition !=
+		searchTestCfgDto2.PrimaryNumSignPosition {
+
+		return false
+	}
+
+	if searchTestCfgDto1.SecondaryNumSignPosition !=
+		searchTestCfgDto2.SecondaryNumSignPosition {
+
+		return false
+	}
+
+	if searchTestCfgDto1.TextCharSearchType !=
+		searchTestCfgDto2.TextCharSearchType {
+
+		return false
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // charSearchTestConfigDtoAtom.
 //
