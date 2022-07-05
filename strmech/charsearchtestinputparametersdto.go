@@ -401,7 +401,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
