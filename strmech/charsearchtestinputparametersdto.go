@@ -973,12 +973,22 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstanceErr
 //
 // ----------------------------------------------------------------
 //
+// Be Advised
+//
+// CharSearchTestInputParametersDto.TestStringStartingIndex is
+// overwritten ONLY if 'testConfigDto.TestStringStartingIndex' has
+// a value greater than minus one (-1). Valid array indexes must
+// have a value greater than minus one (-1).
+//
+//
+// ----------------------------------------------------------------
+//
 // Input Parameters
 //
-//  textConfigDto       CharSearchTestConfigDto
+//  testConfigDto       CharSearchTestConfigDto
 //     - An instance of CharSearchTestConfigDto containing Test
 //      Input Parameter configuration data. Data elements from
-//      'textConfigDto' will be copied to the current instance
+//      'testConfigDto' will be copied to the current instance
 //      of CharSearchTestInputParametersDto.
 //
 //
@@ -989,7 +999,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstanceErr
 //  NONE
 //
 func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
-	textConfigDto CharSearchTestConfigDto) {
+	testConfigDto CharSearchTestConfigDto) {
 
 	if testSearchInputParms.lock == nil {
 		testSearchInputParms.lock = new(sync.Mutex)
@@ -1000,60 +1010,70 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
 	defer testSearchInputParms.lock.Unlock()
 
 	testSearchInputParms.TestInputParametersName =
-		textConfigDto.TestInputParametersName
+		testConfigDto.TestInputParametersName
 
 	testSearchInputParms.TestStringName =
-		textConfigDto.TestStringName
+		testConfigDto.TestStringName
 
 	testSearchInputParms.TestStringLengthName =
-		textConfigDto.TestStringLengthName
+		testConfigDto.TestStringLengthName
+
+	if testConfigDto.TestStringStartingIndex > -1 {
+
+		testSearchInputParms.TestStringStartingIndex =
+			testConfigDto.TestStringStartingIndex
+
+	}
+
+	testSearchInputParms.TestStringStartingIndexName =
+		testConfigDto.TestStringStartingIndexName
 
 	testSearchInputParms.TestStringDescription1 =
-		textConfigDto.TestStringDescription1
+		testConfigDto.TestStringDescription1
 
 	testSearchInputParms.TestStringDescription2 =
-		textConfigDto.TestStringDescription2
+		testConfigDto.TestStringDescription2
 
 	testSearchInputParms.CollectionTestObjIndex =
-		textConfigDto.CollectionTestObjIndex
+		testConfigDto.CollectionTestObjIndex
 
 	testSearchInputParms.NumValueType =
-		textConfigDto.NumValueType
+		testConfigDto.NumValueType
 
 	if !testSearchInputParms.NumValueType.XIsValid() {
 		testSearchInputParms.NumValueType = NumValType.None()
 	}
 
 	testSearchInputParms.NumStrFormatType =
-		textConfigDto.NumStrFormatType
+		testConfigDto.NumStrFormatType
 
 	if !testSearchInputParms.NumStrFormatType.XIsValid() {
 		testSearchInputParms.NumStrFormatType = NumStrFmtType.None()
 	}
 
 	testSearchInputParms.NumSymbolLocation =
-		textConfigDto.NumSymbolLocation
+		testConfigDto.NumSymbolLocation
 
 	if !testSearchInputParms.NumSymbolLocation.XIsValid() {
 		testSearchInputParms.NumSymbolLocation = NumSymLocation.None()
 	}
 
 	testSearchInputParms.NumSymbolClass =
-		textConfigDto.NumSymbolClass
+		testConfigDto.NumSymbolClass
 
 	if !testSearchInputParms.NumSymbolClass.XIsValid() {
 		testSearchInputParms.NumSymbolClass = NumSymClass.None()
 	}
 
 	testSearchInputParms.NumSignValue =
-		textConfigDto.NumSignValue
+		testConfigDto.NumSignValue
 
 	if !testSearchInputParms.NumSignValue.XIsValid() {
 		testSearchInputParms.NumSignValue = NumSignVal.None()
 	}
 
 	testSearchInputParms.PrimaryNumSignPosition =
-		textConfigDto.PrimaryNumSignPosition
+		testConfigDto.PrimaryNumSignPosition
 
 	if !testSearchInputParms.PrimaryNumSignPosition.XIsValid() {
 		testSearchInputParms.PrimaryNumSignPosition =
@@ -1061,7 +1081,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
 	}
 
 	testSearchInputParms.SecondaryNumSignPosition =
-		textConfigDto.SecondaryNumSignPosition
+		testConfigDto.SecondaryNumSignPosition
 
 	if !testSearchInputParms.SecondaryNumSignPosition.XIsValid() {
 		testSearchInputParms.SecondaryNumSignPosition =
@@ -1069,13 +1089,14 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
 	}
 
 	testSearchInputParms.TextCharSearchType =
-		textConfigDto.TextCharSearchType
+		testConfigDto.TextCharSearchType
 
 	if !testSearchInputParms.TextCharSearchType.XIsValid() {
 		testSearchInputParms.TextCharSearchType =
 			CharSearchType.None()
 	}
 
+	return
 }
 
 // New - Returns a new uninitialized instance of

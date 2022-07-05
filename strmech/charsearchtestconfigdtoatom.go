@@ -30,6 +30,8 @@ func (searchTestConfigAtom *charSearchTestConfigDtoAtom) empty(
 
 	searchTestConfigDto.TestStringLengthName = ""
 
+	searchTestConfigDto.TestStringStartingIndex = -1
+
 	searchTestConfigDto.TestStringStartingIndexName = ""
 
 	searchTestConfigDto.TestStringDescription1 = ""

@@ -2,9 +2,9 @@ package strmech
 
 import "sync"
 
-// CharSearchTestConfigDto - Transmits identification and
-// configuration data to methods creating Test Strings and
-// Character Search Test String input parameters.
+// CharSearchTestConfigDto - This data transfer object transmits
+// identification and configuration data to methods creating Test
+// Strings and Character Search Test String input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -62,6 +62,10 @@ type CharSearchTestConfigDto struct {
 	// The label or name of the 'TestStringLength'
 	// parameter. Used in error and informational
 	// messages.
+
+	TestStringStartingIndex int
+	// The starting index in the Test String where the
+	// search operation will begin.
 
 	TestStringStartingIndexName string
 	// The label or name of the TestStringStartingIndex
@@ -178,4 +182,47 @@ type CharSearchTestConfigDto struct {
 	//  CharSearchType.LinearEndOfString()         - Valid
 
 	lock *sync.Mutex
+}
+
+// New - Returns a new, empty, uninitialized instance of
+// CharSearchTestConfigDto. All member variable data elements in
+// the returned instance of CharSearchTestConfigDto will be set to
+// their zero values. Array index data elements will be set to
+// minus one (-1).
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  CharSearchTestConfigDto
+//     - This method will return a new instance of
+//       CharSearchTestConfigDto. All member variable data elements
+//       in this new instance will be set to their zero or
+//       unitialized values. Array index data elements will be set
+//       to minus one (-1).
+//
+func (searchTestConfigDto CharSearchTestConfigDto) New() CharSearchTestConfigDto {
+
+	if searchTestConfigDto.lock == nil {
+		searchTestConfigDto.lock = new(sync.Mutex)
+	}
+
+	searchTestConfigDto.lock.Lock()
+
+	defer searchTestConfigDto.lock.Unlock()
+
+	newTestCfgDto := CharSearchTestConfigDto{}
+
+	charSearchTestConfigDtoAtom{}.ptr().empty(
+		&newTestCfgDto)
+
+	return newTestCfgDto
 }
