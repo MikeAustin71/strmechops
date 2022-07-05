@@ -486,6 +486,60 @@ func (searchTestConfigDto *CharSearchTestConfigDto) Empty() {
 	return
 }
 
+// Equal - Receives a pointer to another instance of
+// CharSearchTestConfigDto and proceeds to compare its internal
+// member variables to those of the current
+// CharSearchTestConfigDto instance in order to determine if they
+// are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingSearchTestConfigDto     *CharSearchTestConfigDto
+//     - A pointer to an instance of CharSearchTestConfigDto. The
+//       internal member variable data values in this instance will
+//       be compared to those in the current instance of
+//       CharSearchTestConfigDto. The results of this comparison
+//       will be returned to the calling functions as a boolean
+//       value.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the internal member variable data values contained in
+//       input parameter 'incomingSearchTestConfigDto' are
+//       equivalent in all respects to those contained in the
+//       current instance of CharSearchTestConfigDto, this return
+//       value will be set to 'true'.
+//
+//       Otherwise, this method will return 'false'.
+//
+func (searchTestConfigDto *CharSearchTestConfigDto) Equal(
+	incomingSearchTestConfigDto *CharSearchTestConfigDto) bool {
+
+	if searchTestConfigDto.lock == nil {
+		searchTestConfigDto.lock = new(sync.Mutex)
+	}
+
+	searchTestConfigDto.lock.Lock()
+
+	defer searchTestConfigDto.lock.Unlock()
+
+	return charSearchTestConfigDtoAtom{}.ptr().equal(
+		searchTestConfigDto,
+		incomingSearchTestConfigDto)
+}
+
 // New - Returns a new, empty, uninitialized instance of
 // CharSearchTestConfigDto. All member variable data elements in
 // the returned instance of CharSearchTestConfigDto will be set to

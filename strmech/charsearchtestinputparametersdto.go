@@ -476,6 +476,9 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyOut(
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
+// Array index values will be set to a value of minus one (-1).
+// Valid array indexes must have values greater than minus one
+// (-1).
 //
 // ----------------------------------------------------------------
 //
