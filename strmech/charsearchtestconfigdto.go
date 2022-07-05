@@ -206,8 +206,8 @@ type CharSearchTestConfigDto struct {
 //     - This method will return a new instance of
 //       CharSearchTestConfigDto. All member variable data elements
 //       in this new instance will be set to their zero or
-//       unitialized values. Array index data elements will be set
-//       to minus one (-1).
+//       uninitialized values. Array index data elements will be
+//       set to minus one (-1).
 //
 func (searchTestConfigDto CharSearchTestConfigDto) New() CharSearchTestConfigDto {
 
