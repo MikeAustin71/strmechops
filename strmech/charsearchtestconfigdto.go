@@ -437,6 +437,55 @@ func (searchTestConfigDto *CharSearchTestConfigDto) CopyOut(
 	return deepCopySearchTestCfgDto, err
 }
 
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchTestConfigDto to their zero or
+// uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of CharSearchTestConfigDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+// Array index values will be set to a value of minus one (-1).
+// Valid array indexes must have values greater than minus one
+// (-1).
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (searchTestConfigDto *CharSearchTestConfigDto) Empty() {
+
+	if searchTestConfigDto.lock == nil {
+		searchTestConfigDto.lock = new(sync.Mutex)
+	}
+
+	searchTestConfigDto.lock.Lock()
+
+	charSearchTestConfigDtoAtom{}.ptr().
+		empty(searchTestConfigDto)
+
+	searchTestConfigDto.lock.Unlock()
+
+	searchTestConfigDto.lock = nil
+
+	return
+}
+
 // New - Returns a new, empty, uninitialized instance of
 // CharSearchTestConfigDto. All member variable data elements in
 // the returned instance of CharSearchTestConfigDto will be set to
