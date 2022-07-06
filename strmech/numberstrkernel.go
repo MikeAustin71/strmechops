@@ -1453,7 +1453,7 @@ func (numStrKernel *NumberStrKernel) GetNumberSign(
 // Return Values
 //
 //  int
-//     - This method returns the number of integer ditis plus the
+//     - This method returns the number of integer digits plus the
 //       number of fractional digits currently residing in this
 //       instance of NumberStrKernel.
 //

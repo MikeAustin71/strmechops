@@ -39,10 +39,10 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	negativeNumSearchSpecsCol NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
 	numParsingTerminators RuneArrayCollection,
+	requestRemainderRunesString bool,
 	ePrefDto *ePref.ErrPrefixDto) (
 	searchResults CharSearchResultsDto,
 	numStrKernel NumberStrKernel,
-	remainderNumStrRunes RuneArrayDto,
 	err error) {
 
 	if sMechMolecule.lock == nil {
@@ -65,7 +65,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -84,7 +83,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 
 	}
@@ -111,7 +109,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -126,7 +123,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -146,7 +142,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -163,7 +158,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -189,7 +183,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -208,7 +201,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
@@ -221,12 +213,16 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	targetInputParms.TargetStringLengthName = "targetSearchStringLength"
 	targetInputParms.TargetStringStartingSearchIndexName = "targetStartingSearchIndex"
 	targetInputParms.TargetStringSearchLength = -1
+	targetInputParms.FoundFirstNumericDigitInNumStr = false
 
-	searchResults.LoadTargetBaseInputParameters(
-		targetInputParms)
-
-	searchResults.FoundFirstNumericDigitInNumStr = false
 	searchResults.SearchResultsName = "Extract Number Runes Results"
+
+	searchResults.SearchResultsFunctionChain =
+		ePrefix.String()
+
+	searchResults.NumSignValue = NumSignVal.Zero()
+
+	searchResults.FoundNonZeroValue = false
 
 	foundDecimalSeparators := false
 	foundNegativeSignSymbols := false
@@ -242,12 +238,22 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		if targetSearchString.CharsArray[i] >= '0' &&
 			targetSearchString.CharsArray[i] <= '9' {
 
-			searchResults.FoundFirstNumericDigitInNumStr = true
+			targetInputParms.FoundFirstNumericDigitInNumStr = true
 
 			if !searchResults.FoundSearchTarget {
+
 				searchResults.FoundSearchTarget = true
 				searchResults.
 					TargetStringFirstFoundIndex = i
+
+			}
+
+			if targetSearchString.CharsArray[i] > '0' {
+				searchResults.FoundNonZeroValue = true
+
+				if searchResults.NumSignValue == NumSignVal.Zero() {
+					searchResults.NumSignValue = NumSignVal.Positive()
+				}
 			}
 
 			if !foundDecimalSeparators {
@@ -262,7 +268,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				if err != nil {
 					return searchResults,
 						numStrKernel,
-						remainderNumStrRunes,
 						err
 				}
 
@@ -278,7 +283,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				if err != nil {
 					return searchResults,
 						numStrKernel,
-						remainderNumStrRunes,
 						err
 				}
 			}
@@ -290,7 +294,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		// Check for Parsing Terminators
 		if !numParsingTerminators.IsNOP() &&
-			searchResults.FoundFirstNumericDigitInNumStr {
+			targetInputParms.FoundFirstNumericDigitInNumStr {
 
 			targetInputParms.TargetStringStartingSearchIndex =
 				i
@@ -332,9 +336,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			targetInputParms.TargetStringSearchLength = -1
 
-			targetInputParms.FoundFirstNumericDigitInNumStr =
-				searchResults.FoundFirstNumericDigitInNumStr
-
 			negNumSearchResults,
 				err = negativeNumSearchSpecsCol.
 				SearchForNegNumSignSymbols(
@@ -349,7 +350,13 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				i =
 					negNumSearchResults.TargetStringLastSearchIndex
 
-				searchResults.TargetStringLastSearchIndex = i
+				searchResults.NumSignValue = NumSignVal.Negative()
+
+				searchResults.PrimaryNumSignPosition =
+					negNumSearchResults.PrimaryNumSignPosition
+
+				searchResults.SecondaryNumSignPosition =
+					negNumSearchResults.SecondaryNumSignPosition
 
 				continue
 			}
@@ -368,7 +375,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 				return searchResults,
 					numStrKernel,
-					remainderNumStrRunes,
 					err
 
 			}
@@ -398,24 +404,99 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	}
 
 computeExitStats:
-	if !numStrKernel.IsNonZeroValue() {
 
-		numStrKernel.numberSign = NumSignVal.Zero()
+	// Slice Examples
+	//arr := []int{1,2,3,4,5}
+	//
+	//fmt.Println(arr[:2])        // [1,2]
+	//
+	//fmt.Println(arr[2:])        // [3,4,5]
+	//
+	//fmt.Println(arr[2:3])        // [3]
+	//
+	//fmt.Println(arr[:])            // [1,2,3,4,5]
 
-	} else if foundNegativeSignSymbols {
-		// MUST BE numStrKernel.IsNonZeroValue() == true
-		numStrKernel.numberSign = NumSignVal.Negative()
+	searchResults.LoadTargetBaseInputParameters(
+		targetInputParms)
+
+	searchResults.RemainderString.Empty()
+
+	if searchResults.FoundSearchTarget == true {
+
+		if requestRemainderRunesString {
+
+			if searchResults.TargetStringNextSearchIndex == -1 {
+				// All characters have been searched.
+				// There is no Remainder String
+			} else {
+				// All characters HAVE NOT BEEN SEARCHED
+				// There is a Remainder String
+
+				searchResults.RemainderString.CharsArray =
+					append(
+						searchResults.RemainderString.CharsArray,
+						targetSearchString.
+							CharsArray[searchResults.TargetStringLastSearchIndex:]...)
+			}
+
+		}
+
+		if searchResults.FoundNonZeroValue == true {
+			// Value is Nonzero
+
+			if searchResults.NumSignValue == NumSignVal.Negative() {
+				numStrKernel.numberSign = NumSignVal.Negative()
+			} else {
+				numStrKernel.numberSign = NumSignVal.Positive()
+			}
+
+		} else {
+			// Value is Zero
+			numStrKernel.numberSign = NumSignVal.Zero()
+		}
 
 	} else {
-		// MUST BE foundNonZeroNumericDigits == true
-		// Must be a positive number
-		numStrKernel.numberSign = NumSignVal.Positive()
+		// searchResults.FoundSearchTarget == false
+		// Didn't find any numeric digits!
+		numStrKernel.Empty()
+		searchResults.TargetStringLastSearchIndex = -1
+		searchResults.TargetStringLastFoundIndex = -1
+		searchResults.TargetStringNextSearchIndex = 0
+
+		if requestRemainderRunesString {
+
+			searchResults.RemainderString.CharsArray =
+				append(
+					searchResults.RemainderString.CharsArray,
+					targetSearchString.
+						CharsArray[searchResults.TargetStringLastSearchIndex:]...)
+
+			if startingSearchIndex == 0 {
+
+				searchResults.RemainderString.CharsArray =
+					make([]rune, len(targetSearchString.
+						CharsArray))
+
+				copy(
+					searchResults.RemainderString.CharsArray,
+					targetSearchString.CharsArray)
+
+			} else {
+
+				startingSearchIndex--
+
+				searchResults.RemainderString.CharsArray =
+					append(
+						searchResults.RemainderString.CharsArray,
+						targetSearchString.
+							CharsArray[startingSearchIndex:]...)
+			}
+		}
 
 	}
 
 	return searchResults,
 		numStrKernel,
-		remainderNumStrRunes,
 		err
 }
 

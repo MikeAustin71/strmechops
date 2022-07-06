@@ -1513,10 +1513,10 @@ func (sMech *StrMech) ExtractNumberRunes(
 	negativeNumSearchSpecs NegNumSearchSpecCollection,
 	decimalSeparatorSpec DecimalSeparatorSpec,
 	numParsingTerminators RuneArrayCollection,
+	requestRemainderRuneString bool,
 	errorPrefix interface{}) (
 	searchResults CharSearchResultsDto,
 	numStrKernel NumberStrKernel,
-	remainderNumStrRunes RuneArrayDto,
 	err error) {
 
 	if sMech.stringDataMutex == nil {
@@ -1539,13 +1539,11 @@ func (sMech *StrMech) ExtractNumberRunes(
 
 		return searchResults,
 			numStrKernel,
-			remainderNumStrRunes,
 			err
 	}
 
 	searchResults,
 		numStrKernel,
-		remainderNumStrRunes,
 		err = strMechMolecule{}.ptr().extractNumRunes(
 		rawNumStrRunes,
 		"numberStr",
@@ -1554,11 +1552,11 @@ func (sMech *StrMech) ExtractNumberRunes(
 		negativeNumSearchSpecs,
 		decimalSeparatorSpec,
 		numParsingTerminators,
+		requestRemainderRuneString,
 		ePrefix)
 
 	return searchResults,
 		numStrKernel,
-		remainderNumStrRunes,
 		err
 }
 

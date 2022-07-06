@@ -80,6 +80,10 @@ type CharSearchResultsDto struct {
 	// has identified the first numeric digit in a string of text
 	// characters.
 
+	FoundNonZeroValue bool
+	// When set to 'true' this signals that the search operation
+	// has detected a nonzero numeric digit.
+
 	TargetInputParametersName string
 	// The Name, Label or descriptive Tag associated with an
 	// instance of CharSearchTargetInputParametersDto.
@@ -187,13 +191,13 @@ type CharSearchResultsDto struct {
 	// the array index of the current Test String object
 	// in the collection.
 
-	ReplacementString *RuneArrayDto
+	ReplacementString RuneArrayDto
 	// A pointer to the Rune Array Data Transfer Object
 	// containing the Replacement Characters to be
 	// substituted for existing characters in a Target
 	// String.
 
-	RemainderString *RuneArrayDto
+	RemainderString RuneArrayDto
 	// A pointer to the Rune Array Data Transfer Object
 	// containing the remaining characters in a Target
 	// String which were NOT included in the search

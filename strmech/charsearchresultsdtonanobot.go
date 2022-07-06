@@ -150,6 +150,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.FoundFirstNumericDigitInNumStr =
 		incomingSearchResultsDto.FoundFirstNumericDigitInNumStr
 
+	targetSearchResultsDto.FoundNonZeroValue =
+		incomingSearchResultsDto.FoundNonZeroValue
+
 	targetSearchResultsDto.TargetInputParametersName =
 		incomingSearchResultsDto.TargetInputParametersName
 
@@ -207,13 +210,10 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.CollectionTestObjIndex =
 		incomingSearchResultsDto.CollectionTestObjIndex
 
-	if incomingSearchResultsDto.RemainderString != nil {
-
-		targetSearchResultsDto.RemainderString =
-			&RuneArrayDto{}
+	if incomingSearchResultsDto.RemainderString.GetRuneArrayLength() > 0 {
 
 		err = targetSearchResultsDto.RemainderString.CopyIn(
-			incomingSearchResultsDto.RemainderString,
+			&incomingSearchResultsDto.RemainderString,
 			ePrefix.XCpy(
 				"targetSearchResultsDto.RemainderString"+
 					"<-incomingSearchResultsDto.RemainderString"))
@@ -226,13 +226,10 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 
 	}
 
-	if incomingSearchResultsDto.ReplacementString != nil {
-
-		targetSearchResultsDto.ReplacementString =
-			&RuneArrayDto{}
+	if incomingSearchResultsDto.ReplacementString.GetRuneArrayLength() > 0 {
 
 		err = targetSearchResultsDto.ReplacementString.CopyIn(
-			incomingSearchResultsDto.ReplacementString,
+			&incomingSearchResultsDto.ReplacementString,
 			ePrefix.XCpy(
 				"targetSearchResultsDto.ReplacementString"+
 					"<-incomingSearchResultsDto.ReplacementString"))
@@ -385,6 +382,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 	copySearchResultsDto.FoundFirstNumericDigitInNumStr =
 		searchResultsDto.FoundFirstNumericDigitInNumStr
 
+	copySearchResultsDto.FoundNonZeroValue =
+		searchResultsDto.FoundNonZeroValue
+
 	copySearchResultsDto.TargetInputParametersName =
 		searchResultsDto.TargetInputParametersName
 
@@ -442,14 +442,11 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 	copySearchResultsDto.CollectionTestObjIndex =
 		searchResultsDto.CollectionTestObjIndex
 
-	if searchResultsDto.RemainderString != nil {
-
-		copySearchResultsDto.RemainderString =
-			&RuneArrayDto{}
+	if searchResultsDto.RemainderString.GetRuneArrayLength() > 0 {
 
 		err = copySearchResultsDto.RemainderString.
 			CopyIn(
-				searchResultsDto.RemainderString,
+				&searchResultsDto.RemainderString,
 				ePrefix.XCpy(
 					"copySearchResultsDto.RemainderString<-"+
 						"searchResultsDto.RemainderString"))
@@ -462,14 +459,11 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 
 	}
 
-	if searchResultsDto.ReplacementString != nil {
-
-		copySearchResultsDto.ReplacementString =
-			&RuneArrayDto{}
+	if searchResultsDto.ReplacementString.GetRuneArrayLength() > 0 {
 
 		err = copySearchResultsDto.ReplacementString.
 			CopyIn(
-				searchResultsDto.ReplacementString,
+				&searchResultsDto.ReplacementString,
 				ePrefix.XCpy(
 					"copySearchResultsDto.ReplacementString<-"+
 						"searchResultsDto.ReplacementString"))
@@ -862,6 +856,16 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	labelParams = append(labelParams, labelParam)
 
+	// Build FoundNonZeroValue
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundNonZeroValue"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchResultsDto.FoundNonZeroValue)
+
+	labelParams = append(labelParams, labelParam)
+
 	// Build TargetInputParametersName
 	labelParam = TextLabelValueStrings{}
 
@@ -1044,18 +1048,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 
 	// Build RemainderString
 
-	if searchResultsDto.RemainderString == nil {
-		// Build RemainderString nil message
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "RemainderString"
-
-		labelParam.ParamValue =
-			"Not Set. RemainderString is a nil pointer"
-
-		labelParams = append(labelParams, labelParam)
-
-	} else if searchResultsDto.RemainderString.
+	if searchResultsDto.RemainderString.
 		GetRuneArrayLength() <=
 		(maxLineLen - maxLabelFieldLen - 3) {
 
@@ -1149,19 +1142,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 	}
 
 	// Build ReplacementString
-
-	if searchResultsDto.ReplacementString == nil {
-		// Build ReplacementString nil message
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "ReplacementString"
-
-		labelParam.ParamValue =
-			"Not Set. ReplacementString is a nil pointer"
-
-		labelParams = append(labelParams, labelParam)
-
-	} else if searchResultsDto.ReplacementString.
+	if searchResultsDto.ReplacementString.
 		GetRuneArrayLength() <=
 		(maxLineLen - maxLabelFieldLen - 3) {
 

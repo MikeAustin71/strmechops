@@ -51,7 +51,7 @@ func (searchResultsDtoElectron charSearchResultsDtoElectron) emptyRemainderStrin
 		return
 	}
 
-	searchResultsDto.RemainderString = nil
+	searchResultsDto.RemainderString.Empty()
 
 	return
 }
@@ -98,7 +98,7 @@ func (searchResultsDtoElectron charSearchResultsDtoElectron) emptyReplacementStr
 		return
 	}
 
-	searchResultsDto.ReplacementString = nil
+	searchResultsDto.ReplacementString.Empty()
 
 	return
 }
@@ -167,26 +167,8 @@ func (searchResultsDtoElectron charSearchResultsDtoElectron) equalRemainderStrin
 		return false
 	}
 
-	if searchResultsDto1.RemainderString == nil &&
-		searchResultsDto2.RemainderString == nil {
-
-		return true
-	}
-
-	if searchResultsDto1.RemainderString == nil &&
-		searchResultsDto2.RemainderString != nil {
-
-		return false
-	}
-
-	if searchResultsDto1.RemainderString != nil &&
-		searchResultsDto2.RemainderString == nil {
-
-		return false
-	}
-
 	return searchResultsDto1.RemainderString.Equal(
-		searchResultsDto2.RemainderString)
+		&searchResultsDto2.RemainderString)
 
 }
 
@@ -254,26 +236,8 @@ func (searchResultsDtoElectron charSearchResultsDtoElectron) equalReplacementStr
 		return false
 	}
 
-	if searchResultsDto1.ReplacementString == nil &&
-		searchResultsDto2.ReplacementString == nil {
-
-		return true
-	}
-
-	if searchResultsDto1.ReplacementString == nil &&
-		searchResultsDto2.ReplacementString != nil {
-
-		return false
-	}
-
-	if searchResultsDto1.ReplacementString != nil &&
-		searchResultsDto2.ReplacementString == nil {
-
-		return false
-	}
-
 	return searchResultsDto1.ReplacementString.Equal(
-		searchResultsDto2.ReplacementString)
+		&searchResultsDto2.ReplacementString)
 
 }
 
