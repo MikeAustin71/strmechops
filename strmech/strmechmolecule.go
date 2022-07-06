@@ -68,13 +68,13 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	if len(targetSearchStringName) == 0 {
-		targetSearchStringName = "targetSearchString"
-	}
+	targetInputParms := CharSearchTargetInputParametersDto{}.New()
 
-	actualTargetStrLength := targetSearchString.GetRuneArrayLength()
+	targetInputParms.TargetString = &targetSearchString
 
-	if actualTargetStrLength == 0 {
+	targetInputParms.TargetStringLength = targetSearchString.GetRuneArrayLength()
+
+	if targetInputParms.TargetStringLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'targetSearchString' is invalid.\n"+
@@ -92,7 +92,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	_,
 		err2 = sMechPreon.testValidityOfRuneCharArray(
-		targetSearchString.CharsArray,
+		targetInputParms.TargetString.CharsArray,
 		nil)
 
 	if err2 != nil {
@@ -112,21 +112,43 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	if startingSearchIndex < 0 {
+	targetInputParms.TargetInputParametersName = "extractNumRunes"
+
+	if len(targetSearchStringName) == 0 {
+		targetInputParms.TargetStringName = "targetSearchString"
+	} else {
+		targetInputParms.TargetStringName = targetSearchStringName
+	}
+
+	targetInputParms.TargetStringLengthName =
+		targetInputParms.TargetStringName + "Length"
+
+	targetInputParms.TargetStringStartingSearchIndexName =
+		targetInputParms.TargetStringName + "StartingSearchIndex"
+
+	targetInputParms.TargetStringSearchLength = -1
+
+	targetInputParms.FoundFirstNumericDigitInNumStr = false
+
+	targetInputParms.TargetStringStartingSearchIndex =
+		startingSearchIndex
+
+	if targetInputParms.TargetStringStartingSearchIndex < 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
 			"'startingSearchIndex' has a value less than zero!\n"+
 			"startingSearchIndex = '%v'\n",
 			ePrefix.String(),
-			startingSearchIndex)
+			targetInputParms.TargetStringStartingSearchIndex)
 
 		return searchResults,
 			numStrKernel,
 			err
 	}
 
-	if startingSearchIndex >= actualTargetStrLength {
+	if targetInputParms.TargetStringStartingSearchIndex >=
+		targetInputParms.TargetStringLength {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'startingSearchIndex' is invalid.\n"+
@@ -135,21 +157,19 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			"startingSearchIndex = '%v'\n"+
 			"%v last index = %v\n",
 			ePrefix.String(),
-			targetSearchStringName,
-			startingSearchIndex,
-			targetSearchStringName,
-			actualTargetStrLength-1)
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringStartingSearchIndex,
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringLength-1)
 
 		return searchResults,
 			numStrKernel,
 			err
 	}
 
-	if characterSearchLength < 0 {
-		characterSearchLength = actualTargetStrLength
-	}
+	targetInputParms.TargetStringSearchLength = characterSearchLength
 
-	if characterSearchLength == 0 {
+	if targetInputParms.TargetStringSearchLength == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'characterSearchLength' is invalid.\n"+
@@ -161,11 +181,16 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	adjustedCharacterSearchLength :=
-		characterSearchLength + startingSearchIndex
+	err = targetInputParms.ValidateTargetParameters(
+		ePrefix.XCpy(
+			"targetInputParms"))
 
-	if adjustedCharacterSearchLength > actualTargetStrLength {
-		adjustedCharacterSearchLength = actualTargetStrLength
+	if err != nil {
+
+		return searchResults,
+			numStrKernel,
+			err
+
 	}
 
 	err2 = negativeNumSearchSpecsCol.IsValidInstanceError(
@@ -204,17 +229,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	targetInputParms := CharSearchTargetInputParametersDto{}.New()
-
-	targetInputParms.TargetInputParametersName = "extractNumRunes"
-	targetInputParms.TargetString = &targetSearchString
-	targetInputParms.TargetStringName = "targetSearchString"
-	targetInputParms.TargetStringLength = actualTargetStrLength
-	targetInputParms.TargetStringLengthName = "targetSearchStringLength"
-	targetInputParms.TargetStringStartingSearchIndexName = "targetStartingSearchIndex"
-	targetInputParms.TargetStringSearchLength = -1
-	targetInputParms.FoundFirstNumericDigitInNumStr = false
-
 	searchResults.SearchResultsName = "Extract Number Runes Results"
 
 	searchResults.SearchResultsFunctionChain =
@@ -222,6 +236,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	searchResults.NumSignValue = NumSignVal.Zero()
 
+	searchResults.FoundSearchTarget = false
 	searchResults.FoundNonZeroValue = false
 
 	foundDecimalSeparators := false
@@ -231,9 +246,11 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	var decimalSepSearchResults CharSearchResultsDto
 	var parsingTerminationResults CharSearchResultsDto
 
-	searchResults.TargetStringLastSearchIndex = 0
+	searchResults.TargetStringLastSearchIndex = -1
 
-	for i := startingSearchIndex; i < actualTargetStrLength; i++ {
+	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
+
+		targetInputParms.TargetStringCurrentSearchIndex = i
 
 		if targetSearchString.CharsArray[i] >= '0' &&
 			targetSearchString.CharsArray[i] <= '9' {
@@ -247,6 +264,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 					TargetStringFirstFoundIndex = i
 
 			}
+
+			searchResults.TargetStringLastFoundIndex = i
 
 			if targetSearchString.CharsArray[i] > '0' {
 				searchResults.FoundNonZeroValue = true
@@ -287,17 +306,13 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				}
 			}
 
-			searchResults.TargetStringLastSearchIndex = i
-
 			continue
 		}
 
 		// Check for Parsing Terminators
+		// All Parsing Operations Cease if Delimiter is Found
 		if !numParsingTerminators.IsNOP() &&
 			targetInputParms.FoundFirstNumericDigitInNumStr {
-
-			targetInputParms.TargetStringStartingSearchIndex =
-				i
 
 			parsingTerminationResults,
 				err = numParsingTerminators.SearchForTextCharacters(
@@ -312,7 +327,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 				searchResults.TargetStringLastSearchIndex = i
 
-				if i+1 < actualTargetStrLength {
+				if i+1 < targetInputParms.TargetStringLength {
 
 					searchResults.
 						TargetStringNextSearchIndex = i + 1
@@ -331,11 +346,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		// Check for Negative Number Sign Symbol
 		if !foundNegativeSignSymbols {
 
-			targetInputParms.TargetStringStartingSearchIndex =
-				i
-
-			targetInputParms.TargetStringSearchLength = -1
-
 			negNumSearchResults,
 				err = negativeNumSearchSpecsCol.
 				SearchForNegNumSignSymbols(
@@ -348,7 +358,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			if foundNegativeSignSymbols {
 
 				i =
-					negNumSearchResults.TargetStringLastSearchIndex
+					negNumSearchResults.TargetStringLastFoundIndex
 
 				searchResults.NumSignValue = NumSignVal.Negative()
 
@@ -362,8 +372,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			}
 		}
 
+		// Check for Decimal Separators
 		if !foundDecimalSeparators {
-			// Search for Decimal Separators
 
 			decimalSepSearchResults,
 				err = decimalSeparatorSpec.SearchForDecimalSeparator(
@@ -390,15 +400,13 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				continue
 			}
 		}
-
-		searchResults.TargetStringLastSearchIndex = i
 	}
 
 	searchResults.TargetStringNextSearchIndex =
 		searchResults.TargetStringLastSearchIndex + 1
 
 	if searchResults.TargetStringNextSearchIndex >=
-		actualTargetStrLength {
+		targetInputParms.TargetStringLength {
 
 		searchResults.TargetStringNextSearchIndex = -1
 	}

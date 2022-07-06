@@ -843,7 +843,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 
 	searchResults.TestStringStartingIndex = 0
 
-	for i := searchResults.TargetStringStartingSearchIndex; i < searchResults.TargetStringLength; i++ {
+	for i := targetInputParms.TargetStringCurrentSearchIndex; i < targetInputParms.TargetStringLength; i++ {
 
 		k = i
 		j = 0
@@ -874,6 +874,10 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 					searchResults.TestStringLength - 1
 
 				searchResults.TargetStringLastFoundIndex = k
+
+				searchResults.TargetStringLastSearchIndex = k
+
+				searchResults.TargetStringCurrentSearchIndex = k
 
 				searchResults.TargetStringFirstFoundIndex =
 					searchResults.TargetStringLastFoundIndex -
@@ -1602,7 +1606,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 
 	j := 0
 
-	for i := searchResults.TargetStringStartingSearchIndex; i < searchResults.TargetStringAdjustedSearchLength; i++ {
+	for i := targetInputParms.TargetStringCurrentSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
 
 		if testInputParms.TestString.CharsArray[j] !=
 			targetInputParms.TargetString.CharsArray[i] {
@@ -1632,6 +1636,10 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 				searchResults.TestStringLength - 1
 
 			searchResults.TargetStringLastFoundIndex = i
+
+			searchResults.TargetStringLastSearchIndex = i
+
+			searchResults.TargetStringCurrentSearchIndex = i
 
 			searchResults.TargetStringFirstFoundIndex =
 				searchResults.TargetStringLastFoundIndex -
@@ -2340,7 +2348,7 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 		testInputParms)
 
 	targetChar :=
-		targetInputParms.TargetString.CharsArray[targetInputParms.TargetStringStartingSearchIndex]
+		targetInputParms.TargetString.CharsArray[targetInputParms.TargetStringCurrentSearchIndex]
 
 	for j := testInputParms.TestStringStartingIndex; j < testInputParms.TestStringLength; j++ {
 
@@ -2358,10 +2366,16 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 			searchResults.TestStringLastFoundIndex = j
 
 			searchResults.TargetStringLastFoundIndex =
-				targetInputParms.TargetStringStartingSearchIndex
+				targetInputParms.TargetStringCurrentSearchIndex
 
 			searchResults.TargetStringFirstFoundIndex =
-				targetInputParms.TargetStringStartingSearchIndex
+				targetInputParms.TargetStringCurrentSearchIndex
+
+			searchResults.TargetStringLastSearchIndex =
+				targetInputParms.TargetStringCurrentSearchIndex
+
+			searchResults.TargetStringCurrentSearchIndex =
+				targetInputParms.TargetStringCurrentSearchIndex
 
 			return searchResults, err
 		}

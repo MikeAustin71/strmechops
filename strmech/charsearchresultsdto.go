@@ -107,6 +107,9 @@ type CharSearchResultsDto struct {
 	// The index in 'TargetString' at which the search
 	// operation begins.
 
+	TargetStringCurrentSearchIndex int
+	// The index in 'TargetString' currently being searched.
+
 	TargetStringFirstFoundIndex int
 	// The index of the first character position in the
 	// Target Search String occupied by the first
@@ -192,19 +195,17 @@ type CharSearchResultsDto struct {
 	// in the collection.
 
 	ReplacementString RuneArrayDto
-	// A pointer to the Rune Array Data Transfer Object
-	// containing the Replacement Characters to be
-	// substituted for existing characters in a Target
-	// String.
+	// A Rune Array Data Transfer Object containing the
+	// Replacement Characters to be substituted for
+	// existing characters in a Target String.
 
 	RemainderString RuneArrayDto
-	// A pointer to the Rune Array Data Transfer Object
-	// containing the remaining characters in a Target
-	// String which were NOT included in the search
-	// operation and which remain to be searched in future
-	// search operations. This string is also used in 'cut'
-	// operations where Target String is divided based on
-	// string delimiters.
+	// A Rune Array Data Transfer Object containing the
+	// remaining characters in a Target String which were
+	// NOT included in the search operation and which remain
+	// to be searched in future search operations. This
+	// string is also used in 'cut' operations where the
+	// Target String is divided based on string delimiters.
 
 	NumValueType NumericValueType
 	// Optional. This enumeration value specifies the type
@@ -805,6 +806,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 
 	charSearchResults.TargetStringStartingSearchIndex =
 		targetInputParms.TargetStringStartingSearchIndex
+
+	charSearchResults.TargetStringCurrentSearchIndex =
+		targetInputParms.TargetStringCurrentSearchIndex
 
 	charSearchResults.TargetStringDescription1 =
 		targetInputParms.TargetStringDescription1

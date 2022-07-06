@@ -73,6 +73,8 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 
 	targetInputParms.TargetStringStartingSearchIndex = -1
 
+	targetInputParms.TargetStringCurrentSearchIndex = -1
+
 	targetInputParms.TargetStringStartingSearchIndexName = ""
 
 	targetInputParms.TargetStringSearchLength = -2
@@ -183,6 +185,12 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.TargetStringStartingSearchIndex !=
 		targetInputParms2.TargetStringStartingSearchIndex {
+
+		return false
+	}
+
+	if targetInputParms1.TargetStringCurrentSearchIndex !=
+		targetInputParms2.TargetStringCurrentSearchIndex {
 
 		return false
 	}
@@ -487,6 +495,7 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) testVa
 			targetInputParms.TargetStringSearchLengthName,
 			targetInputParms.TargetStringSearchLengthName)
 
+		return isValid, err
 	}
 
 	if targetInputParms.TargetStringSearchLength == -1 {
@@ -511,6 +520,34 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) testVa
 		targetInputParms.TargetStringAdjustedSearchLength =
 			targetInputParms.TargetStringLength
 
+	}
+
+	if targetInputParms.TargetStringCurrentSearchIndex <
+		targetInputParms.TargetStringStartingSearchIndex {
+
+		targetInputParms.TargetStringCurrentSearchIndex =
+			targetInputParms.TargetStringStartingSearchIndex
+	}
+
+	if targetInputParms.TargetStringCurrentSearchIndex >=
+		targetInputParms.TargetStringLength {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid!\n"+
+			"%vCurrentSearchIndex has a value greater than\n"+
+			"or equal to %vLength\n"+
+			"%vLength = '%v'\n"+
+			"%vCurrentSearchIndex   = '%v'\n",
+			ePrefix.String(),
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringAdjustedSearchLength,
+			targetInputParms.TargetStringName,
+			targetInputParms.TargetStringCurrentSearchIndex)
+
+		return isValid, err
 	}
 
 	isValid = true

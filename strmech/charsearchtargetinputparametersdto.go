@@ -86,6 +86,9 @@ type CharSearchTargetInputParametersDto struct {
 	// TargetStringStartingSearchIndex parameter.
 	// Used in error and informational messages.
 
+	TargetStringCurrentSearchIndex int
+	// The index in 'TargetString' currently being searched.
+
 	TargetStringSearchLength int
 	// The actual number of characters within the Target
 	// Search String that are included in the search

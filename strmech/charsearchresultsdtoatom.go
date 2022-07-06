@@ -78,6 +78,8 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 
 	searchResultsDto.TargetStringStartingSearchIndex = -1
 
+	searchResultsDto.TargetStringCurrentSearchIndex = -1
+
 	searchResultsDto.TargetStringFirstFoundIndex = -1
 
 	searchResultsDto.TargetStringLastFoundIndex = -1
@@ -253,6 +255,12 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 
 	if searchResultsDto1.TargetStringStartingSearchIndex !=
 		searchResultsDto2.TargetStringStartingSearchIndex {
+
+		return false
+	}
+
+	if searchResultsDto1.TargetStringCurrentSearchIndex !=
+		searchResultsDto2.TargetStringCurrentSearchIndex {
 
 		return false
 	}
