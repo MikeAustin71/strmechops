@@ -1653,6 +1653,42 @@ func (numStrKernel *NumberStrKernel) IsNonZeroValue() bool {
 	return false
 }
 
+// RationalizeFractionalIntegerDigits - If fractional digits are
+// present in this instance of NumberStrKernel, this method will
+// ensure that integer digits are also present.
+//
+// If fractional digits are present and no integer digits are
+// found, this method will add a zero ('0') to the integer digits
+// rune array.
+//
+// Example:
+//   .752 will be converted to 0.752
+//
+func (numStrKernel *NumberStrKernel) RationalizeFractionalIntegerDigits() {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	if numStrKernel.fractionalDigits.GetRuneArrayLength() == 0 {
+		return
+	}
+
+	// Fractional Digits exist!
+	if numStrKernel.integerDigits.GetRuneArrayLength() == 0 {
+
+		numStrKernel.integerDigits.CharsArray =
+			append(numStrKernel.integerDigits.CharsArray,
+				'0')
+	}
+
+	return
+}
+
 // SetNumberSign - Sets the Number Sign for the numeric value
 // represented by the current instance of NumberStrKernel.
 //

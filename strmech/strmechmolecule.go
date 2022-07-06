@@ -441,6 +441,8 @@ computeExitStats:
 
 		}
 
+		numStrKernel.RationalizeFractionalIntegerDigits()
+
 		if searchResults.FoundNonZeroValue == true {
 			// Value is Nonzero
 
