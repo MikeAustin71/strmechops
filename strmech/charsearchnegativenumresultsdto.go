@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
@@ -881,4 +882,65 @@ func (negNumSearchResults CharSearchNegativeNumberResultsDto) New() CharSearchNe
 	newNegNumResultsDto.Empty()
 
 	return newNegNumResultsDto
+}
+
+// String - Returns a formatted text string detailing all the
+// internal member variable names and their corresponding values
+// for the current instance of CharSearchNegativeNumberResultsDto.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+func (negNumSearchResults *CharSearchNegativeNumberResultsDto) String() string {
+
+	if negNumSearchResults.lock == nil {
+		negNumSearchResults.lock = new(sync.Mutex)
+	}
+
+	negNumSearchResults.lock.Lock()
+
+	defer negNumSearchResults.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchNegativeNumberResultsDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchNegativeNumberResultsDto.String()",
+			err.Error())
+
+		return errOut
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchNegNumResultsDtoNanobot{}.ptr().
+		getParameterTextListing(
+			negNumSearchResults,
+			ePrefix.XCpy(
+				"negNumSearchResults->Parameter Listing"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
 }
