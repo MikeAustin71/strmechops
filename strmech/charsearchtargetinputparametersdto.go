@@ -124,6 +124,12 @@ type CharSearchTargetInputParametersDto struct {
 	// numeric digit has been identified in the text
 	// characters specified by 'TargetString'
 
+	FoundDecimalSeparatorSymbols bool
+	// When set to 'true' this signals that a Decimal
+	// Separator Symbol character or characters have been
+	// identified in the text characters specified by
+	// 'TargetString'
+
 	TextCharSearchType CharacterSearchType
 	// Optional. An enumeration value signaling the type
 	// of text character search algorithm used to conduct

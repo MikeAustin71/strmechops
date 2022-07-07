@@ -90,6 +90,11 @@ type CharSearchDecimalSeparatorResultsDto struct {
 	// Signals that Decimal Separator Symbols were located in a
 	// previous search operation.
 
+	FoundFirstNumericDigitInNumStr bool
+	// When set to 'true' this signals that a previous search
+	// operation has identified the first numeric digit in a
+	// string of text characters.
+
 	TargetInputParametersName string
 	// The Name, Label or descriptive Tag associated with an
 	// instance of CharSearchTargetInputParametersDto.
@@ -255,4 +260,75 @@ type CharSearchDecimalSeparatorResultsDto struct {
 	// of DecimalSeparatorSpec
 
 	lock *sync.Mutex
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchDecimalSeparatorResultsDto to their zero
+// or uninitialized states. This method will leave the current
+// instance of CharSearchDecimalSeparatorResultsDto in an
+// invalid state and unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of CharSearchDecimalSeparatorResultsDto. All
+// member variable data values will be reset to their zero or
+// uninitialized states. Array index values will be set to minus
+// one (-1). Valid array indexes have values greater than minus one
+// (-1).
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Empty() {
+
+	if decSepSearchResultsDto.lock == nil {
+		decSepSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	decSepSearchResultsDto.lock.Lock()
+
+	charSearchDecimalSeparatorResultsDtoAtom{}.ptr().
+		empty(decSepSearchResultsDto)
+
+	decSepSearchResultsDto.lock.Unlock()
+
+	decSepSearchResultsDto.lock = nil
+}
+
+// New - Returns a new and uninitialized instance of
+// CharSearchDecimalSeparatorResultsDto.
+//
+// All member variables in this returned instance are set to their
+// zero or uninitialized states. Array index values are set to a
+// value of minus one (-1). All valid array indexes have values
+// greater than minus one (-1).
+//
+func (decSepSearchResultsDto CharSearchDecimalSeparatorResultsDto) New() CharSearchDecimalSeparatorResultsDto {
+
+	if decSepSearchResultsDto.lock == nil {
+		decSepSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	decSepSearchResultsDto.lock.Lock()
+
+	defer decSepSearchResultsDto.lock.Unlock()
+
+	newDecSepSearchResults := CharSearchDecimalSeparatorResultsDto{}
+
+	return newDecSepSearchResults
 }

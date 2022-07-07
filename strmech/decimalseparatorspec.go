@@ -47,22 +47,6 @@ type DecimalSeparatorSpec struct {
 	//                                    which comprise the Decimal
 	//                                    Separator.
 
-	// Processing flags
-	//
-	// Internal Processing flags are used by Number String parsing
-	// functions to identify decimal separators in strings of numeric
-	// digits called 'Number Strings'. These Number String parsing
-	// functions review strings of text characters containing numeric
-	// digits and convert those numeric digits to numeric values.
-
-	foundDecimalSeparatorSymbols bool // Indicates that the decimal separator
-	//                                       characters have been found in the
-	//                                       number string.
-	foundDecimalSeparatorIndex int // Holds the zero based index of the
-	//                                       number where the beginning Decimal
-	//                                       Separator Character was
-	//                                       found in the number string.
-
 	lock *sync.Mutex
 }
 
@@ -571,94 +555,6 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 	return string(decSeparatorSpec.decimalSeparatorChars.CharsArray)
 }
 
-// GetFoundDecimalSeparatorIndex - This integer value is set
-// internally during a number string parsing operation.
-//
-// As such it is almost exclusively used by Number String parsing
-// functions. Users will typically have little or no use for this
-// boolean processing flag.
-//
-// Internal Processing flags like internal member variable
-// 'foundDecimalSeparatorIndex' are used by Number String parsing
-// functions to identify a Decimal Separator Symbol or Symbols in
-// strings of numeric digits called 'Number Strings'. Number String
-// parsing functions review strings of text characters containing
-// numeric digits and convert those numeric digits to numeric
-// values.
-//
-// If the Decimal Separator character or characters configured for
-// the current instance of DecimalSeparatorSpec is located in a
-// Number String during a number string parsing operation, this
-// 'foundDecimalSeparatorIndex' will store the zero based string
-// index marking the beginning of the Decimal Separator character
-// or characters within the Number String.
-//
-// The value of this index is only valid if another internal
-// processing flag, 'foundDecimalSeparatorSymbols' is set to
-// 'true'. For more information on 'foundDecimalSeparatorSymbols'
-// see method:
-//    DecimalSeparatorSpec.GetFoundDecimalSeparatorSymbols()
-//
-// This method returns the internal processing status flag
-// 'foundDecimalSeparatorIndex' identifying the zero based index
-// location of the first Decimal Separator character in a Number
-// String.
-//
-func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundDecimalSeparatorIndex() int {
-
-	if decSeparatorSpec.lock == nil {
-		decSeparatorSpec.lock = new(sync.Mutex)
-	}
-
-	decSeparatorSpec.lock.Lock()
-
-	defer decSeparatorSpec.lock.Unlock()
-
-	return decSeparatorSpec.foundDecimalSeparatorIndex
-}
-
-// GetFoundDecimalSeparatorSymbols - This boolean flag is set internally
-// during a number string parsing operation.
-//
-// As such it is almost exclusively used by Number String parsing
-// functions. Users will typically have little or no use for this
-// boolean processing flag.
-//
-// Internal Processing flags like internal member variable
-// 'foundDecimalSeparatorSymbols' are used by Number String parsing
-// functions to identify a Decimal Separator Symbol or Symbols in
-// strings of numeric digits called 'Number Strings'. Number String
-// parsing functions review strings of text characters containing
-// numeric digits and convert those numeric digits to numeric
-// values.
-//
-// If the Decimal Separator character or characters configured for
-// the current instance of DecimalSeparatorSpec is located in a
-// Number String during a number string parsing operation, this
-// boolean value is set to 'true'.
-//
-// If the subject Decimal Separator character or characters has not
-// yet been located in the Number String, this value is set to
-// 'false'.
-//
-// This method returns the internal processing status flag
-// 'foundDecimalSeparatorSymbols' indicating whether the Decimal
-// Separator character or characters has been located in a number
-// string parsing operation.
-//
-func (decSeparatorSpec *DecimalSeparatorSpec) GetFoundDecimalSeparatorSymbols() bool {
-
-	if decSeparatorSpec.lock == nil {
-		decSeparatorSpec.lock = new(sync.Mutex)
-	}
-
-	decSeparatorSpec.lock.Lock()
-
-	defer decSeparatorSpec.lock.Unlock()
-
-	return decSeparatorSpec.foundDecimalSeparatorSymbols
-}
-
 // IsValidInstance - Performs a diagnostic review of the data
 // values encapsulated in the current DecimalSeparatorSpec instance
 // to determine if they are valid.
@@ -968,7 +864,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
-	CharSearchResultsDto,
+	CharSearchDecimalSeparatorResultsDto,
 	error) {
 
 	if decSeparatorSpec.lock == nil {
@@ -983,7 +879,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	var err error
 
-	decimalSearchResults := CharSearchResultsDto{}.New()
+	decimalSearchResults := CharSearchDecimalSeparatorResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1053,17 +949,17 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	// Nothing to do. Already Found the Decimal
 	// Separator on a previous cycle.
-	if decSeparatorSpec.foundDecimalSeparatorSymbols == true {
+	if targetInputParms.FoundDecimalSeparatorSymbols == true {
 
-		decimalSearchResults.FoundSearchTarget = false
-		decimalSearchResults.FoundSearchTargetOnPreviousSearch = true
+		decimalSearchResults.FoundDecimalSeparatorSymbols = false
+		decimalSearchResults.FoundDecimalSepSymbolsOnPreviousSearch =
+			true
 
 		decimalSearchResults.TargetStringFirstFoundIndex =
-			decSeparatorSpec.foundDecimalSeparatorIndex
+			-1
 
 		decimalSearchResults.TargetStringLastFoundIndex =
-			decSeparatorSpec.foundDecimalSeparatorIndex +
-				testInputParms.TestStringLength - 1
+			-1
 
 		return decimalSearchResults, err
 	}
@@ -1078,8 +974,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	testConfigDto.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	decimalSearchResults.Empty()
+	runeArraySearchResults := CharSearchResultsDto{}
 
-	decimalSearchResults,
+	runeArraySearchResults,
 		err =
 		decSeparatorSpec.decimalSeparatorChars.SearchForTextCharacterString(
 			targetInputParms,
@@ -1091,12 +988,15 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 		return decimalSearchResults, err
 	}
 
-	if decimalSearchResults.FoundSearchTarget {
+	if runeArraySearchResults.FoundSearchTarget {
 
-		decSeparatorSpec.foundDecimalSeparatorSymbols = true
+		decimalSearchResults.FoundDecimalSeparatorSymbols = true
 
-		decSeparatorSpec.foundDecimalSeparatorIndex =
-			decimalSearchResults.TargetStringFirstFoundIndex
+		decimalSearchResults.TargetStringFirstFoundIndex =
+			runeArraySearchResults.TargetStringFirstFoundIndex
+
+		decimalSearchResults.TargetStringLastFoundIndex =
+			runeArraySearchResults.TargetStringLastFoundIndex
 
 	}
 
