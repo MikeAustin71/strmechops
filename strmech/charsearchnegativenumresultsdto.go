@@ -752,7 +752,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextL
 // IMPORTANT
 //
 // This method assumes that the input data elements contained in
-// 'testInputParms' have been validated.
+// 'targetInputParms' have been validated.
 //
 func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTargetBaseInputParameters(
 	targetInputParms CharSearchTargetInputParametersDto) {

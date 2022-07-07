@@ -89,6 +89,8 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 
 	targetInputParms.FoundFirstNumericDigitInNumStr = false
 
+	targetInputParms.FoundDecimalSeparatorSymbols = false
+
 	targetInputParms.TextCharSearchType = CharSearchType.None()
 
 	return
@@ -233,6 +235,12 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.FoundFirstNumericDigitInNumStr !=
 		targetInputParms2.FoundFirstNumericDigitInNumStr {
+
+		return false
+	}
+
+	if targetInputParms1.FoundDecimalSeparatorSymbols !=
+		targetInputParms2.FoundDecimalSeparatorSymbols {
 
 		return false
 	}

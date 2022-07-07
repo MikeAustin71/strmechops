@@ -310,6 +310,121 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Empty() {
 	decSepSearchResultsDto.lock = nil
 }
 
+// LoadTargetBaseInputParameters - Receives Target String data from
+// input parameter 'targetInputParms' and proceeds to transfer key
+// data for the search operation to the current instance of
+// CharSearchDecimalSeparatorResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method assumes that the input data elements contained in
+// 'targetInputParms' have been validated.
+//
+func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) LoadTargetBaseInputParameters(
+	targetInputParms CharSearchTargetInputParametersDto) {
+
+	if decSepSearchResultsDto.lock == nil {
+		decSepSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	decSepSearchResultsDto.lock.Lock()
+
+	defer decSepSearchResultsDto.lock.Unlock()
+
+	decSepSearchResultsDto.TargetInputParametersName =
+		targetInputParms.TargetInputParametersName
+
+	decSepSearchResultsDto.FoundFirstNumericDigitInNumStr =
+		targetInputParms.FoundFirstNumericDigitInNumStr
+
+	decSepSearchResultsDto.TargetStringLength =
+		targetInputParms.TargetStringLength
+
+	decSepSearchResultsDto.TargetStringSearchLength =
+		targetInputParms.TargetStringSearchLength
+
+	decSepSearchResultsDto.TargetStringAdjustedSearchLength =
+		targetInputParms.TargetStringAdjustedSearchLength
+
+	decSepSearchResultsDto.TargetStringStartingSearchIndex =
+		targetInputParms.TargetStringStartingSearchIndex
+
+	decSepSearchResultsDto.TargetStringCurrentSearchIndex =
+		targetInputParms.TargetStringCurrentSearchIndex
+
+	decSepSearchResultsDto.TargetStringDescription1 =
+		targetInputParms.TargetStringDescription1
+
+	decSepSearchResultsDto.TargetStringDescription2 =
+		targetInputParms.TargetStringDescription2
+
+}
+
+// LoadTestBaseInputParameters - Receives Target String data from
+// input parameter 'testInputParms' and proceeds to transfer key
+// data for the search operation to the current instance of
+// CharSearchDecimalSeparatorResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method assumes that the input data elements contained in
+// 'testInputParms' have been validated.
+//
+func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) LoadTestBaseInputParameters(
+	testInputParms CharSearchTestInputParametersDto) {
+
+	if decSepSearchResultsDto.lock == nil {
+		decSepSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	decSepSearchResultsDto.lock.Lock()
+
+	defer decSepSearchResultsDto.lock.Unlock()
+
+	decSepSearchResultsDto.TestInputParametersName =
+		testInputParms.TestInputParametersName
+
+	decSepSearchResultsDto.TestStringName =
+		testInputParms.TestStringName
+
+	decSepSearchResultsDto.TestStringLength =
+		testInputParms.TestStringLength
+
+	decSepSearchResultsDto.TestStringLengthName =
+		testInputParms.TestStringLengthName
+
+	decSepSearchResultsDto.TestStringStartingIndex =
+		testInputParms.TestStringStartingIndex
+
+	decSepSearchResultsDto.TestStringStartingIndexName =
+		testInputParms.TestStringStartingIndexName
+
+	decSepSearchResultsDto.TestStringDescription1 =
+		testInputParms.TestStringDescription1
+
+	decSepSearchResultsDto.TestStringDescription2 =
+		testInputParms.TestStringDescription2
+
+	decSepSearchResultsDto.CollectionTestObjIndex =
+		testInputParms.CollectionTestObjIndex
+
+	decSepSearchResultsDto.NumValueType =
+		testInputParms.NumValueType
+
+	decSepSearchResultsDto.NumSymbolLocation =
+		testInputParms.NumSymbolLocation
+
+	decSepSearchResultsDto.TextCharSearchType =
+		testInputParms.TextCharSearchType
+
+}
+
 // New - Returns a new and uninitialized instance of
 // CharSearchDecimalSeparatorResultsDto.
 //

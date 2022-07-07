@@ -913,7 +913,7 @@ func (charSearchResults CharSearchResultsDto) New() CharSearchResultsDto {
 // IMPORTANT
 //
 // This method assumes that the input data elements contained in
-// 'testInputParms' have been validated.
+// 'targetInputParms' have been validated.
 //
 func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 	targetInputParms CharSearchTargetInputParametersDto) {
