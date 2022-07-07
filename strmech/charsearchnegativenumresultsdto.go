@@ -524,6 +524,51 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyOut(
 			"<-negNumSearchResults"))
 }
 
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchNegativeNumberResultsDto to their zero or
+// uninitialized states. This method will leave the current
+// instance of CharSearchNegativeNumberResultsDto in an
+// invalid state and unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of CharSearchNegativeNumberResultsDto. All
+// member variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Empty() {
+	if negNumSearchResults.lock == nil {
+		negNumSearchResults.lock = new(sync.Mutex)
+	}
+
+	negNumSearchResults.lock.Lock()
+
+	charSearchNegativeNumberResultsDtoAtom{}.ptr().
+		empty(negNumSearchResults)
+
+	negNumSearchResults.lock.Unlock()
+
+	negNumSearchResults.lock = nil
+}
+
 // LoadTargetBaseInputParameters - Receives Target String data from
 // input parameter 'targetInputParms' and proceeds to transfer key
 // data for the search operation to the current instance of
