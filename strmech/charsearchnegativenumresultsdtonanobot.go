@@ -151,6 +151,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 	destinationNegNumResults.FoundDecimalSeparatorSymbols =
 		sourceNegNumResults.FoundDecimalSeparatorSymbols
 
+	destinationNegNumResults.FoundNonZeroValue =
+		sourceNegNumResults.FoundNonZeroValue
+
 	destinationNegNumResults.TargetInputParametersName =
 		sourceNegNumResults.TargetInputParametersName
 
@@ -357,6 +360,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 	deepCopyNegNumResultsDto.FoundDecimalSeparatorSymbols =
 		searchNegNumResults.FoundDecimalSeparatorSymbols
 
+	deepCopyNegNumResultsDto.FoundNonZeroValue =
+		searchNegNumResults.FoundNonZeroValue
+
 	deepCopyNegNumResultsDto.TargetInputParametersName =
 		searchNegNumResults.TargetInputParametersName
 
@@ -447,6 +453,64 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 	return deepCopyNegNumResultsDto, err
 }
 
+// getParameterTextListing - Returns formatted text output
+// listing the member variable names and corresponding values
+// contained in the 'searchNegNumResults' instance of
+// CharSearchNegativeNumberResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  searchNegNumResults *CharSearchNegativeNumberResultsDto
+//     - A pointer to an instance of
+//       CharSearchNegativeNumberResultsDto instance. Formatted
+//       text output will be generated listing the member variable
+//       names and their corresponding values. The formatted text
+//       can then be used for text displays, file output or
+//       printing.
+//
+//       No data validation is performed on this instance of
+//       CharSearchNegativeNumberResultsDto.
+//
+//
+//  errPrefDto          *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for input parameter
+//       'searchNegNumResults' . This formatted text can them be used
+//       for text displays, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParameterTextListing(
 	searchNegNumResults *CharSearchNegativeNumberResultsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -690,6 +754,18 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	if len(labelParam.ParamValue) == 0 {
 		labelParam.ParamValue = "FoundDecimalSeparatorSymbols is EMPTY!"
+	}
+
+	// Build FoundNonZeroValue
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundNonZeroValue"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchNegNumResults.FoundNonZeroValue)
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "FoundNonZeroValue is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)

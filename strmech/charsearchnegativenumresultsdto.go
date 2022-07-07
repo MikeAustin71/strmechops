@@ -106,6 +106,10 @@ type CharSearchNegativeNumberResultsDto struct {
 	// identified in the text characters specified by
 	// 'TargetString'
 
+	FoundNonZeroValue bool
+	// When set to 'true' this signals that the search operation
+	// has detected a nonzero numeric digit.
+
 	TargetInputParametersName string
 	// The Name, Label or descriptive Tag associated with an
 	// instance of CharSearchTargetInputParametersDto.
@@ -779,6 +783,9 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTargetBaseInp
 
 	negNumSearchResults.FoundDecimalSeparatorSymbols =
 		targetInputParms.FoundDecimalSeparatorSymbols
+
+	negNumSearchResults.FoundNonZeroValue =
+		targetInputParms.FoundNonZeroValue
 
 	negNumSearchResults.TargetStringLength =
 		targetInputParms.TargetStringLength

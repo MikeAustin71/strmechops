@@ -91,6 +91,8 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 
 	targetInputParms.FoundDecimalSeparatorSymbols = false
 
+	targetInputParms.FoundNonZeroValue = false
+
 	targetInputParms.TextCharSearchType = CharSearchType.None()
 
 	return
@@ -241,6 +243,12 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.FoundDecimalSeparatorSymbols !=
 		targetInputParms2.FoundDecimalSeparatorSymbols {
+
+		return false
+	}
+
+	if targetInputParms1.FoundNonZeroValue !=
+		targetInputParms2.FoundNonZeroValue {
 
 		return false
 	}

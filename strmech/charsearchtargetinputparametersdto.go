@@ -130,6 +130,10 @@ type CharSearchTargetInputParametersDto struct {
 	// identified in the text characters specified by
 	// 'TargetString'
 
+	FoundNonZeroValue bool
+	// When set to 'true' this signals that the search operation
+	// has detected a nonzero numeric digit.
+
 	TextCharSearchType CharacterSearchType
 	// Optional. An enumeration value signaling the type
 	// of text character search algorithm used to conduct

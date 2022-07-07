@@ -941,6 +941,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 	charSearchResults.FoundDecimalSeparatorSymbols =
 		targetInputParms.FoundDecimalSeparatorSymbols
 
+	charSearchResults.FoundNonZeroValue =
+		targetInputParms.FoundNonZeroValue
+
 	charSearchResults.TargetStringLength =
 		targetInputParms.TargetStringLength
 

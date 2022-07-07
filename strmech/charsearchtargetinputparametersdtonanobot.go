@@ -193,6 +193,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 	destinationTargetInputParms.FoundDecimalSeparatorSymbols =
 		sourceTargetInputParms.FoundDecimalSeparatorSymbols
 
+	destinationTargetInputParms.FoundNonZeroValue =
+		sourceTargetInputParms.FoundNonZeroValue
+
 	destinationTargetInputParms.TextCharSearchType =
 		sourceTargetInputParms.TextCharSearchType
 
@@ -352,6 +355,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	deepCopyTargetInputParms.FoundDecimalSeparatorSymbols =
 		targetInputParms.FoundDecimalSeparatorSymbols
+
+	deepCopyTargetInputParms.FoundNonZeroValue =
+		targetInputParms.FoundNonZeroValue
 
 	deepCopyTargetInputParms.TextCharSearchType =
 		targetInputParms.TextCharSearchType
@@ -857,6 +863,17 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		targetInputParms.FoundDecimalSeparatorSymbols)
+
+	labelParams = append(labelParams, labelParam)
+
+	// FoundNonZeroValue
+
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundNonZeroValue"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.FoundNonZeroValue)
 
 	labelParams = append(labelParams, labelParam)
 

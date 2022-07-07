@@ -69,6 +69,8 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) empty(
 
 	negNumSearchResultsDto.FoundDecimalSeparatorSymbols = false
 
+	negNumSearchResultsDto.FoundNonZeroValue = false
+
 	negNumSearchResultsDto.TargetInputParametersName = ""
 
 	negNumSearchResultsDto.TargetStringLength = -1
@@ -221,6 +223,12 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) equal(
 
 	if negNumSearchResultsDto1.FoundDecimalSeparatorSymbols !=
 		negNumSearchResultsDto2.FoundDecimalSeparatorSymbols {
+
+		return false
+	}
+
+	if negNumSearchResultsDto1.FoundNonZeroValue !=
+		negNumSearchResultsDto2.FoundNonZeroValue {
 
 		return false
 	}

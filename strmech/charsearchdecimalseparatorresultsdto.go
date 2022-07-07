@@ -95,6 +95,10 @@ type CharSearchDecimalSeparatorResultsDto struct {
 	// operation has identified the first numeric digit in a
 	// string of text characters.
 
+	FoundNonZeroValue bool
+	// When set to 'true' this signals that the search operation
+	// has detected a nonzero numeric digit.
+
 	TargetInputParametersName string
 	// The Name, Label or descriptive Tag associated with an
 	// instance of CharSearchTargetInputParametersDto.
@@ -339,6 +343,12 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) LoadTargetBa
 
 	decSepSearchResultsDto.FoundFirstNumericDigitInNumStr =
 		targetInputParms.FoundFirstNumericDigitInNumStr
+
+	decSepSearchResultsDto.FoundDecimalSeparatorSymbols =
+		targetInputParms.FoundDecimalSeparatorSymbols
+
+	decSepSearchResultsDto.FoundNonZeroValue =
+		targetInputParms.FoundNonZeroValue
 
 	decSepSearchResultsDto.TargetStringLength =
 		targetInputParms.TargetStringLength

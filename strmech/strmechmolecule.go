@@ -243,7 +243,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	foundNegativeSignSymbols := false
 
 	var negNumSearchResults CharSearchResultsDto
-	var decimalSepSearchResults CharSearchResultsDto
+	var decimalSepSearchResults CharSearchDecimalSeparatorResultsDto
 	var parsingTerminationResults CharSearchResultsDto
 
 	searchResults.TargetStringLastSearchIndex = -1
@@ -389,7 +389,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			}
 
-			if decimalSepSearchResults.FoundSearchTarget {
+			if decimalSepSearchResults.FoundDecimalSeparatorSymbols {
 
 				foundDecimalSeparators = true
 

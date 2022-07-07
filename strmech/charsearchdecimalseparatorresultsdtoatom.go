@@ -69,6 +69,8 @@ func (searchDecimalSepResultsAtom charSearchDecimalSeparatorResultsDtoAtom) empt
 
 	decimalSepResults.FoundFirstNumericDigitInNumStr = false
 
+	decimalSepResults.FoundNonZeroValue = false
+
 	decimalSepResults.TargetInputParametersName = ""
 
 	decimalSepResults.TargetStringLength = -1
