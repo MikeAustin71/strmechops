@@ -569,6 +569,60 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Empty() {
 	negNumSearchResults.lock = nil
 }
 
+// Equal - Receives a pointer to another instance of
+// CharSearchNegativeNumberResultsDto and proceeds to compare the member
+// variables to those of the current CharSearchNegativeNumberResultsDto
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNegNumSearchResultsDto  *CharSearchNegativeNumberResultsDto
+//     - A pointer to an incoming instance of
+//       CharSearchNegativeNumberResultsDto. This method will
+//       compare all member variable data values in this instance
+//       against those contained in the current instance of
+//       CharSearchNegativeNumberResultsDto. If the data values in
+//       both instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingNegNumSearchResultsDto' are equal in
+//       all respects to those contained in the current instance of
+//       CharSearchNegativeNumberResultsDto, this method will
+//       return a boolean value of 'true'. Otherwise, a value of
+//       'false' will be returned to the calling function.
+//
+func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
+	incomingNegNumSearchResultsDto *CharSearchNegativeNumberResultsDto) bool {
+
+	if negNumSearchResults.lock == nil {
+		negNumSearchResults.lock = new(sync.Mutex)
+	}
+
+	negNumSearchResults.lock.Lock()
+
+	defer negNumSearchResults.lock.Unlock()
+
+	return charSearchNegativeNumberResultsDtoAtom{}.ptr().
+		equal(
+			negNumSearchResults,
+			incomingNegNumSearchResultsDto)
+}
+
 // LoadTargetBaseInputParameters - Receives Target String data from
 // input parameter 'targetInputParms' and proceeds to transfer key
 // data for the search operation to the current instance of
