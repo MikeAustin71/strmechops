@@ -765,8 +765,8 @@ func (charSearchResults *CharSearchResultsDto) Equal(
 
 // GetParameterTextListing - Returns formatted text output
 // detailing the member variable names and their corresponding
-// values contained in the 'searchResultsDto' instance of
-// CharSearchResultsDto.
+// values contained in the current instance of
+// CharSearchResultsDto ('charSearchResults').
 //
 //
 // ----------------------------------------------------------------
@@ -828,9 +828,9 @@ func (charSearchResults *CharSearchResultsDto) Equal(
 //     - If this method completes successfully, an instance of
 //       strings.Builder will be returned. This instance contains
 //       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'searchResultsDto' . This formatted text can them be used
-//       for text displays, file output or printing.
+//       names and their corresponding values for the current
+//       instance of CharSearchResultsDto. This formatted text can
+//       then be used for text displays, file output or printing.
 //
 //
 //  error
@@ -863,7 +863,7 @@ func (charSearchResults *CharSearchResultsDto) GetParameterTextListing(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"CharSearchResultsDto."+
-			"CopyIn()",
+			"GetParameterTextListing()",
 		"")
 
 	if err != nil {
@@ -878,7 +878,12 @@ func (charSearchResults *CharSearchResultsDto) GetParameterTextListing(
 }
 
 // New - Returns a new and uninitialized instance of
-// CharSearchResultsDto
+// CharSearchResultsDto.
+//
+// All member variables in this returned instance are set to their
+// zero or uninitialized states. Array index values are set to a
+// value of minus one (-1). All valid array indexes have values
+// greater than minus one (-1).
 //
 func (charSearchResults CharSearchResultsDto) New() CharSearchResultsDto {
 

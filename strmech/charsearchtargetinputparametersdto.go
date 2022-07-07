@@ -591,9 +591,9 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) EqualTarget
 			incomingTargetInputParms)
 }
 
-// GetFormattedText - Returns a formatted text string detailing all
-// internal member variables and their values for the current
-// instance of CharSearchTargetInputParametersDto.
+// GetParameterTextListing - Returns a formatted text string
+// listing all internal member variables and their values for the
+// current instance of CharSearchTargetInputParametersDto.
 //
 //
 // ----------------------------------------------------------------
@@ -647,15 +647,18 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) EqualTarget
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - If this method completes successfully, this string will
-//       contain a detailed listing of all internal member
-//       variables and their values for the current instance of
-//       CharSearchTargetInputParametersDto.
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for the current
+//       instance of CharSearchTargetInputParametersDto. This
+//       formatted text can then be used for text displays, file
+//       output or printing.
 //
 //
 //  error
@@ -668,9 +671,9 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) EqualTarget
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) GetFormattedText(
+func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) GetParameterTextListing(
 	errorPrefix interface{}) (
-	string,
+	strings.Builder,
 	error) {
 
 	if searchTargetInputParmsDto.lock == nil {
@@ -693,24 +696,15 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) GetFormatte
 
 	if err != nil {
 
-		return "", err
+		return strings.Builder{}, err
 
 	}
 
-	var strBuilder strings.Builder
-
-	strBuilder,
-		err = charSearchTargetInputParametersDtoNanobot{}.ptr().
-		getFormattedText(
+	return charSearchTargetInputParametersDtoNanobot{}.ptr().
+		getParameterTextListing(
 			searchTargetInputParmsDto,
 			ePrefix.XCpy(
 				"strBuilder<-Formatted Text"))
-
-	if err != nil {
-		return "", err
-	}
-
-	return strBuilder.String(), err
 }
 
 // IsValidInstance - Performs a diagnostic review of the member
@@ -1142,8 +1136,8 @@ func (searchTargetInputParmsDto CharSearchTargetInputParametersDto) NewTargetStr
 }
 
 // String - Returns a formatted text string detailing all the
-// internal member variables in the current instance of
-// CharSearchTargetInputParametersDto and their values.
+// internal member variable names and their corresponding values
+// for the current instance of CharSearchTargetInputParametersDto.
 //
 // If an error is encountered, the error message is included in the
 // string returned by this method.
@@ -1184,7 +1178,7 @@ func (searchTargetInputParmsDto *CharSearchTargetInputParametersDto) String() st
 
 	strBuilder,
 		err = charSearchTargetInputParametersDtoNanobot{}.ptr().
-		getFormattedText(
+		getParameterTextListing(
 			searchTargetInputParmsDto,
 			ePrefix.XCpy(
 				"strBuilder"))

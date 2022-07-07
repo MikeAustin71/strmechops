@@ -353,9 +353,10 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 	return deepCopyTargetInputParms, err
 }
 
-// getFormattedText - Returns formatted text output detailing the
-// member variable values contained in the 'targetInputParms'
-// instance of CharSearchTargetInputParametersDto.
+// getParameterTextListing - Returns formatted text output
+// listing the member variable names and corresponding values
+// contained in the 'targetInputParms' instance of
+// CharSearchTargetInputParametersDto.
 //
 //
 // ----------------------------------------------------------------
@@ -410,7 +411,7 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) getFormattedText(
+func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) getParameterTextListing(
 	targetInputParms *CharSearchTargetInputParametersDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strings.Builder,
@@ -435,7 +436,7 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"charSearchTargetInputParametersDtoNanobot."+
-			"getFormattedText()",
+			"getParameterTextListing()",
 		"")
 
 	if err != nil {
