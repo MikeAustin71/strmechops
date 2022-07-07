@@ -327,7 +327,7 @@ type CharSearchResultsDto struct {
 //
 // IMPORTANT
 //
-// All the data fields in current CharSearchResultsDto instance
+// All the data fields in the current CharSearchResultsDto instance
 // ('charSearchResults') will be deleted and overwritten.
 //
 // No Data Validation will be performed on 'incomingSearchResults'.

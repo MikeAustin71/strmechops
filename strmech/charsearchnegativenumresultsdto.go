@@ -1,6 +1,9 @@
 package strmech
 
-import "sync"
+import (
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // CharSearchNegativeNumberResultsDto - Contains parameters
 // detailing the results of a text character search for negative
@@ -57,10 +60,9 @@ import "sync"
 //
 // A key feature of Number String Parsing operations is the
 // classification of numeric values as positive or negative values.
-// Therefore, Number String Parsing functions, used in converting
-// strings of numeric characters into numeric values, assume that
-// those values are positive unless a Negative Number Sign Symbol
-// or Symbols are present in the number string.
+// This classification logic assume that converted numeric values
+// are positive unless a Negative Number Sign Symbol or Symbols are
+// detected within the number string.
 //
 // ----------------------------------------------------------------
 //
@@ -273,6 +275,138 @@ type CharSearchNegativeNumberResultsDto struct {
 	// NegativeNumberSearchSpec
 
 	lock *sync.Mutex
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// CharSearchNegativeNumberResultsDto ('incomingNegNumResultsDto')
+// to the data fields of the current
+// CharSearchNegativeNumberResultsDto instance
+// ('negNumSearchResults').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in the current
+// CharSearchNegativeNumberResultsDto instance
+// ('negNumSearchResults') will be deleted and overwritten.
+//
+// No Data Validation will be performed on
+// 'incomingNegNumResultsDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingNegNumResultsDto   *CharSearchNegativeNumberResultsDto
+//     - A pointer to an instance of
+//       CharSearchNegativeNumberResultsDto. This method will NOT
+//       change the data values of member variables contained in
+//       this instance.
+//
+//       All data values in this CharSearchNegativeNumberResultsDto
+//       instance ('incomingNegNumResultsDto') will be copied to
+//       the current CharSearchNegativeNumberResultsDto instance
+//       ('negNumSearchResults').
+//
+//       No Data Validation will be performed on
+//       'incomingNegNumResultsDto'.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyIn(
+	incomingNegNumResultsDto *CharSearchNegativeNumberResultsDto,
+	errorPrefix interface{}) error {
+
+	if negNumSearchResults.lock == nil {
+		negNumSearchResults.lock = new(sync.Mutex)
+	}
+
+	negNumSearchResults.lock.Lock()
+
+	defer negNumSearchResults.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchNegativeNumberResultsDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return charSearchNegNumResultsDtoNanobot{}.ptr().copyIn(
+		negNumSearchResults,
+		incomingNegNumResultsDto,
+		ePrefix.XCpy(
+			"negNumSearchResults<-incomingNegNumResultsDto"))
+
 }
 
 // LoadTargetBaseInputParameters - Receives Target String data from
