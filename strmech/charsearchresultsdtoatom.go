@@ -66,6 +66,8 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 
 	searchResultsDto.FoundFirstNumericDigitInNumStr = false
 
+	searchResultsDto.FoundDecimalSeparatorSymbols = false
+
 	searchResultsDto.FoundNonZeroValue = false
 
 	searchResultsDto.TargetInputParametersName = ""
@@ -225,6 +227,12 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 
 	if searchResultsDto1.FoundFirstNumericDigitInNumStr !=
 		searchResultsDto2.FoundFirstNumericDigitInNumStr {
+
+		return false
+	}
+
+	if searchResultsDto1.FoundDecimalSeparatorSymbols !=
+		searchResultsDto2.FoundDecimalSeparatorSymbols {
 
 		return false
 	}

@@ -150,6 +150,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.FoundFirstNumericDigitInNumStr =
 		incomingSearchResultsDto.FoundFirstNumericDigitInNumStr
 
+	targetSearchResultsDto.FoundDecimalSeparatorSymbols =
+		incomingSearchResultsDto.FoundDecimalSeparatorSymbols
+
 	targetSearchResultsDto.FoundNonZeroValue =
 		incomingSearchResultsDto.FoundNonZeroValue
 
@@ -393,6 +396,9 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 
 	copySearchResultsDto.FoundFirstNumericDigitInNumStr =
 		searchResultsDto.FoundFirstNumericDigitInNumStr
+
+	copySearchResultsDto.FoundDecimalSeparatorSymbols =
+		searchResultsDto.FoundDecimalSeparatorSymbols
 
 	copySearchResultsDto.FoundNonZeroValue =
 		searchResultsDto.FoundNonZeroValue
@@ -878,6 +884,16 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchResultsDto.FoundFirstNumericDigitInNumStr)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundDecimalSeparatorSymbols
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundDecimalSeparatorSymbols"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchResultsDto.FoundDecimalSeparatorSymbols)
 
 	labelParams = append(labelParams, labelParam)
 

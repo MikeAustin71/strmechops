@@ -148,6 +148,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 	destinationNegNumResults.FoundFirstNumericDigitInNumStr =
 		sourceNegNumResults.FoundFirstNumericDigitInNumStr
 
+	destinationNegNumResults.FoundDecimalSeparatorSymbols =
+		sourceNegNumResults.FoundDecimalSeparatorSymbols
+
 	destinationNegNumResults.TargetInputParametersName =
 		sourceNegNumResults.TargetInputParametersName
 
@@ -350,6 +353,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 
 	deepCopyNegNumResultsDto.FoundFirstNumericDigitInNumStr =
 		searchNegNumResults.FoundFirstNumericDigitInNumStr
+
+	deepCopyNegNumResultsDto.FoundDecimalSeparatorSymbols =
+		searchNegNumResults.FoundDecimalSeparatorSymbols
 
 	deepCopyNegNumResultsDto.TargetInputParametersName =
 		searchNegNumResults.TargetInputParametersName
@@ -670,6 +676,20 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	if len(labelParam.ParamValue) == 0 {
 		labelParam.ParamValue = "FoundFirstNumericDigitInNumStr is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundDecimalSeparatorSymbols
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundDecimalSeparatorSymbols"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchNegNumResults.FoundDecimalSeparatorSymbols)
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "FoundDecimalSeparatorSymbols is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)

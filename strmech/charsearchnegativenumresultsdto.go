@@ -100,6 +100,12 @@ type CharSearchNegativeNumberResultsDto struct {
 	// operation has identified the first numeric digit in a
 	// string of text characters.
 
+	FoundDecimalSeparatorSymbols bool
+	// When set to 'true' this signals that a Decimal
+	// Separator Symbol character or characters have been
+	// identified in the text characters specified by
+	// 'TargetString'
+
 	TargetInputParametersName string
 	// The Name, Label or descriptive Tag associated with an
 	// instance of CharSearchTargetInputParametersDto.
@@ -770,6 +776,9 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTargetBaseInp
 
 	negNumSearchResults.FoundFirstNumericDigitInNumStr =
 		targetInputParms.FoundFirstNumericDigitInNumStr
+
+	negNumSearchResults.FoundDecimalSeparatorSymbols =
+		targetInputParms.FoundDecimalSeparatorSymbols
 
 	negNumSearchResults.TargetStringLength =
 		targetInputParms.TargetStringLength
