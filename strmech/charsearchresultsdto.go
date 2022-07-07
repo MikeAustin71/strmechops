@@ -223,8 +223,8 @@ type CharSearchResultsDto struct {
 
 	NumValueType NumericValueType
 	// Optional. This enumeration value specifies the type
-	// of numeric value for this Test Parameter as either
-	// an integer or floating point value.
+	// of numeric value as either an integer or floating
+	// point value.
 	//
 	// Possible values are listed as follows:
 	//  NumValType.None()

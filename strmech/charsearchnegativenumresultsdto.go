@@ -62,7 +62,7 @@ import (
 //
 // A key feature of Number String Parsing operations is the
 // classification of numeric values as positive or negative values.
-// This classification logic assume that converted numeric values
+// This classification logic assumes that converted numeric values
 // are positive unless a Negative Number Sign Symbol or Symbols are
 // detected within the number string.
 //
@@ -73,7 +73,7 @@ import (
 // identify and transmit the results or outcomes of a search
 // operation for negative number symbols in a number string.
 //
-// Methods performing elements of the text character search
+// Methods performing elements of this text character search
 // operation use this wrapper type to encapsulate and return key
 // data variables describing the search outcome.
 //
