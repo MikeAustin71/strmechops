@@ -449,8 +449,12 @@ func (charSearchResults *CharSearchResultsDto) CopyIn(
 // CopyOut - Returns a deep copy of the current
 // CharSearchResultsDto instance.
 //
-// If the current CharSearchResultsDto instance contains invalid
-// member variables, this method will return an error.
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// No Data Validation will be performed on the current instance
+// of CharSearchResultsDto.
 //
 //
 // ----------------------------------------------------------------

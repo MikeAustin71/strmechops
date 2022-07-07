@@ -409,6 +409,121 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyIn(
 
 }
 
+// CopyOut - Returns a deep copy of the current
+// CharSearchNegativeNumberResultsDto instance.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// No Data Validation will be performed on the current instance
+// of CharSearchResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  CharSearchNegativeNumberResultsDto
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current CharSearchNegativeNumberResultsDto instance.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyOut(
+	errorPrefix interface{}) (
+	CharSearchNegativeNumberResultsDto,
+	error) {
+
+	if negNumSearchResults.lock == nil {
+		negNumSearchResults.lock = new(sync.Mutex)
+	}
+
+	negNumSearchResults.lock.Lock()
+
+	defer negNumSearchResults.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchNegativeNumberResultsDto."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return CharSearchNegativeNumberResultsDto{}, err
+	}
+
+	return charSearchNegNumResultsDtoNanobot{}.ptr().copyOut(
+		negNumSearchResults,
+		ePrefix.XCpy(
+			"<-negNumSearchResults"))
+}
+
 // LoadTargetBaseInputParameters - Receives Target String data from
 // input parameter 'targetInputParms' and proceeds to transfer key
 // data for the search operation to the current instance of
