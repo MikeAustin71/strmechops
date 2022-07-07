@@ -85,14 +85,14 @@ type CharSearchNegativeNumberResultsDto struct {
 	// Optional. A listing of the functions which led to the
 	// creation of this instance of CharSearchResultsDto.
 
-	FoundSearchTarget bool
+	FoundNegativeNumberSymbols bool
 	// Signals a successful search outcome. If set to 'true' the
-	// Test String character or characters were found in the Target
-	// Search String.
+	// Negative Number Symbol character or characters were found
+	// in the Target Search String.
 
-	FoundSearchTargetOnPreviousSearch bool
-	// Signals that the Search Target was located in a previous
-	// search operation.
+	FoundNegNumSymbolsOnPreviousSearch bool
+	// Signals that Negative Number Symbols were located in a
+	// previous search operation.
 
 	FoundFirstNumericDigitInNumStr bool
 	// When set to 'true' this signals that a previous search
@@ -270,7 +270,7 @@ type CharSearchNegativeNumberResultsDto struct {
 	//  CharSearchType.SingleTargetChar()
 	//  CharSearchType.LinearEndOfString()
 
-	FoundNegativeNumberSymbols NegativeNumberSearchSpec
+	NegativeNumberSymbolsSpec NegativeNumberSearchSpec
 	// If negative number symbols were found in the current search
 	// operation, they will be stored in this instance of
 	// NegativeNumberSearchSpec

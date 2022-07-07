@@ -60,9 +60,9 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) empty(
 
 	negNumSearchResultsDto.SearchResultsFunctionChain = ""
 
-	negNumSearchResultsDto.FoundSearchTarget = false
+	negNumSearchResultsDto.FoundNegativeNumberSymbols = false
 
-	negNumSearchResultsDto.FoundSearchTargetOnPreviousSearch =
+	negNumSearchResultsDto.FoundNegNumSymbolsOnPreviousSearch =
 		false
 
 	negNumSearchResultsDto.FoundFirstNumericDigitInNumStr = false
@@ -124,7 +124,7 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) empty(
 	negNumSearchResultsDto.TextCharSearchType =
 		CharSearchType.None()
 
-	negNumSearchResultsDto.FoundNegativeNumberSymbols.Empty()
+	negNumSearchResultsDto.NegativeNumberSymbolsSpec.Empty()
 
 }
 
@@ -199,14 +199,14 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) equal(
 		return false
 	}
 
-	if negNumSearchResultsDto1.FoundSearchTarget !=
-		negNumSearchResultsDto2.FoundSearchTarget {
+	if negNumSearchResultsDto1.FoundNegativeNumberSymbols !=
+		negNumSearchResultsDto2.FoundNegativeNumberSymbols {
 
 		return false
 	}
 
-	if negNumSearchResultsDto1.FoundSearchTargetOnPreviousSearch !=
-		negNumSearchResultsDto2.FoundSearchTargetOnPreviousSearch {
+	if negNumSearchResultsDto1.FoundNegNumSymbolsOnPreviousSearch !=
+		negNumSearchResultsDto2.FoundNegNumSymbolsOnPreviousSearch {
 
 		return false
 	}
@@ -379,8 +379,8 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) equal(
 		return false
 	}
 
-	if !negNumSearchResultsDto1.FoundNegativeNumberSymbols.Equal(
-		&negNumSearchResultsDto2.FoundNegativeNumberSymbols) {
+	if !negNumSearchResultsDto1.NegativeNumberSymbolsSpec.Equal(
+		&negNumSearchResultsDto2.NegativeNumberSymbolsSpec) {
 
 		return false
 	}

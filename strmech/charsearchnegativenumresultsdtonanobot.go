@@ -139,11 +139,11 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 	destinationNegNumResults.SearchResultsFunctionChain =
 		sourceNegNumResults.SearchResultsFunctionChain
 
-	destinationNegNumResults.FoundSearchTarget =
-		sourceNegNumResults.FoundSearchTarget
+	destinationNegNumResults.FoundNegativeNumberSymbols =
+		sourceNegNumResults.FoundNegativeNumberSymbols
 
-	destinationNegNumResults.FoundSearchTargetOnPreviousSearch =
-		sourceNegNumResults.FoundSearchTargetOnPreviousSearch
+	destinationNegNumResults.FoundNegNumSymbolsOnPreviousSearch =
+		sourceNegNumResults.FoundNegNumSymbolsOnPreviousSearch
 
 	destinationNegNumResults.FoundFirstNumericDigitInNumStr =
 		sourceNegNumResults.FoundFirstNumericDigitInNumStr
@@ -229,8 +229,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 	destinationNegNumResults.TextCharSearchType =
 		sourceNegNumResults.TextCharSearchType
 
-	err = destinationNegNumResults.FoundNegativeNumberSymbols.CopyIn(
-		&sourceNegNumResults.FoundNegativeNumberSymbols,
+	err = destinationNegNumResults.NegativeNumberSymbolsSpec.CopyIn(
+		&sourceNegNumResults.NegativeNumberSymbolsSpec,
 		ePrefix.XCpy(
 			"destinationNegNumResults<-"+
 				"sourceNegNumResults"))
@@ -342,11 +342,11 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 	deepCopyNegNumResultsDto.SearchResultsFunctionChain =
 		searchNegNumResults.SearchResultsFunctionChain
 
-	deepCopyNegNumResultsDto.FoundSearchTarget =
-		searchNegNumResults.FoundSearchTarget
+	deepCopyNegNumResultsDto.FoundNegativeNumberSymbols =
+		searchNegNumResults.FoundNegativeNumberSymbols
 
-	deepCopyNegNumResultsDto.FoundSearchTargetOnPreviousSearch =
-		searchNegNumResults.FoundSearchTargetOnPreviousSearch
+	deepCopyNegNumResultsDto.FoundNegNumSymbolsOnPreviousSearch =
+		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch
 
 	deepCopyNegNumResultsDto.FoundFirstNumericDigitInNumStr =
 		searchNegNumResults.FoundFirstNumericDigitInNumStr
@@ -432,8 +432,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 	deepCopyNegNumResultsDto.TextCharSearchType =
 		searchNegNumResults.TextCharSearchType
 
-	err = deepCopyNegNumResultsDto.FoundNegativeNumberSymbols.CopyIn(
-		&searchNegNumResults.FoundNegativeNumberSymbols,
+	err = deepCopyNegNumResultsDto.NegativeNumberSymbolsSpec.CopyIn(
+		&searchNegNumResults.NegativeNumberSymbolsSpec,
 		ePrefix.XCpy(
 			"deepCopyNegNumResultsDto<-"+
 				"searchNegNumResults"))
@@ -632,30 +632,30 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParams = append(labelParams, labelParam)
 
-	// Build FoundSearchTarget
+	// Build FoundNegativeNumberSymbols
 	labelParam = TextLabelValueStrings{}
 
-	labelParam.ParamLabel = "FoundSearchTarget"
+	labelParam.ParamLabel = "FoundNegativeNumberSymbols"
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundSearchTarget)
+		searchNegNumResults.FoundNegativeNumberSymbols)
 
 	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundSearchTarget is EMPTY!"
+		labelParam.ParamValue = "FoundNegativeNumberSymbols is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)
 
-	// Build FoundSearchTargetOnPreviousSearch
+	// Build FoundNegNumSymbolsOnPreviousSearch
 	labelParam = TextLabelValueStrings{}
 
-	labelParam.ParamLabel = "FoundSearchTargetOnPreviousSearch"
+	labelParam.ParamLabel = "FoundNegNumSymbolsOnPreviousSearch"
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundSearchTargetOnPreviousSearch)
+		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch)
 
 	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundSearchTargetOnPreviousSearch is EMPTY!"
+		labelParam.ParamValue = "FoundNegNumSymbolsOnPreviousSearch is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)
@@ -1052,16 +1052,16 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParams = append(labelParams, labelParam)
 
-	// Build FoundNegativeNumberSymbols
+	// Build NegativeNumberSymbolsSpec
 	labelParam = TextLabelValueStrings{}
 
-	labelParam.ParamLabel = "FoundNegativeNumberSymbols"
+	labelParam.ParamLabel = "NegativeNumberSymbolsSpec"
 
-	if searchNegNumResults.FoundNegativeNumberSymbols.
+	if searchNegNumResults.NegativeNumberSymbolsSpec.
 		IsValidInstance() {
-		labelParam.ParamValue = "FoundNegativeNumberSymbols is populated and valid."
+		labelParam.ParamValue = "NegativeNumberSymbolsSpec is populated and valid."
 	} else {
-		labelParam.ParamValue = "FoundNegativeNumberSymbols is invalid and empty."
+		labelParam.ParamValue = "NegativeNumberSymbolsSpec is invalid and empty."
 	}
 
 	labelParams = append(labelParams, labelParam)
