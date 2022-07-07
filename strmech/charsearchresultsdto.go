@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -161,13 +162,26 @@ type CharSearchResultsDto struct {
 	// The Name, Label or descriptive Tag associated with an
 	// instance of CharSearchTestInputParametersDto.
 
+	TestStringName string
+	// The label or name of the 'TestString' parameter.
+	// Used in error and informational messages.
+
 	TestStringLength int
 	// Actual number of text characters in the entire Test
 	// String ('TestString').
 
+	TestStringLengthName string
+	// The label or name of the 'TestStringLength'
+	// parameter. Used in error and informational
+	// messages.
+
 	TestStringStartingIndex int
 	// The starting index in the Test String where the
 	// search operation will begin.
+
+	TestStringStartingIndexName string
+	// The label or name of the TestStringStartingIndex
+	// parameter. Used in error and informational messages.
 
 	TestStringFirstFoundIndex int
 	// The index number in Test String of the first test
@@ -745,6 +759,120 @@ func (charSearchResults *CharSearchResultsDto) Equal(
 		incomingSearchResults)
 }
 
+// GetParameterTextListing - Returns formatted text output
+// detailing the member variable names and their corresponding
+// values contained in the 'searchResultsDto' instance of
+// CharSearchResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for input parameter
+//       'searchResultsDto' . This formatted text can them be used
+//       for text displays, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (charSearchResults *CharSearchResultsDto) GetParameterTextListing(
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if charSearchResults.lock == nil {
+		charSearchResults.lock = new(sync.Mutex)
+	}
+
+	charSearchResults.lock.Lock()
+
+	defer charSearchResults.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"CharSearchResultsDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return strings.Builder{}, err
+	}
+
+	return charSearchResultsDtoNanobot{}.ptr().
+		getParameterTextListing(
+			charSearchResults,
+			ePrefix.XCpy(
+				"charSearchResults"))
+}
+
 // New - Returns a new and uninitialized instance of
 // CharSearchResultsDto
 //
@@ -845,11 +973,20 @@ func (charSearchResults *CharSearchResultsDto) LoadTestBaseInputParameters(
 	charSearchResults.TestInputParametersName =
 		testInputParms.TestInputParametersName
 
+	charSearchResults.TestStringName =
+		testInputParms.TestStringName
+
 	charSearchResults.TestStringLength =
 		testInputParms.TestStringLength
 
+	charSearchResults.TestStringLengthName =
+		testInputParms.TestStringLengthName
+
 	charSearchResults.TestStringStartingIndex =
 		testInputParms.TestStringStartingIndex
+
+	charSearchResults.TestStringStartingIndexName =
+		testInputParms.TestStringStartingIndexName
 
 	charSearchResults.TestStringDescription1 =
 		testInputParms.TestStringDescription1

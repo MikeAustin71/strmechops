@@ -192,11 +192,20 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyIn(
 	targetSearchResultsDto.TestInputParametersName =
 		incomingSearchResultsDto.TestInputParametersName
 
+	targetSearchResultsDto.TestStringName =
+		incomingSearchResultsDto.TestStringName
+
 	targetSearchResultsDto.TestStringLength =
 		incomingSearchResultsDto.TestStringLength
 
+	targetSearchResultsDto.TestStringLengthName =
+		incomingSearchResultsDto.TestStringLengthName
+
 	targetSearchResultsDto.TestStringStartingIndex =
 		incomingSearchResultsDto.TestStringStartingIndex
+
+	targetSearchResultsDto.TestStringStartingIndexName =
+		incomingSearchResultsDto.TestStringStartingIndexName
 
 	targetSearchResultsDto.TestStringFirstFoundIndex =
 		incomingSearchResultsDto.TestStringFirstFoundIndex
@@ -427,11 +436,20 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 	copySearchResultsDto.TestInputParametersName =
 		searchResultsDto.TestInputParametersName
 
+	copySearchResultsDto.TestStringName =
+		searchResultsDto.TestStringName
+
 	copySearchResultsDto.TestStringLength =
 		searchResultsDto.TestStringLength
 
+	copySearchResultsDto.TestStringLengthName =
+		searchResultsDto.TestStringLengthName
+
 	copySearchResultsDto.TestStringStartingIndex =
 		searchResultsDto.TestStringStartingIndex
+
+	copySearchResultsDto.TestStringStartingIndexName =
+		searchResultsDto.TestStringStartingIndexName
 
 	copySearchResultsDto.TestStringFirstFoundIndex =
 		searchResultsDto.TestStringFirstFoundIndex
@@ -509,9 +527,10 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 	return copySearchResultsDto, err
 }
 
-// getFormattedText - Returns formatted text output detailing the
-// member variable values contained in the 'searchResultsDto'
-// instance of CharSearchResultsDto.
+// getParameterTextListing - Returns formatted text output
+// detailing the member variable names and their corresponding
+// values contained in the 'searchResultsDto' instance of
+// CharSearchResultsDto.
 //
 //
 // ----------------------------------------------------------------
@@ -565,7 +584,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) copyOut(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
+func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextListing(
 	searchResultsDto *CharSearchResultsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strings.Builder,
@@ -591,7 +610,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getFormattedText(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"charSearchTestInputParametersDtoNanobot."+
-			"copyIn()",
+			"getParameterTextListing()",
 		"")
 
 	if err != nil {

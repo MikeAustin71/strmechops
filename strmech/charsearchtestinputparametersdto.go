@@ -774,7 +774,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) GetFormattedText(
 
 	strBuilder,
 		err = charSearchTestInputParametersDtoNanobot{}.ptr().
-		getFormattedText(
+		getParameterTextListing(
 			testSearchInputParms,
 			ePrefix.XCpy(
 				"strBuilder<-Formatted Text"))
@@ -1163,7 +1163,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 
 	strBuilder,
 		err = charSearchTestInputParametersDtoNanobot{}.ptr().
-		getFormattedText(
+		getParameterTextListing(
 			testSearchInputParms,
 			ePrefix.XCpy(
 				"strBuilder<-Formatted Text"))

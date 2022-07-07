@@ -92,9 +92,15 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) empty(
 
 	searchResultsDto.TestInputParametersName = ""
 
+	searchResultsDto.TestStringName = ""
+
 	searchResultsDto.TestStringLength = 0
 
+	searchResultsDto.TestStringLengthName = ""
+
 	searchResultsDto.TestStringStartingIndex = -1
+
+	searchResultsDto.TestStringStartingIndexName = ""
 
 	searchResultsDto.TestStringFirstFoundIndex = -1
 
@@ -301,14 +307,32 @@ func (searchResultsDtoAtom *charSearchResultsDtoAtom) equal(
 		return false
 	}
 
+	if searchResultsDto1.TestStringName !=
+		searchResultsDto2.TestStringName {
+
+		return false
+	}
+
 	if searchResultsDto1.TestStringLength !=
 		searchResultsDto2.TestStringLength {
 
 		return false
 	}
 
+	if searchResultsDto1.TestStringLengthName !=
+		searchResultsDto2.TestStringLengthName {
+
+		return false
+	}
+
 	if searchResultsDto1.TestStringStartingIndex !=
 		searchResultsDto2.TestStringStartingIndex {
+
+		return false
+	}
+
+	if searchResultsDto1.TestStringStartingIndexName !=
+		searchResultsDto2.TestStringStartingIndexName {
 
 		return false
 	}

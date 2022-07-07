@@ -23,9 +23,9 @@ import (
 // parameters for identifying negative numeric values within number
 // strings when extracting or parsing numeric digits.
 //
-// Number String Parsing functions used in converting strings of numeric
-// characters into numeric values assume that those values are
-// positive unless a Negative Number Sign Symbol or Symbols are
+// Number String Parsing functions, used in converting strings of
+// numeric characters into numeric values, assume that those values
+// are positive unless a Negative Number Sign Symbol or Symbols are
 // present in the number string.
 //
 // Users configure the NegativeNumberSearchSpec type to define the
