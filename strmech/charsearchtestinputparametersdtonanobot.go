@@ -199,6 +199,15 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 	destinationTestInputParms.TextCharSearchType =
 		sourceTestInputParms.TextCharSearchType
 
+	destinationTestInputParms.RequestFoundTestCharacters =
+		sourceTestInputParms.RequestFoundTestCharacters
+
+	destinationTestInputParms.RequestRemainderString =
+		sourceTestInputParms.RequestRemainderString
+
+	destinationTestInputParms.RequestReplacementString =
+		sourceTestInputParms.RequestReplacementString
+
 	return err
 }
 
@@ -365,6 +374,15 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 
 	deepCopyTestInputParms.TextCharSearchType =
 		testInputParms.TextCharSearchType
+
+	deepCopyTestInputParms.RequestFoundTestCharacters =
+		testInputParms.RequestFoundTestCharacters
+
+	deepCopyTestInputParms.RequestRemainderString =
+		testInputParms.RequestRemainderString
+
+	deepCopyTestInputParms.RequestReplacementString =
+		testInputParms.RequestReplacementString
 
 	return deepCopyTestInputParms, err
 }
@@ -938,6 +956,37 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 
 	labelParams = append(labelParams, labelParam)
 
+	// Build RequestFoundTestCharacters
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestFoundTestCharacters"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		testInputParms.RequestFoundTestCharacters)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build RequestRemainderString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestRemainderString"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		testInputParms.RequestRemainderString)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build RequestReplacementString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestReplacementString"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		testInputParms.RequestReplacementString)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Write Label Parameter Values to String Builder
 	err = txtBuilder.BuildLabelsValues(
 		&strBuilder,
 		labelParams,

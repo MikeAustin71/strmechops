@@ -103,7 +103,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"charSearchTargetInputParametersDtoNanobot."+
+		"charSearchTestConfigDtoNanobot."+
 			"copyIn()",
 		"")
 
@@ -181,6 +181,15 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyIn(
 
 	destinationTestCfgDto.TextCharSearchType =
 		sourceTestCfgDto.TextCharSearchType
+
+	destinationTestCfgDto.RequestFoundTestCharacters =
+		sourceTestCfgDto.RequestFoundTestCharacters
+
+	destinationTestCfgDto.RequestRemainderString =
+		sourceTestCfgDto.RequestRemainderString
+
+	destinationTestCfgDto.RequestReplacementString =
+		sourceTestCfgDto.RequestReplacementString
 
 	return err
 }
@@ -260,7 +269,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"charSearchTargetInputParametersDtoNanobot."+
+		"charSearchTestConfigDtoNanobot."+
 			"copyOut()",
 		"")
 
@@ -330,19 +339,28 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 	deepCopySearchTestCfgDto.TextCharSearchType =
 		searchTestCfgDto.TextCharSearchType
 
+	deepCopySearchTestCfgDto.RequestFoundTestCharacters =
+		searchTestCfgDto.RequestFoundTestCharacters
+
+	deepCopySearchTestCfgDto.RequestRemainderString =
+		searchTestCfgDto.RequestRemainderString
+
+	deepCopySearchTestCfgDto.RequestReplacementString =
+		searchTestCfgDto.RequestReplacementString
+
 	return deepCopySearchTestCfgDto, err
 }
 
-// getFormattedText - Returns formatted text output detailing the
-// member variable values contained in the 'searchTestCfgDto'
-// instance of CharSearchTestConfigDto.
+// getParameterTextListing - Returns formatted text output
+// detailing the member variable values contained in the
+// 'searchTestCfgDto' instance of CharSearchTestConfigDto.
 //
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  testInputParms           *CharSearchTestInputParametersDto
+//  searchTestCfgDto           *CharSearchTestInputParametersDto
 //     - A pointer to an instance of
 //       CharSearchTestInputParametersDto instance. Formatted
 //       text output will be generated listing the member variable
@@ -354,7 +372,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 //       CharSearchTestInputParametersDto.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
+//  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
@@ -376,7 +394,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 //       strings.Builder will be returned. This instance contains
 //       the formatted text output listing the member variable
 //       names and their corresponding values for input parameter
-//       'testInputParms' . This formatted text can them be used
+//       'searchTestCfgDto' . This formatted text can then be used
 //       for text displays, file output or printing.
 //
 //
@@ -390,7 +408,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getFormattedText(
+func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextListing(
 	searchTestCfgDto *CharSearchTestConfigDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strings.Builder,
@@ -414,8 +432,8 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getFormattedText(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"charSearchTargetInputParametersDtoNanobot."+
-			"getFormattedText()",
+		"charSearchTestConfigDtoNanobot."+
+			"getParameterTextListing()",
 		"")
 
 	if err != nil {
@@ -651,6 +669,10 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getFormattedText(
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchTestCfgDto.CollectionTestObjIndex)
 
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "CollectionTestObjIndex is EMPTY!"
+	}
+
 	labelParams = append(labelParams, labelParam)
 
 	// Build NumValueType
@@ -771,7 +793,6 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getFormattedText(
 			CharSearchType.None()
 
 	}
-
 	labelParam.ParamLabel = "TextCharSearchType"
 
 	labelParam.ParamValue =
@@ -779,6 +800,49 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getFormattedText(
 
 	labelParams = append(labelParams, labelParam)
 
+	// Build RequestFoundTestCharacters
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestFoundTestCharacters"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchTestCfgDto.RequestFoundTestCharacters)
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "RequestFoundTestCharacters is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build RequestRemainderString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestRemainderString"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchTestCfgDto.RequestRemainderString)
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "RequestRemainderString is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build RequestReplacementString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestReplacementString"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchTestCfgDto.RequestReplacementString)
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "RequestReplacementString is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Label and Parameter values to String Builder
 	err = txtBuilder.BuildLabelsValues(
 		&strBuilder,
 		labelParams,

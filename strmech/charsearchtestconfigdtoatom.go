@@ -9,6 +9,39 @@ type charSearchTestConfigDtoAtom struct {
 	lock *sync.Mutex
 }
 
+// empty - Receives a pointer to an instance of
+// CharSearchTestConfigDto and proceeds to reset the data values
+// for member variables to their initial or zero values.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the member variable data values contained in input parameter
+// 'searchTestConfigDto' will be deleted and reset to their zero
+// values. Array index values will be set to minus one (-1). Valid
+// array indexes have a value greater than minus one (-1).
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  searchTestConfigDto        *CharSearchTestConfigDto
+//     - A pointer to an instance of CharSearchTestConfigDto. All
+//       the internal member variables contained in this instance
+//       will be deleted and reset to their zero values. Array
+//       index values will be set to minus one (-1). Valid array
+//       indexes have a value greater than minus one (-1).
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (searchTestConfigAtom *charSearchTestConfigDtoAtom) empty(
 	searchTestConfigDto *CharSearchTestConfigDto) {
 
@@ -58,6 +91,12 @@ func (searchTestConfigAtom *charSearchTestConfigDtoAtom) empty(
 
 	searchTestConfigDto.TextCharSearchType =
 		CharSearchType.None()
+
+	searchTestConfigDto.RequestFoundTestCharacters = false
+
+	searchTestConfigDto.RequestRemainderString = false
+
+	searchTestConfigDto.RequestReplacementString = false
 
 	return
 }
@@ -213,6 +252,24 @@ func (searchTestConfigAtom *charSearchTestConfigDtoAtom) equal(
 
 	if searchTestCfgDto1.TextCharSearchType !=
 		searchTestCfgDto2.TextCharSearchType {
+
+		return false
+	}
+
+	if searchTestCfgDto1.RequestFoundTestCharacters !=
+		searchTestCfgDto2.RequestFoundTestCharacters {
+
+		return false
+	}
+
+	if searchTestCfgDto1.RequestRemainderString !=
+		searchTestCfgDto2.RequestRemainderString {
+
+		return false
+	}
+
+	if searchTestCfgDto1.RequestReplacementString !=
+		searchTestCfgDto2.RequestReplacementString {
 
 		return false
 	}

@@ -197,6 +197,23 @@ type CharSearchTestInputParametersDto struct {
 	//  CharSearchType.SingleTargetChar()          - Valid
 	//  CharSearchType.LinearEndOfString()         - Valid
 
+	RequestFoundTestCharacters bool
+	// When set to 'true', this signals the low level search
+	// function to return the actual found text characters
+	// in addition to the standard search results.
+
+	RequestRemainderString bool
+	// When set to 'true', this signals the low level search
+	// function to return the remaining text characters
+	// at the end of the Target String which were NOT
+	// included in the most recent search operation.
+
+	RequestReplacementString bool
+	// When set to 'true', this signals the low level search
+	// function to return the text characters which will
+	// replace those found in the Target String during the
+	// most recent successful search operation.
+
 	lock *sync.Mutex
 }
 
@@ -664,9 +681,9 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 			incomingTestInputParms)
 }
 
-// GetFormattedText - Returns a formatted text string detailing all
-// internal member variables and their values for the current
-// instance of CharSearchTestInputParametersDto.
+// GetParameterTextListing - Returns a formatted text string
+// detailing all internal member variables and their values for
+// the current instance of CharSearchTestInputParametersDto.
 //
 //
 // ----------------------------------------------------------------
@@ -724,11 +741,14 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //
 // Return Values
 //
-//  string
-//     - If this method completes successfully, this string will
-//       contain a detailed listing of all internal member
-//       variables and their values for the current instance of
-//       CharSearchTestInputParametersDto.
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for the current
+//       instance of CharSearchTestInputParametersDto. This
+//       formatted text can then be used for text displays, file
+//       output or printing.
 //
 //
 //  error
@@ -741,9 +761,9 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (testSearchInputParms *CharSearchTestInputParametersDto) GetFormattedText(
+func (testSearchInputParms *CharSearchTestInputParametersDto) GetParameterTextListing(
 	errorPrefix interface{}) (
-	string,
+	strings.Builder,
 	error) {
 
 	if testSearchInputParms.lock == nil {
@@ -761,29 +781,21 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) GetFormattedText(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"CharSearchTestInputParametersDto."+
-			"GetFormattedText()",
+			"GetParameterTextListing()",
 		"")
 
 	if err != nil {
 
-		return "", err
+		return strings.Builder{}, err
 
 	}
 
-	var strBuilder strings.Builder
-
-	strBuilder,
-		err = charSearchTestInputParametersDtoNanobot{}.ptr().
+	return charSearchTestInputParametersDtoNanobot{}.ptr().
 		getParameterTextListing(
 			testSearchInputParms,
 			ePrefix.XCpy(
 				"strBuilder<-Formatted Text"))
 
-	if err != nil {
-		return "", err
-	}
-
-	return strBuilder.String(), err
 }
 
 // IsValidInstance - Performs a diagnostic review of the member
@@ -1098,6 +1110,15 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
 		testSearchInputParms.TextCharSearchType =
 			CharSearchType.None()
 	}
+
+	testSearchInputParms.RequestFoundTestCharacters =
+		testConfigDto.RequestFoundTestCharacters
+
+	testSearchInputParms.RequestRemainderString =
+		testConfigDto.RequestRemainderString
+
+	testSearchInputParms.RequestReplacementString =
+		testConfigDto.RequestReplacementString
 
 	return
 }
