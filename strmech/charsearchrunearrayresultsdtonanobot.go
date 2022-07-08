@@ -250,6 +250,216 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyIn(
 	return err
 }
 
+// copyOut - Returns a deep copy of the input parameter
+// 'runeSearchResultsDto', a pointer to an instance of
+// CharSearchRuneArrayResultsDto.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// NO validation is performed on 'runeSearchResultsDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeSearchResultsDto       *CharSearchRuneArrayResultsDto
+//     - A pointer to an instance of CharSearchRuneArrayResultsDto.
+//       A deep copy of the internal member variables will be
+//       created and returned in a new instance of
+//       CharSearchRuneArrayResultsDto.
+//
+//       No data validation is performed on 'runeSearchResultsDto'.
+//
+//
+//  errPrefDto                      *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyRuneSearchResults  CharSearchRuneArrayResultsDto
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'runeSearchResultsDto' will be created and
+//       returned in a new instance of
+//       CharSearchRuneArrayResultsDto.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut(
+	runeSearchResultsDto *CharSearchRuneArrayResultsDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	deepCopyRuneSearchResults CharSearchRuneArrayResultsDto,
+	err error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"charSearchRuneArrayResultsDtoNanobot."+
+			"copyOut()",
+		"")
+
+	if err != nil {
+
+		return deepCopyRuneSearchResults, err
+
+	}
+
+	if runeSearchResultsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'runeSearchResultsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return deepCopyRuneSearchResults, err
+	}
+
+	charSearchRuneArrayResultsDtoAtom{}.ptr().
+		empty(&deepCopyRuneSearchResults)
+
+	deepCopyRuneSearchResults.SearchResultsName =
+		runeSearchResultsDto.SearchResultsName
+
+	deepCopyRuneSearchResults.SearchResultsFunctionChain =
+		runeSearchResultsDto.SearchResultsFunctionChain
+
+	deepCopyRuneSearchResults.FoundSearchTarget =
+		runeSearchResultsDto.FoundSearchTarget
+
+	deepCopyRuneSearchResults.FoundFirstNumericDigitInNumStr =
+		runeSearchResultsDto.FoundFirstNumericDigitInNumStr
+
+	deepCopyRuneSearchResults.FoundDecimalSeparatorSymbols =
+		runeSearchResultsDto.FoundDecimalSeparatorSymbols
+
+	deepCopyRuneSearchResults.FoundNonZeroValue =
+		runeSearchResultsDto.FoundNonZeroValue
+
+	deepCopyRuneSearchResults.TargetInputParametersName =
+		runeSearchResultsDto.TargetInputParametersName
+
+	deepCopyRuneSearchResults.TargetStringLength =
+		runeSearchResultsDto.TargetStringLength
+
+	deepCopyRuneSearchResults.TargetStringSearchLength =
+		runeSearchResultsDto.TargetStringSearchLength
+
+	deepCopyRuneSearchResults.TargetStringAdjustedSearchLength =
+		runeSearchResultsDto.TargetStringAdjustedSearchLength
+
+	deepCopyRuneSearchResults.TargetStringStartingSearchIndex =
+		runeSearchResultsDto.TargetStringStartingSearchIndex
+
+	deepCopyRuneSearchResults.TargetStringCurrentSearchIndex =
+		runeSearchResultsDto.TargetStringCurrentSearchIndex
+
+	deepCopyRuneSearchResults.TargetStringFirstFoundIndex =
+		runeSearchResultsDto.TargetStringFirstFoundIndex
+
+	deepCopyRuneSearchResults.TargetStringLastFoundIndex =
+		runeSearchResultsDto.TargetStringLastFoundIndex
+
+	deepCopyRuneSearchResults.TargetStringLastSearchIndex =
+		runeSearchResultsDto.TargetStringLastSearchIndex
+
+	deepCopyRuneSearchResults.TargetStringNextSearchIndex =
+		runeSearchResultsDto.TargetStringNextSearchIndex
+
+	deepCopyRuneSearchResults.TargetStringDescription1 =
+		runeSearchResultsDto.TargetStringDescription1
+
+	deepCopyRuneSearchResults.TargetStringDescription2 =
+		runeSearchResultsDto.TargetStringDescription2
+
+	deepCopyRuneSearchResults.TestInputParametersName =
+		runeSearchResultsDto.TestInputParametersName
+
+	deepCopyRuneSearchResults.TestStringName =
+		runeSearchResultsDto.TestStringName
+
+	deepCopyRuneSearchResults.TestStringLength =
+		runeSearchResultsDto.TestStringLength
+
+	deepCopyRuneSearchResults.TestStringLengthName =
+		runeSearchResultsDto.TestStringLengthName
+
+	deepCopyRuneSearchResults.TestStringStartingIndex =
+		runeSearchResultsDto.TestStringStartingIndex
+
+	deepCopyRuneSearchResults.TestStringStartingIndexName =
+		runeSearchResultsDto.TestStringStartingIndexName
+
+	deepCopyRuneSearchResults.TestStringFirstFoundIndex =
+		runeSearchResultsDto.TestStringFirstFoundIndex
+
+	deepCopyRuneSearchResults.TestStringLastFoundIndex =
+		runeSearchResultsDto.TestStringLastFoundIndex
+
+	deepCopyRuneSearchResults.TestStringDescription1 =
+		runeSearchResultsDto.TestStringDescription1
+
+	deepCopyRuneSearchResults.TestStringDescription2 =
+		runeSearchResultsDto.TestStringDescription2
+
+	deepCopyRuneSearchResults.CollectionTestObjIndex =
+		runeSearchResultsDto.CollectionTestObjIndex
+
+	deepCopyRuneSearchResults.TextCharSearchType =
+		runeSearchResultsDto.TextCharSearchType
+
+	err = deepCopyRuneSearchResults.ReplacementString.CopyIn(
+		&runeSearchResultsDto.ReplacementString,
+		ePrefix.XCpy(
+			"deepCopyRuneSearchResults.ReplacementString<-"+
+				"runeSearchResultsDto"))
+
+	if err != nil {
+		return deepCopyRuneSearchResults, err
+	}
+
+	err = deepCopyRuneSearchResults.RemainderString.CopyIn(
+		&runeSearchResultsDto.RemainderString,
+		ePrefix.XCpy(
+			"deepCopyRuneSearchResults.RemainderString<-"+
+				"runeSearchResultsDto"))
+
+	if err != nil {
+		return deepCopyRuneSearchResults, err
+	}
+
+	err = deepCopyRuneSearchResults.FoundCharacters.CopyIn(
+		&runeSearchResultsDto.FoundCharacters,
+		ePrefix.XCpy(
+			"deepCopyRuneSearchResults.FoundCharacters<-"+
+				"runeSearchResultsDto"))
+
+	return deepCopyRuneSearchResults, err
+}
+
 // ptr - Returns a pointer to a new instance of
 // charSearchResultsDtoNanobot.
 //
