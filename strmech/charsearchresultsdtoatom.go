@@ -10,9 +10,8 @@ type charSearchResultsDtoAtom struct {
 }
 
 // empty - Receives a pointer to an instance of
-// CharSearchResultsDto and proceeds to reset the
-// data values for member variables to their initial or zero
-// values.
+// CharSearchResultsDto and proceeds to reset the data values for
+// member variables to their initial or zero values.
 //
 //
 // ----------------------------------------------------------------
@@ -21,7 +20,8 @@ type charSearchResultsDtoAtom struct {
 //
 // All the member variable data values contained in input parameter
 // 'searchResultsDto' will be deleted and reset to their zero
-// values.
+// values. All Array Index values will be set to minus one (-1).
+// Valid Array Indexes have values greater than minus one (-1).
 //
 //
 // ------------------------------------------------------------------------
