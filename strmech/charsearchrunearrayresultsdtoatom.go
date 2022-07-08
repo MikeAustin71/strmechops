@@ -317,13 +317,13 @@ func (searchRunesResultsDtoAtom *charSearchRuneArrayResultsDtoAtom) equal(
 	}
 
 	if runeSearchResults1.TestStringStartingIndex !=
-		runeSearchResults1.TestStringStartingIndex {
+		runeSearchResults2.TestStringStartingIndex {
 
 		return false
 	}
 
 	if runeSearchResults1.TestStringStartingIndexName !=
-		runeSearchResults1.TestStringStartingIndexName {
+		runeSearchResults2.TestStringStartingIndexName {
 
 		return false
 	}
