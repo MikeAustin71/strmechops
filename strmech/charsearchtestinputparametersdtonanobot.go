@@ -398,11 +398,10 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) copy
 //
 //  testInputParms           *CharSearchTestInputParametersDto
 //     - A pointer to an instance of
-//       CharSearchTestInputParametersDto instance. Formatted
-//       text output will be generated listing the member variable
-//       names and their corresponding values. The formatted text
-//       can then be used for text displays, file output or
-//       printing.
+//       CharSearchTestInputParametersDto. Formatted text output
+//       will be generated listing the member variable names and
+//       their corresponding values. The formatted text can then
+//       be used for text displays, file output or printing.
 //
 //       No data validation is performed on this instance of
 //       CharSearchTestInputParametersDto.

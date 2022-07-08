@@ -1139,12 +1139,13 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamLabel = "TextCharSearchType"
 
+	if !searchNegNumResults.TextCharSearchType.XIsValid() {
+		searchNegNumResults.TextCharSearchType =
+			CharSearchType.None()
+	}
+
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TextCharSearchType.String())
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TextCharSearchType is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -1162,6 +1163,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParams = append(labelParams, labelParam)
 
+	// Write Label/Parameter Values to String Builder
 	err = txtBuilder.BuildLabelsValues(
 		&strBuilder,
 		labelParams,
