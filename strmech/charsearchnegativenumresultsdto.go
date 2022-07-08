@@ -429,7 +429,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyIn(
 // IMPORTANT
 //
 // No Data Validation will be performed on the current instance
-// of CharSearchResultsDto.
+// of CharSearchNegativeNumberResultsDto.
 //
 //
 // ----------------------------------------------------------------
