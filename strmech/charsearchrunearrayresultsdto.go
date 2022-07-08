@@ -482,3 +482,56 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Empty() {
 
 	return
 }
+
+// Equal - Receives a pointer to another instance of
+// CharSearchRuneArrayResultsDto and proceeds to compare the member
+// variables to those of the current CharSearchRuneArrayResultsDto
+// instance in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingRuneSearchResults  *CharSearchRuneArrayResultsDto
+//     - A pointer to an incoming instance of
+//       CharSearchRuneArrayResultsDto. This method will compare
+//       all member variable data values in this instance against
+//       those contained in the current instance of
+//       CharSearchRuneArrayResultsDto. If the data values in both
+//       instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingRuneSearchResults' are equal in all
+//       respects to those contained in the current instance of
+//       CharSearchRuneArrayResultsDto, this method will return a
+//       boolean value of 'true'. Otherwise, a value of 'false'
+//       will be returned to the calling function.
+//
+func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Equal(
+	incomingRuneSearchResults *CharSearchRuneArrayResultsDto) bool {
+
+	if runesSearchResultsDto.lock == nil {
+		runesSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	runesSearchResultsDto.lock.Lock()
+
+	defer runesSearchResultsDto.lock.Unlock()
+
+	return charSearchRuneArrayResultsDtoAtom{}.ptr().
+		equal(runesSearchResultsDto,
+			incomingRuneSearchResults)
+}
