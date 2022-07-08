@@ -712,10 +712,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.FoundNegativeNumberSymbols)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundNegativeNumberSymbols is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build FoundNegNumSymbolsOnPreviousSearch
@@ -726,10 +722,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundNegNumSymbolsOnPreviousSearch is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build FoundFirstNumericDigitInNumStr
@@ -739,10 +731,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.FoundFirstNumericDigitInNumStr)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundFirstNumericDigitInNumStr is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -794,10 +782,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringLength)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringLength is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build TargetStringSearchLength
@@ -807,10 +791,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringSearchLength)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringSearchLength is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -836,10 +816,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringStartingSearchIndex)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringStartingSearchIndex is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build TargetStringCurrentSearchIndex
@@ -850,10 +826,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringCurrentSearchIndex)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringCurrentSearchIndex is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build TargetStringFirstFoundIndex
@@ -863,10 +835,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringFirstFoundIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringFirstFoundIndex is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -892,10 +860,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringLastSearchIndex)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringLastSearchIndex is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build TargetStringNextSearchIndex
@@ -905,10 +869,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TargetStringNextSearchIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringNextSearchIndex is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -1004,10 +964,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TestStringStartingIndex)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringStartingIndex is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build TestStringStartingIndexName
@@ -1032,10 +988,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TestStringFirstFoundIndex)
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringFirstFoundIndex is EMPTY!"
-	}
-
 	labelParams = append(labelParams, labelParam)
 
 	// Build TestStringLastFoundIndex
@@ -1045,10 +997,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.TestStringLastFoundIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLastFoundIndex is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
@@ -1098,6 +1046,11 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParam = TextLabelValueStrings{}
 
 	labelParam.ParamLabel = "NumSignValue"
+
+	if !searchNegNumResults.NumSignValue.XIsValid() {
+		searchNegNumResults.NumSignValue =
+			NumSignVal.None()
+	}
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.NumSignValue.String())
