@@ -259,15 +259,17 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 //
 // Input Parameters
 //
-//  searchNegNumResults             *CharSearchNegativeNumberResultsDto
-//     - A pointer to an instance of CharSearchNegativeNumberResultsDto. A
-//       deep copy of the internal member variables will be created
-//       and returned in a new instance of CharSearchNegativeNumberResultsDto.
+//  searchNegNumResults        *CharSearchNegativeNumberResultsDto
+//     - A pointer to an instance of
+//       CharSearchNegativeNumberResultsDto. A deep copy of the
+//       internal member variables contained in this instance will
+//       be created and returned in a new instance of
+//       CharSearchNegativeNumberResultsDto.
 //
 //       No data validation is performed on 'searchNegNumResults'.
 //
 //
-//  errPrefDto                      *ePref.ErrPrefixDto
+//  errPrefDto                 *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
