@@ -199,6 +199,15 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 	destinationTargetInputParms.TextCharSearchType =
 		sourceTargetInputParms.TextCharSearchType
 
+	destinationTargetInputParms.RequestFoundTestCharacters =
+		sourceTargetInputParms.RequestFoundTestCharacters
+
+	destinationTargetInputParms.RequestRemainderString =
+		sourceTargetInputParms.RequestRemainderString
+
+	destinationTargetInputParms.RequestReplacementString =
+		sourceTargetInputParms.RequestReplacementString
+
 	return err
 }
 
@@ -361,6 +370,15 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	deepCopyTargetInputParms.TextCharSearchType =
 		targetInputParms.TextCharSearchType
+
+	deepCopyTargetInputParms.RequestFoundTestCharacters =
+		targetInputParms.RequestFoundTestCharacters
+
+	deepCopyTargetInputParms.RequestRemainderString =
+		targetInputParms.RequestRemainderString
+
+	deepCopyTargetInputParms.RequestReplacementString =
+		targetInputParms.RequestReplacementString
 
 	return deepCopyTargetInputParms, err
 }
@@ -889,6 +907,36 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue =
 		targetInputParms.TextCharSearchType.String()
+
+	labelParams = append(labelParams, labelParam)
+
+	// RequestFoundTestCharacters
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestFoundTestCharacters"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.RequestFoundTestCharacters)
+
+	labelParams = append(labelParams, labelParam)
+
+	// RequestRemainderString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestRemainderString"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.RequestRemainderString)
+
+	labelParams = append(labelParams, labelParam)
+
+	// RequestReplacementString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RequestReplacementString"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.RequestReplacementString)
 
 	labelParams = append(labelParams, labelParam)
 

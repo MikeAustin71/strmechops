@@ -148,6 +148,23 @@ type CharSearchTargetInputParametersDto struct {
 	//  CharSearchType.SingleTargetChar()
 	//  CharSearchType.LinearEndOfString()
 
+	RequestFoundTestCharacters bool
+	// When set to 'true', this signals the low level search
+	// function to return the actual found text characters
+	// in addition to the standard search results.
+
+	RequestRemainderString bool
+	// When set to 'true', this signals the low level search
+	// function to return the remaining text characters
+	// at the end of the Target String which were NOT
+	// included in the most recent search operation.
+
+	RequestReplacementString bool
+	// When set to 'true', this signals the low level search
+	// function to return the text characters which will
+	// replace those found in the Target String during the
+	// most recent successful search operation.
+
 	lock *sync.Mutex
 }
 

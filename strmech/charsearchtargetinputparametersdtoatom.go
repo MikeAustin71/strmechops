@@ -95,6 +95,12 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 
 	targetInputParms.TextCharSearchType = CharSearchType.None()
 
+	targetInputParms.RequestFoundTestCharacters = false
+
+	targetInputParms.RequestRemainderString = false
+
+	targetInputParms.RequestReplacementString = false
+
 	return
 }
 
@@ -255,6 +261,24 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.TextCharSearchType !=
 		targetInputParms2.TextCharSearchType {
+
+		return false
+	}
+
+	if targetInputParms1.RequestFoundTestCharacters !=
+		targetInputParms2.RequestFoundTestCharacters {
+
+		return false
+	}
+
+	if targetInputParms1.RequestRemainderString !=
+		targetInputParms2.RequestRemainderString {
+
+		return false
+	}
+
+	if targetInputParms1.RequestReplacementString !=
+		targetInputParms2.RequestReplacementString {
 
 		return false
 	}
