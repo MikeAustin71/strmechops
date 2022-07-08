@@ -712,3 +712,60 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) LoadTargetBaseInputP
 		targetInputParms.TargetStringDescription2
 
 }
+
+// LoadTestBaseInputParameters - Receives Test String data from
+// input parameter 'testInputParms' and proceeds to transfer key
+// data for the search operation to the current instance of
+// CharSearchRuneArrayResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method assumes that the input data elements contained in
+// 'testInputParms' have been validated. Therefore, NO DATA
+// VALIDATION is performed on input parameter, 'testInputParms'.
+//
+func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) LoadTestBaseInputParameters(
+	testInputParms CharSearchTestInputParametersDto) {
+
+	if runesSearchResultsDto.lock == nil {
+		runesSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	runesSearchResultsDto.lock.Lock()
+
+	defer runesSearchResultsDto.lock.Unlock()
+
+	runesSearchResultsDto.TestInputParametersName =
+		testInputParms.TestInputParametersName
+
+	runesSearchResultsDto.TestStringName =
+		testInputParms.TestStringName
+
+	runesSearchResultsDto.TestStringLength =
+		testInputParms.TestStringLength
+
+	runesSearchResultsDto.TestStringLengthName =
+		testInputParms.TestStringLengthName
+
+	runesSearchResultsDto.TestStringStartingIndex =
+		testInputParms.TestStringStartingIndex
+
+	runesSearchResultsDto.TestStringStartingIndexName =
+		testInputParms.TestStringStartingIndexName
+
+	runesSearchResultsDto.TestStringDescription1 =
+		testInputParms.TestStringDescription1
+
+	runesSearchResultsDto.TestStringDescription2 =
+		testInputParms.TestStringDescription2
+
+	runesSearchResultsDto.CollectionTestObjIndex =
+		testInputParms.CollectionTestObjIndex
+
+	runesSearchResultsDto.TextCharSearchType =
+		testInputParms.TextCharSearchType
+
+}

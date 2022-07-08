@@ -812,7 +812,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTargetBaseInp
 
 }
 
-// LoadTestBaseInputParameters - Receives Target String data from
+// LoadTestBaseInputParameters - Receives Test String data from
 // input parameter 'testInputParms' and proceeds to transfer key
 // data for the search operation to the current instance of
 // CharSearchNegativeNumberResultsDto.
@@ -823,7 +823,8 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTargetBaseInp
 // IMPORTANT
 //
 // This method assumes that the input data elements contained in
-// 'testInputParms' have been validated.
+// 'testInputParms' have been validated. Therefore, NO DATA
+// VALIDATION is performed on input parameter, 'testInputParms'.
 //
 func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTestBaseInputParameters(
 	testInputParms CharSearchTestInputParametersDto) {
