@@ -550,7 +550,9 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyOut(
 // This method will delete all member variable data values in the
 // current instance of CharSearchNegativeNumberResultsDto. All
 // member variable data values will be reset to their zero or
-// uninitialized states.
+// uninitialized states. Array Index values will be set to minus
+// one (-1). All valid Array Index values are greater than minus
+// one (-1).
 //
 //
 // ----------------------------------------------------------------

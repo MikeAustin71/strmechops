@@ -432,3 +432,53 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) CopyOut(
 			"<-runesSearchResultsDto"))
 
 }
+
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchRuneArrayResultsDto to their zero or
+// uninitialized states. This method will leave the current
+// instance of CharSearchRuneArrayResultsDto in an
+// invalid state and unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of CharSearchRuneArrayResultsDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states. Array Index values will be set to minus
+// one (-1). All valid Array Index values are greater than minus
+// one (-1).
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Empty() {
+
+	if runesSearchResultsDto.lock == nil {
+		runesSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	runesSearchResultsDto.lock.Lock()
+
+	charSearchRuneArrayResultsDtoAtom{}.ptr().
+		empty(runesSearchResultsDto)
+
+	runesSearchResultsDto.lock.Unlock()
+
+	runesSearchResultsDto.lock = nil
+
+	return
+}
