@@ -650,3 +650,65 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) GetParameterTextList
 			runesSearchResultsDto,
 			ePrefix.XCpy("runesSearchResultsDto"))
 }
+
+// LoadTargetBaseInputParameters - Receives Target String data from
+// input parameter 'targetInputParms' and proceeds to transfer key
+// data for the search operation to the current instance of
+// CharSearchRuneArrayResultsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method assumes that the input data elements contained in
+// 'targetInputParms' have been validated.
+//
+// This method therefore performs NO DATA VALIDATION on input
+// parameter 'targetInputParms'.
+//
+func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) LoadTargetBaseInputParameters(
+	targetInputParms CharSearchTargetInputParametersDto) {
+
+	if runesSearchResultsDto.lock == nil {
+		runesSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	runesSearchResultsDto.lock.Lock()
+
+	defer runesSearchResultsDto.lock.Unlock()
+
+	runesSearchResultsDto.TargetInputParametersName =
+		targetInputParms.TargetInputParametersName
+
+	runesSearchResultsDto.FoundFirstNumericDigitInNumStr =
+		targetInputParms.FoundFirstNumericDigitInNumStr
+
+	runesSearchResultsDto.FoundDecimalSeparatorSymbols =
+		targetInputParms.FoundDecimalSeparatorSymbols
+
+	runesSearchResultsDto.FoundNonZeroValue =
+		targetInputParms.FoundNonZeroValue
+
+	runesSearchResultsDto.TargetStringLength =
+		targetInputParms.TargetStringLength
+
+	runesSearchResultsDto.TargetStringSearchLength =
+		targetInputParms.TargetStringSearchLength
+
+	runesSearchResultsDto.TargetStringAdjustedSearchLength =
+		targetInputParms.TargetStringAdjustedSearchLength
+
+	runesSearchResultsDto.TargetStringStartingSearchIndex =
+		targetInputParms.TargetStringStartingSearchIndex
+
+	runesSearchResultsDto.TargetStringCurrentSearchIndex =
+		targetInputParms.TargetStringCurrentSearchIndex
+
+	runesSearchResultsDto.TargetStringDescription1 =
+		targetInputParms.TargetStringDescription1
+
+	runesSearchResultsDto.TargetStringDescription2 =
+		targetInputParms.TargetStringDescription2
+
+}
