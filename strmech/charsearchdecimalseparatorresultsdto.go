@@ -586,14 +586,14 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Empty() {
 //
 // Input Parameters
 //
-//  incomingNegNumSearchResultsDto *CharSearchDecimalSeparatorResultsDto
+//  incomingDecSepResults *CharSearchDecimalSeparatorResultsDto
 //     - A pointer to an incoming instance of
 //       CharSearchDecimalSeparatorResultsDto. This method will
 //       compare all member variable data values in this instance
 //       against those contained in the current instance of
-//       CharSearchDecimalSeparatorResultsDto. If the data values in
-//       both instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
+//       CharSearchDecimalSeparatorResultsDto. If the data values
+//       in both instances are found to be equal in all respects,
+//       this method will return a boolean value of 'true'.
 //
 //
 // ----------------------------------------------------------------
@@ -602,8 +602,8 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Empty() {
 //
 //  bool
 //     - If the member variable data values contained in input
-//       parameter 'incomingNegNumSearchResultsDto' are equal in
-//       all respects to those contained in the current instance of
+//       parameter 'incomingDecSepResults' are equal in all
+//       respects to those contained in the current instance of
 //       CharSearchDecimalSeparatorResultsDto, this method will
 //       return a boolean value of 'true'. Otherwise, a value of
 //       'false' will be returned to the calling function.
