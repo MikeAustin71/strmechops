@@ -537,8 +537,8 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) CopyOut(
 // current instance of CharSearchDecimalSeparatorResultsDto. All
 // member variable data values will be reset to their zero or
 // uninitialized states. Array index values will be set to minus
-// one (-1). Valid array indexes have values greater than minus one
-// (-1).
+// one (-1) thereby differentiating them from valid array indexes
+// which have values greater than minus one (-1).
 //
 //
 // ----------------------------------------------------------------

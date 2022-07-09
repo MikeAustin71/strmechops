@@ -405,3 +405,51 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyOut(
 			ePrefix.XCpy(
 				"<-searchNumStrParseResults"))
 }
+
+// Empty - Resets all internal member variables for the current
+// instance of CharSearchNumStrParseResultsDto to their zero or
+// uninitialized states. This method will leave the current
+// instance of CharSearchDecimalSeparatorResultsDto in an invalid
+// state and unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in the
+// current instance of CharSearchNumStrParseResultsDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Empty() {
+
+	if searchNumStrParseResults.lock == nil {
+		searchNumStrParseResults.lock = new(sync.Mutex)
+	}
+
+	searchNumStrParseResults.lock.Lock()
+
+	charSearchNumStrParseResultsDtoAtom{}.ptr().
+		empty(searchNumStrParseResults)
+
+	searchNumStrParseResults.lock.Unlock()
+
+	searchNumStrParseResults.lock = nil
+
+	return
+}
