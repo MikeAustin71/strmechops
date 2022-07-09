@@ -126,6 +126,13 @@ func (searchDecimalSepResultsAtom *charSearchDecimalSeparatorResultsDtoAtom) emp
 
 	decimalSepResults.DecimalSeparatorSymbolsSpec.Empty()
 
+	decimalSepResults.ReplacementString.Empty()
+
+	decimalSepResults.RemainderString.Empty()
+
+	decimalSepResults.FoundRuneArrayChars.Empty()
+
+	return
 }
 
 // equal - Receives a pointer to two instances of
@@ -383,6 +390,24 @@ func (searchDecimalSepResultsAtom *charSearchDecimalSeparatorResultsDtoAtom) equ
 
 	if !decimalSepResults1.DecimalSeparatorSymbolsSpec.Equal(
 		&decimalSepResults2.DecimalSeparatorSymbolsSpec) {
+
+		return false
+	}
+
+	if !decimalSepResults1.ReplacementString.Equal(
+		&decimalSepResults2.ReplacementString) {
+
+		return false
+	}
+
+	if !decimalSepResults1.RemainderString.Equal(
+		&decimalSepResults2.RemainderString) {
+
+		return false
+	}
+
+	if !decimalSepResults1.FoundRuneArrayChars.Equal(
+		&decimalSepResults2.FoundRuneArrayChars) {
 
 		return false
 	}

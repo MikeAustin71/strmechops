@@ -232,7 +232,38 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	err = destinationDecSepResults.DecimalSeparatorSymbolsSpec.CopyIn(
 		&sourceDecSepResults.DecimalSeparatorSymbolsSpec,
 		ePrefix.XCpy(
-			"destinationDecSepResults<-sourceDecSepResults"))
+			"destinationDecSepResults."+
+				"DecimalSeparatorSymbolsSpec<-sourceDecSepResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationDecSepResults.ReplacementString.CopyIn(
+		&sourceDecSepResults.ReplacementString,
+		ePrefix.XCpy(
+			"destinationDecSepResults.ReplacementString"+
+				"<-sourceDecSepResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationDecSepResults.RemainderString.CopyIn(
+		&sourceDecSepResults.RemainderString,
+		ePrefix.XCpy(
+			"destinationDecSepResults.RemainderString"+
+				"<-sourceDecSepResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationDecSepResults.FoundRuneArrayChars.CopyIn(
+		&sourceDecSepResults.FoundRuneArrayChars,
+		ePrefix.XCpy(
+			"destinationDecSepResults.FoundRuneArrayChars"+
+				"<-sourceDecSepResults"))
 
 	return err
 }
@@ -438,6 +469,37 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		&decimalSeparatorResults.DecimalSeparatorSymbolsSpec,
 		ePrefix.XCpy(
 			"deepCopyDecSepResults<-decimalSeparatorResults"))
+
+	if err != nil {
+		return deepCopyDecSepResults, err
+	}
+
+	err = deepCopyDecSepResults.ReplacementString.CopyIn(
+		&decimalSeparatorResults.ReplacementString,
+		ePrefix.XCpy(
+			"deepCopyDecSepResults.ReplacementString"+
+				"<-decimalSeparatorResults"))
+
+	if err != nil {
+		return deepCopyDecSepResults, err
+	}
+
+	err = deepCopyDecSepResults.RemainderString.CopyIn(
+		&decimalSeparatorResults.RemainderString,
+		ePrefix.XCpy(
+			"deepCopyDecSepResults.RemainderString"+
+				"<-decimalSeparatorResults"))
+
+	if err != nil {
+		return deepCopyDecSepResults, err
+	}
+
+	err = deepCopyDecSepResults.FoundRuneArrayChars.CopyIn(
+		&decimalSeparatorResults.FoundRuneArrayChars,
+		ePrefix.XCpy(
+			"deepCopyDecSepResults.FoundRuneArrayChars"+
+				"<-decimalSeparatorResults"))
+
 	return deepCopyDecSepResults, err
 }
 
@@ -1067,6 +1129,48 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	if len(labelParam.ParamValue) == 0 {
 		labelParam.ParamValue = "DecimalSeparatorSymbolsSpec is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build ReplacementString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "ReplacementString"
+
+	labelParam.ParamValue =
+		decimalSeparatorResults.ReplacementString.GetCharacterString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "ReplacementString is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build RemainderString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RemainderString"
+
+	labelParam.ParamValue =
+		decimalSeparatorResults.RemainderString.GetCharacterString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "RemainderString is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundRuneArrayChars
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundRuneArrayChars"
+
+	labelParam.ParamValue =
+		decimalSeparatorResults.FoundRuneArrayChars.GetCharacterString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "FoundRuneArrayChars is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)

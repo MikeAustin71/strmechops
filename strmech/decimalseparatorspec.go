@@ -974,7 +974,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	testConfigDto.TextCharSearchType = CharSearchType.LinearTargetStartingIndex()
 
 	decimalSearchResults.Empty()
-	runeArraySearchResults := CharSearchResultsDto{}
+	runeArraySearchResults := CharSearchRuneArrayResultsDto{}
 
 	runeArraySearchResults,
 		err =
@@ -990,13 +990,10 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 
 	if runeArraySearchResults.FoundSearchTarget {
 
+		decimalSearchResults.LoadRuneArraySearchResults(
+			runeArraySearchResults)
+
 		decimalSearchResults.FoundDecimalSeparatorSymbols = true
-
-		decimalSearchResults.TargetStringFirstFoundIndex =
-			runeArraySearchResults.TargetStringFirstFoundIndex
-
-		decimalSearchResults.TargetStringLastFoundIndex =
-			runeArraySearchResults.TargetStringLastFoundIndex
 
 	}
 

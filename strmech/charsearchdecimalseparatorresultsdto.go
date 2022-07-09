@@ -270,6 +270,22 @@ type CharSearchDecimalSeparatorResultsDto struct {
 	// search operation, they will be stored in this instance
 	// of DecimalSeparatorSpec
 
+	ReplacementString RuneArrayDto
+	// A Rune Array Data Transfer Object containing the
+	// Replacement Characters to be substituted for
+	// existing characters in a Target String.
+
+	RemainderString RuneArrayDto
+	// A Rune Array Data Transfer Object containing the
+	// remaining text characters at the end of the Target
+	// String which were NOT included in the most recent
+	// search operation.
+
+	FoundRuneArrayChars RuneArrayDto
+	// A Rune Array Data Transfer Object containing the
+	// text characters located in the Target String
+	// by the most recent search operation.
+
 	lock *sync.Mutex
 }
 
@@ -738,6 +754,147 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameter
 			decSepSearchResultsDto,
 			ePrefix.XCpy(
 				"decSepSearchResultsDto"))
+}
+
+// LoadRuneArraySearchResults - Transfers the results of a
+// subsidiary rune array search to the internal member variables
+// of the current CharSearchDecimalSeparatorResultsDto instance.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method performs NO DATA VALIDATION on input parameter
+// 'runeArraySearchResults'.
+//
+func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) LoadRuneArraySearchResults(
+	runeArraySearchResults CharSearchRuneArrayResultsDto) {
+
+	if decSepSearchResultsDto.lock == nil {
+		decSepSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	decSepSearchResultsDto.lock.Lock()
+
+	defer decSepSearchResultsDto.lock.Unlock()
+
+	decSepSearchResultsDto.TargetInputParametersName =
+		runeArraySearchResults.TargetInputParametersName
+
+	decSepSearchResultsDto.FoundFirstNumericDigitInNumStr =
+		runeArraySearchResults.FoundFirstNumericDigitInNumStr
+
+	decSepSearchResultsDto.FoundDecimalSeparatorSymbols =
+		runeArraySearchResults.FoundDecimalSeparatorSymbols
+
+	decSepSearchResultsDto.FoundNonZeroValue =
+		runeArraySearchResults.FoundNonZeroValue
+
+	decSepSearchResultsDto.TargetStringLength =
+		runeArraySearchResults.TargetStringLength
+
+	decSepSearchResultsDto.TargetStringSearchLength =
+		runeArraySearchResults.TargetStringSearchLength
+
+	decSepSearchResultsDto.TargetStringAdjustedSearchLength =
+		runeArraySearchResults.TargetStringAdjustedSearchLength
+
+	decSepSearchResultsDto.TargetStringStartingSearchIndex =
+		runeArraySearchResults.TargetStringStartingSearchIndex
+
+	decSepSearchResultsDto.TargetStringCurrentSearchIndex =
+		runeArraySearchResults.TargetStringCurrentSearchIndex
+
+	decSepSearchResultsDto.TargetStringNextSearchIndex =
+		runeArraySearchResults.TargetStringNextSearchIndex
+
+	decSepSearchResultsDto.TargetStringFirstFoundIndex =
+		runeArraySearchResults.TargetStringFirstFoundIndex
+
+	decSepSearchResultsDto.TargetStringLastFoundIndex =
+		runeArraySearchResults.TargetStringLastFoundIndex
+
+	decSepSearchResultsDto.TargetStringLastSearchIndex =
+		runeArraySearchResults.TargetStringLastSearchIndex
+
+	decSepSearchResultsDto.TargetStringDescription1 =
+		runeArraySearchResults.TargetStringDescription1
+
+	decSepSearchResultsDto.TargetStringDescription2 =
+		runeArraySearchResults.TargetStringDescription2
+
+	decSepSearchResultsDto.TestInputParametersName =
+		runeArraySearchResults.TestInputParametersName
+
+	decSepSearchResultsDto.TestStringName =
+		runeArraySearchResults.TestStringName
+
+	decSepSearchResultsDto.TestStringLength =
+		runeArraySearchResults.TestStringLength
+
+	decSepSearchResultsDto.TestStringLengthName =
+		runeArraySearchResults.TestStringLengthName
+
+	decSepSearchResultsDto.TestStringStartingIndex =
+		runeArraySearchResults.TestStringStartingIndex
+
+	decSepSearchResultsDto.TestStringStartingIndexName =
+		runeArraySearchResults.TestStringStartingIndexName
+
+	decSepSearchResultsDto.TestStringFirstFoundIndex =
+		runeArraySearchResults.TestStringFirstFoundIndex
+
+	decSepSearchResultsDto.TestStringLastFoundIndex =
+		runeArraySearchResults.TestStringLastFoundIndex
+
+	decSepSearchResultsDto.TestStringDescription1 =
+		runeArraySearchResults.TestStringDescription1
+
+	decSepSearchResultsDto.CollectionTestObjIndex =
+		runeArraySearchResults.CollectionTestObjIndex
+
+	decSepSearchResultsDto.TextCharSearchType =
+		runeArraySearchResults.TextCharSearchType
+
+	var err error
+
+	if runeArraySearchResults.ReplacementString.
+		GetRuneArrayLength() > 0 {
+
+		err = decSepSearchResultsDto.ReplacementString.CopyIn(
+			&runeArraySearchResults.ReplacementString,
+			"")
+
+		if err != nil {
+			decSepSearchResultsDto.ReplacementString.Empty()
+		}
+	}
+
+	if runeArraySearchResults.RemainderString.
+		GetRuneArrayLength() > 0 {
+
+		err = decSepSearchResultsDto.RemainderString.CopyIn(
+			&runeArraySearchResults.RemainderString,
+			"")
+
+		if err != nil {
+			decSepSearchResultsDto.RemainderString.Empty()
+		}
+	}
+
+	if runeArraySearchResults.FoundRuneArrayChars.
+		GetRuneArrayLength() > 0 {
+
+		err = decSepSearchResultsDto.FoundRuneArrayChars.CopyIn(
+			&runeArraySearchResults.FoundRuneArrayChars,
+			"")
+
+		if err != nil {
+			decSepSearchResultsDto.FoundRuneArrayChars.Empty()
+		}
+	}
+
+	return
 }
 
 // LoadTargetBaseInputParameters - Receives Target String data from

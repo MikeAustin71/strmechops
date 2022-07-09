@@ -112,7 +112,9 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	targetInputParms.TargetInputParametersName = "extractNumRunes"
+	targetInputParms.TargetInputParametersName = "Extract Number Runes"
+	targetInputParms.TargetStringDescription2 =
+		ePrefix.String()
 
 	if len(targetSearchStringName) == 0 {
 		targetInputParms.TargetStringName = "targetSearchString"
@@ -229,8 +231,9 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	targetInputParms.RequestRemainderString =
-		requestRemainderRunesString
+	targetInputParms.RequestRemainderString = false
+	targetInputParms.RequestFoundTestCharacters = false
+	targetInputParms.RequestReplacementString = false
 
 	searchResults.Empty()
 
@@ -250,8 +253,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.NegativeNumberSymbolSearchResults.Empty()
 	searchResults.ParsingTerminatorSearchResults.Empty()
 
-	var negNumSearchResults CharSearchResultsDto
-	var decimalSepSearchResults CharSearchDecimalSeparatorResultsDto
 	var parsingTerminationResults CharSearchResultsDto
 
 	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
@@ -353,7 +354,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				FoundNegativeNumberSymbols {
 
 				i =
-					negNumSearchResults.TargetStringLastFoundIndex
+					searchResults.NegativeNumberSymbolSearchResults.
+						TargetStringLastFoundIndex
 
 				searchResults.NumSignValue = NumSignVal.Negative()
 
@@ -362,42 +364,53 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		}
 
 		// Check for Decimal Separators
-		//if !foundDecimalSeparators {
-		//
-		//	decimalSepSearchResults,
-		//		err = decimalSeparatorSpec.SearchForDecimalSeparator(
-		//		targetInputParms,
-		//		ePrefix.XCpy(
-		//			"targetInputParms"))
-		//
-		//	if err != nil {
-		//
-		//		return searchResults,
-		//			numStrKernel,
-		//			err
-		//
-		//	}
-		//
-		//	if decimalSepSearchResults.FoundDecimalSeparatorSymbols {
-		//
-		//		foundDecimalSeparators = true
-		//
-		//		i = decimalSepSearchResults.TargetStringLastSearchIndex
-		//
-		//		searchResults.TargetStringLastSearchIndex = i
-		//
-		//		continue
-		//	}
-		//}
+		if !targetInputParms.FoundDecimalSeparatorSymbols {
+
+			searchResults.DecimalSeparatorSearchResults,
+				err = decimalSeparatorSpec.SearchForDecimalSeparator(
+				targetInputParms,
+				ePrefix.XCpy(
+					"targetInputParms"))
+
+			if err != nil {
+
+				return searchResults,
+					numStrKernel,
+					err
+
+			}
+
+			if searchResults.DecimalSeparatorSearchResults.
+				FoundDecimalSeparatorSymbols {
+
+				targetInputParms.FoundDecimalSeparatorSymbols = true
+
+				i = searchResults.DecimalSeparatorSearchResults.
+					TargetStringLastSearchIndex
+
+				targetInputParms.TargetStringCurrentSearchIndex = i
+
+				targetInputParms.TargetStringNextSearchIndex = i + 1
+
+				if targetInputParms.TargetStringNextSearchIndex >=
+					targetInputParms.TargetStringLength {
+
+					targetInputParms.TargetStringNextSearchIndex = -1
+
+				}
+
+				continue
+			}
+		}
 	}
 
-	searchResults.TargetStringNextSearchIndex =
-		searchResults.TargetStringLastSearchIndex + 1
+	targetInputParms.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringCurrentSearchIndex + 1
 
-	if searchResults.TargetStringNextSearchIndex >=
+	if targetInputParms.TargetStringNextSearchIndex >=
 		targetInputParms.TargetStringLength {
 
-		searchResults.TargetStringNextSearchIndex = -1
+		targetInputParms.TargetStringNextSearchIndex = -1
 	}
 
 computeExitStats:
@@ -413,16 +426,13 @@ computeExitStats:
 	//
 	//fmt.Println(arr[:])            // [1,2,3,4,5]
 
-	searchResults.LoadTargetBaseInputParameters(
-		targetInputParms)
-
 	searchResults.RemainderString.Empty()
 
-	if searchResults.FoundSearchTarget == true {
+	if searchResults.FoundNumericDigits == true {
 
 		if requestRemainderRunesString {
 
-			if searchResults.TargetStringNextSearchIndex == -1 {
+			if targetInputParms.TargetStringNextSearchIndex == -1 {
 				// All characters have been searched.
 				// There is no Remainder String
 			} else {
@@ -433,7 +443,7 @@ computeExitStats:
 					append(
 						searchResults.RemainderString.CharsArray,
 						targetSearchString.
-							CharsArray[searchResults.TargetStringLastSearchIndex:]...)
+							CharsArray[targetInputParms.TargetStringCurrentSearchIndex:]...)
 			}
 
 		}
@@ -458,19 +468,13 @@ computeExitStats:
 		// searchResults.FoundSearchTarget == false
 		// Didn't find any numeric digits!
 		numStrKernel.Empty()
-		searchResults.TargetStringLastSearchIndex = -1
-		searchResults.TargetStringLastFoundIndex = -1
-		searchResults.TargetStringNextSearchIndex = 0
+		searchResults.FoundNumericDigits = false
+		searchResults.FoundDecimalDigits = false
+		searchResults.FoundNonZeroValue = false
 
 		if requestRemainderRunesString {
 
-			searchResults.RemainderString.CharsArray =
-				append(
-					searchResults.RemainderString.CharsArray,
-					targetSearchString.
-						CharsArray[searchResults.TargetStringLastSearchIndex:]...)
-
-			if startingSearchIndex == 0 {
+			if targetInputParms.TargetStringAdjustedSearchLength == 0 {
 
 				searchResults.RemainderString.CharsArray =
 					make([]rune, len(targetSearchString.
@@ -482,13 +486,13 @@ computeExitStats:
 
 			} else {
 
-				startingSearchIndex--
+				targetInputParms.TargetStringAdjustedSearchLength--
 
 				searchResults.RemainderString.CharsArray =
 					append(
 						searchResults.RemainderString.CharsArray,
 						targetSearchString.
-							CharsArray[startingSearchIndex:]...)
+							CharsArray[targetInputParms.TargetStringAdjustedSearchLength:]...)
 			}
 		}
 

@@ -785,6 +785,14 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextL
 // LoadRuneArraySearchResults - Transfers the results of a
 // subsidiary rune array search to the internal member variables
 // of the current CharSearchNegativeNumberResultsDto instance.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method performs NO DATA VALIDATION on input parameter
+// 'runeArraySearchResults'.
+//
 func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadRuneArraySearchResults(
 	runeArraySearchResults CharSearchRuneArrayResultsDto) {
 
