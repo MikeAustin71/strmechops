@@ -500,7 +500,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 //       the formatted text output listing the member variable
 //       names and their corresponding values for input parameter
 //       'searchNegNumResults' . This formatted text can them be used
-//       for text displays, file output or printing.
+//       for screen displays, file output or printing.
 //
 //
 //  error
@@ -558,7 +558,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 70
+	const maxFieldLen = 79
 
 	// Max Label Field Length = 24
 	const maxLabelFieldLen = 24
@@ -1054,10 +1054,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.NumSignValue.String())
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "NumSignValue is EMPTY!"
-	}
 
 	labelParams = append(labelParams, labelParam)
 
