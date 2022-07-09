@@ -12,7 +12,9 @@ type runeArrayDtoNanobot struct {
 func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 	targetInputParms CharSearchTargetInputParametersDto,
 	testInputParms CharSearchTestInputParametersDto,
-	errPrefDto *ePref.ErrPrefixDto) (CharSearchResultsDto, error) {
+	errPrefDto *ePref.ErrPrefixDto) (
+	CharSearchRuneArrayResultsDto,
+	error) {
 
 	if runeDtoNanobot.lock == nil {
 		runeDtoNanobot.lock = new(sync.Mutex)
@@ -26,7 +28,7 @@ func (runeDtoNanobot *runeArrayDtoNanobot) characterSearchExecutor(
 
 	var err error
 
-	searchResults := CharSearchResultsDto{}
+	searchResults := CharSearchRuneArrayResultsDto{}
 
 	searchResults.Empty()
 

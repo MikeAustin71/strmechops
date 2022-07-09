@@ -121,7 +121,7 @@ func (searchRunesResultsDtoAtom *charSearchRuneArrayResultsDtoAtom) empty(
 
 	runeSearchResults.RemainderString.Empty()
 
-	runeSearchResults.FoundCharacters.Empty()
+	runeSearchResults.FoundRuneArrayChars.Empty()
 
 	return
 }
@@ -376,8 +376,8 @@ func (searchRunesResultsDtoAtom *charSearchRuneArrayResultsDtoAtom) equal(
 		return false
 	}
 
-	if !runeSearchResults1.FoundCharacters.Equal(
-		&runeSearchResults2.FoundCharacters) {
+	if !runeSearchResults1.FoundRuneArrayChars.Equal(
+		&runeSearchResults2.FoundRuneArrayChars) {
 
 		return false
 	}

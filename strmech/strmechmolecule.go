@@ -41,7 +41,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	numParsingTerminators RuneArrayCollection,
 	requestRemainderRunesString bool,
 	ePrefDto *ePref.ErrPrefixDto) (
-	searchResults CharSearchResultsDto,
+	searchResults CharSearchNumStrParseResultsDto,
 	numStrKernel NumberStrKernel,
 	err error) {
 
@@ -229,24 +229,30 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			err
 	}
 
-	searchResults.SearchResultsName = "Extract Number Runes Results"
+	targetInputParms.RequestRemainderString =
+		requestRemainderRunesString
+
+	searchResults.Empty()
+
+	searchResults.SearchResultsName = "Number Runes Extraction Results"
 
 	searchResults.SearchResultsFunctionChain =
 		ePrefix.String()
 
-	searchResults.NumSignValue = NumSignVal.Zero()
-
-	searchResults.FoundSearchTarget = false
+	searchResults.FoundNumericDigits = false
 	searchResults.FoundNonZeroValue = false
-
-	foundDecimalSeparators := false
-	foundNegativeSignSymbols := false
+	searchResults.FoundDecimalSeparatorSymbols = false
+	searchResults.FoundDecimalDigits = false
+	searchResults.NumSignValue = NumSignVal.Zero()
+	searchResults.NumValueType = NumValType.None()
+	searchResults.RemainderString.Empty()
+	searchResults.DecimalSeparatorSearchResults.Empty()
+	searchResults.NegativeNumberSymbolSearchResults.Empty()
+	searchResults.ParsingTerminatorSearchResults.Empty()
 
 	var negNumSearchResults CharSearchResultsDto
 	var decimalSepSearchResults CharSearchDecimalSeparatorResultsDto
 	var parsingTerminationResults CharSearchResultsDto
-
-	searchResults.TargetStringLastSearchIndex = -1
 
 	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
 
@@ -257,25 +263,17 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 			targetInputParms.FoundFirstNumericDigitInNumStr = true
 
-			if !searchResults.FoundSearchTarget {
-
-				searchResults.FoundSearchTarget = true
-				searchResults.
-					TargetStringFirstFoundIndex = i
-
-			}
-
-			searchResults.TargetStringLastFoundIndex = i
-
 			if targetSearchString.CharsArray[i] > '0' {
-				searchResults.FoundNonZeroValue = true
+
+				targetInputParms.FoundNonZeroValue = true
 
 				if searchResults.NumSignValue == NumSignVal.Zero() {
 					searchResults.NumSignValue = NumSignVal.Positive()
 				}
 			}
 
-			if !foundDecimalSeparators {
+			if !searchResults.DecimalSeparatorSearchResults.
+				FoundDecimalSeparatorSymbols {
 
 				err = numStrKernel.AddIntegerDigit(
 					targetSearchString.CharsArray[i],
@@ -311,95 +309,86 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		// Check for Parsing Terminators
 		// All Parsing Operations Cease if Delimiter is Found
-		if !numParsingTerminators.IsNOP() &&
-			targetInputParms.FoundFirstNumericDigitInNumStr {
-
-			parsingTerminationResults,
-				err = numParsingTerminators.SearchForTextCharacters(
-				targetInputParms,
-				ePrefix.XCpy(
-					"numParsingTerminators"))
-
-			if parsingTerminationResults.FoundSearchTarget {
-
-				i = parsingTerminationResults.
-					TargetStringLastSearchIndex
-
-				searchResults.TargetStringLastSearchIndex = i
-
-				if i+1 < targetInputParms.TargetStringLength {
-
-					searchResults.
-						TargetStringNextSearchIndex = i + 1
-
-				} else {
-
-					searchResults.
-						TargetStringNextSearchIndex = -1
-
-				}
-
-				goto computeExitStats
-			}
-		}
+		//if !numParsingTerminators.IsNOP() &&
+		//	targetInputParms.FoundFirstNumericDigitInNumStr {
+		//
+		//	parsingTerminationResults,
+		//		err = numParsingTerminators.SearchForTextCharacters(
+		//		targetInputParms,
+		//		ePrefix.XCpy(
+		//			"numParsingTerminators"))
+		//
+		//	if parsingTerminationResults.FoundSearchTarget {
+		//
+		//		i = parsingTerminationResults.
+		//			TargetStringLastSearchIndex
+		//
+		//		if i+1 < targetInputParms.TargetStringLength {
+		//
+		//			targetInputParms.
+		//				TargetStringNextSearchIndex = i + 1
+		//
+		//		} else {
+		//
+		//			targetInputParms.
+		//				TargetStringNextSearchIndex = -1
+		//
+		//		}
+		//
+		//		goto computeExitStats
+		//	}
+		//}
 
 		// Check for Negative Number Sign Symbol
-		if !foundNegativeSignSymbols {
+		if !searchResults.NegativeNumberSymbolSearchResults.
+			FoundNegativeNumberSymbols {
 
-			negNumSearchResults,
+			searchResults.NegativeNumberSymbolSearchResults,
 				err = negativeNumSearchSpecsCol.
 				SearchForNegNumSignSymbols(
 					targetInputParms,
 					ePrefix)
 
-			foundNegativeSignSymbols =
-				negNumSearchResults.FoundSearchTarget
-
-			if foundNegativeSignSymbols {
+			if searchResults.NegativeNumberSymbolSearchResults.
+				FoundNegativeNumberSymbols {
 
 				i =
 					negNumSearchResults.TargetStringLastFoundIndex
 
 				searchResults.NumSignValue = NumSignVal.Negative()
 
-				searchResults.PrimaryNumSignPosition =
-					negNumSearchResults.PrimaryNumSignPosition
-
-				searchResults.SecondaryNumSignPosition =
-					negNumSearchResults.SecondaryNumSignPosition
-
 				continue
 			}
 		}
 
 		// Check for Decimal Separators
-		if !foundDecimalSeparators {
-
-			decimalSepSearchResults,
-				err = decimalSeparatorSpec.SearchForDecimalSeparator(
-				targetInputParms,
-				ePrefix.XCpy(
-					"targetInputParms"))
-
-			if err != nil {
-
-				return searchResults,
-					numStrKernel,
-					err
-
-			}
-
-			if decimalSepSearchResults.FoundDecimalSeparatorSymbols {
-
-				foundDecimalSeparators = true
-
-				i = decimalSepSearchResults.TargetStringLastSearchIndex
-
-				searchResults.TargetStringLastSearchIndex = i
-
-				continue
-			}
-		}
+		//if !foundDecimalSeparators {
+		//
+		//	decimalSepSearchResults,
+		//		err = decimalSeparatorSpec.SearchForDecimalSeparator(
+		//		targetInputParms,
+		//		ePrefix.XCpy(
+		//			"targetInputParms"))
+		//
+		//	if err != nil {
+		//
+		//		return searchResults,
+		//			numStrKernel,
+		//			err
+		//
+		//	}
+		//
+		//	if decimalSepSearchResults.FoundDecimalSeparatorSymbols {
+		//
+		//		foundDecimalSeparators = true
+		//
+		//		i = decimalSepSearchResults.TargetStringLastSearchIndex
+		//
+		//		searchResults.TargetStringLastSearchIndex = i
+		//
+		//		continue
+		//	}
+		//}
 	}
 
 	searchResults.TargetStringNextSearchIndex =

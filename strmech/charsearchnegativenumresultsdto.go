@@ -97,6 +97,16 @@ type CharSearchNegativeNumberResultsDto struct {
 	// Signals that Negative Number Symbols were located in a
 	// previous search operation.
 
+	FoundLeadingNegNumSymbols bool
+	// Signals that Leading Negative Number Symbols were located
+	// in the Target String. Leading Negative Number Symbols
+	// occur before the first numeric digit in a number string.
+
+	FoundTrailingNegNumSymbols bool
+	// Signals that Trailing Negative Number Symbols were located
+	// in the Target String. Trailing Negative Number Symbols
+	// occur after the last numeric digit in a number string.
+
 	FoundFirstNumericDigitInNumStr bool
 	// When set to 'true' this signals that a previous search
 	// operation has identified the first numeric digit in a
@@ -288,6 +298,22 @@ type CharSearchNegativeNumberResultsDto struct {
 	// operation, they will be stored in this instance of
 	// NegativeNumberSearchSpec
 
+	ReplacementString RuneArrayDto
+	// A Rune Array Data Transfer Object containing the
+	// Replacement Characters to be substituted for
+	// existing characters in a Target String.
+
+	RemainderString RuneArrayDto
+	// A Rune Array Data Transfer Object containing the
+	// remaining text characters at the end of the Target
+	// String which were NOT included in the most recent
+	// search operation.
+
+	FoundRuneArrayChars RuneArrayDto
+	// A Rune Array Data Transfer Object containing the
+	// text characters located in the Target String
+	// by the most recent search operation.
+
 	lock *sync.Mutex
 }
 
@@ -415,11 +441,12 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyIn(
 		return err
 	}
 
-	return charSearchNegNumResultsDtoNanobot{}.ptr().copyIn(
-		negNumSearchResults,
-		incomingNegNumResultsDto,
-		ePrefix.XCpy(
-			"negNumSearchResults<-incomingNegNumResultsDto"))
+	return charSearchNegNumResultsDtoNanobot{}.ptr().
+		copyIn(
+			negNumSearchResults,
+			incomingNegNumResultsDto,
+			ePrefix.XCpy(
+				"negNumSearchResults<-incomingNegNumResultsDto"))
 
 }
 
@@ -753,6 +780,142 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextL
 			ePrefix.XCpy(
 				"negNumSearchResults->Parameter Listing"))
 
+}
+
+// LoadRuneArraySearchResults - Transfers the results of a
+// subsidiary rune array search to the internal member variables
+// of the current CharSearchNegativeNumberResultsDto instance.
+func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadRuneArraySearchResults(
+	runeArraySearchResults CharSearchRuneArrayResultsDto) {
+
+	if negNumSearchResults.lock == nil {
+		negNumSearchResults.lock = new(sync.Mutex)
+	}
+
+	negNumSearchResults.lock.Lock()
+
+	defer negNumSearchResults.lock.Unlock()
+
+	negNumSearchResults.FoundNegativeNumberSymbols =
+		runeArraySearchResults.FoundSearchTarget
+
+	negNumSearchResults.TargetInputParametersName =
+		runeArraySearchResults.TargetInputParametersName
+
+	negNumSearchResults.FoundFirstNumericDigitInNumStr =
+		runeArraySearchResults.FoundFirstNumericDigitInNumStr
+
+	negNumSearchResults.FoundDecimalSeparatorSymbols =
+		runeArraySearchResults.FoundDecimalSeparatorSymbols
+
+	negNumSearchResults.FoundNonZeroValue =
+		runeArraySearchResults.FoundNonZeroValue
+
+	negNumSearchResults.TargetStringLength =
+		runeArraySearchResults.TargetStringLength
+
+	negNumSearchResults.TargetStringSearchLength =
+		runeArraySearchResults.TargetStringSearchLength
+
+	negNumSearchResults.TargetStringAdjustedSearchLength =
+		runeArraySearchResults.TargetStringAdjustedSearchLength
+
+	negNumSearchResults.TargetStringStartingSearchIndex =
+		runeArraySearchResults.TargetStringStartingSearchIndex
+
+	negNumSearchResults.TargetStringCurrentSearchIndex =
+		runeArraySearchResults.TargetStringCurrentSearchIndex
+
+	negNumSearchResults.TargetStringNextSearchIndex =
+		runeArraySearchResults.TargetStringNextSearchIndex
+
+	negNumSearchResults.TargetStringFirstFoundIndex =
+		runeArraySearchResults.TargetStringFirstFoundIndex
+
+	negNumSearchResults.TargetStringLastFoundIndex =
+		runeArraySearchResults.TargetStringLastFoundIndex
+
+	negNumSearchResults.TargetStringLastSearchIndex =
+		runeArraySearchResults.TargetStringLastSearchIndex
+
+	negNumSearchResults.TargetStringDescription1 =
+		runeArraySearchResults.TargetStringDescription1
+
+	negNumSearchResults.TargetStringDescription2 =
+		runeArraySearchResults.TargetStringDescription2
+
+	negNumSearchResults.TestInputParametersName =
+		runeArraySearchResults.TestInputParametersName
+
+	negNumSearchResults.TestStringName =
+		runeArraySearchResults.TestStringName
+
+	negNumSearchResults.TestStringLength =
+		runeArraySearchResults.TestStringLength
+
+	negNumSearchResults.TestStringLengthName =
+		runeArraySearchResults.TestStringLengthName
+
+	negNumSearchResults.TestStringStartingIndex =
+		runeArraySearchResults.TestStringStartingIndex
+
+	negNumSearchResults.TestStringStartingIndexName =
+		runeArraySearchResults.TestStringStartingIndexName
+
+	negNumSearchResults.TestStringFirstFoundIndex =
+		runeArraySearchResults.TestStringFirstFoundIndex
+
+	negNumSearchResults.TestStringLastFoundIndex =
+		runeArraySearchResults.TestStringLastFoundIndex
+
+	negNumSearchResults.TestStringDescription1 =
+		runeArraySearchResults.TestStringDescription1
+
+	negNumSearchResults.CollectionTestObjIndex =
+		runeArraySearchResults.CollectionTestObjIndex
+
+	negNumSearchResults.TextCharSearchType =
+		runeArraySearchResults.TextCharSearchType
+
+	var err error
+
+	if runeArraySearchResults.ReplacementString.
+		GetRuneArrayLength() > 0 {
+
+		err = negNumSearchResults.ReplacementString.CopyIn(
+			&runeArraySearchResults.ReplacementString,
+			"")
+
+		if err != nil {
+			negNumSearchResults.ReplacementString.Empty()
+		}
+	}
+
+	if runeArraySearchResults.RemainderString.
+		GetRuneArrayLength() > 0 {
+
+		err = negNumSearchResults.RemainderString.CopyIn(
+			&runeArraySearchResults.RemainderString,
+			"")
+
+		if err != nil {
+			negNumSearchResults.RemainderString.Empty()
+		}
+	}
+
+	if runeArraySearchResults.FoundRuneArrayChars.
+		GetRuneArrayLength() > 0 {
+
+		err = negNumSearchResults.FoundRuneArrayChars.CopyIn(
+			&runeArraySearchResults.FoundRuneArrayChars,
+			"")
+
+		if err != nil {
+			negNumSearchResults.FoundRuneArrayChars.Empty()
+		}
+	}
+
+	return
 }
 
 // LoadTargetBaseInputParameters - Receives Target String data from

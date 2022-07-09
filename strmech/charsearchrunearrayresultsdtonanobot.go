@@ -243,10 +243,10 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyIn(
 		return err
 	}
 
-	err = destinationRuneSearchResults.FoundCharacters.CopyIn(
-		&sourceRuneSearchResults.FoundCharacters,
+	err = destinationRuneSearchResults.FoundRuneArrayChars.CopyIn(
+		&sourceRuneSearchResults.FoundRuneArrayChars,
 		ePrefix.XCpy(
-			"destinationRuneSearchResults.FoundCharacters<-"+
+			"destinationRuneSearchResults.FoundRuneArrayChars<-"+
 				"sourceRuneSearchResults"))
 
 	return err
@@ -453,10 +453,10 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 		return deepCopyRuneSearchResults, err
 	}
 
-	err = deepCopyRuneSearchResults.FoundCharacters.CopyIn(
-		&runeSearchResultsDto.FoundCharacters,
+	err = deepCopyRuneSearchResults.FoundRuneArrayChars.CopyIn(
+		&runeSearchResultsDto.FoundRuneArrayChars,
 		ePrefix.XCpy(
-			"deepCopyRuneSearchResults.FoundCharacters<-"+
+			"deepCopyRuneSearchResults.FoundRuneArrayChars<-"+
 				"runeSearchResultsDto"))
 
 	return deepCopyRuneSearchResults, err
@@ -1044,16 +1044,16 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	labelParams = append(labelParams, labelParam)
 
-	// Build FoundCharacters
+	// Build FoundRuneArrayChars
 	labelParam = TextLabelValueStrings{}
 
-	labelParam.ParamLabel = "FoundCharacters"
+	labelParam.ParamLabel = "FoundRuneArrayChars"
 
 	labelParam.ParamValue =
-		runeSearchResultsDto.FoundCharacters.GetCharacterString()
+		runeSearchResultsDto.FoundRuneArrayChars.GetCharacterString()
 
 	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundCharacters is EMPTY!"
+		labelParam.ParamValue = "FoundRuneArrayChars is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)

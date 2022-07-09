@@ -181,7 +181,7 @@ type CharSearchRuneArrayResultsDto struct {
 	// String which were NOT included in the most recent
 	// search operation.
 
-	FoundCharacters RuneArrayDto
+	FoundRuneArrayChars RuneArrayDto
 	// A Rune Array Data Transfer Object containing the
 	// text characters located in the Target String
 	// by the most recent search operation.

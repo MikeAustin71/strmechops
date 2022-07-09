@@ -145,6 +145,12 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 	destinationNegNumResults.FoundNegNumSymbolsOnPreviousSearch =
 		sourceNegNumResults.FoundNegNumSymbolsOnPreviousSearch
 
+	destinationNegNumResults.FoundLeadingNegNumSymbols =
+		sourceNegNumResults.FoundLeadingNegNumSymbols
+
+	destinationNegNumResults.FoundTrailingNegNumSymbols =
+		sourceNegNumResults.FoundTrailingNegNumSymbols
+
 	destinationNegNumResults.FoundFirstNumericDigitInNumStr =
 		sourceNegNumResults.FoundFirstNumericDigitInNumStr
 
@@ -238,7 +244,41 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 	err = destinationNegNumResults.NegativeNumberSymbolsSpec.CopyIn(
 		&sourceNegNumResults.NegativeNumberSymbolsSpec,
 		ePrefix.XCpy(
-			"destinationNegNumResults<-"+
+			"destinationNegNumResults."+
+				"NegativeNumberSymbolsSpec<-"+
+				"sourceNegNumResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNegNumResults.ReplacementString.CopyIn(
+		&sourceNegNumResults.ReplacementString,
+		ePrefix.XCpy(
+			"destinationNegNumResults."+
+				"ReplacementString<-"+
+				"sourceNegNumResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNegNumResults.RemainderString.CopyIn(
+		&sourceNegNumResults.RemainderString,
+		ePrefix.XCpy(
+			"destinationNegNumResults."+
+				"RemainderString<-"+
+				"sourceNegNumResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNegNumResults.FoundRuneArrayChars.CopyIn(
+		&sourceNegNumResults.FoundRuneArrayChars,
+		ePrefix.XCpy(
+			"destinationNegNumResults."+
+				"RemainderString<-"+
 				"sourceNegNumResults"))
 
 	return err
@@ -356,6 +396,12 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 	deepCopyNegNumResultsDto.FoundNegNumSymbolsOnPreviousSearch =
 		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch
 
+	deepCopyNegNumResultsDto.FoundLeadingNegNumSymbols =
+		searchNegNumResults.FoundLeadingNegNumSymbols
+
+	deepCopyNegNumResultsDto.FoundTrailingNegNumSymbols =
+		searchNegNumResults.FoundTrailingNegNumSymbols
+
 	deepCopyNegNumResultsDto.FoundFirstNumericDigitInNumStr =
 		searchNegNumResults.FoundFirstNumericDigitInNumStr
 
@@ -449,8 +495,50 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 	err = deepCopyNegNumResultsDto.NegativeNumberSymbolsSpec.CopyIn(
 		&searchNegNumResults.NegativeNumberSymbolsSpec,
 		ePrefix.XCpy(
-			"deepCopyNegNumResultsDto<-"+
+			"deepCopyNegNumResultsDto."+
+				"NegativeNumberSymbolsSpec<-"+
 				"searchNegNumResults"))
+
+	if err != nil {
+
+		return deepCopyNegNumResultsDto, err
+	}
+
+	err = deepCopyNegNumResultsDto.ReplacementString.CopyIn(
+		&searchNegNumResults.ReplacementString,
+		ePrefix.XCpy(
+			"deepCopyNegNumResultsDto."+
+				"ReplacementString<-"+
+				"searchNegNumResults"))
+
+	if err != nil {
+
+		return deepCopyNegNumResultsDto, err
+	}
+
+	err = deepCopyNegNumResultsDto.RemainderString.CopyIn(
+		&searchNegNumResults.RemainderString,
+		ePrefix.XCpy(
+			"deepCopyNegNumResultsDto."+
+				"RemainderString<-"+
+				"searchNegNumResults"))
+
+	if err != nil {
+
+		return deepCopyNegNumResultsDto, err
+	}
+
+	err = deepCopyNegNumResultsDto.FoundRuneArrayChars.CopyIn(
+		&searchNegNumResults.FoundRuneArrayChars,
+		ePrefix.XCpy(
+			"deepCopyNegNumResultsDto."+
+				"FoundRuneArrayChars<-"+
+				"searchNegNumResults"))
+
+	if err != nil {
+
+		return deepCopyNegNumResultsDto, err
+	}
 
 	return deepCopyNegNumResultsDto, err
 }
@@ -721,6 +809,26 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundLeadingNegNumSymbols
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundLeadingNegNumSymbols"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchNegNumResults.FoundLeadingNegNumSymbols)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundTrailingNegNumSymbols
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundTrailingNegNumSymbols"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		searchNegNumResults.FoundTrailingNegNumSymbols)
 
 	labelParams = append(labelParams, labelParam)
 
@@ -1110,6 +1218,48 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		labelParam.ParamValue = "NegativeNumberSymbolsSpec is populated and valid."
 	} else {
 		labelParam.ParamValue = "NegativeNumberSymbolsSpec is invalid and empty."
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build ReplacementString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "ReplacementString"
+
+	labelParam.ParamValue =
+		searchNegNumResults.ReplacementString.GetCharacterString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "ReplacementString is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build RemainderString
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "RemainderString"
+
+	labelParam.ParamValue =
+		searchNegNumResults.RemainderString.GetCharacterString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "RemainderString is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundRuneArrayChars
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundRuneArrayChars"
+
+	labelParam.ParamValue =
+		searchNegNumResults.FoundRuneArrayChars.GetCharacterString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "FoundRuneArrayChars is EMPTY!"
 	}
 
 	labelParams = append(labelParams, labelParam)

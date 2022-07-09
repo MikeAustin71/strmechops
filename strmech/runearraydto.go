@@ -1949,7 +1949,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	targetInputParms CharSearchTargetInputParametersDto,
 	testConfigDto CharSearchTestConfigDto,
 	errorPrefix interface{}) (
-	CharSearchResultsDto,
+	CharSearchRuneArrayResultsDto,
 	error) {
 
 	if charsArrayDto.lock == nil {
@@ -1963,7 +1963,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	errorResults := CharSearchResultsDto{}.New()
+	errorResults := CharSearchRuneArrayResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(

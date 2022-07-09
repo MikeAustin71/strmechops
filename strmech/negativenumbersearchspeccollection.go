@@ -1445,7 +1445,7 @@ func (negNumSignCol NegNumSearchSpecCollection) NewUS(
 func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
-	CharSearchResultsDto,
+	CharSearchNegativeNumberResultsDto,
 	error) {
 
 	if negNumSignCol.lock == nil {
@@ -1459,7 +1459,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	errorSearchResults := CharSearchResultsDto{}.New()
+	searchResults := CharSearchNegativeNumberResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1470,7 +1470,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 
 	if err != nil {
 
-		return errorSearchResults, err
+		return searchResults, err
 
 	}
 
@@ -1485,12 +1485,10 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 			"for Negative Number Sign symbols.\n",
 			ePrefix.String())
 
-		return errorSearchResults, err
+		return searchResults, err
 	}
 
 	var err2 error
-
-	var searchResults CharSearchResultsDto
 
 	for i := 0; i < lenNegNumSpecsCol; i++ {
 
@@ -1513,9 +1511,11 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 			return searchResults, err
 		}
 
-		if searchResults.FoundSearchTarget {
+		if searchResults.FoundNegativeNumberSymbols {
 
 			negNumSignCol.foundNegNumSign = true
+
+			searchResults.CollectionTestObjIndex = i
 
 			negNumSignCol.foundNegNumSignColIndex =
 				searchResults.CollectionTestObjIndex
