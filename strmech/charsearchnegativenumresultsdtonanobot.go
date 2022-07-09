@@ -56,7 +56,7 @@ type charSearchNegNumResultsDtoNanobot struct {
 //       No data validation is performed on 'sourceNegNumResults'.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
+//  errPrefDto                   *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
