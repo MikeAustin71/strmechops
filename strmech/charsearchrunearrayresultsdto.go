@@ -769,3 +769,29 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) LoadTestBaseInputPar
 		testInputParms.TextCharSearchType
 
 }
+
+// New - Returns a new and uninitialized instance of
+// CharSearchRuneArrayResultsDto.
+//
+// All member variables in this returned instance are set to their
+// zero or uninitialized states. Array index values are set to a
+// value of minus one (-1) to differentiate them from valid array
+// indexes which have values greater than minus one (-1).
+//
+func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) New() CharSearchRuneArrayResultsDto {
+
+	if runesSearchResultsDto.lock == nil {
+		runesSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	runesSearchResultsDto.lock.Lock()
+
+	defer runesSearchResultsDto.lock.Unlock()
+
+	newRunesSearchResults := CharSearchRuneArrayResultsDto{}
+
+	charSearchRuneArrayResultsDtoAtom{}.ptr().
+		empty(&newRunesSearchResults)
+
+	return newRunesSearchResults
+}
