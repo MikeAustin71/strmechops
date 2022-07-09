@@ -169,6 +169,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 	destinationTargetInputParms.TargetStringCurrentSearchIndex =
 		sourceTargetInputParms.TargetStringCurrentSearchIndex
 
+	destinationTargetInputParms.TargetStringNextSearchIndex =
+		sourceTargetInputParms.TargetStringNextSearchIndex
+
 	destinationTargetInputParms.TargetStringStartingSearchIndexName =
 		sourceTargetInputParms.TargetStringStartingSearchIndexName
 
@@ -340,6 +343,9 @@ func (searchTargetInputParmsNanobot *charSearchTargetInputParametersDtoNanobot) 
 
 	deepCopyTargetInputParms.TargetStringCurrentSearchIndex =
 		targetInputParms.TargetStringCurrentSearchIndex
+
+	deepCopyTargetInputParms.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringNextSearchIndex
 
 	deepCopyTargetInputParms.TargetStringStartingSearchIndexName =
 		targetInputParms.TargetStringStartingSearchIndexName
@@ -794,6 +800,16 @@ func (searchTargetInputParmsNanobot charSearchTargetInputParametersDtoNanobot) g
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		targetInputParms.TargetStringCurrentSearchIndex)
+
+	labelParams = append(labelParams, labelParam)
+
+	// TargetStringNextSearchIndex
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "TargetStringNextSearchIndex"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		targetInputParms.TargetStringNextSearchIndex)
 
 	labelParams = append(labelParams, labelParam)
 

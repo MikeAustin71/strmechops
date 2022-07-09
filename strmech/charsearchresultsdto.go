@@ -959,6 +959,9 @@ func (charSearchResults *CharSearchResultsDto) LoadTargetBaseInputParameters(
 	charSearchResults.TargetStringCurrentSearchIndex =
 		targetInputParms.TargetStringCurrentSearchIndex
 
+	charSearchResults.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringNextSearchIndex
+
 	charSearchResults.TargetStringDescription1 =
 		targetInputParms.TargetStringDescription1
 

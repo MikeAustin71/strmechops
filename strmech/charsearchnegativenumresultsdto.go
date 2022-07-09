@@ -806,6 +806,9 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTargetBaseInp
 	negNumSearchResults.TargetStringCurrentSearchIndex =
 		targetInputParms.TargetStringCurrentSearchIndex
 
+	negNumSearchResults.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringNextSearchIndex
+
 	negNumSearchResults.TargetStringDescription1 =
 		targetInputParms.TargetStringDescription1
 

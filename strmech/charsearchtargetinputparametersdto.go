@@ -89,6 +89,9 @@ type CharSearchTargetInputParametersDto struct {
 	TargetStringCurrentSearchIndex int
 	// The index in 'TargetString' currently being searched.
 
+	TargetStringNextSearchIndex int
+	// The next index in 'TargetString' to be searched.
+
 	TargetStringSearchLength int
 	// The actual number of characters within the Target
 	// Search String that are included in the search

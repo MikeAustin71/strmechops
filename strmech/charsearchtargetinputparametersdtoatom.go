@@ -75,6 +75,8 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) empty(
 
 	targetInputParms.TargetStringCurrentSearchIndex = -1
 
+	targetInputParms.TargetStringNextSearchIndex = -1
+
 	targetInputParms.TargetStringStartingSearchIndexName = ""
 
 	targetInputParms.TargetStringSearchLength = -2
@@ -201,6 +203,12 @@ func (searchTargetInputParmsAtom *charSearchTargetInputParametersDtoAtom) equal(
 
 	if targetInputParms1.TargetStringCurrentSearchIndex !=
 		targetInputParms2.TargetStringCurrentSearchIndex {
+
+		return false
+	}
+
+	if targetInputParms1.TargetStringNextSearchIndex !=
+		targetInputParms2.TargetStringNextSearchIndex {
 
 		return false
 	}

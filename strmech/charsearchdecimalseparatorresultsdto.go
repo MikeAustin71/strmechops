@@ -791,6 +791,9 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) LoadTargetBa
 	decSepSearchResultsDto.TargetStringCurrentSearchIndex =
 		targetInputParms.TargetStringCurrentSearchIndex
 
+	decSepSearchResultsDto.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringNextSearchIndex
+
 	decSepSearchResultsDto.TargetStringDescription1 =
 		targetInputParms.TargetStringDescription1
 
