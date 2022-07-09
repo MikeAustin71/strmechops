@@ -726,7 +726,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameter
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"CharSearchDecimalSeparatorResultsDto."+
-			"CopyIn()",
+			"GetParameterTextListing()",
 		"")
 
 	if err != nil {

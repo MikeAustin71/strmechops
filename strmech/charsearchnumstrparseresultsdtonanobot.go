@@ -396,7 +396,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //       DecimalSeparatorSearchResults,
 //       NegativeNumberSymbolSearchResults and
 //       ParsingTerminatorSearchResults will be included in the
-//       formatted text output
+//       formatted text output.
 //
 //  errPrefDto          *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
