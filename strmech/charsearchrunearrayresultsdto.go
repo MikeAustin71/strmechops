@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
@@ -794,4 +795,64 @@ func (runesSearchResultsDto CharSearchRuneArrayResultsDto) New() CharSearchRuneA
 		empty(&newRunesSearchResults)
 
 	return newRunesSearchResults
+}
+
+// String - Returns a formatted text string detailing all the
+// internal member variable names and their corresponding values
+// for the current instance of CharSearchRuneArrayResultsDto.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) String() string {
+
+	if runesSearchResultsDto.lock == nil {
+		runesSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	runesSearchResultsDto.lock.Lock()
+
+	defer runesSearchResultsDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchNegativeNumberResultsDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchNegativeNumberResultsDto.String()",
+			err.Error())
+
+		return errOut
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchRuneArrayResultsDtoNanobot{}.ptr().
+		getParameterTextListing(
+			runesSearchResultsDto,
+			ePrefix.XCpy("runesSearchResultsDto"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
 }
