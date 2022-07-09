@@ -24,7 +24,7 @@ import (
 // compared and matched with characters in another string.
 //
 // Character Search algorithms using the Character Search Type
-// ('CharacterSearchType') rely on a framework consisting of a
+// ('TextCharSearchType') rely on a framework consisting of a
 // 'Target Search String' and a 'Test String'.
 //
 //    Target String        - A string character or characters which
@@ -69,9 +69,9 @@ import (
 // ----------------------------------------------------------------
 //
 // The Character Search Negative Number Results Data Transfer
-// Object type (CharSearchNegativeNumberResultsDto) is used to
-// identify and transmit the results or outcomes of a search
-// operation for negative number symbols in a number string.
+// type (CharSearchNegativeNumberResultsDto) is used to identify
+// and transmit the results or outcomes of a search operation for
+// negative number symbols in a number string.
 //
 // Methods performing elements of this text character search
 // operation use this wrapper type to encapsulate and return key
