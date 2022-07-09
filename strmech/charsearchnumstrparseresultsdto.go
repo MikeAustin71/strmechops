@@ -634,3 +634,27 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTex
 			ePrefix.XCpy(
 				"searchNumStrParseResults"))
 }
+
+// New - Returns a new and uninitialized instance of
+// CharSearchNumStrParseResultsDto.
+//
+// All member variables in this returned instance are set to their
+// zero or uninitialized states.
+//
+func (searchNumStrParseResults CharSearchNumStrParseResultsDto) New() CharSearchNumStrParseResultsDto {
+
+	if searchNumStrParseResults.lock == nil {
+		searchNumStrParseResults.lock = new(sync.Mutex)
+	}
+
+	searchNumStrParseResults.lock.Lock()
+
+	defer searchNumStrParseResults.lock.Unlock()
+
+	newNumStrParseResults := CharSearchNumStrParseResultsDto{}
+
+	charSearchNumStrParseResultsDtoAtom{}.ptr().
+		empty(&newNumStrParseResults)
+
+	return newNumStrParseResults
+}
