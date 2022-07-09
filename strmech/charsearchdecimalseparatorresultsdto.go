@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
@@ -863,8 +864,8 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) LoadTestBase
 //
 // All member variables in this returned instance are set to their
 // zero or uninitialized states. Array index values are set to a
-// value of minus one (-1). All valid array indexes have values
-// greater than minus one (-1).
+// value of minus one (-1) to differentiate them from valid array
+// indexes which have values greater than minus one (-1).
 //
 func (decSepSearchResultsDto CharSearchDecimalSeparatorResultsDto) New() CharSearchDecimalSeparatorResultsDto {
 
@@ -878,5 +879,71 @@ func (decSepSearchResultsDto CharSearchDecimalSeparatorResultsDto) New() CharSea
 
 	newDecSepSearchResults := CharSearchDecimalSeparatorResultsDto{}
 
+	charSearchDecimalSeparatorResultsDtoAtom{}.ptr().
+		empty(&newDecSepSearchResults)
+
 	return newDecSepSearchResults
+}
+
+// String - Returns a formatted text string detailing all the
+// internal member variable names and their corresponding values
+// for the current instance of
+// CharSearchDecimalSeparatorResultsDto.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) String() string {
+
+	if decSepSearchResultsDto.lock == nil {
+		decSepSearchResultsDto.lock = new(sync.Mutex)
+	}
+
+	decSepSearchResultsDto.lock.Lock()
+
+	defer decSepSearchResultsDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchDecimalSeparatorResultsDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchDecimalSeparatorResultsDto."+
+				"String()",
+			err.Error())
+
+		return errOut
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
+		getParameterTextListing(
+			decSepSearchResultsDto,
+			ePrefix.XCpy(
+				"decSepSearchResultsDto"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
 }

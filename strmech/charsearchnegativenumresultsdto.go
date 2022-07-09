@@ -883,8 +883,8 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) LoadTestBaseInput
 //
 // All member variables in this returned instance are set to their
 // zero or uninitialized states. Array index values are set to a
-// value of minus one (-1). All valid array indexes have values
-// greater than minus one (-1).
+// value of minus one (-1) to differentiate them from valid array
+// indexes which have values greater than minus one (-1).
 //
 func (negNumSearchResults CharSearchNegativeNumberResultsDto) New() CharSearchNegativeNumberResultsDto {
 
@@ -898,7 +898,8 @@ func (negNumSearchResults CharSearchNegativeNumberResultsDto) New() CharSearchNe
 
 	newNegNumResultsDto := CharSearchNegativeNumberResultsDto{}
 
-	newNegNumResultsDto.Empty()
+	charSearchNegativeNumberResultsDtoAtom{}.ptr().
+		empty(&newNegNumResultsDto)
 
 	return newNegNumResultsDto
 }
