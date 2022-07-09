@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
@@ -657,4 +658,79 @@ func (searchNumStrParseResults CharSearchNumStrParseResultsDto) New() CharSearch
 		empty(&newNumStrParseResults)
 
 	return newNumStrParseResults
+}
+
+// String - Returns a formatted text string detailing all the
+// internal member variable names and their corresponding values
+// for the current instance of
+// CharSearchNumStrParseResultsDto.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+// ----------------------------------------------------------------
+//
+// BE ADVISED
+//
+// This method will NOT include the detail information on subsidiary
+// types RemainderString, DecimalSeparatorSearchResults,
+// NegativeNumberSymbolSearchResults and
+// ParsingTerminatorSearchResults. If this detail information is
+// required in the formatted text output, call method:
+//   CharSearchNumStrParseResultsDto.GetParameterTextListing()
+//
+func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) String() string {
+
+	if searchNumStrParseResults.lock == nil {
+		searchNumStrParseResults.lock = new(sync.Mutex)
+	}
+
+	searchNumStrParseResults.lock.Lock()
+
+	defer searchNumStrParseResults.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchNumStrParseResultsDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchNumStrParseResultsDto."+
+				"String()",
+			err.Error())
+
+		return errOut
+	}
+
+	var strBuilder strings.Builder
+
+	strBuilder,
+		err = charSearchNumStrParseResultsDtoNanobot{}.ptr().
+		getParameterTextListing(
+			searchNumStrParseResults,
+			false,
+			ePrefix.XCpy(
+				"searchNumStrParseResults"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
 }
