@@ -598,7 +598,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Empty() {
 //
 // Input Parameters
 //
-//  incomingNegNumSearchResultsDto  *CharSearchNegativeNumberResultsDto
+//  incomingNegNumSearchResultsDto *CharSearchNegativeNumberResultsDto
 //     - A pointer to an incoming instance of
 //       CharSearchNegativeNumberResultsDto. This method will
 //       compare all member variable data values in this instance
