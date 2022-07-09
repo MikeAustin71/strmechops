@@ -778,7 +778,7 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) LoadTestBaseInputPar
 // value of minus one (-1) to differentiate them from valid array
 // indexes which have values greater than minus one (-1).
 //
-func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) New() CharSearchRuneArrayResultsDto {
+func (runesSearchResultsDto CharSearchRuneArrayResultsDto) New() CharSearchRuneArrayResultsDto {
 
 	if runesSearchResultsDto.lock == nil {
 		runesSearchResultsDto.lock = new(sync.Mutex)
