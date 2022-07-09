@@ -79,12 +79,14 @@ import (
 //
 type CharSearchNegativeNumberResultsDto struct {
 	SearchResultsName string
-	// Optional. The Name, Label or descriptive Tag associated with
-	// the current instance of CharSearchResultsDto.
+	// Optional. The Name, Label or descriptive Tag
+	// associated with the current instance of
+	// CharSearchNegativeNumberResultsDto.
 
 	SearchResultsFunctionChain string
 	// Optional. A listing of the functions which led to the
-	// creation of this instance of CharSearchResultsDto.
+	// creation of this instance of
+	// CharSearchNegativeNumberResultsDto.
 
 	FoundNegativeNumberSymbols bool
 	// Signals a successful search outcome. If set to 'true' the

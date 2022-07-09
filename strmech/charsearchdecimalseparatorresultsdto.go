@@ -79,17 +79,19 @@ import (
 //
 type CharSearchDecimalSeparatorResultsDto struct {
 	SearchResultsName string
-	// Optional. The Name, Label or descriptive Tag associated with
-	// the current instance of CharSearchResultsDto.
+	// Optional. The Name, Label or descriptive Tag
+	// associated with the current instance of
+	// CharSearchDecimalSeparatorResultsDto.
 
 	SearchResultsFunctionChain string
-	// Optional. A listing of the functions which led to the
-	// creation of this instance of CharSearchResultsDto.
+	// Optional. A listing of the functions which led to
+	// the creation of this instance of
+	// CharSearchDecimalSeparatorResultsDto.
 
 	FoundDecimalSeparatorSymbols bool
-	// Signals a successful search outcome. If set to 'true' the
-	// Decimal Separator Symbol character or characters were found
-	// in the Target Search String.
+	// Signals a successful search outcome. If set to 'true'
+	// the/ Decimal Separator Symbol character or characters
+	// were found in the Target Search String.
 
 	FoundDecimalSepSymbolsOnPreviousSearch bool
 	// Signals that Decimal Separator Symbols were located in a
