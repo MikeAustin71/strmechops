@@ -1355,7 +1355,8 @@ func (charsArrayDto RuneArrayDto) NewLatinAlphabet() RuneArrayDto {
 //  charSearchType             CharacterSearchType
 //     - An enumeration value used to specify the type target
 //       string search algorithm applied by the returned instance
-//       of RuneArrayDto.
+//       of RuneArrayDto. If 'charSearchType' is invalid, an error
+//       will be returned.
 //
 //
 //       The Character Search Type must be set to one of the
@@ -2214,8 +2215,8 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 //     - A character string used to populate a new instance of
 //       RuneArrayDto which is returned to the calling function.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
+//       If this string is empty or has a zero length, an error
+//       will be returned.
 //
 //
 //  charSearchType             CharacterSearchType
@@ -2490,12 +2491,12 @@ func (charsArrayDto RuneArrayDto) NewString(
 //
 // Input Parameters
 //
-//  charArray                  []rune
-//     - An array of runes used to populate a new instance of
+//  stringChars                string
+//     - A character string used to populate a new instance of
 //       RuneArrayDto which is returned to the calling function.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
+//       If this string is empty or has a zero length, an error
+//       will be returned.
 //
 //
 //  description1               string
@@ -2518,7 +2519,8 @@ func (charsArrayDto RuneArrayDto) NewString(
 //  charSearchType             CharacterSearchType
 //     - An enumeration value used to specify the type target
 //       string search algorithm applied by the returned instance
-//       of RuneArrayDto.
+//       of RuneArrayDto. If 'charSearchType' is invalid, an error
+//       will be returned.
 //
 //
 //       The Character Search Type must be set to one of the
@@ -2796,14 +2798,15 @@ func (charsArrayDto RuneArrayDto) NewStringAllParams(
 //     - A character string used to populate a new instance of
 //       RuneArrayDto which is returned to the calling function.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
+//       If this string is empty or has a zero length, an error
+//       will be returned.
 //
 //
 //  charSearchType             CharacterSearchType
 //     - An enumeration value used to specify the type target
 //       string search algorithm applied by the returned instance
-//       of RuneArrayDto.
+//       of RuneArrayDto. If 'charSearchType' is invalid, an error
+//       will be returned.
 //
 //
 //       The Character Search Type must be set to one of the
