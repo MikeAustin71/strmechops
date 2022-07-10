@@ -74,6 +74,89 @@ func (runeArrayColAtom *runeArrayCollectionAtom) empty(
 	return
 }
 
+// equal - Receives a pointer to two instances of
+// RuneArrayCollection and proceeds to compare their member
+// variables in order to determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables for both instances are equal
+// in all respects, this flag is set to 'true'. Otherwise, this
+// method returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeArrayCol1  *RuneArrayCollection
+//     - A pointer to an instance of RuneArrayCollection. Internal
+//       member variables from 'runeArrayCol1' will be compared to
+//       those of 'runeArrayCol2' to determine if both instances
+//       are equivalent.
+//
+//
+//  runeArrayCol2  *RuneArrayCollection
+//     - A pointer to an instance of RuneArrayCollection. Internal
+//       member variables from 'runeArrayCol2' will be compared to
+//       those of 'runeArrayCol1' to determine if both instances
+//       are equivalent.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the comparison of 'runeArrayCol1' and 'runeArrayCol2'
+//       shows that all internal member variables are equivalent,
+//       this method will return a boolean value of 'true'.
+//
+//       If the two instances are NOT equal, this method will
+//       return a boolean value of 'false' to the calling function.
+//
+func (runeArrayColAtom *runeArrayCollectionAtom) equal(
+	runeArrayCol1 *RuneArrayCollection,
+	runeArrayCol2 *RuneArrayCollection) bool {
+
+	if runeArrayColAtom.lock == nil {
+		runeArrayColAtom.lock = new(sync.Mutex)
+	}
+
+	runeArrayColAtom.lock.Lock()
+
+	defer runeArrayColAtom.lock.Unlock()
+
+	if runeArrayCol1 == nil ||
+		runeArrayCol2 == nil {
+
+		return false
+	}
+
+	lenOfRuneArrayDtoCol := len(runeArrayCol1.runeArrayDtoCol)
+
+	if lenOfRuneArrayDtoCol !=
+		len(runeArrayCol2.runeArrayDtoCol) {
+
+		return false
+	}
+
+	// Collection Lengths are Equal!
+	if lenOfRuneArrayDtoCol == 0 {
+		return true
+	}
+
+	for i := 0; i < lenOfRuneArrayDtoCol; i++ {
+
+		if !runeArrayCol1.runeArrayDtoCol[i].Equal(
+			&runeArrayCol2.runeArrayDtoCol[i]) {
+
+			return false
+		}
+	}
+
+	return true
+}
+
 // ptr - Returns a pointer to a new instance of
 // runeArrayCollectionAtom.
 //

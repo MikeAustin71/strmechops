@@ -2221,7 +2221,8 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 //  charSearchType             CharacterSearchType
 //     - An enumeration value used to specify the type target
 //       string search algorithm applied by the returned instance
-//       of RuneArrayDto.
+//       of RuneArrayDto. If 'charSearchType' is invalid, an error
+//       will be returned.
 //
 //
 //       The Character Search Type must be set to one of the
