@@ -54,18 +54,18 @@ func (runeArrayColAtom *runeArrayCollectionAtom) empty(
 		return
 	}
 
-	lenRuneArrayCol := len(runeArrayCol.RuneArrayDtoCol)
+	lenRuneArrayCol := len(runeArrayCol.runeArrayDtoCol)
 
 	if lenRuneArrayCol == 0 {
 
-		runeArrayCol.RuneArrayDtoCol = nil
+		runeArrayCol.runeArrayDtoCol = nil
 
 		return
 	}
 
 	for i := 0; i < lenRuneArrayCol; i++ {
 
-		runeArrayCol.RuneArrayDtoCol[i].Empty()
+		runeArrayCol.runeArrayDtoCol[i].Empty()
 
 	}
 

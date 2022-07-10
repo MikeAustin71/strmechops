@@ -141,9 +141,9 @@ func (runeArrayColNanobot *runeArrayCollectionNanobot) copyIn(
 		err =
 		runeArrayCollectionElectron{}.ptr().
 			testValidityRuneArrayCollection(
-				sourceRuneArrayCol.RuneArrayDtoCol,
+				sourceRuneArrayCol.runeArrayDtoCol,
 				ePrefix.XCpy(
-					"sourceRuneArrayCol.RuneArrayDtoCol"))
+					"sourceRuneArrayCol.runeArrayDtoCol"))
 
 	if err != nil {
 
@@ -153,21 +153,21 @@ func (runeArrayColNanobot *runeArrayCollectionNanobot) copyIn(
 
 	// lenSourceCol was validated. It MUST BE greater
 	// than zero.
-	lenSourceCol := len(sourceRuneArrayCol.RuneArrayDtoCol)
+	lenSourceCol := len(sourceRuneArrayCol.runeArrayDtoCol)
 
 	runeArrayCollectionAtom{}.ptr().
 		empty(destinationRuneArrayCol)
 
-	destinationRuneArrayCol.RuneArrayDtoCol =
+	destinationRuneArrayCol.runeArrayDtoCol =
 		make([]RuneArrayDto, lenSourceCol)
 
 	for i := 0; i < lenSourceCol; i++ {
 
-		err = destinationRuneArrayCol.RuneArrayDtoCol[i].CopyIn(
-			&sourceRuneArrayCol.RuneArrayDtoCol[i],
+		err = destinationRuneArrayCol.runeArrayDtoCol[i].CopyIn(
+			&sourceRuneArrayCol.runeArrayDtoCol[i],
 			ePrefix.XCpy(
 				fmt.Sprintf("destinationRuneArrayCol"+
-					"<-sourceRuneArrayCol.RuneArrayDtoCol[%v]",
+					"<-sourceRuneArrayCol.runeArrayDtoCol[%v]",
 					i)))
 
 		if err != nil {
@@ -287,9 +287,9 @@ func (runeArrayColNanobot *runeArrayCollectionNanobot) copyOut(
 		err =
 		runeArrayCollectionElectron{}.ptr().
 			testValidityRuneArrayCollection(
-				runeArrayCol.RuneArrayDtoCol,
+				runeArrayCol.runeArrayDtoCol,
 				ePrefix.XCpy(
-					"runeArrayCol.RuneArrayDtoCol"))
+					"runeArrayCol.runeArrayDtoCol"))
 
 	if err != nil {
 
@@ -298,21 +298,21 @@ func (runeArrayColNanobot *runeArrayCollectionNanobot) copyOut(
 	}
 	// lenRuneArrayCol was validated. It MUST BE greater
 	// than zero.
-	lenRuneArrayCol := len(runeArrayCol.RuneArrayDtoCol)
+	lenRuneArrayCol := len(runeArrayCol.runeArrayDtoCol)
 
 	runeArrayCollectionAtom{}.ptr().
 		empty(&deepCopyRuneArrayCol)
 
-	deepCopyRuneArrayCol.RuneArrayDtoCol =
+	deepCopyRuneArrayCol.runeArrayDtoCol =
 		make([]RuneArrayDto, lenRuneArrayCol)
 
 	for i := 0; i < lenRuneArrayCol; i++ {
 
-		err = deepCopyRuneArrayCol.RuneArrayDtoCol[i].CopyIn(
-			&runeArrayCol.RuneArrayDtoCol[i],
+		err = deepCopyRuneArrayCol.runeArrayDtoCol[i].CopyIn(
+			&runeArrayCol.runeArrayDtoCol[i],
 			ePrefix.XCpy(
 				fmt.Sprintf("deepCopyRuneArrayCol"+
-					"<-RuneArrayDtoCol.RuneArrayDtoCol[%v]",
+					"<-runeArrayDtoCol.runeArrayDtoCol[%v]",
 					i)))
 
 		if err != nil {

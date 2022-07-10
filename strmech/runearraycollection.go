@@ -11,7 +11,7 @@ import (
 // Essentially, this is a collection, or an array, of rune arrays.
 //
 type RuneArrayCollection struct {
-	RuneArrayDtoCol []RuneArrayDto
+	runeArrayDtoCol []RuneArrayDto
 
 	lock *sync.Mutex
 }
@@ -102,9 +102,9 @@ func (runeArrayCol *RuneArrayCollection) AddLatinAlphabetEnglishDto() {
 
 	defer runeArrayCol.lock.Unlock()
 
-	runeArrayCol.RuneArrayDtoCol =
+	runeArrayCol.runeArrayDtoCol =
 		append(
-			runeArrayCol.RuneArrayDtoCol,
+			runeArrayCol.runeArrayDtoCol,
 			RuneArrayDto{}.NewLatinAlphabet())
 
 }
@@ -192,9 +192,9 @@ func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 
 	defer runeArrayCol.lock.Unlock()
 
-	runeArrayCol.RuneArrayDtoCol =
+	runeArrayCol.runeArrayDtoCol =
 		append(
-			runeArrayCol.RuneArrayDtoCol,
+			runeArrayCol.runeArrayDtoCol,
 			RuneArrayDto{}.NewNumericCharacters())
 }
 
@@ -345,8 +345,8 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 
 	}
 
-	runeArrayCol.RuneArrayDtoCol =
-		append(runeArrayCol.RuneArrayDtoCol, runeArrayDto)
+	runeArrayCol.runeArrayDtoCol =
+		append(runeArrayCol.runeArrayDtoCol, runeArrayDto)
 
 	return err
 }
@@ -510,8 +510,8 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 		return err
 	}
 
-	runeArrayCol.RuneArrayDtoCol =
-		append(runeArrayCol.RuneArrayDtoCol, deepCopyRuneArrayDto)
+	runeArrayCol.runeArrayDtoCol =
+		append(runeArrayCol.runeArrayDtoCol, deepCopyRuneArrayDto)
 
 	return err
 }
@@ -851,10 +851,10 @@ func (runeArrayCol *RuneArrayCollection) Equal(
 		return false
 	}
 
-	lenOfRuneArrayDtoCol := len(runeArrayCol.RuneArrayDtoCol)
+	lenOfRuneArrayDtoCol := len(runeArrayCol.runeArrayDtoCol)
 
 	if lenOfRuneArrayDtoCol !=
-		len(incomingRuneArrayCol.RuneArrayDtoCol) {
+		len(incomingRuneArrayCol.runeArrayDtoCol) {
 
 		return false
 	}
@@ -866,8 +866,8 @@ func (runeArrayCol *RuneArrayCollection) Equal(
 
 	for i := 0; i < lenOfRuneArrayDtoCol; i++ {
 
-		if !runeArrayCol.RuneArrayDtoCol[i].Equal(
-			&incomingRuneArrayCol.RuneArrayDtoCol[i]) {
+		if !runeArrayCol.runeArrayDtoCol[i].Equal(
+			&incomingRuneArrayCol.runeArrayDtoCol[i]) {
 
 			return false
 		}
@@ -894,7 +894,7 @@ func (runeArrayCol *RuneArrayCollection) GetNumberOfRuneArrayDtos() int {
 
 	defer runeArrayCol.lock.Unlock()
 
-	return len(runeArrayCol.RuneArrayDtoCol)
+	return len(runeArrayCol.runeArrayDtoCol)
 }
 
 // IsNOP - Stands for 'Is No Operation'.
@@ -921,7 +921,7 @@ func (runeArrayCol *RuneArrayCollection) IsNOP() bool {
 
 	defer runeArrayCol.lock.Unlock()
 
-	if len(runeArrayCol.RuneArrayDtoCol) == 0 {
+	if len(runeArrayCol.runeArrayDtoCol) == 0 {
 
 		// This instance is a NOP
 		return true
@@ -940,11 +940,11 @@ func (runeArrayCol *RuneArrayCollection) IsNOP() bool {
 // Collection where the number of elements is greater than zero.
 //
 // If the length of internal member variable
-// 'RuneArrayCollection.RuneArrayDtoCol' is greater than zero, this
+// 'RuneArrayCollection.runeArrayDtoCol' is greater than zero, this
 // method will return 'true'.
 //
 // If the length of internal member variable
-// RuneArrayCollection.RuneArrayDtoCol is equal to zero, this
+// RuneArrayCollection.runeArrayDtoCol is equal to zero, this
 // method will return 'false'.
 //
 // This method is identical in function to method:
@@ -963,11 +963,14 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstance() bool {
 
 	defer runeArrayCol.lock.Unlock()
 
-	if len(runeArrayCol.RuneArrayDtoCol) > 0 {
-		return true
-	}
+	isValid,
+		_ :=
+		runeArrayCollectionElectron{}.ptr().
+			testValidityRuneArrayCollection(
+				runeArrayCol.runeArrayDtoCol,
+				nil)
 
-	return false
+	return isValid
 }
 
 // IsValidInstanceError - Returns an error if the current instance
@@ -978,11 +981,11 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstance() bool {
 // Collection where the number of elements is greater than zero.
 //
 // If the length of internal member variable
-// 'RuneArrayCollection.RuneArrayDtoCol' is greater than zero, this
+// 'RuneArrayCollection.runeArrayDtoCol' is greater than zero, this
 // method will return 'nil' signaling "No Error".
 //
 // If the length of internal member variable
-// RuneArrayCollection.RuneArrayDtoCol is equal to zero, this
+// RuneArrayCollection.runeArrayDtoCol is equal to zero, this
 // method will return an error containing an appropriate error
 // message.
 //
@@ -1017,15 +1020,13 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 		return err
 	}
 
-	if len(runeArrayCol.RuneArrayDtoCol) == 0 {
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of RuneArrayCollection contains\n"+
-			"an empty collection of RuneArrayDto objects. The length\n"+
-			"of RuneArrayCollection.RuneArrayDtoCol is zero.\n"+
-			"This instance of RuneArrayCollection is therefore invalid!\n",
-			ePrefix.String())
-
-	}
+	_,
+		err =
+		runeArrayCollectionElectron{}.ptr().
+			testValidityRuneArrayCollection(
+				runeArrayCol.runeArrayDtoCol,
+				ePrefix.XCpy(
+					"runeArrayCol"))
 
 	return err
 }
@@ -1062,12 +1063,12 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 		return errorSearchResults, err
 	}
 
-	lenRuneDtoCollection := len(runeArrayCol.RuneArrayDtoCol)
+	lenRuneDtoCollection := len(runeArrayCol.runeArrayDtoCol)
 
 	if lenRuneDtoCollection == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: The Rune Array Collection is Empty!\n"+
-			"runeArrayCol.RuneArrayDtoCol has a length of zero.\n",
+			"runeArrayCol.runeArrayDtoCol has a length of zero.\n",
 			ePrefix.String())
 
 		return errorSearchResults, err
@@ -1089,12 +1090,12 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 	for i := 0; i < lenRuneDtoCollection; i++ {
 
 		dtoSearchResults,
-			err = runeArrayCol.RuneArrayDtoCol[i].
+			err = runeArrayCol.runeArrayDtoCol[i].
 			SearchForTextCharacterString(
 				targetInputParms,
 				testConfigDto,
 				ePrefix.XCpy(
-					fmt.Sprintf("runeArrayCol.RuneArrayDtoCol[%v]",
+					fmt.Sprintf("runeArrayCol.runeArrayDtoCol[%v]",
 						i)))
 
 		if err != nil {
