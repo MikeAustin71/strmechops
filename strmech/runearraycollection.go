@@ -16,8 +16,8 @@ type RuneArrayCollection struct {
 	lock *sync.Mutex
 }
 
-// AddLatinAlphabetEnglishDto - Adds a RuneArrayDto to the Rune Array
-// Collection. This RuneArrayDto is populated with the Latin
+// AddLatinAlphabetEnglishDto - Adds a RuneArrayDto to the Rune
+// Array Collection. This RuneArrayDto is populated with the Latin
 // Alphabet (English Version). The total number of characters
 // is 52 comprised of 26 lower case letters and 26 upper case
 // letters.
@@ -26,6 +26,58 @@ type RuneArrayCollection struct {
 // operations looking for alphabetic characters classified as
 // delimiters.
 //
+// ----------------------------------------------------------------
+//
+// Default Settings
+//
+// The character search type for the RuneArrayDto instance is
+// automatically set to:
+//
+//    CharSearchType.SingleTargetChar()
+//
+//  - A Single Target Character Search Type means that a single
+//    character in the Target Search String will be compared to
+//    all characters in the Test String.
+//
+//    If a single Target String character equals any character in
+//    the Test String, a 'Match' or successful search outcome will
+//    be declared.
+//
+//    The search operation is limited to a single designated Target
+//    Search String character. Each and every one of the Test
+//    String Characters will be compared to this single designated
+//    Target String Search Character. The search operation will
+//    terminate when a matching character is first identified in
+//    the Test String or when the end of the Test String is
+//    encountered.
+//
+//      Example #1
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 5
+//         Test String: "ZFXyURJK"
+//
+//    In this example of a Single Target Character Search, the
+//    search will begin and end at Target Search String index
+//    number 5. Since one of the Test String Characters ('X')
+//    matches the 'X' character at index number 5 in the Target
+//    Search String, the search operation is classified as a
+//    success. A matching character was found.
+//
+//      Example #2
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 0
+//         Test String: "ZFXyURJK"
+//
+//    In this second example of a Single Target Character Search,
+//    the search will begin and end at Target Search String index
+//    number 0. Since NONE of the Test String Characters matches
+//    the 'H' character at index number 0 in the Target Search
+//    String, the search operation is classified as a failure. No
+//    matching character was found.
 //
 // -----------------------------------------------------------------
 //
@@ -50,77 +102,10 @@ func (runeArrayCol *RuneArrayCollection) AddLatinAlphabetEnglishDto() {
 
 	defer runeArrayCol.lock.Unlock()
 
-	latinAlphabetRuneArray := []rune{
-		'a',
-		'b',
-		'c',
-		'd',
-		'e',
-		'f',
-		'g',
-		'h',
-		'i',
-		'j',
-		'k',
-		'l',
-		'm',
-		'n',
-		'o',
-		'p',
-		'q',
-		'r',
-		's',
-		't',
-		'u',
-		'v',
-		'w',
-		'x',
-		'y',
-		'z',
-		'A',
-		'B',
-		'C',
-		'D',
-		'E',
-		'F',
-		'G',
-		'H',
-		'I',
-		'J',
-		'K',
-		'L',
-		'M',
-		'N',
-		'O',
-		'P',
-		'Q',
-		'R',
-		'S',
-		'T',
-		'U',
-		'V',
-		'W',
-		'X',
-		'Y',
-		'Z'}
-
-	lenLatinAlphabet := len(latinAlphabetRuneArray)
-
-	runeArrayDto := RuneArrayDto{}
-
-	runeArrayDto.CharsArray = make([]rune, lenLatinAlphabet)
-
-	for i := 0; i < lenLatinAlphabet; i++ {
-		runeArrayDto.CharsArray[i] = latinAlphabetRuneArray[i]
-	}
-
-	runeArrayDto.charSearchType =
-		CharSearchType.SingleTargetChar()
-
 	runeArrayCol.RuneArrayDtoCol =
 		append(
 			runeArrayCol.RuneArrayDtoCol,
-			runeArrayDto)
+			RuneArrayDto{}.NewLatinAlphabet())
 
 }
 
@@ -131,6 +116,58 @@ func (runeArrayCol *RuneArrayCollection) AddLatinAlphabetEnglishDto() {
 // An array of numeric digits in useful in search operations looking
 // for numeric characters classified as delimiters.
 //
+// ----------------------------------------------------------------
+//
+// Default Settings
+//
+// The character search type for the returned instance of
+// RuneArrayDto is automatically set to:
+//
+//    CharSearchType.SingleTargetChar()
+//
+//  - A Single Target Character Search Type means that a single
+//    character in the Target Search String will be compared to
+//    all characters in the Test String.
+//
+//    If a single Target String character equals any character in
+//    the Test String, a 'Match' or successful search outcome will
+//    be declared.
+//
+//    The search operation is limited to a single designated Target
+//    Search String character. Each and every one of the Test
+//    String Characters will be compared to this single designated
+//    Target String Search Character. The search operation will
+//    terminate when a matching character is first identified in
+//    the Test String or when the end of the Test String is
+//    encountered.
+//
+//      Example #1
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 5
+//         Test String: "ZFXyURJK"
+//
+//    In this example of a Single Target Character Search, the
+//    search will begin and end at Target Search String index
+//    number 5. Since one of the Test String Characters ('X')
+//    matches the 'X' character at index number 5 in the Target
+//    Search String, the search operation is classified as a
+//    success. A matching character was found.
+//
+//      Example #2
+//                                 1         2         3
+//                Index  0123456789012345678901234567890
+//       Target String: "Hey, Xray-4 is the call sign."
+//       Target String Starting Index: 0
+//         Test String: "ZFXyURJK"
+//
+//    In this second example of a Single Target Character Search,
+//    the search will begin and end at Target Search String index
+//    number 0. Since NONE of the Test String Characters matches
+//    the 'H' character at index number 0 in the Target Search
+//    String, the search operation is classified as a failure. No
+//    matching character was found.
 //
 // -----------------------------------------------------------------
 //
@@ -155,34 +192,10 @@ func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 
 	defer runeArrayCol.lock.Unlock()
 
-	numericDigitsArray := []rune{
-		'0',
-		'1',
-		'2',
-		'3',
-		'4',
-		'5',
-		'6',
-		'7',
-		'8',
-		'9',
-	}
-
-	runeArrayDto := RuneArrayDto{}
-
-	runeArrayDto.CharsArray = make([]rune, 10)
-
-	for i := 0; i < 10; i++ {
-		runeArrayDto.CharsArray[i] = numericDigitsArray[i]
-	}
-
-	runeArrayDto.charSearchType =
-		CharSearchType.SingleTargetChar()
-
 	runeArrayCol.RuneArrayDtoCol =
 		append(
 			runeArrayCol.RuneArrayDtoCol,
-			runeArrayDto)
+			RuneArrayDto{}.NewNumericCharacters())
 }
 
 // AddRuneArrayDto - Receives an instance of RuneArrayDto and
@@ -240,16 +253,15 @@ func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 //                   error prefix information
 //
 //       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -265,7 +277,7 @@ func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -359,7 +371,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 // variable 'RuneArrayDto.charSearchType'.
 //
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
@@ -395,16 +407,15 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 //                   error prefix information
 //
 //       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -420,7 +431,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// -----------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
@@ -740,7 +751,7 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
-	CharSearchResultsDto,
+	CharSearchRuneArrayResultsDto,
 	error) {
 
 	if runeArrayCol.lock == nil {
@@ -754,7 +765,8 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	errorSearchResults := CharSearchResultsDto{}.New()
+	errorSearchResults :=
+		CharSearchRuneArrayResultsDto{}.New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -788,7 +800,7 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 		return errorSearchResults, err
 	}
 
-	var dtoSearchResults CharSearchResultsDto
+	var dtoSearchResults CharSearchRuneArrayResultsDto
 
 	testConfigDto := CharSearchTestConfigDto{}.New()
 
@@ -804,7 +816,7 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 						i)))
 
 		if err != nil {
-			return dtoSearchResults, err
+			return errorSearchResults, err
 		}
 
 		if dtoSearchResults.FoundSearchTarget {
