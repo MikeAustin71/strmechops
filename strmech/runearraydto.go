@@ -893,6 +893,53 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 	return string(charsArrayDto.CharsArray)
 }
 
+// IsValidCharacterSearchType - Returns a boolean value signaling
+// whether Character Search Type member variable ('charSearchType')
+// for this RuneArrayDto instance is valid.
+//
+// The Character Search Type variable is styled as:
+//   runeArrayDto.charSearchType
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If member variable 'charSearchType' (Character Search
+//       Type) for the current RuneArrayDto instnce is judged to be
+//       valid in all respects, this return parameter will be set
+//       to 'true'.
+//
+//       If member variable 'charSearchType' (Character Search
+//       Type) is found to be invalid, this return parameter will
+//       be set to 'false'.
+//
+func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchType() bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	isValid,
+		_ := runeArrayDtoQuark{}.ptr().isValidCharacterSearchType(
+		charsArrayDto,
+		nil)
+
+	return isValid
+}
+
 // NewNumericCharacters - Returns a new instance of RuneArrayDto
 // configured with numeric characters (0 through 9 inclusive).
 //

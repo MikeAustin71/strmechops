@@ -76,7 +76,7 @@ func (runeArrayColElectron runeArrayCollectionElectron) testValidityRuneArrayCol
 	if lenArrayRuneArrayDtos == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'arrayRuneArrayDtos' is "+
+			"Error: Input parameter 'arrayRuneArrayDtos' is \n"+
 			"empty and has a length of zero!\n",
 			ePrefix.String())
 
