@@ -893,6 +893,152 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 	return string(charsArrayDto.CharsArray)
 }
 
+// IsEmpty - Returns a boolean value of 'true' if the Character
+// Array for the current RuneArrayDto is empty or has a zero length.
+//
+// A Character Array with a zero length contains zero characters.
+//
+func (charsArrayDto *RuneArrayDto) IsEmpty() bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	if len(charsArrayDto.CharsArray) == 0 {
+		return true
+	}
+
+	return false
+}
+
+// IsValidCharacterArray - Returns a boolean value of 'true' if the
+// Character Array for the current RuneArrayDto instance.
+//
+// The Character Array of the current RuneArrayDto instance is
+// stored in member variable:
+//    RuneArrayDto.CharsArray
+//
+// The Character array is judged to be valid if it has an array
+// length greater than zero.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid                    bool
+//     - If the current RuneArrayDto instance member variable
+//       'CharsArray' (Character Array) is judged to be valid
+//       in all respects, this return parameter will be set to
+//       'true'.
+//
+//     - If the current RuneArrayDto instance member variable
+//       'CharsArray' (Character Array) is judged to be invalid,
+//       this return parameter will be set to 'false'.
+//
+func (charsArrayDto *RuneArrayDto) IsValidCharacterArray() bool {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	isValid,
+		_ := runeArrayDtoQuark{}.ptr().isValidCharacterArray(
+		charsArrayDto,
+		nil)
+
+	return isValid
+}
+
+// IsValidCharacterArrayError - Returns an error value signaling
+// whether Character Array for the current RuneArrayDto instance is
+// valid.
+//
+// If the Character Array is judged to be valid, the returned error
+// parameter is set to 'nil'.
+//
+// If the Character Array length is greater than zero, the
+// Character Array is classified as valid.
+//
+// The Character Array variable is styled as:
+//   RuneArrayDto.charSearchType
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the current RuneArrayDto member variable
+//       'charSearchType' (Character Search Type) is judged to be
+//       valid in all respects, this return parameter will be set
+//       to 'nil'.
+//
+//       If the current RuneArrayDto member variable
+//       'charSearchType' (Character Search Type) is found to be
+//       invalid, this return parameter will be configured with an
+//       appropriate error message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (charsArrayDto *RuneArrayDto) IsValidCharacterArrayError() error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"RuneArrayDto."+
+			"IsValidCharacterArrayError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = runeArrayDtoQuark{}.ptr().isValidCharacterArray(
+		charsArrayDto,
+		ePrefix.XCpy(
+			"charsArrayDto"))
+
+	return err
+}
+
 // IsValidCharacterSearchType - Returns a boolean value signaling
 // whether Character Search Type member variable ('charSearchType')
 // for this RuneArrayDto instance is valid.
@@ -914,7 +1060,7 @@ func (charsArrayDto *RuneArrayDto) GetCharacterString() string {
 //
 //  bool
 //     - If member variable 'charSearchType' (Character Search
-//       Type) for the current RuneArrayDto instnce is judged to be
+//       Type) for the current RuneArrayDto instance is judged to be
 //       valid in all respects, this return parameter will be set
 //       to 'true'.
 //
@@ -938,6 +1084,76 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchType() bool {
 		nil)
 
 	return isValid
+}
+
+// IsValidCharacterSearchTypeError - Returns an error value
+// signaling whether Character Search Type member variable
+// ('charSearchType') for this RuneArrayDto instance is valid.
+//
+// If the Character Search Type is judged to be valid, the returned
+// error parameter is set to 'nil'.
+//
+// The Character Search Type variable is styled as:
+//   runeArrayDto.charSearchType
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the current RuneArrayDto member variable
+//       'charSearchType' (Character Search Type) is judged to be
+//       valid in all respects, this return parameter will be set
+//       to 'nil'.
+//
+//       If the current RuneArrayDto member variable
+//       'charSearchType' (Character Search Type) is found to be
+//       invalid, this return parameter will be configured with an
+//       appropriate error message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError() error {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"RuneArrayDto."+
+			"IsValidCharacterSearchTypeError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		err = runeArrayDtoQuark{}.ptr().isValidCharacterSearchType(
+		charsArrayDto,
+		ePrefix.XCpy(
+			"charsArrayDto"))
+
+	return err
 }
 
 // NewNumericCharacters - Returns a new instance of RuneArrayDto
