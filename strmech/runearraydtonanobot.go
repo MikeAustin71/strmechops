@@ -5,6 +5,9 @@ import (
 	"sync"
 )
 
+// runeArrayDtoNanobot - Provides helper methods for type
+// RuneArrayDto.
+//
 type runeArrayDtoNanobot struct {
 	lock *sync.Mutex
 }

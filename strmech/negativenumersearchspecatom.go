@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// negNumSearchSpecAtom - Provides helper methods for type
+// NegativeNumberSearchSpec.
+//
 type negNumSearchSpecAtom struct {
 	lock *sync.Mutex
 }

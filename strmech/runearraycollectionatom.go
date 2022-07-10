@@ -2,26 +2,11 @@ package strmech
 
 import "sync"
 
+// runeArrayCollectionAtom - Provides helper methods for type
+// RuneArrayCollection.
+//
 type runeArrayCollectionAtom struct {
 	lock *sync.Mutex
-}
-
-// ptr - Returns a pointer to a new instance of
-// runeArrayCollectionAtom.
-//
-func (runeArrayColAtom runeArrayCollectionAtom) ptr() *runeArrayCollectionAtom {
-
-	if runeArrayColAtom.lock == nil {
-		runeArrayColAtom.lock = new(sync.Mutex)
-	}
-
-	runeArrayColAtom.lock.Lock()
-
-	defer runeArrayColAtom.lock.Unlock()
-
-	return &runeArrayCollectionAtom{
-		lock: new(sync.Mutex),
-	}
 }
 
 // empty - Receives a pointer to an instance of
@@ -87,4 +72,22 @@ func (runeArrayColAtom *runeArrayCollectionAtom) empty(
 	runeArrayCol = nil
 
 	return
+}
+
+// ptr - Returns a pointer to a new instance of
+// runeArrayCollectionAtom.
+//
+func (runeArrayColAtom runeArrayCollectionAtom) ptr() *runeArrayCollectionAtom {
+
+	if runeArrayColAtom.lock == nil {
+		runeArrayColAtom.lock = new(sync.Mutex)
+	}
+
+	runeArrayColAtom.lock.Lock()
+
+	defer runeArrayColAtom.lock.Unlock()
+
+	return &runeArrayCollectionAtom{
+		lock: new(sync.Mutex),
+	}
 }

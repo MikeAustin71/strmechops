@@ -1323,9 +1323,9 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'charSearchType' is invalid!\n"+
 			"'charSearchType' must be set to one of three enumerations:\n"+
-			"CharacterSearchType(0).LinearTargetStartingIndex()\n OR"+
-			"CharacterSearchType(0).SingleTargetChar()\n"+
-			"CharacterSearchType(0).LinearEndOfString()\n"+
+			"(1) CharacterSearchType(0).LinearTargetStartingIndex()\n"+
+			"(2) CharacterSearchType(0).SingleTargetChar()\n"+
+			"(3) CharacterSearchType(0).LinearEndOfString()\n"+
 			"'charSearchType' string  value = '%v'\n"+
 			"'charSearchType' integer value = '%v'\n",
 			ePrefix.String(),

@@ -516,6 +516,242 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 	return err
 }
 
+// CopyIn - Copies the data fields from an incoming instance of
+// RuneArrayCollection ('incomingRuneArrayCol') to the data fields
+// of the current RuneArrayCollection instance ('runeArrayCol').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current RuneArrayCollection instance
+// ('runeArrayCol') will be deleted and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingRuneArrayCol       *RuneArrayCollection
+//     - A pointer to an instance of RuneArrayCollection. This
+//       method will NOT change the values of internal member
+//       variables contained in this instance.
+//
+//       All data values in this RuneArrayCollection instance
+//       will be copied to current RuneArrayCollection
+//       instance ('runeArrayCol').
+//
+//       If parameter 'incomingRuneArrayCol' is determined to be
+//       invalid, an error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) CopyIn(
+	incomingRuneArrayCol *RuneArrayCollection,
+	errorPrefix interface{}) error {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return runeArrayCollectionNanobot{}.ptr().
+		copyIn(
+			runeArrayCol,
+			incomingRuneArrayCol,
+			ePrefix.XCpy(
+				"runeArrayCol<-incomingRuneArrayCol"))
+}
+
+// CopyOut - Returns a deep copy of the current RuneArrayCollection
+// instance.
+//
+// If the current RuneArrayCollection instance contains invalid
+// member variables, this method will return an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  RuneArrayCollection
+//     - If this method completes successfully and no errors are
+//       encountered, this parameter will return a deep copy of the
+//       current RuneArrayCollection instance.
+//
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) CopyOut(
+	errorPrefix interface{}) (
+	RuneArrayCollection,
+	error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return RuneArrayCollection{}, err
+	}
+
+	return runeArrayCollectionNanobot{}.ptr().
+		copyOut(
+			runeArrayCol,
+			ePrefix.XCpy(
+				"<-runeArrayCol"))
+}
+
 // Empty - Empties the internal RuneArrayDto collection and sets
 // its value to 'nil'. This method will leave the current
 // instance of RuneArrayCollection in an invalid state and
