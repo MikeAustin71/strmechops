@@ -81,6 +81,7 @@ func (runeArrayColAtom *runeArrayCollectionAtom) empty(
 	for i := 0; i < lenRuneArrayCol; i++ {
 
 		runeArrayCol.RuneArrayDtoCol[i].Empty()
+
 	}
 
 	runeArrayCol = nil

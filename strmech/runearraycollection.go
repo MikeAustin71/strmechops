@@ -516,6 +516,52 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 	return err
 }
 
+// Empty - Empties the internal RuneArrayDto collection and sets
+// its value to 'nil'. This method will leave the current
+// instance of RuneArrayCollection in an invalid state and
+// unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will members of the internal RuneArrayDto
+// collection. After completion, the internal RuneArrayDto
+// collection will have a value of 'nil'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (runeArrayCol *RuneArrayCollection) Empty() {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	runeArrayCollectionAtom{}.ptr().
+		empty(runeArrayCol)
+
+	runeArrayCol.lock.Unlock()
+
+	runeArrayCol.lock = nil
+
+	return
+}
+
 // Equal - Receives a pointer to another instance of
 // RuneArrayCollection and proceeds to compare its internal
 // member variables to those of the current
