@@ -2052,8 +2052,8 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 // zero.
 //
 // If input parameter 'zeroBasedIndex' is less than zero or greater
-// than the last member element in the collection, an error will be
-// returned.
+// than the index of the last member element in the collection, an
+// error will be returned.
 //
 // -----------------------------------------------------------------
 //
@@ -2124,7 +2124,7 @@ func (txtLinesCol *TextLineSpecLinesCollection) PeekAtLastTextLine(
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //

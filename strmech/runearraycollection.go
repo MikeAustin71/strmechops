@@ -2063,9 +2063,9 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 // in the Rune Array Collection maintained by the current instance
 // of RuneArrayCollection.
 //
-// This operation is nondestructive meanng that the Rune Array
-// Collection maintained by the current instance
-// of RuneArrayCollection is unchanged by this method.
+// This 'peek' operation is nondestructive meaning that the Rune
+// Array Collection maintained by the current instance of
+// RuneArrayCollection is unchanged by this method.
 //
 // If the current Rune Array Collection is empty and has zero
 // elements, an error will be returned.
@@ -2074,7 +2074,6 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -2164,30 +2163,167 @@ func (runeArrayCol *RuneArrayCollection) PeekAtFirstElement(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayCollection."+
-			"ReplaceAtIndex()",
+			"PeekAtFirstElement()",
 		"")
 
 	if err != nil {
 		return firstRuneArrayDto, err
 	}
 
-	if len(runeArrayCol.runeArrayDtoCol) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Rune Array Collection is Empty!\n"+
-			"'runeArrayCol.runeArrayDtoCol' has a length of zero.\n",
-			ePrefix.String())
-
-		return firstRuneArrayDto, err
-	}
-
 	firstRuneArrayDto,
-		err = runeArrayCol.runeArrayDtoCol[0].CopyOut(
-		ePrefix.XCpy(
-			"firstRuneArrayDto<-" +
-				"runeArrayCol.runeArrayDtoCol[0]"))
+		err = runeArrayCollectionAtom{}.ptr().
+		peekPopRuneArrayCol(
+			runeArrayCol,
+			0,
+			false,
+			ePrefix.XCpy(
+				"firstRuneArrayDt<-"+
+					"runeArrayCol.runeArrayDtoCol[0]"))
 
 	return firstRuneArrayDto, err
+}
+
+// PeekAtIndexElement - Returns a deep copy of the Rune Array
+// Collection member element specified by input parameter,
+// 'zeroBasedIndex'.
+//
+// This 'peek' operation is nondestructive meaning that the Rune
+// Array Collection maintained by the current instance of
+// RuneArrayCollection is unchanged by this method.
+//
+// If the Rune Array collection maintained by the current
+// RuneArrayCollection instance is empty (contains zero elements),
+// an error will be returned.
+//
+// Remember that indexes in the Rune Array collection are zero
+// based. This means the first element in the collection is index
+// zero.
+//
+// If input parameter 'zeroBasedIndex' is less than zero or greater
+// than the index of the last member element in the collection, an
+// error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  zeroBasedIndex             int
+//     - Specifies the index of the member element in the Rune
+//       Arrays Collection which will be returned as a deep copy
+//       of the original. If this input parameter is found to be
+//       invalid or if the Rune Arrays Collection is empty, an
+//       error will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  targetRuneArrayDto         RuneArrayDto
+//     - If this method completes successfully, a deep copy of the
+//       Rune Array Data Transfer Object 'RuneArrayDto' specified
+//       by index parameter 'zeroBasedIndex' in the Rune Array
+//       Collection maintained by the current RuneArrayCollection
+//       instance will be returned to the calling function.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) PeekAtIndexElement(
+	zeroBasedIndex int,
+	errorPrefix interface{}) (
+	targetRuneArrayDto RuneArrayDto,
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"PeekAtIndexElement()",
+		"")
+
+	if err != nil {
+		return targetRuneArrayDto, err
+	}
+
+	targetRuneArrayDto,
+		err = runeArrayCollectionAtom{}.ptr().
+		peekPopRuneArrayCol(
+			runeArrayCol,
+			zeroBasedIndex,
+			false,
+			ePrefix.XCpy(
+				fmt.Sprintf("firstRuneArrayDt<-"+
+					"runeArrayCol.runeArrayDtoCol[%v]",
+					zeroBasedIndex)))
+
+	return targetRuneArrayDto, err
 }
 
 // ReplaceAtIndex - Replaces a member of the Rune Array Collection

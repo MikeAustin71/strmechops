@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// runeArrayCollectionElectron - Provides helper methods for type
+// RuneArrayCollection.
+//
 type runeArrayCollectionElectron struct {
 	lock *sync.Mutex
 }

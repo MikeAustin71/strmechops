@@ -513,7 +513,7 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 		err = fmt.Errorf("%v - ERROR\n"+
 			"Input parameter 'zeroBasedIndex' is invalid!\n"+
 			"'zeroBasedIndex' is less than zero.\n"+
-			"indexId = '%v'\n",
+			"zeroBasedIndex = '%v'\n",
 			ePrefix.String(),
 			zeroBasedIndex)
 
