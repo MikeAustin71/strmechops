@@ -2462,6 +2462,138 @@ func (runeArrayCol *RuneArrayCollection) PeekAtLastElement(
 	return lastRuneArrayDto, err
 }
 
+// PopFirstElement - Returns a deep copy of the first element in
+// the Rune Array Collection maintained by the current instance of
+// RuneArrayCollection.
+//
+// If the current Rune Array Collection is empty and has zero
+// elements, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This 'pop' operation is destructive meaning that after returning
+// a deep copy of the first element in the Rune Array Collection,
+// this method will proceed to DELETE the first element in the Rune
+// Array Collection maintained by the current instance of
+// RuneArrayCollection.
+//
+// Be advised, this method WILL DELETE DATA!
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  firstRuneArrayDto          RuneArrayDto
+//     - If this method completes successfully, a deep copy of the
+//       first Rune Array Data Transfer Object 'RuneArrayDto' in
+//       the Rune Array Collection maintained by the current
+//       RuneArrayCollection instance will be returned to the
+//       calling function.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) PopFirstElement(
+	errorPrefix interface{}) (
+	firstRuneArrayDto RuneArrayDto,
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"PopFirstElement()",
+		"")
+
+	if err != nil {
+		return firstRuneArrayDto, err
+	}
+
+	firstRuneArrayDto,
+		err = runeArrayCollectionAtom{}.ptr().
+		peekPopRuneArrayCol(
+			runeArrayCol,
+			0,
+			true,
+			ePrefix.XCpy(
+				"firstRuneArrayDt<-"+
+					"runeArrayCol.runeArrayDtoCol[0]"))
+
+	return firstRuneArrayDto, err
+}
+
 // ReplaceAtIndex - Replaces a member of the Rune Array Collection
 // with a user supplied RuneArrayDto.
 //
@@ -2475,7 +2607,7 @@ func (runeArrayCol *RuneArrayCollection) PeekAtLastElement(
 // 'replaceAtIndex' will be deleted
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Input Parameters
 //
