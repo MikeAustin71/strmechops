@@ -2333,6 +2333,49 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 	return err
 }
 
+// New - Returns a new uninitialized instance of
+// RuneArrayCollection. The internal RuneArrayDto collection will
+// be empty.
+//
+// In this state, the returned instance of RuneArrayCollection is
+// invalid an unusable. It will then be necessary to add
+// RuneArrayDto objects to the collection using 'Add' or 'Set'
+// methods.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  RuneArrayCollection
+//     - This method returns an empty an uninitialized instance of
+//       RuneArrayCollection. The internal RuneArrayDto Collection
+//       is empty.
+//
+func (runeArrayCol RuneArrayCollection) New() RuneArrayCollection {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	newRuneArrayCol := RuneArrayCollection{}
+
+	runeArrayCollectionAtom{}.ptr().
+		empty(&newRuneArrayCol)
+
+	return newRuneArrayCol
+}
+
 // PeekAtFirstElement - Returns a deep copy of the first element in
 // the Rune Array Collection maintained by the current instance of
 // RuneArrayCollection.
@@ -3453,9 +3496,9 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 // judged to be invalid, an error will be returned.
 //
 // Valid RuneArrayDto array members must satisfy two criteria in
-// order to be classifed as 'valid'.
+// order to be classified as 'valid'.
 //
-//   (1) The RuneArrayDto internal Charater Array must have a
+//   (1) The RuneArrayDto internal Character Array must have a
 //       length greater than zero.
 //
 //   (2) The Character Search Type associated with each
@@ -3490,9 +3533,9 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 //       invalid, an error will be returned.
 //
 //       Valid RuneArrayDto array members must satisfy two criteria
-//       in order to be classifed as 'valid'.
+//       in order to be classified as 'valid'.
 //
-//       (1) The RuneArrayDto internal Charater Array must have a
+//       (1) The RuneArrayDto internal Character Array must have a
 //           length greater than zero.
 //
 //       (2) The Character Search Type associated with each
