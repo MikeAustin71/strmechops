@@ -2059,6 +2059,189 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 	return err
 }
 
+// ReplaceAtIndex - Replaces a member of the Rune Array Collection
+// with a user supplied RuneArrayDto.
+//
+// A deep copy of input paramter runeArrayDto will be used to make
+// the replacement.
+//
+// The Rune Array Colleciton member element to be replaced is
+// determined by input parameter 'replaceAtIndex'.
+//
+// When the operation is completed the old member element at index
+// 'replaceAtIndex' will be deleted
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeArrayDto               RuneArrayDto
+//     - A deep copy of this RuneArrayDto instance will be created
+//       and added to the Rune Array Collection for the the current
+//       instance of RuneArrayCollection.
+//
+//       If 'runeArrayDto' contains a zero length character array,
+//       an error will be returned. Likewise, if 'runeArrayDto'
+//       contains an invalid Character Search Type
+//       'charSearchType', an error will be returned.
+//
+//
+//  replaceAtIndex             int
+//     - The index of an element within the  Rune Array Collection
+//       maintained by the current RuneArrayDto instance. The
+//       array element at this index will be deleted and replaced
+//       by a deep copy of input parameter, 'runeArrayDto'.
+//
+//       If 'replaceAtIndex' proves to be an invalid index, an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) ReplaceAtIndex(
+	runeArrayDto RuneArrayDto,
+	replaceAtIndex int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"ReplaceAtIndex()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = runeArrayDto.IsValidCharacterArrayError(
+		ePrefix.XCpy(
+			"runeArrayDto"))
+
+	if err != nil {
+		return err
+	}
+
+	err = runeArrayDto.IsValidCharacterSearchTypeError(
+		ePrefix.XCpy(
+			"runeArrayDto"))
+
+	if err != nil {
+		return err
+	}
+
+	// Length is already validated. It MUST BE
+	// greater than zero.
+	lenOfChars := runeArrayDto.GetRuneArrayLength()
+
+	if replaceAtIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'replaceAtIndex' is invalid!\n"+
+			"'replaceAtIndex' is less than zero (0).\n"+
+			"replaceAtIndex = '%v'\n",
+			ePrefix.String(),
+			replaceAtIndex)
+
+		return err
+	}
+
+	if replaceAtIndex >= lenOfChars {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'replaceAtIndex' is out of range and invalid!\n"+
+			"'replaceAtIndex' is greater than the maximum Rune Array Collection index.\n"+
+			"The last element in the Rune Array Collection is index '%v'.\n"+
+			"Input parameter 'replaceAtIndex' = '%v'\n",
+			ePrefix.String(),
+			lenOfChars-1,
+			replaceAtIndex)
+
+		return err
+	}
+
+	runeArrayCol.runeArrayDtoCol[replaceAtIndex].Empty()
+
+	runeArrayCol.runeArrayDtoCol[replaceAtIndex],
+		err = runeArrayDto.CopyOut(
+		ePrefix.XCpy(
+			fmt.Sprintf("newRuneArray<-"+
+				"runeArrayCol.runeArrayDtoCol[%v]",
+				replaceAtIndex)))
+
+	return err
+}
+
 func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 	targetInputParms CharSearchTargetInputParametersDto,
 	errorPrefix interface{}) (
