@@ -1244,6 +1244,44 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 	return err
 }
 
+// New - Returns a new uninitialized instance of RuneArrayDto. All
+// internal member variables will be set to their zero states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  RuneArrayDto
+//     - This method returns an empty an uninitialized instance of
+//       RuneArrayDto. All internal member variables are set to
+//       their states.
+//
+func (charsArrayDto RuneArrayDto) New() RuneArrayDto {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	newRuneArrayDto := RuneArrayDto{}
+
+	runeArrayDtoAtom{}.ptr().empty(
+		&newRuneArrayDto)
+
+	return newRuneArrayDto
+}
+
 // NewNumericCharacters - Returns a new instance of RuneArrayDto
 // configured with numeric characters (0 through 9 inclusive).
 //
@@ -1309,7 +1347,6 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 // Input Parameters
 //
 //  NONE
-//
 //
 //
 // ----------------------------------------------------------------
