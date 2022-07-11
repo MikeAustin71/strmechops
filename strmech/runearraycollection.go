@@ -2032,6 +2032,155 @@ func (runeArrayCol *RuneArrayCollection) Equal(
 			incomingRuneArrayCol)
 }
 
+// GetCollection - Returns a deep copy of the Rune Array Collection
+// maintained by the current instance of RuneArrayCollection.
+//
+// If the Rune Array Collection is empty or has zero elements, an
+// error will be returned.
+//
+// This operation is nondestructive meaning that the Rune Array
+// Collection maintained by the current instance of
+// RuneArrayCollection is unchanged by this method. No data will be
+// deleted.
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyRuneArrayCol       []RuneArray
+//     - This method will return an array of RuneArrayDto objects
+//       representing a deep copy of the Rune Array Collection
+//       maintained by the current instance of RuneArrayCollection.
+//
+//       If the current Rune Array Collection is empty, this
+//       return parameter will be set to 'nil' and an error will
+//       be returned.
+//
+//
+//  err                        error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) GetCollection(
+	errorPrefix interface{}) (
+	deepCopyRuneArrayCol []RuneArrayDto,
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	deepCopyRuneArrayCol = nil
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"GetCollection()",
+		"")
+
+	if err != nil {
+		return deepCopyRuneArrayCol, err
+	}
+
+	lenRuneArrayCol := len(runeArrayCol.runeArrayDtoCol)
+
+	if lenRuneArrayCol == 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"The Rune Array Dto Collection, 'runeArrayCol.runeArrayDtoCol' is EMPTY!\n",
+			ePrefix.String())
+
+		return deepCopyRuneArrayCol, err
+	}
+
+	deepCopyRuneArrayCol =
+		make([]RuneArrayDto, lenRuneArrayCol)
+
+	for i := 0; i < lenRuneArrayCol; i++ {
+
+		deepCopyRuneArrayCol[i],
+			err = runeArrayCol.runeArrayDtoCol[i].CopyOut(
+			ePrefix.XCpy(
+				fmt.Sprintf("deepCopyRuneArrayCol"+
+					"<-runeArrayCol.runeArrayDtoCol[%v]",
+					i)))
+
+		if err != nil {
+			deepCopyRuneArrayCol = nil
+			return deepCopyRuneArrayCol, err
+		}
+
+	}
+
+	return deepCopyRuneArrayCol, err
+}
+
 // GetNumberOfRuneArrayDtos - Returns the number of elements in the
 // RuneArrayDto collection. The returned integer value is therefore
 // equal to the length of the internal array of RuneArrayDto
@@ -2248,7 +2397,7 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 //       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
 //
