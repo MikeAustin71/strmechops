@@ -3720,9 +3720,6 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 	testInputParms.LoadTestConfigDto(
 		testConfigDto)
 
-	testInputParms.TextCharSearchType =
-		CharSearchType.None()
-
 	err = targetInputParms.ValidateCharSearchType(
 		ePrefix)
 
@@ -3732,29 +3729,39 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 		// Character Search Type.
 		testInputParms.TextCharSearchType =
 			targetInputParms.TextCharSearchType
+
 	} else {
 		// err != nil
+		// targetInputParms.TextCharSearchType is invalid
 
-		if !charsArrayDto.charSearchType.XIsValid() {
-			err = fmt.Errorf("%v\n"+
-				"Error: Both Input Parameters Search Type and\n"+
-				"RuneArrayDto Search Type are invalid.\n"+
-				"The Search Operation is Terminating!\n"+
-				"Input Parameters Search Type String  = '%v'\n"+
-				"Input Parameters Search Type Integer = '%v'\n"+
-				"RuneArrayDto Search Type String  = '%v'\n"+
-				"RuneArrayDto Search Type Integer = '%v'\n",
-				ePrefix.String(),
-				testInputParms.TextCharSearchType.String(),
-				testInputParms.TextCharSearchType.XValueInt(),
-				charsArrayDto.charSearchType.String(),
-				charsArrayDto.charSearchType.XValueInt())
-			return errorResults, err
+		err = testInputParms.ValidateCharSearchType(
+			ePrefix)
 
+		if err != nil {
+			// testInputParms.TextCharSearchType is invalid
+			// Use charsArrayDto.charSearchType
+
+			if !charsArrayDto.charSearchType.XIsValid() {
+				err = fmt.Errorf("%v\n"+
+					"Error: Both Input Parameters Search Type and\n"+
+					"RuneArrayDto Search Type are invalid.\n"+
+					"The Search Operation is Terminating!\n"+
+					"Input Parameters Search Type String  = '%v'\n"+
+					"Input Parameters Search Type Integer = '%v'\n"+
+					"RuneArrayDto Search Type String  = '%v'\n"+
+					"RuneArrayDto Search Type Integer = '%v'\n",
+					ePrefix.String(),
+					testInputParms.TextCharSearchType.String(),
+					testInputParms.TextCharSearchType.XValueInt(),
+					charsArrayDto.charSearchType.String(),
+					charsArrayDto.charSearchType.XValueInt())
+				return errorResults, err
+
+			}
+
+			testInputParms.TextCharSearchType =
+				charsArrayDto.charSearchType
 		}
-
-		testInputParms.TextCharSearchType =
-			charsArrayDto.charSearchType
 	}
 
 	testInputParms.TestString = charsArrayDto

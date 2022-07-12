@@ -353,7 +353,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 				i =
 					searchResults.NegativeNumberSymbolSearchResults.
-						TargetStringLastSearchIndex
+						TargetStringCurrentSearchIndex
 
 				targetInputParms.TargetStringCurrentSearchIndex = i
 
