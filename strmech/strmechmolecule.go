@@ -353,10 +353,28 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 				i =
 					searchResults.NegativeNumberSymbolSearchResults.
-						TargetStringLastFoundIndex
+						TargetStringLastSearchIndex
+
+				targetInputParms.TargetStringCurrentSearchIndex = i
+
+				targetInputParms.TargetStringNextSearchIndex = i + 1
+
+				if targetInputParms.TargetStringNextSearchIndex >=
+					targetInputParms.TargetStringLength {
+
+					targetInputParms.TargetStringNextSearchIndex = -1
+
+				}
 
 				searchResults.NumSignValue = NumSignVal.Negative()
 
+				if searchResults.NegativeNumberSymbolSearchResults.
+					PrimaryNumSignPosition == NumSignSymPos.BeforeAndAfter() ||
+					searchResults.NegativeNumberSymbolSearchResults.
+						PrimaryNumSignPosition == NumSignSymPos.After() {
+
+					goto computeExitStats
+				}
 				continue
 			}
 		}

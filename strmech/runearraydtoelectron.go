@@ -635,6 +635,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 				// Set Target String Parameters
 				searchResults.TargetStringLastFoundIndex = k
 
+				searchResults.TargetStringLastSearchIndex = k
+
 				searchResults.TargetStringFirstFoundIndex =
 					searchResults.TargetStringLastFoundIndex -
 						searchResults.TestStringLength +
@@ -1436,6 +1438,8 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 			// Target String Parameters
 			searchResults.TargetStringLastFoundIndex = i
 
+			searchResults.TargetStringLastSearchIndex = i
+
 			searchResults.TargetStringFirstFoundIndex =
 				searchResults.TargetStringLastFoundIndex -
 					searchResults.TestStringLength +
@@ -2002,7 +2006,7 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 					searchResults.RemainderString.CharsArray =
 						append(
 							searchResults.RemainderString.CharsArray,
-							targetInputParms.TargetString.CharsArray[searchResults.TargetStringCurrentSearchIndex:]...)
+							testInputParms.TestString.CharsArray[j])
 				}
 			}
 
