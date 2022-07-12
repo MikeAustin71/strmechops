@@ -29,7 +29,7 @@ type ITextLineSpecification interface {
 	String() string
 
 	TextBuilder(
-		sBuilder *strings.Builder,
+		sBuilder strings.Builder,
 		errorPrefix interface{}) error
 
 	TextLineSpecName() string

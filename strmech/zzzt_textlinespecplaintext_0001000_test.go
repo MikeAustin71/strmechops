@@ -5567,7 +5567,7 @@ func TestTextLineSpecPlainText_TextBuilder_000100(t *testing.T) {
 	sb := strings.Builder{}
 
 	err = plainTextLine01.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy("plainTextLine01->sb"))
 
 	if err != nil {
@@ -5614,7 +5614,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 	sb := strings.Builder{}
 
 	err := plainTextLine01.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy("empty plainTextLine01->sb"))
 
 	if err == nil {
@@ -5660,22 +5660,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 	}
 
 	err = plainTextLine01.TextBuilder(
-		nil,
-		ePrefix.XCpy("plainTextLine01->nil sb"))
-
-	if err == nil {
-		t.Errorf("%v\n"+
-			"Error:\n"+
-			"Expected error return from plainTextLine01.TextBuilder()\n"+
-			"because strings.Builder pointer is 'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	err = plainTextLine01.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy("valid plainTextLine01->sb"))
 
 	if err != nil {
@@ -5710,7 +5695,7 @@ func TestTextLineSpecPlainText_TextBuilder_000200(t *testing.T) {
 	}
 
 	err = plainTextLine01.TextBuilder(
-		&sb,
+		sb,
 		StrMech{})
 
 	if err == nil {

@@ -5219,10 +5219,10 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   *strings.Builder
-//    - A pointer to an instance of strings.Builder. The line of
-//      text produced by the current instance of
-//      TextLineSpecPlainText and writes that text to 'sBuilder'.
+//  sBuilder                   strings.Builder
+//    - An instance of strings.Builder. The line of text produced
+//      by the current instance of TextLineSpecPlainText will be
+//      written to 'sBuilder'.
 //
 //
 //  errorPrefix                interface{}
@@ -5285,7 +5285,7 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //       the beginning of the error message.
 //
 func (plainTextLine *TextLineSpecPlainText) TextBuilder(
-	sBuilder *strings.Builder,
+	sBuilder strings.Builder,
 	errorPrefix interface{}) error {
 
 	if plainTextLine.lock == nil {
@@ -5306,15 +5306,6 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if sBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'sBuilder' (strings.Builder)\n"+
-			"is invalid! 'sBuilder' is a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 

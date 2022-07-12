@@ -47,10 +47,10 @@ type TextStrBuilder struct {
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of text
+//       characters created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  paramLabelValues           []TextLabelValueStrings
@@ -298,7 +298,7 @@ type TextStrBuilder struct {
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	paramLabelValues []TextLabelValueStrings,
 	leftMarginStr string,
 	paramLabelFieldLength int,
@@ -329,15 +329,6 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -406,10 +397,10 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of text
+//       characters created by this method will be written to this
+//       instance of strings.Builder.
 //
 //  txtFormatters              []TextFormatterDto
 //     - An array of TextFormatterDto objects containing
@@ -816,7 +807,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	txtFormatters []TextFormatterDto,
 	errorPrefix interface{}) error {
 
@@ -839,15 +830,6 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -991,10 +973,10 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. Formatted
-//       Date/Time Text created by this method will be written
-//       to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. Formatted Date/Time Text
+//       created by this method will be written to this instance
+//       of strings.Builder.
 //
 //
 //  dateTime                   time.Time
@@ -1138,7 +1120,7 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldDateTime(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	dateTime time.Time,
 	dateTimeFieldLength int,
 	dateTimeFormat string,
@@ -1165,15 +1147,6 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -1224,6 +1197,13 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. Formatted Date/Time Text
+//       created by this method will be written to this instance
+//       of strings.Builder.
+//
 //
 //  fillerCharacters           string
 //     - A string containing the text characters which will be
@@ -1351,7 +1331,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldFiller(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	lineTerminator string,
@@ -1376,15 +1356,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -1420,10 +1391,10 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       text label string created by this method will be written
-//       to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  labelText                  string
@@ -1557,7 +1528,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldLabel(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	labelText string,
 	labelFieldLength int,
 	labelTextJustify TextJustify,
@@ -1583,15 +1554,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -1629,10 +1591,10 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       text label string created by this method will be written
-//       to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  fieldLength                int
@@ -1710,7 +1672,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldSpacer(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	fieldLength int,
 	errorPrefix interface{}) error {
 
@@ -1762,10 +1724,10 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -1927,7 +1889,7 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	dateTime time.Time,
 	dateTimeFieldLength int,
@@ -1998,10 +1960,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -2148,7 +2110,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -2175,15 +2137,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -2225,10 +2178,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -2384,7 +2337,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	labelText string,
 	labelFieldLength int,
@@ -2412,15 +2365,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -2463,10 +2407,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -2580,7 +2524,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	fieldLength int,
 	rightMarginStr string,
@@ -2637,10 +2581,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 //
 // Input Parameters
 //
-//  strBuilder                      *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr                   string
@@ -2866,7 +2810,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	paramLabelStr string,
 	paramLabelFieldLength int,
@@ -2899,15 +2843,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -2970,10 +2905,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of
+//       text characters created by this method will be written to
+//       this instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -3199,7 +3134,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	paramLabelStr string,
 	paramLabelFieldLength int,
@@ -3231,15 +3166,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -3307,10 +3233,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of
+//       text characters created by this method will be written to
+//       this instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -3489,7 +3415,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineSolid(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -3518,15 +3444,6 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -3568,10 +3485,10 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of
+//       text characters created by this method will be written to
+//       this instance of strings.Builder.
 //
 //
 //  numOfBlankLines            int
@@ -3645,7 +3562,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineBlank(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	numOfBlankLines int,
 	errorPrefix interface{}) (
 	err error) {
@@ -3929,7 +3846,7 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	startTimeLabel string,
 	startTime time.Time,

@@ -403,6 +403,14 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	strings.Builder,
 	error) {
 
+	if numStrKernelNanobot.lock == nil {
+		numStrKernelNanobot.lock = new(sync.Mutex)
+	}
+
+	numStrKernelNanobot.lock.Lock()
+
+	defer numStrKernelNanobot.lock.Unlock()
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	var err error
@@ -514,7 +522,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	fmtrs = append(fmtrs, txtFmt)
 
 	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+		strBuilder,
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -540,7 +548,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	labelParam.ParamLabel = "Integer Digits"
 
 	labelParam.ParamValue =
-		numStrKernel.GetIntegerString()
+		numStrKernel.integerDigits.GetCharacterString()
 
 	if len(labelParam.ParamValue) == 0 {
 		labelParam.ParamValue = "Integer Digits is EMPTY!"
@@ -554,7 +562,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	labelParam.ParamLabel = "Fractional Digits"
 
 	labelParam.ParamValue =
-		numStrKernel.GetIntegerString()
+		numStrKernel.fractionalDigits.GetCharacterString()
 
 	if len(labelParam.ParamValue) == 0 {
 		labelParam.ParamValue = "Fractional Digits is EMPTY!"
@@ -605,7 +613,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	labelParam.ParamValue =
 		fmt.Sprintf("%v",
-			numStrKernel.IsNonZeroValue())
+			numStrKernel.isNonZeroValue)
 
 	if len(labelParam.ParamValue) == 0 {
 		labelParam.ParamValue = "Is Non Zero Value is EMPTY!"
@@ -615,7 +623,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	// Write Label/Parameter Values to String Builder
 	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
+		strBuilder,
 		labelParams,
 		" ",
 		maxLabelFieldLen,
@@ -694,7 +702,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	fmtrs = append(fmtrs, txtFmt)
 
 	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+		strBuilder,
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))

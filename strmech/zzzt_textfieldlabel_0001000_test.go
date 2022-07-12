@@ -4674,25 +4674,8 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"TestTextFieldSpecLabel_TextBuilder_000100()",
 		"")
+
 	var err error
-
-	txtFieldLabelZero := TextFieldSpecLabel{}
-
-	err =
-		txtFieldLabelZero.TextBuilder(
-			nil,
-			ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtFieldLabelZero."+
-			"TextBuilder()\n"+
-			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
 
 	var txtFieldLabelOne *TextFieldSpecLabel
 
@@ -4731,7 +4714,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldLabelOne.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"txtFieldLabelOne->sb"))
 
@@ -4775,7 +4758,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldLabelOne.TextBuilder(
-			&sb,
+			sb,
 			StrMech{})
 
 	if err == nil {
@@ -4815,23 +4798,6 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	err =
-		txtFieldLabelTwo.TextBuilder(
-			nil,
-			ePrefix.XCpy(
-				"txtFieldLabelTwo"))
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtFieldLabelTwo{}."+
-			"TextBuilder()\n"+
-			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
 	var txtFieldLabelThree TextFieldSpecLabel
 
 	txtFieldLabelThree,
@@ -4852,7 +4818,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldLabelThree.TextBuilder(
-			&sb,
+			sb,
 			StrMech{})
 
 	if err == nil {
@@ -4875,7 +4841,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldLabelThree.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"txtFieldLabelThree is invalid!"))
 
@@ -4910,7 +4876,7 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldLabelFour.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"txtFieldLabelFour-sb"))
 

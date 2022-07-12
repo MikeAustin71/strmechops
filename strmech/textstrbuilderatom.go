@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
@@ -30,10 +29,10 @@ type textStrBuilderAtom struct {
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of text
+//       characters created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -161,7 +160,7 @@ type textStrBuilderAtom struct {
 //       the beginning of the error message.
 //
 func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	dateTime time.Time,
 	dateTimeFieldLength int,
@@ -190,15 +189,6 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -262,10 +252,10 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of text
+//       characters created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -379,7 +369,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 //       the beginning of the error message.
 //
 func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -406,15 +396,6 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -595,7 +576,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 //       the beginning of the error message.
 //
 func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	labelText string,
 	labelFieldLength int,
@@ -623,15 +604,6 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 

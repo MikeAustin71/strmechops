@@ -24,10 +24,10 @@ type textStrBuilderElectron struct {
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       text label string created by this method will be written
-//       to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted text label
+//       string created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -108,7 +108,7 @@ type textStrBuilderElectron struct {
 //       the beginning of the error message.
 //
 func (txtBuilderElectron *textStrBuilderElectron) fieldSpacerWithMargins(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	fieldLength int,
 	rightMarginStr string,
@@ -134,15 +134,6 @@ func (txtBuilderElectron *textStrBuilderElectron) fieldSpacerWithMargins(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 
@@ -199,10 +190,10 @@ func (txtBuilderElectron *textStrBuilderElectron) fieldSpacerWithMargins(
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of text
+//       characters created by this method will be written to this
+//       instance of strings.Builder.
 //
 //
 //  numOfBlankLines            int
@@ -242,7 +233,7 @@ func (txtBuilderElectron *textStrBuilderElectron) fieldSpacerWithMargins(
 //       the beginning of the error message.
 //
 func (txtBuilderElectron *textStrBuilderElectron) lineBlank(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	numOfBlankLines int,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -265,15 +256,6 @@ func (txtBuilderElectron *textStrBuilderElectron) lineBlank(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 

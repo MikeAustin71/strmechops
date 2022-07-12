@@ -3315,10 +3315,10 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   *strings.Builder
-//    - A pointer to an instance of strings.Builder. The line of
-//      text produced by the current instance of
-//      TextFieldSpecFiller and writes that text to 'sBuilder'.
+//  sBuilder                   strings.Builder
+//    - An instance of strings.Builder. The line of text produced
+//      by the current instance of TextFieldSpecFiller is written
+//      to 'sBuilder'.
 //
 //
 //  errorPrefix                interface{}
@@ -3383,7 +3383,7 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //       the beginning of the error message.
 //
 func (txtFillerField *TextFieldSpecFiller) TextBuilder(
-	sBuilder *strings.Builder,
+	sBuilder strings.Builder,
 	errorPrefix interface{}) error {
 
 	if txtFillerField.lock == nil {
@@ -3404,15 +3404,6 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if sBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'sBuilder' (strings.Builder)\n"+
-			"is invalid! 'sBuilder' is a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 

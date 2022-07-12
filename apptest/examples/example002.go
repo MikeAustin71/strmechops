@@ -104,7 +104,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	fmtrs = append(fmtrs, txtFmt)
 
 	err := txtBuilder.BuildTextFormatters(
-		&strBuilder,
+		strBuilder,
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -307,7 +307,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	fmtrs = append(fmtrs, txtFmt)
 
 	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+		strBuilder,
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))

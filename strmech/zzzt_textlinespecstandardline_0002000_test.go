@@ -2157,7 +2157,7 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 	sb0 := strings.Builder{}
 
 	_ = stdLine01.TextBuilder(
-		&sb0,
+		sb0,
 		ePrefix.XCpy(
 			"stdLine01"))
 
@@ -2185,7 +2185,7 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 	sb := strings.Builder{}
 
 	err = stdLine02.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy(
 			""))
 
@@ -2215,9 +2215,7 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	var stdLine03 TextLineSpecStandardLine
-
-	stdLine03,
+	_,
 		err = createTestTextLineSpecStandardLine01(
 		ePrefix.XCpy(
 			"stdLine03"))
@@ -2225,23 +2223,6 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
-		return
-	}
-
-	err = stdLine03.TextBuilder(
-		nil,
-		ePrefix.XCpy(
-			"stdLine03 - sb is nil"))
-
-	if err == nil {
-
-		t.Errorf("%v - ERROR\n"+
-			"Test #2"+
-			"Expected an error return from stdLine03.TextBuilder()\n"+
-			"because input parameter 'sBuilder' is 'nil' an invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
 		return
 	}
 
@@ -2261,7 +2242,7 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 	}
 
 	err = stdLine04.TextBuilder(
-		&sb2,
+		sb2,
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {

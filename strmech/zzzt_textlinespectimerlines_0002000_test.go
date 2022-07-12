@@ -3556,7 +3556,7 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 	sb0 := strings.Builder{}
 
 	err = timerLines02.TextBuilder(
-		&sb0,
+		sb0,
 		ePrefix.XCpy(
 			"timerLines02"))
 
@@ -3587,7 +3587,7 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 	sb0.Reset()
 
 	err = timerLines03.TextBuilder(
-		&sb0,
+		sb0,
 		ePrefix.XCpy(
 			"timerLines03"))
 
@@ -3629,7 +3629,7 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 	sb0.Reset()
 
 	err = timerLines04.TextBuilder(
-		&sb0,
+		sb0,
 		StrMech{})
 
 	if err == nil {
@@ -3643,10 +3643,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	var timerLines05 *TextLineSpecTimerLines
-
 	_,
-		timerLines05,
+		_,
 		err = createTestTextLineSpecTimerLines02(
 		ePrefix.XCpy(
 			"timerLines05"))
@@ -3654,22 +3652,6 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
-		return
-	}
-
-	err = timerLines05.TextBuilder(
-		nil,
-		ePrefix.XCpy(
-			"timerLines05"))
-
-	if err == nil {
-
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected an error return from timerLines05.TextBuilder()\n"+
-			"because input parameter 'sBuilder' is invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!!\n",
-			ePrefix.String())
-
 		return
 	}
 

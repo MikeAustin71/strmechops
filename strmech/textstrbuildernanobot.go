@@ -54,10 +54,10 @@ func (txtBuilderNanobot textStrBuilderNanobot) ptr() *textStrBuilderNanobot {
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       string of text characters created by this method will be
-//       written to this instance of strings.Builder.
+//  strBuilder                 strings.Builder
+//     - An instance of strings.Builder. A formatted string of
+//       text characters created by this method will be written to
+//       this instance of strings.Builder.
 //
 //
 //  leftMarginStr              string
@@ -204,7 +204,7 @@ func (txtBuilderNanobot textStrBuilderNanobot) ptr() *textStrBuilderNanobot {
 //       the beginning of the error message.
 //
 func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
-	strBuilder *strings.Builder,
+	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -233,15 +233,6 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 

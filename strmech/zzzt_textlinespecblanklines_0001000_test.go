@@ -4572,7 +4572,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000100(t *testing.T) {
 	sb := strings.Builder{}
 
 	err = txtBlankLinesOne.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy("txtBlankLinesOne->sb"))
 
 	if err != nil {
@@ -4621,7 +4621,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 	sb := strings.Builder{}
 
 	err := txtBlankLinesOne.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy("empty txtBlankLinesOne->sb"))
 
 	if err == nil {
@@ -4668,21 +4668,6 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = txtBlankLinesTwo.TextBuilder(
-		nil,
-		ePrefix.XCpy("txtBlankLinesTwo->nil sb"))
-
-	if err == nil {
-		t.Errorf("%v\n"+
-			"Error:\n"+
-			"Expected error return from txtBlankLinesTwo.TextBuilder()\n"+
-			"because strings.Builder pointer is 'nil'.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
 	txtBlankLinesThree := TextLineSpecBlankLines{}
 
 	err = txtBlankLinesThree.CopyIn(
@@ -4706,7 +4691,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 	}
 
 	err = txtBlankLinesThree.TextBuilder(
-		&sb,
+		sb,
 		ePrefix.XCpy("valid txtBlankLinesThree->sb"))
 
 	if err != nil {
@@ -4742,7 +4727,7 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 	}
 
 	err = txtBlankLinesThree.TextBuilder(
-		&sb,
+		sb,
 		StrMech{})
 
 	if err == nil {

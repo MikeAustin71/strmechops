@@ -3424,8 +3424,8 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 //
 //  sBuilder                   *strings.Builder
 //    - A pointer to an instance of strings.Builder. The line of
-//      text produced by the current instance of
-//      TextFieldSpecLabel and writes that text to 'sBuilder'.
+//      text produced by the current instance of TextFieldSpecLabel
+//      is written to 'sBuilder'.
 //
 //
 //  errorPrefix                interface{}
@@ -3490,7 +3490,7 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 //       the beginning of the error message.
 //
 func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
-	sBuilder *strings.Builder,
+	sBuilder strings.Builder,
 	errorPrefix interface{}) error {
 
 	if txtFieldLabel.lock == nil {
@@ -3511,15 +3511,6 @@ func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if sBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'sBuilder' (strings.Builder)\n"+
-			"is invalid! 'sBuilder' is a 'nil' pointer.\n",
-			ePrefix.String())
-
 		return err
 	}
 

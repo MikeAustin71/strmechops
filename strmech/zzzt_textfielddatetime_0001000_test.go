@@ -4009,26 +4009,10 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		"TestTextFieldSpecDateTime_TextBuilder_000100()",
 		"")
 
-	txtFieldDateTimeOne := TextFieldSpecDateTime{}
-
-	err :=
-		txtFieldDateTimeOne.TextBuilder(
-			nil,
-			ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtFieldDateTimeOne.SetFieldLength()\n"+
-			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
 	timeZoneName := "America/Chicago"
 
 	var tzLocPtr *time.Location
+	var err error
 
 	tzLocPtr, err = time.LoadLocation(timeZoneName)
 
@@ -4090,7 +4074,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldDateTimeTwo.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 
@@ -4132,7 +4116,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldDateTimeTwo.TextBuilder(
-			&sb,
+			sb,
 			StrMech{})
 
 	if err == nil {
@@ -4148,9 +4132,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	var txtFieldDateTimeThree TextFieldSpecDateTime
-
-	txtFieldDateTimeThree,
+	_,
 		err = TextFieldSpecDateTime{}.NewDateTimeField(
 		dateTime,
 		fieldLen,
@@ -4164,23 +4146,6 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 			"Error:\n'%v'\n",
 			ePrefix.String(),
 			err.Error())
-
-		return
-	}
-
-	err =
-		txtFieldDateTimeThree.TextBuilder(
-			nil,
-			ePrefix.XCpy(
-				"txtFieldDateTimeThree"))
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from txtFieldDateTimeTwo{}."+
-			"TextBuilder()\n"+
-			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
 
 		return
 	}
@@ -4210,7 +4175,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	err =
 		txtFieldDateTimeFour.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"txtFieldDateTimeFour-sb"))
 
@@ -4333,7 +4298,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000200(t *testing.T) {
 
 	err =
 		txtFieldDateTimeTwo.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 

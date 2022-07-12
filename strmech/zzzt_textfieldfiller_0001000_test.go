@@ -10444,27 +10444,13 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	fillerTxtFieldOne := TextFieldSpecFiller{}
 
-	err :=
-		fillerTxtFieldOne.TextBuilder(
-			nil,
-			ePrefix)
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from TextFieldSpecFiller."+
-			"TextBuilder()\n"+
-			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
-
-		return
-	}
-
 	fillerChars := "-"
 	fillerRepeatCnt := 5
 
 	expectedFormattedText :=
 		strings.Repeat(fillerChars, fillerRepeatCnt)
+
+	var err error
 
 	fillerTxtFieldOne,
 		err = TextFieldSpecFiller{}.NewTextFiller(
@@ -10492,7 +10478,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	err =
 		fillerTxtFieldOne.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"fillerTxtFieldOne->sb"))
 
@@ -10536,7 +10522,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	err =
 		fillerTxtFieldOne.TextBuilder(
-			&sb,
+			sb,
 			StrMech{})
 
 	if err == nil {
@@ -10550,9 +10536,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	var fillerTxtFieldTwo TextFieldSpecFiller
-
-	fillerTxtFieldTwo,
+	_,
 		err = TextFieldSpecFiller{}.NewTextFiller(
 		fillerChars,
 		fillerRepeatCnt,
@@ -10565,23 +10549,6 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 			"Error:\n'%v'\n",
 			ePrefix.String(),
 			err.Error())
-
-		return
-	}
-
-	err =
-		fillerTxtFieldTwo.TextBuilder(
-			nil,
-			ePrefix.XCpy(
-				"fillerTxtFieldTwo"))
-
-	if err == nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected an error return from fillerTxtFieldTwo."+
-			"TextBuilder()\n"+
-			"because input parameter 'sBuilder' is 'nil' and invalid.\n"+
-			"HOWEVER, NO ERROR WAS RETURNED!\n",
-			ePrefix.String())
 
 		return
 	}
@@ -10605,7 +10572,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	err =
 		fillerTxtFieldThree.TextBuilder(
-			&sb,
+			sb,
 			StrMech{})
 
 	if err == nil {
@@ -10626,7 +10593,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	err =
 		fillerTxtFieldThree.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"fillerTxtFieldThree is invalid!"))
 
@@ -10660,7 +10627,7 @@ func TestTextFieldSpecFiller_TextBuilder_000100(t *testing.T) {
 
 	err =
 		fillerTxtFieldFour.TextBuilder(
-			&sb,
+			sb,
 			ePrefix.XCpy(
 				"fillerTxtFieldFour->sb"))
 
