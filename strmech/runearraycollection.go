@@ -16,6 +16,184 @@ type RuneArrayCollection struct {
 	lock *sync.Mutex
 }
 
+// AddCollection - Receives an array of RuneArrayDto objects and
+// adds them to the collection maintained by the current instance
+// of RuneArrayCollection.
+//
+// Input parameter 'runeArrayDtoCol' consists of an array of
+// RuneArrayDto objects. Deep copies of these objects will be used
+// to populated the new Rune Array Collection.
+//
+// If any member of the RuneArrayDto array, 'runeArrayDtoCol', is
+// judged to be invalid, an error will be returned.
+//
+// Valid RuneArrayDto array members must satisfy two criteria in
+// order to be classified as 'valid'.
+//
+//   (1) The RuneArrayDto internal Character Array must have a
+//       length greater than zero.
+//
+//   (2) The Character Search Type associated with each
+//       RuneArrayDto must be valid.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  runeArrayDtoCol            []RuneArrayDto
+//     - An array of RuneArrayDto objects which be used to replace
+//       the existing Rune Array Dto Collection maintained by the
+//       current instance of RuneArrayCollection.
+//
+//       Deep copies of each element in parameter 'runeArrayDtoCol'
+//       will be used to populate the new Rune Array Dto Collection
+//       contained in the current instance of RuneArrayCollection.
+//
+//       If this parameter is submitted as a 'nil' or zero length
+//       array, an error will be returned.
+//
+//       If any member element of this array is classified as
+//       invalid, an error will be returned.
+//
+//       Valid RuneArrayDto array members must satisfy two criteria
+//       in order to be classified as 'valid'.
+//
+//       (1) The RuneArrayDto internal Character Array must have a
+//           length greater than zero.
+//
+//       (2) The Character Search Type associated with each
+//           RuneArrayDto must be valid.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (runeArrayCol *RuneArrayCollection) AddCollection(
+	runeArrayDtoCol []RuneArrayDto,
+	errorPrefix interface{}) (
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"AddCollection()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenIncomingRuneArray := len(runeArrayDtoCol)
+
+	if lenIncomingRuneArray == 0 {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"Input parameter 'runeArrayDtoCol' is EMPTY!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	for i := 0; i < lenIncomingRuneArray; i++ {
+
+		err = runeArrayDtoCol[i].IsValidCharacterArrayError(
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"runeArrayDtoCol[%v] Character Array Error!",
+					i)))
+
+		if err != nil {
+			return err
+		}
+
+		err = runeArrayDtoCol[i].IsValidCharacterSearchTypeError(
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"runeArrayDtoCol[%v] Character Serach Type Error!",
+					i)))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	runeArrayCol.runeArrayDtoCol = append(
+		runeArrayCol.runeArrayDtoCol,
+		runeArrayDtoCol...)
+
+	return err
+}
+
 // AddLatinAlphabetEnglishDto - Adds a RuneArrayDto to the Rune
 // Array Collection. This RuneArrayDto is populated with the Latin
 // Alphabet (English Version). The total number of characters
