@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
+	"time"
 )
 
 // numberStrKernelNanobot - Provides helper methods for type
@@ -337,6 +339,368 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 		numStrKernel.isNonZeroValue
 
 	return deepCopyNumStrKernel, err
+}
+
+// getParameterTextListing - Returns formatted text output
+// listing the member variable names and corresponding values
+// contained in the 'numStrKernel' instance of NumberStrKernel.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  numStrKernel               *NumberStrKernel
+//     - A pointer to an instance of NumberStrKernel instance.
+//       Formatted text output will be generated listing the member
+//       variable names and their corresponding values. The
+//       formatted text can then be used for screen displays, file
+//       output or printing.
+//
+//       No data validation is performed on this instance of
+//       CharSearchDecimalSeparatorResultsDto.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for input parameter
+//       'numStrKernel' . This formatted text can them be used for
+//       screen displays, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
+	numStrKernel *NumberStrKernel,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strings.Builder,
+	error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(1024)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"numberStrKernelNanobot."+
+			"getParameterTextListing()",
+		"")
+
+	if err != nil {
+
+		return strBuilder, err
+
+	}
+
+	if numStrKernel == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	// Total available Length of Output Line
+	const maxFieldLen = 70
+
+	// Max Label Field Length = 38
+	const maxLabelFieldLen = 38
+
+	txtBuilder := TextStrBuilder{}
+
+	// Leading Title Marquee
+	var fmtrs []TextFormatterDto
+
+	// Blank Line
+	txtFmt := TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Top
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title Line 1
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "NumberStrKernel"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title Line 2
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "Parameter Listing"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title Line  3 Date/Time
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.DateTime()
+	txtFmt.DateTime.LeftMarginStr = ""
+	txtFmt.DateTime.FieldDateTime = time.Now()
+	txtFmt.DateTime.FieldLength = maxFieldLen
+	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
+	txtFmt.DateTime.FieldDateTimeFormat =
+		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
+	txtFmt.DateTime.RightMarginStr = ""
+	txtFmt.DateTime.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Trailing Blank Line
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
+
+	err = txtBuilder.BuildTextFormatters(
+		&strBuilder,
+		fmtrs,
+		ePrefix.XCpy(
+			"strBuilder<-Marquee Top"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	fmtrs = nil
+
+	// End Of Marquee
+
+	// Begin Label Parameter Pairs
+
+	colonSpace := ": "
+
+	var labelParams []TextLabelValueStrings
+
+	// Build Integer Digits
+	labelParam := TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "Integer Digits"
+
+	labelParam.ParamValue =
+		numStrKernel.GetIntegerString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "Integer Digits is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build Fractional Digits
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "Fractional Digits"
+
+	labelParam.ParamValue =
+		numStrKernel.GetIntegerString()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "Fractional Digits is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build NumericValueType
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "Numeric Value Type"
+
+	if !numStrKernel.numericValueType.XIsValid() {
+		numStrKernel.numericValueType = NumValType.None()
+	}
+
+	labelParam.ParamValue =
+		numStrKernel.numericValueType.String()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "Numeric Value Type is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build NumberSign
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "Number Sign"
+
+	if !numStrKernel.numberSign.XIsValid() {
+		numStrKernel.numberSign = NumSignVal.None()
+	}
+
+	labelParam.ParamValue =
+		numStrKernel.numericValueType.String()
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "Number Sign Type is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build Is Non Zero Value
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "Is Non Zero Value"
+
+	labelParam.ParamValue =
+		fmt.Sprintf("%v",
+			numStrKernel.IsNonZeroValue())
+
+	if len(labelParam.ParamValue) == 0 {
+		labelParam.ParamValue = "Is Non Zero Value is EMPTY!"
+	}
+
+	labelParams = append(labelParams, labelParam)
+
+	// Write Label/Parameter Values to String Builder
+	err = txtBuilder.BuildLabelsValues(
+		&strBuilder,
+		labelParams,
+		" ",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		-1,
+		TxtJustify.Left(),
+		" ",
+		"\n",
+		ePrefix.XCpy(
+			"labelParams #2"))
+
+	labelParams = nil
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	// Trailing Title Marquee
+	// Top Blank Line
+	fmtrs = nil
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 1
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Top
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title # 1
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "NumberStrKernel"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Title # 2
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Label()
+	txtFmt.Label.LeftMarginStr = ""
+	txtFmt.Label.FieldText = "End of Parameter Listing"
+	txtFmt.Label.FieldLength = maxFieldLen
+	txtFmt.Label.FieldJustify = TxtJustify.Center()
+	txtFmt.Label.RightMarginStr = ""
+	txtFmt.Label.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Filler =======
+	// Marquee Bottom
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.Filler()
+	txtFmt.Filler.LeftMarginStr = " "
+	txtFmt.Filler.FillerCharacters = "="
+	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
+	txtFmt.Filler.RightMarginStr = " "
+	txtFmt.Filler.LineTerminator = "\n"
+	fmtrs = append(fmtrs, txtFmt)
+
+	// Blank Line
+	txtFmt = TextFormatterDto{}
+	txtFmt.FormatType = TxtFieldType.BlankLine()
+	txtFmt.BlankLine.NumOfBlankLines = 2
+	fmtrs = append(fmtrs, txtFmt)
+
+	err = txtBuilder.BuildTextFormatters(
+		&strBuilder,
+		fmtrs,
+		ePrefix.XCpy(
+			"Marquee-Bottom"))
+	fmtrs = nil
+
+	return strBuilder, err
 }
 
 // ptr - Returns a pointer to a new instance of

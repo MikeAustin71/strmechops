@@ -1506,6 +1506,8 @@ func (sMech *StrMech) ExtractNumericDigits(
 // (a.k.a. characters) and returns the numeric digits extracted
 // from this array as text characters.
 //
+// Tests are located in zzzt_strmech_0003000_test.go
+//
 func (sMech *StrMech) ExtractNumberRunes(
 	rawNumStrRunes RuneArrayDto,
 	startSearchIndex int,

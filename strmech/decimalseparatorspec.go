@@ -331,65 +331,6 @@ func (decSeparatorSpec *DecimalSeparatorSpec) Empty() {
 	decSeparatorSpec.lock = nil
 }
 
-// EmptyProcessingFlags - Resets all the internal processing flags
-// to their initial or zero states.
-//
-// Internal Processing flags are used by Number String parsing
-// functions to identify a Decimal Separator Symbol or Symbols in
-// strings of numeric digits called 'Number Strings'. Number String
-// parsing functions review strings of text characters containing
-// numeric digits and convert those numeric digits to numeric
-// values.
-//
-// The DecimalSeparatorSpec type includes a series of flags which
-// are used to identify a Decimal Separator Symbol or Symbols
-// within Number Strings. Number String parsing functions use these
-// internal processing flags to record the status of a search for
-// a Decimal Separator Symbol or Symbols defined by the current
-// instance of DecimalSeparatorSpec.
-//
-// Calling this method will effectively clear all of these internal
-// processing flags and prepare the current instance of
-// DecimalSeparatorSpec for a new number string parsing operation.
-//
-// This method will only reset the internal processing flags:
-//   DecimalSeparatorSpec.foundDecimalSeparatorSymbols
-//   DecimalSeparatorSpec.foundDecimalSeparatorIndex
-//
-// This method will not alter the Decimal Separator Characters
-// configured for the current instance of DecimalSeparatorSpec.
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters
-//
-//  NONE
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  NONE
-//
-func (decSeparatorSpec *DecimalSeparatorSpec) EmptyProcessingFlags() {
-
-	if decSeparatorSpec.lock == nil {
-		decSeparatorSpec.lock = new(sync.Mutex)
-	}
-
-	decSeparatorSpec.lock.Lock()
-
-	defer decSeparatorSpec.lock.Unlock()
-
-	decSepSpecElectron := decimalSepSpecElectron{}
-
-	decSepSpecElectron.emptyProcessingFlags(
-		decSeparatorSpec)
-
-	return
-}
-
 // Equal - Receives a pointer to another instance of
 // DecimalSeparatorSpec and proceeds to compare its internal member
 // variables to those of the current DecimalSeparatorSpec instance

@@ -82,9 +82,6 @@ func (decSepSpecAtom *decimalSeparatorSpecAtom) empty(
 
 	decSepSpec.decimalSeparatorChars.Empty()
 
-	decimalSepSpecElectron{}.ptr().
-		emptyProcessingFlags(decSepSpec)
-
 	return
 }
 

@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -1632,6 +1633,40 @@ func (numStrKernel *NumberStrKernel) GetNumberSignInt(
 	}
 
 	return numStrKernel.numberSign.XArithmeticValue(), err
+}
+
+func (numStrKernel *NumberStrKernel) GetParameterTextListing(
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"NumberStrKernel."+
+			"GetNumberSignInt()",
+		"")
+
+	if err != nil {
+		return strings.Builder{}, err
+	}
+
+	return numberStrKernelNanobot{}.ptr().
+		getParameterTextListing(
+			numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
 }
 
 // IsNonZeroValue - Returns 'true' if the value of the current
