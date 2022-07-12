@@ -253,8 +253,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.NegativeNumberSymbolSearchResults.Empty()
 	searchResults.ParsingTerminatorSearchResults.Empty()
 
-	var parsingTerminationResults CharSearchResultsDto
-
 	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
 
 		targetInputParms.TargetStringCurrentSearchIndex = i
@@ -310,35 +308,35 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		// Check for Parsing Terminators
 		// All Parsing Operations Cease if Delimiter is Found
-		//if !numParsingTerminators.IsNOP() &&
-		//	targetInputParms.FoundFirstNumericDigitInNumStr {
-		//
-		//	parsingTerminationResults,
-		//		err = numParsingTerminators.SearchForTextCharacters(
-		//		targetInputParms,
-		//		ePrefix.XCpy(
-		//			"numParsingTerminators"))
-		//
-		//	if parsingTerminationResults.FoundSearchTarget {
-		//
-		//		i = parsingTerminationResults.
-		//			TargetStringLastSearchIndex
-		//
-		//		if i+1 < targetInputParms.TargetStringLength {
-		//
-		//			targetInputParms.
-		//				TargetStringNextSearchIndex = i + 1
-		//
-		//		} else {
-		//
-		//			targetInputParms.
-		//				TargetStringNextSearchIndex = -1
-		//
-		//		}
-		//
-		//		goto computeExitStats
-		//	}
-		//}
+		if !numParsingTerminators.IsNOP() &&
+			targetInputParms.FoundFirstNumericDigitInNumStr {
+
+			searchResults.ParsingTerminatorSearchResults,
+				err = numParsingTerminators.SearchForTextCharacters(
+				targetInputParms,
+				ePrefix.XCpy(
+					"numParsingTerminators"))
+
+			if searchResults.ParsingTerminatorSearchResults.FoundSearchTarget {
+
+				i = searchResults.ParsingTerminatorSearchResults.
+					TargetStringLastSearchIndex
+
+				if i+1 < targetInputParms.TargetStringLength {
+
+					targetInputParms.
+						TargetStringNextSearchIndex = i + 1
+
+				} else {
+
+					targetInputParms.
+						TargetStringNextSearchIndex = -1
+
+				}
+
+				goto computeExitStats
+			}
+		}
 
 		// Check for Negative Number Sign Symbol
 		if !searchResults.NegativeNumberSymbolSearchResults.
@@ -472,29 +470,8 @@ computeExitStats:
 		searchResults.FoundDecimalDigits = false
 		searchResults.FoundNonZeroValue = false
 
-		if requestRemainderRunesString {
-
-			if targetInputParms.TargetStringAdjustedSearchLength == 0 {
-
-				searchResults.RemainderString.CharsArray =
-					make([]rune, len(targetSearchString.
-						CharsArray))
-
-				copy(
-					searchResults.RemainderString.CharsArray,
-					targetSearchString.CharsArray)
-
-			} else {
-
-				targetInputParms.TargetStringAdjustedSearchLength--
-
-				searchResults.RemainderString.CharsArray =
-					append(
-						searchResults.RemainderString.CharsArray,
-						targetSearchString.
-							CharsArray[targetInputParms.TargetStringAdjustedSearchLength:]...)
-			}
-		}
+		searchResults.RemainderString.CharsArray =
+			targetSearchString.CharsArray[:]
 
 	}
 

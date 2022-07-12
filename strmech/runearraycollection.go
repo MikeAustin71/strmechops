@@ -22,7 +22,7 @@ type RuneArrayCollection struct {
 //
 // Input parameter 'runeArrayDtoCol' consists of an array of
 // RuneArrayDto objects. Deep copies of these objects will be used
-// to populated the new Rune Array Collection.
+// to populate the new Rune Array Collection.
 //
 // If any member of the RuneArrayDto array, 'runeArrayDtoCol', is
 // judged to be invalid, an error will be returned.
@@ -4199,7 +4199,7 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 	var dtoSearchResults CharSearchRuneArrayResultsDto
 
 	testConfigDto := CharSearchTestConfigDto{}.New()
-
+	testConfigDto.RequestFoundTestCharacters = true
 	for i := 0; i < lenRuneDtoCollection; i++ {
 
 		dtoSearchResults,
@@ -4217,6 +4217,8 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 
 		if dtoSearchResults.FoundSearchTarget {
 
+			dtoSearchResults.CollectionTestObjIndex = i
+
 			return dtoSearchResults, err
 		}
 	}
@@ -4232,7 +4234,7 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 //
 // Input parameter 'runeArrayDtoCol' consists of an array of
 // RuneArrayDto objects. Deep copies of these objects will be used
-// to populated the new Rune Array Collection.
+// to populate the new Rune Array Collection.
 //
 // If any member of the RuneArrayDto array, 'runeArrayDtoCol', is
 // judged to be invalid, an error will be returned.
