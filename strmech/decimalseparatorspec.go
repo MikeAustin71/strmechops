@@ -982,7 +982,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			targetInputParms,
 			testConfigDto,
 			ePrefix.XCpy(
-				"negNumSearchSpec-Before"))
+				"decSeparatorSpec.decimalSeparatorChars"))
 
 	if err != nil {
 		return decimalSearchResults, err

@@ -320,17 +320,16 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			if searchResults.ParsingTerminatorSearchResults.FoundSearchTarget {
 
 				i = searchResults.ParsingTerminatorSearchResults.
-					TargetStringLastSearchIndex
+					TargetStringCurrentSearchIndex
 
-				if i+1 < targetInputParms.TargetStringLength {
+				targetInputParms.TargetStringCurrentSearchIndex = i
 
-					targetInputParms.
-						TargetStringNextSearchIndex = i + 1
+				targetInputParms.TargetStringNextSearchIndex = i + 1
 
-				} else {
+				if targetInputParms.TargetStringNextSearchIndex >=
+					targetInputParms.TargetStringLength {
 
-					targetInputParms.
-						TargetStringNextSearchIndex = -1
+					targetInputParms.TargetStringNextSearchIndex = -1
 
 				}
 
@@ -375,6 +374,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 					goto computeExitStats
 				}
+
 				continue
 			}
 		}
@@ -386,7 +386,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				err = decimalSeparatorSpec.SearchForDecimalSeparator(
 				targetInputParms,
 				ePrefix.XCpy(
-					"targetInputParms"))
+					"decimalSeparatorSpec"))
 
 			if err != nil {
 
