@@ -1515,7 +1515,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 	numParsingTerminators RuneArrayCollection,
 	requestRemainderRuneString bool,
 	errorPrefix interface{}) (
-	searchResults CharSearchResultsDto,
+	searchResults CharSearchNumStrParseResultsDto,
 	numStrKernel NumberStrKernel,
 	err error) {
 

@@ -1435,6 +1435,38 @@ func (numStrKernel *NumberStrKernel) GetNumberSign(
 	return numStrKernel.numberSign, err
 }
 
+// GetNumberOfFractionalDigits - Returns the number of fractional
+// digits in the current instance of NumberStrKernel.
+//
+func (numStrKernel *NumberStrKernel) GetNumberOfFractionalDigits() int {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return len(numStrKernel.fractionalDigits.CharsArray)
+}
+
+// GetNumberOfIntegerDigits - Returns the number of integer
+// digits in the current instance of NumberStrKernel.
+//
+func (numStrKernel *NumberStrKernel) GetNumberOfIntegerDigits() int {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	return len(numStrKernel.integerDigits.CharsArray)
+}
+
 // GetNumberOfNumericDigits - Returns the number of numeric digits
 // contained in this instance of NumberStrKernel.
 //

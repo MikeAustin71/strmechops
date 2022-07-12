@@ -446,7 +446,22 @@ computeExitStats:
 
 		}
 
-		numStrKernel.RationalizeFractionalIntegerDigits()
+		if numStrKernel.GetNumberOfFractionalDigits() > 0 &&
+			numStrKernel.GetNumberOfIntegerDigits() == 0 {
+
+			// Rationalize Fractional Digits
+			err = numStrKernel.AddIntegerDigit(
+				'0',
+				ePrefix.XCpy("Add '0' int digit"))
+
+			if err != nil {
+
+				return searchResults,
+					numStrKernel,
+					err
+			}
+
+		}
 
 		if searchResults.FoundNonZeroValue == true {
 			// Value is Nonzero
