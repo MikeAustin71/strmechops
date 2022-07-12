@@ -307,12 +307,6 @@ func (decSepSpecNanobot *decimalSepSpecNanobot) copyOut(
 						"decSepSpec.decimalSeparatorChars"))
 	}
 
-	copyOfDecSepSpec.foundDecimalSeparatorSymbols =
-		decSepSpec.foundDecimalSeparatorSymbols
-
-	copyOfDecSepSpec.foundDecimalSeparatorIndex =
-		decSepSpec.foundDecimalSeparatorIndex
-
 	return copyOfDecSepSpec, err
 }
 
