@@ -544,13 +544,13 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -589,7 +589,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -620,7 +620,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -818,13 +818,13 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunes(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -863,7 +863,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunes(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -894,7 +894,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunes(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -1071,13 +1071,13 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunesDesc(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -1116,7 +1116,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunesDesc(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -1147,7 +1147,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunesDesc(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -1319,8 +1319,8 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 //       parameter configures the first of two description
 //       strings.
 //
-//       This parameter is optional and not required. Zero length
-//       strings will NOT return an error.
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
 //
 //
 //  description2               string
@@ -1331,8 +1331,8 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 //       parameter configures the second of two description
 //       strings.
 //
-//       This parameter is optional and not required. Zero length
-//       strings will NOT return an error.
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
 //
 //
 //  charSearchType             CharacterSearchType
@@ -1345,13 +1345,13 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -1390,7 +1390,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -1421,7 +1421,7 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -2374,6 +2374,570 @@ func (runeArrayCol RuneArrayCollection) New() RuneArrayCollection {
 		empty(&newRuneArrayCol)
 
 	return newRuneArrayCol
+}
+
+// NewColMemberString - Creates a new instance of
+// RuneArrayCollection which includes a single RuneArrayDto object
+// in the Rune Array Dto Collection.
+//
+// This single RuneArrayDto collection member is generated from the
+// string and character search type input parameters. Users also
+// have the option of creating tags or descriptive text for the new
+// RuneArrayDto object.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  stringChars                string
+//     - A character string used to create the new instance of
+//       RuneArrayDto which is then added to the Rune Array Dto
+//       Collection.
+//
+//       If this array is empty or has a zero length, an error will
+//       be returned.
+//
+//
+//  description1               string
+//
+//     - Users have the option of configuring a text string to
+//       describe the function or purpose of the text characters
+//       configured for the returned instance of RuneArrayDto. This
+//       parameter configures the first of two description strings.
+//
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
+//
+//
+//  description2               string
+//
+//     - Users have the option of configuring a text string to
+//       describe the function or purpose of the text characters
+//       configured for the returned instance of RuneArrayDto. This
+//       parameter configures the second of two description strings.
+//
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
+//
+//
+//  charSearchType             CharacterSearchType
+//     - An enumeration value used to specify the type target
+//       string search algorithm applied by the RuneArrayDto
+//       instance added to the Rune Array Collection.
+//
+//       If 'charSearchType' is invalid, an error will be returned.
+//
+//
+//       The Character Search Type must be set to one of the
+//       following enumeration values:
+//
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
+//
+//    Character Search Type Options
+//
+//    CharSearchType.LinearTargetStartingIndex()
+//    - Designates the search type as a Linear Target Starting
+//      Index Search Type. This means that each character in the
+//      Target Search String will be compared to each corresponding
+//      character in the Test String beginning at a specified
+//      starting index in the Target Search String.
+//
+//      The search will proceed for from left to right in Test
+//      Character Sequence.
+//
+//      If the Test Characters are NOT found in the Target Search
+//      String beginning at the designated Target String Starting
+//      Index, the search outcome will be unsuccessful and NO match
+//      will be declared.
+//
+//      A 'Match', or successful search outcome, is defined as the
+//      case where each character in the Target String matches each
+//      corresponding character in the Test String beginning at the
+//      designated Target String Starting Index.
+//
+//
+//        Example
+//                                  1         2         3
+//                 Index  0123456789012345678901234567890
+//        Target String: "Hey, Xray-4 is the call sign."
+//        Target String Starting Index: 5
+//          Test String: "Xray"
+//
+//      In this example of a Linear Target Starting Index Search, a
+//      match between the Target String and Test String will be
+//      declared, if and only if, the search begins at Target
+//      String index number 5. If the search begins at an any index
+//      other than 5, no match will be declared and the search will
+//      be classified as unsuccessful.
+//
+//      NOTE: Linear Target Starting Index is the default search
+//            type.
+//
+//
+//   CharSearchType.SingleTargetChar()
+//    - Designates the search type as a Single Target Character
+//      Search Type. This means that a single character in the
+//      Target Search String will be compared to all characters in
+//      the Test String.
+//
+//      If a single Target String character equals any character in
+//      the Test String, a 'Match' or successful search outcome
+//      will be declared.
+//
+//      The search will proceed from left to right in the Target
+//      String. Each Target String Character will be compared to
+//      all characters in the Test String looking for the first
+//      matching Test String Character. The search will terminate
+//      when a matching character is first identified or when the
+//      end of the Target String is encountered.
+//
+//
+//        Example
+//                                   1         2         3
+//                  Index  0123456789012345678901234567890
+//         Target String: "Hey, Xray-4 is the call sign."
+//         Target String Starting Index: 0
+//           Test String: "ZFXyURJK"
+//
+//      In this example of a Single Target Character Search, the
+//      search will terminate at Target String index numbers 5
+//      because it is the first Target String index to match one
+//      of the Test String Characters ('X').
+//
+//
+//   CharSearchType.LinearEndOfString()
+//    - Designates the search type as a Linear End Of String
+//      Search. With this type of search operation, the entire
+//      Target Search String will be searched from left to right
+//      for the first occurrence of the Test String.
+//
+//      The search will begin the Target String Starting Index and
+//      proceed left to right until (1) an instance of the entire
+//      Test String is located or (2) the end of the Target Search
+//      String is encountered.
+//
+//      This is a linear search, so a 'Match' requires that each
+//      character in Target Search String must correspond to a
+//      matching character in the Test String.
+//
+//           Example
+//                                      1         2         3
+//                     Index  0123456789012345678901234567890
+//            Target String: "Hey, Xray-4 is the call sign."
+//            Target String Starting Index: 0
+//              Test String: "Xray-4"
+//
+//      In this example of a Linear End of String Search, the
+//      search operation will begin comparing corresponding
+//      characters in the Target Search String and the Test String
+//      beginning at index zero. The comparison will fail at index
+//      zero, but the search algorithm will continue attempting to
+//      find the Test String at indexes 1,2, 3 & 4. The Test String
+//      will be found beginning at index number 5 and the search
+//      algorithm will terminate at that point with a successful
+//      outcome or 'Match' result.
+//
+//
+//   For more information see the source code comments for type,
+//   CharacterSearchType.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+func (runeArrayCol RuneArrayCollection) NewColMemberString(
+	stringChars string,
+	description1 string,
+	description2 string,
+	charSearchType CharacterSearchType,
+	errorPrefix interface{}) (
+	newRuneArrayCol RuneArrayCollection,
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"NewColMemberString()",
+		"")
+
+	if err != nil {
+		return newRuneArrayCol, err
+	}
+
+	var newRuneArrayDto RuneArrayDto
+
+	newRuneArrayDto,
+		err = RuneArrayDto{}.NewStringAllParams(
+		stringChars,
+		description1,
+		description2,
+		charSearchType,
+		ePrefix.XCpy(
+			"newRuneArrayDto"))
+
+	if err != nil {
+		return newRuneArrayCol, err
+	}
+
+	newRuneArrayCol.runeArrayDtoCol =
+		append(newRuneArrayCol.runeArrayDtoCol, newRuneArrayDto)
+
+	return newRuneArrayCol, err
+}
+
+// NewColMemberRunes - Creates a new instance of
+// RuneArrayCollection which includes a single RuneArrayDto object
+// in the Rune Array Dto Collection.
+//
+// This single RuneArrayDto collection member is generated from the
+// rune array and character search type passed as input parameters.
+// Users also have the option of creating tags or descriptive text
+// for the new RuneArrayDto object.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  charArray                  []rune
+//     - An array of runes used to populate a new instance of
+//       RuneArrayDto  which is then added to the Rune Array Dto
+//       Collection.
+//
+//       If this array is empty or has a zero length, an error will
+//       be returned.
+//
+//
+//  description1               string
+//
+//     - Users have the option of configuring a text string to
+//       describe the function or purpose of the text characters
+//       configured for the returned instance of RuneArrayDto. This
+//       parameter configures the first of two description strings.
+//
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
+//
+//
+//  description2               string
+//
+//     - Users have the option of configuring a text string to
+//       describe the function or purpose of the text characters
+//       configured for the returned instance of RuneArrayDto. This
+//       parameter configures the second of two description strings.
+//
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
+//
+//
+//  charSearchType             CharacterSearchType
+//     - An enumeration value used to specify the type target
+//       string search algorithm applied by the RuneArrayDto
+//       instance added to the Rune Array Collection.
+//
+//       If 'charSearchType' is invalid, an error will be returned.
+//
+//
+//       The Character Search Type must be set to one of the
+//       following enumeration values:
+//
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
+//
+//    Character Search Type Options
+//
+//    CharSearchType.LinearTargetStartingIndex()
+//    - Designates the search type as a Linear Target Starting
+//      Index Search Type. This means that each character in the
+//      Target Search String will be compared to each corresponding
+//      character in the Test String beginning at a specified
+//      starting index in the Target Search String.
+//
+//      The search will proceed for from left to right in Test
+//      Character Sequence.
+//
+//      If the Test Characters are NOT found in the Target Search
+//      String beginning at the designated Target String Starting
+//      Index, the search outcome will be unsuccessful and NO match
+//      will be declared.
+//
+//      A 'Match', or successful search outcome, is defined as the
+//      case where each character in the Target String matches each
+//      corresponding character in the Test String beginning at the
+//      designated Target String Starting Index.
+//
+//
+//        Example
+//                                  1         2         3
+//                 Index  0123456789012345678901234567890
+//        Target String: "Hey, Xray-4 is the call sign."
+//        Target String Starting Index: 5
+//          Test String: "Xray"
+//
+//      In this example of a Linear Target Starting Index Search, a
+//      match between the Target String and Test String will be
+//      declared, if and only if, the search begins at Target
+//      String index number 5. If the search begins at an any index
+//      other than 5, no match will be declared and the search will
+//      be classified as unsuccessful.
+//
+//      NOTE: Linear Target Starting Index is the default search
+//            type.
+//
+//
+//   CharSearchType.SingleTargetChar()
+//    - Designates the search type as a Single Target Character
+//      Search Type. This means that a single character in the
+//      Target Search String will be compared to all characters in
+//      the Test String.
+//
+//      If a single Target String character equals any character in
+//      the Test String, a 'Match' or successful search outcome
+//      will be declared.
+//
+//      The search will proceed from left to right in the Target
+//      String. Each Target String Character will be compared to
+//      all characters in the Test String looking for the first
+//      matching Test String Character. The search will terminate
+//      when a matching character is first identified or when the
+//      end of the Target String is encountered.
+//
+//
+//        Example
+//                                   1         2         3
+//                  Index  0123456789012345678901234567890
+//         Target String: "Hey, Xray-4 is the call sign."
+//         Target String Starting Index: 0
+//           Test String: "ZFXyURJK"
+//
+//      In this example of a Single Target Character Search, the
+//      search will terminate at Target String index numbers 5
+//      because it is the first Target String index to match one
+//      of the Test String Characters ('X').
+//
+//
+//   CharSearchType.LinearEndOfString()
+//    - Designates the search type as a Linear End Of String
+//      Search. With this type of search operation, the entire
+//      Target Search String will be searched from left to right
+//      for the first occurrence of the Test String.
+//
+//      The search will begin the Target String Starting Index and
+//      proceed left to right until (1) an instance of the entire
+//      Test String is located or (2) the end of the Target Search
+//      String is encountered.
+//
+//      This is a linear search, so a 'Match' requires that each
+//      character in Target Search String must correspond to a
+//      matching character in the Test String.
+//
+//           Example
+//                                      1         2         3
+//                     Index  0123456789012345678901234567890
+//            Target String: "Hey, Xray-4 is the call sign."
+//            Target String Starting Index: 0
+//              Test String: "Xray-4"
+//
+//      In this example of a Linear End of String Search, the
+//      search operation will begin comparing corresponding
+//      characters in the Target Search String and the Test String
+//      beginning at index zero. The comparison will fail at index
+//      zero, but the search algorithm will continue attempting to
+//      find the Test String at indexes 1,2, 3 & 4. The Test String
+//      will be found beginning at index number 5 and the search
+//      algorithm will terminate at that point with a successful
+//      outcome or 'Match' result.
+//
+//
+//   For more information see the source code comments for type,
+//   CharacterSearchType.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+func (runeArrayCol RuneArrayCollection) NewColMemberRunes(
+	charArray []rune,
+	description1 string,
+	description2 string,
+	charSearchType CharacterSearchType,
+	errorPrefix interface{}) (
+	newRuneArrayCol RuneArrayCollection,
+	err error) {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayCollection."+
+			"NewColMemberRunes()",
+		"")
+
+	if err != nil {
+		return newRuneArrayCol, err
+	}
+
+	var newRuneArrayDto RuneArrayDto
+
+	newRuneArrayDto,
+		err = RuneArrayDto{}.NewRunesAllParams(
+		charArray,
+		description1,
+		description2,
+		charSearchType,
+		ePrefix.XCpy(
+			"newRuneArrayDto"))
+
+	if err != nil {
+		return newRuneArrayCol, err
+	}
+
+	newRuneArrayCol.runeArrayDtoCol =
+		append(newRuneArrayCol.runeArrayDtoCol, newRuneArrayDto)
+
+	return newRuneArrayCol, err
 }
 
 // PeekAtFirstElement - Returns a deep copy of the first element in

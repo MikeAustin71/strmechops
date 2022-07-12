@@ -623,13 +623,13 @@ func (charsArrayDto *RuneArrayDto) EqualCharArrays(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 // Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting Index
 //      Search Type. This means that each character in the Target
 //      Search String will be compared to each corresponding
@@ -668,7 +668,7 @@ func (charsArrayDto *RuneArrayDto) EqualCharArrays(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the Target
 //      Search String will be compared to all characters in the Test
@@ -699,7 +699,7 @@ func (charsArrayDto *RuneArrayDto) EqualCharArrays(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String Search.
 //      With this type of search operation, the entire Target Search
 //      String will be searched from left to right for the
@@ -1487,13 +1487,13 @@ func (charsArrayDto RuneArrayDto) NewLatinAlphabet() RuneArrayDto {
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -1532,7 +1532,7 @@ func (charsArrayDto RuneArrayDto) NewLatinAlphabet() RuneArrayDto {
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -1563,7 +1563,7 @@ func (charsArrayDto RuneArrayDto) NewLatinAlphabet() RuneArrayDto {
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -1765,6 +1765,9 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 //       configured for the returned instance of RuneArrayDto. This
 //       parameter configures the first of two description strings.
 //
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
+//
 //
 //  description2               string
 //
@@ -1772,6 +1775,9 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 //       describe the function or purpose of the text characters
 //       configured for the returned instance of RuneArrayDto. This
 //       parameter configures the second of two description strings.
+//
+//       If this descriptive text is not required, set this
+//       parameter to an empty string.
 //
 //
 //  charSearchType             CharacterSearchType
@@ -1783,13 +1789,13 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -1828,7 +1834,7 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -1859,7 +1865,7 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -2070,13 +2076,13 @@ func (charsArrayDto RuneArrayDto) NewRunesAllParams(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -2115,7 +2121,7 @@ func (charsArrayDto RuneArrayDto) NewRunesAllParams(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -2146,7 +2152,7 @@ func (charsArrayDto RuneArrayDto) NewRunesAllParams(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -2354,13 +2360,13 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -2399,7 +2405,7 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -2430,7 +2436,7 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -2651,13 +2657,13 @@ func (charsArrayDto RuneArrayDto) NewString(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -2696,7 +2702,7 @@ func (charsArrayDto RuneArrayDto) NewString(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -2727,7 +2733,7 @@ func (charsArrayDto RuneArrayDto) NewString(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -2937,13 +2943,13 @@ func (charsArrayDto RuneArrayDto) NewStringAllParams(
 //       The Character Search Type must be set to one of the
 //       following enumeration values:
 //
-//        TextCharSearchType.LinearTargetStartingIndex()
-//        TextCharSearchType.SingleTargetChar()
-//        TextCharSearchType.LinearEndOfString()
+//        CharSearchType.LinearTargetStartingIndex()
+//        CharSearchType.SingleTargetChar()
+//        CharSearchType.LinearEndOfString()
 //
 //    Character Search Type Options
 //
-//    TextCharSearchType.LinearTargetStartingIndex()
+//    CharSearchType.LinearTargetStartingIndex()
 //    - Designates the search type as a Linear Target Starting
 //      Index Search Type. This means that each character in the
 //      Target Search String will be compared to each corresponding
@@ -2982,7 +2988,7 @@ func (charsArrayDto RuneArrayDto) NewStringAllParams(
 //            type.
 //
 //
-//   TextCharSearchType.SingleTargetChar()
+//   CharSearchType.SingleTargetChar()
 //    - Designates the search type as a Single Target Character
 //      Search Type. This means that a single character in the
 //      Target Search String will be compared to all characters in
@@ -3013,7 +3019,7 @@ func (charsArrayDto RuneArrayDto) NewStringAllParams(
 //      of the Test String Characters ('X').
 //
 //
-//   TextCharSearchType.LinearEndOfString()
+//   CharSearchType.LinearEndOfString()
 //    - Designates the search type as a Linear End Of String
 //      Search. With this type of search operation, the entire
 //      Target Search String will be searched from left to right
@@ -3236,9 +3242,9 @@ func (charsArrayDto RuneArrayDto) NewStringPtr(
 // For this method, the Character Search Type must be set to one of
 // the following enumeration values:
 //
-//  TextCharSearchType.LinearTargetStartingIndex()
-//  TextCharSearchType.SingleTargetChar()
-//  TextCharSearchType.LinearEndOfString()
+//  CharSearchType.LinearTargetStartingIndex()
+//  CharSearchType.SingleTargetChar()
+//  CharSearchType.LinearEndOfString()
 //
 //
 // ----------------------------------------------------------------
@@ -3348,10 +3354,10 @@ func (charsArrayDto RuneArrayDto) NewStringPtr(
 //           Parameters Data Transfer Object.
 //
 //          Valid CharSearch Type values are listed as follows:
-//          TextCharSearchType.None() - Invalid Value
-//          TextCharSearchType.LinearTargetStartingIndex() - Default
-//          TextCharSearchType.SingleTargetChar()
-//          TextCharSearchType.LinearEndOfString()
+//          CharSearchType.None() - Invalid Value
+//          CharSearchType.LinearTargetStartingIndex() - Default
+//          CharSearchType.SingleTargetChar()
+//          CharSearchType.LinearEndOfString()
 //       }
 //
 //
@@ -3822,16 +3828,16 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 // For this method, the Character Search Type must be set to one of
 // the following enumeration values:
 //
-//  TextCharSearchType.LinearTargetStartingIndex()
-//  TextCharSearchType.SingleTargetChar()
-//  TextCharSearchType.LinearEndOfString()
+//  CharSearchType.LinearTargetStartingIndex()
+//  CharSearchType.SingleTargetChar()
+//  CharSearchType.LinearEndOfString()
 //
 //
 // ----------------------------------------------------------------
 //
 // Character Search Type Options
 //
-//  TextCharSearchType.LinearTargetStartingIndex()
+//  CharSearchType.LinearTargetStartingIndex()
 //  - Designates the search type as a Linear Target Starting Index
 //    Search Type. This means that each character in the Target
 //    Search String will be compared to each corresponding
@@ -3870,7 +3876,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 //          type.
 //
 //
-// TextCharSearchType.SingleTargetChar()
+// CharSearchType.SingleTargetChar()
 //  - Designates the search type as a Single Target Character
 //    Search Type. This means that a single character in the Target
 //    Search String will be compared to all characters in the Test
@@ -3901,7 +3907,7 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 //    of the Test String Characters ('X').
 //
 //
-// TextCharSearchType.LinearEndOfString()
+// CharSearchType.LinearEndOfString()
 //  - Designates the search type as a Linear End Of String Search.
 //    With this type of search operation, the entire Target Search
 //    String will be searched from left to right for the
