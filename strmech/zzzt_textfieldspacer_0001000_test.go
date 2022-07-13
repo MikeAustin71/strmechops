@@ -2068,9 +2068,9 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 
 	sb := strings.Builder{}
 
-	err =
+	sb,
+		err =
 		txtFieldSpacerOne.TextBuilder(
-			sb,
 			ePrefix.XCpy(
 				"txtFieldSpacerOne->sb"))
 
@@ -2112,9 +2112,9 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	err =
+	sb,
+		err =
 		txtFieldSpacerOne.TextBuilder(
-			sb,
 			StrMech{})
 
 	if err == nil {
@@ -2162,9 +2162,9 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	err =
+	sb,
+		err =
 		txtFieldSpacerThree.TextBuilder(
-			sb,
 			StrMech{})
 
 	if err == nil {
@@ -2182,9 +2182,9 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 
 	txtFieldSpacerThree.fieldLen = -9999
 
-	err =
+	sb,
+		err =
 		txtFieldSpacerThree.TextBuilder(
-			sb,
 			ePrefix.XCpy(
 				"txtFieldSpacerThree is invalid!"))
 
@@ -2218,9 +2218,9 @@ func TestTextFieldSpecSpacer_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	err =
+	sb,
+		err =
 		txtFieldSpacerFour.TextBuilder(
-			sb,
 			ePrefix.XCpy(
 				"txtFieldSpacerFour->sb"))
 

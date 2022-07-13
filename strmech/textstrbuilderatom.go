@@ -218,14 +218,20 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 		return strBuilder, err
 	}
 
-	err = txtDateTimeField.TextBuilder(
-		strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtDateTimeField.TextBuilder(
 		ePrefix.XCpy(
 			"strBuilder<-txtDateTimeField"))
 
 	if err != nil {
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	if len(rightMarginStr) > 0 {
 		strBuilder.WriteString(rightMarginStr)
@@ -425,14 +431,20 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 		return strBuilder, err
 	}
 
-	err = txtFillerFieldSpec.TextBuilder(
-		strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtFillerFieldSpec.TextBuilder(
 		ePrefix.XCpy(
 			"strBuilder<-txtFillerFieldSpec"))
 
 	if err != nil {
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	if len(rightMarginStr) > 0 {
 		strBuilder.WriteString(leftMarginStr)
@@ -635,14 +647,20 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 		return strBuilder, err
 	}
 
-	err = txtLabelSpec.TextBuilder(
-		strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtLabelSpec.TextBuilder(
 		ePrefix.XCpy(
 			"strBuilder<-txtLabelSpec"))
 
 	if err != nil {
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	if len(rightMarginStr) > 0 {
 		strBuilder.WriteString(rightMarginStr)

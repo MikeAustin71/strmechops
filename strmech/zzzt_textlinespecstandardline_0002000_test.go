@@ -2154,10 +2154,8 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 
 	stdLine01 := TextLineSpecStandardLine{}
 
-	sb0 := strings.Builder{}
-
-	_ = stdLine01.TextBuilder(
-		sb0,
+	_,
+		_ = stdLine01.TextBuilder(
 		ePrefix.XCpy(
 			"stdLine01"))
 
@@ -2184,8 +2182,8 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 
 	sb := strings.Builder{}
 
-	err = stdLine02.TextBuilder(
-		sb,
+	sb,
+		err = stdLine02.TextBuilder(
 		ePrefix.XCpy(
 			""))
 
@@ -2228,8 +2226,6 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 
 	var stdLine04 TextLineSpecStandardLine
 
-	sb2 := strings.Builder{}
-
 	stdLine04,
 		err = createTestTextLineSpecStandardLine01(
 		ePrefix.XCpy(
@@ -2241,8 +2237,8 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	err = stdLine04.TextBuilder(
-		sb2,
+	sb,
+		err = stdLine04.TextBuilder(
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {

@@ -1741,9 +1741,8 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 }
 
 // NewRunesAllParams - Receives an array of runes and returns a new
-// instance of RuneArrayDto. This method also requires input
-// parameters for all internal member variables in the Rune Array
-// type.
+// instance of RuneArrayDto. This method requires input parameters
+// for all internal member variables in the Rune Array type.
 //
 //
 // ----------------------------------------------------------------
@@ -2613,7 +2612,7 @@ func (charsArrayDto RuneArrayDto) NewString(
 }
 
 // NewStringAllParams - Creates and returns a new instance of
-// RuneArrayDto using a string input parameter. This method also
+// RuneArrayDto using a string input parameter. This method
 // requires input parameters for all internal member variables
 // contained in the RuneArrayDto type.
 //

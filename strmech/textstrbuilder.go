@@ -3959,10 +3959,8 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 		return strBuilder, err
 	}
 
-	err = timerLinesSpec.TextBuilder(
-		strBuilder,
+	return timerLinesSpec.TextBuilder(
 		ePrefix.XCpy(
 			"strBuilder<-timerLinesSpec"))
 
-	return strBuilder, err
 }

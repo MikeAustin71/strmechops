@@ -153,7 +153,7 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) equalCollections(
 //     - A pointer to an instance of TextLineSpecLinesCollection.
 //       The Text Line Collection encapsulated by this instance
 //       will have an additional Text Line member inserted into the
-//       Collection. The Text Line object to be inserted is
+//       Collection. The Text Lines object to be inserted is
 //       specified by input parameter, 'textLine'. This Text Line
 //       will be inserted into the Text Lines Collection at the
 //       array index designated by input parameter,

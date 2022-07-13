@@ -3189,8 +3189,8 @@ func TestTextLineSpecSolidLine_TextBuilder_000100(t *testing.T) {
 
 	sb := strings.Builder{}
 
-	err = txtSolidLine01.TextBuilder(
-		sb,
+	sb,
+		err = txtSolidLine01.TextBuilder(
 		ePrefix.XCpy("txtSolidLine01->sb"))
 
 	if err != nil {
@@ -3237,8 +3237,8 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 
 	sb := strings.Builder{}
 
-	err := txtSolidLine01.TextBuilder(
-		sb,
+	sb,
+		err := txtSolidLine01.TextBuilder(
 		ePrefix.XCpy("empty txtSolidLine01->sb"))
 
 	if err == nil {
@@ -3294,8 +3294,8 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = txtSolidLine02.TextBuilder(
-		sb,
+	sb,
+		err = txtSolidLine02.TextBuilder(
 		ePrefix.XCpy("valid txtSolidLine02->sb"))
 
 	if err != nil {
@@ -3329,8 +3329,8 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = txtSolidLine02.TextBuilder(
-		sb,
+	sb,
+		err = txtSolidLine02.TextBuilder(
 		StrMech{})
 
 	if err == nil {

@@ -4571,8 +4571,8 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000100(t *testing.T) {
 
 	sb := strings.Builder{}
 
-	err = txtBlankLinesOne.TextBuilder(
-		sb,
+	sb,
+		err = txtBlankLinesOne.TextBuilder(
 		ePrefix.XCpy("txtBlankLinesOne->sb"))
 
 	if err != nil {
@@ -4619,9 +4619,10 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 	txtBlankLinesOne := TextLineSpecBlankLines{}
 
 	sb := strings.Builder{}
+	var err error
 
-	err := txtBlankLinesOne.TextBuilder(
-		sb,
+	sb,
+		err = txtBlankLinesOne.TextBuilder(
 		ePrefix.XCpy("empty txtBlankLinesOne->sb"))
 
 	if err == nil {
@@ -4690,8 +4691,8 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = txtBlankLinesThree.TextBuilder(
-		sb,
+	sb,
+		err = txtBlankLinesThree.TextBuilder(
 		ePrefix.XCpy("valid txtBlankLinesThree->sb"))
 
 	if err != nil {
@@ -4726,8 +4727,8 @@ func TestTextLineSpecBlankLines_TextLineBuilder_000200(t *testing.T) {
 		return
 	}
 
-	err = txtBlankLinesThree.TextBuilder(
-		sb,
+	sb,
+		err = txtBlankLinesThree.TextBuilder(
 		StrMech{})
 
 	if err == nil {

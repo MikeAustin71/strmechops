@@ -4070,11 +4070,13 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	sb := strings.Builder{}
+	strBuilder := strings.Builder{}
 
-	err =
+	strBuilder2 := strings.Builder{}
+
+	strBuilder2,
+		err =
 		txtFieldDateTimeTwo.TextBuilder(
-			sb,
 			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 
@@ -4088,6 +4090,10 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
 	sMech := StrMech{}
 
 	printableExpectedStr :=
@@ -4097,7 +4103,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	printableActualStr :=
 		sMech.ConvertNonPrintableChars(
-			[]rune(sb.String()),
+			[]rune(strBuilder.String()),
 			true)
 
 	if printableExpectedStr !=
@@ -4114,9 +4120,9 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	err =
+	strBuilder2,
+		err =
 		txtFieldDateTimeTwo.TextBuilder(
-			sb,
 			StrMech{})
 
 	if err == nil {
@@ -4130,7 +4136,8 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	sb.Reset()
+	strBuilder.Reset()
+	strBuilder2.Reset()
 
 	_,
 		err = TextFieldSpecDateTime{}.NewDateTimeField(
@@ -4171,11 +4178,12 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	sb.Reset()
+	strBuilder.Reset()
+	strBuilder2.Reset()
 
-	err =
+	strBuilder2,
+		err =
 		txtFieldDateTimeFour.TextBuilder(
-			sb,
 			ePrefix.XCpy(
 				"txtFieldDateTimeFour-sb"))
 
@@ -4185,7 +4193,7 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	actualFmtStr := sb.String()
+	actualFmtStr := strBuilder2.String()
 
 	if expectedFormattedText !=
 		actualFmtStr {
@@ -4294,11 +4302,9 @@ func TestTextFieldSpecDateTime_TextBuilder_000200(t *testing.T) {
 	// trigger an error.
 	txtFieldDateTimeTwo.fieldLen = -999
 
-	sb := strings.Builder{}
-
-	err =
+	_,
+		err =
 		txtFieldDateTimeTwo.TextBuilder(
-			sb,
 			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 

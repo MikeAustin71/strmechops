@@ -3555,8 +3555,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	sb0 := strings.Builder{}
 
-	err = timerLines02.TextBuilder(
-		sb0,
+	sb0,
+		err = timerLines02.TextBuilder(
 		ePrefix.XCpy(
 			"timerLines02"))
 
@@ -3586,8 +3586,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	sb0.Reset()
 
-	err = timerLines03.TextBuilder(
-		sb0,
+	sb0,
+		err = timerLines03.TextBuilder(
 		ePrefix.XCpy(
 			"timerLines03"))
 
@@ -3628,8 +3628,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	sb0.Reset()
 
-	err = timerLines04.TextBuilder(
-		sb0,
+	sb0,
+		err = timerLines04.TextBuilder(
 		StrMech{})
 
 	if err == nil {
