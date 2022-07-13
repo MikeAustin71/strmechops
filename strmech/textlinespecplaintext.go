@@ -5274,6 +5274,13 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //
 // Return Values
 //
+//  strings.Builder
+//    - If the method completes successfully, an instance of
+//      strings.Builder will be returned containing the line of
+//      formatted text produced by the current instance of
+//      TextLineSpecPlainText.
+//
+//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -5285,8 +5292,9 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //       the beginning of the error message.
 //
 func (plainTextLine *TextLineSpecPlainText) TextBuilder(
-	sBuilder strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if plainTextLine.lock == nil {
 		plainTextLine.lock = new(sync.Mutex)
@@ -5299,6 +5307,10 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -5306,7 +5318,7 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var formattedTxtStr string
@@ -5318,13 +5330,13 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 			ePrefix.XCpy("plainTextLine"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var err2 error
 
 	_,
-		err2 = sBuilder.WriteString(formattedTxtStr)
+		err2 = strBuilder.WriteString(formattedTxtStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -5334,7 +5346,7 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 			err2.Error())
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // TextLineSpecName - returns a string specifying the name

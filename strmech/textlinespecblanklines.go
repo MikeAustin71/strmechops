@@ -2985,12 +2985,6 @@ func (blkLines TextLineSpecBlankLines) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextLineSpecBlankLines will be
-//      written to 'sBuilder'.
-//
-//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -3040,6 +3034,13 @@ func (blkLines TextLineSpecBlankLines) String() string {
 //
 // Return Values
 //
+//  strings.Builder
+//    - If the method completes successfully, an instance of
+//      strings.Builder will be returned containing the line of
+//      formatted text produced by the current instance of
+//      TextLineSpecBlankLines.
+//
+//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -3051,8 +3052,9 @@ func (blkLines TextLineSpecBlankLines) String() string {
 //       the beginning of the error message.
 //
 func (blkLines *TextLineSpecBlankLines) TextBuilder(
-	sBuilder strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if blkLines.lock == nil {
 		blkLines.lock = new(sync.Mutex)
@@ -3065,6 +3067,10 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -3072,7 +3078,7 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var formattedTxtStr string
@@ -3084,13 +3090,13 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 			ePrefix.XCpy("blkLines"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var err2 error
 
 	_,
-		err2 = sBuilder.WriteString(formattedTxtStr)
+		err2 = strBuilder.WriteString(formattedTxtStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -3100,7 +3106,7 @@ func (blkLines *TextLineSpecBlankLines) TextBuilder(
 			err2.Error())
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // TextLineSpecName - returns Text Line Specification Name.

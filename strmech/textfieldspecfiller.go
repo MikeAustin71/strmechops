@@ -3315,12 +3315,6 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextFieldSpecFiller is written
-//      to 'sBuilder'.
-//
-//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -3372,6 +3366,13 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //
 // Return Values
 //
+//  strings.Builder
+//    - If the method completes successfully, an instance of
+//      strings.Builder will be returned containing the line of
+//      formatted text produced by the current instance of
+//      TextFieldSpecFiller.
+//
+//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -3383,8 +3384,9 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //       the beginning of the error message.
 //
 func (txtFillerField *TextFieldSpecFiller) TextBuilder(
-	sBuilder strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if txtFillerField.lock == nil {
 		txtFillerField.lock = new(sync.Mutex)
@@ -3397,6 +3399,10 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -3404,7 +3410,7 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var formattedTxtStr string
@@ -3417,13 +3423,13 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 				"txtFillerField->formattedTxtStr"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var err2 error
 
 	_,
-		err2 = sBuilder.WriteString(formattedTxtStr)
+		err2 = strBuilder.WriteString(formattedTxtStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -3433,7 +3439,7 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 			err2.Error())
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // TextFieldName - returns a string specifying the name

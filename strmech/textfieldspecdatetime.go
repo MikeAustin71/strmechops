@@ -3680,12 +3680,6 @@ func (txtDateTimeField TextFieldSpecDateTime) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextFieldSpecDateTime is written
-//      to 'sBuilder'.
-//
-//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -3735,6 +3729,13 @@ func (txtDateTimeField TextFieldSpecDateTime) String() string {
 //
 // Return Values
 //
+//  strings.Builder
+//    - If the method completes successfully, an instance of
+//      strings.Builder will be returned containing the line of
+//      formatted text produced by the current instance of
+//      TextFieldSpecDateTime.
+//
+//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -3746,8 +3747,9 @@ func (txtDateTimeField TextFieldSpecDateTime) String() string {
 //       the beginning of the error message.
 //
 func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
-	sBuilder strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if txtDateTimeField.lock == nil {
 		txtDateTimeField.lock = new(sync.Mutex)
@@ -3759,6 +3761,8 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	strBuilder := strings.Builder{}
+	strBuilder.Grow(512)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3767,7 +3771,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var formattedTxtStr string
@@ -3780,13 +3784,13 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
 				"txtDateTimeField"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var err2 error
 
 	_,
-		err2 = sBuilder.WriteString(formattedTxtStr)
+		err2 = strBuilder.WriteString(formattedTxtStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -3796,7 +3800,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) TextBuilder(
 			err2.Error())
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // TextFieldName - returns a string specifying the name of the Text

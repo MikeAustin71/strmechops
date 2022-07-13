@@ -1467,13 +1467,6 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //
 // Input Parameters
 //
-//
-//  strBuilder                 *strings.Builder
-//     - An instance of strings.Builder. Formatted Text Lines
-//       created from the TextFieldDto input objects will be
-//       written to this instance of strings.Builder.
-//
-//
 //  dtos                       []TextFieldDto
 //  - An array of TextFieldDto objects. The Text Field Data
 //    Transfer object is a structure used to transmit Text Field
@@ -1652,6 +1645,12 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //
 // Return Values
 //
+//  strings.Builder
+//    - If the method completes successfully, an instance of
+//      strings.Builder will be returned containing formatted text
+//      lines created from the TextFieldDto input objects.
+//
+//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -1663,9 +1662,10 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //       the beginning of the error message.
 //
 func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
-	strBuilder strings.Builder,
 	dtos []TextFieldDto,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -1678,6 +1678,10 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1686,16 +1690,21 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var outputStr string
 
 	newStdLine := TextLineSpecStandardLine{}.New()
 
+	var strBuilder2 strings.Builder
+
+	strBuilder2.Grow(512)
+
 	for idx, item := range dtos {
 
 		if !item.FieldType.XIsValid() {
+
 			err = fmt.Errorf("%v\n"+
 				"Error: dtos[%v].FieldType is invalid!\n"+
 				"FieldType String Value  = %v\n"+
@@ -1705,7 +1714,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 				item.FieldType.String(),
 				item.FieldType.XValueInt())
 
-			return err
+			return strBuilder, err
 		}
 
 		// Process Blank Lines First!
@@ -1724,17 +1733,21 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 					ePrefix)
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
-			err = blankLine.TextBuilder(
-				strBuilder,
+			strBuilder2,
+				err = blankLine.TextBuilder(
 				ePrefix.XCpy(
 					"strBuilder<-blankLine"))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
 
 			continue
 		}
@@ -1752,7 +1765,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 		}
 
@@ -1769,7 +1782,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else if item.FieldType == TxtFieldType.DateTime() {
@@ -1792,7 +1805,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else if item.FieldType == TxtFieldType.Filler() {
@@ -1811,7 +1824,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else {
@@ -1826,7 +1839,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		}
@@ -1844,7 +1857,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 		}
 
@@ -1859,7 +1872,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 			newStdLine.TurnAutoLineTerminationOn()
@@ -1877,7 +1890,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 				"outputStr<-newStdLine"))
 
 		if err != nil {
-			return err
+			return strBuilder, err
 		}
 
 		strBuilder.WriteString(outputStr)
@@ -1885,7 +1898,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 		newStdLine = TextLineSpecStandardLine{}.New()
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // BuildTextLabelParameterLines - Generates multiple Standard Lines
@@ -8263,12 +8276,6 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextLineSpecPlainText will be
-//      written to 'sBuilder'.
-//
-//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -8320,6 +8327,13 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //
 // Return Values
 //
+//  strings.Builder
+//    - If the method completes successfully, an instance of
+//      strings.Builder will be returned containing the line of
+//      formatted text produced by the current instance of
+//      TextLineSpecStandardLine.
+//
+//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -8331,8 +8345,9 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //       the beginning of the error message.
 //
 func (stdLine *TextLineSpecStandardLine) TextBuilder(
-	sBuilder strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -8345,6 +8360,10 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -8352,7 +8371,7 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var formattedTxtStr string
@@ -8366,13 +8385,13 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 			ePrefix.XCpy("stdLine"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var err2 error
 
 	_,
-		err2 = sBuilder.WriteString(formattedTxtStr)
+		err2 = strBuilder.WriteString(formattedTxtStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -8382,7 +8401,7 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 			err2.Error())
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // TextLineSpecName - returns a string specifying the name
