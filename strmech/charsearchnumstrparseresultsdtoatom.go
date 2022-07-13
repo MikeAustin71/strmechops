@@ -66,6 +66,8 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 
 	numStrParseResults.FoundDecimalSeparatorSymbols = false
 
+	numStrParseResults.FoundIntegerDigits = false
+
 	numStrParseResults.FoundDecimalDigits = false
 
 	numStrParseResults.NumSignValue = NumSignVal.None()
@@ -169,6 +171,12 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 
 	if numStrParseResults1.FoundDecimalDigits !=
 		numStrParseResults2.FoundDecimalDigits {
+
+		return false
+	}
+
+	if numStrParseResults1.FoundIntegerDigits !=
+		numStrParseResults2.FoundIntegerDigits {
 
 		return false
 	}

@@ -260,10 +260,12 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		if targetSearchString.CharsArray[i] >= '0' &&
 			targetSearchString.CharsArray[i] <= '9' {
 
+			searchResults.FoundNumericDigits = true
 			targetInputParms.FoundFirstNumericDigitInNumStr = true
 
 			if targetSearchString.CharsArray[i] > '0' {
 
+				searchResults.FoundNonZeroValue = true
 				targetInputParms.FoundNonZeroValue = true
 
 				if searchResults.NumSignValue == NumSignVal.Zero() {
@@ -287,6 +289,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 						err
 				}
 
+				searchResults.FoundIntegerDigits = true
+
 			} else {
 
 				err = numStrKernel.AddFractionalDigit(
@@ -301,6 +305,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 						numStrKernel,
 						err
 				}
+
+				searchResults.FoundDecimalDigits = true
 			}
 
 			continue
@@ -478,6 +484,16 @@ computeExitStats:
 					numStrKernel,
 					err
 			}
+
+		}
+
+		if searchResults.FoundDecimalDigits {
+
+			searchResults.NumValueType = NumValType.FloatingPoint()
+
+		} else {
+
+			searchResults.NumValueType = NumValType.Integer()
 
 		}
 

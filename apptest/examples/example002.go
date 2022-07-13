@@ -138,7 +138,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	strBuilder.Reset()
 
-	numberStr := " 123456 "
+	numberStr := " 123456.789 "
 
 	var searchResults strmech.CharSearchNumStrParseResultsDto
 	var numStrKernel strmech.NumberStrKernel
@@ -215,7 +215,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	strBuilder.Reset()
 
-	strBuilder,
+	strBuilder2,
 		err = searchResults.GetParameterTextListing(
 		false,
 		ePrefix.XCpy("searchResults"))
@@ -233,9 +233,13 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
-	fmt.Printf(strBuilder.String() + "\n")
+	strBuilder.WriteString(strBuilder2.String())
+	strBuilder2.Reset()
 
-	strBuilder,
+	fmt.Printf(strBuilder.String() + "\n")
+	strBuilder.Reset()
+
+	strBuilder2,
 		err = numStrKernel.GetParameterTextListing(
 		ePrefix.XCpy(
 			"numStrKernel"))
@@ -253,7 +257,11 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
+	strBuilder.WriteString(strBuilder2.String())
+	strBuilder2.Reset()
+
 	fmt.Printf(strBuilder.String() + "\n")
+	strBuilder.Reset()
 
 	// Trailing Title Marquee
 	// Top Blank Line
@@ -325,6 +333,8 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	strBuilder2.Reset()
 
 	fmt.Printf(strBuilder.String() + "\n")
+
+	strBuilder.Reset()
 
 	return
 }

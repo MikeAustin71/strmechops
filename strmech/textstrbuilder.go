@@ -347,6 +347,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 
 	txtBuilderAtom := textStrBuilderAtom{}
 	var strBuilder2 strings.Builder
+	strBuilder2.Grow(256)
 
 	for idx, item := range paramLabelValues {
 
@@ -369,7 +370,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 		strBuilder.WriteString(strBuilder2.String())
 		strBuilder2.Reset()
 
-		strBuilder,
+		strBuilder2,
 			err = txtBuilderAtom.fieldLabelWithMargins(
 			"",
 			item.ParamValue,

@@ -149,6 +149,9 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 	destinationNumStrParseResults.FoundDecimalSeparatorSymbols =
 		sourceNumStrParseResults.FoundDecimalSeparatorSymbols
 
+	destinationNumStrParseResults.FoundIntegerDigits =
+		sourceNumStrParseResults.FoundIntegerDigits
+
 	destinationNumStrParseResults.FoundDecimalDigits =
 		sourceNumStrParseResults.FoundDecimalDigits
 
@@ -315,6 +318,9 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 
 	deepCopyNumStrParseResults.FoundDecimalSeparatorSymbols =
 		numStrParseResults.FoundDecimalSeparatorSymbols
+
+	deepCopyNumStrParseResults.FoundIntegerDigits =
+		numStrParseResults.FoundIntegerDigits
 
 	deepCopyNumStrParseResults.FoundDecimalDigits =
 		numStrParseResults.FoundDecimalDigits
@@ -618,19 +624,125 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	labelParams = append(labelParams, labelParam)
 
-	// Build SearchResultsFunctionChain
-	labelParam = TextLabelValueStrings{}
+	strBuilder2.Reset()
 
-	labelParam.ParamLabel = "SearchResultsFunctionChain"
+	// Write Label/Parameter Values to String Builder
+	strBuilder2,
+		err = txtBuilder.BuildLabelsValues(
+		labelParams,
+		" ",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		-1,
+		TxtJustify.Left(),
+		" ",
+		"\n",
+		ePrefix.XCpy(
+			"labelParams #2"))
 
-	labelParam.ParamValue =
-		numStrParseResults.SearchResultsFunctionChain
+	strBuilder.WriteString(strBuilder2.String())
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsFunctionChain is EMPTY!"
+	strBuilder2.Reset()
+
+	labelParams = nil
+
+	if err != nil {
+
+		return strBuilder, err
 	}
 
-	labelParams = append(labelParams, labelParam)
+	// Build SearchResultsFunctionChain
+
+	strBuilder2.Reset()
+
+	strBuilder2,
+		err = txtBuilder.LineBlank(
+		2,
+		ePrefix.XCpy(
+			"Blank Line Before SearchResultsFunctionChain"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	strBuilder2,
+		err = txtBuilder.FieldsSingleLabel(
+		" ",
+		"SearchResultsFunctionChain",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		"\n",
+		ePrefix.XCpy(
+			"SearchResultsFunctionChain Label"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	strParam := numStrParseResults.SearchResultsFunctionChain
+	//
+	//eolCount := strings.Count(strParam, "\n")
+	//
+	//strBuilder.WriteString(
+	//	fmt.Sprintf("The number of new lines in\n"+
+	//		"SearchResultsFunctionChain = %v\n\n",
+	//		eolCount))
+	// Count was 3
+
+	spacer := strings.Repeat(" ", 16)
+
+	strParam = strings.Replace(
+		strParam,
+		"\n",
+		"\n"+spacer,
+		-1)
+
+	strBuilder2,
+		err = txtBuilder.FieldsSingleLabel(
+		spacer,
+		strParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		"\n",
+		ePrefix.XCpy(
+			"SearchResultsFunctionChain Param Value"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	strBuilder2,
+		err = txtBuilder.LineBlank(
+		2,
+		ePrefix.XCpy(
+			"Blank Line After SearchResultsFunctionChain"))
+
+	if err != nil {
+
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	// Build FoundNumericDigits
 	labelParam = TextLabelValueStrings{}
@@ -649,6 +761,16 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	labelParam.ParamValue = fmt.Sprintf("%v",
 		numStrParseResults.FoundDecimalSeparatorSymbols)
+
+	labelParams = append(labelParams, labelParam)
+
+	// Build FoundIntegerDigits
+	labelParam = TextLabelValueStrings{}
+
+	labelParam.ParamLabel = "FoundIntegerDigits"
+
+	labelParam.ParamValue = fmt.Sprintf("%v",
+		numStrParseResults.FoundIntegerDigits)
 
 	labelParams = append(labelParams, labelParam)
 
@@ -709,6 +831,8 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		labelParams = append(labelParams, labelParam)
 
 	}
+
+	strBuilder2.Reset()
 
 	// Write Label/Parameter Values to String Builder
 	strBuilder2,

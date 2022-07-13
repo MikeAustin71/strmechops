@@ -103,6 +103,12 @@ type CharSearchNumStrParseResultsDto struct {
 	// Decimal Separator Symbol characters have been
 	// identified in the 'Target String'.
 
+	FoundIntegerDigits bool
+	// When set to 'true', this signals that one or more
+	// integer digits ('0' through '9' inclusive) were
+	// located in the Target String to the left of the
+	// Decimal Separator Symbol (a.k.a. Decimal Point).
+
 	FoundDecimalDigits bool
 	// When set to 'true', this signals that one or more
 	// numeric digit characters ('0' through '9' inclusive)
