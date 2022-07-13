@@ -5958,23 +5958,18 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   strings.Builder
-//    - An instance of strings.Builder. The line of text produced
-//      by the current instance of TextLineSpecTimerLines and writes
-//      that text to 'sBuilder'.
-//
-//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
+//
 //
 //       1. nil - A nil value is valid and generates an empty
 //                collection of error prefix and error context
@@ -5985,16 +5980,16 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -6006,12 +6001,20 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Return Values
+//
+//  strings.Builder
+//    - If this method completes successfully, an instance of
+//      strings.Builder will be returned containing the line of
+//      text produced by the current instance of
+//      TextLineSpecTimerLines.
+//
 //
 //  error
 //     - If the method completes successfully and no errors are
@@ -6024,8 +6027,9 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 //       the beginning of the error message.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
-	sBuilder strings.Builder,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -6038,6 +6042,10 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(512)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -6045,7 +6053,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var formattedTxtStr string
@@ -6059,13 +6067,13 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 			ePrefix)
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var err2 error
 
 	_,
-		err2 = sBuilder.WriteString(formattedTxtStr)
+		err2 = strBuilder.WriteString(formattedTxtStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
@@ -6075,7 +6083,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 			err2.Error())
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // TextLineSpecName - returns a string specifying the name

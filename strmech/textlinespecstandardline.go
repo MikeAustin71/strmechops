@@ -1915,13 +1915,6 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //
 // Input Parameters
 //
-//
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. Formatted
-//       Text Lines created from the TextFieldDto input objects
-//       will be written to this instance of strings.Builder.
-//
-//
 //  dtos                       []TextLabelParameterValueFieldDto
 //  - An array of TextLabelParameterValueFieldDto objects. The Text
 //    Label Parameter Value Field Data Transfer object is a
@@ -2143,6 +2136,12 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //
 // Return Values
 //
+//  strBuilder                 *strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text lines created from the TextFieldDto input parameters.
+//
+//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -2154,9 +2153,10 @@ func (stdLine TextLineSpecStandardLine) BuildTextFieldLines(
 //       the beginning of the error message.
 //
 func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
-	strBuilder *strings.Builder,
 	dtos []TextLabelParameterValueFieldDto,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -2169,6 +2169,10 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(512)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -2177,16 +2181,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 		"")
 
 	if err != nil {
-		return err
-	}
-
-	if strBuilder == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' has a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return err
+		return strBuilder, err
 	}
 
 	var outputStr string
@@ -2208,7 +2203,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 		}
 
@@ -2224,7 +2219,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		}
@@ -2241,7 +2236,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		}
@@ -2266,7 +2261,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else {
@@ -2283,7 +2278,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 					idx,
 					idx)
 
-				return err
+				return strBuilder, err
 			}
 
 			_,
@@ -2297,7 +2292,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		}
@@ -2315,7 +2310,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		}
@@ -2331,7 +2326,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 						idx)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 			newStdLine.TurnAutoLineTerminationOn()
@@ -2349,7 +2344,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 				"outputStr<-newStdLine"))
 
 		if err != nil {
-			return err
+			return strBuilder, err
 		}
 
 		strBuilder.WriteString(outputStr)
@@ -2358,7 +2353,7 @@ func (stdLine TextLineSpecStandardLine) BuildTextLabelParameterLines(
 
 	} // End Of for idx, item := range dtos
 
-	return err
+	return strBuilder, err
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
