@@ -29,12 +29,6 @@ type textStrBuilderAtom struct {
 //
 // Input Parameters
 //
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of text
-//       characters created by this method will be written to this
-//       instance of strings.Builder.
-//
-//
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
 //       for the 'dateTime' field.
@@ -149,6 +143,12 @@ type textStrBuilderAtom struct {
 //
 // Return Values
 //
+//  strBuilder                 strings.Builder
+//     - If this method completes successfully, it will return an
+//       instance of strings.Builder containing a formatted string
+//       of text characters.
+//
+//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -160,7 +160,6 @@ type textStrBuilderAtom struct {
 //       the beginning of the error message.
 //
 func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	dateTime time.Time,
 	dateTimeFieldLength int,
@@ -169,6 +168,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 	rightMarginStr string,
 	lineTerminator string,
 	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
 	err error) {
 
 	if txtBuilderAtom.lock == nil {
@@ -180,6 +180,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 	defer txtBuilderAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	strBuilder.Grow(256)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -189,7 +190,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(dateTimeFormat) == 0 {
@@ -214,7 +215,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 			"txtDateTimeField<-dateTime"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	err = txtDateTimeField.TextBuilder(
@@ -223,7 +224,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 			"strBuilder<-txtDateTimeField"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(rightMarginStr) > 0 {
@@ -234,7 +235,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 		strBuilder.WriteString(lineTerminator)
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // FieldsSingleFiller - Designed to produce three text elements
@@ -251,12 +252,6 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of text
-//       characters created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -358,6 +353,12 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 //
 // Return Values
 //
+//  strBuilder                 strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -369,13 +370,13 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 //       the beginning of the error message.
 //
 func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	rightMarginStr string,
 	lineTerminator string,
 	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
 	err error) {
 
 	if txtBuilderAtom.lock == nil {
@@ -388,6 +389,8 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -396,7 +399,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(fillerCharacters) == 0 {
@@ -419,7 +422,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 			"txtFillerFieldSpec"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	err = txtFillerFieldSpec.TextBuilder(
@@ -428,7 +431,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 			"strBuilder<-txtFillerFieldSpec"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(rightMarginStr) > 0 {
@@ -439,7 +442,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 		strBuilder.WriteString(lineTerminator)
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // fieldLabelWithMargins - Formats a single text label and writes
@@ -453,12 +456,6 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of strings.Builder. A formatted
-//       text label string created by this method will be written
-//       to this instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -565,6 +562,11 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 //
 // Return Values
 //
+//  strBuilder                 strings.Builder
+//     - If this method completes successfully, it will return an
+//       instance of strings.Builder containing a formatted text label.
+//
+//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -576,7 +578,6 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 //       the beginning of the error message.
 //
 func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	labelText string,
 	labelFieldLength int,
@@ -584,6 +585,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 	rightMarginStr string,
 	lineTerminator string,
 	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
 	err error) {
 
 	if txtBuilderAtom.lock == nil {
@@ -596,6 +598,8 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	strBuilder.Grow(256)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -604,7 +608,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(labelText) == 0 {
@@ -628,7 +632,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 			"txtLabelSpec<-labelText"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	err = txtLabelSpec.TextBuilder(
@@ -637,7 +641,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 			"strBuilder<-txtLabelSpec"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(rightMarginStr) > 0 {
@@ -648,7 +652,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 		strBuilder.WriteString(lineTerminator)
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // ptr - Returns a pointer to a new instance of

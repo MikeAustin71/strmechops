@@ -587,8 +587,10 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 	txtFmt.BlankLine.NumOfBlankLines = 1
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -597,6 +599,10 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	fmtrs = nil
 
@@ -660,8 +666,8 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 
 		// Write existing Parameter Label-Value Pairs
 		// to string (strBuilder)
-		err = txtBuilder.BuildLabelsValues(
-			&strBuilder,
+		strBuilder2,
+			err = txtBuilder.BuildLabelsValues(
 			labelParams,
 			" ",
 			maxLabelFieldLen,
@@ -681,8 +687,12 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 
 		labelParams = nil
 
-		err = txtBuilder.FieldsSingleLabel(
-			&strBuilder,
+		strBuilder.WriteString(strBuilder2.String())
+
+		strBuilder2.Reset()
+
+		strBuilder2,
+			err = txtBuilder.FieldsSingleLabel(
 			" ",
 			"TestString",
 			maxLabelFieldLen,
@@ -697,8 +707,12 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 			return strBuilder, err
 		}
 
-		err = txtBuilder.FieldsSingleLabel(
-			&strBuilder,
+		strBuilder.WriteString(strBuilder2.String())
+
+		strBuilder2.Reset()
+
+		strBuilder2,
+			err = txtBuilder.FieldsSingleLabel(
 			"  ",
 			testInputParms.TestString.GetCharacterString(),
 			-1,
@@ -713,8 +727,12 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 			return strBuilder, err
 		}
 
-		err = txtBuilder.LineBlank(
-			&strBuilder,
+		strBuilder.WriteString(strBuilder2.String())
+
+		strBuilder2.Reset()
+
+		strBuilder2,
+			err = txtBuilder.LineBlank(
 			1,
 			ePrefix.XCpy(
 				"Blank Line After ReplacementString"))
@@ -723,6 +741,10 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 
 			return strBuilder, err
 		}
+
+		strBuilder.WriteString(strBuilder2.String())
+
+		strBuilder2.Reset()
 
 	}
 
@@ -986,8 +1008,8 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 	labelParams = append(labelParams, labelParam)
 
 	// Write Label Parameter Values to String Builder
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildLabelsValues(
 		labelParams,
 		" ",
 		maxLabelFieldLen,
@@ -1006,6 +1028,10 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	// Trailing Title Marquee
 	// Top Blank Line
@@ -1065,12 +1091,16 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 	txtFmt.BlankLine.NumOfBlankLines = 2
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 	fmtrs = nil
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	return strBuilder, err
 }

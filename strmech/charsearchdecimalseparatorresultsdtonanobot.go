@@ -703,8 +703,10 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	txtFmt.BlankLine.NumOfBlankLines = 1
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -713,6 +715,10 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	fmtrs = nil
 
@@ -1176,8 +1182,8 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	labelParams = append(labelParams, labelParam)
 
 	// Write Label/Parameter Values to String Builder
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildLabelsValues(
 		labelParams,
 		" ",
 		maxLabelFieldLen,
@@ -1189,6 +1195,10 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		"\n",
 		ePrefix.XCpy(
 			"labelParams #2"))
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	labelParams = nil
 
@@ -1255,12 +1265,16 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	txtFmt.BlankLine.NumOfBlankLines = 2
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 	fmtrs = nil
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	return strBuilder, err
 }

@@ -204,7 +204,6 @@ func (txtBuilderNanobot textStrBuilderNanobot) ptr() *textStrBuilderNanobot {
 //       the beginning of the error message.
 //
 func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -212,7 +211,9 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 	interiorLineTerminator string,
 	numOfLines int,
 	finalLineTerminator string,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	strings.Builder,
+	error) {
 
 	if txtBuilderNanobot.lock == nil {
 		txtBuilderNanobot.lock = new(sync.Mutex)
@@ -224,6 +225,9 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -233,7 +237,7 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if numOfLines < 1 {
@@ -245,7 +249,7 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 			ePrefix.String(),
 			numOfLines)
 
-		return err
+		return strBuilder, err
 	}
 
 	if numOfLines > 1000000 {
@@ -257,15 +261,16 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 			ePrefix.String(),
 			numOfLines)
 
-		return err
+		return strBuilder, err
 	}
 
 	txtBuilderAtom := textStrBuilderAtom{}
+	var strBuilder2 strings.Builder
 
 	for i := 0; i < numOfLines; i++ {
 
-		err = txtBuilderAtom.fieldFillerWithMargins(
-			strBuilder,
+		strBuilder2,
+			err = txtBuilderAtom.fieldFillerWithMargins(
 			leftMarginStr,
 			fillerCharacters,
 			fillerCharsRepeatCount,
@@ -277,13 +282,17 @@ func (txtBuilderNanobot *textStrBuilderNanobot) lineSolidWithMargins(
 					i)))
 
 		if err != nil {
-			return err
+			return strBuilder, err
 		}
+
+		strBuilder.WriteString(strBuilder2.String())
+
+		strBuilder2.Reset()
 	}
 
 	if len(finalLineTerminator) > 0 {
 		strBuilder.WriteString(finalLineTerminator)
 	}
 
-	return err
+	return strBuilder, err
 }

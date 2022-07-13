@@ -103,8 +103,11 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	txtFmt.BlankLine.NumOfBlankLines = 1
 	fmtrs = append(fmtrs, txtFmt)
 
-	err := txtBuilder.BuildTextFormatters(
-		strBuilder,
+	var err error
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -124,6 +127,10 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	}
 
 	fmtrs = nil
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	// End Of Marquee
 
@@ -306,12 +313,16 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	txtFmt.BlankLine.NumOfBlankLines = 2
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 	fmtrs = nil
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	fmt.Printf(strBuilder.String() + "\n")
 

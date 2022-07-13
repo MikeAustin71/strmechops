@@ -548,8 +548,10 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 	txtFmt.BlankLine.NumOfBlankLines = 1
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -558,6 +560,10 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	fmtrs = nil
 
@@ -843,8 +849,8 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 	labelParams = append(labelParams, labelParam)
 
 	// Label and Parameter values to String Builder
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildLabelsValues(
 		labelParams,
 		" ",
 		maxLabelFieldLen,
@@ -863,6 +869,10 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	// Trailing Title Marquee
 	// Top Blank Line
@@ -922,12 +932,16 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 	txtFmt.BlankLine.NumOfBlankLines = 2
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 	fmtrs = nil
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	return strBuilder, err
 }

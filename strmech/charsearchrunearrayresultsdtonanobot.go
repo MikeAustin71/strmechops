@@ -652,8 +652,10 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	txtFmt.BlankLine.NumOfBlankLines = 1
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -662,6 +664,10 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	fmtrs = nil
 
@@ -1059,8 +1065,8 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	labelParams = append(labelParams, labelParam)
 
 	// Write Label/Parameter Values to String Builder
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildLabelsValues(
 		labelParams,
 		" ",
 		maxLabelFieldLen,
@@ -1079,6 +1085,10 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	// Trailing Title Marquee
 	// Top Blank Line
@@ -1138,12 +1148,16 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	txtFmt.BlankLine.NumOfBlankLines = 2
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 	fmtrs = nil
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	return strBuilder, err
 }

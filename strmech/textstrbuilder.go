@@ -47,12 +47,6 @@ type TextStrBuilder struct {
 //
 // Input Parameters
 //
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of text
-//       characters created by this method will be written to this
-//       instance of strings.Builder.
-//
-//
 //  paramLabelValues           []TextLabelValueStrings
 //     - An array of Text Label Value string pairs. This array
 //       contains the parameter label strings and the parameter
@@ -287,7 +281,13 @@ type TextStrBuilder struct {
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -298,7 +298,6 @@ type TextStrBuilder struct {
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
-	strBuilder strings.Builder,
 	paramLabelValues []TextLabelValueStrings,
 	leftMarginStr string,
 	paramLabelFieldLength int,
@@ -309,7 +308,8 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 	paramValueRightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -320,6 +320,10 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(1024)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -329,7 +333,7 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(paramLabelValues) == 0 {
@@ -338,16 +342,16 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 			"The 'paramLabelValues' array has a length of zero (0).\n",
 			ePrefix.String())
 
-		return err
-
+		return strBuilder, err
 	}
 
 	txtBuilderAtom := textStrBuilderAtom{}
+	var strBuilder2 strings.Builder
 
 	for idx, item := range paramLabelValues {
 
-		err = txtBuilderAtom.fieldLabelWithMargins(
-			strBuilder,
+		strBuilder2,
+			err = txtBuilderAtom.fieldLabelWithMargins(
 			leftMarginStr,
 			item.ParamLabel,
 			paramLabelFieldLength,
@@ -359,11 +363,14 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 				idx)))
 
 		if err != nil {
-			return err
+			return strBuilder, err
 		}
 
-		err = txtBuilderAtom.fieldLabelWithMargins(
-			strBuilder,
+		strBuilder.WriteString(strBuilder2.String())
+		strBuilder2.Reset()
+
+		strBuilder,
+			err = txtBuilderAtom.fieldLabelWithMargins(
 			"",
 			item.ParamValue,
 			paramValueFieldLength,
@@ -375,12 +382,15 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 				idx)))
 
 		if err != nil {
-			return err
+			return strBuilder, err
 		}
+
+		strBuilder.WriteString(strBuilder2.String())
+		strBuilder2.Reset()
 
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // BuildTextFormatters - Receives an array of TextFormatterDto
@@ -396,11 +406,6 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of text
-//       characters created by this method will be written to this
-//       instance of strings.Builder.
 //
 //  txtFormatters              []TextFormatterDto
 //     - An array of TextFormatterDto objects containing
@@ -796,7 +801,13 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing Formatted
+//       Date/Time Text.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -807,9 +818,10 @@ func (txtStrBuildr *TextStrBuilder) BuildLabelsValues(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
-	strBuilder strings.Builder,
 	txtFormatters []TextFormatterDto,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strBuilder strings.Builder,
+	err error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -820,7 +832,7 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+	strBuilder.Grow(2048)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -830,7 +842,7 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	lenTxtFormatters := len(txtFormatters)
@@ -841,12 +853,14 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 			"The 'txtFormatters' array is empty and has a length of zero.\n",
 			ePrefix.String())
 
-		return err
+		return strBuilder, err
 	}
 
 	txtBuilderAtom := textStrBuilderAtom{}
 
 	txtBuilderElectron := textStrBuilderElectron{}
+
+	var strBuilder2 strings.Builder
 
 	for i := 0; i < lenTxtFormatters; i++ {
 
@@ -861,14 +875,14 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 				txtFormatters[i].FormatType.String(),
 				txtFormatters[i].FormatType.XValueInt())
 
-			return err
+			return strBuilder, err
 
 		}
 
 		if txtFormatters[i].FormatType == TxtFieldType.Label() {
 
-			err = txtBuilderAtom.fieldLabelWithMargins(
-				strBuilder,
+			strBuilder2,
+				err = txtBuilderAtom.fieldLabelWithMargins(
 				txtFormatters[i].Label.LeftMarginStr,
 				txtFormatters[i].Label.FieldText,
 				txtFormatters[i].Label.FieldLength,
@@ -881,13 +895,13 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 						i)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else if txtFormatters[i].FormatType == TxtFieldType.DateTime() {
 
-			err = txtBuilderAtom.fieldDateTimeWithMargins(
-				strBuilder,
+			strBuilder2,
+				err = txtBuilderAtom.fieldDateTimeWithMargins(
 				txtFormatters[i].DateTime.LeftMarginStr,
 				txtFormatters[i].DateTime.FieldDateTime,
 				txtFormatters[i].DateTime.FieldLength,
@@ -901,13 +915,13 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 						i)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else if txtFormatters[i].FormatType == TxtFieldType.Filler() {
 
-			err = txtBuilderAtom.fieldFillerWithMargins(
-				strBuilder,
+			strBuilder2,
+				err = txtBuilderAtom.fieldFillerWithMargins(
 				txtFormatters[i].Filler.LeftMarginStr,
 				txtFormatters[i].Filler.FillerCharacters,
 				txtFormatters[i].Filler.FillerCharsRepeatCount,
@@ -919,13 +933,13 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 						i)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else if txtFormatters[i].FormatType == TxtFieldType.BlankLine() {
 
-			err = txtBuilderElectron.lineBlank(
-				strBuilder,
+			strBuilder2,
+				err = txtBuilderElectron.lineBlank(
 				txtFormatters[i].BlankLine.NumOfBlankLines,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -933,14 +947,14 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 						i)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		} else {
 			// MUST BE TxtFieldType.Spacer()
 
-			err = txtBuilderElectron.fieldSpacerWithMargins(
-				strBuilder,
+			strBuilder2,
+				err = txtBuilderElectron.fieldSpacerWithMargins(
 				txtFormatters[i].Spacer.LeftMarginStr,
 				txtFormatters[i].Spacer.FieldLength,
 				txtFormatters[i].Spacer.RightMarginStr,
@@ -951,14 +965,17 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 						i)))
 
 			if err != nil {
-				return err
+				return strBuilder, err
 			}
 
 		}
 
+		strBuilder.WriteString(strBuilder2.String())
+		strBuilder2.Reset()
+
 	}
 
-	return err
+	return strBuilder, err
 }
 
 // FieldDateTime - Formats a single date time and writes it to an
@@ -972,12 +989,6 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. Formatted Date/Time Text
-//       created by this method will be written to this instance
-//       of strings.Builder.
-//
 //
 //  dateTime                   time.Time
 //     - The date/time value which will be formatted as a text
@@ -1109,7 +1120,13 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing Formatted
+//       Date/Time Text.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -1120,13 +1137,13 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldDateTime(
-	strBuilder strings.Builder,
 	dateTime time.Time,
 	dateTimeFieldLength int,
 	dateTimeFormat string,
 	dateTimeTextJustify TextJustify,
 	lineTerminator string,
 	errorPrefix interface{}) (
+	strBuilder strings.Builder,
 	err error) {
 
 	if txtStrBuildr.lock == nil {
@@ -1138,6 +1155,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	strBuilder.Grow(256)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1147,7 +1165,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if dateTime.IsZero() {
@@ -1157,12 +1175,11 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 			"'dateTime' has a has a zero Date/Time value.\n",
 			ePrefix.String())
 
-		return err
+		return strBuilder, err
 
 	}
 
 	return textStrBuilderAtom{}.ptr().fieldDateTimeWithMargins(
-		strBuilder,
 		"",
 		dateTime,
 		dateTimeFieldLength,
@@ -1197,12 +1214,6 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. Formatted Date/Time Text
-//       created by this method will be written to this instance
-//       of strings.Builder.
 //
 //
 //  fillerCharacters           string
@@ -1320,9 +1331,15 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 //
 // Return Values
 //
-//  error
+//  strBuilder                 strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
+//  err                        error
 //     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
+//       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
 //       an appropriate error message.
 //
@@ -1331,11 +1348,11 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldFiller(
-	strBuilder strings.Builder,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	lineTerminator string,
 	errorPrefix interface{}) (
+	strBuilder strings.Builder,
 	err error) {
 
 	if txtStrBuildr.lock == nil {
@@ -1347,6 +1364,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	strBuilder.Grow(256)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1356,7 +1374,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(fillerCharacters) == 0 {
@@ -1367,12 +1385,11 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 			"length of zero (0).\n",
 			ePrefix.String())
 
-		return err
+		return strBuilder, err
 
 	}
 
 	return textStrBuilderAtom{}.ptr().fieldFillerWithMargins(
-		strBuilder,
 		"",
 		fillerCharacters,
 		fillerCharsRepeatCount,
@@ -1390,12 +1407,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  labelText                  string
 //     - This strings holds the text characters which will be
@@ -1517,7 +1528,13 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted text
+//       characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -1528,13 +1545,13 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldLabel(
-	strBuilder strings.Builder,
 	labelText string,
 	labelFieldLength int,
 	labelTextJustify TextJustify,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -1545,6 +1562,10 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1554,7 +1575,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(labelText) == 0 {
@@ -1565,12 +1586,10 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 			"of zero (0).\n",
 			ePrefix.String())
 
-		return err
-
+		return strBuilder, err
 	}
 
 	return textStrBuilderAtom{}.ptr().fieldLabelWithMargins(
-		strBuilder,
 		"",
 		labelText,
 		labelFieldLength,
@@ -1590,12 +1609,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  fieldLength                int
 //     - An integer value which is used to specify the number of
@@ -1661,7 +1674,13 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -1672,9 +1691,10 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldSpacer(
-	strBuilder strings.Builder,
 	fieldLength int,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -1686,6 +1706,9 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1695,12 +1718,11 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	return textStrBuilderElectron{}.ptr().
 		fieldSpacerWithMargins(
-			strBuilder,
 			"",
 			fieldLength,
 			"",
@@ -1723,12 +1745,6 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -1878,7 +1894,13 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -1889,7 +1911,6 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	dateTime time.Time,
 	dateTimeFieldLength int,
@@ -1898,7 +1919,8 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 	rightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -1909,6 +1931,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1918,7 +1944,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if dateTime.IsZero() {
@@ -1928,12 +1954,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 			"'dateTime' has a has a zero Date/Time value.\n",
 			ePrefix.String())
 
-		return err
-
+		return strBuilder, err
 	}
 
 	return textStrBuilderAtom{}.ptr().fieldDateTimeWithMargins(
-		strBuilder,
 		leftMarginStr,
 		dateTime,
 		dateTimeFieldLength,
@@ -1959,12 +1983,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -2099,6 +2117,12 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 //
 // Return Values
 //
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -2110,14 +2134,14 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
 	rightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2128,6 +2152,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2137,7 +2165,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(fillerCharacters) == 0 {
@@ -2148,12 +2176,11 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 			"length of zero (0).\n",
 			ePrefix.String())
 
-		return err
+		return strBuilder, err
 
 	}
 
 	return textStrBuilderAtom{}.ptr().fieldFillerWithMargins(
-		strBuilder,
 		leftMarginStr,
 		fillerCharacters,
 		fillerCharsRepeatCount,
@@ -2177,12 +2204,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -2326,6 +2347,12 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 //
 // Return Values
 //
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -2337,7 +2364,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	labelText string,
 	labelFieldLength int,
@@ -2345,7 +2371,8 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 	rightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2356,6 +2383,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2365,7 +2396,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(labelText) == 0 {
@@ -2376,12 +2407,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 			"of zero (0).\n",
 			ePrefix.String())
 
-		return err
-
+		return strBuilder, err
 	}
 
 	return textStrBuilderAtom{}.ptr().fieldLabelWithMargins(
-		strBuilder,
 		leftMarginStr,
 		labelText,
 		labelFieldLength,
@@ -2406,12 +2435,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -2513,7 +2536,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //
 // Return Values
 //
-//  err                        error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -2524,12 +2553,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	fieldLength int,
 	rightMarginStr string,
 	lineTerminator string,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2541,6 +2571,9 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2550,12 +2583,11 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	return textStrBuilderElectron{}.ptr().
 		fieldSpacerWithMargins(
-			strBuilder,
 			leftMarginStr,
 			fieldLength,
 			rightMarginStr,
@@ -2580,12 +2612,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted text label
-//       string created by this method will be written to this
-//       instance of strings.Builder.
-//
 //
 //  leftMarginStr                   string
 //     - The contents of the string will be used as the left margin
@@ -2799,7 +2825,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 //
 // Return Values
 //
-//  err                             error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be return containing formatted text
+//       characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -2810,7 +2842,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	paramLabelStr string,
 	paramLabelFieldLength int,
@@ -2823,7 +2854,8 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 	paramDateTimeRightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2834,6 +2866,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2843,7 +2879,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if paramDateTimeValue.IsZero() {
@@ -2852,14 +2888,14 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 			"'paramDateTimeValue' has a value of zero (0).\n",
 			ePrefix.String())
 
-		return err
+		return strBuilder, err
 
 	}
 
 	txtBuilderAtom := textStrBuilderAtom{}
 
-	err = txtBuilderAtom.fieldLabelWithMargins(
-		strBuilder,
+	strBuilder,
+		err = txtBuilderAtom.fieldLabelWithMargins(
 		leftMarginStr,
 		paramLabelStr,
 		paramLabelFieldLength,
@@ -2870,11 +2906,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 			"strBuilder<-paramLabelStr"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
-	err = txtBuilderAtom.fieldDateTimeWithMargins(
-		strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilderAtom.fieldDateTimeWithMargins(
 		"",
 		paramDateTimeValue,
 		paramDateTimeFieldLength,
@@ -2885,7 +2923,9 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 		ePrefix.XCpy(
 			"strBuilder<-paramDateTimeValue"))
 
-	return err
+	strBuilder.WriteString(strBuilder2.String())
+
+	return strBuilder, err
 }
 
 // FieldsLabelParameterValue - Is designed to five text elements
@@ -2904,12 +2944,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of
-//       text characters created by this method will be written to
-//       this instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -3123,6 +3157,12 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 //
 // Return Values
 //
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -3134,7 +3174,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	paramLabelStr string,
 	paramLabelFieldLength int,
@@ -3146,7 +3185,8 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 	paramValueRightMarginStr string,
 	lineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -3157,6 +3197,10 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3166,7 +3210,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(paramValueStr) == 0 {
@@ -3176,14 +3220,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 			"length of zero (0).\n",
 			ePrefix.String())
 
-		return err
-
+		return strBuilder, err
 	}
 
 	txtBuilderAtom := textStrBuilderAtom{}
 
-	err = txtBuilderAtom.fieldLabelWithMargins(
-		strBuilder,
+	strBuilder,
+		err = txtBuilderAtom.fieldLabelWithMargins(
 		leftMarginStr,
 		paramLabelStr,
 		paramLabelFieldLength,
@@ -3194,11 +3237,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 			"strBuilder<-paramLabelStr"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
-	err = txtBuilderAtom.fieldLabelWithMargins(
-		strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilderAtom.fieldLabelWithMargins(
 		"",
 		paramValueStr,
 		paramValueFieldLength,
@@ -3208,7 +3253,11 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 		ePrefix.XCpy(
 			"strBuilder<-paramValueStr"))
 
-	return err
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	return strBuilder, err
 }
 
 // LineSolid - Designed to produce one or more separate lines of
@@ -3232,12 +3281,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of
-//       text characters created by this method will be written to
-//       this instance of strings.Builder.
-//
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
@@ -3404,6 +3447,12 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 //
 // Return Values
 //
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -3415,7 +3464,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineSolid(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -3424,7 +3472,8 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 	numOfLines int,
 	finalLineTerminator string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -3435,6 +3484,10 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3444,7 +3497,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	if len(fillerCharacters) == 0 {
@@ -3455,12 +3508,10 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 			"length of zero (0).\n",
 			ePrefix.String())
 
-		return err
-
+		return strBuilder, err
 	}
 
 	return textStrBuilderNanobot{}.ptr().lineSolidWithMargins(
-		strBuilder,
 		leftMarginStr,
 		fillerCharacters,
 		fillerCharsRepeatCount,
@@ -3484,12 +3535,6 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
-//  strBuilder                 strings.Builder
-//     - An instance of strings.Builder. A formatted string of
-//       text characters created by this method will be written to
-//       this instance of strings.Builder.
-//
 //
 //  numOfBlankLines            int
 //     - The number of blank lines which will be generated by this
@@ -3551,7 +3596,13 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 //
 // Return Values
 //
-//  err                             error
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
+//  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
 //       if errors are encountered, this return value will contain
@@ -3562,10 +3613,10 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineBlank(
-	strBuilder strings.Builder,
 	numOfBlankLines int,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -3576,6 +3627,10 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3585,16 +3640,14 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	return textStrBuilderElectron{}.ptr().lineBlank(
-		strBuilder,
 		numOfBlankLines,
 		ePrefix.XCpy(fmt.Sprintf(
 			"strBuilder<-numOfBlankLines=='%v'",
 			numOfBlankLines)))
-
 }
 
 // LineTimerStartStop - Creates and returns a new instance of
@@ -3846,7 +3899,6 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
-	strBuilder strings.Builder,
 	leftMarginStr string,
 	startTimeLabel string,
 	startTime time.Time,
@@ -3858,7 +3910,8 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 	textLabelJustification TextJustify,
 	rightMarginStr string,
 	errorPrefix interface{}) (
-	err error) {
+	strings.Builder,
+	error) {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -3869,6 +3922,10 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(1024)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3878,7 +3935,7 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 		"")
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	var timerLinesSpec *TextLineSpecTimerLines
@@ -3899,7 +3956,7 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 			"timerLinesSpec"))
 
 	if err != nil {
-		return err
+		return strBuilder, err
 	}
 
 	err = timerLinesSpec.TextBuilder(
@@ -3907,5 +3964,5 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 		ePrefix.XCpy(
 			"strBuilder<-timerLinesSpec"))
 
-	return err
+	return strBuilder, err
 }

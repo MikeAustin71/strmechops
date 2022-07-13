@@ -743,8 +743,10 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	txtFmt.BlankLine.NumOfBlankLines = 1
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"strBuilder<-Marquee Top"))
@@ -753,6 +755,10 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 		return strBuilder, err
 	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	fmtrs = nil
 
@@ -1265,8 +1271,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	labelParams = append(labelParams, labelParam)
 
 	// Write Label/Parameter Values to String Builder
-	err = txtBuilder.BuildLabelsValues(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildLabelsValues(
 		labelParams,
 		" ",
 		maxLabelFieldLen,
@@ -1278,6 +1284,10 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		"\n",
 		ePrefix.XCpy(
 			"labelParams #2"))
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	labelParams = nil
 
@@ -1344,11 +1354,16 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	txtFmt.BlankLine.NumOfBlankLines = 2
 	fmtrs = append(fmtrs, txtFmt)
 
-	err = txtBuilder.BuildTextFormatters(
-		&strBuilder,
+	strBuilder2,
+		err = txtBuilder.BuildTextFormatters(
 		fmtrs,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
 	fmtrs = nil
 
 	return strBuilder, err
