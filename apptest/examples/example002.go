@@ -138,7 +138,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	strBuilder.Reset()
 
-	numberStr := " 123456.789 "
+	numberStr := " 1.234 "
 
 	var searchResults strmech.CharSearchNumStrParseResultsDto
 	var numStrKernel strmech.NumberStrKernel

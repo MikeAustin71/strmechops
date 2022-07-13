@@ -405,6 +405,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 			if searchResults.DecimalSeparatorSearchResults.
 				FoundDecimalSeparatorSymbols {
 
+				searchResults.FoundDecimalSeparatorSymbols = true
+
 				targetInputParms.FoundDecimalSeparatorSymbols = true
 
 				i = searchResults.DecimalSeparatorSearchResults.
