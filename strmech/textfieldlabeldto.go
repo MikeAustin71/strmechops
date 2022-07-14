@@ -9,12 +9,19 @@ type TextFieldLabelDto struct {
 	// generated.
 	//
 	// Possible values are listed as follows:
-	//   TxtFieldType.None()      - Invalid
-	//   TxtFieldType.Label()     - Valid
-	//   TxtFieldType.DateTime()  - Valid
-	//   TxtFieldType.Filler()    - Valid
-	//   TxtFieldType.Spacer()    - Valid
-	//   TxtFieldType.BlankLine() - Valid
+	//   TxtFieldType.None()        - Invalid
+	//   TxtFieldType.Label()       - Valid
+	//   TxtFieldType.DateTime()    - Valid
+	//   TxtFieldType.Filler()      - Valid
+	//   TxtFieldType.Spacer()      - Valid
+	//   TxtFieldType.BlankLine()   - Valid
+	//   TxtFieldType.SolidLine()   - Valid
+	//   TxtFieldType.Line1Column() - Valid
+	//   TxtFieldType.Line2Column() - Valid
+	//   TxtFieldType.Line3Column() - Valid
+	//   TxtFieldType.Line4Column() - Valid
+	//   TxtFieldType.Line5Column() - Valid
+	//   TxtFieldType.Line6Column() - Valid
 
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin

@@ -801,11 +801,19 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //  Example: TextFieldType(0).FloatingPoint()
 //
 // Usage:
-//  TxtFieldType.None(),
-//  TxtFieldType.Label(),
-//  TxtFieldType.DateTime(),
-//  TxtFieldType.Filler(),
-//  TxtFieldType.Spacer(),
+//  TxtFieldType.None()
+//  TxtFieldType.Label()
+//  TxtFieldType.DateTime()
+//  TxtFieldType.Filler()
+//  TxtFieldType.Spacer()
+//  TxtFieldType.BlankLine()
+//  TxtFieldType.SolidLine()
+//  TxtFieldType.Line1Column()
+//  TxtFieldType.Line2Column()
+//  TxtFieldType.Line3Column()
+//  TxtFieldType.Line4Column()
+//  TxtFieldType.Line5Column()
+//  TxtFieldType.Line6Column()
 //
 const TxtFieldType = TextFieldType(0)
 
