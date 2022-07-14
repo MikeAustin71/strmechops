@@ -356,7 +356,7 @@ func (numValType NumericValueType) XParseString(
 }
 
 // XReturnNoneIfInvalid - Provides a standardized value for invalid
-// instances of NumericValueType.
+// instances of enumeration NumericValueType.
 //
 // If the current instance of NumericValueType is invalid, this
 // method will always return a value of NumericValueType(0).None().
@@ -366,9 +366,16 @@ func (numValType NumericValueType) XParseString(
 // Enumeration NumericValueType has an underlying type of integer
 // (int). This means the type could conceivably be set to any
 // integer value. This method ensures that all invalid
-// NumericValueType are consistently classified as 'None'
+// NumericValueType instances are consistently classified as 'None'
 // (NumericValueType(0).None()). Remember that 'None' is considered
 // an invalid value.
+//
+// For example, assume that NumericValueType was set to an integer
+// value of -848972. Calling this method on a NumericValueType with
+// this invalid integer value will return a an integer value of
+// zero or the equivalent of NumericValueType(0).None(). This
+// conversion is useful in generating text strings for meaningful
+// informational and error messages.
 //
 func (numValType NumericValueType) XReturnNoneIfInvalid() NumericValueType {
 
@@ -442,6 +449,19 @@ type numericValueTypeNanobot struct {
 	lock *sync.Mutex
 }
 
+// isValidNumericValueType - Receives an instance of
+// NumericValueType and returns a boolean value signaling whether
+// that NumericValueType instance is valid.
+//
+// If the passed instance of NumericValueType is valid, this method
+// returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// NumericValueType enumeration.
+//
 func (enumNumValueType *numericValueTypeNanobot) isValidNumericValueType(
 	enumNumericValType NumericValueType) bool {
 
@@ -462,7 +482,7 @@ func (enumNumValueType *numericValueTypeNanobot) isValidNumericValueType(
 }
 
 // ptr - Returns a pointer to a new instance of
-// charSearchTestInputParametersDtoElectron.
+// numericValueTypeNanobot.
 //
 func (enumNumValueType numericValueTypeNanobot) ptr() *numericValueTypeNanobot {
 

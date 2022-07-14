@@ -170,6 +170,7 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    character sequence which is replicated multiple times to
 //    create the entire length of the Filler Text Field.
 //
+//
 // Spacer                       4
 //  - Identifies the Text Field Specification as a type
 //    TextFieldSpecSpacer.
@@ -177,9 +178,11 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    The Spacer Text Field Specification is used to create a Text
 //    Field consisting of one or more white space characters (" ").
 //
+//
 // BlankLine                    5
 //  - Identifies a type TextLineSpecBlankLines which is used to
 //    generate Blank Lines of text.
+//
 //
 // SolidLine                    6
 //  - Identifies a Solid Line Specification consisting of a left
@@ -188,14 +191,6 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    character sequence. This type of line is implemented using
 //    the TextLineSpecSolidLine Specification.
 //
-//  Line1Column                 7
-//  - Identifies a Text Line consisting of one column. This one
-//    column is typically a descriptive Text Label field.
-//
-//    The line/column architecture differs from single text fields
-//    in that lines includes margins on both sides of the column in
-//    addition to providing input parameters for line-termination
-//    characters such as new line characters ('\n').
 //
 //  Line1Column                 7
 //  - Identifies a Text Line consisting of one column. This one
@@ -205,6 +200,7 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    in that lines includes margins on both sides of the column in
 //    addition to providing input parameters for line-termination
 //    characters such as new line characters ('\n').
+//
 //
 //  Line2Column                 8
 //  - Identifies a Text Line consisting of two columns. The first
@@ -219,8 +215,9 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //
 //  Line3Column                 9
 //  - Identifies a Text Line consisting of three columns. The first
-//    column is usually a descriptive Text Label field. The second
-//    and third columns are typically Parameter Value fields.
+//    column is frequently styled as a descriptive Text Label field.
+//    The second and third columns are typically Parameter Value
+//    fields.
 //
 //    The line/column architecture differs from single text fields
 //    in that lines include margins on both sides of the columns in
@@ -228,6 +225,40 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    characters such as new line characters  ('\n').
 //
 //
+//  Line4Column                10
+//  - Identifies a Text Line consisting of four columns. The first
+//    column is usually a descriptive Text Label field. The second,
+//    third and fourth columns typically contain Parameter Value
+//    fields.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines include margins on both sides of the columns in
+//    addition to providing input parameters for line-termination
+//    characters such as new line characters  ('\n').
+//
+//
+//  Line5Column                11
+//  - Identifies a Text Line consisting of five columns. The first
+//    column is frequently styled as a descriptive Text Label
+//    field. The second, third, fourth and fifth columns typically
+//    contain Parameter Value fields.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines include margins on both sides of the columns in
+//    addition to providing input parameters for line-termination
+//    characters such as new line characters  ('\n').
+//
+//
+//  Line6Column                12
+//  - Identifies a Text Line consisting of six columns. The first
+//    column is frequently styled as a descriptive Text Label
+//    field. The second, third, fourth, fifth and sixth columns
+//    typically contain Parameter Value fields.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines include margins on both sides of the columns in
+//    addition to providing input parameters for line-termination
+//    characters such as new line characters  ('\n').
 //
 //
 // ----------------------------------------------------------------
@@ -450,6 +481,11 @@ func (txtFieldType TextFieldType) Line4Column() TextFieldType {
 // second, third, fourth and fifth columns typically contain
 // Parameter Value fields.
 //
+// The line/column architecture differs from single text fields in
+// that lines includes margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
 func (txtFieldType TextFieldType) Line5Column() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -463,6 +499,11 @@ func (txtFieldType TextFieldType) Line5Column() TextFieldType {
 // The first column is usually a descriptive Text Label field. The
 // second, third, fourth, fifth and sixth columns typically contain
 // Parameter Value fields.
+//
+// The line/column architecture differs from single text fields in
+// that lines includes margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
 //
 func (txtFieldType TextFieldType) Line6Column() TextFieldType {
 
@@ -504,6 +545,44 @@ func (txtFieldType TextFieldType) String() string {
 	return result
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration TextFieldType.
+//
+// If the current instance of TextFieldType is invalid, this
+// method will always return a value of TextFieldType(0).None().
+//
+// Background
+//
+// Enumeration TextFieldType has an underlying type of integer
+// (int). This means the type could conceivably be set to any
+// integer value. This method ensures that all invalid
+// TextFieldType instances are consistently classified as 'None'
+// (TextFieldType(0).None()). Remember that 'None' is considered
+// an invalid value.
+//
+// For example, assume that TextFieldType was set to an integer
+// value of -848972. Calling this method on a TextFieldType with
+// this invalid integer value will return an integer value of zero
+// or the equivalent of TextFieldType(0).None(). This conversion is
+// useful in generating text strings for meaningful informational
+// and error messages.
+//
+func (txtFieldType TextFieldType) XReturnNoneIfInvalid() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	isValid := textFieldTypeNanobot{}.ptr().
+		isValidTextField(txtFieldType)
+
+	if !isValid {
+		return TextFieldType(0).None()
+	}
+
+	return txtFieldType
+}
+
 // XIsValid - Returns a boolean value signaling whether the current
 // TextFieldType value is valid.
 //
@@ -517,14 +596,14 @@ func (txtFieldType TextFieldType) String() string {
 //
 // Usage
 //
-//  roundingType :=
+//  textType :=
 // 			TextFieldType(0).Label()
 //
-//  isValid := roundingType.XIsValid() // isValid == true
+//  isValid := textType.XIsValid() // isValid == true
 //
-//  roundingType = TextFieldType(0).None()
+//  textType = TextFieldType(0).None()
 //
-//  isValid = roundingType.XIsValid() // isValid == false
+//  isValid = textType.XIsValid() // isValid == false
 //
 func (txtFieldType TextFieldType) XIsValid() bool {
 
@@ -532,13 +611,10 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 
 	defer lockTextFieldType.Unlock()
 
-	if txtFieldType < 1 ||
-		txtFieldType > 12 {
+	txtFieldNanobot := textFieldTypeNanobot{}
 
-		return false
-	}
-
-	return true
+	return txtFieldNanobot.isValidTextField(
+		txtFieldType)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -732,3 +808,61 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //  TxtFieldType.Spacer(),
 //
 const TxtFieldType = TextFieldType(0)
+
+// textFieldTypeNanobot - Provides helper methods for
+// enumeration TextFieldType.
+//
+type textFieldTypeNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidTextField - Receives an instance of TextFieldType and
+// returns a boolean value signaling whether that TextFieldType
+// instance is valid.
+//
+// If the passed instance of TextFieldType is valid, this method
+// returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// TextFieldType enumeration.
+//
+func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
+	textFieldType TextFieldType) bool {
+
+	if textFieldNanobot.lock == nil {
+		textFieldNanobot.lock = new(sync.Mutex)
+	}
+
+	textFieldNanobot.lock.Lock()
+
+	defer textFieldNanobot.lock.Unlock()
+
+	if textFieldType < 1 ||
+		textFieldType > 12 {
+
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFieldTypeNanobot.
+//
+func (textFieldNanobot textFieldTypeNanobot) ptr() *textFieldTypeNanobot {
+
+	if textFieldNanobot.lock == nil {
+		textFieldNanobot.lock = new(sync.Mutex)
+	}
+
+	textFieldNanobot.lock.Lock()
+
+	defer textFieldNanobot.lock.Unlock()
+
+	return &textFieldTypeNanobot{
+		lock: new(sync.Mutex),
+	}
+}
