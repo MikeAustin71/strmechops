@@ -1764,8 +1764,8 @@ func (mt MainTest) TimerEventText08() {
 
 	lineBreakSpec,
 		err = strmech.TextLineSpecSolidLine{}.NewSolidLine(
-		0,
-		0,
+		"",
+		"",
 		"-",
 		75,
 		ePrefix.XCpy(

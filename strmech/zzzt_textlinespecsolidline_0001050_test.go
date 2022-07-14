@@ -13,18 +13,18 @@ func TestTextLineSpecSolidLine_Read_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_Read_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n-\n"
 
 	expectedTextStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
@@ -162,8 +162,8 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 		"TestTextLineSpecSolidLine_Read_000200()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n-\n"
@@ -171,11 +171,11 @@ func TestTextLineSpecSolidLine_Read_000200(t *testing.T) {
 	turnAutoLineTerminationOff = true
 
 	expectedTextStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin)
+			rightMargin
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
 
@@ -372,26 +372,26 @@ func TestTextLineSpecSolidLine_Read_000300(t *testing.T) {
 		"TestTextLineSpecSolidLine_Read_000300()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n-\n"
 
 	expectedTextStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
 
 	err :=
 		txtSolidLine01.SetFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -552,18 +552,18 @@ func TestTextLineSpecSolidLine_Read_000400(t *testing.T) {
 		"TestTextLineSpecSolidLine_Read_000400()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedTextStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
@@ -726,8 +726,8 @@ func TestTextLineSpecSolidLine_Read_000500(t *testing.T) {
 
 	txtSolidLine01.solidLineChars = nil
 	txtSolidLine01.newLineChars = nil
-	txtSolidLine01.leftMargin = -1
-	txtSolidLine01.rightMargin = -1
+	txtSolidLine01.leftMarginChars = nil
+	txtSolidLine01.rightMarginChars = nil
 	txtSolidLine01.solidLineCharsRepeatCount = -1
 
 	p := make([]byte, 15)
@@ -774,18 +774,18 @@ func TestTextLineSpecSolidLine_ReaderInitialize_000100(t *testing.T) {
 
 	txtSolidLine00.ReaderInitialize()
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	lenExpectedStr := len(expectedSolidLineStr)
@@ -1037,18 +1037,18 @@ func TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
@@ -1139,26 +1139,26 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 		"TestTextLineSpecSolidLine_Read_000300()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n-\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
 
 	err :=
 		txtSolidLine01.SetFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -1214,8 +1214,8 @@ func TestTextLineSpecSolidLine_SetFullSolidLineRunesConfig_000100(t *testing.T) 
 
 	err =
 		txtSolidLine02.SetFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -1242,18 +1242,18 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetLeftMargin_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01,
@@ -1312,8 +1312,11 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 
 	expectedNewLeftMargin := 5
 
+	leftMarginStr := strings.Repeat(" ",
+		expectedNewLeftMargin)
+
 	err = txtSolidLine01.SetLeftMargin(
-		expectedNewLeftMargin,
+		leftMarginStr,
 		ePrefix.XCpy(
 			"txtSolidLine01"))
 
@@ -1343,7 +1346,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	printableExpectedStr =
@@ -1377,7 +1380,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 	txtSolidLine02 := TextLineSpecSolidLine{}
 
 	err = txtSolidLine02.SetLeftMargin(
-		3,
+		"   ",
 		StrMech{})
 
 	if err == nil {
@@ -1395,7 +1398,7 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 	txtSolidLine03 := TextLineSpecSolidLine{}
 
 	err = txtSolidLine03.SetLeftMargin(
-		1000001,
+		strings.Repeat(" ", 1000001),
 		ePrefix.XCpy(
 			"txtSolidLine03:leftMargin==1000001"))
 
@@ -1408,19 +1411,6 @@ func TestTextLineSpecSolidLine_SetLeftMargin_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 
-		return
-	}
-
-	txtSolidLIne04 := TextLineSpecSolidLine{}
-
-	err = txtSolidLIne04.SetLeftMargin(
-		-1,
-		ePrefix.XCpy(
-			"leftMargin==-1 should be valid!"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
 		return
 	}
 
@@ -1696,26 +1686,26 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetNewLineRunes_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
 
 	err :=
 		txtSolidLine01.SetFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -1791,11 +1781,11 @@ func TestTextLineSpecSolidLine_SetNewLineRunes_000100(t *testing.T) {
 	}
 
 	expectedSolidLineStr =
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01FmtText,
@@ -1973,8 +1963,8 @@ func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetNewLineRunes_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n-\n"
@@ -1982,11 +1972,11 @@ func TestTextLineSpecSolidLine_SetSolidLineAllParms_000100(t *testing.T) {
 	turnAutoLineTerminationOff = true
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin)
+			rightMargin
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
 
@@ -2244,18 +2234,18 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetRightMargin_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01,
@@ -2315,7 +2305,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 	expectedNewRightMargin := 5
 
 	err = txtSolidLine01.SetRightMargin(
-		expectedNewRightMargin,
+		strings.Repeat(" ", expectedNewRightMargin),
 		ePrefix.XCpy(
 			"txtSolidLine01"))
 
@@ -2341,7 +2331,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 	}
 
 	expectedSolidLineStr =
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
@@ -2379,7 +2369,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 	txtSolidLine02 := TextLineSpecSolidLine{}
 
 	err = txtSolidLine02.SetRightMargin(
-		3,
+		strings.Repeat("", 3),
 		StrMech{})
 
 	if err == nil {
@@ -2397,7 +2387,7 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 	txtSolidLine03 := TextLineSpecSolidLine{}
 
 	err = txtSolidLine03.SetRightMargin(
-		1000001,
+		strings.Repeat(" ", 1000001),
 		ePrefix.XCpy(
 			"txtSolidLine03:rightMargin==1000001"))
 
@@ -2413,19 +2403,6 @@ func TestTextLineSpecSolidLine_SetRightMargin_000100(t *testing.T) {
 		return
 	}
 
-	txtSolidLIne04 := TextLineSpecSolidLine{}
-
-	err = txtSolidLIne04.SetRightMargin(
-		-1,
-		ePrefix.XCpy(
-			"rightMargin==-1 should be valid!"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
 	return
 }
 
@@ -2435,18 +2412,18 @@ func TestTextLineSpecSolidLine_SetSolidLine_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetSolidLine_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01 := TextLineSpecSolidLine{}
@@ -2534,8 +2511,8 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetSolidLineStrChars_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
@@ -2568,11 +2545,11 @@ func TestTextLineSpecSolidLine_SetSolidLineStrChars_000100(t *testing.T) {
 	solidLineCharsRepeatCount = 20
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	err = txtSolidLine01.SetSolidLineStrChars(
@@ -2760,8 +2737,8 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
@@ -2794,11 +2771,11 @@ func TestTextLineSpecSolidLine_SetSolidLineRuneChars_000100(t *testing.T) {
 	solidLineCharsRepeatCount = 20
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	err = txtSolidLine01.SetSolidLineRuneChars(
@@ -3024,18 +3001,18 @@ func TestTextLineSpecSolidLine_String_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_String_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01,
@@ -3147,25 +3124,25 @@ func TestTextLineSpecSolidLine_TextBuilder_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_TextBuilder_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-!"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n\n"
 
 	expectedTextStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01,
 		err := TextLineSpecSolidLine{}.
 		NewFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -3253,18 +3230,18 @@ func TestTextLineSpecSolidLine_TextBuilder_000200(t *testing.T) {
 		return
 	}
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n\n"
 
 	expectedTextStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine02 := TextLineSpecSolidLine{}
@@ -3407,8 +3384,8 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n\n"
@@ -3468,11 +3445,11 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOff_000100(t *testing.T) {
 	}
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin)
+			rightMargin
 
 	sMech := StrMech{}
 
@@ -3529,8 +3506,8 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n\n"
@@ -3590,11 +3567,11 @@ func TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100(t *testing.T) {
 	}
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	sMech := StrMech{}

@@ -49,7 +49,7 @@ type integerSeparatorDtoMolecule struct {
 //
 // The complexity inherent in the IntegerSeparatorDto type, used as
 // an input parameter, is necessary in order to provide support for
-// multinational and multi-cultural integer separation algorithms.
+// multinational and multicultural integer separation algorithms.
 // For more information on integer grouping sequence, reference the
 // source documentation for type, IntegerSeparatorDto.
 //
@@ -86,8 +86,8 @@ type integerSeparatorDtoMolecule struct {
 //       multiple characters to separate integers.
 //
 //       The complexity inherent in the IntegerSeparatorDto type is
-//       necessary in order to provide support for multi-national
-//       and multi-cultural integer separation algorithms. For
+//       necessary in order to provide support for multinational
+//       and multicultural integer separation algorithms. For
 //       additional details, reference the source code
 //       documentation for type  IntegerSeparatorDto.
 //

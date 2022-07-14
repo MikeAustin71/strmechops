@@ -32,7 +32,7 @@ type strMechNanobot struct {
 // If no End-Of-Line delimiters are found in 'targetStr', no
 // error will be generated, the return parameter 'numOfTextLines'
 // will be set to zero, the length of the returned string array,
-// 'textLineStrs', will be set to zero and retrun parameter
+// 'textLineStrs', will be set to zero and return parameter
 // 'remainderStr' will be set equal to 'targetStr'.
 //
 //

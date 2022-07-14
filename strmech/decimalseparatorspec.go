@@ -673,9 +673,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) IsValidInstanceError(
 // of text characters containing numeric digits and convert those
 // numeric digits to numeric values. If a Decimal Separator Symbol
 // or Symbols are located in a Number String the digits to the
-// the right of the Decimal Separator are considered fractional
-// numeric values and the digits to the left are considered integer
-// numeric values.
+// right of the Decimal Separator are considered fractional numeric
+// values and the digits to the left are considered integer numeric
+// values.
 //
 // If the Decimal Separator specified by the current instance of
 // DecimalSeparatorSpec is located in a Target Search String, this

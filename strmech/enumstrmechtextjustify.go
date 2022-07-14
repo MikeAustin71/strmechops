@@ -142,9 +142,8 @@ func (sopsTxtJustify TextJustify) Right() TextJustify {
 }
 
 // Center - Signals that the text justification format is
-// is set to 'Center'. Strings will be positioned in the
-// center of the text field equidistant from the left and
-// right margins.
+// set to 'Center'. Strings will be positioned in the center of the
+// text field equidistant from the left and right margins.
 //
 //        Example: "   TextString   "
 //

@@ -203,18 +203,18 @@ func TestTextLineSpecSolidLine_copyOut_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_copyOut_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", 2) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01,
@@ -390,8 +390,8 @@ func TestTextLineSpecSolidLine_equal_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_equal_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n-\n"
@@ -488,8 +488,6 @@ func TestTextLineSpecSolidLine_equal_000100(t *testing.T) {
 		return
 	}
 
-	leftMargin = 2
-	rightMargin = 2
 	solidLineChars = "-"
 	solidLineCharsRepeatCount = 35
 	newLineChars = "\n-\n"
@@ -577,25 +575,25 @@ func TestTextLineSpecSolidLine_getFormattedText_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_getFormattedText_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n"
 
 	expectedSolidLineStr :=
-		strings.Repeat(" ", leftMargin) +
+		leftMargin +
 			strings.Repeat(
 				solidLineChars,
 				solidLineCharsRepeatCount) +
-			strings.Repeat(" ", rightMargin) +
+			rightMargin +
 			newLineChars
 
 	txtSolidLine01,
 		err := TextLineSpecSolidLine{}.
 		NewPtrFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -672,7 +670,8 @@ func TestTextLineSpecSolidLine_getFormattedText_000100(t *testing.T) {
 		return
 	}
 
-	txtSolidLine01.rightMargin = 1000001
+	txtSolidLine01.rightMarginChars =
+		[]rune(strings.Repeat(" ", 1000001))
 
 	_,
 		err =
@@ -702,8 +701,8 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 		"TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := "-"
 	solidLineCharsRepeatCount := 35
 	newLineChars := "\n\n"
@@ -711,8 +710,8 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 	txtSolidLine01,
 		err := TextLineSpecSolidLine{}.
 		NewPtrFullSolidLineRunesConfig(
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -770,9 +769,7 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 		return
 	}
 
-	var txtSolidLine03 TextLineSpecSolidLine
-
-	txtSolidLine03,
+	_,
 		err = txtSolidLine01.CopyOut(
 		ePrefix.XCpy(
 			"txtSolidLine01->txtSolidLine03"))
@@ -780,77 +777,6 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 	if err != nil {
 		t.Errorf("%v\n",
 			err.Error())
-		return
-	}
-
-	txtSolidLine03.leftMargin = -97
-
-	isValid,
-		err = txtSolidLineAtom.testValidityOfTextSpecSolidLine(
-		&txtSolidLine03,
-		ePrefix.XCpy(
-			"Testing 'txtSolidLine03'"))
-
-	if isValid == false {
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected 'isValid' equal 'true' because\n"+
-			"txtSolidLine03.leftMargin = -97 defaulted to zero.\n"+
-			"HOWEVER, 'isValid' IS 'false'!!!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if err != nil {
-		t.Errorf("\n%v - ERROR\n"+
-			"Expected no errors from \n"+
-			"txtSolidLineAtom.testValidityOfTextSpecSolidLine() \n"+
-			"because txtSolidLine03.leftMargin = -97 defaulted to zero.\n"+
-			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	var txtSolidLine04 TextLineSpecSolidLine
-
-	txtSolidLine04,
-		err = txtSolidLine01.CopyOut(
-		ePrefix.XCpy(
-			"txtSolidLine01->txtSolidLine04"))
-
-	if err != nil {
-		t.Errorf("%v\n",
-			err.Error())
-		return
-	}
-
-	txtSolidLine04.rightMargin = -97
-
-	isValid,
-		err = txtSolidLineAtom.testValidityOfTextSpecSolidLine(
-		&txtSolidLine04,
-		ePrefix.XCpy(
-			"Testing 'txtSolidLine04'"))
-
-	if isValid == false {
-		t.Errorf("%v - ERROR\n"+
-			"Expected 'isValid' equal 'true' because\n"+
-			"txtSolidLine04.rightMargin = -97 defaulted to zero.\n"+
-			"HOWEVER, 'isValid' IS 'false'!!!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	if err != nil {
-		t.Errorf("%v - ERROR\n"+
-			"Expected no errors returned from \n"+
-			"txtSolidLineAtom.testValidityOfTextSpecSolidLine() \n"+
-			"because txtSolidLine04.rightMargin = -97 defaulted to zero.\n"+
-			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
-			ePrefix.String())
-
 		return
 	}
 
@@ -867,7 +793,8 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 		return
 	}
 
-	txtSolidLine05.leftMargin = 1000001
+	txtSolidLine05.leftMarginChars =
+		[]rune(strings.Repeat(" ", 1000001))
 
 	isValid,
 		err = txtSolidLineAtom.testValidityOfTextSpecSolidLine(
@@ -909,7 +836,8 @@ func TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100(t *testing
 		return
 	}
 
-	txtSolidLine06.rightMargin = 1000001
+	txtSolidLine06.rightMarginChars =
+		[]rune(strings.Repeat(" ", 1000001))
 
 	isValid,
 		err = txtSolidLineAtom.testValidityOfTextSpecSolidLine(
@@ -1101,8 +1029,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 		"TestTextLineSpecSolidLine_setTxtSolidLine_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := []rune{'-'}
 	solidLineCharsRepeatCount := 35
 	newLineChars := []rune{'\n', '\n'}
@@ -1114,8 +1042,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 
 	err := txtSolidLineMolecule.setTxtSolidLine(
 		nil,
-		leftMargin,
-		rightMargin,
+		[]rune(leftMargin),
+		[]rune(rightMargin),
 		solidLineChars,
 		solidLineCharsRepeatCount,
 		newLineChars,
@@ -1142,8 +1070,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1167,8 +1095,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1194,8 +1122,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1216,38 +1144,14 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 
 	solidLineCharsRepeatCount = 5
 
-	leftMargin = -35
+	leftMargin =
+		strings.Repeat(" ", 1000001)
 
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
-			solidLineChars,
-			solidLineCharsRepeatCount,
-			newLineChars,
-			turnLineTerminatorOff,
-			ePrefix.XCpy(
-				"solidLineChars length == 0"))
-
-	if err != nil {
-		t.Errorf("%v - ERROR \n"+
-			"Expected no errors from txtSolidLineMolecule."+
-			"setTxtSolidLine()\n"+
-			"because 'leftMargin' is less than zero (0).\n"+
-			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	leftMargin = 1000001
-
-	err =
-		txtSolidLineMolecule.setTxtSolidLine(
-			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1266,40 +1170,15 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 		return
 	}
 
-	leftMargin = 3
-
-	rightMargin = -102
-
-	err =
-		txtSolidLineMolecule.setTxtSolidLine(
-			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
-			solidLineChars,
-			solidLineCharsRepeatCount,
-			newLineChars,
-			turnLineTerminatorOff,
-			ePrefix.XCpy(
-				"solidLineChars length == 0"))
-
-	if err != nil {
-		t.Errorf("%v - ERROR \n"+
-			"Expected no errors from txtSolidLineMolecule."+
-			"setTxtSolidLine()\n"+
-			"because 'rightMargin' is less than zero.\n"+
-			"HOWEVER, AN ERROR WAS RETURNED!!!\n",
-			ePrefix.String())
-
-		return
-	}
-
-	rightMargin = 1000001
+	leftMargin = "   "
+	rightMargin =
+		strings.Repeat(" ", 1000001)
 
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1318,7 +1197,7 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 		return
 	}
 
-	rightMargin = 3
+	rightMargin = strings.Repeat(" ", 3)
 
 	sMechPreon := strMechPreon{}
 
@@ -1338,8 +1217,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1363,8 +1242,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000100(t *testing.T) {
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1392,8 +1271,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000200(t *testing.T) {
 		"TestTextLineSpecSolidLine_setTxtSolidLine_000100()",
 		"")
 
-	leftMargin := 2
-	rightMargin := 2
+	leftMargin := "  "
+	rightMargin := "  "
 	solidLineChars := []rune{'-'}
 	solidLineCharsRepeatCount := 35
 	newLineChars := []rune{'\n', '\n'}
@@ -1406,8 +1285,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000200(t *testing.T) {
 	err :=
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine01,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1428,8 +1307,8 @@ func TestTextLineSpecSolidLine_setTxtSolidLine_000200(t *testing.T) {
 	err =
 		txtSolidLineMolecule.setTxtSolidLine(
 			&txtSolidLine02,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMargin),
+			[]rune(rightMargin),
 			badSolidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
