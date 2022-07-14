@@ -10,33 +10,54 @@ import (
 // the lock on 'lockTextFieldType'.
 
 var mTextFieldTypeCodeToString = map[TextFieldType]string{
-	TextFieldType(0): "None",
-	TextFieldType(1): "Label",
-	TextFieldType(2): "DateTime",
-	TextFieldType(3): "Filler",
-	TextFieldType(4): "Spacer",
-	TextFieldType(5): "BlankLine",
+	TextFieldType(0):  "None",
+	TextFieldType(1):  "Label",
+	TextFieldType(2):  "DateTime",
+	TextFieldType(3):  "Filler",
+	TextFieldType(4):  "Spacer",
+	TextFieldType(5):  "BlankLine",
+	TextFieldType(6):  "SolidLine",
+	TextFieldType(7):  "Line1Column",
+	TextFieldType(8):  "Line2Column",
+	TextFieldType(9):  "Line3Column",
+	TextFieldType(10): "Line4Column",
+	TextFieldType(11): "Line5Column",
+	TextFieldType(12): "Line6Column",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
-	"None":      TextFieldType(0),
-	"Label":     TextFieldType(1),
-	"DateTime":  TextFieldType(2),
-	"Date Time": TextFieldType(2),
-	"Date":      TextFieldType(2),
-	"Filler":    TextFieldType(3),
-	"Spacer":    TextFieldType(4),
-	"BlankLine": TextFieldType(5),
+	"None":        TextFieldType(0),
+	"Label":       TextFieldType(1),
+	"DateTime":    TextFieldType(2),
+	"Date Time":   TextFieldType(2),
+	"Date":        TextFieldType(2),
+	"Filler":      TextFieldType(3),
+	"Spacer":      TextFieldType(4),
+	"BlankLine":   TextFieldType(5),
+	"SolidLine":   TextFieldType(6),
+	"Line1Column": TextFieldType(7),
+	"Line2Column": TextFieldType(8),
+	"Line3Column": TextFieldType(9),
+	"Line4Column": TextFieldType(10),
+	"Line5Column": TextFieldType(11),
+	"Line6Column": TextFieldType(12),
 }
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
-	"none":      TextFieldType(0),
-	"label":     TextFieldType(1),
-	"datetime":  TextFieldType(2),
-	"date time": TextFieldType(2),
-	"date":      TextFieldType(2),
-	"filler":    TextFieldType(3),
-	"spacer":    TextFieldType(4),
-	"blankline": TextFieldType(5),
+	"none":        TextFieldType(0),
+	"label":       TextFieldType(1),
+	"datetime":    TextFieldType(2),
+	"date time":   TextFieldType(2),
+	"date":        TextFieldType(2),
+	"filler":      TextFieldType(3),
+	"spacer":      TextFieldType(4),
+	"blankline":   TextFieldType(5),
+	"solidline":   TextFieldType(6),
+	"line1column": TextFieldType(7),
+	"line2column": TextFieldType(8),
+	"line3column": TextFieldType(9),
+	"line4column": TextFieldType(10),
+	"line5column": TextFieldType(11),
+	"line6column": TextFieldType(12),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
@@ -159,6 +180,54 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 // BlankLine                    5
 //  - Identifies a type TextLineSpecBlankLines which is used to
 //    generate Blank Lines of text.
+//
+// SolidLine                    6
+//  - Identifies a Solid Line Specification consisting of a left
+//    margin, a 'Filler' field made up of a single or repeating
+//    character sequence, a right margin and a line termination
+//    character sequence. This type of line is implemented using
+//    the TextLineSpecSolidLine Specification.
+//
+//  Line1Column                 7
+//  - Identifies a Text Line consisting of one column. This one
+//    column is typically a descriptive Text Label field.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines includes margins on both sides of the column in
+//    addition to providing input parameters for line-termination
+//    characters such as new line characters ('\n').
+//
+//  Line1Column                 7
+//  - Identifies a Text Line consisting of one column. This one
+//    column is typically a descriptive Text Label field.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines includes margins on both sides of the column in
+//    addition to providing input parameters for line-termination
+//    characters such as new line characters ('\n').
+//
+//  Line2Column                 8
+//  - Identifies a Text Line consisting of two columns. The first
+//    column is usually a descriptive Text Label field. The second
+//    column is typically a Parameter Value field.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines includes margins on both sides of the columns
+//    in addition to providing input parameters for
+//    line-termination characters such as new line characters
+//    ('\n').
+//
+//  Line3Column                 9
+//  - Identifies a Text Line consisting of three columns. The first
+//    column is usually a descriptive Text Label field. The second
+//    and third columns are typically Parameter Value fields.
+//
+//    The line/column architecture differs from single text fields
+//    in that lines include margins on both sides of the columns in
+//    addition to providing input parameters for line-termination
+//    characters such as new line characters  ('\n').
+//
+//
 //
 //
 // ----------------------------------------------------------------
@@ -288,6 +357,122 @@ func (txtFieldType TextFieldType) BlankLine() TextFieldType {
 	return TextFieldType(5)
 }
 
+// SolidLine - Identifies a Solid Line Specification consisting
+// of a left margin, a 'Filler' field made up of a single
+// or repeating character sequence, a right margin and a line
+// termination character sequence. This type of line is implemented
+// using the TextLineSpecSolidLine Specification.
+//
+func (txtFieldType TextFieldType) SolidLine() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(6)
+}
+
+// Line1Column - Identifies a Text Line consisting of one column.
+// This one column is typically a descriptive Text Label field.
+//
+// The line/column architecture differs from single text fields
+// in that lines includes margins on both sides of the column in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
+func (txtFieldType TextFieldType) Line1Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(7)
+}
+
+// Line2Column - Identifies a Text Line consisting of two columns.
+// The first column is usually a descriptive Text Label field. The
+// second column is typically a Parameter Value field.
+//
+// The line/column architecture differs from single text fields
+// in that lines include margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
+func (txtFieldType TextFieldType) Line2Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(8)
+}
+
+// Line3Column - Identifies a Text Line consisting of three
+// columns. The first column is usually a descriptive Text Label
+// field. The second and third columns are typically Parameter
+// Value fields.
+//
+// The line/column architecture differs from single text fields
+// in that lines include margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
+func (txtFieldType TextFieldType) Line3Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(9)
+}
+
+// Line4Column - Identifies a Text Line consisting of four columns.
+// The first column is usually a descriptive Text Label field. The
+// second, third and fourth columns typically contain Parameter
+// Value fields.
+//
+// The line/column architecture differs from single text fields in
+// that lines includes margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
+func (txtFieldType TextFieldType) Line4Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(10)
+}
+
+// Line5Column - Identifies a Text Line consisting of five columns.
+// The first column is usually a descriptive Text Label field. The
+// second, third, fourth and fifth columns typically contain
+// Parameter Value fields.
+//
+func (txtFieldType TextFieldType) Line5Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(11)
+}
+
+// Line6Column - Identifies a Text Line consisting of six columns.
+// The first column is usually a descriptive Text Label field. The
+// second, third, fourth, fifth and sixth columns typically contain
+// Parameter Value fields.
+//
+func (txtFieldType TextFieldType) Line6Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(12)
+}
+
 // String - Returns a string with the name of the enumeration
 // associated with this current instance of 'TextFieldType'.
 //
@@ -348,7 +533,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 	defer lockTextFieldType.Unlock()
 
 	if txtFieldType < 1 ||
-		txtFieldType > 5 {
+		txtFieldType > 12 {
 
 		return false
 	}
@@ -388,6 +573,14 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "Date"
 //           "Filler"
 //           "Spacer"
+//           "BlankLine"
+//           "SolidLine"
+//           "Line1Column"
+//           "Line2Column"
+//           "Line3Column"
+//           "Line4Column"
+//           "Line5Column"
+//           "Line6Column"
 //
 //       If 'false', a case-insensitive search is conducted for the
 //       enumeration name. In this example, 'label'
@@ -402,6 +595,14 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "date"
 //           "filler"
 //           "spacer"
+//           "blankline"
+//           "solidline"
+//           "line1column"
+//           "line2column"
+//           "line3column"
+//           "line4column"
+//           "line5column"
+//           "line6column"
 //
 //
 // ----------------------------------------------------------------

@@ -1,6 +1,21 @@
 package strmech
 
 type TextFieldLabelDto struct {
+	FormatType TextFieldType
+	// Required. This enumeration value specifies the type of Text
+	// Format Operation to be performed. Depending on this value,
+	// other member variables in the type will be accessed and used
+	//
+	// generated.
+	//
+	// Possible values are listed as follows:
+	//   TxtFieldType.None()      - Invalid
+	//   TxtFieldType.Label()     - Valid
+	//   TxtFieldType.DateTime()  - Valid
+	//   TxtFieldType.Filler()    - Valid
+	//   TxtFieldType.Spacer()    - Valid
+	//   TxtFieldType.BlankLine() - Valid
+
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
 	// for the Text Field.
