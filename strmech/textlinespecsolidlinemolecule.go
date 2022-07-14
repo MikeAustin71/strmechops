@@ -141,11 +141,33 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyIn(
 			"incomingTxtSolidLine.solidLineChars->"+
 				"targetTxtSolidLine.solidLineChars"))
 
-	targetTxtSolidLine.leftMargin =
-		incomingTxtSolidLine.leftMargin
+	if err != nil {
+		return err
+	}
 
-	targetTxtSolidLine.rightMargin =
-		incomingTxtSolidLine.rightMargin
+	err = sMechPreon.copyRuneArrays(
+		&targetTxtSolidLine.leftMarginChars,
+		&incomingTxtSolidLine.leftMarginChars,
+		true,
+		ePrefix.XCpy(
+			"incomingTxtSolidLine.leftMarginChars->"+
+				"targetTxtSolidLine.leftMarginChars"))
+
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
+		&targetTxtSolidLine.rightMarginChars,
+		&incomingTxtSolidLine.rightMarginChars,
+		true,
+		ePrefix.XCpy(
+			"incomingTxtSolidLine.rightMarginChars->"+
+				"targetTxtSolidLine.rightMarginChars"))
+
+	if err != nil {
+		return err
+	}
 
 	targetTxtSolidLine.solidLineCharsRepeatCount =
 		incomingTxtSolidLine.solidLineCharsRepeatCount
@@ -272,11 +294,33 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) copyOut(
 			"txtSolidLine.solidLineChars->"+
 				"newTxtSolidLine.solidLineChars"))
 
-	newTxtSolidLine.leftMargin =
-		txtSolidLine.leftMargin
+	if err != nil {
+		return newTxtSolidLine, err
+	}
 
-	newTxtSolidLine.rightMargin =
-		txtSolidLine.rightMargin
+	err = sMechPreon.copyRuneArrays(
+		&newTxtSolidLine.leftMarginChars,
+		&txtSolidLine.leftMarginChars,
+		true,
+		ePrefix.XCpy(
+			"txtSolidLine.leftMarginChars->"+
+				"newTxtSolidLine.leftMarginChars"))
+
+	if err != nil {
+		return newTxtSolidLine, err
+	}
+
+	err = sMechPreon.copyRuneArrays(
+		&newTxtSolidLine.rightMarginChars,
+		&txtSolidLine.rightMarginChars,
+		true,
+		ePrefix.XCpy(
+			"txtSolidLine.rightMarginChars->"+
+				"newTxtSolidLine.rightMarginChars"))
+
+	if err != nil {
+		return newTxtSolidLine, err
+	}
 
 	newTxtSolidLine.solidLineCharsRepeatCount =
 		txtSolidLine.solidLineCharsRepeatCount
@@ -397,9 +441,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 
 	sb.Grow(256)
 
-	for i := 0; i < txtSolidLine.leftMargin; i++ {
-		sb.WriteString(" ")
-	}
+	sb.WriteString(string(txtSolidLine.leftMarginChars))
 
 	str := string(txtSolidLine.solidLineChars)
 
@@ -407,9 +449,7 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) getFormattedText(
 		sb.WriteString(str)
 	}
 
-	for i := 0; i < txtSolidLine.rightMargin; i++ {
-		sb.WriteString(" ")
-	}
+	sb.WriteString(string(txtSolidLine.rightMarginChars))
 
 	if !txtSolidLine.turnLineTerminatorOff {
 		sb.WriteString(string(txtSolidLine.newLineChars))
@@ -471,35 +511,33 @@ func (txtSolidLineMolecule textLineSpecSolidLineMolecule) ptr() *textLineSpecSol
 //       input parameters.
 //
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginChars            []rune
+//     - A rune array. These text characters which will be inserted
+//       on the left side of the solid line.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMargin = []rune{' ', ' ',' '} // Three spaces
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If leftMarginChars has a length greater than one-million
+//       (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginChars           []rune
+//     - A rune array. These text characters will be appended to
+//       the end, or right side, of the solid line.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMargin = []rune{} // Empty Array
+//         rightMargin = []rune{' ',' ',' '} // Three spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If rightMarginChars has a length greater than one-million
+//       (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             []rune
@@ -575,8 +613,8 @@ func (txtSolidLineMolecule textLineSpecSolidLineMolecule) ptr() *textLineSpecSol
 //
 func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 	txtSolidLine *TextLineSpecSolidLine,
-	leftMargin int,
-	rightMargin int,
+	leftMarginChars []rune,
+	rightMarginChars []rune,
 	solidLineChars []rune,
 	solidLineCharsRepeatCount int,
 	newLineChars []rune,
@@ -645,33 +683,47 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
-	if leftMargin < 0 {
-		leftMargin = 0
-	}
-
-	if leftMargin > 1000000 {
+	if len(leftMarginChars) > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'leftMargin' is invalid!\n"+
-			"The integer value of 'leftMargin' is greater than 1,000,000.\n"+
-			"leftMargin='%v'\n",
+			"Error: Input parameter 'leftMarginChars' is invalid!\n"+
+			"'leftMarginChars' has a length greater than 1,000,000.\n"+
+			"leftMarginChars length ='%v'\n",
 			ePrefix.String(),
-			leftMargin)
+			len(leftMarginChars))
 
 		return err
 	}
 
-	if rightMargin < 0 {
-		rightMargin = 0
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		leftMarginChars,
+		ePrefix.XCpy(
+			"Error: Input parameter 'leftMarginChars'"+
+				" is invalid!"))
+
+	if err != nil {
+		return err
 	}
 
-	if rightMargin > 1000000 {
+	if len(rightMarginChars) > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'rightMargin' is invalid!\n"+
-			"The integer value of 'rightMargin' is greater than 1,000,000.\n"+
-			"leftMargin='%v'\n",
+			"Error: Input parameter 'rightMarginChars' is invalid!\n"+
+			"'rightMarginChars' has a length greater than 1,000,000.\n"+
+			"rightMarginChars length ='%v'\n",
 			ePrefix.String(),
-			leftMargin)
+			len(rightMarginChars))
 
+		return err
+	}
+
+	_,
+		err = sMechPreon.testValidityOfRuneCharArray(
+		rightMarginChars,
+		ePrefix.XCpy(
+			"Error: Input parameter 'rightMarginChars'"+
+				" is invalid!"))
+
+	if err != nil {
 		return err
 	}
 
@@ -692,6 +744,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
+	textLineSpecSolidLineAtom{}.ptr().empty(
+		txtSolidLine)
+
 	err = sMechPreon.copyRuneArrays(
 		&txtSolidLine.solidLineChars,
 		&solidLineChars,
@@ -704,9 +759,29 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
-	txtSolidLine.leftMargin = leftMargin
+	err = sMechPreon.copyRuneArrays(
+		&txtSolidLine.leftMarginChars,
+		&leftMarginChars,
+		true,
+		ePrefix.XCpy(
+			"incomingTxtSolidLine.leftMarginChars->"+
+				"targetTxtSolidLine.leftMarginChars"))
 
-	txtSolidLine.rightMargin = rightMargin
+	if err != nil {
+		return err
+	}
+
+	err = sMechPreon.copyRuneArrays(
+		&txtSolidLine.rightMarginChars,
+		&rightMarginChars,
+		true,
+		ePrefix.XCpy(
+			"incomingTxtSolidLine.rightMarginChars->"+
+				"targetTxtSolidLine.rightMarginChars"))
+
+	if err != nil {
+		return err
+	}
 
 	txtSolidLine.solidLineCharsRepeatCount =
 		solidLineCharsRepeatCount

@@ -37,8 +37,8 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) empty(
 		return
 	}
 
-	txtSolidLine.leftMargin = 0
-	txtSolidLine.rightMargin = 0
+	txtSolidLine.leftMarginChars = nil
+	txtSolidLine.rightMarginChars = nil
 	txtSolidLine.solidLineChars = nil
 	txtSolidLine.solidLineCharsRepeatCount = 0
 	txtSolidLine.newLineChars = nil
@@ -74,13 +74,19 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) equal(
 		return false
 	}
 
-	if txtSolidLineOne.leftMargin !=
-		txtSolidLineTwo.leftMargin {
+	sMechPreon := strMechPreon{}
+
+	if !sMechPreon.equalRuneArrays(
+		txtSolidLineOne.leftMarginChars,
+		txtSolidLineTwo.leftMarginChars) {
+
 		return false
 	}
 
-	if txtSolidLineOne.rightMargin !=
-		txtSolidLineTwo.rightMargin {
+	if !sMechPreon.equalRuneArrays(
+		txtSolidLineOne.rightMarginChars,
+		txtSolidLineTwo.rightMarginChars) {
+
 		return false
 	}
 
@@ -88,8 +94,6 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) equal(
 		txtSolidLineTwo.turnLineTerminatorOff {
 		return false
 	}
-
-	sMechPreon := strMechPreon{}
 
 	if !sMechPreon.equalRuneArrays(
 		txtSolidLineOne.solidLineChars,
@@ -284,32 +288,62 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
-	if txtSolidLine.leftMargin < 0 {
-		txtSolidLine.leftMargin = 0
-	}
-
-	if txtSolidLine.leftMargin > 1000000 {
+	if len(txtSolidLine.leftMarginChars) > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'txtSolidLine.leftMargin' is invalid!\n"+
-			"The integer value of 'txtSolidLine.leftMargin' is greater than 1,000,000.\n"+
-			"txtSolidLine.leftMargin='%v'\n",
+			"The length of 'txtSolidLine.leftMarginChars' is greater than 1,000,000.\n"+
+			"txtSolidLine.leftMarginChars length ='%v'\n",
 			ePrefix.String(),
-			txtSolidLine.leftMargin)
+			len(txtSolidLine.leftMarginChars))
 
 		return isValid, err
 	}
 
-	if txtSolidLine.rightMargin < 0 {
-		txtSolidLine.rightMargin = 0
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		txtSolidLine.leftMarginChars,
+		ePrefix.XCpy(
+			"txtSolidLine.leftMarginChars is invalid!"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"txtSolidLine.leftMarginChars contains invalid runes!\n"+
+			"%v\n"+
+			"txtSolidLine.leftMarginChars='%v'\n",
+			ePrefix.String(),
+			err2.Error(),
+			txtSolidLine.leftMarginChars)
+
+		return isValid, err
 	}
 
-	if txtSolidLine.rightMargin > 1000000 {
+	if len(txtSolidLine.rightMarginChars) > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: 'txtSolidLine.rightMargin' is invalid!\n"+
-			"The integer value of 'txtSolidLine.rightMargin' is greater than 1,000,000.\n"+
-			"txtSolidLine.rightMargin='%v'\n",
+			"Error: 'txtSolidLine.rightMarginChars' is invalid!\n"+
+			"The length of 'txtSolidLine.rightMarginChars' is greater than 1,000,000.\n"+
+			"txtSolidLine.rightMarginChars length ='%v'\n",
 			ePrefix.String(),
-			txtSolidLine.rightMargin)
+			len(txtSolidLine.rightMarginChars))
+
+		return isValid, err
+	}
+
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		txtSolidLine.rightMarginChars,
+		ePrefix.XCpy(
+			"txtSolidLine.rightMarginChars is invalid!"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v - ERROR\n"+
+			"txtSolidLine.rightMarginChars contains invalid runes!\n"+
+			"%v\n"+
+			"txtSolidLine.rightMarginChars='%v'\n",
+			ePrefix.String(),
+			err2.Error(),
+			txtSolidLine.rightMarginChars)
 
 		return isValid, err
 	}
@@ -344,7 +378,7 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 				"txtSolidLine.newLineChars='%v'\n"+
 				"Error Msg: %v\n",
 				ePrefix.String(),
-				txtSolidLine.rightMargin,
+				txtSolidLine.newLineChars,
 				err2.Error())
 
 			return isValid, err

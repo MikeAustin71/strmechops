@@ -41,8 +41,8 @@ import (
 //         Solid line = "   *****   "
 //
 type TextLineSpecSolidLine struct {
-	leftMargin                int
-	rightMargin               int
+	leftMarginChars           []rune
+	rightMarginChars          []rune
 	solidLineChars            []rune
 	solidLineCharsRepeatCount int
 	newLineChars              []rune
@@ -758,7 +758,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) GetLeftMarginLength() int {
 
 	defer txtSpecSolidLine.lock.Unlock()
 
-	return txtSpecSolidLine.leftMargin
+	return len(txtSpecSolidLine.leftMarginChars)
 }
 
 // GetNewLineChars - Returns the solid line termination sequence
@@ -865,7 +865,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) GetRightMarginLength() int {
 
 	defer txtSpecSolidLine.lock.Unlock()
 
-	return txtSpecSolidLine.rightMargin
+	return len(txtSpecSolidLine.rightMarginChars)
 }
 
 // GetSolidLineChars - Returns a string containing the character or
@@ -1222,9 +1222,11 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) IsValidInstanceError(
 //
 // This method will automatically set the following default values:
 //
-//  leftMargin                  - Defaults to zero (0)
+//  leftMarginChars             - Defaults to zero (0) length rune
+//                                array.
 //
-//  rightMargin                 - Defaults to zero (0)
+//  rightMarginChars            - Defaults to zero (0) length rune
+//                                array.
 //
 //  line termination character  - Defaults to new line character
 //                                ('\n')
@@ -1363,8 +1365,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			0,
-			0,
+			[]rune{}, // Empty Rune Array - No Left Margin
+			[]rune{}, // Empty Rune Array - No Right Margin
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
@@ -1401,39 +1403,40 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -1552,8 +1555,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewDefaultSolidLine(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	newLineChars string,
@@ -1585,8 +1588,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -1627,40 +1630,41 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginChars            []rune
+//     - An array of runes containing the text characters to be
+//       positioned on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty rune array.
 //
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
-//         rightMargin = 0
+//         leftMarginChars = []rune{' ',' ', ' '} // 3-spaces
+//         rightMargin = []rune{} // Empty rune array
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
 //
-//       If this value is greater than one-million (1,000,000), an
-//       error will be returned.
+//       If the 'leftMarginChars' rune array length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginChars           []rune
+//     - An array of runes containing the text characters to be
+//       positioned on the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty rune array.
 //
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginChars = []rune{} // Empty rune array
+//         rightMargin = []rune{' ',' ', ' '} // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If this value is greater than one-million (1,000,000), an
-//       error will be returned.
+//       If the 'rightMarginChars' rune array length is greater
+//       than one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             []rune
@@ -1785,8 +1789,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineConfig(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
-	leftMargin int,
-	rightMargin int,
+	leftMarginChars []rune,
+	rightMarginChars []rune,
 	solidLineChars []rune,
 	solidLineCharsRepeatCount int,
 	newLineChars []rune,
@@ -1818,8 +1822,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			leftMarginChars,
+			rightMarginChars,
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -1868,39 +1872,40 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -2000,8 +2005,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewFullSolidLineRunesConfig(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	errorPrefix interface{}) (
@@ -2032,8 +2037,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
@@ -2073,39 +2078,40 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //
 // Input Parameters
 //
-//  leftMargin                   int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                  int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars               string
@@ -2236,8 +2242,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLine(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLineAllParms(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	newLineChars string,
@@ -2270,8 +2276,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLineAllParms(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -2324,9 +2330,14 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewSolidLineAllParms(
 //
 // This method will automatically set the following default values:
 //
-//  leftMargin                  - Defaults to zero (0)
+//  leftMarginChars             - Defaults to zero (0) length or
+//                                empty rune array. No left margin
+//                                is configured.
 //
-//  rightMargin                 - Defaults to zero (0)
+//  rightMargin                 - Defaults to zero (0) length or
+//                                empty rune array. No right margin
+//                                is configured.
+//
 //
 //  line termination character  - Defaults to new line character
 //                                ('\n')
@@ -2467,8 +2478,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			0,
-			0,
+			[]rune{},
+			[]rune{},
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
@@ -2506,39 +2517,40 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -2658,8 +2670,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrDefaultSolidLine(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	newLineChars string,
@@ -2695,8 +2707,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -2738,40 +2750,41 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginChars            []rune
+//     - An array of runes containing the text characters to be
+//       positioned on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty rune array.
 //
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
-//         rightMargin = 0
+//         leftMarginChars = []rune{' ',' ', ' '} // 3-spaces
+//         rightMargin = []rune{} // Empty rune array
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
 //
-//       If this value is greater than one-million (1,000,000), an
-//       error will be returned.
+//       If the 'leftMarginChars' rune array length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginChars           []rune
+//     - An array of runes containing the text characters to be
+//       positioned on the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty rune array.
 //
 //       Example:
 //         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginChars = []rune{} // Empty rune array
+//         rightMargin = []rune{' ',' ', ' '} // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If this value is greater than one-million (1,000,000), an
-//       error will be returned.
+//       If the 'rightMarginChars' rune array length is greater
+//       than one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             []rune
@@ -2897,8 +2910,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineConfig(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
-	leftMargin int,
-	rightMargin int,
+	leftMarginChars []rune,
+	rightMarginChars []rune,
 	solidLineChars []rune,
 	solidLineCharsRepeatCount int,
 	newLineChars []rune,
@@ -2933,8 +2946,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			leftMarginChars,
+			rightMarginChars,
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -2983,39 +2996,40 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             string
@@ -3116,8 +3130,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrFullSolidLineRunesConfig(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	errorPrefix interface{}) (
@@ -3152,8 +3166,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			&txtSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
@@ -3194,39 +3208,40 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 //
 // Input Parameters
 //
-//  leftMargin                   int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                  int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars               string
@@ -3358,8 +3373,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLine(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLineAllParms(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	newLineChars string,
@@ -3394,8 +3409,8 @@ func (txtSpecSolidLine TextLineSpecSolidLine) NewPtrSolidLineAllParms(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			txtSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -3696,34 +3711,39 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) ReaderInitialize() {
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//       If the 'leftMarginStr' string length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//       If the 'rightMarginStr' string length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
@@ -3830,8 +3850,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) ReaderInitialize() {
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	newLineChars string,
@@ -3862,8 +3882,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			txtSpecSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -3909,35 +3929,41 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginChars            []rune
+//     - An array of runes containing the text characters to be
+//       positioned on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty rune array.
 //
 //       Example:
-//         solidLineChars = "*"
+//         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginChars = []rune{' ',' ', ' '} // 3-spaces
+//         rightMargin = []rune{} // Empty rune array
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//
+//       If the 'leftMarginChars' rune array length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginChars           []rune
+//     - An array of runes containing the text characters to be
+//       positioned on the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty rune array.
 //
 //       Example:
-//         solidLineChars = "*"
+//         solidLineChars = []rune{'*'}
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginChars = []rune{} // Empty rune array
+//         rightMargin = []rune{' ',' ', ' '} // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       If the 'rightMarginChars' rune array length is greater
+//       than one-million (1,000,000), an error will be returned.
 //
 //
 //  solidLineChars             []rune
@@ -4044,8 +4070,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineConfig(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
-	leftMargin int,
-	rightMargin int,
+	leftMarginChars []rune,
+	rightMarginChars []rune,
 	solidLineChars []rune,
 	solidLineCharsRepeatCount int,
 	newLineChars []rune,
@@ -4076,8 +4102,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			txtSpecSolidLine,
-			leftMargin,
-			rightMargin,
+			leftMarginChars,
+			rightMarginChars,
 			solidLineChars,
 			solidLineCharsRepeatCount,
 			newLineChars,
@@ -4090,13 +4116,14 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 // SetLeftMargin - Sets the left margin for the current instance
 // of TextLineSpecSolidLine.
 //
-// The left margin defines the number of white space characters
-// which will be inserted on the left side of the solid line.
+// The left margin defines the text characters which will be
+// positioned on the left side of the solid line.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
 //
@@ -4104,21 +4131,22 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), 'leftMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'leftMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'leftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  errorPrefix                interface{}
@@ -4182,7 +4210,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetFullSolidLineRunesConfig(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
-	leftMargin int,
+	leftMarginStr string,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -4206,24 +4234,51 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetLeftMargin(
 		return err
 	}
 
-	if leftMargin < 0 {
-		leftMargin = 0
-	}
-
-	if leftMargin > 1000000 {
+	if len(leftMarginStr) > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'leftMargin' is invalid!\n"+
-			"The integer value of 'leftMargin' is greater than 1,000,000.\n"+
-			"leftMargin='%v'\n",
+			"Error: Input parameter 'leftMarginStr' is invalid!\n"+
+			"The string length of 'leftMarginStr' is greater than 1,000,000.\n"+
+			"leftMarginStr length ='%v'\n",
 			ePrefix.String(),
-			leftMargin)
+			len(leftMarginStr))
 
 		return err
 	}
 
-	txtSpecSolidLine.leftMargin = leftMargin
+	leftMarginChars := []rune(leftMarginStr)
 
-	return
+	sMechPreon := strMechPreon{}
+
+	var err2 error
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		leftMarginChars,
+		ePrefix.XCpy(
+			"Error: Input parameter 'leftMarginStr'"+
+				" is invalid!"))
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'leftMarginStr' is invalid!\n"+
+			"When converted to runes, the following error was returned:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return err
+	}
+
+	txtSpecSolidLine.leftMarginChars = nil
+
+	err = sMechPreon.copyRuneArrays(
+		&txtSpecSolidLine.leftMarginChars,
+		&leftMarginChars,
+		true,
+		ePrefix.XCpy(
+			"Input Parameter leftMarginStr->"+
+				"txtSpecSolidLine.leftMarginChars"))
+
+	return err
 }
 
 // SetNewLineChars - Sets the new line character or
@@ -4534,34 +4589,39 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//       If the 'leftMarginStr' string length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//       If the 'rightMarginStr' string length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
@@ -4680,8 +4740,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetNewLineRunes(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineAllParms(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	newLineChars string,
@@ -4713,8 +4773,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineAllParms(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			txtSpecSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune(newLineChars),
@@ -4891,15 +4951,14 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineCharsRepeatCount(
 // SetRightMargin - Sets the right margin for the current instance
 // of TextLineSpecSolidLine.
 //
-// The right margin defines the number of white space characters
-// which will be appended to the end, or right side, of the solid
-// line.
+// The right margin defines the text characters which will be
+// appended to the end, or right side, of the solid line.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
 //
@@ -4907,22 +4966,22 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineCharsRepeatCount(
 //
 // Input Parameters
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), 'rightMargin' will be
-//       set to a default value of zero (0).
-//
-//       If the 'rightMargin' value is greater than one-million
-//       (1,000,000), an error will be returned.
+//       If the 'rightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned.
 //
 //
 //  errorPrefix                interface{}
@@ -4986,7 +5045,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLineCharsRepeatCount(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
-	rightMargin int,
+	rightMarginStr string,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -5010,24 +5069,51 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
 		return err
 	}
 
-	if rightMargin < 0 {
-		rightMargin = 0
-	}
-
-	if rightMargin > 1000000 {
+	if len(rightMarginStr) > 1000000 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'rightMargin' is invalid!\n"+
-			"The integer value of 'rightMargin' is greater than 1,000,000.\n"+
-			"leftMargin='%v'\n",
+			"Error: Input parameter 'rightMarginStr' is invalid!\n"+
+			"The string length of 'rightMarginStr' is greater than 1,000,000.\n"+
+			"rightMarginStr length ='%v'\n",
 			ePrefix.String(),
-			rightMargin)
+			len(rightMarginStr))
 
 		return err
 	}
 
-	txtSpecSolidLine.rightMargin = rightMargin
+	rightMarginChars := []rune(rightMarginStr)
 
-	return
+	sMechPreon := strMechPreon{}
+
+	var err2 error
+	_,
+		err2 = sMechPreon.testValidityOfRuneCharArray(
+		rightMarginChars,
+		ePrefix.XCpy(
+			"Error: Input parameter 'rightMarginStr'"+
+				" is invalid!"))
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'rightMarginStr' is invalid!\n"+
+			"When converted to runes, the following error was returned:\n"+
+			"%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return err
+	}
+
+	txtSpecSolidLine.rightMarginChars = nil
+
+	err = sMechPreon.copyRuneArrays(
+		&txtSpecSolidLine.rightMarginChars,
+		&rightMarginChars,
+		true,
+		ePrefix.XCpy(
+			"Input Parameter rightMarginStr->"+
+				"txtSpecSolidLine.rightMarginChars"))
+
+	return err
 }
 
 // SetSolidLine - This method configures the current
@@ -5079,34 +5165,39 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
 //
 // Input Parameters
 //
-//  leftMargin                 int
-//     - The number of white space characters which will be
-//       inserted on the left side of the solid line.
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the left side of the Solid Line.
+//
+//       If no left margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 3
+//         leftMarginStr  = "   " // 3-spaces
+//         rightMarginStr = "" // Empty string
 //         Solid line = "   *****"
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//       If the 'leftMarginStr' string length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
-//  rightMargin                 int
-//     - The number of white space characters appended to the
-//       end, or right side, of the solid line.
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the right side of the Solid Line.
+//
+//       If no right margin is required, set this parameter to an
+//       empty string.
 //
 //       Example:
 //         solidLineChars = "*"
 //         solidLineCharsRepeatCount = 5
-//         leftMargin = 0
-//         rightMargin = 3
+//         leftMarginStr = "" // Empty string
+//         rightMarginStr = "   " // 3-spaces
 //         Solid line = "*****   "
 //
-//       If this value is less than zero (0), it will be set to a
-//       default value of zero (0). If this value is greater than
+//       If the 'rightMarginStr' string length is greater than
 //       one-million (1,000,000), an error will be returned.
 //
 //
@@ -5199,8 +5290,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetRightMargin(
 //       attached at the beginning of the error message.
 //
 func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
-	leftMargin int,
-	rightMargin int,
+	leftMarginStr string,
+	rightMarginStr string,
 	solidLineChars string,
 	solidLineCharsRepeatCount int,
 	errorPrefix interface{}) (
@@ -5229,8 +5320,8 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) SetSolidLine(
 	err = textLineSpecSolidLineMolecule{}.ptr().
 		setTxtSolidLine(
 			txtSpecSolidLine,
-			leftMargin,
-			rightMargin,
+			[]rune(leftMarginStr),
+			[]rune(rightMarginStr),
 			[]rune(solidLineChars),
 			solidLineCharsRepeatCount,
 			[]rune{'\n'},
