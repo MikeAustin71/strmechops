@@ -4,4 +4,6 @@ NumericValueType has an example of invalid type standardization.
 
 Example usage is found at :
  charSearchTestConfigDtoNanobot.getFormattedText()
- 
+
+TextFieldType is also configured  with new method:
+ TextFieldType.XReturnNoneIfInvalid()
