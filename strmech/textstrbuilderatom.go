@@ -416,20 +416,28 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineBlankWithDto(
 
 	var blankLinesSpec TextLineSpecBlankLines
 
-	lineTerminator := blankLineDto.LineTerminator
+	if len(blankLineDto.LineTerminator) == 0 {
 
-	if len(lineTerminator) == 0 {
-		lineTerminator = "\n"
+		blankLinesSpec,
+			err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
+			blankLineDto.NumOfBlankLines,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"blankLineDto.NumOfBlankLines='%v'\n",
+					blankLineDto.NumOfBlankLines)))
+
+	} else {
+
+		blankLinesSpec,
+			err = TextLineSpecBlankLines{}.NewBlankLines(
+			blankLineDto.NumOfBlankLines,
+			blankLineDto.LineTerminator,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"blankLineDto.NumOfBlankLines='%v'\n",
+					blankLineDto.NumOfBlankLines)))
+
 	}
-
-	blankLinesSpec,
-		err = TextLineSpecBlankLines{}.NewBlankLines(
-		blankLineDto.NumOfBlankLines,
-		lineTerminator,
-		ePrefix.XCpy(
-			fmt.Sprintf(
-				"blankLineDto.NumOfBlankLines='%v'\n",
-				blankLineDto.NumOfBlankLines)))
 
 	if err != nil {
 		return strBuilder, err
