@@ -352,6 +352,10 @@ func (txtBuilderAtom *textStrBuilderAtom) buildSpacerFieldWithDto(
 		ePrefix.XCpy(
 			"strBuilder2<-stdLine"))
 
+	if err != nil {
+		return strBuilder, err
+	}
+
 	strBuilder.WriteString(strBuilder2.String())
 
 	strBuilder2.Reset()
@@ -410,20 +414,41 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineBlankWithDto(
 		return strBuilder, err
 	}
 
-	if blankLineDto.NumOfBlankLines > 128 {
+	var blankLinesSpec TextLineSpecBlankLines
 
-		strBuilder.Grow(blankLineDto.NumOfBlankLines)
+	lineTerminator := blankLineDto.LineTerminator
 
-	} else {
-
-		strBuilder.Grow(128)
+	if len(lineTerminator) == 0 {
+		lineTerminator = "\n"
 	}
 
-	for i := 0; i < blankLineDto.NumOfBlankLines; i++ {
+	blankLinesSpec,
+		err = TextLineSpecBlankLines{}.NewBlankLines(
+		blankLineDto.NumOfBlankLines,
+		lineTerminator,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"blankLineDto.NumOfBlankLines='%v'\n",
+				blankLineDto.NumOfBlankLines)))
 
-		strBuilder.WriteString("\n")
-
+	if err != nil {
+		return strBuilder, err
 	}
+
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = blankLinesSpec.TextBuilder(
+		ePrefix.XCpy("" +
+			"blankLinesSpec"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
 
 	return strBuilder, err
 }

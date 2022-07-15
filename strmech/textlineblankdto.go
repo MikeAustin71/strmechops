@@ -9,4 +9,15 @@ type TextLineBlankDto struct {
 	// returned. Likewise, if this value is greater than
 	// one-million (1,000,000), an error will be returned.
 
+	LineTerminator string
+	// This string holds the character or characters which will be
+	// used to terminate the formatted line of text output.
+	//
+	// The most common usage sets this string to a new line
+	// character ("\n").
+	//
+	// If no Line Terminator is required, set 'LineTerminator' to
+	// a zero length or empty string and no line termination
+	// characters will be created.
+
 }
