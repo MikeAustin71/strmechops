@@ -3,10 +3,7 @@ package strmech
 type TextFieldLabelDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
-	// Format Operation to be performed. Depending on this value,
-	// other member variables in the type will be accessed and used
-	//
-	// generated.
+	// Format Operation to be performed.
 	//
 	// Possible values are listed as follows:
 	//   TxtFieldType.None()        - Invalid
@@ -22,6 +19,9 @@ type TextFieldLabelDto struct {
 	//   TxtFieldType.Line4Column() - Valid
 	//   TxtFieldType.Line5Column() - Valid
 	//   TxtFieldType.Line6Column() - Valid
+	//
+	// For TextFieldLabelDto 'FormatType' should be
+	// set to: TxtFieldType.Label()
 
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
@@ -100,7 +100,7 @@ type TextFieldLabelDto struct {
 	// The most common usage sets this string to a new line
 	// character ("\n").
 	//
-	// If no Line Terminator is required, set 'lineTerminator' to
+	// If no Line Terminator is required, set 'LineTerminator' to
 	// a zero length or empty string and no line termination
 	// characters will be created.
 

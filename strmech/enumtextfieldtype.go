@@ -23,6 +23,8 @@ var mTextFieldTypeCodeToString = map[TextFieldType]string{
 	TextFieldType(10): "Line4Column",
 	TextFieldType(11): "Line5Column",
 	TextFieldType(12): "Line6Column",
+	TextFieldType(13): "Line7Column",
+	TextFieldType(14): "Line8Column",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
@@ -41,6 +43,8 @@ var mTextFieldTypeStringToCode = map[string]TextFieldType{
 	"Line4Column": TextFieldType(10),
 	"Line5Column": TextFieldType(11),
 	"Line6Column": TextFieldType(12),
+	"Line7Column": TextFieldType(13),
+	"Line8Column": TextFieldType(14),
 }
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 	"none":        TextFieldType(0),
@@ -58,6 +62,8 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 	"line4column": TextFieldType(10),
 	"line5column": TextFieldType(11),
 	"line6column": TextFieldType(12),
+	"line7column": TextFieldType(13),
+	"line8column": TextFieldType(14),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
@@ -514,6 +520,44 @@ func (txtFieldType TextFieldType) Line6Column() TextFieldType {
 	return TextFieldType(12)
 }
 
+// Line7Column - Identifies a Text Line consisting of seven
+// columns. The first column is usually a descriptive Text
+// Label field. Typically, the remaining columns 2-7 contain
+// Parameter Value fields.
+//
+// The line/column architecture differs from single text fields in
+// that lines includes margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
+func (txtFieldType TextFieldType) Line7Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(13)
+}
+
+// Line8Column - Identifies a Text Line consisting of eight
+// columns. The first column is usually a descriptive Text
+// Label field. Typically, the remaining columns 2-8 contain
+// Parameter Value fields.
+//
+// The line/column architecture differs from single text fields in
+// that lines includes margins on both sides of the columns in
+// addition to providing input parameters for line-termination
+// characters such as new line characters ('\n').
+//
+func (txtFieldType TextFieldType) Line8Column() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(14)
+}
+
 // String - Returns a string with the name of the enumeration
 // associated with this current instance of 'TextFieldType'.
 //
@@ -657,6 +701,8 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "Line4Column"
 //           "Line5Column"
 //           "Line6Column"
+//           "Line7Column"
+//           "Line8Column"
 //
 //       If 'false', a case-insensitive search is conducted for the
 //       enumeration name. In this example, 'label'
@@ -679,6 +725,8 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "line4column"
 //           "line5column"
 //           "line6column"
+//           "line7column"
+//           "line8column"
 //
 //
 // ----------------------------------------------------------------
@@ -814,6 +862,8 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //  TxtFieldType.Line4Column()
 //  TxtFieldType.Line5Column()
 //  TxtFieldType.Line6Column()
+//  TxtFieldType.Line7Column()
+//  TxtFieldType.Line8Column()
 //
 const TxtFieldType = TextFieldType(0)
 
@@ -849,7 +899,7 @@ func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
 	defer textFieldNanobot.lock.Unlock()
 
 	if textFieldType < 1 ||
-		textFieldType > 12 {
+		textFieldType > 14 {
 
 		return false
 	}
