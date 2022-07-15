@@ -1136,10 +1136,6 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return strBuilder, err
 			}
 
-			strBuilder.WriteString(strBuilder2.String())
-
-			strBuilder2.Reset()
-
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.DateTime() {
 
@@ -1154,10 +1150,6 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			if err != nil {
 				return strBuilder, err
 			}
-
-			strBuilder.WriteString(strBuilder2.String())
-
-			strBuilder2.Reset()
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Filler() {
@@ -1174,10 +1166,6 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return strBuilder, err
 			}
 
-			strBuilder.WriteString(strBuilder2.String())
-
-			strBuilder2.Reset()
-
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Spacer() {
 
@@ -1192,10 +1180,6 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			if err != nil {
 				return strBuilder, err
 			}
-
-			strBuilder.WriteString(strBuilder2.String())
-
-			strBuilder2.Reset()
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.BlankLine() {
@@ -1212,10 +1196,6 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return strBuilder, err
 			}
 
-			strBuilder.WriteString(strBuilder2.String())
-
-			strBuilder2.Reset()
-
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.SolidLine() {
 
@@ -1231,11 +1211,44 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return strBuilder, err
 			}
 
-			strBuilder.WriteString(strBuilder2.String())
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.Line1Column() {
 
-			strBuilder2.Reset()
+			strBuilder2,
+				err = txtBuilderAtom.buildTextLine1Column(
+				txtFmtSpecs.fmtCollection[i].LineColumns,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].LineColumns",
+						i)))
 
+			if err != nil {
+				return strBuilder, err
+			}
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.Line2Column() {
+
+			strBuilder2,
+				err = txtBuilderAtom.buildTextLine2Column(
+				txtFmtSpecs.fmtCollection[i].LineColumns,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].LineColumns",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+		} else {
+
+			continue
 		}
+
+		strBuilder.WriteString(strBuilder2.String())
+
+		strBuilder2.Reset()
 
 	}
 

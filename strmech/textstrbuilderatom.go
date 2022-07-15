@@ -692,7 +692,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLine2Column(
 		return strBuilder, err
 	}
 
-	if line2Col.FormatType != TxtFieldType.Line1Column() {
+	if line2Col.FormatType != TxtFieldType.Line2Column() {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'line1Col.FormatType' is invalid!\n"+
@@ -788,6 +788,178 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLine2Column(
 
 		err = stdLine.SetNewLineChars(
 			line2Col.FmtParameters.LineTerminator,
+			ePrefix.XCpy(
+				"line2Col.FmtParameters.LineTerminator"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+	}
+
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = stdLine.TextBuilder(
+		ePrefix.XCpy(
+			"strBuilder2<-stdLine"))
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	return strBuilder, err
+}
+
+func (txtBuilderAtom *textStrBuilderAtom) buildTextLine3Column(
+	line3Col TextLineColumnsDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
+	err error) {
+
+	if txtBuilderAtom.lock == nil {
+		txtBuilderAtom.lock = new(sync.Mutex)
+	}
+
+	txtBuilderAtom.lock.Lock()
+
+	defer txtBuilderAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderAtom."+
+			"fieldFillerWithMargins()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if line3Col.FormatType != TxtFieldType.Line3Column() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'line1Col.FormatType' is invalid!\n"+
+			"Expected line2Col.FormatType == TxtFieldType.Line1Column()\n"+
+			"Actual  line2Col.FormatType String Value  = '%v'\n"+
+			"Actual  line2Col.FormatType Integer Value = '%v'\n",
+			ePrefix.String(),
+			line3Col.FormatType.String(),
+			line3Col.FormatType.XValueInt())
+
+		return strBuilder, err
+	}
+
+	stdLine := TextLineSpecStandardLine{}
+
+	// Build LeftMarginStr
+	if len(line3Col.FmtParameters.Col1LeftMarginStr) > 0 {
+		_,
+			err = stdLine.AddTextFieldLabel(
+			line3Col.FmtParameters.Col1LeftMarginStr,
+			-1,
+			TxtJustify.Left(),
+			ePrefix.XCpy("line3Col.FmtParameters.Col1LeftMarginStr"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	}
+
+	// Build Col1FieldText
+	_,
+		err = stdLine.AddTextFieldLabel(
+		line3Col.Col1FieldText,
+		line3Col.FmtParameters.Col1FieldLength,
+		line3Col.FmtParameters.Col1FieldJustify,
+		ePrefix.XCpy("line3Col.Col1FieldText"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build Col1RightMarginStr
+	if len(line3Col.FmtParameters.Col1RightMarginStr) > 0 {
+		_,
+			err = stdLine.AddTextFieldLabel(
+			line3Col.FmtParameters.Col1RightMarginStr,
+			-1,
+			TxtJustify.Left(),
+			ePrefix.XCpy("line2Col.FmtParameters.Col1RightMarginStr"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	}
+
+	// Build Col2FieldText
+	_,
+		err = stdLine.AddTextFieldLabel(
+		line3Col.Col2FieldText,
+		line3Col.FmtParameters.Col2FieldLength,
+		line3Col.FmtParameters.Col2FieldJustify,
+		ePrefix.XCpy("line3Col.Col2FieldText"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build Col2RightMarginStr
+	if len(line3Col.FmtParameters.Col2RightMarginStr) > 0 {
+		_,
+			err = stdLine.AddTextFieldLabel(
+			line3Col.FmtParameters.Col2RightMarginStr,
+			-1,
+			TxtJustify.Left(),
+			ePrefix.XCpy("line3Col.FmtParameters.Col2RightMarginStr"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	}
+
+	// Build Col3FieldText
+	_,
+		err = stdLine.AddTextFieldLabel(
+		line3Col.Col3FieldText,
+		line3Col.FmtParameters.Col3FieldLength,
+		line3Col.FmtParameters.Col3FieldJustify,
+		ePrefix.XCpy("line3Col.Col3FieldText"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build Col3RightMarginStr
+	if len(line3Col.FmtParameters.Col3RightMarginStr) > 0 {
+		_,
+			err = stdLine.AddTextFieldLabel(
+			line3Col.FmtParameters.Col3RightMarginStr,
+			-1,
+			TxtJustify.Left(),
+			ePrefix.XCpy("line3Col.FmtParameters.Col3RightMarginStr"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	}
+
+	// Build Line Terminator
+	if len(line3Col.FmtParameters.LineTerminator) == 0 {
+
+		stdLine.TurnAutoLineTerminationOff()
+
+	} else {
+
+		stdLine.TurnAutoLineTerminationOn()
+
+		err = stdLine.SetNewLineChars(
+			line3Col.FmtParameters.LineTerminator,
 			ePrefix.XCpy(
 				"line2Col.FmtParameters.LineTerminator"))
 
