@@ -44,6 +44,7 @@ type TextFmtParamsLineColumns struct {
 	col8FieldJustify   TextJustify
 	col8RightMarginStr string
 	lineTerminator     string
+	maxLineLength      int
 	isValid            bool
 
 	lock *sync.Mutex
@@ -93,6 +94,7 @@ func (paramsLineCol *TextFmtParamsLineColumns) CopyIn(
 	paramsLineCol.col8FieldJustify = incomingParams.col8FieldJustify
 	paramsLineCol.col8RightMarginStr = incomingParams.col8RightMarginStr
 	paramsLineCol.lineTerminator = incomingParams.lineTerminator
+	paramsLineCol.maxLineLength = incomingParams.maxLineLength
 	paramsLineCol.isValid = incomingParams.isValid
 
 	return
@@ -144,6 +146,7 @@ func (paramsLineCol *TextFmtParamsLineColumns) CopyOut() TextFmtParamsLineColumn
 		col8FieldJustify:   paramsLineCol.col8FieldJustify,
 		col8RightMarginStr: paramsLineCol.col8RightMarginStr,
 		lineTerminator:     paramsLineCol.lineTerminator,
+		maxLineLength:      paramsLineCol.maxLineLength,
 		isValid:            paramsLineCol.isValid,
 		lock:               nil,
 	}
