@@ -83,7 +83,7 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) findStdTxtLineParam
 
 	for i := 0; i < lenOfStdLineFmtParams; i++ {
 
-		if txtFmtCollection.stdTextLineParamCollection[i].formatType ==
+		if txtFmtCollection.stdTextLineParamCollection[i].FormatType ==
 			searchForTextFieldType {
 
 			lineColsFormatter = txtFmtCollection.

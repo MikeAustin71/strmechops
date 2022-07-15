@@ -978,6 +978,160 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 
 	return strBuilder, err
 }
+func (txtStrBuildr *TextStrBuilder) BuildText(
+	txtFmtSpecs TextFormatterCollection,
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(512)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"BuildText()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	lenTextFormatterCol :=
+		txtFmtSpecs.GetLengthFormatterCollection()
+
+	if lenTextFormatterCol == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtFmtSpecs' is invalid!\n"+
+			"The Text Formatter Collection is empty.\n",
+			ePrefix.String())
+
+		return strBuilder, err
+
+	}
+
+	txtBuilderAtom := textStrBuilderAtom{}
+
+	for i := 0; i < lenTextFormatterCol; i++ {
+
+		strBuilder2 := strings.Builder{}
+
+		if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.Label() {
+
+			strBuilder2,
+				err = txtBuilderAtom.buildLabelFieldWithDto(
+				txtFmtSpecs.fmtCollection[i].Label,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].Label.FieldText",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.DateTime() {
+
+			strBuilder2,
+				err = txtBuilderAtom.buildDateTimeFieldWithDto(
+				txtFmtSpecs.fmtCollection[i].DateTime,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].DateTime.FieldText",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.Filler() {
+
+			strBuilder2,
+				err = txtBuilderAtom.buildFillerFieldWithDto(
+				txtFmtSpecs.fmtCollection[i].Filler,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].Filler.FieldText",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.BlankLine() {
+
+			strBuilder2,
+				err = txtBuilderAtom.buildTextLineBlankWithDto(
+				txtFmtSpecs.fmtCollection[i].BlankLine,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].BlankLine",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.SolidLine() {
+
+			strBuilder2,
+				err = txtBuilderAtom.buildTextLineSolidWithDto(
+				txtFmtSpecs.fmtCollection[i].SolidLine,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].SolidLine",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		}
+
+	}
+
+	return strBuilder, err
+}
 
 // FieldDateTime - Formats a single date time and writes it to an
 // instance of strings.Builder.

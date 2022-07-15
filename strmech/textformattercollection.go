@@ -111,16 +111,16 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		BlankLine:  TextLineBlankDto{},
 		SolidLine:  TextLineSolidLineDto{},
 		LineColumns: TextLineColumnsDto{
-			formatType:    TxtFieldType.Line1Column(),
-			col1FieldText: column1FieldText,
-			col2FieldText: "",
-			col3FieldText: "",
-			col4FieldText: "",
-			col5FieldText: "",
-			col6FieldText: "",
-			col7FieldText: "",
-			col8FieldText: "",
-			fmtParameters: stdLineColsFmt,
+			FormatType:    TxtFieldType.Line1Column(),
+			Col1FieldText: column1FieldText,
+			Col2FieldText: "",
+			Col3FieldText: "",
+			Col4FieldText: "",
+			Col5FieldText: "",
+			Col6FieldText: "",
+			Col7FieldText: "",
+			Col8FieldText: "",
+			FmtParameters: stdLineColsFmt,
 			lock:          nil,
 		},
 	}
@@ -168,9 +168,9 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	if col1FieldLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'col1FieldLength' is invalid!\n"+
-			"'col1FieldLength' has a value less than minus one (-1)\n"+
-			"col1FieldLength = '%v'\n",
+			"Error: Input parameter 'Col1FieldLength' is invalid!\n"+
+			"'Col1FieldLength' has a value less than minus one (-1)\n"+
+			"Col1FieldLength = '%v'\n",
 			ePrefix.String(),
 			col1FieldLength)
 
@@ -180,10 +180,10 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	if !col1FieldJustify.XIsValid() {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'col1FieldJustify' is invalid!\n"+
-			"'col1FieldJustify' must be set to 'Left', 'Right' or 'Center'.\n"+
-			"col1FieldJustify String Value  = '%v'\n"+
-			"col1FieldJustify Integer Value = '%v'\n",
+			"Error: Input parameter 'Col1FieldJustify' is invalid!\n"+
+			"'Col1FieldJustify' must be set to 'Left', 'Right' or 'Center'.\n"+
+			"Col1FieldJustify String Value  = '%v'\n"+
+			"Col1FieldJustify Integer Value = '%v'\n",
 			ePrefix.String(),
 			col1FieldJustify.String(),
 			col1FieldJustify.XValueInt())
@@ -217,41 +217,41 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	}
 
 	newStdFmtParams := TextFmtParamsLineColumns{
-		formatType:         TxtFieldType.Line1Column(),
-		col1LeftMarginStr:  leftMarginStr,
-		col1FieldLength:    col1FieldLength,
-		col1FieldJustify:   col1FieldJustify,
-		col1RightMarginStr: rightMarginStr,
-		col2LeftMarginStr:  "",
-		col2FieldLength:    0,
-		col2FieldJustify:   0,
-		col2RightMarginStr: "",
-		col3LeftMarginStr:  "",
-		col3FieldLength:    0,
-		col3FieldJustify:   0,
-		col3RightMarginStr: "",
-		col4LeftMarginStr:  "",
-		col4FieldLength:    0,
-		col4FieldJustify:   0,
-		col4RightMarginStr: "",
-		col5LeftMarginStr:  "",
-		col5FieldLength:    0,
-		col5FieldJustify:   0,
-		col5RightMarginStr: "",
-		col6LeftMarginStr:  "",
-		col6FieldLength:    0,
-		col6FieldJustify:   0,
-		col6RightMarginStr: "",
-		col7LeftMarginStr:  "",
-		col7FieldLength:    0,
-		col7FieldJustify:   0,
-		col7RightMarginStr: "",
-		col8LeftMarginStr:  "",
-		col8FieldLength:    0,
-		col8FieldJustify:   0,
-		col8RightMarginStr: "",
-		lineTerminator:     lineTerminator,
-		maxLineLength:      maxLineLength,
+		FormatType:         TxtFieldType.Line1Column(),
+		Col1LeftMarginStr:  leftMarginStr,
+		Col1FieldLength:    col1FieldLength,
+		Col1FieldJustify:   col1FieldJustify,
+		Col1RightMarginStr: rightMarginStr,
+		Col2LeftMarginStr:  "",
+		Col2FieldLength:    0,
+		Col2FieldJustify:   0,
+		Col2RightMarginStr: "",
+		Col3LeftMarginStr:  "",
+		Col3FieldLength:    0,
+		Col3FieldJustify:   0,
+		Col3RightMarginStr: "",
+		Col4LeftMarginStr:  "",
+		Col4FieldLength:    0,
+		Col4FieldJustify:   0,
+		Col4RightMarginStr: "",
+		Col5LeftMarginStr:  "",
+		Col5FieldLength:    0,
+		Col5FieldJustify:   0,
+		Col5RightMarginStr: "",
+		Col6LeftMarginStr:  "",
+		Col6FieldLength:    0,
+		Col6FieldJustify:   0,
+		Col6RightMarginStr: "",
+		Col7LeftMarginStr:  "",
+		Col7FieldLength:    0,
+		Col7FieldJustify:   0,
+		Col7RightMarginStr: "",
+		Col8LeftMarginStr:  "",
+		Col8FieldLength:    0,
+		Col8FieldJustify:   0,
+		Col8RightMarginStr: "",
+		LineTerminator:     lineTerminator,
+		MaxLineLength:      maxLineLength,
 		isValid:            true,
 		lock:               nil,
 	}
@@ -266,7 +266,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 		for i := 0; i < lenStdTxtLineCol; i++ {
 
 			if txtFmtCollection.stdTextLineParamCollection[i].
-				formatType == TxtFieldType.Line1Column() {
+				FormatType == TxtFieldType.Line1Column() {
 
 				txtFmtCollection.stdTextLineParamCollection[i].
 					CopyIn(&newStdFmtParams)
@@ -296,21 +296,21 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 		BlankLine:  TextLineBlankDto{},
 		SolidLine:  TextLineSolidLineDto{},
 		LineColumns: TextLineColumnsDto{
-			formatType:    TxtFieldType.Line1Column(),
-			col1FieldText: col1FieldText,
-			col2FieldText: "",
-			col3FieldText: "",
-			col4FieldText: "",
-			col5FieldText: "",
-			col6FieldText: "",
-			col7FieldText: "",
-			col8FieldText: "",
-			fmtParameters: TextFmtParamsLineColumns{},
+			FormatType:    TxtFieldType.Line1Column(),
+			Col1FieldText: col1FieldText,
+			Col2FieldText: "",
+			Col3FieldText: "",
+			Col4FieldText: "",
+			Col5FieldText: "",
+			Col6FieldText: "",
+			Col7FieldText: "",
+			Col8FieldText: "",
+			FmtParameters: TextFmtParamsLineColumns{},
 			lock:          nil,
 		},
 	}
 
-	newLine1Col.LineColumns.fmtParameters.CopyIn(
+	newLine1Col.LineColumns.FmtParameters.CopyIn(
 		&newStdFmtParams)
 
 	txtFmtCollection.fmtCollection =
@@ -319,6 +319,55 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 			newLine1Col)
 
 	return err
+}
+
+// GetLengthFormatterCollection - Returns the length of the Text
+// Formatter Collection contained in the current instance of
+// TextFormatterCollection.
+//
+// The Text Formatter Collection is an array of Text Formatter Data
+// Transfer Objects (TextFormatterDto).
+//
+// The collection length is returned as an integer value.
+//
+func (txtFmtCollection *TextFormatterCollection) GetLengthFormatterCollection() int {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	return len(txtFmtCollection.fmtCollection)
+}
+
+// GetLengthStdTextLineParamCollection - Returns the length of the
+// Standard Text Line Parameter Collection contained in the current
+// instance of TextFormatterCollection.
+//
+// The Standard Text Line Parameter Collection is an array of Text
+// Format Parameters for Lines and Columns
+// (TextFmtParamsLineColumns).
+//
+// The Standard Text Line Parameter Collection is used to produced
+// standardized lines of texts containing between one and eight
+// label fields.
+//
+// The collection length is returned as an integer value.
+//
+func (txtFmtCollection *TextFormatterCollection) GetLengthStdTextLineParamCollection() int {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	return len(txtFmtCollection.stdTextLineParamCollection)
 }
 
 // SetStdFormatParamsLine1Col - Sets the standard format parameters
@@ -398,41 +447,41 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 	}
 
 	newStdFmtParams := TextFmtParamsLineColumns{
-		formatType:         TxtFieldType.Line1Column(),
-		col1LeftMarginStr:  leftMarginStr,
-		col1FieldLength:    fieldLength,
-		col1FieldJustify:   fieldJustify,
-		col1RightMarginStr: rightMarginStr,
-		col2LeftMarginStr:  "",
-		col2FieldLength:    0,
-		col2FieldJustify:   0,
-		col2RightMarginStr: "",
-		col3LeftMarginStr:  "",
-		col3FieldLength:    0,
-		col3FieldJustify:   0,
-		col3RightMarginStr: "",
-		col4LeftMarginStr:  "",
-		col4FieldLength:    0,
-		col4FieldJustify:   0,
-		col4RightMarginStr: "",
-		col5LeftMarginStr:  "",
-		col5FieldLength:    0,
-		col5FieldJustify:   0,
-		col5RightMarginStr: "",
-		col6LeftMarginStr:  "",
-		col6FieldLength:    0,
-		col6FieldJustify:   0,
-		col6RightMarginStr: "",
-		col7LeftMarginStr:  "",
-		col7FieldLength:    0,
-		col7FieldJustify:   0,
-		col7RightMarginStr: "",
-		col8LeftMarginStr:  "",
-		col8FieldLength:    0,
-		col8FieldJustify:   0,
-		col8RightMarginStr: "",
-		lineTerminator:     lineTerminator,
-		maxLineLength:      maxLineLength,
+		FormatType:         TxtFieldType.Line1Column(),
+		Col1LeftMarginStr:  leftMarginStr,
+		Col1FieldLength:    fieldLength,
+		Col1FieldJustify:   fieldJustify,
+		Col1RightMarginStr: rightMarginStr,
+		Col2LeftMarginStr:  "",
+		Col2FieldLength:    0,
+		Col2FieldJustify:   0,
+		Col2RightMarginStr: "",
+		Col3LeftMarginStr:  "",
+		Col3FieldLength:    0,
+		Col3FieldJustify:   0,
+		Col3RightMarginStr: "",
+		Col4LeftMarginStr:  "",
+		Col4FieldLength:    0,
+		Col4FieldJustify:   0,
+		Col4RightMarginStr: "",
+		Col5LeftMarginStr:  "",
+		Col5FieldLength:    0,
+		Col5FieldJustify:   0,
+		Col5RightMarginStr: "",
+		Col6LeftMarginStr:  "",
+		Col6FieldLength:    0,
+		Col6FieldJustify:   0,
+		Col6RightMarginStr: "",
+		Col7LeftMarginStr:  "",
+		Col7FieldLength:    0,
+		Col7FieldJustify:   0,
+		Col7RightMarginStr: "",
+		Col8LeftMarginStr:  "",
+		Col8FieldLength:    0,
+		Col8FieldJustify:   0,
+		Col8RightMarginStr: "",
+		LineTerminator:     lineTerminator,
+		MaxLineLength:      maxLineLength,
 		isValid:            true,
 		lock:               nil,
 	}
@@ -443,7 +492,7 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 	for i := 0; i < lenStdTextLineCol; i++ {
 
 		if txtFmtCollection.
-			stdTextLineParamCollection[i].formatType ==
+			stdTextLineParamCollection[i].FormatType ==
 			TxtFieldType.Line1Column() {
 
 			txtFmtCollection.

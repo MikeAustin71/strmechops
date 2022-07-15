@@ -5,22 +5,22 @@ import (
 )
 
 type TextLineColumnsDto struct {
-	formatType TextFieldType
+	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
 	// Format Operation to be performed. For the Line1Column
 	// Formatter Type, this value is always set to:
 	//   TxtFieldType.Line1Column()
 
-	col1FieldText string
-	col2FieldText string
-	col3FieldText string
-	col4FieldText string
-	col5FieldText string
-	col6FieldText string
-	col7FieldText string
-	col8FieldText string
+	Col1FieldText string
+	Col2FieldText string
+	Col3FieldText string
+	Col4FieldText string
+	Col5FieldText string
+	Col6FieldText string
+	Col7FieldText string
+	Col8FieldText string
 
-	fmtParameters TextFmtParamsLineColumns
+	FmtParameters TextFmtParamsLineColumns
 
 	lock *sync.Mutex
 }
@@ -40,10 +40,10 @@ func (fmtLine1Col *TextLineColumnsDto) GetTextFieldType() TextFieldType {
 
 	defer fmtLine1Col.lock.Unlock()
 
-	if fmtLine1Col.formatType != TxtFieldType.Line1Column() {
+	if fmtLine1Col.FormatType != TxtFieldType.Line1Column() {
 
-		fmtLine1Col.formatType = TxtFieldType.Line1Column()
+		fmtLine1Col.FormatType = TxtFieldType.Line1Column()
 	}
 
-	return fmtLine1Col.formatType
+	return fmtLine1Col.FormatType
 }
