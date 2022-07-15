@@ -60,5 +60,15 @@ type TextFormatterDto struct {
 	LineColumns TextLineColumnsDto
 	// A structure containing data elements necessary for the
 	// creation of a text line containing at least one, and up
-	// to 8-columns.
+	// to 8-columns. TextFieldType's covered by 'LineColumns'
+	// are listed as follows:
+	//  TxtFieldType.Line1Column()
+	//  TxtFieldType.Line2Column()
+	//  TxtFieldType.Line3Column()
+	//  TxtFieldType.Line4Column()
+	//  TxtFieldType.Line5Column()
+	//  TxtFieldType.Line6Column()
+	//  TxtFieldType.Line7Column()
+	//  TxtFieldType.Line8Column()
+
 }
