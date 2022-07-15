@@ -23,17 +23,21 @@ type TextFormatterCollection struct {
 }
 
 // AddLine1Col - Adds Field Text and Format Parameters for
-// Format Type 'Line1Column' Text. This method will assign
-// Format Parameter to this 'Line1Column' Text Line based
-// on the Standard Parameters for this Text Type.
+// Format Type 'Line1Column' Text. The 'Line1Column' Text is
+// designed to produce a single line of text consisting of one
+// text field with optional left and right margins.
 //
-// This method will extract format parameters from the Standard
-// Text Line Parameters collection maintained by this instance of
+// This method will assign previously configured (a.k.a. default)
+// Format Parameters to this 'Line1Column' Text Line. The prior
+// configuration of these 'Line1Column' Format Parameters is
+// a requirement and errors will be generated if these standard
+// Format Parameters have not yet been created.
+//
+// This method will extract the previously created Standard Format
+// Parameters for 'Line1Column' Text Lines from the Standard Text
+// Line Parameters collection maintained by this instance of
 // TextFormatterCollection.
 //
-// If the standard parameters for 'Line1Column' Text Lines do
-// not exist in the Standard Text Line Parameters Collection,
-// an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -43,6 +47,10 @@ type TextFormatterCollection struct {
 // configured in the Standard Text Line Parameters Collection
 // before calling this method.
 //
+// If the standard parameters for 'Line1Column' Text Lines were
+// not previously configured in the Standard Text Line Parameters
+// Collection, an error will be returned.
+//
 // ----------------------------------------------------------------
 //
 // To configure the standard parameters for 'Line1Column' Text
@@ -50,6 +58,18 @@ type TextFormatterCollection struct {
 //   TextFormatterCollection.CfgLine1Col()
 //   TextFormatterCollection.SetStdFormatParamsLine1Col()
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  column1FieldText           string
+//     - This string contains the text which will be configured
+//       for the single text field created for the 'Line1Column'
+//       Text Line created by this method.
+//
+//       If this string parameter is empty, it will be defaulted to
+//       a single white space character (" ").
 func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	column1FieldText string,
 	errorPrefix interface{}) error {
