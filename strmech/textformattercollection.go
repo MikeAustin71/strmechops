@@ -71,7 +71,7 @@ type TextFormatterCollection struct {
 //       If this string parameter is empty, it will be defaulted to
 //       a single white space character (" ").
 func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
-	column1FieldText string,
+	column1Field IAddColumns,
 	errorPrefix interface{}) error {
 
 	if txtFmtCollection.lock == nil {
@@ -95,6 +95,11 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	if err != nil {
 		return err
 	}
+
+	var column1FieldText string
+
+	column1FieldText = fmt.Sprintf("%v",
+		column1Field)
 
 	var foundStdParams bool
 	var stdLineColsFmt TextFmtParamsLineColumns
