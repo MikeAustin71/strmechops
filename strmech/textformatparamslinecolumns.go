@@ -43,9 +43,30 @@ type TextFmtParamsLineColumns struct {
 	Col8FieldLength    int
 	Col8FieldJustify   TextJustify
 	Col8RightMarginStr string
-	LineTerminator     string
-	MaxLineLength      int
-	isValid            bool
+
+	TurnLineTerminationOff bool
+	// If this parameter is set to 'true' no Line Termination
+	// Sequence will be applied for this text line.
+
+	LineTerminator string
+	// If this parameter is submitted as an empty string,
+	// the default new line terminator ('\n') will be applied.
+	// If this parameter is populated, this character sequence
+	// will be used as the Line Terminator for this text line.
+	// Remember that the line termination operation will only
+	// be performed if paramter 'TurnLineTerminationOff' is set
+	// to 'false'.
+
+	MaxLineLength int
+	// Set this parameter to minus one -1 to specify an unlimited
+	// line length for this text line.
+
+	TurnAutoLineLengthBreaksOn bool
+	// When this parameter is set to 'true', text fields which extend
+	// beyond the maximum line length 'MaxLineLength' will be placed
+	// on the following line of text.
+
+	isValid bool
 
 	lock *sync.Mutex
 }
@@ -93,8 +114,11 @@ func (paramsLineCol *TextFmtParamsLineColumns) CopyIn(
 	paramsLineCol.Col8FieldLength = incomingParams.Col8FieldLength
 	paramsLineCol.Col8FieldJustify = incomingParams.Col8FieldJustify
 	paramsLineCol.Col8RightMarginStr = incomingParams.Col8RightMarginStr
+	paramsLineCol.TurnLineTerminationOff = incomingParams.TurnLineTerminationOff
 	paramsLineCol.LineTerminator = incomingParams.LineTerminator
 	paramsLineCol.MaxLineLength = incomingParams.MaxLineLength
+	paramsLineCol.TurnAutoLineLengthBreaksOn =
+		incomingParams.TurnAutoLineLengthBreaksOn
 	paramsLineCol.isValid = incomingParams.isValid
 
 	return
@@ -113,42 +137,44 @@ func (paramsLineCol *TextFmtParamsLineColumns) CopyOut() TextFmtParamsLineColumn
 	defer paramsLineCol.lock.Unlock()
 
 	newParamsLineCols := TextFmtParamsLineColumns{
-		FormatType:         paramsLineCol.FormatType,
-		Col1LeftMarginStr:  paramsLineCol.Col1LeftMarginStr,
-		Col1FieldLength:    paramsLineCol.Col1FieldLength,
-		Col1FieldJustify:   paramsLineCol.Col1FieldJustify,
-		Col1RightMarginStr: paramsLineCol.Col1RightMarginStr,
-		Col2LeftMarginStr:  paramsLineCol.Col2LeftMarginStr,
-		Col2FieldLength:    paramsLineCol.Col2FieldLength,
-		Col2FieldJustify:   paramsLineCol.Col2FieldJustify,
-		Col2RightMarginStr: paramsLineCol.Col2RightMarginStr,
-		Col3FieldLength:    paramsLineCol.Col3FieldLength,
-		Col3FieldJustify:   paramsLineCol.Col3FieldJustify,
-		Col3RightMarginStr: paramsLineCol.Col3RightMarginStr,
-		Col4LeftMarginStr:  paramsLineCol.Col4LeftMarginStr,
-		Col4FieldLength:    paramsLineCol.Col4FieldLength,
-		Col4FieldJustify:   paramsLineCol.Col4FieldJustify,
-		Col4RightMarginStr: paramsLineCol.Col4RightMarginStr,
-		Col5LeftMarginStr:  paramsLineCol.Col5LeftMarginStr,
-		Col5FieldLength:    paramsLineCol.Col5FieldLength,
-		Col5FieldJustify:   paramsLineCol.Col5FieldJustify,
-		Col5RightMarginStr: paramsLineCol.Col5RightMarginStr,
-		Col6LeftMarginStr:  paramsLineCol.Col6LeftMarginStr,
-		Col6FieldLength:    paramsLineCol.Col6FieldLength,
-		Col6FieldJustify:   paramsLineCol.Col6FieldJustify,
-		Col6RightMarginStr: paramsLineCol.Col6RightMarginStr,
-		Col7LeftMarginStr:  paramsLineCol.Col7LeftMarginStr,
-		Col7FieldLength:    paramsLineCol.Col7FieldLength,
-		Col7FieldJustify:   paramsLineCol.Col7FieldJustify,
-		Col7RightMarginStr: paramsLineCol.Col7RightMarginStr,
-		Col8LeftMarginStr:  paramsLineCol.Col8LeftMarginStr,
-		Col8FieldLength:    paramsLineCol.Col8FieldLength,
-		Col8FieldJustify:   paramsLineCol.Col8FieldJustify,
-		Col8RightMarginStr: paramsLineCol.Col8RightMarginStr,
-		LineTerminator:     paramsLineCol.LineTerminator,
-		MaxLineLength:      paramsLineCol.MaxLineLength,
-		isValid:            paramsLineCol.isValid,
-		lock:               nil,
+		FormatType:                 paramsLineCol.FormatType,
+		Col1LeftMarginStr:          paramsLineCol.Col1LeftMarginStr,
+		Col1FieldLength:            paramsLineCol.Col1FieldLength,
+		Col1FieldJustify:           paramsLineCol.Col1FieldJustify,
+		Col1RightMarginStr:         paramsLineCol.Col1RightMarginStr,
+		Col2LeftMarginStr:          paramsLineCol.Col2LeftMarginStr,
+		Col2FieldLength:            paramsLineCol.Col2FieldLength,
+		Col2FieldJustify:           paramsLineCol.Col2FieldJustify,
+		Col2RightMarginStr:         paramsLineCol.Col2RightMarginStr,
+		Col3FieldLength:            paramsLineCol.Col3FieldLength,
+		Col3FieldJustify:           paramsLineCol.Col3FieldJustify,
+		Col3RightMarginStr:         paramsLineCol.Col3RightMarginStr,
+		Col4LeftMarginStr:          paramsLineCol.Col4LeftMarginStr,
+		Col4FieldLength:            paramsLineCol.Col4FieldLength,
+		Col4FieldJustify:           paramsLineCol.Col4FieldJustify,
+		Col4RightMarginStr:         paramsLineCol.Col4RightMarginStr,
+		Col5LeftMarginStr:          paramsLineCol.Col5LeftMarginStr,
+		Col5FieldLength:            paramsLineCol.Col5FieldLength,
+		Col5FieldJustify:           paramsLineCol.Col5FieldJustify,
+		Col5RightMarginStr:         paramsLineCol.Col5RightMarginStr,
+		Col6LeftMarginStr:          paramsLineCol.Col6LeftMarginStr,
+		Col6FieldLength:            paramsLineCol.Col6FieldLength,
+		Col6FieldJustify:           paramsLineCol.Col6FieldJustify,
+		Col6RightMarginStr:         paramsLineCol.Col6RightMarginStr,
+		Col7LeftMarginStr:          paramsLineCol.Col7LeftMarginStr,
+		Col7FieldLength:            paramsLineCol.Col7FieldLength,
+		Col7FieldJustify:           paramsLineCol.Col7FieldJustify,
+		Col7RightMarginStr:         paramsLineCol.Col7RightMarginStr,
+		Col8LeftMarginStr:          paramsLineCol.Col8LeftMarginStr,
+		Col8FieldLength:            paramsLineCol.Col8FieldLength,
+		Col8FieldJustify:           paramsLineCol.Col8FieldJustify,
+		Col8RightMarginStr:         paramsLineCol.Col8RightMarginStr,
+		TurnLineTerminationOff:     paramsLineCol.TurnLineTerminationOff,
+		LineTerminator:             paramsLineCol.LineTerminator,
+		MaxLineLength:              paramsLineCol.MaxLineLength,
+		TurnAutoLineLengthBreaksOn: paramsLineCol.TurnAutoLineLengthBreaksOn,
+		isValid:                    paramsLineCol.isValid,
+		lock:                       nil,
 	}
 
 	return newParamsLineCols

@@ -3,12 +3,205 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"math/big"
 	"strings"
 	"sync"
 )
 
 type textSpecificationAtom struct {
 	lock *sync.Mutex
+}
+
+// convertParamEmptyInterfaceToString - Receives an object styled
+// as an empty interface and attempts to convert it to a string.
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  emptyIFace                 interface{}
+//     - This object will be converted to a type of string and
+//       returned to the calling function.
+//
+//
+//  emptyIFaceParamName        string
+//     - This is the name or text label used to describe input
+//       parameter 'emptyIFace' when formatting informational or
+//       error messages. If this parameter is submitted as an empty
+//       string its value will be defaulted to 'emptyIFace'.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this parameter
+//       to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  convertedString            string
+//     - If this method completes successfully, this parameter will
+//       be populated with a string value extracted and converted
+//       from the empty interface input parameter, 'emptyIFace'.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
+	emptyIFace interface{},
+	emptyIFaceParamName string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	convertedString string,
+	err error) {
+
+	if txtSpecAtom.lock == nil {
+		txtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	txtSpecAtom.lock.Lock()
+
+	defer txtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var ok bool
+	var plainString string
+	var iStringer fmt.Stringer
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textSpecificationAtom."+
+			"convertEmptyInterfaceToString()",
+		"")
+
+	if err != nil {
+		return convertedString, err
+	}
+
+	if len(emptyIFaceParamName) == 0 {
+		emptyIFaceParamName = "emptyIFace"
+	}
+
+	switch emptyIFace.(type) { // the switch uses the type of the interface
+
+	case bool:
+
+		goto standardConversion
+
+	case uint, uint8, uint16, uint32, uint64:
+
+		goto standardConversion
+
+	case int, int8, int16, int32, int64:
+
+		goto standardConversion
+
+	case float32, float64:
+
+		goto standardConversion
+
+	case *big.Int:
+
+		goto standardConversion
+
+	case *big.Float:
+
+		goto standardConversion
+
+	case fmt.Stringer:
+		goto stringerConversion
+
+	case string:
+		goto straightStringConversion
+
+	case nil:
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' value.\n",
+			ePrefix.String(),
+			emptyIFaceParamName,
+			emptyIFaceParamName)
+
+		return convertedString, err
+
+	default:
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an unsupported type.\n"+
+			"'%v' is Type: %T",
+			ePrefix.String(),
+			emptyIFaceParamName,
+			emptyIFaceParamName,
+			emptyIFaceParamName,
+			emptyIFace)
+
+		return convertedString, err
+	}
+
+standardConversion:
+
+	convertedString = fmt.Sprintf("%v",
+		emptyIFace)
+
+	return convertedString, err
+
+straightStringConversion:
+
+	plainString,
+		ok = emptyIFace.(string)
+
+	if !ok {
+		err = fmt.Errorf("%v\n"+
+			"Error: Failed to convert empty interface\n"+
+			"(%v) to string!\n"+
+			"String Conversion Error.\n",
+			ePrefix.String(),
+			emptyIFaceParamName)
+
+		return convertedString, err
+	}
+
+	convertedString = plainString
+
+	return convertedString, err
+
+stringerConversion:
+
+	iStringer,
+		ok = emptyIFace.(fmt.Stringer)
+
+	if !ok {
+		err = fmt.Errorf("%v\n"+
+			"Error: Failed to convert empty interface\n"+
+			"(%v) to string!\n"+
+			"fmt.Stringer Conversion Error.\n",
+			ePrefix.String(),
+			emptyIFaceParamName)
+
+		return convertedString, err
+	}
+
+	convertedString = iStringer.String()
+	return convertedString, err
 }
 
 // getDefaultNewLineChars - Returns the default new line characters

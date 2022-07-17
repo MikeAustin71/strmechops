@@ -1,0 +1,17 @@
+
+
+https://tip.golang.org/ref/spec#Method_declarations
+
+type Pair[A, B any] struct {
+	a A
+	b B
+}
+
+func (p Pair[A, B]) Swap() Pair[B, A]  { … }  // receiver declares A, B
+func (p Pair[First, _]) First() First  { … }  // receiver declares First, corresponds to A in Pair
+
+
+type IInputParamToStr interface {
+	*big.Int | *big.Float | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
+		~int | ~int8 | ~int16 | ~int32 | ~int64 |
+		~float32 | ~float64 | ~string | ~bool
