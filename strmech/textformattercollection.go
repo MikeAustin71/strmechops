@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
+	"time"
 )
 
 // TextFormatterCollection - This type contains a collection of
@@ -15,7 +16,7 @@ type TextFormatterCollection struct {
 	fmtCollection []TextFormatterDto
 	// Text
 
-	stdTextLineParamCollection []TextFmtParamsLineColumns
+	stdTextLineParamCollection []TextFmtParamsLineColumnsDto
 	// Standard Format Parameter Collection.
 	// Provides standard text formats
 
@@ -81,6 +82,8 @@ type TextFormatterCollection struct {
 //          float32, float64
 //          *big.Int *big.Float
 //          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
 //
 //       If the 'column1Field' is not convertible to one of the
 //       supported types, an error will be returned.
@@ -178,7 +181,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	}
 
 	var foundStdParams bool
-	var stdLineColsFmt TextFmtParamsLineColumns
+	var stdLineColsFmt TextFmtParamsLineColumnsDto
 
 	foundStdParams,
 		stdLineColsFmt,
@@ -221,33 +224,38 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		return err
 	}
 
-	newLine1Col := TextFormatterDto{
+	if len(column1FieldText) == 0 {
+		column1FieldText = " "
+	}
+
+	newTextLine1Cols := TextLineColumnsDto{
 		FormatType: TxtFieldType.Line1Column(),
-		DateTime:   TextFieldDateTimeDto{},
-		Filler:     TextFieldFillerDto{},
-		Label:      TextFieldLabelDto{},
-		Spacer:     TextFieldSpacerDto{},
-		BlankLine:  TextLineBlankDto{},
-		SolidLine:  TextLineSolidLineDto{},
-		LineColumns: TextLineColumnsDto{
-			FormatType:    TxtFieldType.Line1Column(),
-			Col1FieldText: column1FieldText,
-			Col2FieldText: "",
-			Col3FieldText: "",
-			Col4FieldText: "",
-			Col5FieldText: "",
-			Col6FieldText: "",
-			Col7FieldText: "",
-			Col8FieldText: "",
-			FmtParameters: stdLineColsFmt,
-			lock:          nil,
+		TextFieldsContent: []TextFieldsContentDto{
+			{
+				TextFieldString:   column1FieldText,
+				TextFieldDateTime: time.Time{},
+				lock:              nil,
+			},
 		},
+		FmtParameters: stdLineColsFmt,
+		lock:          nil,
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.Line1Column(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: newTextLine1Cols,
 	}
 
 	txtFmtCollection.fmtCollection =
 		append(
 			txtFmtCollection.fmtCollection,
-			newLine1Col)
+			newTextFormatter)
 
 	return err
 }
@@ -587,40 +595,18 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 
 	}
 
-	newStdFmtParams := TextFmtParamsLineColumns{
-		FormatType:                 TxtFieldType.Line1Column(),
-		Col1LeftMarginStr:          leftMarginStr,
-		Col1FieldLength:            column1FieldLength,
-		Col1FieldJustify:           column1FieldJustify,
-		Col1RightMarginStr:         rightMarginStr,
-		Col2LeftMarginStr:          "",
-		Col2FieldLength:            0,
-		Col2FieldJustify:           0,
-		Col2RightMarginStr:         "",
-		Col3LeftMarginStr:          "",
-		Col3FieldLength:            0,
-		Col3FieldJustify:           0,
-		Col3RightMarginStr:         "",
-		Col4LeftMarginStr:          "",
-		Col4FieldLength:            0,
-		Col4FieldJustify:           0,
-		Col4RightMarginStr:         "",
-		Col5LeftMarginStr:          "",
-		Col5FieldLength:            0,
-		Col5FieldJustify:           0,
-		Col5RightMarginStr:         "",
-		Col6LeftMarginStr:          "",
-		Col6FieldLength:            0,
-		Col6FieldJustify:           0,
-		Col6RightMarginStr:         "",
-		Col7LeftMarginStr:          "",
-		Col7FieldLength:            0,
-		Col7FieldJustify:           0,
-		Col7RightMarginStr:         "",
-		Col8LeftMarginStr:          "",
-		Col8FieldLength:            0,
-		Col8FieldJustify:           0,
-		Col8RightMarginStr:         "",
+	newStdFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType: TxtFieldType.Line1Column(),
+		FieldFormatParams: []TextFieldFmtParamsDto{
+			{
+				LeftMarginStr:  leftMarginStr,
+				FieldLength:    column1FieldLength,
+				FieldJustify:   column1FieldJustify,
+				DateTimeFormat: "",
+				RightMarginStr: rightMarginStr,
+				lock:           nil,
+			},
+		},
 		TurnLineTerminationOff:     turnLineTerminationOff,
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
@@ -629,36 +615,29 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 		lock:                       nil,
 	}
 
-	newLine1Col := TextFormatterDto{
-		FormatType: 0,
-		DateTime:   TextFieldDateTimeDto{},
-		Filler:     TextFieldFillerDto{},
-		Label:      TextFieldLabelDto{},
-		Spacer:     TextFieldSpacerDto{},
-		BlankLine:  TextLineBlankDto{},
-		SolidLine:  TextLineSolidLineDto{},
-		LineColumns: TextLineColumnsDto{
-			FormatType:    TxtFieldType.Line1Column(),
-			Col1FieldText: column1FieldText,
-			Col2FieldText: "",
-			Col3FieldText: "",
-			Col4FieldText: "",
-			Col5FieldText: "",
-			Col6FieldText: "",
-			Col7FieldText: "",
-			Col8FieldText: "",
-			FmtParameters: TextFmtParamsLineColumns{},
-			lock:          nil,
+	newTextLine1Cols := TextLineColumnsDto{
+		FormatType: TxtFieldType.Line1Column(),
+		TextFieldsContent: []TextFieldsContentDto{
+			{
+				TextFieldString:   column1FieldText,
+				TextFieldDateTime: time.Time{},
+				lock:              nil,
+			},
 		},
+		FmtParameters: newStdFmtParams,
+		lock:          nil,
 	}
 
-	newLine1Col.LineColumns.FmtParameters.CopyIn(
-		&newStdFmtParams)
-
-	txtFmtCollection.fmtCollection =
-		append(
-			txtFmtCollection.fmtCollection,
-			newLine1Col)
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.Line1Column(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: newTextLine1Cols,
+	}
 
 	err = textFormatterCollectionElectron{}.ptr().
 		cfgNewStdTxtLineParameters(
@@ -666,6 +645,15 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 			newStdFmtParams,
 			ePrefix.XCpy(
 				"newStdFmtParams"))
+
+	if err != nil {
+		return err
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
 
 	return err
 }
@@ -698,7 +686,7 @@ func (txtFmtCollection *TextFormatterCollection) GetLengthFormatterCollection() 
 //
 // The Standard Text Line Parameter Collection is an array of Text
 // Format Parameters for Lines and Columns
-// (TextFmtParamsLineColumns).
+// (TextFmtParamsLineColumnsDto).
 //
 // The Standard Text Line Parameter Collection is used to produced
 // standardized lines of texts containing between one and eight
@@ -849,7 +837,7 @@ func (txtFmtCollection *TextFormatterCollection) GetLengthStdTextLineParamCollec
 //  turnAutoLineLengthBreaksOn bool
 //     - This parameter controls whether text lines which exceed
 //       the maximum line length ('maxLineLength') are broken up
-//       and presented on on the following line.
+//       and presented on the following line.
 //
 //       To apply automatic line breaking at the maximum line
 //       length, set the value of this parameter to 'true'.
@@ -989,40 +977,18 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 
 	}
 
-	newStdFmtParams := TextFmtParamsLineColumns{
-		FormatType:                 TxtFieldType.Line1Column(),
-		Col1LeftMarginStr:          leftMarginStr,
-		Col1FieldLength:            column1FieldLength,
-		Col1FieldJustify:           column1FieldJustify,
-		Col1RightMarginStr:         rightMarginStr,
-		Col2LeftMarginStr:          "",
-		Col2FieldLength:            0,
-		Col2FieldJustify:           0,
-		Col2RightMarginStr:         "",
-		Col3LeftMarginStr:          "",
-		Col3FieldLength:            0,
-		Col3FieldJustify:           0,
-		Col3RightMarginStr:         "",
-		Col4LeftMarginStr:          "",
-		Col4FieldLength:            0,
-		Col4FieldJustify:           0,
-		Col4RightMarginStr:         "",
-		Col5LeftMarginStr:          "",
-		Col5FieldLength:            0,
-		Col5FieldJustify:           0,
-		Col5RightMarginStr:         "",
-		Col6LeftMarginStr:          "",
-		Col6FieldLength:            0,
-		Col6FieldJustify:           0,
-		Col6RightMarginStr:         "",
-		Col7LeftMarginStr:          "",
-		Col7FieldLength:            0,
-		Col7FieldJustify:           0,
-		Col7RightMarginStr:         "",
-		Col8LeftMarginStr:          "",
-		Col8FieldLength:            0,
-		Col8FieldJustify:           0,
-		Col8RightMarginStr:         "",
+	newStdFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType: TxtFieldType.Line1Column(),
+		FieldFormatParams: []TextFieldFmtParamsDto{
+			{
+				LeftMarginStr:  leftMarginStr,
+				FieldLength:    column1FieldLength,
+				FieldJustify:   column1FieldJustify,
+				DateTimeFormat: "",
+				RightMarginStr: rightMarginStr,
+				lock:           nil,
+			},
+		},
 		TurnLineTerminationOff:     turnLineTerminationOff,
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,

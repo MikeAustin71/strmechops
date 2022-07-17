@@ -7,22 +7,288 @@ import (
 type TextLineColumnsDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
-	// Format Operation to be performed. For the Line1Column
-	// Formatter Type, this value is always set to:
+	// Format Operation to be performed. For Example, when applying
+	// the Line1Column Formatter Type, set this value to:
 	//   TxtFieldType.Line1Column()
 
-	Col1FieldText string
-	Col2FieldText string
-	Col3FieldText string
-	Col4FieldText string
-	Col5FieldText string
-	Col6FieldText string
-	Col7FieldText string
-	Col8FieldText string
+	TextFieldsContent []TextFieldsContentDto
 
-	FmtParameters TextFmtParamsLineColumns
+	FmtParameters TextFmtParamsLineColumnsDto
 
 	lock *sync.Mutex
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// TextLineColumnsDto ('incomingTxtLineCols') to the data fields
+// of the current TextLineColumnsDto instance
+// ('fmtLineCols').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current TextLineColumnsDto instance
+// ('fmtLineCols') will be deleted and overwritten.
+//
+// NO DATA VALIDATION IS performed on input parameter,
+// 'incomingTxtLineCols'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLineCols        TextLineColumnsDto
+//     - An instance of TextLineColumnsDto. This method will NOT
+//       change the data values of member variables contained in
+//       this instance.
+//
+//       All data values in this TextLineColumnsDto instance
+//       ('incomingTxtLineCols') will be copied to the current
+//       TextLineColumnsDto instance ('fmtLineCols').
+//
+//       No data validation is performed on input parameter,
+//       'incomingTxtLineCols'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (fmtLineCols *TextLineColumnsDto) CopyIn(
+	incomingTxtLineCols TextLineColumnsDto) {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	fmtLineCols.FormatType =
+		incomingTxtLineCols.FormatType
+
+	lenItems := len(fmtLineCols.TextFieldsContent)
+
+	for i := 0; i < lenItems; i++ {
+
+		fmtLineCols.TextFieldsContent[i].Empty()
+	}
+
+	fmtLineCols.TextFieldsContent = nil
+
+	lenItems = len(incomingTxtLineCols.TextFieldsContent)
+
+	if lenItems > 0 {
+		fmtLineCols.TextFieldsContent =
+			make([]TextFieldsContentDto, lenItems)
+
+		for i := 0; i < lenItems; i++ {
+
+			fmtLineCols.TextFieldsContent[i].CopyIn(
+				incomingTxtLineCols.TextFieldsContent[i])
+
+		}
+	}
+
+	fmtLineCols.FmtParameters.CopyIn(
+		incomingTxtLineCols.FmtParameters)
+
+	return
+}
+
+// CopyOut - Returns a deep copy of the current TextLineColumnsDto
+// instance.
+//
+// NO DATA VALIDATION is performed on the current instance of
+// TextLineColumnsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyTxtLineColsDto     TextLineColumnsDto
+//     - This parameter will return a deep copy of the current
+//       TextLineColumnsDto instance.
+//
+func (fmtLineCols *TextLineColumnsDto) CopyOut() (
+	deepCopyTxtLineColsDto TextLineColumnsDto) {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	deepCopyTxtLineColsDto.FormatType =
+		fmtLineCols.FormatType
+
+	lenItems := len(fmtLineCols.TextFieldsContent)
+
+	if lenItems > 0 {
+		deepCopyTxtLineColsDto.TextFieldsContent =
+			make([]TextFieldsContentDto, lenItems)
+
+		for i := 0; i < lenItems; i++ {
+
+			deepCopyTxtLineColsDto.TextFieldsContent[i].CopyIn(
+				fmtLineCols.TextFieldsContent[i])
+
+		}
+	}
+
+	deepCopyTxtLineColsDto.FmtParameters.CopyIn(
+		fmtLineCols.FmtParameters)
+
+	return deepCopyTxtLineColsDto
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of TextLineColumnsDto to their zero or
+// uninitialized states. This method will leave the current
+// instance of TextLineColumnsDto in an invalid state and
+// unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextLineColumnsDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (fmtLineCols *TextLineColumnsDto) Empty() {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	fmtLineCols.FormatType = TxtFieldType.None()
+
+	lenItems := len(fmtLineCols.TextFieldsContent)
+
+	for i := 0; i < lenItems; i++ {
+
+		fmtLineCols.TextFieldsContent[i].Empty()
+	}
+
+	fmtLineCols.TextFieldsContent = nil
+
+	fmtLineCols.FmtParameters.Empty()
+
+	fmtLineCols.lock.Unlock()
+
+	fmtLineCols.lock = nil
+}
+
+// Equal - Receives another instance of TextLineColumnsDto and
+// proceeds to compare the member variables to those of the current
+// TextLineColumnsDto instance in order to determine if they are
+// equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLineCols        TextLineColumnsDto
+//     - An incoming instance of TextLineColumnsDto. This method
+//       will compare all member variable data values in this
+//       instance against those contained in the current instance
+//       of TextLineColumnsDto. If the data values in both
+//       instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingTxtLineCols' are equal in all respects
+//       to those contained in the current instance of
+//       TextLineColumnsDto, this method will return a boolean
+//       value of 'true'. Otherwise a value of 'false' will be
+//       returned to the calling function.
+//
+func (fmtLineCols *TextLineColumnsDto) Equal(
+	incomingTxtLineCols TextLineColumnsDto) bool {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	if fmtLineCols.FormatType !=
+		incomingTxtLineCols.FormatType {
+
+		return false
+	}
+
+	lenItems := len(fmtLineCols.TextFieldsContent)
+
+	if len(incomingTxtLineCols.TextFieldsContent) !=
+		lenItems {
+
+		return false
+	}
+
+	for i := 0; i < lenItems; i++ {
+
+		if !fmtLineCols.TextFieldsContent[i].Equal(
+			incomingTxtLineCols.TextFieldsContent[i]) {
+
+			return false
+		}
+	}
+
+	if !fmtLineCols.FmtParameters.Equal(
+		incomingTxtLineCols.FmtParameters) {
+
+		return false
+	}
+
+	return true
 }
 
 // GetTextFieldType - Returns the internal member variable which
@@ -30,20 +296,15 @@ type TextLineColumnsDto struct {
 // TextLineColumnsDto, TextFieldType should be set to
 // TxtFieldType.Line1Column().
 //
-func (fmtLine1Col *TextLineColumnsDto) GetTextFieldType() TextFieldType {
+func (fmtLineCols *TextLineColumnsDto) GetTextFieldType() TextFieldType {
 
-	if fmtLine1Col.lock == nil {
-		fmtLine1Col.lock = new(sync.Mutex)
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
 	}
 
-	fmtLine1Col.lock.Lock()
+	fmtLineCols.lock.Lock()
 
-	defer fmtLine1Col.lock.Unlock()
+	defer fmtLineCols.lock.Unlock()
 
-	if fmtLine1Col.FormatType != TxtFieldType.Line1Column() {
-
-		fmtLine1Col.FormatType = TxtFieldType.Line1Column()
-	}
-
-	return fmtLine1Col.FormatType
+	return fmtLineCols.FormatType
 }

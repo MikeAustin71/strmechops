@@ -14,7 +14,7 @@ type textFormatterCollectionElectron struct {
 
 func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLineParameters(
 	txtFmtCollection *TextFormatterCollection,
-	newStdFmtParams TextFmtParamsLineColumns,
+	newStdFmtParams TextFmtParamsLineColumnsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -64,7 +64,7 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLinePar
 				FormatType == TxtFieldType.Line1Column() {
 
 				txtFmtCollection.stdTextLineParamCollection[i].
-					CopyIn(&newStdFmtParams)
+					CopyIn(newStdFmtParams)
 
 				foundStdTxtLineColFmt = true
 
@@ -90,7 +90,7 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) findStdTxtLineParam
 	searchForTextFieldType TextFieldType,
 	errPrefDto *ePref.ErrPrefixDto) (
 	foundTxtFormatter bool,
-	lineColsFormatter TextFmtParamsLineColumns,
+	lineColsFormatter TextFmtParamsLineColumnsDto,
 	err error) {
 
 	if txtSolidLineElectron.lock == nil {

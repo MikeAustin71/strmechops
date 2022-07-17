@@ -25,6 +25,31 @@ type textSpecificationAtom struct {
 //     - This object will be converted to a type of string and
 //       returned to the calling function.
 //
+//       This parameter is an empty interface which must contain
+//       of several specific types. This empty interface type will
+//       be converted to a string and configured as the single text
+//       field in this 'Line1Column' Text Line.
+//
+//       Supported types which may be submitted through this empty
+//       interface parameter are listed as follows:
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//
+//       If the 'column1Field' is not convertible to one of the
+//       supported types, an error will be returned.
+//
+//       If the converted string value for 'column1Field' is empty,
+//       it will be defaulted to a single white space character
+//       (" ").
+//
 //
 //  emptyIFaceParamName        string
 //     - This is the name or text label used to describe input
@@ -85,6 +110,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	var ok bool
 	var plainString string
 	var iStringer fmt.Stringer
+	var dateTimeInputDto TextInputParamFieldDateTimeDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -102,6 +128,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	}
 
 	switch emptyIFace.(type) { // the switch uses the type of the interface
+
+	case TextInputParamFieldDateTimeDto:
+
+		goto dateTimeConversion
 
 	case bool:
 
@@ -156,6 +186,34 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 		return convertedString, err
 	}
+
+dateTimeConversion:
+
+	dateTimeInputDto,
+		ok = emptyIFace.(TextInputParamFieldDateTimeDto)
+
+	if !ok {
+		err = fmt.Errorf("%v\n"+
+			"Error: Failed to convert empty interface\n"+
+			"(%v) to Date Time!\n"+
+			"String Conversion Error.\n",
+			ePrefix.String(),
+			emptyIFaceParamName)
+
+		return convertedString, err
+	}
+
+	if len(dateTimeInputDto.FieldDateTimeFormat) == 0 {
+		dateTimeInputDto.FieldDateTimeFormat =
+			textSpecificationMolecule{}.ptr().
+				getDefaultDateTimeFormat()
+
+	}
+
+	convertedString = dateTimeInputDto.FieldDateTime.
+		Format(dateTimeInputDto.FieldDateTimeFormat)
+
+	return convertedString, err
 
 standardConversion:
 
