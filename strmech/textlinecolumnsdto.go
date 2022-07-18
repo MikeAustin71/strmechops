@@ -291,6 +291,47 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 	return true
 }
 
+// GetNumberOfFieldFormatParams - Returns the number of Field
+// Format Parameters configured for the current instance of
+// TextLineColumnsDto.
+//
+// The number of Field Format Parameters should always match the
+// number of Text Fields configured for the current instance of
+// TextLineColumnsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method returns an integer value specifying the number
+//       of Field Format Parameters array maintained by this
+//       instance of TextLineColumnsDto:
+//
+//       TextFmtParamsLineColumnsDto.FmtParameters.
+//           FieldFormatParams
+//
+func (fmtLineCols *TextLineColumnsDto) GetNumberOfFieldFormatParams() int {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	return fmtLineCols.FmtParameters.GetNumOfFieldFmtParams()
+}
+
 // GetNumberOfTextFields - Returns the number of Text Field Content
 // Data Transfer objects residing in the Text Field Content array
 // maintained by this instance of TextLineColumnsDto.
@@ -317,6 +358,7 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 //          TextLineColumnsDto.TextFieldsContent
 //
 func (fmtLineCols *TextLineColumnsDto) GetNumberOfTextFields() int {
+
 	if fmtLineCols.lock == nil {
 		fmtLineCols.lock = new(sync.Mutex)
 	}
