@@ -23,13 +23,135 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
+// AddLabel - Adds a single text label field to the Formatter
+// Collection. Users have the option to format the text label with
+// a line terminator.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  leftMarginStr              string
+//     - The contents of this string will be used as the left
+//       margin for the text label field.
+//
+//       If no left margin is required, set 'leftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
+//  fieldText                  string
+//     - This strings holds the text characters which will be
+//       formatted as a text label.
+//
+//       If 'labelText' is submitted as a zero length or empty
+//       string, it will be automatically converted to a single
+//       white space (" ").
+//
+//
+//  fieldLength                int
+//     - Used to format Text Label Fields. This is the length of
+//       the text field in which the formatted 'fieldText' string
+//       will be displayed. If 'fieldLength' is less than the
+//       length of the 'fieldText' string, it will be automatically
+//       set equal to the 'labelText' string length.
+//
+//       To automatically set the value of 'fieldLength' to the
+//       length of 'fieldText', set this parameter to a value
+//       of  minus one (-1).
+//
+//
+//  fieldJustify               TextJustify
+//      An enumeration value specifying the justification of the
+//      'fieldText' string within the text field specified by
+//      'fieldLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text label, field length and a Text Justification object
+//      of type TextJustify. This is because text labels with a
+//      field length equal to or less than the length of the text
+//      label never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the text
+//      label, text justification must be equal to one of these
+//      three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       this text element into a valid line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text label field and no other text
+//       elements. A string of text characters will be accepted for
+//       this parameter.
+//
+//       Again, the most common usage sets this string to a new
+//       line character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this label text
+//       will be presented.
+//
+//       Set this parameter to minus one (-1), and no maximum line
+//       limits will be applied.
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (txtFmtCollection *TextFormatterCollection) AddLabel(
 	leftMarginStr string,
 	fieldText string,
 	fieldLength int,
 	fieldJustify TextJustify,
 	rightMarginStr string,
-	lineTerminator string) {
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool) {
 
 	if txtFmtCollection.lock == nil {
 		txtFmtCollection.lock = new(sync.Mutex)
@@ -44,13 +166,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 		DateTime:   TextFieldDateTimeDto{},
 		Filler:     TextFieldFillerDto{},
 		Label: TextFieldLabelDto{
-			FormatType:     TxtFieldType.Label(),
-			LeftMarginStr:  leftMarginStr,
-			FieldText:      fieldText,
-			FieldLength:    fieldLength,
-			FieldJustify:   fieldJustify,
-			RightMarginStr: rightMarginStr,
-			LineTerminator: lineTerminator,
+			FormatType:                 TxtFieldType.Label(),
+			LeftMarginStr:              leftMarginStr,
+			FieldText:                  fieldText,
+			FieldLength:                fieldLength,
+			FieldJustify:               fieldJustify,
+			RightMarginStr:             rightMarginStr,
+			LineTerminator:             lineTerminator,
+			MaxLineLength:              maxLineLength,
+			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 		},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
@@ -843,8 +967,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 // Input Parameters
 //
 //  leftMarginStr              string
-//     - The contents of the string will be used as the left margin
-//       for the 'Column1' field.
+//     - The contents of this string will be used as the left
+//       margin for the 'Column1' field.
 //
 //       If no left margin is required, set 'leftMarginStr' to a
 //       zero length or empty string, and no left margin will be
@@ -1629,8 +1753,8 @@ func (txtFmtCollection *TextFormatterCollection) GetLengthStdTextLineParamCollec
 // Input Parameters
 //
 //  leftMarginStr              string
-//     - The contents of the string will be used as the left margin
-//       for the 'Column1' field.
+//     - The contents of this string will be used as the left
+//       margin for the 'Column1' field.
 //
 //       If no left margin is required, set 'leftMarginStr' to a
 //       zero length or empty string, and no left margin will be
@@ -1929,8 +2053,8 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 // Input Parameters
 //
 //  leftMarginStr              string
-//     - The contents of the string will be used as the left margin
-//       for the 'Column1' field.
+//     - The contents of this string will be used as the left
+//       margin for the 'Column1' field.
 //
 //       If no left margin is required, set 'leftMarginStr' to a
 //       zero length or empty string, and no left margin will be

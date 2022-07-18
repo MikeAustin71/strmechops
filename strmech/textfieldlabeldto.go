@@ -5,23 +5,9 @@ type TextFieldLabelDto struct {
 	// Required. This enumeration value specifies the type of Text
 	// Format Operation to be performed.
 	//
-	// Possible values are listed as follows:
-	//   TxtFieldType.None()        - Invalid
+	// For TextFieldLabelDto Format Type, this value
+	// should always be set to:
 	//   TxtFieldType.Label()       - Valid
-	//   TxtFieldType.DateTime()    - Valid
-	//   TxtFieldType.Filler()      - Valid
-	//   TxtFieldType.Spacer()      - Valid
-	//   TxtFieldType.BlankLine()   - Valid
-	//   TxtFieldType.SolidLine()   - Valid
-	//   TxtFieldType.Line1Column() - Valid
-	//   TxtFieldType.Line2Column() - Valid
-	//   TxtFieldType.Line3Column() - Valid
-	//   TxtFieldType.Line4Column() - Valid
-	//   TxtFieldType.Line5Column() - Valid
-	//   TxtFieldType.Line6Column() - Valid
-	//
-	// For TextFieldLabelDto 'FormatType' should be
-	// set to: TxtFieldType.Label()
 
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
@@ -51,13 +37,6 @@ type TextFieldLabelDto struct {
 	// If this parameter is submitted with a value less than
 	// minus one (-1) or greater than 1-million (1,000,000), an
 	// error will be returned.
-	//
-	// If TextFieldType is set to 'Filler' or 'Spacer',
-	// 'FieldLength' will be used to specify the number of Filler
-	// or Spacer characters in the line.
-	//
-	// If TextFieldType is set to 'BlankLine', 'FieldLength' will
-	// be used to specify the number of blank lines created.
 
 	FieldJustify TextJustify
 	// An enumeration which specifies the justification of the
@@ -86,22 +65,31 @@ type TextFieldLabelDto struct {
 	//     TxtJustify.Center()
 
 	RightMarginStr string
-	// The contents of the string will be used as the right margin
-	// for the Text Field.
+	// The contents of the string will be used as the right
+	// margin for the Text Field.
 	//
-	// If no right margin is required, set 'RightMarginStr' to a
-	// zero length or empty string, and no right margin will be
-	// created.
+	// If no right margin is required, set 'RightMarginStr' to
+	// a zero length or empty string, and no right margin will
+	// be created.
 
 	LineTerminator string
-	// This string holds the character or characters which will be
-	// used to terminate the formatted line of text output.
+	// This string holds the character or characters which will
+	// be used to terminate the formatted line of text output.
 	//
 	// The most common usage sets this string to a new line
 	// character ("\n").
 	//
-	// If no Line Terminator is required, set 'LineTerminator' to
-	// a zero length or empty string and no line termination
+	// If no Line Terminator is required, set 'LineTerminator'
+	// to a zero length or empty string and no line termination
 	// characters will be created.
+
+	MaxLineLength int
+	// Set this parameter to minus one -1 to specify an
+	// unlimited line length for this text line.
+
+	TurnAutoLineLengthBreaksOn bool
+	// When this parameter is set to 'true', text fields which
+	// extend beyond the maximum line length ('MaxLineLength')
+	// will be placed on the following line of text.
 
 }
