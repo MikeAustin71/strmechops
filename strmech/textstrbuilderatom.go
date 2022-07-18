@@ -553,7 +553,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
 // Text Line Column configurations. A Text Line Column
 // specification describes a single line of text consisting of
 // one or more columns containing formatted text. Typically,
-// each Text Line Column is terminted with default or custom
+// each Text Line Column is terminated with default or custom
 // line termination characters. However, line termination is
 // optional.
 //
@@ -609,6 +609,8 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	strBuilder.Grow(512)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -618,6 +620,22 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 	if err != nil {
 		return strBuilder, err
+	}
+
+	if lineCols.FormatType != TxtFieldType.LineColumns() {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'lineCols.FormatType' is invalid!\n"+
+			"'lineCols.FormatType' should be set to \n"+
+			"TxtFieldType.LineColumns(). It is NOT!\n"+
+			"'lineCols.FormatType' String Value  = '%v'\n"+
+			"'lineCols.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			lineCols.FormatType.String(),
+			lineCols.FormatType.XValueInt())
+
+		if err != nil {
+			return strBuilder, err
+		}
 	}
 
 	numOfTextFields := len(lineCols.TextFieldsContent)
@@ -630,53 +648,6 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 			ePrefix.String())
 
 		return strBuilder, err
-	}
-
-	var masterTextFieldType TextFieldType
-
-	switch numOfTextFields {
-	case 1:
-		masterTextFieldType = TxtFieldType.Line1Column()
-	case 2:
-		masterTextFieldType = TxtFieldType.Line2Column()
-	case 3:
-		masterTextFieldType = TxtFieldType.Line3Column()
-	case 4:
-		masterTextFieldType = TxtFieldType.Line4Column()
-	case 5:
-		masterTextFieldType = TxtFieldType.Line5Column()
-	case 6:
-		masterTextFieldType = TxtFieldType.Line6Column()
-	case 7:
-		masterTextFieldType = TxtFieldType.Line7Column()
-	case 8:
-		masterTextFieldType = TxtFieldType.Line8Column()
-	default:
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'lineCols.TextFieldsContent' is invalid!\n"+
-			"The number of 'lineCols.TextFieldsContent' elements exceeds the"+
-			"maximum limit of 8-Text Fields.\n"+
-			"'lineCols.TextFieldsContent' Length = '%v'\n",
-			ePrefix.String(),
-			numOfTextFields)
-
-		return strBuilder, err
-	}
-
-	if masterTextFieldType != lineCols.FormatType {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'lineCols is invalid!\n"+
-			"The 'lineCols.FormatType' does not match the\n"+
-			"number of text Text Fields contained in \n"+
-			"lineCols.TextFieldsContent."+
-			"'lineCols.TextFieldsContent' Length = '%v'\n",
-			ePrefix.String(),
-			numOfTextFields)
-
-		return strBuilder, err
-
 	}
 
 	lenItems := len(lineCols.FmtParameters.FieldFormatParams)
@@ -734,8 +705,6 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 	defaultDateTimeFormat := textSpecificationMolecule{}.ptr().
 		getDefaultDateTimeFormat()
-
-	strBuilder.Grow(512)
 
 	var txtLabelSpec TextFieldSpecLabel
 	var strBuilder2 strings.Builder

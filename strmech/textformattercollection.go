@@ -24,41 +24,41 @@ type TextFormatterCollection struct {
 }
 
 // AddLine1Col - Adds Field Text and Format Parameters for
-// Format Type 'Line1Column'.
+// Format Type 1-Column Text Lne.
 //
-// The 'Line1Column' Text Line type is designed to produce a single
-// line of text consisting of one text field with optional left and
-// right margins. This single text field is referred to as
-// 'Column1'.
+// The 1-Column Text Lines type is designed to produce a single
+// line of text consisting of one text field or text column with
+// optional left and right margins. This single text field is
+// referred to as 'Column-1'.
 //
 // This method will assign previously configured (a.k.a. default)
-// Format Parameters to this 'Line1Column' Text Line. The prior
-// configuration of these 'Line1Column' Format Parameters is
-// a requirement and errors will be generated if these standard
-// Format Parameters have not yet been created.
+// Format Parameters to this 1-Column Text Line. The prior
+// configuration of these 1-Column Format Parameters is a
+// requirement and errors will be generated if these Standard
+// Format Parameters have not previously been created.
 //
 // This method will extract those previously created Standard
-// Format Parameters for 'Line1Column' Text Lines from the
-// Standard Text Line Parameters collection maintained by this
-// instance of TextFormatterCollection.
+// Format Parameters for 1-Column Text Lines from the Standard Text
+// Line Parameters collection maintained by this instance of
+// TextFormatterCollection.
 //
 //
 // ----------------------------------------------------------------
 //
 // IMPORTANT
 //
-// The standard parameters for 'Line1Column' Text Lines must be
+// The standard parameters for 1-Column Text Lines must be
 // configured in the Standard Text Line Parameters Collection
 // before calling this method.
 //
-// If the standard parameters for 'Line1Column' Text Lines were
-// not previously configured in the Standard Text Line Parameters
+// If the standard parameters for 1-Column Text Lines were not
+// previously configured in the Standard Text Line Parameters
 // Collection, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
-// To configure the standard parameters for 'Line1Column' Text
-// Lines, call one of the following methods:
+// To configure the standard parameters for 1-Column Text Lines,
+// call one of the following methods:
 //   TextFormatterCollection.CfgLine1Col()
 //   TextFormatterCollection.SetStdFormatParamsLine1Col()
 //
@@ -229,7 +229,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	}
 
 	newTextLine1Cols := TextLineColumnsDto{
-		FormatType: TxtFieldType.Line1Column(),
+		FormatType: TxtFieldType.LineColumns(),
 		TextFieldsContent: []TextFieldsContentDto{
 			{
 				TextFieldString:   column1FieldText,
@@ -242,7 +242,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.Line1Column(),
+		FormatType:  TxtFieldType.LineColumns(),
 		DateTime:    TextFieldDateTimeDto{},
 		Filler:      TextFieldFillerDto{},
 		Label:       TextFieldLabelDto{},
@@ -596,7 +596,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	}
 
 	newStdFmtParams := TextFmtParamsLineColumnsDto{
-		FormatType: TxtFieldType.Line1Column(),
+		FormatType: TxtFieldType.LineColumns(),
 		FieldFormatParams: []TextFieldFmtParamsDto{
 			{
 				LeftMarginStr:  leftMarginStr,
@@ -616,7 +616,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	}
 
 	newTextLine1Cols := TextLineColumnsDto{
-		FormatType: TxtFieldType.Line1Column(),
+		FormatType: TxtFieldType.LineColumns(),
 		TextFieldsContent: []TextFieldsContentDto{
 			{
 				TextFieldString:   column1FieldText,
@@ -629,7 +629,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.Line1Column(),
+		FormatType:  TxtFieldType.LineColumns(),
 		DateTime:    TextFieldDateTimeDto{},
 		Filler:      TextFieldFillerDto{},
 		Label:       TextFieldLabelDto{},
@@ -708,15 +708,15 @@ func (txtFmtCollection *TextFormatterCollection) GetLengthStdTextLineParamCollec
 }
 
 // SetStdFormatParamsLine1Col - Sets the Standard Format Parameters
-// for a text line consisting of one text column (Line1Column).
-// This standard format will be applied as the default format of
-// all 'Line1Column' Text Format Operations.
+// for a Text Line consisting of one text column. This standard
+// format will be applied as the default format for all Text Lines
+// consisting of one text column.
 //
-// After configuring Standard Format Parameters for 'Line1Column'
-// Text Lines, users should configure additional 'Line1Column' Text
+// After configuring Standard Format Parameters for 1-Column
+// Text Lines, users should configure additional 1-Column Text
 // Lines using method TextFormatterCollection.AddLine1Col() in
 // order to reduce the number of input parameters required to
-// produce a 'Line1Column' Text Line.
+// produce a 1-Column Text Line.
 //
 //
 // ----------------------------------------------------------------
@@ -978,7 +978,7 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 	}
 
 	newStdFmtParams := TextFmtParamsLineColumnsDto{
-		FormatType: TxtFieldType.Line1Column(),
+		FormatType: TxtFieldType.LineColumns(),
 		FieldFormatParams: []TextFieldFmtParamsDto{
 			{
 				LeftMarginStr:  leftMarginStr,

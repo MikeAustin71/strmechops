@@ -1211,10 +1211,8 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return strBuilder, err
 			}
 
-		} else if txtFmtSpecs.fmtCollection[i].FormatType >=
-			TxtFieldType.Line1Column() &&
-			txtFmtSpecs.fmtCollection[i].FormatType <=
-				TxtFieldType.Line8Column() {
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.LineColumns() {
 
 			strBuilder2,
 				err = txtBuilderAtom.buildTextLineColumns(
