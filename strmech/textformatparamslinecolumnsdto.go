@@ -364,7 +364,26 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Equal(
 	return true
 }
 
-// GetTextParamsType - Returns the Text Field Type.
+// GetTextParamsType - Returns the Text FormatType Type.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  TextFieldType
+//     - This method returns an enumeration value specifying the
+//       Text Format Type associated with this instance of
+//       TextFmtParamsLineColumnsDto:
+//          TextFmtParamsLineColumnsDto.FormatType
+//
 func (paramsLineCol *TextFmtParamsLineColumnsDto) GetTextParamsType() TextFieldType {
 
 	if paramsLineCol.lock == nil {
@@ -376,4 +395,40 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) GetTextParamsType() TextFieldT
 	defer paramsLineCol.lock.Unlock()
 
 	return paramsLineCol.FormatType
+}
+
+// GetNumOfFieldFmtParams - Returns the number of
+// TextFieldFmtParams Data Transfer Objects contained in the Field
+// Format Parameters array maintained by this instance of
+// TextFmtParamsLineColumnsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This method returns an integer value specifying the number
+//       of array objects in the Format Parameters array maintained
+//       by this instance of TextFmtParamsLineColumnsDto:
+//          TextFmtParamsLineColumnsDto.FieldFormatParams
+//
+func (paramsLineCol *TextFmtParamsLineColumnsDto) GetNumOfFieldFmtParams() int {
+
+	if paramsLineCol.lock == nil {
+		paramsLineCol.lock = new(sync.Mutex)
+	}
+
+	paramsLineCol.lock.Lock()
+
+	defer paramsLineCol.lock.Unlock()
+
+	return len(paramsLineCol.FieldFormatParams)
 }
