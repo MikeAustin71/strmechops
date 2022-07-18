@@ -23,6 +23,49 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
+func (txtFmtCollection *TextFormatterCollection) AddLabel(
+	leftMarginStr string,
+	fieldText string,
+	fieldLength int,
+	fieldJustify TextJustify,
+	rightMarginStr string,
+	lineTerminator string) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	newTextFormatter := TextFormatterDto{
+		FormatType: TxtFieldType.Label(),
+		DateTime:   TextFieldDateTimeDto{},
+		Filler:     TextFieldFillerDto{},
+		Label: TextFieldLabelDto{
+			FormatType:     TxtFieldType.Label(),
+			LeftMarginStr:  leftMarginStr,
+			FieldText:      fieldText,
+			FieldLength:    fieldLength,
+			FieldJustify:   fieldJustify,
+			RightMarginStr: rightMarginStr,
+			LineTerminator: lineTerminator,
+		},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
 // AddLine1Col - Adds a single Text Field used to generate a
 // 1-Column Text Line.
 //
