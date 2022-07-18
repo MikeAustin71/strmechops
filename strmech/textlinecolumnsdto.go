@@ -291,6 +291,43 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 	return true
 }
 
+// GetNumberOfTextFields - Returns the number of Text Field Content
+// Data Transfer objects residing in the Text Field Content array
+// maintained by this instance of TextLineColumnsDto.
+//
+// Effectively, this is the number of Text Fields currently
+// configured, in this instance of TextLineColumnsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This returned integer value specifies the number of Text
+//       Fields currently configured in this instance of
+//       TextLineColumnsDto:
+//          TextLineColumnsDto.TextFieldsContent
+//
+func (fmtLineCols *TextLineColumnsDto) GetNumberOfTextFields() int {
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	return len(fmtLineCols.TextFieldsContent)
+}
+
 // GetTextFieldType - Returns the internal member variable which
 // stores the value of Text Format Type. For type
 // TextLineColumnsDto, this value should be set to
