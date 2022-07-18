@@ -1,6 +1,8 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
 
@@ -404,4 +406,186 @@ func (fmtLineCols *TextLineColumnsDto) GetTextFieldType() TextFieldType {
 	defer fmtLineCols.lock.Unlock()
 
 	return fmtLineCols.FormatType
+}
+
+// IsValidInstance - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineColumnsDto instance
+// to determine if they are valid.
+//
+// If all data elements evaluate as classified as valid, this
+// method returns a boolean value of 'true'. If any data element
+// is invalid, this method returns 'false'.
+//
+// Comparatively little validation is performed. Primarily, this
+// method checks to ensure that the number Text Fields matches
+// the number Field Format Paramter objects configured for this
+// instance of TextLineColumnsDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If all data elements encapsulated by the current instance
+//       of TextLineSpecStandardLine are valid, this returned
+//       boolean value is set to 'true'. If any data values are
+//       invalid, this return parameter is set to 'false'.
+//
+func (fmtLineCols *TextLineColumnsDto) IsValidInstance() (
+	isValid bool) {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	isValid = false
+
+	lenTxtFields := len(fmtLineCols.TextFieldsContent)
+
+	lenFmtParams := len(fmtLineCols.FmtParameters.FieldFormatParams)
+
+	if lenTxtFields !=
+		lenFmtParams {
+
+		return isValid
+	}
+
+	isValid = true
+
+	return isValid
+}
+
+// IsValidInstanceError - Performs a diagnostic review of the data
+// values encapsulated in the current TextLineColumnsDto instance
+// to determine if they are valid.
+//
+// If any data elements evaluates as invalid, this method will
+// return an error.
+//
+// Comparatively little validation is performed. Primarily, this
+// method checks to ensure that the number Text Fields matches
+// the number Field Format Paramter objects configured for this
+// instance of TextLineColumnsDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If any of the internal member data variables contained in
+//       the current instance of TextLineColumnsDto are found
+//       to be invalid, this method will return an error.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (fmtLineCols *TextLineColumnsDto) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if fmtLineCols.lock == nil {
+		fmtLineCols.lock = new(sync.Mutex)
+	}
+
+	fmtLineCols.lock.Lock()
+
+	defer fmtLineCols.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextLineSpecStandardLine."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenTxtFields := len(fmtLineCols.TextFieldsContent)
+
+	lenFmtParams := len(fmtLineCols.FmtParameters.FieldFormatParams)
+
+	if lenTxtFields !=
+		lenFmtParams {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of Text Fields DOES NOT MATCH\n"+
+			"the number of Field Format Parameters configured\n"+
+			"for this instance of TextLineColumnsDto.\n"+
+			"Number of Text Fields = '%v'\n"+
+			"Number of Field Format Parameters = '%v'\n",
+			ePrefix.String(),
+			lenTxtFields,
+			lenFmtParams)
+	}
+
+	return err
 }
