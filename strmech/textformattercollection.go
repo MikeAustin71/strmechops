@@ -189,9 +189,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		textFormatterCollectionElectron{}.ptr().
 			findStdTxtLineParameters(
 				txtFmtCollection,
-				TxtFieldType.Line1Column(),
+				1, // This is a one column Text Line
 				ePrefix.XCpy(
-					"TxtFieldType.Line1Column()"))
+					"Text Line 1-Column"))
 
 	if err != nil {
 		return err
@@ -201,11 +201,11 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 
 		err = fmt.Errorf("%v - Error\n"+
 			"Could NOT locate Standard Text Line Parameter Format\n"+
-			"for Text Field Type: %v.\n"+
-			"Use one of the 'SetStdFormatParams' to configure a\n"+
-			"new Standard Text Line Column Parameters Format. ",
-			ePrefix.String(),
-			TxtFieldType.Line1Column().String())
+			"for a 1-Column Text Line.\n"+
+			"Use one the 'SetStdFormatParams()' method to configure a\n"+
+			"new Standard Text Line Column Parameters Format for this"+
+			"1-Column Text Line Type. ",
+			ePrefix.String())
 
 		return err
 	}

@@ -12,6 +12,14 @@ type textFormatterCollectionElectron struct {
 	lock *sync.Mutex
 }
 
+// cfgNewStdTxtLineParameters - Configures a new
+// TextFmtParamsLineColumnsDto object in the Standard Format
+// Parameters collection maintained of the TextFormatterCollection.
+//
+// If an existing TextFmtParamsLineColumnsDto cannot be located,
+// the new Standard Format Parameters object is appended to the
+// Standard Format Parameters Collection.
+//
 func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLineParameters(
 	txtFmtCollection *TextFormatterCollection,
 	newStdFmtParams TextFmtParamsLineColumnsDto,
@@ -51,6 +59,8 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLinePar
 		return err
 	}
 
+	numOfNewStdFmtParams := newStdFmtParams.GetNumOfFieldFmtParams()
+
 	lenStdTxtLineCol :=
 		len(txtFmtCollection.stdTextLineParamCollection)
 
@@ -61,7 +71,7 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLinePar
 		for i := 0; i < lenStdTxtLineCol; i++ {
 
 			if txtFmtCollection.stdTextLineParamCollection[i].
-				FormatType == TxtFieldType.Line1Column() {
+				GetNumOfFieldFmtParams() == numOfNewStdFmtParams {
 
 				txtFmtCollection.stdTextLineParamCollection[i].
 					CopyIn(newStdFmtParams)
@@ -87,7 +97,7 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLinePar
 
 func (txtSolidLineElectron *textFormatterCollectionElectron) findStdTxtLineParameters(
 	txtFmtCollection *TextFormatterCollection,
-	searchForTextFieldType TextFieldType,
+	targetNumOfTextLineColumns int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	foundTxtFormatter bool,
 	lineColsFormatter TextFmtParamsLineColumnsDto,
@@ -132,15 +142,14 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) findStdTxtLineParam
 			err
 	}
 
-	if !searchForTextFieldType.XIsValid() {
+	if targetNumOfTextLineColumns < 1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'searchForTextFieldType' is invalid!\n"+
-			"searchForTextFieldType String Value  = '%v'\n"+
-			"searchForTextFieldType Integer Value = '%v'\n",
+			"Error: Input parameter 'targetNumOfTextLineColumns' is invalid!\n"+
+			"'targetNumOfTextLineColumns' has a value less than one (1).\n"+
+			"targetNumOfTextLineColumns Value  = '%v'\n",
 			ePrefix.String(),
-			searchForTextFieldType.String(),
-			searchForTextFieldType.XValueInt())
+			targetNumOfTextLineColumns)
 
 		return foundTxtFormatter,
 			lineColsFormatter,
@@ -156,8 +165,8 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) findStdTxtLineParam
 
 	for i := 0; i < lenOfStdLineFmtParams; i++ {
 
-		if txtFmtCollection.stdTextLineParamCollection[i].FormatType ==
-			searchForTextFieldType {
+		if txtFmtCollection.stdTextLineParamCollection[i].GetNumOfFieldFmtParams() ==
+			targetNumOfTextLineColumns {
 
 			lineColsFormatter = txtFmtCollection.
 				stdTextLineParamCollection[i].CopyOut()
