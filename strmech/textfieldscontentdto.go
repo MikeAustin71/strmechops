@@ -7,8 +7,12 @@ import (
 
 type TextFieldsContentDto struct {
 	TextFieldString string
+	// Either TextFieldString or TextFieldDateTime should
+	// be configured, but NOT both.
 
 	TextFieldDateTime time.Time
+	// Either TextFieldString or TextFieldDateTime should
+	// be configured, but NOT both.
 
 	lock *sync.Mutex
 }

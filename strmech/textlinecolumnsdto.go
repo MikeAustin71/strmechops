@@ -9,9 +9,9 @@ import (
 type TextLineColumnsDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
-	// Format Operation to be performed. For Example, when applying
-	// the Line1Column Formatter Type, set this value to:
-	//   TxtFieldType.Line1Column()
+	// Format Operation to be performed. This should value should
+	// always be set to:
+	//   TxtFieldType.LineColumns()
 
 	TextFieldsContent []TextFieldsContentDto
 

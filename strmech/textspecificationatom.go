@@ -6,6 +6,7 @@ import (
 	"math/big"
 	"strings"
 	"sync"
+	"time"
 )
 
 type textSpecificationAtom struct {
@@ -32,6 +33,7 @@ type textSpecificationAtom struct {
 //
 //       Supported types which may be submitted through this empty
 //       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
 //          string
 //          bool
 //          uint, uint8, uint16, uint32, uint64,
@@ -108,9 +110,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var ok bool
-	var plainString string
+	var plainString, defaultDateTimeFormat string
 	var iStringer fmt.Stringer
 	var dateTimeInputDto TextInputParamFieldDateTimeDto
+	var dateTimeValue time.Time
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -127,7 +130,31 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 		emptyIFaceParamName = "emptyIFace"
 	}
 
+	defaultDateTimeFormat =
+		textSpecificationMolecule{}.ptr().getDefaultDateTimeFormat()
+
 	switch emptyIFace.(type) { // the switch uses the type of the interface
+
+	case time.Time:
+
+		dateTimeValue,
+			ok = emptyIFace.(time.Time)
+
+		if !ok {
+			err = fmt.Errorf("%v\n"+
+				"Error: Failed to convert empty interface\n"+
+				"(%v) to Date Time Value!\n"+
+				"String Conversion Error.\n",
+				ePrefix.String(),
+				emptyIFaceParamName)
+
+			return convertedString, err
+		}
+
+		convertedString =
+			dateTimeValue.Format(defaultDateTimeFormat)
+
+		return convertedString, err
 
 	case TextInputParamFieldDateTimeDto:
 

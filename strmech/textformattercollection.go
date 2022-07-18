@@ -75,6 +75,7 @@ type TextFormatterCollection struct {
 //
 //       Supported types which may be submitted through this empty
 //       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
 //          string
 //          bool
 //          uint, uint8, uint16, uint32, uint64,
@@ -202,7 +203,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		err = fmt.Errorf("%v - Error\n"+
 			"Could NOT locate Standard Text Line Parameter Format\n"+
 			"for a 1-Column Text Line.\n"+
-			"Use one the 'SetStdFormatParams()' method to configure a\n"+
+			"Use the 'SetStdFormatParams()' method to configure a\n"+
 			"new Standard Text Line Column Parameters Format for this"+
 			"1-Column Text Line Type. ",
 			ePrefix.String())
@@ -260,14 +261,226 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	return err
 }
 
+func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
+	textFields []interface{},
+	errorPrefix interface{}) error {
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"AddLineMultiCol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenTextFields := len(textFields)
+
+	var foundStdParams bool
+	var stdLineColsFmt TextFmtParamsLineColumnsDto
+
+	foundStdParams,
+		stdLineColsFmt,
+		err =
+		textFormatterCollectionElectron{}.ptr().
+			findStdTxtLineParameters(
+				txtFmtCollection,
+				lenTextFields, // Must Match number of text fields
+				ePrefix.XCpy(
+					fmt.Sprintf("Text Line %v-Column",
+						lenTextFields)))
+
+	if err != nil {
+		return err
+	}
+
+	if !foundStdParams {
+
+		err = fmt.Errorf("%v - Error\n"+
+			"Could NOT locate Standard Text Line Parameter Format\n"+
+			"for a %v-Column Text Line.\n"+
+			"Use the 'SetStdFormatParams()' method to configure a\n"+
+			"new Standard Text Line Column Parameters Format for this"+
+			"%v-Column Text Line. ",
+			ePrefix.String(),
+			lenTextFields,
+			lenTextFields)
+
+		return err
+	}
+
+	textFieldsContent := make([]TextFieldsContentDto, lenTextFields)
+
+	for i := 0; i < lenTextFields; i++ {
+
+		textFieldsContent[i].TextFieldString,
+			err = textSpecificationAtom{}.ptr().
+			convertParamEmptyInterfaceToString(
+				textFields[i],
+				fmt.Sprintf("textFields[%v]", i),
+				ePrefix.XCpy(
+					fmt.Sprintf("textFields[%v]", i)))
+
+		if err != nil {
+			return err
+		}
+
+		textFieldsContent[i].TextFieldDateTime = time.Time{}
+		textFieldsContent[i].lock = nil
+	}
+
+	newTextLineCols := TextLineColumnsDto{
+		FormatType:        TxtFieldType.LineColumns(),
+		TextFieldsContent: textFieldsContent,
+		FmtParameters:     stdLineColsFmt,
+		lock:              nil,
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.LineColumns(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: newTextLineCols,
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return err
+}
+
+func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
+	errorPrefix interface{},
+	textFields ...interface{}) error {
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"AddLineMultiCol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	textFieldsContent := make([]TextFieldsContentDto, 0)
+
+	for idx, txtFieldVal := range textFields {
+
+		txtFieldContent := TextFieldsContentDto{}
+
+		txtFieldContent.TextFieldString,
+			err = textSpecificationAtom{}.ptr().
+			convertParamEmptyInterfaceToString(
+				txtFieldVal,
+				fmt.Sprintf("txtFieldVal[%v]", idx),
+				ePrefix.XCpy(
+					fmt.Sprintf("txtFieldVal[%v]", idx)))
+
+		if err != nil {
+			return err
+		}
+
+		txtFieldContent.TextFieldDateTime = time.Time{}
+		txtFieldContent.lock = nil
+
+		textFieldsContent = append(
+			textFieldsContent,
+			txtFieldContent)
+
+	}
+
+	lenTextFields := len(textFieldsContent)
+
+	var foundStdParams bool
+	var stdLineColsFmt TextFmtParamsLineColumnsDto
+
+	foundStdParams,
+		stdLineColsFmt,
+		err =
+		textFormatterCollectionElectron{}.ptr().
+			findStdTxtLineParameters(
+				txtFmtCollection,
+				lenTextFields, // Must Match number of text fields
+				ePrefix.XCpy(
+					fmt.Sprintf("Text Line %v-Column",
+						lenTextFields)))
+
+	if err != nil {
+		return err
+	}
+
+	if !foundStdParams {
+
+		err = fmt.Errorf("%v - Error\n"+
+			"Could NOT locate Standard Text Line Parameter Format\n"+
+			"for a %v-Column Text Line.\n"+
+			"Use the 'SetStdFormatParams()' method to configure a\n"+
+			"new Standard Text Line Column Parameters Format for this"+
+			"%v-Column Text Line. ",
+			ePrefix.String(),
+			lenTextFields,
+			lenTextFields)
+
+		return err
+	}
+
+	newTextLineCols := TextLineColumnsDto{
+		FormatType:        TxtFieldType.LineColumns(),
+		TextFieldsContent: textFieldsContent,
+		FmtParameters:     stdLineColsFmt,
+		lock:              nil,
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.LineColumns(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: newTextLineCols,
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return err
+}
+
 // CfgLine1Col - Allows the user to configure both the field value
 // and the Format Parameters for text line Format Type
 // 'Line1Column'.
 //
-// The 'Line1Column' Text Line type is designed to produce a single
-// line of text consisting of one text field with optional left and
-// right margins. This single text field is referred to as
-// 'Column1'.
+// The '1-Column' Text Line is designed to produce a single line of
+// text consisting of one text field with optional left and right
+// margins.
 //
 // Unlike method TextFormatterCollection.AddLine1Col(), this method
 // has no requirement for previously configured Standard Format
@@ -279,12 +492,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 //
 // IMPORTANT
 //
-// This method will create the Standard Format Parameters for this
+// When input parameter 'saveFmtParamsAsDefault' is set to 'true',
+// this method will create the Standard Format Parameters for this
 // and all future 'Line1Column' Text types created by this instance
-// of TextFormatterCollection. After calling this method once,
-// users should call TextFormatterCollection.AddLine1Col() to
-// reduce the number of input parameters required to produce other
-// 'Line1Column' Text type
+// of TextFormatterCollection.
+//
+// If input parameter  'saveFmtParamsAsDefault' is set to 'true',
+// then in the future, users should call
+// TextFormatterCollection.AddLine1Col() to reduce the number of
+// input parameters required to produce other '1-Column' Text Line.
 //
 //
 // ----------------------------------------------------------------
@@ -308,6 +524,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 //
 //       Supported types which may be submitted through this empty
 //       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
 //          string
 //          bool
 //          uint, uint8, uint16, uint32, uint64,
@@ -315,6 +532,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 //          float32, float64
 //          *big.Int *big.Float
 //          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
 //
 //       If the 'column1Field' is not convertible to one of the
 //       supported types, an error will be returned.
@@ -435,6 +654,18 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 //       length, set the value of this parameter to 'true'.
 //
 //
+//  saveFmtParamsAsDefault     bool
+//     - When this parameter is set to 'true', the Text Field
+//       Format Parameters will be saved as the default Format
+//       Parameters for this specific number of Text Columns.
+//
+//       If this parameter is set to 'false', the Text Field
+//       Format Parameters associated with this number of Text
+//       Columns will NOT be saved as a default and therefore
+//       these format parameters will not be used in subsequent
+//       calls to the 'Add' methods.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -506,6 +737,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
+	saveFmtParamsAsDefault bool,
 	errorPrefix interface{}) error {
 
 	if txtFmtCollection.lock == nil {
@@ -639,15 +871,353 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 		LineColumns: newTextLine1Cols,
 	}
 
-	err = textFormatterCollectionElectron{}.ptr().
-		cfgNewStdTxtLineParameters(
-			txtFmtCollection,
-			newStdFmtParams,
-			ePrefix.XCpy(
-				"newStdFmtParams"))
+	if saveFmtParamsAsDefault == true {
+
+		err = textFormatterCollectionElectron{}.ptr().
+			cfgNewStdTxtLineParameters(
+				txtFmtCollection,
+				newStdFmtParams,
+				ePrefix.XCpy(
+					"newStdFmtParams"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return err
+}
+
+// CfgLineMultiCol - Allows for the addition of a Text Line
+// consisting of one or more columns.
+//
+// The number of 'textFields' MUST MATCH the number of Field
+// Format Parameters
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// When input parameter 'saveFmtParamsAsDefault' is set to 'true',
+// this method will create the Standard Format Parameters for this
+// and all future Text Lines with the same number of columns.
+//
+// If input parameter  'saveFmtParamsAsDefault' is set to 'true',
+// then in the future, users should call
+// TextFormatterCollection.AddLineMultiCol() to reduce the number
+// of input parameters required to produce other Text Lines with
+// the same number of text columns.
+//
+// If the number of elements in the textFields array does NOT MATCH
+// the number of elements in the 'fieldFormatParams' array, an
+// error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textFields               []interface{}
+//     - This parameter is an array of empty interfaces which must
+//       contain one of several specific data types. This empty
+//       interface type will be converted to a string and configured
+//       as the text columns within this Text Lines.
+//
+//       Supported types which may be submitted through this empty
+//       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//       If the 'column1Field' is not convertible to one of the
+//       supported types, an error will be returned.
+//
+//       If the converted string value for 'column1Field' is empty,
+//       it will be defaulted to a single white space character
+//       (" ").
+//
+//       If the number of elements in this array does NOT MATCH the
+//       number of elements in the 'fieldFormatParams' array, an
+//       error will be returned.
+//
+//
+//  fieldFormatParams          []TextFieldFmtParamsDto
+//     - An array of Text Field Format Parameters
+//      (TextFieldFmtParamsDto).
+//
+//      If the number of elements in this array does NOT MATCH the
+//      number of elements in the 'textFields' array, an error will
+//      be returned.
+//
+//      The TextFieldFmtParamsDto type is defined as follows:
+//
+//        type TextFieldFmtParamsDto struct {
+//          LeftMarginStr  string
+//          FieldLength    int
+//          FieldJustify   TextJustify
+//          DateTimeFormat string
+//          RightMarginStr string
+//        }
+//
+//
+//   turnLineTerminationOff    bool
+//     - When this parameter is set to 'true', no line termination
+//       sequence will be configured for this 'Line1Column' Text
+//       Line.
+//
+//       Text Lines operate on the assumption that a line
+//       termination is standard operating procedure. The default
+//       line terminator for text lines is the new line character,
+//       '\n'.
+//
+//       Users have the option of turning off the entire line
+//       termination sequence if this parameter is set to 'true'.
+//
+//
+//  lineTerminator             string
+//     - If this parameter is set to an empty string, the default
+//       line terminator, a new line character '\n', will be
+//       applied to this 'Line1Column' Text Line.
+//
+//       If this string is populated and the string length is
+//       greater than zero (0), an alternate line termination
+//       sequence will be configured using the characters provided
+//       in the 'lineTerminator' string.
+//
+//       Remember that the application of a line termination
+//       sequence is controlled by parameter
+//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//       set to 'true', no line termination characters will be
+//       configured for this 'Line1Column' Text Line.
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this 'Line1Column'
+//       Text will be presented.
+//
+//       Set this parameter to minus one (-1), and no maximum line
+//       limits will be applied.
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength').
+//
+//       If the value of 'maxLineLength' is less than minus one
+//       (-1), an error will be returned.
+//
+//       If the value of 'maxLineLength' is zero (0), an error will
+//       be returned.
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
+//
+//
+//  saveFmtParamsAsDefault     bool
+//     - When this parameter is set to 'true', the Text Field
+//       Format Parameters will be saved as the default Format
+//       Parameters for this specific number of Text Columns.
+//
+//       If this parameter is set to 'false', the Text Field
+//       Format Parameters associated with this number of Text
+//       Columns will NOT be saved as a default and therefore
+//       these format parameters will not be used in subsequent
+//       calls to the 'Add' methods.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
+	textFields []interface{},
+	fieldFormatParams []TextFieldFmtParamsDto,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
+	saveFmtParamsAsDefault bool,
+	errorPrefix interface{}) error {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"CfgLineMultiCol()",
+		"")
 
 	if err != nil {
 		return err
+	}
+
+	lenTextFields := len(textFields)
+
+	lenFieldFmtParams := len(fieldFormatParams)
+
+	if lenTextFields != lenFieldFmtParams {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'textFields' and\n"+
+			"'fieldFormatParams' are invalid!\n"+
+			"Both arrays must have the same length\n"+
+			"or same number of elements!\n"+
+			"'textFields' Length       = '%v'\n"+
+			"'fieldFormatParams Length = '%v'\n",
+			ePrefix.String(),
+			lenTextFields,
+			lenFieldFmtParams)
+
+		return err
+	}
+
+	textFieldsContent := make([]TextFieldsContentDto, lenTextFields)
+
+	for i := 0; i < lenTextFields; i++ {
+
+		textFieldsContent[i].TextFieldString,
+			err = textSpecificationAtom{}.ptr().
+			convertParamEmptyInterfaceToString(
+				textFields[i],
+				fmt.Sprintf("textFields[%v]", i),
+				ePrefix.XCpy(
+					fmt.Sprintf("textFields[%v]", i)))
+
+		if err != nil {
+			return err
+		}
+
+		textFieldsContent[i].TextFieldDateTime = time.Time{}
+		textFieldsContent[i].lock = nil
+	}
+
+	newStdFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType:                 TxtFieldType.LineColumns(),
+		FieldFormatParams:          fieldFormatParams,
+		TurnLineTerminationOff:     turnLineTerminationOff,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		isValid:                    true,
+		lock:                       nil,
+	}
+
+	newTextLineCols := TextLineColumnsDto{
+		FormatType:        TxtFieldType.LineColumns(),
+		TextFieldsContent: textFieldsContent,
+		FmtParameters:     newStdFmtParams,
+		lock:              nil,
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.LineColumns(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: newTextLineCols,
+	}
+
+	if saveFmtParamsAsDefault == true {
+
+		err = textFormatterCollectionElectron{}.ptr().
+			cfgNewStdTxtLineParameters(
+				txtFmtCollection,
+				newStdFmtParams,
+				ePrefix.XCpy(
+					"newStdFmtParams"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -1003,6 +1573,121 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 			newStdFmtParams,
 			ePrefix.XCpy(
 				"newStdFmtParams"))
+
+	return err
+}
+
+func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
+	fieldFormatParams []TextFieldFmtParamsDto,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
+	errorPrefix interface{}) error {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"SetStdFormatParamsMultiCol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	newStdFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType:                 TxtFieldType.LineColumns(),
+		FieldFormatParams:          fieldFormatParams,
+		TurnLineTerminationOff:     turnLineTerminationOff,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		isValid:                    true,
+		lock:                       nil,
+	}
+
+	err = textFormatterCollectionElectron{}.ptr().
+		cfgNewStdTxtLineParameters(
+			txtFmtCollection,
+			newStdFmtParams,
+			ePrefix.XCpy(
+				"newStdFmtParams"))
+
+	return err
+
+}
+
+func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsManyCol(
+	errorPrefix interface{},
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
+	fieldFormatParams ...TextFieldFmtParamsDto) error {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"SetStdFormatParamsMultiCol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fieldFmtParameters := make([]TextFieldFmtParamsDto, 0)
+
+	for _, textFieldFmtParameter := range fieldFormatParams {
+
+		fieldFmtParameters = append(
+			fieldFmtParameters,
+			textFieldFmtParameter)
+	}
+
+	newStdFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType:                 TxtFieldType.LineColumns(),
+		FieldFormatParams:          fieldFmtParameters,
+		TurnLineTerminationOff:     turnLineTerminationOff,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		isValid:                    true,
+		lock:                       nil,
+	}
+
+	lenFmtParams := len(fieldFmtParameters)
+
+	err = textFormatterCollectionElectron{}.ptr().
+		cfgNewStdTxtLineParameters(
+			txtFmtCollection,
+			newStdFmtParams,
+			ePrefix.XCpy(
+				fmt.Sprintf("newStdFmtParams %v-Columns",
+					lenFmtParams)))
 
 	return err
 }
