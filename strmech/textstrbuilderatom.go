@@ -207,6 +207,37 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 		return strBuilder, err
 	}
 
+	var maximumLineLength = labelFieldDto.MaxLineLength
+
+	if maximumLineLength == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'labelFieldDto.MaxLineLength' has a value of zero (0).\n",
+			ePrefix.String())
+
+		return strBuilder, err
+
+	}
+
+	if maximumLineLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'labelFieldDto.MaxLineLength' has a value less than minus one (-1).\n"+
+			"lineCols.FmtParameters.MaxLineLength= '%v'\n",
+			ePrefix.String(),
+			maximumLineLength)
+
+		return strBuilder, err
+
+	}
+
+	if maximumLineLength == -1 ||
+		labelFieldDto.TurnAutoLineLengthBreaksOn == false {
+		maximumLineLength = math.MaxInt32
+	}
+
 	labelText := labelFieldDto.FieldText
 
 	if len(labelText) == 0 {
@@ -215,8 +246,20 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 
 	}
 
-	if len(labelFieldDto.LeftMarginStr) > 0 {
+	var currentLineLength = 0
+	lenItems := len(labelFieldDto.LeftMarginStr)
+
+	if lenItems > 0 {
+
+		if currentLineLength+lenItems >= maximumLineLength {
+			currentLineLength = 0
+			strBuilder.WriteString("\n")
+		}
+
 		strBuilder.WriteString(labelFieldDto.LeftMarginStr)
+
+		currentLineLength += lenItems
+
 	}
 
 	var txtLabelSpec TextFieldSpecLabel
@@ -233,7 +276,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 		return strBuilder, err
 	}
 
-	strBuilder2 := strings.Builder{}
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
 		err = txtLabelSpec.TextBuilder(
@@ -244,11 +287,28 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 		return strBuilder, err
 	}
 
+	lenItems = strBuilder2.Len()
+
+	if currentLineLength+lenItems >= maximumLineLength {
+		currentLineLength = 0
+		strBuilder.WriteString("\n")
+	}
+
+	currentLineLength += lenItems
+
 	strBuilder.WriteString(strBuilder2.String())
 
 	strBuilder2.Reset()
 
-	if len(labelFieldDto.RightMarginStr) > 0 {
+	lenItems = len(labelFieldDto.RightMarginStr)
+
+	if lenItems > 0 {
+
+		if currentLineLength+lenItems >= maximumLineLength {
+			currentLineLength = 0
+			strBuilder.WriteString("\n")
+		}
+
 		strBuilder.WriteString(labelFieldDto.RightMarginStr)
 	}
 
@@ -711,11 +771,6 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 	for i := 0; i < numOfTextFields; i++ {
 
-		if currentLineLength >= maximumLineLength {
-			currentLineLength = 0
-			strBuilder.WriteString("\n")
-		}
-
 		if !lineCols.TextFieldsContent[i].TextFieldDateTime.IsZero() {
 			// Extract DateTime or String for Column Text
 			actualDateTimeFormat = lineCols.FmtParameters.FieldFormatParams[i].DateTimeFormat
@@ -739,41 +794,21 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 		if lenItems > 0 {
 
-			txtLabelSpec,
-				err = TextFieldSpecLabel{}.NewTextLabel(
-				lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr,
-				-1,
-				TxtJustify.Left(),
-				ePrefix.XCpy(fmt.Sprintf(
-					"lineCols.FmtParameters.FieldFormatParams[%v].LeftMarginStr",
-					i)))
-
-			if err != nil {
-				return strBuilder, err
-			}
-
-			strBuilder2,
-				err = txtLabelSpec.TextBuilder(
-				ePrefix.XCpy(fmt.Sprintf(
-					"lineCols.FmtParameters.FieldFormatParams[%v].LeftMarginStr",
-					i)))
-
-			if err != nil {
-				return strBuilder, err
-			}
-
-			currentLineLength += strBuilder2.Len()
-
-			if currentLineLength >= maximumLineLength {
+			if currentLineLength+lenItems >= maximumLineLength {
 				currentLineLength = 0
 				strBuilder.WriteString("\n")
 			}
 
-			strBuilder.WriteString(strBuilder2.String())
+			currentLineLength += lenItems
+
+			strBuilder.WriteString(
+				lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr)
 		}
 
 		// Build Column Field Text
-		if len(columnText) == 0 {
+		lenItems = len(columnText)
+
+		if lenItems == 0 {
 			columnText = " "
 		}
 
@@ -800,12 +835,14 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 			return strBuilder, err
 		}
 
-		currentLineLength += strBuilder2.Len()
+		lenItems = strBuilder2.Len()
 
-		if currentLineLength >= maximumLineLength {
+		if currentLineLength+lenItems >= maximumLineLength {
 			currentLineLength = 0
 			strBuilder.WriteString("\n")
 		}
+
+		currentLineLength += lenItems
 
 		strBuilder.WriteString(strBuilder2.String())
 
@@ -816,30 +853,15 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 		if lenItems > 0 {
 
-			txtLabelSpec,
-				err = TextFieldSpecLabel{}.NewTextLabel(
-				lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr,
-				-1,
-				TxtJustify.Left(),
-				ePrefix.XCpy(fmt.Sprintf(
-					"lineCols.FmtParameters.FieldFormatParams[%v].RightMarginStr",
-					i)))
-
-			if err != nil {
-				return strBuilder, err
+			if currentLineLength+lenItems >= maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
 			}
 
-			strBuilder2,
-				err = txtLabelSpec.TextBuilder(
-				ePrefix.XCpy(fmt.Sprintf(
-					"lineCols.FmtParameters.FieldFormatParams[%v].RightMarginStr",
-					i)))
+			strBuilder.WriteString(
+				lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr)
 
-			if err != nil {
-				return strBuilder, err
-			}
-
-			currentLineLength += strBuilder2.Len()
+			currentLineLength += lenItems
 
 			if currentLineLength >= maximumLineLength {
 				currentLineLength = 0

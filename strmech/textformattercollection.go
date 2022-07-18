@@ -161,6 +161,14 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 
 	defer txtFmtCollection.lock.Unlock()
 
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
+	if fieldLength < 1 {
+		fieldLength = -1
+	}
+
 	newTextFormatter := TextFormatterDto{
 		FormatType: TxtFieldType.Label(),
 		DateTime:   TextFieldDateTimeDto{},
