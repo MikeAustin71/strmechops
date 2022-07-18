@@ -23,11 +23,11 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
-// AddLine1Col - Adds Field Text and Format Parameters for
-// Format Type 1-Column Text Lne.
+// AddLine1Col - Adds a single Text Field used to generate a
+// 1-Column Text Line.
 //
-// The 1-Column Text Lines type is designed to produce a single
-// line of text consisting of one text field or text column with
+// The 1-Column Text Line is designed to produce a single line
+// of text consisting of one text field or text column with
 // optional left and right margins. This single text field is
 // referred to as 'Column-1'.
 //
@@ -234,6 +234,298 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		TextFieldsContent: []TextFieldsContentDto{
 			{
 				TextFieldString:   column1FieldText,
+				TextFieldDateTime: time.Time{},
+				lock:              nil,
+			},
+		},
+		FmtParameters: stdLineColsFmt,
+		lock:          nil,
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.LineColumns(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: newTextLine1Cols,
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return err
+}
+
+// AddLine2Col - Adds two Text Fields used to generate a 2-Column
+// Text Lne.
+//
+// The 2-Column Text Line is designed to produce a single line of
+// text consisting of two text fields or text columns with
+// optional left and right margins.
+//
+// This method will assign previously configured (a.k.a. default)
+// Format Parameters to this 2-Column Text Line. The prior
+// configuration of these 2-Column Format Parameters is a
+// requirement and errors will be generated if these Standard
+// Format Parameters have not previously been created.
+//
+// This method will extract those previously created Standard
+// Format Parameters for 2-Column Text Lines from the Standard Text
+// Line Parameters collection maintained by this instance of
+// TextFormatterCollection.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The standard parameters for 2-Column Text Lines must be
+// configured in the Standard Text Line Parameters Collection
+// before calling this method.
+//
+// If the standard parameters for 2-Column Text Lines were not
+// previously configured in the Standard Text Line Parameters
+// Collection, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// To configure the standard parameters for 2-Column Text Lines,
+// call one of the following methods:
+//   TextFormatterCollection.CfgLine2Col()
+//   TextFormatterCollection.SetStdFormatParamsLine2Col()
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  column1Field               interface{}
+//     - This is the first of two text fields used to generate a
+//       2-Column Text Line. This parameter is an empty interface
+//       which must contain one of several specific data types.
+//       This empty interface type will be converted to a string
+//       and configured as the first text field in this 2-Column
+//       Text Line.
+//
+//       Supported types which may be submitted through this empty
+//       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//       If the 'column1Field' is not convertible to one of the
+//       supported types, an error will be returned.
+//
+//       If the converted string value for 'column1Field' is empty,
+//       it will be defaulted to a single white space character
+//       (" ").
+//
+//
+//  column2Field               interface{}
+//     - This is the second of two text fields used to generate a
+//       2-Column Text Line. This parameter is an empty interface
+//       which must contain one of several specific data types.
+//       This empty interface type will be converted to a string
+//       and configured as the second text field in this 2-Column
+//       Text Line.
+//
+//       Supported types which may be submitted through this empty
+//       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//       If the 'column2Field' is not convertible to one of the
+//       supported types, an error will be returned.
+//
+//       If the converted string value for 'column2Field' is empty,
+//       it will be defaulted to a single white space character
+//       (" ").
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
+	column1Field interface{},
+	column2Field interface{},
+	errorPrefix interface{}) error {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"AddLine2Col()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var foundStdParams bool
+	var stdLineColsFmt TextFmtParamsLineColumnsDto
+
+	foundStdParams,
+		stdLineColsFmt,
+		err =
+		textFormatterCollectionElectron{}.ptr().
+			findStdTxtLineParameters(
+				txtFmtCollection,
+				2, // This is a two column Text Line
+				ePrefix.XCpy(
+					"Text Line 2-Column"))
+
+	if err != nil {
+		return err
+	}
+
+	if !foundStdParams {
+
+		err = fmt.Errorf("%v - Error\n"+
+			"Could NOT locate Standard Text Line Parameter Format\n"+
+			"for a 2-Column Text Line.\n"+
+			"Use the 'SetStdFormatParams()' method to configure a\n"+
+			"new Standard Text Line Column Parameters Format for this"+
+			"2-Column Text Line Type. ",
+			ePrefix.String())
+
+		return err
+	}
+
+	var column1FieldText string
+
+	column1FieldText,
+		err = textSpecificationAtom{}.ptr().
+		convertParamEmptyInterfaceToString(
+			column1Field,
+			"column1Field",
+			ePrefix.XCpy(
+				"column1Field"))
+
+	if err != nil {
+		return err
+	}
+
+	if len(column1FieldText) == 0 {
+		column1FieldText = " "
+	}
+
+	var column2FieldText string
+
+	column2FieldText,
+		err = textSpecificationAtom{}.ptr().
+		convertParamEmptyInterfaceToString(
+			column2Field,
+			"column2Field",
+			ePrefix.XCpy(
+				"column2Field"))
+
+	if err != nil {
+		return err
+	}
+
+	if len(column2FieldText) == 0 {
+		column2FieldText = " "
+	}
+
+	newTextLine1Cols := TextLineColumnsDto{
+		FormatType: TxtFieldType.LineColumns(),
+		TextFieldsContent: []TextFieldsContentDto{
+			{
+				TextFieldString:   column1FieldText,
+				TextFieldDateTime: time.Time{},
+				lock:              nil,
+			},
+			{
+				TextFieldString:   column2FieldText,
 				TextFieldDateTime: time.Time{},
 				lock:              nil,
 			},
