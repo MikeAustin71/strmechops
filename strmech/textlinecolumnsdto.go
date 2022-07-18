@@ -292,9 +292,27 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 }
 
 // GetTextFieldType - Returns the internal member variable which
-// stores the value of TextFieldType. For type
-// TextLineColumnsDto, TextFieldType should be set to
+// stores the value of Text Format Type. For type
+// TextLineColumnsDto, this value should be set to
 // TxtFieldType.Line1Column().
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  TextFieldType
+//     - This method returns an enumeration value specifying the
+//       Text Field Type associated with this instance of
+//       TextLineColumnsDto:
+//          TextLineColumnsDto.FormatType
 //
 func (fmtLineCols *TextLineColumnsDto) GetTextFieldType() TextFieldType {
 
