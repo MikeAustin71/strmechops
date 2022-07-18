@@ -549,6 +549,50 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
 	return strBuilder, err
 }
 
+// buildTextLineColumns - This method is used to generate text for
+// Text Line Column configurations. A Text Line Column
+// specification describes a single line of text consisting of
+// one or more columns containing formatted text. Typically,
+// each Text Line Column is terminted with default or custom
+// line termination characters. However, line termination is
+// optional.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  lineCols                   TextLineColumnsDto
+//     - An instance of TextLineColumnsDto which contains the
+//       specifications for generating a single line of text
+//       containing one or more text columns or text fields.
+//
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//
+//  strBuilder                 strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing the formatted
+//       string of text characters generated from the Text Line
+//       Column specification passed as input parameter,
+//       'lineCols'.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 	lineCols TextLineColumnsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
