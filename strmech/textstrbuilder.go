@@ -1211,26 +1211,13 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 				return strBuilder, err
 			}
 
-		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
-			TxtFieldType.Line1Column() {
+		} else if txtFmtSpecs.fmtCollection[i].FormatType >=
+			TxtFieldType.Line1Column() &&
+			txtFmtSpecs.fmtCollection[i].FormatType <=
+				TxtFieldType.Line8Column() {
 
 			strBuilder2,
-				err = txtBuilderAtom.buildTextLine1Column(
-				txtFmtSpecs.fmtCollection[i].LineColumns,
-				ePrefix.XCpy(
-					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].LineColumns",
-						i)))
-
-			if err != nil {
-				return strBuilder, err
-			}
-
-		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
-			TxtFieldType.Line2Column() {
-
-			strBuilder2,
-				err = txtBuilderAtom.buildTextLine2Column(
+				err = txtBuilderAtom.buildTextLineColumns(
 				txtFmtSpecs.fmtCollection[i].LineColumns,
 				ePrefix.XCpy(
 					fmt.Sprintf(

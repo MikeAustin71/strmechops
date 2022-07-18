@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"math"
 	"strings"
 	"sync"
 	"time"
@@ -548,8 +549,8 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
 	return strBuilder, err
 }
 
-func (txtBuilderAtom *textStrBuilderAtom) buildTextLine1Column(
-	line1Col TextLineColumnsDto,
+func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
+	lineCols TextLineColumnsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strBuilder strings.Builder,
 	err error) {
@@ -568,416 +569,290 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLine1Column(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderAtom."+
-			"fieldFillerWithMargins()",
+			"buildTextLineColumns()",
 		"")
 
 	if err != nil {
 		return strBuilder, err
 	}
 
-	if line1Col.FormatType != TxtFieldType.Line1Column() {
+	numOfTextFields := len(lineCols.TextFieldsContent)
+
+	if numOfTextFields == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'line1Col.FormatType' is invalid!\n"+
-			"Expected line1Col.FormatType == TxtFieldType.Line1Column()\n"+
-			"Actual  line1Col.FormatType String Value  = '%v'\n"+
-			"Actual  line1Col.FormatType Integer Value = '%v'\n",
-			ePrefix.String(),
-			line1Col.FormatType.String(),
-			line1Col.FormatType.XValueInt())
+			"Error: Input parameter 'lineCols.TextFieldsContent' is invalid!\n"+
+			"'lineCols.TextFieldsContent' is empty an contains zero (0) elements.\n",
+			ePrefix.String())
 
 		return strBuilder, err
 	}
 
-	stdLine := TextLineSpecStandardLine{}
+	var masterTextFieldType TextFieldType
 
-	// Build LeftMarginStr
-	if len(line1Col.FmtParameters.Col1LeftMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line1Col.FmtParameters.Col1LeftMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line1Col.FmtParameters.Col1LeftMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-	}
-
-	// Build Col1FieldText
-	_,
-		err = stdLine.AddTextFieldLabel(
-		line1Col.Col1FieldText,
-		line1Col.FmtParameters.Col1FieldLength,
-		line1Col.FmtParameters.Col1FieldJustify,
-		ePrefix.XCpy("line1Col.Col1FieldText"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	// Build Col1RightMarginStr
-	if len(line1Col.FmtParameters.Col1RightMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line1Col.FmtParameters.Col1RightMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line1Col.FmtParameters.Col1RightMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-	}
-
-	if len(line1Col.FmtParameters.LineTerminator) == 0 {
-
-		stdLine.TurnAutoLineTerminationOff()
-
-	} else {
-
-		stdLine.TurnAutoLineTerminationOn()
-
-		err = stdLine.SetNewLineChars(
-			line1Col.FmtParameters.LineTerminator,
-			ePrefix.XCpy(
-				"line1Col.FmtParameters.LineTerminator"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-	}
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = stdLine.TextBuilder(
-		ePrefix.XCpy(
-			"strBuilder2<-stdLine"))
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
-}
-
-func (txtBuilderAtom *textStrBuilderAtom) buildTextLine2Column(
-	line2Col TextLineColumnsDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strBuilder strings.Builder,
-	err error) {
-
-	if txtBuilderAtom.lock == nil {
-		txtBuilderAtom.lock = new(sync.Mutex)
-	}
-
-	txtBuilderAtom.lock.Lock()
-
-	defer txtBuilderAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textStrBuilderAtom."+
-			"fieldFillerWithMargins()",
-		"")
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	if line2Col.FormatType != TxtFieldType.Line2Column() {
+	switch numOfTextFields {
+	case 1:
+		masterTextFieldType = TxtFieldType.Line1Column()
+	case 2:
+		masterTextFieldType = TxtFieldType.Line2Column()
+	case 3:
+		masterTextFieldType = TxtFieldType.Line3Column()
+	case 4:
+		masterTextFieldType = TxtFieldType.Line4Column()
+	case 5:
+		masterTextFieldType = TxtFieldType.Line5Column()
+	case 6:
+		masterTextFieldType = TxtFieldType.Line6Column()
+	case 7:
+		masterTextFieldType = TxtFieldType.Line7Column()
+	case 8:
+		masterTextFieldType = TxtFieldType.Line8Column()
+	default:
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'line1Col.FormatType' is invalid!\n"+
-			"Expected line2Col.FormatType == TxtFieldType.Line1Column()\n"+
-			"Actual  line2Col.FormatType String Value  = '%v'\n"+
-			"Actual  line2Col.FormatType Integer Value = '%v'\n",
+			"Error: Input parameter 'lineCols.TextFieldsContent' is invalid!\n"+
+			"The number of 'lineCols.TextFieldsContent' elements exceeds the"+
+			"maximum limit of 8-Text Fields.\n"+
+			"'lineCols.TextFieldsContent' Length = '%v'\n",
 			ePrefix.String(),
-			line2Col.FormatType.String(),
-			line2Col.FormatType.XValueInt())
+			numOfTextFields)
 
 		return strBuilder, err
 	}
 
-	stdLine := TextLineSpecStandardLine{}
-
-	// Build LeftMarginStr
-	if len(line2Col.FmtParameters.Col1LeftMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line2Col.FmtParameters.Col1LeftMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line2Col.FmtParameters.Col1LeftMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-	}
-
-	// Build Col1FieldText
-	_,
-		err = stdLine.AddTextFieldLabel(
-		line2Col.Col1FieldText,
-		line2Col.FmtParameters.Col1FieldLength,
-		line2Col.FmtParameters.Col1FieldJustify,
-		ePrefix.XCpy("line2Col.Col1FieldText"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	// Build Col1RightMarginStr
-	if len(line2Col.FmtParameters.Col1RightMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line2Col.FmtParameters.Col1RightMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line2Col.FmtParameters.Col1RightMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-	}
-
-	// Build Col2FieldText
-	_,
-		err = stdLine.AddTextFieldLabel(
-		line2Col.Col2FieldText,
-		line2Col.FmtParameters.Col2FieldLength,
-		line2Col.FmtParameters.Col2FieldJustify,
-		ePrefix.XCpy("line2Col.Col2FieldText"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	// Build Col2RightMarginStr
-	if len(line2Col.FmtParameters.Col2RightMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line2Col.FmtParameters.Col2RightMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line2Col.FmtParameters.Col2RightMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-	}
-
-	// Build Line Terminator
-	if len(line2Col.FmtParameters.LineTerminator) == 0 {
-
-		stdLine.TurnAutoLineTerminationOff()
-
-	} else {
-
-		stdLine.TurnAutoLineTerminationOn()
-
-		err = stdLine.SetNewLineChars(
-			line2Col.FmtParameters.LineTerminator,
-			ePrefix.XCpy(
-				"line2Col.FmtParameters.LineTerminator"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-	}
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = stdLine.TextBuilder(
-		ePrefix.XCpy(
-			"strBuilder2<-stdLine"))
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
-}
-
-func (txtBuilderAtom *textStrBuilderAtom) buildTextLine3Column(
-	line3Col TextLineColumnsDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strBuilder strings.Builder,
-	err error) {
-
-	if txtBuilderAtom.lock == nil {
-		txtBuilderAtom.lock = new(sync.Mutex)
-	}
-
-	txtBuilderAtom.lock.Lock()
-
-	defer txtBuilderAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textStrBuilderAtom."+
-			"fieldFillerWithMargins()",
-		"")
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	if line3Col.FormatType != TxtFieldType.Line3Column() {
+	if masterTextFieldType != lineCols.FormatType {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'line1Col.FormatType' is invalid!\n"+
-			"Expected line2Col.FormatType == TxtFieldType.Line1Column()\n"+
-			"Actual  line2Col.FormatType String Value  = '%v'\n"+
-			"Actual  line2Col.FormatType Integer Value = '%v'\n",
+			"Error: Input parameter 'lineCols is invalid!\n"+
+			"The 'lineCols.FormatType' does not match the\n"+
+			"number of text Text Fields contained in \n"+
+			"lineCols.TextFieldsContent."+
+			"'lineCols.TextFieldsContent' Length = '%v'\n",
 			ePrefix.String(),
-			line3Col.FormatType.String(),
-			line3Col.FormatType.XValueInt())
+			numOfTextFields)
 
 		return strBuilder, err
-	}
-
-	stdLine := TextLineSpecStandardLine{}
-
-	// Build LeftMarginStr
-	if len(line3Col.FmtParameters.Col1LeftMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line3Col.FmtParameters.Col1LeftMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line3Col.FmtParameters.Col1LeftMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
 
 	}
 
-	// Build Col1FieldText
-	_,
-		err = stdLine.AddTextFieldLabel(
-		line3Col.Col1FieldText,
-		line3Col.FmtParameters.Col1FieldLength,
-		line3Col.FmtParameters.Col1FieldJustify,
-		ePrefix.XCpy("line3Col.Col1FieldText"))
+	lenItems := len(lineCols.FmtParameters.FieldFormatParams)
 
-	if err != nil {
+	if lenItems != numOfTextFields {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineCols is invalid!\n"+
+			"The number of Field Format Parameters does\n"+
+			"NOT MATCH the number text fields.\n"+
+			"'lineCols.TextFieldsContent' Length = '%v'\n"+
+			"'lineCols.FmtParameters.FieldFormatParams' Length = '%v'\n",
+			ePrefix.String(),
+			numOfTextFields,
+			lenItems)
+
 		return strBuilder, err
-	}
-
-	// Build Col1RightMarginStr
-	if len(line3Col.FmtParameters.Col1RightMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line3Col.FmtParameters.Col1RightMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line2Col.FmtParameters.Col1RightMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
 
 	}
 
-	// Build Col2FieldText
-	_,
-		err = stdLine.AddTextFieldLabel(
-		line3Col.Col2FieldText,
-		line3Col.FmtParameters.Col2FieldLength,
-		line3Col.FmtParameters.Col2FieldJustify,
-		ePrefix.XCpy("line3Col.Col2FieldText"))
+	var columnText, actualDateTimeFormat string
+	var maximumLineLength = lineCols.FmtParameters.MaxLineLength
 
-	if err != nil {
+	if maximumLineLength == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'lineCols.FmtParameters.MaxLineLength' has a value of zero (0).\n",
+			ePrefix.String())
+
 		return strBuilder, err
-	}
-
-	// Build Col2RightMarginStr
-	if len(line3Col.FmtParameters.Col2RightMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line3Col.FmtParameters.Col2RightMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line3Col.FmtParameters.Col2RightMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
 
 	}
 
-	// Build Col3FieldText
-	_,
-		err = stdLine.AddTextFieldLabel(
-		line3Col.Col3FieldText,
-		line3Col.FmtParameters.Col3FieldLength,
-		line3Col.FmtParameters.Col3FieldJustify,
-		ePrefix.XCpy("line3Col.Col3FieldText"))
+	if maximumLineLength < -1 {
 
-	if err != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'lineCols.FmtParameters.MaxLineLength' has a value less"+
+			"than minus one (-1).\n"+
+			"lineCols.FmtParameters.MaxLineLength= '%v'\n",
+			ePrefix.String(),
+			maximumLineLength)
+
 		return strBuilder, err
-	}
-
-	// Build Col3RightMarginStr
-	if len(line3Col.FmtParameters.Col3RightMarginStr) > 0 {
-		_,
-			err = stdLine.AddTextFieldLabel(
-			line3Col.FmtParameters.Col3RightMarginStr,
-			-1,
-			TxtJustify.Left(),
-			ePrefix.XCpy("line3Col.FmtParameters.Col3RightMarginStr"))
-
-		if err != nil {
-			return strBuilder, err
-		}
 
 	}
 
-	// Build Line Terminator
-	if len(line3Col.FmtParameters.LineTerminator) == 0 {
-
-		stdLine.TurnAutoLineTerminationOff()
-
-	} else {
-
-		stdLine.TurnAutoLineTerminationOn()
-
-		err = stdLine.SetNewLineChars(
-			line3Col.FmtParameters.LineTerminator,
-			ePrefix.XCpy(
-				"line2Col.FmtParameters.LineTerminator"))
-
-		if err != nil {
-			return strBuilder, err
-		}
+	if maximumLineLength == -1 ||
+		lineCols.FmtParameters.TurnAutoLineLengthBreaksOn == false {
+		maximumLineLength = math.MaxInt32
 	}
 
+	var currentLineLength = 0
+
+	defaultDateTimeFormat := textSpecificationMolecule{}.ptr().
+		getDefaultDateTimeFormat()
+
+	strBuilder.Grow(512)
+
+	var txtLabelSpec TextFieldSpecLabel
 	var strBuilder2 strings.Builder
 
-	strBuilder2,
-		err = stdLine.TextBuilder(
-		ePrefix.XCpy(
-			"strBuilder2<-stdLine"))
+	for i := 0; i < numOfTextFields; i++ {
 
-	strBuilder.WriteString(strBuilder2.String())
+		if currentLineLength >= maximumLineLength {
+			currentLineLength = 0
+			strBuilder.WriteString("\n")
+		}
 
-	strBuilder2.Reset()
+		if !lineCols.TextFieldsContent[i].TextFieldDateTime.IsZero() {
+			// Extract DateTime or String for Column Text
+			actualDateTimeFormat = lineCols.FmtParameters.FieldFormatParams[i].DateTimeFormat
+
+			if len(actualDateTimeFormat) == 0 {
+				actualDateTimeFormat = defaultDateTimeFormat
+			}
+
+			columnText =
+				lineCols.TextFieldsContent[i].TextFieldDateTime.Format(
+					actualDateTimeFormat)
+		} else {
+
+			columnText = lineCols.TextFieldsContent[i].TextFieldString
+
+		}
+
+		// Build Left Margin Str
+		lenItems =
+			len(lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr)
+
+		if lenItems > 0 {
+
+			txtLabelSpec,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(fmt.Sprintf(
+					"lineCols.FmtParameters.FieldFormatParams[%v].LeftMarginStr",
+					i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder2,
+				err = txtLabelSpec.TextBuilder(
+				ePrefix.XCpy(fmt.Sprintf(
+					"lineCols.FmtParameters.FieldFormatParams[%v].LeftMarginStr",
+					i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			currentLineLength += strBuilder2.Len()
+
+			if currentLineLength >= maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			strBuilder.WriteString(strBuilder2.String())
+		}
+
+		// Build Column Field Text
+		if len(columnText) == 0 {
+			columnText = " "
+		}
+
+		txtLabelSpec,
+			err = TextFieldSpecLabel{}.NewTextLabel(
+			columnText,
+			lineCols.FmtParameters.FieldFormatParams[i].FieldLength,
+			lineCols.FmtParameters.FieldFormatParams[i].FieldJustify,
+			ePrefix.XCpy(fmt.Sprintf(
+				"columnText[%v]",
+				i)))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+		strBuilder2,
+			err = txtLabelSpec.TextBuilder(
+			ePrefix.XCpy(fmt.Sprintf(
+				"lineCols.FmtParameters.FieldFormatParams[%v].LeftMarginStr",
+				i)))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+		currentLineLength += strBuilder2.Len()
+
+		if currentLineLength >= maximumLineLength {
+			currentLineLength = 0
+			strBuilder.WriteString("\n")
+		}
+
+		strBuilder.WriteString(strBuilder2.String())
+
+		// Build Right Margin Str
+
+		lenItems =
+			len(lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr)
+
+		if lenItems > 0 {
+
+			txtLabelSpec,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr,
+				-1,
+				TxtJustify.Left(),
+				ePrefix.XCpy(fmt.Sprintf(
+					"lineCols.FmtParameters.FieldFormatParams[%v].RightMarginStr",
+					i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			strBuilder2,
+				err = txtLabelSpec.TextBuilder(
+				ePrefix.XCpy(fmt.Sprintf(
+					"lineCols.FmtParameters.FieldFormatParams[%v].RightMarginStr",
+					i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+			currentLineLength += strBuilder2.Len()
+
+			if currentLineLength >= maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+		}
+	} // End of Text Field Loop
+
+	if lineCols.FmtParameters.TurnLineTerminationOff == true {
+		// Line Termination is OFF
+		// We are commanded to skip Line Terminator
+		return strBuilder, err
+
+	}
+
+	// Line Termination is ON
+	// We are REQUIRED to provide a Line Terminator
+	if len(lineCols.FmtParameters.LineTerminator) > 0 {
+
+		strBuilder.WriteString(
+			lineCols.FmtParameters.LineTerminator)
+
+	} else {
+		strBuilder.WriteString("\n")
+	}
 
 	return strBuilder, err
 }
