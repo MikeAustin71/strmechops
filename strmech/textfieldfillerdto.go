@@ -246,3 +246,101 @@ func (txtFillerDto *TextFieldFillerDto) CopyOut() (
 
 	return deepCopyTxtFillerDto
 }
+
+// Equal - Receives another instance of TextFieldFillerDto and
+// proceeds to compare the member variables to those of the current
+// TextFieldFillerDto instance in order to determine if they are
+// equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtFillerDto        TextFieldFillerDto
+//     - An incoming instance of TextFieldFillerDto. This method
+//       will compare all member variable data values in this
+//       instance against those contained in the current instance
+//       of TextFieldFillerDto. If the data values in both
+//       instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingTxtFillerDto' are equal in all respects
+//       to those contained in the current instance of
+//       TextFieldFillerDto, this method will return a boolean
+//       value of 'true'. Otherwise a value of 'false' will be
+//       returned to the calling function.
+//
+func (txtFillerDto *TextFieldFillerDto) Equal(
+	incomingTxtFillerDto TextFieldFillerDto) bool {
+
+	if txtFillerDto.lock == nil {
+		txtFillerDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerDto.lock.Lock()
+
+	defer txtFillerDto.lock.Unlock()
+
+	if txtFillerDto.FormatType !=
+		incomingTxtFillerDto.FormatType {
+
+		return false
+	}
+
+	if txtFillerDto.LeftMarginStr !=
+		incomingTxtFillerDto.LeftMarginStr {
+
+		return false
+	}
+
+	if txtFillerDto.FillerCharacters !=
+		incomingTxtFillerDto.FillerCharacters {
+
+		return false
+	}
+
+	if txtFillerDto.FillerCharsRepeatCount !=
+		incomingTxtFillerDto.FillerCharsRepeatCount {
+
+		return false
+	}
+
+	if txtFillerDto.RightMarginStr !=
+		incomingTxtFillerDto.RightMarginStr {
+
+		return false
+	}
+
+	if txtFillerDto.LineTerminator !=
+		incomingTxtFillerDto.LineTerminator {
+
+		return false
+	}
+
+	if txtFillerDto.MaxLineLength !=
+		incomingTxtFillerDto.MaxLineLength {
+
+		return false
+	}
+
+	if txtFillerDto.TurnAutoLineLengthBreaksOn !=
+		incomingTxtFillerDto.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	return true
+}
