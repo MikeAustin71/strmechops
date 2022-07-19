@@ -186,3 +186,63 @@ func (txtFillerDto *TextFieldFillerDto) CopyIn(
 
 	return
 }
+
+// CopyOut - Returns a deep copy of the current TextFieldFillerDto
+// instance.
+//
+// NO DATA VALIDATION is performed on the current instance of
+// TextFieldFillerDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyTxtFillerDto        TextFieldFillerDto
+//     - This parameter will return a deep copy of the current
+//       TextFieldFillerDto instance.
+//
+func (txtFillerDto *TextFieldFillerDto) CopyOut() (
+	deepCopyTxtFillerDto TextFieldFillerDto) {
+
+	if txtFillerDto.lock == nil {
+		txtFillerDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerDto.lock.Lock()
+
+	defer txtFillerDto.lock.Unlock()
+
+	deepCopyTxtFillerDto.FormatType =
+		txtFillerDto.FormatType
+
+	deepCopyTxtFillerDto.LeftMarginStr =
+		txtFillerDto.LeftMarginStr
+
+	deepCopyTxtFillerDto.FillerCharacters =
+		txtFillerDto.FillerCharacters
+
+	deepCopyTxtFillerDto.FillerCharsRepeatCount =
+		txtFillerDto.FillerCharsRepeatCount
+
+	deepCopyTxtFillerDto.RightMarginStr =
+		txtFillerDto.RightMarginStr
+
+	deepCopyTxtFillerDto.LineTerminator =
+		txtFillerDto.LineTerminator
+
+	deepCopyTxtFillerDto.MaxLineLength =
+		txtFillerDto.MaxLineLength
+
+	deepCopyTxtFillerDto.TurnAutoLineLengthBreaksOn =
+		txtFillerDto.TurnAutoLineLengthBreaksOn
+
+	return deepCopyTxtFillerDto
+}
