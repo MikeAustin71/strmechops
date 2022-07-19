@@ -23,6 +23,142 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
+// AddDateTime - Adds a date time value formatted as a text field
+// to the Formatter Collection. Users have the option to format
+// this date time text field with a line terminator (a.k.a. new
+// line character '\n').
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  leftMarginStr              string
+//     - The contents of this string will be used as the left
+//       margin for the date time text field.
+//
+//       If no left margin is required, set 'leftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
+//  fieldDateTime              time.Time
+//     - The date/time value which will be formatted as a text
+//       string.
+//
+//       If this parameter is set equal to zero, an error will be
+//       generated when attempting to create a text field with a
+//       Text Builder method.
+//
+//
+//  fieldDateTimeFormat        string
+//    - This string will be used to format the date/time value
+//      'fieldDateTime' as a text string.
+//
+//       If this 'fieldDateTimeFormat' string is empty (has a zero
+//       length), a default Date/Time format string will be applied
+//       as follows:
+//         "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//
+//  fieldLength                int
+//     - Used to format date time text field. This is the length of
+//       the text field in which the formatted date time text
+//       string will be displayed. If 'fieldLength' is less than the
+//       length of the date time string, it will be automatically
+//       set equal to the date time string length.
+//
+//       If 'fieldLength' is greater than the length of the date
+//       time text string, the 'fieldJustify' parameter will be
+//       used to configure or justify the text within the
+//       boundaries the text field defined by 'fieldLength'.
+//
+//       To automatically set the value of 'fieldLength' to the
+//       length of the date time text field, set this parameter to
+//       a value of  minus one (-1).
+//
+//
+//  fieldJustify               TextJustify
+//      An enumeration value specifying the justification of the
+//      date time text string within the text field specified by
+//      'fieldLength'.
+//
+//      Text justification can only be evaluated in the context of
+//      a text label, field length and a Text Justification object
+//      of type TextJustify. This is because text labels with a
+//      field length equal to or less than the length of the text
+//      label never use text justification. In these cases, text
+//      justification is completely ignored.
+//
+//      If the field length is greater than the length of the date
+//      time text string, text justification must be equal to one
+//      of these three valid values:
+//          TextJustify(0).Left()
+//          TextJustify(0).Right()
+//          TextJustify(0).Center()
+//
+//      You can also use the abbreviated text justification
+//      enumeration syntax as follows:
+//
+//          TxtJustify.Left()
+//          TxtJustify.Right()
+//          TxtJustify.Center()
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted date time text thereby
+//       converting this text element into a valid line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text label field and no other text
+//       elements. Any string of text characters will be accepted
+//       for this parameter.
+//
+//       Again, the most common usage sets this string to a new
+//       line character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this date time
+//       text field will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (txtFmtCollection *TextFormatterCollection) AddDateTime(
 	leftMarginStr string,
 	fieldDateTime time.Time,
@@ -86,9 +222,189 @@ func (txtFmtCollection *TextFormatterCollection) AddDateTime(
 	return
 }
 
+// AddDateTimeDto - Adds a date time value formatted as a text
+// field to the Formatter Collection. Users have the option to
+// format this date time text field with a line terminator
+// (a.k.a. new line character '\n').
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textDateTimeDto            TextFieldDateTimeDto
+//     - An instance of TextFieldDateTimeDto which contains all the
+//       necessary data parameters to produce a date time text
+//       field.
+//
+//       The Text Field Date Time Data Transfer Object is defined
+//       as follows:
+//
+//
+//       type TextFieldDateTimeDto struct {
+//         FormatType TextFieldType
+//          Required. This enumeration value specifies the type of
+//          Text Format Operation to be performed.
+//
+//          For the TextFieldDateTimeDto Format Type, this value
+//          should always be set to:
+//            TxtFieldType.DateTime()       - Valid
+//
+//         LeftMarginStr string
+//          The contents of the string will be used as the left
+//          margin for the Text Field.
+//
+//          If no left margin is required, set 'LeftMarginStr' to a
+//          zero length or empty string, and no left margin will be
+//          created.
+//
+//         FieldDateTime time.Time
+//          This time value will be converted to a string and used
+//          to populate the Date Time Text Field.
+//
+//         FieldDateTimeFormat string
+//          This string will be used to format the Date/Time value
+//          contained in parameter 'FieldDateTime' as text.
+//
+//          If 'FieldDateTime' is set to a value greater than zero
+//          and this 'FieldDateTimeFormat' string is empty (has a
+//          zero length), a default Date/Time format string will be
+//          applied as follows:
+//                  "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//         FieldLength int
+//          Used to format Text Fields. This is the length of the
+//          text field in which the date time text field will be
+//          displayed. If 'FieldLength' is less than the length of
+//          the date time text string, it will be automatically set
+//          equal to the date time text string length.
+//
+//          If 'FieldLength' is greater than the length of the date
+//          time text string, the 'FieldJustify' parameter will be
+//          used to configure or justify the text with the
+//          boundaries of the text field defined by 'FieldLength'.
+//
+//          To automatically set the value of 'FieldLength' to the
+//          length of of the date time text string, set this
+//          parameter to a value of minus one (-1).
+//
+//          If this parameter is submitted with a value less than
+//          minus one (-1) or greater than 1-million (1,000,000),
+//          an error will be returned when attempting to build the
+//          final text output.
+//
+//
+//         FieldJustify        TextJustify
+//          An enumeration which specifies the justification of the
+//          date time text string within the text field specified
+//          by 'FieldLength'.
+//
+//          Text justification can only be evaluated in the context
+//          of a text label, field length and a Text Justification
+//          object of type TextJustify. This is because text labels
+//          with a field length equal to or less than the length of
+//          the text label never use text justification. In these
+//          cases, text justification is completely ignored.
+//
+//          If the field length is greater than the length of the
+//          date time text string, text justification must be equal
+//          to one of these three valid values:
+//              TextJustify(0).Left()
+//              TextJustify(0).Right()
+//              TextJustify(0).Center()
+//
+//          You can also use the abbreviated text justification
+//          enumeration syntax as follows:
+//
+//              TxtJustify.Left()
+//              TxtJustify.Right()
+//              TxtJustify.Center()
+//
+//         RightMarginStr string
+//          The contents of the string will be used as the right margin
+//          for the Text Field.
+//
+//          If no right margin is required, set 'RightMarginStr' to a
+//          zero length or empty string, and no right margin will be
+//          created.
+//
+//         LineTerminator string
+//          This string holds the character or characters which will be
+//          used to terminate the formatted line of text output.
+//
+//          The most common usage sets this string to a new line
+//          character ("\n").
+//
+//          If no Line Terminator is required, set 'lineTerminator' to
+//          a zero length or empty string and no line termination
+//          characters will be created.
+//
+//         MaxLineLength int
+//          Set this parameter to minus one -1 to specify an
+//          unlimited line length for this text line.
+//
+//         TurnAutoLineLengthBreaksOn bool
+//          When this parameter is set to 'true', text fields which
+//          extend beyond the maximum line length ('MaxLineLength')
+//          will be terminated with a new line character ('\n') and
+//          placed on the following line of text.
+//
+//       }
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddDateTimeDto(
+	textDateTimeDto TextFieldDateTimeDto) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if textDateTimeDto.MaxLineLength < 1 {
+		textDateTimeDto.MaxLineLength = -1
+	}
+
+	if textDateTimeDto.FieldLength < 1 {
+		textDateTimeDto.FieldLength = -1
+	}
+
+	if len(textDateTimeDto.FieldDateTimeFormat) == 0 {
+		textDateTimeDto.FieldDateTimeFormat =
+			textSpecificationMolecule{}.ptr().
+				getDefaultDateTimeFormat()
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.DateTime(),
+		DateTime:    textDateTimeDto.CopyOut(),
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
 // AddLabel - Adds a single text label field to the Formatter
-// Collection. Users have the option to format the text label with
-// a line terminator.
+// Collection. Users have the option to format this text label with
+// a line terminator (a.k.a. new line character '\n').
 //
 //
 // ----------------------------------------------------------------
@@ -109,7 +425,7 @@ func (txtFmtCollection *TextFormatterCollection) AddDateTime(
 //     - This parameter is an empty interface which must contain
 //       one of several specific types. This empty interface type
 //       will be converted to a string and configured as the text
-//       text field for this label.
+//       field for this label.
 //
 //       Supported types which may be submitted through this empty
 //       interface parameter are listed as follows:
@@ -139,9 +455,19 @@ func (txtFmtCollection *TextFormatterCollection) AddDateTime(
 //       length of the 'fieldText' string, it will be automatically
 //       set equal to the 'labelText' string length.
 //
+//       If 'fieldLength' is greater than the length of the
+//       'fieldText' text string, the 'fieldJustify' parameter will
+//       be used to configure or justify the text within the
+//       boundaries of the text field defined by 'fieldLength'.
+//
 //       To automatically set the value of 'fieldLength' to the
 //       length of 'fieldText', set this parameter to a value
 //       of  minus one (-1).
+//
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000),
+//       an error will be returned when attempting to build the
+//       final text output.
 //
 //
 //  fieldJustify               TextJustify
@@ -179,8 +505,8 @@ func (txtFmtCollection *TextFormatterCollection) AddDateTime(
 //       If a text line is required, setting this string to include
 //       a new line character ('\n') will ensure that the text line
 //       consists of the text label field and no other text
-//       elements. A string of text characters will be accepted for
-//       this parameter.
+//       elements. Any string of text characters will be accepted
+//       for this parameter.
 //
 //       Again, the most common usage sets this string to a new
 //       line character ("\n").
@@ -194,9 +520,9 @@ func (txtFmtCollection *TextFormatterCollection) AddDateTime(
 //     - The maximum length of the line on which this label text
 //       will be presented.
 //
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
-//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+///
 //       'maxLineLength' is used in conjunction with parameter
 //       'turnAutoLineLengthBreaksOn' to automatically place text
 //       fields on separate text lines when that text exceeds the
@@ -310,7 +636,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 
 // AddLabelDto - Adds a single text label field to the Formatter
 // Collection. Users have the option to format the text label with
-// a line terminator.
+// a line terminator (a.k.a. new line character '\n').
 //
 // This text label is created from an instance of TextFieldLabelDto
 // passed as an input parameter.
@@ -319,7 +645,6 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  textLabelDto               TextFieldLabelDto
 //     - An instance of TextFieldLabelDto which contains all the
@@ -358,6 +683,12 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 //           displayed. If 'FieldLength' is less than the length of
 //           the 'FieldText' string, it will be automatically set
 //           equal to the 'FieldText' string length.
+//
+//           If 'FieldLength' is greater than the length of the
+//           'FieldText' text string, the 'FieldJustify' parameter
+//           will be used to configure or justify the text within
+//           the boundaries of the text field defined by
+//           'FieldLength'.
 //
 //           To automatically set the value of 'FieldLength' to the
 //           length of 'FieldText', set this parameter to a value
@@ -411,7 +742,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 //           be formatted as a separate line of text.
 //
 //           The most common usage sets this string to a new line
-//           character ("\n").
+//           character ("\n"); however, any string of text
+//           characters will be accepted.
 //
 //           If no Line Terminator is required, set
 //           'LineTerminator' to a zero length or empty string and
@@ -427,14 +759,14 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 //           'MaxLineLength' is used in conjunction with parameter
 //           'TurnAutoLineLengthBreaksOn' to automatically place
 //           text fields on separate text lines when that text
-//           exceeds the maximum text line length
-//           ('MaxLineLength'). Therefore, paramter
-//           'turnAutoLineLengthBreaksOn' controls whether
-//           automatic line breaks using 'MaxLineLength' will be
-//           applied.
+//           exceeds the maximum text line length('MaxLineLength').
+//           Therefore, parameter 'turnAutoLineLengthBreaksOn'
+//           controls whether automatic line breaks using
+//           'MaxLineLength' will be applied.
 //
-//           If the value of 'maxLineLength' is less than one (1),
+//           If the value of 'MaxLineLength' is less than one (1),
 //           it will be automatically converted to minus one (-1).
+//
 //           Set this parameter to minus one (-1) to specify an
 //           unlimited line length for this text line.
 //

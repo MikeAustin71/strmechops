@@ -32,6 +32,11 @@ type TextFieldLabelDto struct {
 	// string, it will be automatically set equal to the
 	// 'FieldText' string length.
 	//
+	// If 'FieldLength' is greater than the length of the
+	// 'FieldText' text string, the 'FieldJustify' parameter will
+	//  be used to configure or justify the text within the
+	//  boundaries of the text field defined by 'FieldLength'.
+	//
 	// To automatically set the value of 'FieldLength' to the
 	// length of 'FieldText', set this parameter to a value of
 	// minus one (-1).
@@ -260,4 +265,170 @@ func (txtLabelDto *TextFieldLabelDto) CopyOut() (
 		txtLabelDto.TurnAutoLineLengthBreaksOn
 
 	return deepCopyTxtLabelDto
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of TextFieldLabelDto to their zero or uninitialized
+// states. This method will leave the current instance of
+// TextFieldLabelDto in an invalid state and unavailable for
+// immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextFieldLabelDto. All member variable data
+// values will be reset to their zero or uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtLabelDto *TextFieldLabelDto) Empty() {
+
+	if txtLabelDto.lock == nil {
+		txtLabelDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelDto.lock.Lock()
+
+	txtLabelDto.FormatType = TxtFieldType.None()
+
+	txtLabelDto.LeftMarginStr = ""
+
+	txtLabelDto.FieldText = ""
+
+	txtLabelDto.FieldLength = -99
+
+	txtLabelDto.FieldJustify = TxtJustify.None()
+
+	txtLabelDto.RightMarginStr = ""
+
+	txtLabelDto.LineTerminator = ""
+
+	txtLabelDto.MaxLineLength = -99
+
+	txtLabelDto.TurnAutoLineLengthBreaksOn = false
+
+	txtLabelDto.lock.Unlock()
+
+	txtLabelDto.lock = nil
+
+	return
+}
+
+// Equal - Receives another instance of TextFieldLabelDto and
+// proceeds to compare the member variables to those of the current
+// TextFieldLabelDto instance in order to determine if they are
+// equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLabelDto        TextFieldLabelDto
+//     - An incoming instance of TextFieldLabelDto. This method
+//       will compare all member variable data values in this
+//       instance against those contained in the current instance
+//       of TextFieldLabelDto. If the data values in both
+//       instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingTxtLabelDto' are equal in all respects
+//       to those contained in the current instance of
+//       TextFieldLabelDto, this method will return a boolean
+//       value of 'true'. Otherwise a value of 'false' will be
+//       returned to the calling function.
+//
+func (txtLabelDto *TextFieldLabelDto) Equal(
+	incomingTxtLabelDto TextFieldLabelDto) bool {
+
+	if txtLabelDto.lock == nil {
+		txtLabelDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelDto.lock.Lock()
+
+	defer txtLabelDto.lock.Unlock()
+
+	if txtLabelDto.FormatType !=
+		incomingTxtLabelDto.FormatType {
+
+		return false
+	}
+
+	if txtLabelDto.LeftMarginStr !=
+		incomingTxtLabelDto.LeftMarginStr {
+
+		return false
+	}
+
+	if txtLabelDto.FieldText !=
+		incomingTxtLabelDto.FieldText {
+
+		return false
+	}
+
+	if txtLabelDto.FieldLength !=
+		incomingTxtLabelDto.FieldLength {
+
+		return false
+	}
+
+	if txtLabelDto.FieldJustify !=
+		incomingTxtLabelDto.FieldJustify {
+
+		return false
+	}
+
+	if txtLabelDto.RightMarginStr !=
+		incomingTxtLabelDto.RightMarginStr {
+
+		return false
+	}
+
+	if txtLabelDto.LineTerminator !=
+		incomingTxtLabelDto.LineTerminator {
+
+		return false
+	}
+
+	if txtLabelDto.MaxLineLength !=
+		incomingTxtLabelDto.MaxLineLength {
+
+		return false
+	}
+
+	if txtLabelDto.TurnAutoLineLengthBreaksOn !=
+		incomingTxtLabelDto.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	return true
 }
