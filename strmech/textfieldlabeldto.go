@@ -1,5 +1,7 @@
 package strmech
 
+import "sync"
+
 type TextFieldLabelDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
@@ -18,13 +20,13 @@ type TextFieldLabelDto struct {
 
 	FieldText string
 	// The Text Field string or contents. If this string is empty
-	// (has a zero (0) length) and is designated as a Label, Filler
-	// or Spacer Text Field, an error will be generated.
+	// (has a zero (0) length) it will be automatically converted
+	// to a single white space character (" ").
 	//
 	// This string represents the contents of the Text Field.
 
 	FieldLength int
-	// Used to format Label Text Fields. This is the length of the
+	// Used to format FieldText string. This is the length of the
 	// text field in which the 'FieldText' will be displayed. If
 	// 'FieldLength' is less than the length of the 'FieldText'
 	// string, it will be automatically set equal to the
@@ -73,8 +75,11 @@ type TextFieldLabelDto struct {
 	// be created.
 
 	LineTerminator string
-	// This string holds the character or characters which will
-	// be used to terminate the formatted line of text output.
+	// This string holds the character or characters which will be
+	// used to terminate the formatted line of text output thereby
+	// converting this text element into a valid line of text. Line
+	// Termination is optional. Populate this string only if this
+	// text output should be formatted as a separate line of text.
 	//
 	// The most common usage sets this string to a new line
 	// character ("\n").
@@ -84,12 +89,175 @@ type TextFieldLabelDto struct {
 	// characters will be created.
 
 	MaxLineLength int
-	// Set this parameter to minus one -1 to specify an
-	// unlimited line length for this text line.
+	// The maximum length of the line on which this label text
+	// will be presented.
+	//
+	// Set this parameter to minus one (-1) to specify an unlimited
+	// line length for this text line.
+	//
+	// 'MaxLineLength' is used in conjunction with parameter
+	// 'TurnAutoLineLengthBreaksOn' to automatically place text
+	// fields on separate text lines when that text exceeds the
+	// maximum text line length ('MaxLineLength'). Therefore,
+	// paramter 'turnAutoLineLengthBreaksOn' controls whether
+	// automatic line breaks using 'MaxLineLength' will be
+	// applied.
+	//
+	// If the value of 'maxLineLength' is less than one (1), it
+	// will be automatically converted to minus one (-1).
+	// Set this parameter to minus one (-1) to specify an unlimited
+	// line length for this text line.
 
 	TurnAutoLineLengthBreaksOn bool
-	// When this parameter is set to 'true', text fields which
-	// extend beyond the maximum line length ('MaxLineLength')
-	// will be placed on the following line of text.
+	// This parameter controls whether text lines which exceed the
+	// maximum line length ('MaxLineLength') are broken up and
+	// presented on the following line.
+	//
+	// To apply automatic line breaking at the maximum line length,
+	// set the value of this parameter to 'true'.
 
+	lock *sync.Mutex
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// TextFieldLabelDto ('incomingTxtLabelDto') to the data fields
+// of the current TextFieldLabelDto instance
+// ('txtLabelDto').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current TextFieldLabelDto instance
+// ('txtLabelDto') will be deleted and overwritten.
+//
+// NO DATA VALIDATION IS performed on input parameter,
+// 'incomingTxtLabelDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtLabelDto        TextFieldLabelDto
+//     - An instance of TextFieldLabelDto. This method will NOT
+//       change the data values of member variables contained in
+//       this instance.
+//
+//       All data values in this TextFieldLabelDto instance
+//       ('incomingTxtLabelDto') will be copied to the current
+//       TextFieldLabelDto instance ('txtLabelDto').
+//
+//       No data validation is performed on input parameter,
+//       'incomingTxtLabelDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtLabelDto *TextFieldLabelDto) CopyIn(
+	incomingTxtLabelDto TextFieldLabelDto) {
+
+	if txtLabelDto.lock == nil {
+		txtLabelDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelDto.lock.Lock()
+
+	defer txtLabelDto.lock.Unlock()
+
+	txtLabelDto.FormatType =
+		incomingTxtLabelDto.FormatType
+
+	txtLabelDto.LeftMarginStr =
+		incomingTxtLabelDto.LeftMarginStr
+
+	txtLabelDto.FieldText =
+		incomingTxtLabelDto.FieldText
+
+	txtLabelDto.FieldLength =
+		incomingTxtLabelDto.FieldLength
+
+	txtLabelDto.FieldJustify =
+		incomingTxtLabelDto.FieldJustify
+
+	txtLabelDto.RightMarginStr =
+		incomingTxtLabelDto.RightMarginStr
+
+	txtLabelDto.LineTerminator =
+		incomingTxtLabelDto.LineTerminator
+
+	txtLabelDto.MaxLineLength =
+		incomingTxtLabelDto.MaxLineLength
+
+	txtLabelDto.TurnAutoLineLengthBreaksOn =
+		incomingTxtLabelDto.TurnAutoLineLengthBreaksOn
+
+	return
+}
+
+// CopyOut - Returns a deep copy of the current TextFieldLabelDto
+// instance.
+//
+// NO DATA VALIDATION is performed on the current instance of
+// TextFieldLabelDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyTxtLabelDto        TextFieldLabelDto
+//     - This parameter will return a deep copy of the current
+//       TextFieldLabelDto instance.
+//
+func (txtLabelDto *TextFieldLabelDto) CopyOut() (
+	deepCopyTxtLabelDto TextFieldLabelDto) {
+
+	if txtLabelDto.lock == nil {
+		txtLabelDto.lock = new(sync.Mutex)
+	}
+
+	txtLabelDto.lock.Lock()
+
+	defer txtLabelDto.lock.Unlock()
+
+	deepCopyTxtLabelDto.FormatType =
+		txtLabelDto.FormatType
+
+	deepCopyTxtLabelDto.LeftMarginStr =
+		txtLabelDto.LeftMarginStr
+
+	deepCopyTxtLabelDto.FieldText =
+		txtLabelDto.FieldText
+
+	deepCopyTxtLabelDto.FieldLength =
+		txtLabelDto.FieldLength
+
+	deepCopyTxtLabelDto.FieldJustify =
+		txtLabelDto.FieldJustify
+
+	deepCopyTxtLabelDto.RightMarginStr =
+		txtLabelDto.RightMarginStr
+
+	deepCopyTxtLabelDto.LineTerminator =
+		txtLabelDto.LineTerminator
+
+	deepCopyTxtLabelDto.MaxLineLength =
+		txtLabelDto.MaxLineLength
+
+	deepCopyTxtLabelDto.TurnAutoLineLengthBreaksOn =
+		txtLabelDto.TurnAutoLineLengthBreaksOn
+
+	return deepCopyTxtLabelDto
 }

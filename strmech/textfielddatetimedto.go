@@ -3,6 +3,14 @@ package strmech
 import "time"
 
 type TextFieldDateTimeDto struct {
+	FormatType TextFieldType
+	// Required. This enumeration value specifies the type of Text
+	// Format Operation to be performed.
+	//
+	// For TextFieldDateTimeDto Format Type, this value
+	// should always be set to:
+	//   TxtFieldType.DateTime()       - Valid
+
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
 	// for the Text Field.
@@ -90,5 +98,15 @@ type TextFieldDateTimeDto struct {
 	// If no Line Terminator is required, set 'lineTerminator' to
 	// a zero length or empty string and no line termination
 	// characters will be created.
+
+	MaxLineLength int
+	// Set this parameter to minus one -1 to specify an
+	// unlimited line length for this text line.
+
+	TurnAutoLineLengthBreaksOn bool
+	// When this parameter is set to 'true', text fields which
+	// extend beyond the maximum line length ('MaxLineLength')
+	// will be terminated with a new line character ('\n') and
+	// placed on the following line of text.
 
 }

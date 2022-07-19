@@ -23,6 +23,69 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
+func (txtFmtCollection *TextFormatterCollection) AddDateTime(
+	leftMarginStr string,
+	fieldDateTime time.Time,
+	fieldDateTimeFormat string,
+	fieldLength int,
+	fieldJustify TextJustify,
+	rightMarginStr string,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
+	if fieldLength < 1 {
+		fieldLength = -1
+	}
+
+	if len(fieldDateTimeFormat) == 0 {
+		fieldDateTimeFormat =
+			textSpecificationMolecule{}.ptr().
+				getDefaultDateTimeFormat()
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType: TxtFieldType.DateTime(),
+		DateTime: TextFieldDateTimeDto{
+			FormatType:                 TxtFieldType.DateTime(),
+			LeftMarginStr:              leftMarginStr,
+			FieldDateTime:              fieldDateTime,
+			FieldDateTimeFormat:        fieldDateTimeFormat,
+			FieldLength:                fieldLength,
+			FieldJustify:               fieldJustify,
+			RightMarginStr:             rightMarginStr,
+			LineTerminator:             lineTerminator,
+			MaxLineLength:              maxLineLength,
+			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		},
+		Filler:      TextFieldFillerDto{},
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
 // AddLabel - Adds a single text label field to the Formatter
 // Collection. Users have the option to format the text label with
 // a line terminator.
@@ -42,13 +105,31 @@ type TextFormatterCollection struct {
 //       created.
 //
 //
-//  fieldText                  string
-//     - This strings holds the text characters which will be
-//       formatted as a text label.
+//  fieldText                  interface{}
+//     - This parameter is an empty interface which must contain
+//       one of several specific types. This empty interface type
+//       will be converted to a string and configured as the text
+//       text field for this label.
 //
-//       If 'labelText' is submitted as a zero length or empty
-//       string, it will be automatically converted to a single
-//       white space (" ").
+//       Supported types which may be submitted through this empty
+//       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//       If the 'fieldText' is not convertible to one of the
+//       supported types, an error will be returned.
+//
+//       If the converted string value for 'column1Field' is empty,
+//       it will be defaulted to a single white space character
+//       (" ").
 //
 //
 //  fieldLength                int
@@ -145,13 +226,14 @@ type TextFormatterCollection struct {
 //
 func (txtFmtCollection *TextFormatterCollection) AddLabel(
 	leftMarginStr string,
-	fieldText string,
+	fieldText interface{},
 	fieldLength int,
 	fieldJustify TextJustify,
 	rightMarginStr string,
 	lineTerminator string,
 	maxLineLength int,
-	turnAutoLineLengthBreaksOn bool) {
+	turnAutoLineLengthBreaksOn bool,
+	errorPrefix interface{}) error {
 
 	if txtFmtCollection.lock == nil {
 		txtFmtCollection.lock = new(sync.Mutex)
@@ -161,12 +243,40 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 
 	defer txtFmtCollection.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"AddLabel()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	if maxLineLength < 1 {
 		maxLineLength = -1
 	}
 
 	if fieldLength < 1 {
 		fieldLength = -1
+	}
+
+	var fieldTextStr string
+
+	fieldTextStr,
+		err = textSpecificationAtom{}.ptr().
+		convertParamEmptyInterfaceToString(
+			fieldText,
+			"fieldText",
+			ePrefix.XCpy(
+				"fieldText"))
+
+	if err != nil {
+		return err
 	}
 
 	newTextFormatter := TextFormatterDto{
@@ -176,7 +286,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 		Label: TextFieldLabelDto{
 			FormatType:                 TxtFieldType.Label(),
 			LeftMarginStr:              leftMarginStr,
-			FieldText:                  fieldText,
+			FieldText:                  fieldTextStr,
 			FieldLength:                fieldLength,
 			FieldJustify:               fieldJustify,
 			RightMarginStr:             rightMarginStr,
@@ -184,6 +294,191 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 		},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return err
+}
+
+// AddLabelDto - Adds a single text label field to the Formatter
+// Collection. Users have the option to format the text label with
+// a line terminator.
+//
+// This text label is created from an instance of TextFieldLabelDto
+// passed as an input parameter.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  textLabelDto               TextFieldLabelDto
+//     - An instance of TextFieldLabelDto which contains all the
+//       necessary data parameters to produce a text label.
+//
+//       The Text Field Label Data Transfer Object is defined as
+//       follows:
+//
+//       type TextFieldLabelDto struct {
+//         FormatType TextFieldType
+//           Required. This enumeration value specifies the type of
+//           Text Format Operation to be performed.
+//
+//           For TextFieldLabelDto Format Type, this value should
+//           always be set to:
+//             TxtFieldType.Label()       - Valid
+//
+//         LeftMarginStr string
+//           The contents of the string will be used as the left
+//           margin for the Text Field.
+//
+//           If no left margin is required, set 'LeftMarginStr' to
+//           a zero length or empty string, and no left margin will
+//           be created.
+//
+//         FieldText string
+//           The Text Field string or contents. If this string is
+//           empty (has a zero (0) length) it will be automatically
+//           converted to a single white space character (" ").
+//
+//           This string represents the contents of the Text Field.
+//
+//         FieldLength int
+//           Used to format FieldText string. This is the length of
+//           the text field in which the 'FieldText' will be
+//           displayed. If 'FieldLength' is less than the length of
+//           the 'FieldText' string, it will be automatically set
+//           equal to the 'FieldText' string length.
+//
+//           To automatically set the value of 'FieldLength' to the
+//           length of 'FieldText', set this parameter to a value
+//           of minus one (-1).
+//
+//           If this parameter is submitted with a value less than
+//           minus one (-1) or greater than 1-million (1,000,000),
+//           an error will be returned.
+//
+//         FieldJustify TextJustify
+//           An enumeration which specifies the justification of
+//           the 'FieldText' string within the text field specified
+//           by 'FieldLength'.
+//
+//           Text justification can only be evaluated in the
+//           context of a text label, field length and a Text
+//           Justification object of type TextJustify. This is
+//           because text labels with a field length equal to or
+//           less than the length of the text label never use text
+//           justification. In these cases, text justification is
+//           completely ignored.
+//
+//           If the field length is greater than the length of the
+//           text label, text justification must be equal to one of
+//           these three valid values:
+//               TextJustify(0).Left()
+//               TextJustify(0).Right()
+//               TextJustify(0).Center()
+//
+//           You can also use the abbreviated text justification
+//           enumeration syntax as follows:
+//
+//               TxtJustify.Left()
+//               TxtJustify.Right()
+//               TxtJustify.Center()
+//
+//         RightMarginStr string
+//           The contents of the string will be used as the right
+//           margin for the Text Field.
+//
+//           If no right margin is required, set 'RightMarginStr'
+//           to a zero length or empty string, and no right margin
+//           will be created.
+//
+//         LineTerminator string
+//           This string holds the character or characters which
+//           will be used to terminate the formatted line of text
+//           output thereby converting this text element into a
+//           valid line of text. Line Termination is optional.
+//           Populate this string only if this text output should
+//           be formatted as a separate line of text.
+//
+//           The most common usage sets this string to a new line
+//           character ("\n").
+//
+//           If no Line Terminator is required, set
+//           'LineTerminator' to a zero length or empty string and
+//           no line termination characters will be created.
+//
+//         MaxLineLength int
+//           The maximum length of the line on which this label
+//           text will be presented.
+//
+//           Set this parameter to minus one (-1) to specify an
+//           unlimited line length for this text line.
+//
+//           'MaxLineLength' is used in conjunction with parameter
+//           'TurnAutoLineLengthBreaksOn' to automatically place
+//           text fields on separate text lines when that text
+//           exceeds the maximum text line length
+//           ('MaxLineLength'). Therefore, paramter
+//           'turnAutoLineLengthBreaksOn' controls whether
+//           automatic line breaks using 'MaxLineLength' will be
+//           applied.
+//
+//           If the value of 'maxLineLength' is less than one (1),
+//           it will be automatically converted to minus one (-1).
+//           Set this parameter to minus one (-1) to specify an
+//           unlimited line length for this text line.
+//
+//         TurnAutoLineLengthBreaksOn bool
+//           This parameter controls whether text lines which
+//           exceed the maximum line length ('MaxLineLength') are
+//           broken up and presented on the following line.
+//
+//           To apply automatic line breaking at the maximum line
+//           length, set the value of this parameter to 'true'.
+//
+//       }
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddLabelDto(
+	textLabelDto TextFieldLabelDto) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if textLabelDto.MaxLineLength < 1 {
+		textLabelDto.MaxLineLength = -1
+	}
+
+	if textLabelDto.FieldLength < 1 {
+		textLabelDto.FieldLength = -1
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.Label(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      TextFieldFillerDto{},
+		Label:       textLabelDto.CopyOut(),
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
 		SolidLine:   TextLineSolidLineDto{},
@@ -244,9 +539,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLabel(
 //
 //  column1Field               interface{}
 //     - This parameter is an empty interface which must contain
-//       of several specific types. This empty interface type will
-//       be converted to a string and configured as the single text
-//       field in this 'Line1Column' Text Line.
+//       one of several specific types. This empty interface type
+//       will be converted to a string and configured as the single
+//       text field in this 'Line1Column' Text Line.
 //
 //       Supported types which may be submitted through this empty
 //       interface parameter are listed as follows:
