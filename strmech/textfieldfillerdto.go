@@ -70,7 +70,10 @@ type TextFieldFillerDto struct {
 
 	LineTerminator string
 	// This string holds the character or characters which will be
-	// used to terminate the formatted line of text output.
+	// used to terminate the formatted line of text output thereby
+	// converting this text element into a valid line of text. Line
+	// Termination is optional. Populate this string only if this
+	// text output should be formatted as a separate line of text.
 	//
 	// The most common usage sets this string to a new line
 	// character ("\n").
@@ -96,6 +99,7 @@ type TextFieldFillerDto struct {
 	//
 	// If the value of 'maxLineLength' is less than one (1), it
 	// will be automatically converted to minus one (-1).
+	//
 	// Set this parameter to minus one (-1) to specify an unlimited
 	// line length for this text line.
 
@@ -245,6 +249,65 @@ func (txtFillerDto *TextFieldFillerDto) CopyOut() (
 		txtFillerDto.TurnAutoLineLengthBreaksOn
 
 	return deepCopyTxtFillerDto
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of TextFieldFillerDto to their zero or uninitialized
+// states. This method will leave the current instance of
+// TextFieldFillerDto in an invalid state and unavailable for
+// immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextFieldFillerDto. All member variable data
+// values will be reset to their zero or uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFillerDto *TextFieldFillerDto) Empty() {
+
+	if txtFillerDto.lock == nil {
+		txtFillerDto.lock = new(sync.Mutex)
+	}
+
+	txtFillerDto.lock.Lock()
+
+	txtFillerDto.FormatType = TxtFieldType.None()
+
+	txtFillerDto.LeftMarginStr = ""
+
+	txtFillerDto.FillerCharacters = ""
+
+	txtFillerDto.FillerCharsRepeatCount = 0
+
+	txtFillerDto.RightMarginStr = ""
+
+	txtFillerDto.LineTerminator = ""
+
+	txtFillerDto.MaxLineLength = -99
+
+	txtFillerDto.TurnAutoLineLengthBreaksOn = false
+
+	txtFillerDto.lock.Unlock()
+
+	txtFillerDto.lock = nil
+
 }
 
 // Equal - Receives another instance of TextFieldFillerDto and

@@ -110,6 +110,7 @@ type TextFieldLabelDto struct {
 	//
 	// If the value of 'maxLineLength' is less than one (1), it
 	// will be automatically converted to minus one (-1).
+	//
 	// Set this parameter to minus one (-1) to specify an unlimited
 	// line length for this text line.
 
