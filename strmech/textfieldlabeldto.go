@@ -2,6 +2,57 @@ package strmech
 
 import "sync"
 
+// TextFieldLabelDto - The Text Field Label Data Transfer Object is
+// used to transmit data parameters and specifications required to
+// construct a text label string. A text label contains a string of
+// text characters.
+//
+// Typically, Text Label Fields are designed to be configured
+// within a line of text. However, with the TextFieldLabelDto,
+// users have the option of configuring a Text Label Field as a
+// separate stand-alone line of text.
+//
+// The text string or text label is positioned inside a text field
+// with a given field length. Text Justification within this text
+// field is controlled by the Text Justification specification
+// value which may be set to 'Left', 'Right' or 'Center'.
+//
+// Text Label Justification Examples:
+//   'Hello World  ' - Left Justified, Field Length= 13
+//   '  Hello World' - Right Justified, Field Length= 13
+//   ' Hello World ' - Centered, Field Length= 13
+//
+// Text Label Usage Example 1:
+//   LeftMarginStr = "" // Empty String
+//   FieldText = "Hello"  // Length = 5 characters
+//   FieldLength = 7
+//   FieldJustify = TxtJustify.Center()
+//   RightMarginStr = "" // Empty String
+//   LineTerminator = "" // Empty String
+//   MaxLineLength = -1
+//   TurnAutoLineLengthBreaksOn = false
+//   Final Text Label string = " Hello "
+//
+// Text Label Usage Example 2:
+//   LeftMarginStr = "" // Empty String
+//   FieldText = "Hello"  // Length = 5 characters
+//   FieldLength = 7
+//   FieldJustify = TxtJustify.Center()
+//   RightMarginStr = "" // Empty String
+//   LineTerminator = "\n" // Empty String
+//   MaxLineLength = -1
+//   TurnAutoLineLengthBreaksOn = false
+//   Final Text Label string = " Hello \n"
+//
+// Text Field Specifications are designed to be configured within a
+// line of text. Those lines of text can then be formatted for text
+// displays, file output or printing. The type
+// TextLineSpecStandardLine can be used to compose a line of text
+// consisting of multiple Text Field Specifications like
+// TextFieldSpecLabel. Text Field Specifications are therefore
+// used as the components or building blocks for single lines of
+// text.
+
 type TextFieldLabelDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text

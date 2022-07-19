@@ -16,14 +16,20 @@ import (
 // 'Left', 'Right' or 'Center'. A text label contains a string of
 // text characters.
 //
-// Text Label Examples:
+// Text Label Justification Examples:
 //   'Hello World  ' - Left Justified, Field Length= 13
 //   '  Hello World' - Right Justified, Field Length= 13
 //   ' Hello World ' - Centered, Field Length= 13
 //
+// Text Label Usage Example:
+//   textLabel = "Hello"  // Length = 5 characters
+//   fieldLen = 7
+//   textJustification = TxtJustify.Center()
+//   Final Text Label string = " Hello "
+//
 // Text Field Specifications are designed to be configured within a
-// line of text. Those lines of text can then be formatted for text
-// displays, file output or printing. The type
+// line of text. Those lines of text can then be formatted for
+// screen displays, file output or printing. The type
 // TextLineSpecStandardLine can be used to compose a line of text
 // consisting of multiple Text Field Specifications like
 // TextFieldSpecLabel. Text Field Specifications are therefore

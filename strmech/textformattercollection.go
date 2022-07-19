@@ -807,6 +807,209 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 	return
 }
 
+// AddFieldFillerDto - Adds a Text Filler Field to the Formatter
+// Collection generated from an input parameter of type
+// TextFieldFillerDto.
+//
+// Typically, Text Filler Fields are designed to be configured
+// within a line of text. However, users have the option of
+// configuring a Text Filler Field as a separate stand-alone
+// line of text.
+//
+// Text Filler Fields are commonly used as margins containing
+// multiple white space characters, or line separators containing
+// multiple dashes, equal signs or underscore characters. Text
+// Filler Fields consist of filler characters ('fillerCharacters')
+// and the filler characters repeat count
+// ('fillerCharsRepeatCount'). A filler field is made up of one or
+// more filler characters. These filler characters are repeated one
+// or more times in order to construct the complete filler field as
+// shown in the following examples:
+//
+//  Example 1:
+//   Filler Characters = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
+//
+//  Example 3:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Line Terminator = "\n"
+//   Formatted Text = "-*-*-*\n"
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  textFillerDto              TextFieldFillerDto
+//     - An instance of TextFieldFillerDto which contains all the
+//       necessary data parameters to produce a Text Filler Field.
+//
+//       The Text Field Filler Data Transfer Object is defined as
+//       follows:
+//
+//       type TextFieldFillerDto struct {
+//
+//        FormatType TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For the TextFieldFillerDto Format Type, this value
+//         should always be set to:
+//           TxtFieldType.Filler()       - Valid
+//
+//        LeftMarginStr string
+//         The contents of the string will be used as the left
+//         margin for the Text Field.
+//
+//         If no left margin is required, set 'LeftMarginStr' to a
+//         zero length or empty string, and no left margin will be
+//         created.
+//
+//        FillerCharacters string
+//         A string containing the text characters which will be
+//         included in the Text Filler Field. The final Text Filler
+//         Field will be constructed from the filler characters
+//         repeated one or more times as specified by the
+//         'FillerCharsRepeatCount' parameter.
+//
+//          Text Field Filler Length =
+//            Length of fillerCharacters X fillerCharsRepeatCount
+//
+//            Example #1: FillerCharacters = "-*"
+//                        FillerCharsRepeatCount = 3
+//                        Final Text Filler Field = "-*-*-*"
+//
+//            Example #2: FillerCharacters = "-"
+//                        FillerCharsRepeatCount = 3
+//                        Final Text Filler Field = "---"
+//
+//
+//        FillerCharsRepeatCount int
+//         Controls the number of times 'FillerCharacters' is
+//         repeated when constructing the final Text Filler Field.
+//         The actual length of the string which will populate the
+//         completed Text Filler Field is equal to the length of
+//         'FillerCharacters' times the value of
+//         'FillerCharsRepeatCount'.
+//
+//          Text Field Filler Length =
+//            Length of FillerCharacters X FillerCharsRepeatCount
+//
+//            Example #1: FillerCharacters = "-*"
+//                        FillerRepeatCount = 3
+//                        Final Text Filler Field = "-*-*-*"
+//
+//            Example #2: FillerCharacters = "-"
+//                        FillerRepeatCount = 3
+//                        Final Text Filler Field = "---"
+//
+//         If 'FillerCharsRepeatCount' has a value less than one
+//         (1) or greater than one-million (1,000,000), an error
+//         will be returned when attempting to format text.
+//
+//        RightMarginStr string
+//         The contents of the string will be used as the right
+//         margin for the Text Filler Field.
+//
+//         If no right margin is required, set 'RightMarginStr' to
+//         a zero length or empty string, and no right margin will
+//         be created.
+//
+//        LineTerminator string
+//         This string holds the character or characters which will
+//         be used to terminate the formatted line of text output
+//         thereby converting this text element into a valid
+//         stand-alone line of text. Line Termination is optional.
+//         Populate this string only if this text output should be
+//         formatted as a separate line of text.
+//
+//         The most common usage sets this string to a new line
+//         character ("\n").
+//
+//         If no Line Terminator is required, set 'lineTerminator'
+//         to a zero length or empty string and no line termination
+//         characters will be created.
+//
+//        MaxLineLength int
+//         The maximum length of the line on which this label text
+//         will be presented.
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         'MaxLineLength' is used in conjunction with parameter
+//         'TurnAutoLineLengthBreaksOn' to automatically place text
+//         fields on separate text lines when that text exceeds the
+//         maximum text line length ('MaxLineLength'). Therefore,
+//         paramter 'turnAutoLineLengthBreaksOn' controls whether
+//         automatic line breaks using 'MaxLineLength' will be
+//         applied.
+//
+//         If the value of 'maxLineLength' is less than one (1), it
+//         will be automatically converted to minus one (-1).
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//        TurnAutoLineLengthBreaksOn bool
+//         This parameter controls whether text lines which exceed
+//         the maximum line length ('MaxLineLength') are broken up
+//         and presented on the following line.
+//
+//         To apply automatic line breaking at the maximum line
+//         length, set the value of this parameter to 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
+	textFillerDto TextFieldFillerDto) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if textFillerDto.MaxLineLength < 1 {
+		textFillerDto.MaxLineLength = -1
+	}
+
+	textFillerDto.FormatType = TxtFieldType.Filler()
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:  TxtFieldType.Filler(),
+		DateTime:    TextFieldDateTimeDto{},
+		Filler:      textFillerDto.CopyOut(),
+		Label:       TextFieldLabelDto{},
+		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
 // AddFieldLabel - Adds a single text label field to the Formatter
 // Collection. Users have the option to format this text label with
 // a line terminator (a.k.a. new line character '\n').
