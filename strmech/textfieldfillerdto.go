@@ -2,6 +2,35 @@ package strmech
 
 import "sync"
 
+// TextFieldFillerDto - The Text Field Filler Data Transfer Object
+// is designed to transfer data parameters and specifications
+// required to construct a Text Filler Field.
+//
+// Typically, Text Filler Fields are designed to be configured
+// within a line of text. However, with the TextFieldFillerDto,
+// users have the option of configuring a Text Filler Field as a
+// separate stand-alone line of text.
+//
+// Text Filler Fields are commonly used as margins containing
+// multiple white space characters, or line separators containing
+// multiple dashes, equal signs or underscore characters. Text
+// Filler Fields consist of filler characters ('FillerCharacters')
+// and the filler characters repeat count
+// ('FillerCharsRepeatCount'). A filler field is made up of one or
+// more filler characters. These filler characters are repeated one
+// or more times in order to construct the complete filler field as
+// shown in the following examples:
+//
+//  Example 1:
+//   Filler Characters = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
+//
 type TextFieldFillerDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text
@@ -23,46 +52,46 @@ type TextFieldFillerDto struct {
 	// included in the Text Filler Field. The final Text Filler
 	// Field will be constructed from the filler characters
 	// repeated one or more times as specified by the
-	// 'fillerCharsRepeatCount' parameter.
+	// 'FillerCharsRepeatCount' parameter.
 	//
 	//  Text Field Filler Length =
 	//    Length of fillerCharacters X fillerCharsRepeatCount
 	//
-	//    Example #1: fillerCharacters = "-*"
-	//                fillerRepeatCount = 3
+	//    Example #1: FillerCharacters = "-*"
+	//                FillerCharsRepeatCount = 3
 	//                Final Text Filler Field = "-*-*-*"
 	//
-	//    Example #2: fillerCharacters = "-"
-	//                fillerRepeatCount = 3
+	//    Example #2: FillerCharacters = "-"
+	//                FillerCharsRepeatCount = 3
 	//                Final Text Filler Field = "---"
 	//
 
 	FillerCharsRepeatCount int
-	// Controls the number of times 'fillerCharacters' is
-	// repeated when constructing the final Text Filler Field
-	// returned by this method. The actual length of the string
-	// which will populated the completed Text Filler Field is
-	// equal to the length of 'fillerCharacters' times the value
-	// of 'fillerCharsRepeatCount'.
+	// Controls the number of times 'FillerCharacters' is
+	// repeated when constructing the final Text Filler Field.
+	// The actual length of the string which will populate the
+	// completed Text Filler Field is equal to the length of
+	// 'FillerCharacters' times the value of
+	// 'FillerCharsRepeatCount'.
 	//
 	//  Text Field Filler Length =
-	//    Length of fillerCharacters X fillerCharsRepeatCount
+	//    Length of FillerCharacters X FillerCharsRepeatCount
 	//
-	//    Example #1: fillerCharacters = "-*"
-	//                fillerRepeatCount = 3
+	//    Example #1: FillerCharacters = "-*"
+	//                FillerRepeatCount = 3
 	//                Final Text Filler Field = "-*-*-*"
 	//
-	//    Example #2: fillerCharacters = "-"
-	//                fillerRepeatCount = 3
+	//    Example #2: FillerCharacters = "-"
+	//                FillerRepeatCount = 3
 	//                Final Text Filler Field = "---"
 	//
-	// If 'fillerCharsRepeatCount' has a value less than one (1) or
+	// If 'FillerCharsRepeatCount' has a value less than one (1) or
 	// greater than one-million (1,000,000), an error will be
 	// returned.
 
 	RightMarginStr string
 	// The contents of the string will be used as the right margin
-	// for the Text Field.
+	// for the Text Filler Field.
 	//
 	// If no right margin is required, set 'RightMarginStr' to a
 	// zero length or empty string, and no right margin will be
