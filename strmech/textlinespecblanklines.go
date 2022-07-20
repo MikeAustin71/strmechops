@@ -12,10 +12,10 @@ import (
 // text line specification which is used to create one or more
 // blank lines of text.
 //
-// By default, the blank line(s) are terminated with a standard
-// new line character '\n'. However, users have the option to
-// substitute an array of runes and apply any character or group
-// of characters to terminate the line.
+// Blank Lines typically consist of one ore more new line
+// characters ('\n') and nothing more. However, users have the
+// option to provide alternate or custom line termination
+// characters which will be applied instead.
 //
 // To override the default line termination character
 // (newline '\n'), see method:

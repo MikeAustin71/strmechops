@@ -46,7 +46,7 @@ type TextFieldSpacerDto struct {
 
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
-	// for the Text Field.
+	// for the Text Spacer Field.
 	//
 	// If no left margin is required, set 'LeftMarginStr' to a zero
 	// length or empty string, and no left margin will be created.
@@ -65,7 +65,7 @@ type TextFieldSpacerDto struct {
 
 	RightMarginStr string
 	// The contents of the string will be used as the right margin
-	// for the Text Field.
+	// for the Text Spacer Field.
 	//
 	// If no right margin is required, set 'RightMarginStr' to a
 	// zero length or empty string, and no right margin will be
