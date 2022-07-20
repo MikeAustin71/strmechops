@@ -2311,6 +2311,124 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	return err
 }
 
+// AddLineMultiCol - Adds a single Text Line consisting of one or
+// more columns to the Text Formatter Collection.
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will assign previously configured (a.k.a. default)
+// Format Parameters to this multi-column Text Line. The prior
+// configuration of these Format Parameters is a requirement and
+// errors will be generated if these Standard Format Parameters
+// have not previously been created. The number of columns in the
+// Standard Format Paramters instance MUST MATCH the number of
+// elements in the input array parameter, 'textFields'.
+//
+// Example: If input parameter 'textFields' contains 3-items, then
+// a 3-column Standard Format Parameters instance must be
+// previously configured.
+//
+// To configure the standard parameters for Text Lines, call one of
+// the following methods:
+//   TextFormatterCollection.CfgLineMultiCol()
+//   TextFormatterCollection.SetStdFormatParamsMultiCol()
+//   TextFormatterCollection.SetStdFormatParamsManyCol()
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textFields                 []interface{}
+//     - An array of type empty interfacer ([]interface{}). Each
+//       element in this array will be converted to a string and
+//       configured as a text column in this Multi-Column Text
+//       Line.
+//
+//       Supported types which may be submitted through this empty
+//       interface array are listed as follows:
+//          time.Time (Converted using default format)
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//       If an element in the 'textFields' array is not convertible
+//       to one of the supported types, an error will be returned.
+//
+//       If the converted string value for a 'textFields' element
+//       is empty (has a zero length), it will be defaulted to a
+//       single white space character (" ").
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
 func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 	textFields []interface{},
 	errorPrefix interface{}) error {
@@ -3518,8 +3636,8 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 	return err
 }
 
-// CfgLineMultiCol - Allows for the addition of a Text Line
-// consisting of one or more columns.
+// CfgLineMultiCol - Adds a single Text Line consisting of one or
+// more columns to the Text Formatter Collection.
 //
 // The number of 'textFields' MUST MATCH the number of Field
 // Format Parameters
