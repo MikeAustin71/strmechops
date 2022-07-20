@@ -1036,6 +1036,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 //   turnAutoLineLengthBreaksOn = false
 //   Final Text Label string = " Hello \n"
 //
+//
 // ----------------------------------------------------------------
 //
 // Input Parameters
@@ -2939,6 +2940,316 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 			newTextFormatter)
 
 	return err
+}
+
+// AddLineSolid - Adds a Solid Text Line to the Formatter
+// Collection.
+//
+// A solid line, as defined here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// calling function using input parameter,
+// 'SolidLineCharRepeatCount'.
+//
+// Therefore, the number of solid line characters produced is
+// equal to:
+//   (Number of 'solidLineChars') x 'solidLineCharRepeatCount'
+//
+// By default, all solid lines are terminated by a new line
+// character ('\n'). This means that each instance of a solid will
+// be formatted as a single line of text. Users have the option
+// to alter this behavior and control the content and application
+// of line termination characters through two input parameters,
+// 'turnLineTerminationOff' and 'lineTerminator'.
+//
+//       Example-1:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = ""
+//         Final Solid Line String = "*****\n"
+//
+//       Example-2:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****\n\n"
+//
+//       Example-3:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = true
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****"
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  leftMarginStr              string
+//     - A string containing the text characters to be positioned
+//       on the Left side of the Solid Line.
+//
+//       If no Left margin is required, set this parameter to an
+//       empty string ("").
+//
+//       Example A-1:
+//         LeftMarginStr = "xxx"
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         RightMarginStr = "" // Empty string
+//         Solid Line = "xxx*****"
+//
+//       Example A-2:
+//         LeftMarginStr = ""
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         RightMarginStr = "" // Empty string
+//         Solid Line = "*****"
+//
+//       If the 'LeftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned when
+//       attempting to create formatted text output.
+//
+//
+//  solidLineChars             string
+//     - This string specifies the character or characters which
+//       will comprise the solid line string for screen display,
+//       file output or printing.
+//
+//       Example B-1:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned when attempting to create formatted
+//       text output.
+//
+//
+//  solidLineCharRepeatCount   int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), it will be automatically converted to one (1).
+//
+//       Example C-1:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
+//
+//
+//  rightMarginStr             string
+//     - A string containing the text characters to positioned on
+//       the Right side of the Solid Line.
+//
+//       If no Right margin is required, set this parameter to an
+//       empty string.
+//
+//       Example D-1:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMarginStr = "" // Empty string
+//         RightMarginStr = "xxx"
+//         Solid line = "*****xxx"
+//
+//       If the 'RightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned when
+//       attempting to created formatted text output.
+//
+//
+//  turnLineTerminationOff     bool
+//     - If this parameter is set to 'true' no Line Termination
+//       Sequence will be applied for this text line (Example E-3).
+//
+//             Example E-1:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = ""
+//               Final Solid Line String = "*****\n"
+//
+//             Example E-2:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****\n\n"
+//
+//             Example E-3:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = true
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****"
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which
+//       will be used to terminate the formatted line of text
+//       output.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If 'LineTerminator' is configured as an empty string
+//       (string length zero), a single new line character ('\n')
+//       will be automatically applied to produce line termination.
+//
+//       LineTerminator works in conjunction with member variable
+//       'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+//       controls the application of a line terminator. Setting
+//       'TurnLineTerminationOff' to 'true' means that NO line
+//       terminator will be applied to this instance of Text Solid
+//       Line (Example F-3).
+//
+//             Example F-1:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = ""
+//               Final Solid Line String = "*****\n"
+//
+//             Example F-2:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****\n\n"
+//
+//             Example F-3:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = true
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****"
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which the solid line
+//       text characters will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than one (1),
+//       it will be automatically converted to minus one (-1).
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are positioned
+//       on the following line as a separate line of text.
+//
+//       To apply automatic line breaking at the maximum line
+//       length ('maxLineLength'), set the value of this parameter
+//       to 'true'.
+//
+//       When this parameter is set to 'true', text fields which
+//       extend beyond the maximum line length ('maxLineLength')
+//       will be formatted as a separate line of text on the
+//       following line.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
+	leftMarginStr string,
+	solidLineChars string,
+	solidLineCharRepeatCount int,
+	rightMarginStr string,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
+	if solidLineCharRepeatCount < 1 {
+		maxLineLength = 1
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType: TxtFieldType.SolidLine(),
+		DateTime:   TextFieldDateTimeDto{},
+		Filler:     TextFieldFillerDto{},
+		Label:      TextFieldLabelDto{},
+		Spacer:     TextFieldSpacerDto{},
+		BlankLine:  TextLineBlankDto{},
+		SolidLine: TextLineSolidDto{
+			FormatType:                 TxtFieldType.SolidLine(),
+			LeftMarginStr:              leftMarginStr,
+			SolidLineChars:             solidLineChars,
+			SolidLineCharRepeatCount:   solidLineCharRepeatCount,
+			RightMarginStr:             rightMarginStr,
+			TurnLineTerminationOff:     turnLineTerminationOff,
+			LineTerminator:             lineTerminator,
+			MaxLineLength:              maxLineLength,
+			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+			lock:                       nil,
+		},
+
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
 }
 
 // CfgLine1Col - Allows the user to configure both the field value

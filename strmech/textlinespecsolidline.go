@@ -28,8 +28,8 @@ import (
 // 'solidLineCharsRepeatCount'.
 //
 // By default, all solid lines are terminated by a new line
-// character ('\n'). This means that each instance of a solid will
-// be formatted as a single line of text. If another new line
+// character ('\n'). This means that each instance of a solid line
+// will be formatted as a single line of text. If another new line
 // character or characters is required, reference method:
 //    TextLineSpecSolidLine.SetNewLineChars()
 //

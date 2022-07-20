@@ -7,7 +7,8 @@ import (
 )
 
 // TextLineSolidDto - Used to create a solid line of text
-// characters for screen display, file output or printing.
+// characters formatted for screen display, file output or
+// printing.
 //
 // A solid line, as used here, consists of a single character or
 // multiple characters used in a repeating sequence to construct
@@ -170,8 +171,8 @@ type TextLineSolidDto struct {
 	// will be automatically applied to produce line termination.
 	//
 	// LineTerminator works in conjunction with member variable
-	// 'TurnLineTerminationOff'. 'TurnLineTerminationOff' controls
-	// the application of a line terminator. Setting
+	// 'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+	// controls the application of a line terminator. Setting
 	// 'TurnLineTerminationOff' to 'true' means that NO line
 	// terminator will be applied to this instance of Text Solid
 	// Line.
@@ -204,8 +205,8 @@ type TextLineSolidDto struct {
 	//         Final Solid Line String = "*****"
 
 	MaxLineLength int
-	// The maximum length of the line on which this solid line
-	// will be presented.
+	// The maximum length of the line on which the solid line
+	// text characters will be presented.
 	//
 	// Set this parameter to minus one (-1) to specify an
 	// unlimited line length for this text line.
@@ -225,17 +226,18 @@ type TextLineSolidDto struct {
 	// unlimited line length for this text line.
 
 	TurnAutoLineLengthBreaksOn bool
-	// This parameter controls whether text lines which exceed the
-	// maximum line length ('MaxLineLength') are broken up and
-	// presented on the following line.
+	// This parameter controls whether text lines which exceed
+	// the maximum line length ('MaxLineLength') are
+	// positioned on the following line as a separate line of
+	// text.
 	//
 	// To apply automatic line breaking at the maximum line
 	// length, set the value of this parameter to 'true'.
 	//
 	// When this parameter is set to 'true', text fields which
-	// extend beyond the maximum line length 'MaxLineLength' will
-	// be formatted as a separate line of text on the following
-	// line.
+	// extend beyond the maximum line length 'MaxLineLength'
+	// will be formatted as a separate line of text on the
+	// following line.
 
 	lock *sync.Mutex
 }
