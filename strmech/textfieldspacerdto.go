@@ -52,9 +52,11 @@ type TextFieldSpacerDto struct {
 	// length or empty string, and no left margin will be created.
 
 	FieldLength int
-	//  An integer value greater than zero and less than 1,000,001
-	//  which is used to specify the number of white space
+	//  An integer value used to specify the number of white space
 	//  characters in the Text Spacer Field.
+	//
+	//  Values less than zero and greater than one million
+	//  (1,000,001) will generate errors.
 	//
 	//  Examples:
 	//   fieldLen = 1 produces text field " "  // 1-white space
@@ -162,26 +164,201 @@ func (txtSpacerDto *TextFieldSpacerDto) CopyIn(
 
 	defer txtSpacerDto.lock.Unlock()
 
-	txtSpacerDto.FormatType =
-		incomingTxtSpacerDto.FormatType
-
-	txtSpacerDto.LeftMarginStr =
-		incomingTxtSpacerDto.LeftMarginStr
-
-	txtSpacerDto.FieldLength =
-		incomingTxtSpacerDto.FieldLength
-
-	txtSpacerDto.RightMarginStr =
-		incomingTxtSpacerDto.RightMarginStr
-
-	txtSpacerDto.LineTerminator =
-		incomingTxtSpacerDto.LineTerminator
-
-	txtSpacerDto.MaxLineLength =
-		incomingTxtSpacerDto.MaxLineLength
-
-	txtSpacerDto.TurnAutoLineLengthBreaksOn =
-		incomingTxtSpacerDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldSpacerDtoNanobot{}.ptr().copy(
+		txtSpacerDto,
+		&incomingTxtSpacerDto,
+		nil)
 
 	return
+}
+
+// CopyOut - Returns a deep copy of the current TextFieldSpacerDto
+// instance.
+//
+// NO DATA VALIDATION is performed on the current instance of
+// TextFieldSpacerDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyTxtSpacerDto        TextFieldSpacerDto
+//     - This parameter will return a deep copy of the current
+//       TextFieldSpacerDto instance.
+//
+func (txtSpacerDto *TextFieldSpacerDto) CopyOut() (
+	deepCopyTxtSpacerDto TextFieldSpacerDto) {
+
+	if txtSpacerDto.lock == nil {
+		txtSpacerDto.lock = new(sync.Mutex)
+	}
+
+	txtSpacerDto.lock.Lock()
+
+	defer txtSpacerDto.lock.Unlock()
+
+	_ = textFieldSpacerDtoNanobot{}.ptr().copy(
+		&deepCopyTxtSpacerDto,
+		txtSpacerDto,
+		nil)
+
+	return deepCopyTxtSpacerDto
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of TextFieldSpacerDto to their zero or uninitialized
+// states. This method will leave the current instance of
+// TextFieldSpacerDto in an invalid state and unavailable for
+// immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextFieldSpacerDto. All member variable data
+// values will be reset to their zero or uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtSpacerDto *TextFieldSpacerDto) Empty() {
+
+	if txtSpacerDto.lock == nil {
+		txtSpacerDto.lock = new(sync.Mutex)
+	}
+
+	txtSpacerDto.lock.Lock()
+
+	txtSpacerDto.FormatType = TxtFieldType.None()
+
+	txtSpacerDto.LeftMarginStr = ""
+
+	txtSpacerDto.FieldLength = -99
+
+	txtSpacerDto.RightMarginStr = ""
+
+	txtSpacerDto.LineTerminator = ""
+
+	txtSpacerDto.MaxLineLength = -99
+
+	txtSpacerDto.TurnAutoLineLengthBreaksOn = false
+
+	txtSpacerDto.lock.Unlock()
+
+	txtSpacerDto.lock = nil
+
+	return
+}
+
+// Equal - Receives another instance of TextFieldSpacerDto and
+// proceeds to compare the member variables to those of the current
+// TextFieldSpacerDto instance in order to determine if they are
+// equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTxtSpacerDto       TextFieldSpacerDto
+//     - An incoming instance of TextFieldSpacerDto. This method
+//       will compare all member variable data values in this
+//       instance against those contained in the current instance
+//       of TextFieldSpacerDto. If the data values in both
+//       instances are found to be equal in all respects, this
+//       method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingTxtSpacerDto' are equal in all respects
+//       to those contained in the current instance of
+//       TextFieldSpacerDto, this method will return a boolean
+//       value of 'true'. Otherwise a value of 'false' will be
+//       returned to the calling function.
+//
+func (txtSpacerDto *TextFieldSpacerDto) Equal(
+	incomingTxtSpacerDto TextFieldSpacerDto) bool {
+
+	if txtSpacerDto.lock == nil {
+		txtSpacerDto.lock = new(sync.Mutex)
+	}
+
+	txtSpacerDto.lock.Lock()
+
+	defer txtSpacerDto.lock.Unlock()
+
+	if txtSpacerDto.FormatType !=
+		incomingTxtSpacerDto.FormatType {
+
+		return false
+	}
+
+	if txtSpacerDto.LeftMarginStr !=
+		incomingTxtSpacerDto.LeftMarginStr {
+
+		return false
+	}
+
+	if txtSpacerDto.FieldLength !=
+		incomingTxtSpacerDto.FieldLength {
+
+		return false
+	}
+
+	if txtSpacerDto.RightMarginStr !=
+		incomingTxtSpacerDto.RightMarginStr {
+
+		return false
+	}
+
+	if txtSpacerDto.LineTerminator !=
+		incomingTxtSpacerDto.LineTerminator {
+
+		return false
+	}
+
+	if txtSpacerDto.MaxLineLength !=
+		incomingTxtSpacerDto.MaxLineLength {
+
+		return false
+	}
+
+	if txtSpacerDto.TurnAutoLineLengthBreaksOn !=
+		incomingTxtSpacerDto.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	return true
 }

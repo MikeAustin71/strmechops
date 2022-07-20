@@ -226,32 +226,10 @@ func (txtLabelDto *TextFieldLabelDto) CopyIn(
 
 	defer txtLabelDto.lock.Unlock()
 
-	txtLabelDto.FormatType =
-		incomingTxtLabelDto.FormatType
-
-	txtLabelDto.LeftMarginStr =
-		incomingTxtLabelDto.LeftMarginStr
-
-	txtLabelDto.FieldText =
-		incomingTxtLabelDto.FieldText
-
-	txtLabelDto.FieldLength =
-		incomingTxtLabelDto.FieldLength
-
-	txtLabelDto.FieldJustify =
-		incomingTxtLabelDto.FieldJustify
-
-	txtLabelDto.RightMarginStr =
-		incomingTxtLabelDto.RightMarginStr
-
-	txtLabelDto.LineTerminator =
-		incomingTxtLabelDto.LineTerminator
-
-	txtLabelDto.MaxLineLength =
-		incomingTxtLabelDto.MaxLineLength
-
-	txtLabelDto.TurnAutoLineLengthBreaksOn =
-		incomingTxtLabelDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldLabelDtoNanobot{}.ptr().copy(
+		txtLabelDto,
+		&incomingTxtLabelDto,
+		nil)
 
 	return
 }
@@ -289,32 +267,10 @@ func (txtLabelDto *TextFieldLabelDto) CopyOut() (
 
 	defer txtLabelDto.lock.Unlock()
 
-	deepCopyTxtLabelDto.FormatType =
-		txtLabelDto.FormatType
-
-	deepCopyTxtLabelDto.LeftMarginStr =
-		txtLabelDto.LeftMarginStr
-
-	deepCopyTxtLabelDto.FieldText =
-		txtLabelDto.FieldText
-
-	deepCopyTxtLabelDto.FieldLength =
-		txtLabelDto.FieldLength
-
-	deepCopyTxtLabelDto.FieldJustify =
-		txtLabelDto.FieldJustify
-
-	deepCopyTxtLabelDto.RightMarginStr =
-		txtLabelDto.RightMarginStr
-
-	deepCopyTxtLabelDto.LineTerminator =
-		txtLabelDto.LineTerminator
-
-	deepCopyTxtLabelDto.MaxLineLength =
-		txtLabelDto.MaxLineLength
-
-	deepCopyTxtLabelDto.TurnAutoLineLengthBreaksOn =
-		txtLabelDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldLabelDtoNanobot{}.ptr().copy(
+		&deepCopyTxtLabelDto,
+		txtLabelDto,
+		nil)
 
 	return deepCopyTxtLabelDto
 }

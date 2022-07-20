@@ -615,11 +615,6 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 // AddFieldFiller - Adds a Text Filler Field to the Formatter
 // Collection.
 //
-// Typically, Text Filler Fields are designed to be configured
-// within a line of text. However, users have the option of
-// configuring a Text Filler Field as a separate stand-alone
-// line of text.
-//
 // Text Filler Fields are commonly used as margins containing
 // multiple white space characters, or line separators containing
 // multiple dashes, equal signs or underscore characters. Text
@@ -645,6 +640,11 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 //   Filler Characters Repeat Count = 3
 //   Line Terminator = "\n"
 //   Formatted Text = "-*-*-*\n"
+//
+// Typically, Text Filler Fields are designed to be configured
+// within a line of text. However, users have the option of
+// configuring a Text Filler Field as a separate stand-alone
+// line of text by means of the input parameter 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -1437,6 +1437,167 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 		Filler:      TextFieldFillerDto{},
 		Label:       textLabelDto.CopyOut(),
 		Spacer:      TextFieldSpacerDto{},
+		BlankLine:   TextLineBlankDto{},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
+// AddFieldSpacer - Adds a Text Spacer Field to the Formatter
+// Collection.
+//
+// Text Spacer Fields consist of one or more white space
+// characters (" ").
+//
+//
+// Text Spacer Field Example-1:
+//
+//  LeftMarginStr = ""
+//  FieldLength = 3
+//  RightMarginStr = ""
+//  LineTerminator = ""
+//  Final Text Spacer string = "   " // 3-white spaces
+//
+// Text Spacer Field Example-2:
+//
+//  LeftMarginStr = ""
+//  FieldLength = 3
+//  RightMarginStr = ""
+//  LineTerminator = "\n"
+//  Final Text Spacer string = "   \n" // 3-white spaces and
+//                                     // 1-new line character
+//                                     // ('\n')
+//
+// Typically, Text Spacer Fields are designed to be configured
+// within a line of text. However, users have the option of
+// configuring a Text Filler Field as a separate stand-alone
+// line of text by means of the input parameter 'lineTerminator'.
+// line of text by means of the input parameter 'lineTerminator'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  leftMarginStr              string
+//     - The contents of this string will be used as the left
+//       margin for the Text Spacer Field.
+//
+//       If no left margin is required, set 'leftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
+//  fieldLength                int
+//     - An integer value used to specify the number of white space
+//       characters in the Text Spacer Field.
+//
+//       If the value of this parameter is less than zero and greater
+//       than one-million (1,000,000), an error will be generated when
+//       attempting to create formatted text output.
+//
+//       Examples:
+//        fieldLen = 1 produces text field " "  // 1-white space
+//        fieldLen = 2 produces text field "  " // 2-white spaces
+//        fieldLen = 5 produces text field "     " // 5-white spaces
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       this text element into a valid line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text spacer field and no other text
+//       elements. Any string of text characters will be accepted
+//       for this parameter.
+//
+//       Again, the most common usage sets this string to a new
+//       line character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this Text Spacer
+//       Field will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+///
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
+	leftMarginStr string,
+	fieldLength int,
+	rightMarginStr string,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType: TxtFieldType.Spacer(),
+		DateTime:   TextFieldDateTimeDto{},
+		Filler:     TextFieldFillerDto{},
+		Label:      TextFieldLabelDto{},
+		Spacer: TextFieldSpacerDto{
+			FormatType:                 TxtFieldType.Spacer(),
+			LeftMarginStr:              leftMarginStr,
+			FieldLength:                fieldLength,
+			RightMarginStr:             rightMarginStr,
+			LineTerminator:             lineTerminator,
+			MaxLineLength:              maxLineLength,
+			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+			lock:                       nil,
+		},
 		BlankLine:   TextLineBlankDto{},
 		SolidLine:   TextLineSolidLineDto{},
 		LineColumns: TextLineColumnsDto{},

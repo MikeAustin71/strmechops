@@ -193,29 +193,10 @@ func (txtFillerDto *TextFieldFillerDto) CopyIn(
 
 	defer txtFillerDto.lock.Unlock()
 
-	txtFillerDto.FormatType =
-		incomingTxtFillerDto.FormatType
-
-	txtFillerDto.LeftMarginStr =
-		incomingTxtFillerDto.LeftMarginStr
-
-	txtFillerDto.FillerCharacters =
-		incomingTxtFillerDto.FillerCharacters
-
-	txtFillerDto.FillerCharsRepeatCount =
-		incomingTxtFillerDto.FillerCharsRepeatCount
-
-	txtFillerDto.RightMarginStr =
-		incomingTxtFillerDto.RightMarginStr
-
-	txtFillerDto.LineTerminator =
-		incomingTxtFillerDto.LineTerminator
-
-	txtFillerDto.MaxLineLength =
-		incomingTxtFillerDto.MaxLineLength
-
-	txtFillerDto.TurnAutoLineLengthBreaksOn =
-		incomingTxtFillerDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldFillerDtoNanobot{}.ptr().copy(
+		txtFillerDto,
+		&incomingTxtFillerDto,
+		nil)
 
 	return
 }
@@ -253,29 +234,10 @@ func (txtFillerDto *TextFieldFillerDto) CopyOut() (
 
 	defer txtFillerDto.lock.Unlock()
 
-	deepCopyTxtFillerDto.FormatType =
-		txtFillerDto.FormatType
-
-	deepCopyTxtFillerDto.LeftMarginStr =
-		txtFillerDto.LeftMarginStr
-
-	deepCopyTxtFillerDto.FillerCharacters =
-		txtFillerDto.FillerCharacters
-
-	deepCopyTxtFillerDto.FillerCharsRepeatCount =
-		txtFillerDto.FillerCharsRepeatCount
-
-	deepCopyTxtFillerDto.RightMarginStr =
-		txtFillerDto.RightMarginStr
-
-	deepCopyTxtFillerDto.LineTerminator =
-		txtFillerDto.LineTerminator
-
-	deepCopyTxtFillerDto.MaxLineLength =
-		txtFillerDto.MaxLineLength
-
-	deepCopyTxtFillerDto.TurnAutoLineLengthBreaksOn =
-		txtFillerDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldFillerDtoNanobot{}.ptr().copy(
+		&deepCopyTxtFillerDto,
+		txtFillerDto,
+		nil)
 
 	return deepCopyTxtFillerDto
 }
