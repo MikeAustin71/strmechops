@@ -523,7 +523,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineBlankWithDto(
 }
 
 func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
-	solidLineDto TextLineSolidLineDto,
+	solidLineDto TextLineSolidDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strBuilder strings.Builder,
 	err error) {

@@ -210,7 +210,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -390,7 +390,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeDto(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -600,7 +600,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -795,7 +795,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -998,7 +998,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -1246,7 +1246,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 		},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -1438,7 +1438,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 		Label:       textLabelDto.CopyOut(),
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -1598,7 +1598,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 			lock:                       nil,
 		},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -1769,7 +1769,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacerDto(
 		Label:       TextFieldLabelDto{},
 		Spacer:      txtFieldSpacerDto.CopyOut(),
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -2007,7 +2007,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLine1Cols,
 	}
 
@@ -2299,7 +2299,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLine1Cols,
 	}
 
@@ -2384,7 +2384,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
 			LineTerminator:  lineTerminator,
 			lock:            nil,
 		},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -2476,7 +2476,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlankDto(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   txtLineBlankDto.CopyOut(),
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: TextLineColumnsDto{},
 	}
 
@@ -2697,7 +2697,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLineCols,
 	}
 
@@ -2929,7 +2929,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLineCols,
 	}
 
@@ -3341,7 +3341,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLine1Cols,
 	}
 
@@ -3909,7 +3909,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLine1Cols,
 	}
 
@@ -4243,7 +4243,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 		Label:       TextFieldLabelDto{},
 		Spacer:      TextFieldSpacerDto{},
 		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidLineDto{},
+		SolidLine:   TextLineSolidDto{},
 		LineColumns: newTextLineCols,
 	}
 

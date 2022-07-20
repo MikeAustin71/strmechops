@@ -12,7 +12,7 @@ import (
 // text line specification which is used to create one or more
 // blank lines of text.
 //
-// Blank Lines typically consist of one ore more new line
+// Blank Lines typically consist of one or more new line
 // characters ('\n') and nothing more. However, users have the
 // option to provide alternate or custom line termination
 // characters which will be applied instead.

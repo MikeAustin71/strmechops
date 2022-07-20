@@ -16,14 +16,7 @@ type TextFormatterDto struct {
 	//  TxtFieldType.Spacer()
 	//  TxtFieldType.BlankLine()
 	//  TxtFieldType.SolidLine()
-	//  TxtFieldType.Line1Column()
-	//  TxtFieldType.Line2Column()
-	//  TxtFieldType.Line3Column()
-	//  TxtFieldType.Line4Column()
-	//  TxtFieldType.Line5Column()
-	//  TxtFieldType.Line6Column()
-	//  TxtFieldType.Line7Column()
-	//  TxtFieldType.Line8Column()
+	//  TxtFieldType.LineColumns()
 
 	DateTime TextFieldDateTimeDto
 	// A structure containing data elements necessary for the
@@ -45,7 +38,7 @@ type TextFormatterDto struct {
 	// A structure containing data elements necessary for the
 	// creation of Blank Lines or New Lines.
 
-	SolidLine TextLineSolidLineDto
+	SolidLine TextLineSolidDto
 	// A structure containing data elements necessary for the
 	// creation of a solid line of text characters.
 	//

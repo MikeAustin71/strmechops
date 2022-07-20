@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // TextFieldSpacerDto - This type is used to transmit data
 // parameters and specifications required to create Text Spacer
@@ -83,8 +87,8 @@ type TextFieldSpacerDto struct {
 	// characters will be created.
 
 	MaxLineLength int
-	// The maximum length of the line on which this label text
-	// will be presented.
+	// The maximum length of the line on which this label Text
+	// Field Spacer string will be presented.
 	//
 	// Set this parameter to minus one (-1) to specify an
 	// unlimited line length for this text line.
@@ -93,11 +97,11 @@ type TextFieldSpacerDto struct {
 	// 'TurnAutoLineLengthBreaksOn' to automatically place text
 	// fields on separate text lines when that text exceeds the
 	// maximum text line length ('MaxLineLength'). Therefore,
-	// paramter 'turnAutoLineLengthBreaksOn' controls whether
+	// paramter 'TurnAutoLineLengthBreaksOn' controls whether
 	// automatic line breaks using 'MaxLineLength' will be
 	// applied.
 	//
-	// If the value of 'maxLineLength' is less than one (1), it
+	// If the value of 'MaxLineLength' is less than one (1), it
 	// will be automatically converted to minus one (-1).
 	//
 	// Set this parameter to minus one (-1) to specify an unlimited
@@ -110,6 +114,10 @@ type TextFieldSpacerDto struct {
 	//
 	// To apply automatic line breaking at the maximum line length,
 	// set the value of this parameter to 'true'.
+	//
+	// When this parameter is set to 'true', text fields which extend
+	// beyond the maximum line length 'MaxLineLength' will be
+	// formatted as a separate line of text on the following line.
 
 	lock *sync.Mutex
 }
@@ -361,4 +369,101 @@ func (txtSpacerDto *TextFieldSpacerDto) Equal(
 	}
 
 	return true
+}
+
+// textFieldSpacerDtoNanobot - Provides helper methods for
+// TextFieldSpacerDto.
+type textFieldSpacerDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy - Copies all data from a source instance of
+// TextFieldSpacerDto to a destination instance of
+// TextFieldSpacerDto.
+func (txtSpacerDtoNanobot *textFieldSpacerDtoNanobot) copy(
+	destinationTxtSpacerDto *TextFieldSpacerDto,
+	sourceTxtSpacerDto *TextFieldSpacerDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtSpacerDtoNanobot.lock == nil {
+		txtSpacerDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtSpacerDtoNanobot.lock.Lock()
+
+	defer txtSpacerDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldSpacerDtoNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if sourceTxtSpacerDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtSpacerDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	if destinationTxtSpacerDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtSpacerDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	destinationTxtSpacerDto.FormatType =
+		sourceTxtSpacerDto.FormatType
+
+	destinationTxtSpacerDto.LeftMarginStr =
+		sourceTxtSpacerDto.LeftMarginStr
+
+	destinationTxtSpacerDto.FieldLength =
+		sourceTxtSpacerDto.FieldLength
+
+	destinationTxtSpacerDto.RightMarginStr =
+		sourceTxtSpacerDto.RightMarginStr
+
+	destinationTxtSpacerDto.LineTerminator =
+		sourceTxtSpacerDto.LineTerminator
+
+	destinationTxtSpacerDto.MaxLineLength =
+		sourceTxtSpacerDto.MaxLineLength
+
+	destinationTxtSpacerDto.TurnAutoLineLengthBreaksOn =
+		sourceTxtSpacerDto.TurnAutoLineLengthBreaksOn
+
+	return err
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFieldSpacerDtoNanobot.
+//
+func (txtSpacerDtoNanobot textFieldSpacerDtoNanobot) ptr() *textFieldSpacerDtoNanobot {
+
+	if txtSpacerDtoNanobot.lock == nil {
+		txtSpacerDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtSpacerDtoNanobot.lock.Lock()
+
+	defer txtSpacerDtoNanobot.lock.Unlock()
+
+	return &textFieldSpacerDtoNanobot{
+		lock: new(sync.Mutex),
+	}
 }
