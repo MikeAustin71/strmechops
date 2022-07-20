@@ -2311,6 +2311,91 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	return err
 }
 
+// AddLineBlank - Adds Blank Text Lines to the Formatter
+// Collection.
+//
+// Blank Lines typically consist of one or more new line
+// characters ('\n') and nothing more. However, users have
+// the option to provide alternate or custom line termination
+// characters which will be applied instead.
+//
+// The number of blank lines created is controlled by input
+// parameter 'numOfBlankLines'.
+//
+//  Example-1 :
+//   NumOfBlankLines = 3
+//   LineTerminator = ""
+//   Final Blank Line Text = "\n\n\n" // 3-new line characters
+//
+//  Example-2 :
+//   NumOfBlankLines = 2
+//   LineTerminator = "\n x \n"
+//   Final Blank Line Text = "\n x \n\n x \n"
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  numOfBlankLines            int
+//     - Specifies the number of blank lines which will be created.
+//       Essentially, this parameter controls the number of new
+//       line characters configured in the resulting text string.
+//
+//
+//  lineTerminator             string
+//     - If this parameter is submitted as an empty string,
+//       the default new line terminator ('\n') will be applied as
+//       a line termination sequence.
+//
+//       If this parameter is populated, this character sequence
+//       will be used as the Line Terminator for this text blank
+//       line.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
+	numOfBlankLines int,
+	lineTerminator string) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	newTextFormatter := TextFormatterDto{
+		FormatType: TxtFieldType.BlankLine(),
+		DateTime:   TextFieldDateTimeDto{},
+		Filler:     TextFieldFillerDto{},
+		Label:      TextFieldLabelDto{},
+		Spacer:     TextFieldSpacerDto{},
+		BlankLine: TextLineBlankDto{
+			FormatType:      TxtFieldType.BlankLine(),
+			NumOfBlankLines: numOfBlankLines,
+			LineTerminator:  lineTerminator,
+			lock:            nil,
+		},
+		SolidLine:   TextLineSolidLineDto{},
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
 // AddLineMultiCol - Adds a single Text Line consisting of one or
 // more columns to the Text Formatter Collection.
 //
