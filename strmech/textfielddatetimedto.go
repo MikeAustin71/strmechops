@@ -1,6 +1,8 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 	"time"
 )
@@ -48,8 +50,8 @@ type TextFieldDateTimeDto struct {
 	//  boundaries the text field defined by 'FieldLength'.
 	//
 	// To automatically set the value of 'FieldLength' to the
-	// length of of the date time text string, set this
-	// parameter to a value of minus one (-1).
+	// length of the date time text string, set this parameter
+	// to a value of minus one (-1).
 	//
 	// If this parameter is submitted with a value less than
 	// minus one (-1) or greater than 1-million (1,000,000),
@@ -163,35 +165,11 @@ func (txtDateTimeDto *TextFieldDateTimeDto) CopyIn(
 
 	defer txtDateTimeDto.lock.Unlock()
 
-	txtDateTimeDto.FormatType =
-		incomingDateTimeDto.FormatType
-
-	txtDateTimeDto.LeftMarginStr =
-		incomingDateTimeDto.LeftMarginStr
-
-	txtDateTimeDto.FieldDateTime =
-		incomingDateTimeDto.FieldDateTime
-
-	txtDateTimeDto.FieldDateTimeFormat =
-		incomingDateTimeDto.FieldDateTimeFormat
-
-	txtDateTimeDto.FieldLength =
-		incomingDateTimeDto.FieldLength
-
-	txtDateTimeDto.FieldJustify =
-		incomingDateTimeDto.FieldJustify
-
-	txtDateTimeDto.RightMarginStr =
-		incomingDateTimeDto.RightMarginStr
-
-	txtDateTimeDto.LineTerminator =
-		incomingDateTimeDto.LineTerminator
-
-	txtDateTimeDto.MaxLineLength =
-		incomingDateTimeDto.MaxLineLength
-
-	txtDateTimeDto.TurnAutoLineLengthBreaksOn =
-		incomingDateTimeDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldDateTimeDtoNanobot{}.ptr().
+		copy(
+			txtDateTimeDto,
+			&incomingDateTimeDto,
+			nil)
 
 	return
 }
@@ -229,35 +207,11 @@ func (txtDateTimeDto *TextFieldDateTimeDto) CopyOut() (
 
 	defer txtDateTimeDto.lock.Unlock()
 
-	deepCopyDateTimeDto.FormatType =
-		txtDateTimeDto.FormatType
-
-	deepCopyDateTimeDto.LeftMarginStr =
-		txtDateTimeDto.LeftMarginStr
-
-	deepCopyDateTimeDto.FieldDateTime =
-		txtDateTimeDto.FieldDateTime
-
-	deepCopyDateTimeDto.FieldDateTimeFormat =
-		txtDateTimeDto.FieldDateTimeFormat
-
-	deepCopyDateTimeDto.FieldLength =
-		txtDateTimeDto.FieldLength
-
-	deepCopyDateTimeDto.FieldJustify =
-		txtDateTimeDto.FieldJustify
-
-	deepCopyDateTimeDto.RightMarginStr =
-		txtDateTimeDto.RightMarginStr
-
-	deepCopyDateTimeDto.LineTerminator =
-		txtDateTimeDto.LineTerminator
-
-	deepCopyDateTimeDto.MaxLineLength =
-		txtDateTimeDto.MaxLineLength
-
-	deepCopyDateTimeDto.TurnAutoLineLengthBreaksOn =
-		txtDateTimeDto.TurnAutoLineLengthBreaksOn
+	_ = textFieldDateTimeDtoNanobot{}.ptr().
+		copy(
+			&deepCopyDateTimeDto,
+			txtDateTimeDto,
+			nil)
 
 	return deepCopyDateTimeDto
 }
@@ -433,4 +387,110 @@ func (txtDateTimeDto *TextFieldDateTimeDto) Equal(
 	}
 
 	return true
+}
+
+// textFieldDateTimeDtoNanobot - Provides helper methods for
+// TextFieldDateTimeDto.
+type textFieldDateTimeDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy - Copies all data from a source instance of
+// TextFieldDateTimeDto to a destination instance of
+// TextFieldDateTimeDto.
+func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) copy(
+	sourceTxtDateTimeDto *TextFieldDateTimeDto,
+	destinationTxtDateTimeDto *TextFieldDateTimeDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtDateTimeDtoNanobot.lock == nil {
+		txtDateTimeDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeDtoNanobot.lock.Lock()
+
+	defer txtDateTimeDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldDateTimeDtoNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if sourceTxtDateTimeDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtDateTimeDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	if destinationTxtDateTimeDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtDateTimeDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	destinationTxtDateTimeDto.FormatType =
+		sourceTxtDateTimeDto.FormatType
+
+	destinationTxtDateTimeDto.LeftMarginStr =
+		sourceTxtDateTimeDto.LeftMarginStr
+
+	destinationTxtDateTimeDto.FieldDateTime =
+		sourceTxtDateTimeDto.FieldDateTime
+
+	destinationTxtDateTimeDto.FieldDateTimeFormat =
+		sourceTxtDateTimeDto.FieldDateTimeFormat
+
+	destinationTxtDateTimeDto.FieldLength =
+		sourceTxtDateTimeDto.FieldLength
+
+	destinationTxtDateTimeDto.FieldJustify =
+		sourceTxtDateTimeDto.FieldJustify
+
+	destinationTxtDateTimeDto.RightMarginStr =
+		sourceTxtDateTimeDto.RightMarginStr
+
+	destinationTxtDateTimeDto.LineTerminator =
+		sourceTxtDateTimeDto.LineTerminator
+
+	destinationTxtDateTimeDto.MaxLineLength =
+		sourceTxtDateTimeDto.MaxLineLength
+
+	destinationTxtDateTimeDto.TurnAutoLineLengthBreaksOn =
+		sourceTxtDateTimeDto.TurnAutoLineLengthBreaksOn
+
+	return err
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFieldDateTimeDtoNanobot.
+//
+func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) ptr() *textFieldDateTimeDtoNanobot {
+
+	if txtDateTimeDtoNanobot.lock == nil {
+		txtDateTimeDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	txtDateTimeDtoNanobot.lock.Lock()
+
+	defer txtDateTimeDtoNanobot.lock.Unlock()
+
+	return &textFieldDateTimeDtoNanobot{
+		lock: new(sync.Mutex),
+	}
 }

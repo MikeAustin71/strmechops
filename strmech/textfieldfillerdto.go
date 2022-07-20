@@ -486,7 +486,7 @@ func (txtFillerDtoNanobot *textFieldFillerDtoNanobot) copy(
 }
 
 // ptr - Returns a pointer to a new instance of
-// textFieldSpacerDtoNanobot.
+// textFieldFillerDtoNanobot.
 //
 func (txtFillerDtoNanobot textFieldFillerDtoNanobot) ptr() *textFieldFillerDtoNanobot {
 
