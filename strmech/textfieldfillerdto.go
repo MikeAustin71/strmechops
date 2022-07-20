@@ -112,8 +112,8 @@ type TextFieldFillerDto struct {
 	// characters will be created.
 
 	MaxLineLength int
-	// The maximum length of the line on which this label text
-	// will be presented.
+	// The maximum length of the line on which this text filler
+	// string will be presented.
 	//
 	// Set this parameter to minus one (-1) to specify an unlimited
 	// line length for this text line.
