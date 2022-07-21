@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // TextFmtParamsLineColumnsDto - Contains Text Format Parameters for a
 // Line containing one or more columns of text.
@@ -90,37 +94,10 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyIn(
 
 	defer paramsLineCol.lock.Unlock()
 
-	paramsLineCol.FormatType = incomingParams.FormatType
-
-	paramsLineCol.FieldFormatParams = nil
-
-	lenCol := len(incomingParams.FieldFormatParams)
-
-	if lenCol > 0 {
-		paramsLineCol.FieldFormatParams =
-			make([]TextFieldFmtParamsDto, lenCol)
-
-		for i := 0; i < lenCol; i++ {
-
-			paramsLineCol.FieldFormatParams[i].CopyIn(
-				incomingParams.FieldFormatParams[i])
-
-		}
-	}
-
-	paramsLineCol.TurnLineTerminationOff =
-		incomingParams.TurnLineTerminationOff
-
-	paramsLineCol.LineTerminator =
-		incomingParams.LineTerminator
-
-	paramsLineCol.MaxLineLength =
-		incomingParams.MaxLineLength
-
-	paramsLineCol.TurnAutoLineLengthBreaksOn =
-		incomingParams.TurnAutoLineLengthBreaksOn
-
-	paramsLineCol.isValid = incomingParams.isValid
+	_ = textFmtParamsLineColsNanobot{}.ptr().
+		copy(paramsLineCol,
+			&incomingParams,
+			nil)
 
 	return
 }
@@ -158,37 +135,11 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyOut() (
 
 	defer paramsLineCol.lock.Unlock()
 
-	deepCopyTxtFmtLineCols.FormatType = paramsLineCol.FormatType
-
-	deepCopyTxtFmtLineCols.FieldFormatParams = nil
-
-	lenCol := len(paramsLineCol.FieldFormatParams)
-
-	if lenCol > 0 {
-		deepCopyTxtFmtLineCols.FieldFormatParams =
-			make([]TextFieldFmtParamsDto, lenCol)
-
-		for i := 0; i < lenCol; i++ {
-
-			deepCopyTxtFmtLineCols.FieldFormatParams[i].CopyIn(
-				paramsLineCol.FieldFormatParams[i])
-
-		}
-	}
-
-	deepCopyTxtFmtLineCols.TurnLineTerminationOff =
-		paramsLineCol.TurnLineTerminationOff
-
-	deepCopyTxtFmtLineCols.LineTerminator =
-		paramsLineCol.LineTerminator
-
-	deepCopyTxtFmtLineCols.MaxLineLength =
-		paramsLineCol.MaxLineLength
-
-	deepCopyTxtFmtLineCols.TurnAutoLineLengthBreaksOn =
-		paramsLineCol.TurnAutoLineLengthBreaksOn
-
-	deepCopyTxtFmtLineCols.isValid = paramsLineCol.isValid
+	_ = textFmtParamsLineColsNanobot{}.ptr().
+		copy(
+			&deepCopyTxtFmtLineCols,
+			paramsLineCol,
+			nil)
 
 	return deepCopyTxtFmtLineCols
 }
@@ -231,27 +182,8 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Empty() {
 
 	paramsLineCol.lock.Lock()
 
-	paramsLineCol.FormatType = TxtFieldType.None()
-
-	lenCol := len(paramsLineCol.FieldFormatParams)
-
-	for i := 0; i < lenCol; i++ {
-
-		paramsLineCol.FieldFormatParams[i].Empty()
-
-	}
-
-	paramsLineCol.FieldFormatParams = nil
-
-	paramsLineCol.TurnLineTerminationOff = false
-
-	paramsLineCol.LineTerminator = ""
-
-	paramsLineCol.MaxLineLength = -1
-
-	paramsLineCol.TurnAutoLineLengthBreaksOn = false
-
-	paramsLineCol.isValid = false
+	textFmtParamsLineColsMolecule{}.ptr().
+		empty(paramsLineCol)
 
 	paramsLineCol.lock.Unlock()
 
@@ -305,63 +237,10 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Equal(
 
 	defer paramsLineCol.lock.Unlock()
 
-	if paramsLineCol.FormatType !=
-		incomingFmtLineCols.FormatType {
-
-		return false
-	}
-
-	lenCol := len(incomingFmtLineCols.FieldFormatParams)
-
-	if len(paramsLineCol.FieldFormatParams) !=
-		lenCol {
-
-		return false
-	}
-
-	if lenCol > 0 {
-
-		for i := 0; i < lenCol; i++ {
-
-			if !paramsLineCol.FieldFormatParams[i].Equal(
-				incomingFmtLineCols.FieldFormatParams[i]) {
-
-				return false
-			}
-
-		}
-	}
-
-	if paramsLineCol.TurnLineTerminationOff !=
-		incomingFmtLineCols.TurnLineTerminationOff {
-
-		return false
-	}
-
-	if paramsLineCol.LineTerminator !=
-		incomingFmtLineCols.LineTerminator {
-
-		return false
-	}
-
-	if paramsLineCol.MaxLineLength !=
-		incomingFmtLineCols.MaxLineLength {
-
-		return false
-	}
-
-	if paramsLineCol.TurnAutoLineLengthBreaksOn !=
-		incomingFmtLineCols.TurnAutoLineLengthBreaksOn {
-
-		return false
-	}
-
-	if paramsLineCol.isValid != incomingFmtLineCols.isValid {
-
-		return false
-	}
-
-	return true
+	return textFmtParamsLineColsMolecule{}.ptr().
+		equal(
+			paramsLineCol,
+			&incomingFmtLineCols)
 }
 
 // GetTextParamsType - Returns the Text FormatType Type.
@@ -431,4 +310,258 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) GetNumOfFieldFmtParams() int {
 	defer paramsLineCol.lock.Unlock()
 
 	return len(paramsLineCol.FieldFormatParams)
+}
+
+// textFmtParamsLineColsNanobot - Provides helper methods for
+// TextFmtParamsLineColumnsDto.
+type textFmtParamsLineColsNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy - Copies all data from a source instance of
+// TextFmtParamsLineColumnsDto to a destination instance of
+// TextFmtParamsLineColumnsDto.
+func (lineColsNanobot *textFmtParamsLineColsNanobot) copy(
+	destinationTxtParamsLineColsDto *TextFmtParamsLineColumnsDto,
+	sourceTxtParamsLineColsDto *TextFmtParamsLineColumnsDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if lineColsNanobot.lock == nil {
+		lineColsNanobot.lock = new(sync.Mutex)
+	}
+
+	lineColsNanobot.lock.Lock()
+
+	defer lineColsNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFmtParamsLineColsNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if sourceTxtParamsLineColsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtParamsLineColsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	if destinationTxtParamsLineColsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtParamsLineColsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	textFmtParamsLineColsMolecule{}.ptr().
+		empty(destinationTxtParamsLineColsDto)
+
+	destinationTxtParamsLineColsDto.FormatType =
+		sourceTxtParamsLineColsDto.FormatType
+
+	lenItems := len(sourceTxtParamsLineColsDto.FieldFormatParams)
+
+	if lenItems > 0 {
+
+		destinationTxtParamsLineColsDto.FieldFormatParams =
+			make([]TextFieldFmtParamsDto, lenItems)
+
+		for i := 0; i < lenItems; i++ {
+
+			destinationTxtParamsLineColsDto.FieldFormatParams[i].CopyIn(
+				sourceTxtParamsLineColsDto.FieldFormatParams[i])
+
+		}
+	}
+
+	destinationTxtParamsLineColsDto.TurnLineTerminationOff =
+		sourceTxtParamsLineColsDto.TurnLineTerminationOff
+
+	destinationTxtParamsLineColsDto.LineTerminator =
+		sourceTxtParamsLineColsDto.LineTerminator
+
+	destinationTxtParamsLineColsDto.MaxLineLength =
+		sourceTxtParamsLineColsDto.MaxLineLength
+
+	destinationTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn =
+		sourceTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn
+
+	destinationTxtParamsLineColsDto.isValid =
+		sourceTxtParamsLineColsDto.isValid
+
+	return err
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFmtParamsLineColsNanobot.
+//
+func (lineColsNanobot textFmtParamsLineColsNanobot) ptr() *textFmtParamsLineColsNanobot {
+
+	if lineColsNanobot.lock == nil {
+		lineColsNanobot.lock = new(sync.Mutex)
+	}
+
+	lineColsNanobot.lock.Lock()
+
+	defer lineColsNanobot.lock.Unlock()
+
+	return &textFmtParamsLineColsNanobot{
+		lock: new(sync.Mutex),
+	}
+}
+
+// textFmtParamsLineColsMolecule - Provides helper methods for
+// TextFmtParamsLineColumnsDto.
+type textFmtParamsLineColsMolecule struct {
+	lock *sync.Mutex
+}
+
+// empty - Receives a pointer to an instance of
+// TextFmtParamsLineColumnsDto and proceeds to set all the member
+// variables to their zero or uninitialized states.
+//
+// Are previous data values contained in this instance of
+// TextFmtParamsLineColumnsDto will be deleted.
+//
+func (lineColsMolecule textFmtParamsLineColsMolecule) empty(
+	targetTxtParamsLineColsDto *TextFmtParamsLineColumnsDto) {
+
+	if lineColsMolecule.lock == nil {
+		lineColsMolecule.lock = new(sync.Mutex)
+	}
+
+	lineColsMolecule.lock.Lock()
+
+	defer lineColsMolecule.lock.Unlock()
+
+	if targetTxtParamsLineColsDto == nil {
+		return
+	}
+
+	targetTxtParamsLineColsDto.FormatType = TxtFieldType.None()
+
+	lenItems := len(targetTxtParamsLineColsDto.FieldFormatParams)
+
+	for i := 0; i < lenItems; i++ {
+		targetTxtParamsLineColsDto.FieldFormatParams[i].Empty()
+	}
+
+	targetTxtParamsLineColsDto.FieldFormatParams = nil
+
+	targetTxtParamsLineColsDto.TurnLineTerminationOff = false
+
+	targetTxtParamsLineColsDto.LineTerminator = ""
+
+	targetTxtParamsLineColsDto.MaxLineLength = -1
+
+	targetTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn = false
+
+	targetTxtParamsLineColsDto.isValid = false
+
+	return
+}
+
+// equal - Compares two instances of TextFmtParamsLineColumnsDto
+// and returns a boolean value signaling whether the two
+// instances are equivalent in all respects.
+//
+// If the two instances of TextFmtParamsLineColumnsDto are equal,
+// this method returns 'true'.
+//
+func (lineColsMolecule textFmtParamsLineColsMolecule) equal(
+	txtFmtParamsDto1 *TextFmtParamsLineColumnsDto,
+	txtFmtParamsDto2 *TextFmtParamsLineColumnsDto) bool {
+
+	if lineColsMolecule.lock == nil {
+		lineColsMolecule.lock = new(sync.Mutex)
+	}
+
+	lineColsMolecule.lock.Lock()
+
+	defer lineColsMolecule.lock.Unlock()
+
+	if txtFmtParamsDto1 == nil ||
+		txtFmtParamsDto2 == nil {
+
+		return false
+	}
+
+	if txtFmtParamsDto1.FormatType !=
+		txtFmtParamsDto2.FormatType {
+
+		return false
+	}
+
+	lenItems1 := len(txtFmtParamsDto1.FieldFormatParams)
+
+	lenItems2 := len(txtFmtParamsDto2.FieldFormatParams)
+
+	if lenItems1 != lenItems2 {
+		return false
+	}
+
+	if lenItems1 != 0 {
+
+		for i := 0; i < lenItems1; i++ {
+
+			if !txtFmtParamsDto1.FieldFormatParams[i].Equal(
+				txtFmtParamsDto2.FieldFormatParams[i]) {
+
+				return false
+			}
+		}
+
+	}
+
+	if txtFmtParamsDto1.LineTerminator !=
+		txtFmtParamsDto2.LineTerminator {
+
+		return false
+	}
+
+	if txtFmtParamsDto1.TurnAutoLineLengthBreaksOn !=
+		txtFmtParamsDto2.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	if txtFmtParamsDto1.isValid !=
+		txtFmtParamsDto2.isValid {
+
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFmtParamsLineColsMolecule.
+//
+func (lineColsMolecule textFmtParamsLineColsMolecule) ptr() *textFmtParamsLineColsMolecule {
+
+	if lineColsMolecule.lock == nil {
+		lineColsMolecule.lock = new(sync.Mutex)
+	}
+
+	lineColsMolecule.lock.Lock()
+
+	defer lineColsMolecule.lock.Unlock()
+
+	return &textFmtParamsLineColsMolecule{
+		lock: new(sync.Mutex),
+	}
 }
