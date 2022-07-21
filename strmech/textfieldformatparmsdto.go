@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 type TextFieldFmtParamsDto struct {
 	LeftMarginStr  string
@@ -113,20 +117,11 @@ func (txtFieldFmtParams *TextFieldFmtParamsDto) CopyOut() (
 
 	defer txtFieldFmtParams.lock.Unlock()
 
-	deepCopyTxtFieldParams.LeftMarginStr =
-		txtFieldFmtParams.LeftMarginStr
-
-	deepCopyTxtFieldParams.FieldLength =
-		txtFieldFmtParams.FieldLength
-
-	deepCopyTxtFieldParams.FieldJustify =
-		txtFieldFmtParams.FieldJustify
-
-	deepCopyTxtFieldParams.DateTimeFormat =
-		txtFieldFmtParams.DateTimeFormat
-
-	deepCopyTxtFieldParams.RightMarginStr =
-		txtFieldFmtParams.RightMarginStr
+	_ = textFieldFmtParamsDtoNanobot{}.ptr().
+		copy(
+			&deepCopyTxtFieldParams,
+			txtFieldFmtParams,
+			nil)
 
 	return deepCopyTxtFieldParams
 }
@@ -168,15 +163,9 @@ func (txtFieldFmtParams *TextFieldFmtParamsDto) Empty() {
 
 	txtFieldFmtParams.lock.Lock()
 
-	txtFieldFmtParams.LeftMarginStr = ""
-
-	txtFieldFmtParams.FieldLength = -1
-
-	txtFieldFmtParams.FieldJustify = TxtJustify.None()
-
-	txtFieldFmtParams.DateTimeFormat = ""
-
-	txtFieldFmtParams.RightMarginStr = ""
+	textFieldFmtParamsDtoNanobot{}.ptr().
+		empty(
+			txtFieldFmtParams)
 
 	txtFieldFmtParams.lock.Unlock()
 
@@ -232,35 +221,183 @@ func (txtFieldFmtParams *TextFieldFmtParamsDto) Equal(
 
 	defer txtFieldFmtParams.lock.Unlock()
 
-	if txtFieldFmtParams.LeftMarginStr !=
-		incomingFieldParams.LeftMarginStr {
+	return textFieldFmtParamsDtoNanobot{}.ptr().
+		equal(txtFieldFmtParams,
+			&incomingFieldParams)
+}
+
+// textFieldFmtParamsDtoNanobot - Provides helper methods for
+// TextFieldFmtParamsDto.
+type textFieldFmtParamsDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy - Copies all data from a source instance of
+// TextFieldFmtParamsDto to a destination instance of
+// TextFieldFmtParamsDto.
+func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) copy(
+	destinationTxtFmtParamsDto *TextFieldFmtParamsDto,
+	sourceTxtFmtParamsDto *TextFieldFmtParamsDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if txtFmtParamsNanobot.lock == nil {
+		txtFmtParamsNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFmtParamsNanobot.lock.Lock()
+
+	defer txtFmtParamsNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textFieldFmtParamsDtoNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if sourceTxtFmtParamsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtFmtParamsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	if destinationTxtFmtParamsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtFmtParamsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	destinationTxtFmtParamsDto.LeftMarginStr =
+		sourceTxtFmtParamsDto.LeftMarginStr
+
+	destinationTxtFmtParamsDto.FieldLength =
+		sourceTxtFmtParamsDto.FieldLength
+
+	destinationTxtFmtParamsDto.FieldJustify =
+		sourceTxtFmtParamsDto.FieldJustify
+
+	destinationTxtFmtParamsDto.DateTimeFormat =
+		sourceTxtFmtParamsDto.DateTimeFormat
+
+	destinationTxtFmtParamsDto.RightMarginStr =
+		sourceTxtFmtParamsDto.RightMarginStr
+
+	return err
+}
+
+// empty - Receives a pointer to an instance of
+// TextFieldFmtParamsDto and proceeds to set all the member
+// variables to their zero or uninitialized states.
+//
+// Are previous data values contained in this instance of
+// TextFieldFmtParamsDto will be deleted.
+//
+func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) empty(
+	targetTxtFmtParamsDto *TextFieldFmtParamsDto) {
+
+	if txtFmtParamsNanobot.lock == nil {
+		txtFmtParamsNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFmtParamsNanobot.lock.Lock()
+
+	defer txtFmtParamsNanobot.lock.Unlock()
+
+	if targetTxtFmtParamsDto == nil {
+		return
+	}
+
+	targetTxtFmtParamsDto.LeftMarginStr = ""
+
+	targetTxtFmtParamsDto.FieldLength = -1
+
+	targetTxtFmtParamsDto.FieldJustify = TxtJustify.None()
+
+	targetTxtFmtParamsDto.DateTimeFormat = ""
+
+	targetTxtFmtParamsDto.RightMarginStr = ""
+
+}
+
+// equal - Compares two instances of TextFieldFmtParamsDto
+// and returns a boolean value signaling whether the two
+// instances are equivalent in all respects.
+//
+// If the two instances of TextFieldFmtParamsDto are equal,
+// this method returns 'true'.
+//
+func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) equal(
+	txtFmtParamsDto1 *TextFieldFmtParamsDto,
+	txtFmtParamsDto2 *TextFieldFmtParamsDto) bool {
+
+	if txtFmtParamsDto1 == nil ||
+		txtFmtParamsDto2 == nil {
 
 		return false
 	}
 
-	if txtFieldFmtParams.FieldLength !=
-		incomingFieldParams.FieldLength {
+	if txtFmtParamsDto1.LeftMarginStr !=
+		txtFmtParamsDto2.LeftMarginStr {
 
 		return false
 	}
 
-	if txtFieldFmtParams.FieldJustify !=
-		incomingFieldParams.FieldJustify {
+	if txtFmtParamsDto1.FieldLength !=
+		txtFmtParamsDto2.FieldLength {
 
 		return false
 	}
 
-	if txtFieldFmtParams.DateTimeFormat !=
-		incomingFieldParams.DateTimeFormat {
+	if txtFmtParamsDto1.FieldJustify !=
+		txtFmtParamsDto2.FieldJustify {
 
 		return false
 	}
 
-	if txtFieldFmtParams.RightMarginStr !=
-		incomingFieldParams.RightMarginStr {
+	if txtFmtParamsDto1.DateTimeFormat !=
+		txtFmtParamsDto2.DateTimeFormat {
+
+		return false
+	}
+
+	if txtFmtParamsDto1.RightMarginStr !=
+		txtFmtParamsDto2.RightMarginStr {
 
 		return false
 	}
 
 	return true
+
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFieldFmtParamsDtoNanobot.
+//
+func (txtFmtParamsNanobot textFieldFmtParamsDtoNanobot) ptr() *textFieldFmtParamsDtoNanobot {
+
+	if txtFmtParamsNanobot.lock == nil {
+		txtFmtParamsNanobot.lock = new(sync.Mutex)
+	}
+
+	txtFmtParamsNanobot.lock.Lock()
+
+	defer txtFmtParamsNanobot.lock.Unlock()
+
+	return &textFieldFmtParamsDtoNanobot{
+		lock: new(sync.Mutex),
+	}
 }
