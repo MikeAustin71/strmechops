@@ -6,9 +6,10 @@ import (
 	"sync"
 )
 
-// TextLineSolidDto - Used to create a solid line of text
-// characters formatted for screen display, file output or
-// printing.
+// TextLineSolidDto - The Text Line Solid Data Transfer Object
+// is used to transfer data parameters required for the creation
+// of a solid line of text characters formatted for screen display,
+// file output or printing.
 //
 // A solid line, as used here, consists of a single character or
 // multiple characters used in a repeating sequence to construct
@@ -17,8 +18,7 @@ import (
 // ("*****") and other similar line break presentations. Multiple
 // characters may be used to produce more complex line sequences
 // ("--*--*--*"). The length of a solid line is specified by the
-// calling function using input parameter,
-// 'SolidLineCharRepeatCount'.
+// by member variable, 'SolidLineCharRepeatCount'.
 //
 // Therefore, the number of solid line characters produced is
 // equal to:

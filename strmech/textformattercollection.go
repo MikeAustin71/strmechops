@@ -242,15 +242,16 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 //
 //
 //       type TextFieldDateTimeDto struct {
-//         FormatType TextFieldType
+//
+//         FormatType                  TextFieldType
 //          Required. This enumeration value specifies the type of
 //          Text Format Operation to be performed.
 //
 //          For the TextFieldDateTimeDto Format Type, this value
 //          should always be set to:
-//            TxtFieldType.DateTime()       - Valid
+//            TxtFieldType.DateTime()
 //
-//         LeftMarginStr string
+//         LeftMarginStr               string
 //          The contents of the string will be used as the left
 //          margin for the Text Field.
 //
@@ -258,11 +259,11 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 //          zero length or empty string, and no left margin will be
 //          created.
 //
-//         FieldDateTime time.Time
+//         FieldDateTime               time.Time
 //          This time value will be converted to a string and used
 //          to populate the Date Time Text Field.
 //
-//         FieldDateTimeFormat string
+//         FieldDateTimeFormat         string
 //          This string will be used to format the Date/Time value
 //          contained in parameter 'FieldDateTime' as text.
 //
@@ -272,7 +273,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 //          applied as follows:
 //                  "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//         FieldLength int
+//         FieldLength                 int
 //          Used to format Text Fields. This is the length of the
 //          text field in which the date time text field will be
 //          displayed. If 'FieldLength' is less than the length of
@@ -294,7 +295,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 //          final text output.
 //
 //
-//         FieldJustify        TextJustify
+//         FieldJustify                TextJustify
 //          An enumeration which specifies the justification of the
 //          date time text string within the text field specified
 //          by 'FieldLength'.
@@ -328,7 +329,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 //          zero length or empty string, and no right margin will be
 //          created.
 //
-//         LineTerminator string
+//         LineTerminator              string
 //          This string holds the character or characters which will be
 //          used to terminate the formatted line of text output.
 //
@@ -339,11 +340,11 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 //          a zero length or empty string and no line termination
 //          characters will be created.
 //
-//         MaxLineLength int
+//         MaxLineLength               int
 //          Set this parameter to minus one -1 to specify an
 //          unlimited line length for this text line.
 //
-//         TurnAutoLineLengthBreaksOn bool
+//         TurnAutoLineLengthBreaksOn  bool
 //          When this parameter is set to 'true', text fields which
 //          extend beyond the maximum line length ('MaxLineLength')
 //          will be terminated with a new line character ('\n') and
@@ -857,15 +858,15 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //
 //       type TextFieldFillerDto struct {
 //
-//        FormatType TextFieldType
+//        FormatType                   TextFieldType
 //         Required. This enumeration value specifies the type of
 //         Text Format Operation to be performed.
 //
 //         For the TextFieldFillerDto Format Type, this value
 //         should always be set to:
-//           TxtFieldType.Filler()       - Valid
+//           TxtFieldType.Filler()
 //
-//        LeftMarginStr string
+//        LeftMarginStr                string
 //         The contents of the string will be used as the left
 //         margin for the Text Field.
 //
@@ -873,7 +874,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //         zero length or empty string, and no left margin will be
 //         created.
 //
-//        FillerCharacters string
+//        FillerCharacters             string
 //         A string containing the text characters which will be
 //         included in the Text Filler Field. The final Text Filler
 //         Field will be constructed from the filler characters
@@ -892,7 +893,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //                        Final Text Filler Field = "---"
 //
 //
-//        FillerCharsRepeatCount int
+//        FillerCharsRepeatCount       int
 //         Controls the number of times 'FillerCharacters' is
 //         repeated when constructing the final Text Filler Field.
 //         The actual length of the string which will populate the
@@ -915,7 +916,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //         (1) or greater than one-million (1,000,000), an error
 //         will be returned when attempting to format text.
 //
-//        RightMarginStr string
+//        RightMarginStr               string
 //         The contents of the string will be used as the right
 //         margin for the Text Filler Field.
 //
@@ -923,7 +924,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //         a zero length or empty string, and no right margin will
 //         be created.
 //
-//        LineTerminator string
+//        LineTerminator               string
 //         This string holds the character or characters which will
 //         be used to terminate the formatted line of text output
 //         thereby converting this text element into a valid
@@ -938,7 +939,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //         to a zero length or empty string and no line termination
 //         characters will be created.
 //
-//        MaxLineLength int
+//        MaxLineLength                int
 //         The maximum length of the line on which this label text
 //         will be presented.
 //
@@ -959,7 +960,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //         Set this parameter to minus one (-1) to specify an
 //         unlimited line length for this text line.
 //
-//        TurnAutoLineLengthBreaksOn bool
+//        TurnAutoLineLengthBreaksOn   bool
 //         This parameter controls whether text lines which exceed
 //         the maximum line length ('MaxLineLength') are broken up
 //         and presented on the following line.
@@ -1271,7 +1272,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //
 // Input Parameters
 //
-//  textLabelDto               TextFieldLabelDto
+//  textLabelDto                       TextFieldLabelDto
 //     - An instance of TextFieldLabelDto which contains all the
 //       necessary data parameters to produce a text label.
 //
@@ -1279,15 +1280,16 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //       follows:
 //
 //       type TextFieldLabelDto struct {
-//         FormatType TextFieldType
+//
+//         FormatType                  TextFieldType
 //           Required. This enumeration value specifies the type of
 //           Text Format Operation to be performed.
 //
 //           For TextFieldLabelDto Format Type, this value should
 //           always be set to:
-//             TxtFieldType.Label()       - Valid
+//             TxtFieldType.Label()
 //
-//         LeftMarginStr string
+//         LeftMarginStr               string
 //           The contents of the string will be used as the left
 //           margin for the Text Field.
 //
@@ -1295,14 +1297,14 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //           a zero length or empty string, and no left margin will
 //           be created.
 //
-//         FieldText string
+//         FieldText                   string
 //           The Text Field string or contents. If this string is
 //           empty (has a zero (0) length) it will be automatically
 //           converted to a single white space character (" ").
 //
 //           This string represents the contents of the Text Field.
 //
-//         FieldLength int
+//         FieldLength                 int
 //           Used to format FieldText string. This is the length of
 //           the text field in which the 'FieldText' will be
 //           displayed. If 'FieldLength' is less than the length of
@@ -1324,7 +1326,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //           an error will be generated when attempting to format
 //           text.
 //
-//         FieldJustify TextJustify
+//         FieldJustify                TextJustify
 //           An enumeration which specifies the justification of
 //           the 'FieldText' string within the text field specified
 //           by 'FieldLength'.
@@ -1351,7 +1353,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //               TxtJustify.Right()
 //               TxtJustify.Center()
 //
-//         RightMarginStr string
+//         RightMarginStr              string
 //           The contents of the string will be used as the right
 //           margin for the Text Field.
 //
@@ -1359,7 +1361,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //           to a zero length or empty string, and no right margin
 //           will be created.
 //
-//         LineTerminator string
+//         LineTerminator              string
 //           This string holds the character or characters which
 //           will be used to terminate the formatted line of text
 //           output thereby converting this text element into a
@@ -1375,7 +1377,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //           'LineTerminator' to a zero length or empty string and
 //           no line termination characters will be created.
 //
-//         MaxLineLength int
+//         MaxLineLength               int
 //           The maximum length of the line on which this label
 //           text will be presented.
 //
@@ -1396,7 +1398,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 //           Set this parameter to minus one (-1) to specify an
 //           unlimited line length for this text line.
 //
-//         TurnAutoLineLengthBreaksOn bool
+//         TurnAutoLineLengthBreaksOn  bool
 //           This parameter controls whether text lines which
 //           exceed the maximum line length ('MaxLineLength') are
 //           broken up and presented on the following line.
@@ -1657,15 +1659,14 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //
 //       type TextFieldSpacerDto struct {
 //
-//        FormatType           TextFieldType
+//        FormatType                   TextFieldType
 //         Required. This enumeration value specifies the type of
 //         Text Format Operation to be performed.
 //
 //         For the TextFieldSpacerDto Format Type, this value
-//         should always be set to:
-//           TxtFieldType.Spacer()       - Valid
+//         should always be set to: TxtFieldType.Spacer()
 //
-//        LeftMarginStr        string
+//        LeftMarginStr                string
 //         The contents of the string will be used as the left
 //         margin for the Text Spacer Field.
 //
@@ -1673,7 +1674,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //         zero length or empty string, and no left margin will be
 //         created.
 //
-//        FieldLength          int
+//        FieldLength                  int
 //         An integer value used to specify the number of white
 //         space characters in the Text Spacer Field.
 //
@@ -1691,7 +1692,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //          fieldLen = 5 produces text field "     "
 //             // 5-white spaces
 //
-//        RightMarginStr       string
+//        RightMarginStr               string
 //         The contents of the string will be used as the right
 //         margin for the Text Spacer Field.
 //
@@ -1699,7 +1700,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //         a zero length or empty string, and no right margin will
 //         be created.
 //
-//        LineTerminator       string
+//        LineTerminator               string
 //         This string holds the character or characters which will
 //         be used to terminate the formatted line of text output.
 //
@@ -1710,7 +1711,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //         to a zero length or empty string and no line
 //         termination characters will be created.
 //
-//        MaxLineLength        int
+//        MaxLineLength                int
 //         The maximum length of the line on which this label text
 //         will be presented.
 //
@@ -1731,7 +1732,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //         Set this parameter to minus one (-1) to specify an
 //         unlimited line length for this text line.
 //
-//        TurnAutoLineLengthBreaksOn bool
+//        TurnAutoLineLengthBreaksOn   bool
 //         This parameter controls whether text lines which exceed
 //         the maximum line length ('MaxLineLength') are broken up
 //         and presented on the following line.
@@ -2435,7 +2436,14 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
 //
 //       type TextLineBlankDto struct {
 //
-//        NumOfBlankLines int
+//        FormatType                 TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For the TextLineBlankDto Format Type, this value
+//         should always be set to: TxtFieldType.BlankLine()
+//
+//        NumOfBlankLines            int
 //         The number of blank lines which will be generated by this
 //         method.
 //
@@ -2443,7 +2451,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
 //         one-million, an error will be returned when attempting
 //         to format the Text Blank Line for text output.
 //
-//        LineTerminator string
+//        LineTerminator             string
 //        If this parameter is submitted as an empty string,
 //        the default new line terminator ('\n') will be applied.
 //        If this parameter is populated, this character sequence
@@ -2951,9 +2959,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 // underscore characters ("____"), equal signs ("====="), asterisks
 // ("*****") and other similar line break presentations. Multiple
 // characters may be used to produce more complex line sequences
-// ("--*--*--*"). The length of a solid line is specified by the
-// calling function using input parameter,
-// 'SolidLineCharRepeatCount'.
+// ("--*--*--*"). The length of a solid line is specified by
+// input parameter, 'SolidLineCharRepeatCount'.
 //
 // Therefore, the number of solid line characters produced is
 // equal to:
@@ -3218,7 +3225,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 	}
 
 	if solidLineCharRepeatCount < 1 {
-		maxLineLength = 1
+		solidLineCharRepeatCount = 1
 	}
 
 	newTextFormatter := TextFormatterDto{
@@ -3240,6 +3247,301 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 			lock:                       nil,
 		},
+
+		LineColumns: TextLineColumnsDto{},
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
+// AddLineSolidDto - Adds a Solid Text Line to the Formatter
+// Collection generated from an input parameter of type
+// TextFormatterCollection.
+//
+// A solid line, as defined here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by the
+// Text Line Solid Data Transfer Object member variable,
+// 'SolidLineCharRepeatCount'.
+//
+// Therefore, the number of solid line characters produced is
+// equal to:
+//   (Number of 'solidLineChars') x 'solidLineCharRepeatCount'
+//
+// By default, all solid lines are terminated by a new line
+// character ('\n'). This means that each instance of a solid will
+// be formatted as a single line of text. Users have the option
+// to alter this behavior and control the content and application
+// of line termination characters through two input parameters,
+// 'turnLineTerminationOff' and 'lineTerminator'.
+//
+//       Example-1:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = ""
+//         Final Solid Line String = "*****\n"
+//
+//       Example-2:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****\n\n"
+//
+//       Example-3:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = true
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****"
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  txtLineSolidDto            TextLineSolidDto
+//     - An instance of TextLineSolidDto which contains all the
+//       data parameters required to produce a Text Solid Line.
+//
+//       The Text Line Solid Transfer Object is defined as
+//       follows:
+//       type TextLineSolidDto struct {
+//
+//        FormatType                   TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For TextLineSolidDto 'FormatType' this parameter should
+//         be set to: TxtFieldType.SolidLine()
+//
+//        LeftMarginStr                string
+//         A string containing the text characters to be positioned
+//         on the Left side of the Solid Line.
+//
+//         If no Left margin is required, set this parameter to an
+//         empty string.
+//
+//         Example:
+//           LeftMarginStr = "xxx"
+//           SolidLineChars = "*"
+//           SolidLineCharRepeatCount = 5
+//           RightMarginStr = "" // Empty string
+//           Solid Line = "xxx*****"
+//
+//         If the 'LeftMarginStr' string length is greater than
+//         one-million (1,000,000), an error will be returned when
+//         attempting to create formatted text output.
+//
+//        SolidLineChars               string
+//         This string specifies the character or characters which
+//         will comprise the solid line string for screen display,
+//         file output or printing.
+//
+//         Example:
+//           solidLineChars = "*"
+//           solidLineCharsRepeatCount = 5
+//           Solid line = "*****"
+//
+//         If this parameter is submitted as a zero length string,
+//         an error will be returned when attempting to create
+//         formatted.
+//
+//        SolidLineCharRepeatCount     int
+//         This integer value specifies the number of times that
+//         parameter 'solidLineChars' will be repeated in
+//         constructing the solid line.
+//
+//         If this parameter is submitted with a value less than one
+//         (1), an error will be returned.
+//
+//         Example:
+//           solidLineChars = "*"
+//           solidLineCharsRepeatCount = 5
+//           Solid line = "*****"
+//
+//        RightMarginStr               string
+//         A string containing the text characters to positioned on
+//         the Right side of the Solid Line.
+//
+//         If no Right margin is required, set this parameter to an
+//         empty string.
+//
+//         Example:
+//           solidLineChars = "*"
+//           solidLineCharsRepeatCount = 5
+//           leftMarginStr = "" // Empty string
+//           RightMarginStr = "xxx"
+//           Solid line = "*****xxx"
+//
+//         If the 'RightMarginStr' string length is greater than
+//         one-million (1,000,000), an error will be returned.
+//
+//        TurnLineTerminationOff     bool
+//         If this parameter is set to 'true' no Line Termination
+//         Sequence will be applied for this text line (Example-3).
+//
+//              Example-1:
+//                SolidLineChars = "*"
+//                SolidLineCharRepeatCount = 5
+//                LeftMarginStr = ""
+//                RightMarginStr = ""
+//                TurnLineTerminationOff = false
+//                LineTerminator = ""
+//                Final Solid Line String = "*****\n"
+//
+//              Example-2:
+//                SolidLineChars = "*"
+//                SolidLineCharRepeatCount = 5
+//                LeftMarginStr = ""
+//                RightMarginStr = ""
+//                TurnLineTerminationOff = false
+//                LineTerminator = "\n\n"
+//                Final Solid Line String = "*****\n\n"
+//
+//              Example-3:
+//                SolidLineChars = "*"
+//                SolidLineCharRepeatCount = 5
+//                LeftMarginStr = ""
+//                RightMarginStr = ""
+//                TurnLineTerminationOff = true
+//                LineTerminator = "\n\n"
+//                Final Solid Line String = "*****"
+//
+//        LineTerminator               string
+//         This string holds the character or characters which
+//         will be used to terminate the formatted line of text
+//         output.
+//
+//         The most common usage sets this string to a new line
+//         character ("\n").
+//
+//         If 'LineTerminator' is configured as an empty string
+//         (string length zero), a single new line character ('\n')
+//         will be automatically applied to produce line termination.
+//
+//         LineTerminator works in conjunction with member variable
+//         'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+//         controls the application of a line terminator. Setting
+//         'TurnLineTerminationOff' to 'true' means that NO line
+//         terminator will be applied to this instance of Text Solid
+//         Line.
+//
+//               Example-1:
+//                 SolidLineChars = "*"
+//                 SolidLineCharRepeatCount = 5
+//                 LeftMarginStr = ""
+//                 RightMarginStr = ""
+//                 TurnLineTerminationOff = false
+//                 LineTerminator = ""
+//                 Final Solid Line String = "*****\n"
+//
+//               Example-2:
+//                 SolidLineChars = "*"
+//                 SolidLineCharRepeatCount = 5
+//                 LeftMarginStr = ""
+//                 RightMarginStr = ""
+//                 TurnLineTerminationOff = false
+//                 LineTerminator = "\n\n"
+//                 Final Solid Line String = "*****\n\n"
+//
+//               Example-3:
+//                 SolidLineChars = "*"
+//                 SolidLineCharRepeatCount = 5
+//                 LeftMarginStr = ""
+//                 RightMarginStr = ""
+//                 TurnLineTerminationOff = true
+//                 LineTerminator = "\n\n"
+//                 Final Solid Line String = "*****"
+//
+//        MaxLineLength                int
+//         The maximum length of the line on which the solid line
+//         text characters will be presented.
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         'MaxLineLength' is used in conjunction with parameter
+//         'TurnAutoLineLengthBreaksOn' to automatically place text
+//         fields on separate text lines when that text exceeds the
+//         maximum text line length ('MaxLineLength'). Therefore,
+//         paramter 'TurnAutoLineLengthBreaksOn' controls whether
+//         automatic line breaks using 'MaxLineLength' will be
+//         applied.
+//
+//         If the value of 'MaxLineLength' is less than one (1),
+//         it will be automatically converted to minus one (-1).
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         TurnAutoLineLengthBreaksOn bool
+//         This parameter controls whether text lines which exceed
+//         the maximum line length ('MaxLineLength') are
+//         positioned on the following line as a separate line of
+//         text.
+//
+//         To apply automatic line breaking at the maximum line
+//         length, set the value of this parameter to 'true'.
+//
+//         When this parameter is set to 'true', text fields which
+//         extend beyond the maximum line length 'MaxLineLength'
+//         will be formatted as a separate line of text on the
+//         following line.
+//
+//       }
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddLineSolidDto(
+	txtLineSolidDto TextLineSolidDto) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if txtLineSolidDto.MaxLineLength < 1 {
+		txtLineSolidDto.MaxLineLength = -1
+	}
+
+	if txtLineSolidDto.SolidLineCharRepeatCount < 1 {
+		txtLineSolidDto.SolidLineCharRepeatCount = 1
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType: TxtFieldType.SolidLine(),
+		DateTime:   TextFieldDateTimeDto{},
+		Filler:     TextFieldFillerDto{},
+		Label:      TextFieldLabelDto{},
+		Spacer:     TextFieldSpacerDto{},
+		BlankLine:  TextLineBlankDto{},
+		SolidLine:  txtLineSolidDto.CopyOut(),
 
 		LineColumns: TextLineColumnsDto{},
 	}
