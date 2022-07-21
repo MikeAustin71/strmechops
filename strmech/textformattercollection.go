@@ -4997,6 +4997,54 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 	return err
 }
 
+// Empty - Resets all internal member variables for the current
+// instance of TextFormatterCollection to their zero or
+// uninitialized states. This method will leave the current
+// instance of TextFormatterCollection in an invalid state and
+// unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextFormatterCollection. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) Empty() {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	textFormatterCollectionMolecule{}.ptr().
+		empty(
+			txtFmtCollection)
+
+	txtFmtCollection.lock.Unlock()
+
+	txtFmtCollection.lock = nil
+
+}
+
 // EmptyFormatterCollection - Deletes all member elements of the
 // Text Formatter Collection.
 //
@@ -5004,7 +5052,23 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 //		TextFormatterCollection.fmtCollection
 // will be set to 'nil'.
 //
-// TODO - Add calls to Empty on TextFormatterDto
+// The internal member variable that holds the Text Formatter
+// Collection is defined as follows:
+//
+//   fmtCollection []TextFormatterDto
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
 //
 func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
 
@@ -5016,15 +5080,53 @@ func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
 
 	defer txtFmtCollection.lock.Unlock()
 
-	lenItems := len(txtFmtCollection.fmtCollection)
-
-	for i := 0; i < lenItems; i++ {
-
-	}
-
-	txtFmtCollection.fmtCollection = nil
+	textFormatterCollectionAtom{}.ptr().
+		emptyFormatterCollection(txtFmtCollection)
 
 	return
+}
+
+// EmptyLineParamCollection - Deletes all member elements in the
+// Standard Text Line Parameters Collection.
+//
+// Internal member variable
+//		TextFormatterCollection.stdTextLineParamCollection
+// will be set to 'nil'.
+//
+// The internal member variable that holds the Standard Text Line
+// Parameters Collection is defined as follows:
+//
+//   stdTextLineParamCollection []TextFmtParamsLineColumnsDto
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) EmptyLineParamCollection() {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	textFormatterCollectionAtom{}.ptr().
+		emptyLineParamCollection(
+			txtFmtCollection)
+
+	return
+
 }
 
 // GetLengthFormatterCollection - Returns the length of the Text
