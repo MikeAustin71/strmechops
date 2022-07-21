@@ -5016,6 +5016,12 @@ func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
 
 	defer txtFmtCollection.lock.Unlock()
 
+	lenItems := len(txtFmtCollection.fmtCollection)
+
+	for i := 0; i < lenItems; i++ {
+
+	}
+
 	txtFmtCollection.fmtCollection = nil
 
 	return

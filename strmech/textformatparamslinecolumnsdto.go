@@ -514,17 +514,13 @@ func (lineColsMolecule textFmtParamsLineColsMolecule) equal(
 		return false
 	}
 
-	if lenItems1 != 0 {
+	for i := 0; i < lenItems1; i++ {
 
-		for i := 0; i < lenItems1; i++ {
+		if !txtFmtParamsDto1.FieldFormatParams[i].Equal(
+			txtFmtParamsDto2.FieldFormatParams[i]) {
 
-			if !txtFmtParamsDto1.FieldFormatParams[i].Equal(
-				txtFmtParamsDto2.FieldFormatParams[i]) {
-
-				return false
-			}
+			return false
 		}
-
 	}
 
 	if txtFmtParamsDto1.LineTerminator !=

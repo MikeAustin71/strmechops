@@ -70,34 +70,11 @@ func (fmtLineCols *TextLineColumnsDto) CopyIn(
 
 	defer fmtLineCols.lock.Unlock()
 
-	fmtLineCols.FormatType =
-		incomingTxtLineCols.FormatType
-
-	lenItems := len(fmtLineCols.TextFieldsContent)
-
-	for i := 0; i < lenItems; i++ {
-
-		fmtLineCols.TextFieldsContent[i].Empty()
-	}
-
-	fmtLineCols.TextFieldsContent = nil
-
-	lenItems = len(incomingTxtLineCols.TextFieldsContent)
-
-	if lenItems > 0 {
-		fmtLineCols.TextFieldsContent =
-			make([]TextFieldsContentDto, lenItems)
-
-		for i := 0; i < lenItems; i++ {
-
-			fmtLineCols.TextFieldsContent[i].CopyIn(
-				incomingTxtLineCols.TextFieldsContent[i])
-
-		}
-	}
-
-	fmtLineCols.FmtParameters.CopyIn(
-		incomingTxtLineCols.FmtParameters)
+	_ = textLineColumnsDtoNanobot{}.ptr().
+		copy(
+			fmtLineCols,
+			&incomingTxtLineCols,
+			nil)
 
 	return
 }
@@ -135,25 +112,11 @@ func (fmtLineCols *TextLineColumnsDto) CopyOut() (
 
 	defer fmtLineCols.lock.Unlock()
 
-	deepCopyTxtLineColsDto.FormatType =
-		fmtLineCols.FormatType
-
-	lenItems := len(fmtLineCols.TextFieldsContent)
-
-	if lenItems > 0 {
-		deepCopyTxtLineColsDto.TextFieldsContent =
-			make([]TextFieldsContentDto, lenItems)
-
-		for i := 0; i < lenItems; i++ {
-
-			deepCopyTxtLineColsDto.TextFieldsContent[i].CopyIn(
-				fmtLineCols.TextFieldsContent[i])
-
-		}
-	}
-
-	deepCopyTxtLineColsDto.FmtParameters.CopyIn(
-		fmtLineCols.FmtParameters)
+	_ = textLineColumnsDtoNanobot{}.ptr().
+		copy(
+			&deepCopyTxtLineColsDto,
+			fmtLineCols,
+			nil)
 
 	return deepCopyTxtLineColsDto
 }
@@ -196,18 +159,9 @@ func (fmtLineCols *TextLineColumnsDto) Empty() {
 
 	fmtLineCols.lock.Lock()
 
-	fmtLineCols.FormatType = TxtFieldType.None()
-
-	lenItems := len(fmtLineCols.TextFieldsContent)
-
-	for i := 0; i < lenItems; i++ {
-
-		fmtLineCols.TextFieldsContent[i].Empty()
-	}
-
-	fmtLineCols.TextFieldsContent = nil
-
-	fmtLineCols.FmtParameters.Empty()
+	textLineColumnsDtoMolecule{}.ptr().
+		empty(
+			fmtLineCols)
 
 	fmtLineCols.lock.Unlock()
 
@@ -261,36 +215,10 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 
 	defer fmtLineCols.lock.Unlock()
 
-	if fmtLineCols.FormatType !=
-		incomingTxtLineCols.FormatType {
-
-		return false
-	}
-
-	lenItems := len(fmtLineCols.TextFieldsContent)
-
-	if len(incomingTxtLineCols.TextFieldsContent) !=
-		lenItems {
-
-		return false
-	}
-
-	for i := 0; i < lenItems; i++ {
-
-		if !fmtLineCols.TextFieldsContent[i].Equal(
-			incomingTxtLineCols.TextFieldsContent[i]) {
-
-			return false
-		}
-	}
-
-	if !fmtLineCols.FmtParameters.Equal(
-		incomingTxtLineCols.FmtParameters) {
-
-		return false
-	}
-
-	return true
+	return textLineColumnsDtoMolecule{}.ptr().
+		equal(
+			fmtLineCols,
+			&incomingTxtLineCols)
 }
 
 // GetNumberOfFieldFormatParams - Returns the number of Field
@@ -588,4 +516,221 @@ func (fmtLineCols *TextLineColumnsDto) IsValidInstanceError(
 	}
 
 	return err
+}
+
+// textLineColumnsDtoNanobot - Provides helper methods for
+// TextLineColumnsDto.
+type textLineColumnsDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copy - Copies all data from a source instance of
+// TextLineColumnsDto to a destination instance of
+// TextLineColumnsDto.
+func (lineColsDtoNanobot *textLineColumnsDtoNanobot) copy(
+	destinationTxtLineColsDto *TextLineColumnsDto,
+	sourceTxtLineColsDto *TextLineColumnsDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if lineColsDtoNanobot.lock == nil {
+		lineColsDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	lineColsDtoNanobot.lock.Lock()
+
+	defer lineColsDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineColumnsDtoNanobot."+
+			"copy()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if sourceTxtLineColsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTxtLineColsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	if destinationTxtLineColsDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTxtLineColsDto' is a nil pointer!\n",
+			ePrefix.String())
+
+	}
+
+	textLineColumnsDtoMolecule{}.ptr().
+		empty(destinationTxtLineColsDto)
+
+	destinationTxtLineColsDto.FormatType =
+		sourceTxtLineColsDto.FormatType
+
+	lenItems := len(sourceTxtLineColsDto.TextFieldsContent)
+
+	if lenItems > 0 {
+
+		destinationTxtLineColsDto.TextFieldsContent =
+			make([]TextFieldsContentDto, lenItems)
+
+		for i := 0; i < lenItems; i++ {
+
+			destinationTxtLineColsDto.TextFieldsContent[i].CopyIn(
+				sourceTxtLineColsDto.TextFieldsContent[i])
+
+		}
+	}
+
+	destinationTxtLineColsDto.FmtParameters.CopyIn(
+		sourceTxtLineColsDto.FmtParameters)
+
+	return err
+}
+
+// ptr - Returns a pointer to a new instance of
+// textLineColumnsDtoNanobot.
+//
+func (lineColsDtoNanobot textLineColumnsDtoNanobot) ptr() *textLineColumnsDtoNanobot {
+
+	if lineColsDtoNanobot.lock == nil {
+		lineColsDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	lineColsDtoNanobot.lock.Lock()
+
+	defer lineColsDtoNanobot.lock.Unlock()
+
+	return &textLineColumnsDtoNanobot{
+		lock: new(sync.Mutex),
+	}
+}
+
+// textLineColumnsDtoMolecule - Provides helper methods for
+// TextLineColumnsDto.
+type textLineColumnsDtoMolecule struct {
+	lock *sync.Mutex
+}
+
+// empty - Receives a pointer to an instance of TextLineColumnsDto
+// and proceeds to set all the internal member variables to their
+// zero or uninitialized states.
+//
+// This method will therefore delete all data currently held
+// by this instance of TextLineColumnsDto.
+//
+func (lineColsDtoMolecule *textLineColumnsDtoMolecule) empty(
+	txtLineColsDto *TextLineColumnsDto) {
+
+	if lineColsDtoMolecule.lock == nil {
+		lineColsDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	lineColsDtoMolecule.lock.Lock()
+
+	defer lineColsDtoMolecule.lock.Unlock()
+
+	if txtLineColsDto == nil {
+		return
+	}
+
+	txtLineColsDto.FormatType = TxtFieldType.None()
+
+	lenItems := len(txtLineColsDto.TextFieldsContent)
+
+	for i := 0; i < lenItems; i++ {
+
+		txtLineColsDto.TextFieldsContent[i].Empty()
+	}
+
+	txtLineColsDto.TextFieldsContent = nil
+
+	txtLineColsDto.FmtParameters.Empty()
+
+}
+
+// equal - Receives pointers to two instances of TextLineColumnsDto
+// and proceeds to compare all the member data variables for both
+// instances.
+//
+// If the two instances of TextLineColumnsDto are found to be equal
+// in all respects, this method will return a boolean value of
+// 'true'.
+//
+func (lineColsDtoMolecule *textLineColumnsDtoMolecule) equal(
+	txtLineColsDto1 *TextLineColumnsDto,
+	txtLineColsDto2 *TextLineColumnsDto) bool {
+
+	if lineColsDtoMolecule.lock == nil {
+		lineColsDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	lineColsDtoMolecule.lock.Lock()
+
+	defer lineColsDtoMolecule.lock.Unlock()
+
+	if txtLineColsDto1 == nil ||
+		txtLineColsDto2 == nil {
+		return false
+	}
+
+	if txtLineColsDto1.FormatType !=
+		txtLineColsDto2.FormatType {
+
+		return false
+	}
+
+	lenItems := len(txtLineColsDto1.TextFieldsContent)
+
+	if lenItems != len(txtLineColsDto2.TextFieldsContent) {
+
+		return false
+	}
+
+	for i := 0; i < lenItems; i++ {
+
+		if !txtLineColsDto1.TextFieldsContent[i].Equal(
+			txtLineColsDto2.TextFieldsContent[i]) {
+
+			return false
+		}
+	}
+
+	if !txtLineColsDto1.FmtParameters.Equal(
+		txtLineColsDto1.FmtParameters) {
+
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// textLineColumnsDtoMolecule.
+//
+func (lineColsDtoMolecule textLineColumnsDtoMolecule) ptr() *textLineColumnsDtoMolecule {
+
+	if lineColsDtoMolecule.lock == nil {
+		lineColsDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	lineColsDtoMolecule.lock.Lock()
+
+	defer lineColsDtoMolecule.lock.Unlock()
+
+	return &textLineColumnsDtoMolecule{
+		lock: new(sync.Mutex),
+	}
 }
