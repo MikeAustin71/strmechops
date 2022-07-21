@@ -1781,6 +1781,14 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //
 // Input Parameters
 //
+//  leftMarginStr              string
+//     - The contents of this string will be used as the left
+//       margin for the Text Filler Field.
+//
+//       If no left margin is required, set 'leftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
 //
 //  fillerCharacters           string
 //     - A string containing the text characters which will be
@@ -1836,15 +1844,43 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //       If a text line is required, setting this string to include
 //       a new line character ('\n') will ensure that the text line
 //       consists of the text label field and no other text
-//       elements.
+//       elements. Any string of text characters will be accepted
+//       for this parameter.
 //
-//       The most common usage sets this string to a new line
-//       character ("\n").
+//       Again, the most common usage sets this string to a new
+//       line character ("\n").
 //
 //       If Line Termination is NOT required, set 'lineTerminator'
 //       to a zero length or empty string and no line termination
 //       characters will be created.
 //
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this label text
+//       will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -1914,9 +1950,13 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldFiller(
+	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
+	rightMarginStr string,
 	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) (
 	strBuilder strings.Builder,
 	err error) {
@@ -1955,14 +1995,33 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 
 	}
 
-	return textStrBuilderAtom{}.ptr().fieldFillerWithMargins(
-		"",
-		fillerCharacters,
-		fillerCharsRepeatCount,
-		"",
-		lineTerminator,
+	if fillerCharsRepeatCount < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is invalid!\n"+
+			"'fillerCharsRepeatCount' has a value less than one (1).\n"+
+			"fillerCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			fillerCharsRepeatCount)
+
+		return strBuilder, err
+	}
+
+	fillerFieldDto := TextFieldFillerDto{
+		FormatType:                 TxtFieldType.Filler(),
+		LeftMarginStr:              leftMarginStr,
+		FillerCharacters:           fillerCharacters,
+		FillerCharsRepeatCount:     fillerCharsRepeatCount,
+		RightMarginStr:             rightMarginStr,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		lock:                       nil,
+	}
+	return textStrBuilderAtom{}.ptr().buildFillerFieldWithDto(
+		fillerFieldDto,
 		ePrefix.XCpy(
-			"strBuilder<-fillerCharacters"))
+			"strBuilder<-fillerFieldDto"))
 }
 
 // FieldLabel - Formats a single text label and writes the output string
@@ -2922,338 +2981,6 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 			lineTerminator,
 			ePrefix.XCpy(
 				"strBuilder<-Spacer FieldLength"))
-}
-
-// FieldsLabelParameterDateTime - Is designed to produce five text
-// elements consolidated and formatted as a single text field.
-//
-// The five text elements consist of a left margin string, a
-// parameter text label field, a parameter label right margin
-// string, a parameter Date/Time value , and a parameter Date/Time
-// value right margin string.
-//
-// These five text elements can be configured as a complete line of
-// text depending on the value applied to input parameter
-// 'lineTerminator'.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  leftMarginStr                   string
-//     - The contents of the string will be used as the left margin
-//       for the 'paramLabelStr' field.
-//
-//       If no left margin is required, set 'LeftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  paramLabelStr                   string
-//     - This strings holds the text characters which will be
-//       formatted as a Parameter Text Label. The 'paramLabelStr'
-//       field provides a narrative text description of the
-//       Parameter Date/Time Value field, 'paramDateTimeValue'.
-//
-//       This text label, 'paramLabelStr', will be positioned to
-//       the immediate right of the left margin string,
-//       'leftMarginStr'.
-//
-//       If 'paramLabelStr' is submitted as a zero length or empty
-//       string, it will be skipped or ignored and no error will be
-//       generated.
-//
-//
-//  paramLabelFieldLength           int
-//     - Used to format the Text Label Field, 'paramLabelStr'. This
-//       is the length of the text field in which the formatted
-//       'paramLabelStr' string will be displayed. If
-//       'paramLabelFieldLength' is less than the length of the
-//       'paramLabelStr' string, it will be automatically set equal
-//       to the 'paramLabelStr' string length.
-//
-//       To automatically set the value of 'paramLabelFieldLength'
-//       to the length of 'paramLabelStr', set this parameter to a
-//       value of  minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
-//
-//
-//  paramLabelTextJustify           TextJustify
-//      An enumeration value specifying the justification of the
-//      'paramLabelStr' string within the text field specified by
-//      'paramLabelFieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
-//
-//
-//  paramLabelRightMarginStr        string
-//     - The contents of the string will be used as the right
-//       margin for the 'paramLabelStr' field.
-//
-//       If no right margin is required, set
-//       'paramLabelRightMarginStr' to a zero length or empty
-//       string, and no right margin will be created.
-//
-//
-//  paramDateTimeValue              time.Time
-//     - This strings holds the text characters which will be
-//       formatted as a Parameter Text Label. The 'paramDateTimeValue'
-//       field contains actual Parameter Value information.
-//
-//       This text label will be positioned to the immediate
-//       right of the Parameter Label Right Margin string,
-//       'paramLabelRightMarginStr'.
-//
-//       If 'paramDateTimeValue' is submitted as a zero length or empty
-//       string, an error will be returned.
-//
-//
-//  paramDateTimeFieldLength        int
-//     - Used to format the Text Label Field, 'paramDateTimeValue'. This
-//       is the length of the text field in which the formatted
-//       'paramDateTimeValue' string will be displayed. If
-//       'paramDateTimeFieldLength' is less than the length of the
-//       'paramDateTimeValue' string, it will be automatically set equal
-//       to the 'paramDateTimeValue' string length.
-//
-//       To automatically set the value of 'paramDateTimeFieldLength'
-//       to the length of 'paramDateTimeValue', set this parameter to a
-//       value of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
-//
-//
-//  paramDateTimeTextJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'paramDateTimeValue' string within the text field specified by
-//      'paramDateTimeFieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
-//
-//
-//  paramDateTimeRightMarginStr     string
-//     - The contents of the string will be used as the right
-//       margin for the 'paramDateTimeValue' field.
-//
-//       If no right margin is required, set
-//       'paramDateTimeRightMarginStr' to a zero length or empty
-//       string, and no right margin will be created.
-//
-//
-//  lineTerminator                  string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted text thereby converting
-//       these five text element into a single line of text.
-//
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the five text
-//       elements formatted by this method as single text field
-//       will constitute a single line of text.
-//
-//       The most common usage sets this string to a new line
-//       character ("\n").
-//
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
-//
-//
-//  errorPrefix                     interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be return containing formatted text
-//       characters.
-//
-//
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterDateTime(
-	leftMarginStr string,
-	paramLabelStr string,
-	paramLabelFieldLength int,
-	paramLabelTextJustify TextJustify,
-	paramLabelRightMarginStr string,
-	paramDateTimeValue time.Time,
-	paramDateTimeFieldLength int,
-	paramDateTimeFormat string,
-	paramDateTimeTextJustify TextJustify,
-	paramDateTimeRightMarginStr string,
-	lineTerminator string,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
-
-	if txtStrBuildr.lock == nil {
-		txtStrBuildr.lock = new(sync.Mutex)
-	}
-
-	txtStrBuildr.lock.Lock()
-
-	defer txtStrBuildr.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-	var strBuilder strings.Builder
-
-	strBuilder.Grow(128)
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextStrBuilder."+
-			"FieldsLabelParameterDateTime()",
-		"")
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	if paramDateTimeValue.IsZero() {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'paramDateTimeValue' is invalid!\n"+
-			"'paramDateTimeValue' has a value of zero (0).\n",
-			ePrefix.String())
-
-		return strBuilder, err
-
-	}
-
-	txtBuilderAtom := textStrBuilderAtom{}
-
-	strBuilder,
-		err = txtBuilderAtom.fieldLabelWithMargins(
-		leftMarginStr,
-		paramLabelStr,
-		paramLabelFieldLength,
-		paramLabelTextJustify,
-		paramLabelRightMarginStr,
-		"",
-		ePrefix.XCpy(
-			"strBuilder<-paramLabelStr"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilderAtom.fieldDateTimeWithMargins(
-		"",
-		paramDateTimeValue,
-		paramDateTimeFieldLength,
-		paramDateTimeFormat,
-		paramDateTimeTextJustify,
-		paramDateTimeRightMarginStr,
-		lineTerminator,
-		ePrefix.XCpy(
-			"strBuilder<-paramDateTimeValue"))
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	return strBuilder, err
 }
 
 // FieldsLabelParameterValue - Is designed to five text elements

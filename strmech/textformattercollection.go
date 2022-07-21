@@ -652,7 +652,6 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 //
 // Input Parameters
 //
-//
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left
 //       margin for the Text Filler Field.
@@ -730,7 +729,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 //
 //       Set this parameter to minus one (-1) to specify an
 //       unlimited line length for this text line.
-///
+//
 //       'maxLineLength' is used in conjunction with parameter
 //       'turnAutoLineLengthBreaksOn' to automatically place text
 //       fields on separate text lines when that text exceeds the
@@ -847,7 +846,6 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  textFillerDto              TextFieldFillerDto
 //     - An instance of TextFieldFillerDto which contains all the
