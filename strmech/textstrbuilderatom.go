@@ -16,6 +16,9 @@ type textStrBuilderAtom struct {
 	lock *sync.Mutex
 }
 
+// buildDateTimeFieldWithDto - Receives a Date Time Field Data
+// Transfer Objects and generates a Date Time Text string which
+// is returned in a strings.Builder instance.
 func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 	dateTimeFieldDto TextFieldDateTimeDto,
 	errPrefDto *ePref.ErrPrefixDto) (

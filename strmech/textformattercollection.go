@@ -24,8 +24,8 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
-// AddFieldDateTime - Adds a date time value formatted as a text field
-// to the Formatter Collection. Users have the option to format
+// AddFieldDateTime - Adds a date time value formatted as a text
+// field to the Formatter Collection. Users have the option to format
 // this date time text field with a line terminator (a.k.a. new
 // line character '\n').
 //
@@ -33,7 +33,6 @@ type TextFormatterCollection struct {
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left
