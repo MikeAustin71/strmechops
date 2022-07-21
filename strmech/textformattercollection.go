@@ -4997,6 +4997,30 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 	return err
 }
 
+// EmptyFormatterCollection - Deletes all member elements of the
+// Text Formatter Collection.
+//
+// Internal member variable
+//		TextFormatterCollection.fmtCollection
+// will be set to 'nil'.
+//
+// TODO - Add calls to Empty on TextFormatterDto
+//
+func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	txtFmtCollection.fmtCollection = nil
+
+	return
+}
+
 // GetLengthFormatterCollection - Returns the length of the Text
 // Formatter Collection contained in the current instance of
 // TextFormatterCollection.
