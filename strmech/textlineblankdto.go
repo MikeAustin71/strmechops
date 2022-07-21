@@ -312,6 +312,7 @@ func (txtBlankLineNanobot *textLineBlankDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceBlankLineDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationBlankLineDto == nil {
@@ -320,6 +321,7 @@ func (txtBlankLineNanobot *textLineBlankDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationBlankLineDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	destinationBlankLineDto.FormatType =

@@ -448,6 +448,7 @@ func (txtFillerDtoNanobot *textFieldFillerDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtFillerDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtFillerDto == nil {
@@ -456,6 +457,7 @@ func (txtFillerDtoNanobot *textFieldFillerDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtFillerDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	destinationTxtFillerDto.FormatType =

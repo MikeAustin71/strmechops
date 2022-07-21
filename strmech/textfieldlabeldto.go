@@ -490,6 +490,7 @@ func (txtLabelDtoNanobot *textFieldLabelDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtLabelDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtLabelDto == nil {
@@ -498,6 +499,7 @@ func (txtLabelDtoNanobot *textFieldLabelDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtLabelDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	destinationTxtLabelDto.FormatType =

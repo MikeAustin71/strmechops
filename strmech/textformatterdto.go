@@ -312,6 +312,7 @@ func (textFMtDtoNanobot *textFormatterDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtFormatterDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtFormatterDto == nil {
@@ -320,6 +321,7 @@ func (textFMtDtoNanobot *textFormatterDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtFormatterDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	textFormatterDtoMolecule{}.ptr().

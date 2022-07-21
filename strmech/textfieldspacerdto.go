@@ -416,6 +416,7 @@ func (txtSpacerDtoNanobot *textFieldSpacerDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtSpacerDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtSpacerDto == nil {
@@ -424,6 +425,7 @@ func (txtSpacerDtoNanobot *textFieldSpacerDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtSpacerDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	destinationTxtSpacerDto.FormatType =

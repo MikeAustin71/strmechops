@@ -515,7 +515,7 @@ type textLineSolidLineDtoNanobot struct {
 // TextLineSolidDto to a destination instance of
 // TextLineSolidDto.
 func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copy(
-	txtSolidLineDto *TextLineSolidDto,
+	destinationSolidLineDto *TextLineSolidDto,
 	sourceSolidLineDto *TextLineSolidDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -550,41 +550,43 @@ func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceSolidLineDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
-	if txtSolidLineDto == nil {
+	if destinationSolidLineDto == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'txtSolidLineDto' is a nil pointer!\n",
+			"ERROR: Input parameter 'destinationSolidLineDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
-	txtSolidLineDto.FormatType =
+	destinationSolidLineDto.FormatType =
 		sourceSolidLineDto.FormatType
 
-	txtSolidLineDto.LeftMarginStr =
+	destinationSolidLineDto.LeftMarginStr =
 		sourceSolidLineDto.LeftMarginStr
 
-	txtSolidLineDto.SolidLineChars =
+	destinationSolidLineDto.SolidLineChars =
 		sourceSolidLineDto.SolidLineChars
 
-	txtSolidLineDto.SolidLineCharRepeatCount =
+	destinationSolidLineDto.SolidLineCharRepeatCount =
 		sourceSolidLineDto.SolidLineCharRepeatCount
 
-	txtSolidLineDto.RightMarginStr =
+	destinationSolidLineDto.RightMarginStr =
 		sourceSolidLineDto.RightMarginStr
 
-	txtSolidLineDto.TurnLineTerminationOff =
+	destinationSolidLineDto.TurnLineTerminationOff =
 		sourceSolidLineDto.TurnLineTerminationOff
 
-	txtSolidLineDto.LineTerminator =
+	destinationSolidLineDto.LineTerminator =
 		sourceSolidLineDto.LineTerminator
 
-	txtSolidLineDto.MaxLineLength =
+	destinationSolidLineDto.MaxLineLength =
 		sourceSolidLineDto.MaxLineLength
 
-	txtSolidLineDto.TurnAutoLineLengthBreaksOn =
+	destinationSolidLineDto.TurnAutoLineLengthBreaksOn =
 		sourceSolidLineDto.TurnAutoLineLengthBreaksOn
 
 	return err

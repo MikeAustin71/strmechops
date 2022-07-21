@@ -434,6 +434,7 @@ func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtDateTimeDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtDateTimeDto == nil {
@@ -442,6 +443,7 @@ func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtDateTimeDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	destinationTxtDateTimeDto.FormatType =

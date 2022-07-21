@@ -3,7 +3,7 @@ package strmech
 import "sync"
 
 // textFormatterCollectionAtom - Provides helper methods for
-// TextLineColumnsDto.
+// TextFormatterCollection.
 type textFormatterCollectionAtom struct {
 	lock *sync.Mutex
 }

@@ -357,6 +357,7 @@ func (lineColsNanobot *textFmtParamsLineColsNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtParamsLineColsDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtParamsLineColsDto == nil {
@@ -365,6 +366,7 @@ func (lineColsNanobot *textFmtParamsLineColsNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtParamsLineColsDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	textFmtParamsLineColsMolecule{}.ptr().

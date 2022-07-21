@@ -563,6 +563,7 @@ func (lineColsDtoNanobot *textLineColumnsDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtLineColsDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtLineColsDto == nil {
@@ -571,6 +572,7 @@ func (lineColsDtoNanobot *textLineColumnsDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtLineColsDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	textLineColumnsDtoMolecule{}.ptr().

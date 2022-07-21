@@ -271,6 +271,7 @@ func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) copy(
 			"ERROR: Input parameter 'sourceTxtFmtParamsDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	if destinationTxtFmtParamsDto == nil {
@@ -279,6 +280,7 @@ func (txtFmtParamsNanobot *textFieldFmtParamsDtoNanobot) copy(
 			"ERROR: Input parameter 'destinationTxtFmtParamsDto' is a nil pointer!\n",
 			ePrefix.String())
 
+		return err
 	}
 
 	destinationTxtFmtParamsDto.LeftMarginStr =
