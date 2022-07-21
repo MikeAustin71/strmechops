@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 	"time"
 )
@@ -967,6 +968,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 //
 //         To apply automatic line breaking at the maximum line
 //         length, set the value of this parameter to 'true'.
+//       }
 //
 //
 // ----------------------------------------------------------------
@@ -3552,6 +3554,118 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolidDto(
 			newTextFormatter)
 
 	return
+}
+
+// BuildText - Generates the formatted text using the contents
+// of the Text Formatter Collection maintained by the current
+// instance of TextFormatterCollection.
+//
+// If the Text Formatter Collection is empty (contains zero
+// elements), an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If the method completes successfully with no errors, this
+//       parameter will contain all the formatted text generated
+//       from the Text Formatter Collection.
+//
+//
+//  error
+//     - If the method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtFmtCollection *TextFormatterCollection) BuildText(
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"BuildText()",
+		"")
+
+	if err != nil {
+		return strings.Builder{}, err
+	}
+
+	txtBuilder := TextStrBuilder{}
+
+	return txtBuilder.BuildText(
+		txtFmtCollection,
+		ePrefix.XCpy(
+			"txtFmtCollection"))
 }
 
 // CfgLine1Col - Allows the user to configure both the field value

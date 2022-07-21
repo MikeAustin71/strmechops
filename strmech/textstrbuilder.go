@@ -1069,7 +1069,7 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) BuildText(
-	txtFmtSpecs TextFormatterCollection,
+	txtFmtSpecs *TextFormatterCollection,
 	errorPrefix interface{}) (
 	strings.Builder,
 	error) {
