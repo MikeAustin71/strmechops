@@ -1297,6 +1297,10 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 //       length of the date time text field, set this parameter to
 //       a value of  minus one (-1).
 //
+//       If this parameter is submitted with a value less than
+//       minus one (-1) or greater than 1-million (1,000,000),
+//       an error will be returned.
+//
 //
 //  fieldJustify               TextJustify
 //      An enumeration value specifying the justification of the
@@ -1359,7 +1363,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 //       automatic line breaks using 'maxLineLength' will be
 //       applied.
 //
-//       If the value of 'maxLineLength' is less than zero (0), it
+//       If the value of 'maxLineLength' is less than one (1), it
 //       will be automatically converted to minus one (-1).
 //
 //
@@ -1486,6 +1490,36 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 
 		return strBuilder, err
 
+	}
+
+	if fieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value less than minus one (-1).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if fieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
 	}
 
 	dateTimeDto := TextFieldDateTimeDto{
@@ -1751,6 +1785,36 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 
 		return strBuilder, err
 
+	}
+
+	if textDateTimeDto.FieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textDateTimeDto.FieldLength' is invalid!\n"+
+			"'textDateTimeDto.FieldLength' has a value less than minus one (-1).\n"+
+			"textDateTimeDto.FieldLength = '%v'\n",
+			ePrefix.String(),
+			textDateTimeDto.FieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if textDateTimeDto.FieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textDateTimeDto.FieldLength' is invalid!\n"+
+			"'textDateTimeDto.FieldLength' has a value greater than one-million (1,000,000).\n"+
+			"textDateTimeDto.FieldLength = '%v'\n",
+			ePrefix.String(),
+			textDateTimeDto.FieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if textDateTimeDto.MaxLineLength < 1 {
+		textDateTimeDto.MaxLineLength = -1
 	}
 
 	return textStrBuilderAtom{}.ptr().buildDateTimeFieldWithDto(
@@ -2020,6 +2084,22 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		return strBuilder, err
 	}
 
+	if fillerCharsRepeatCount > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerCharsRepeatCount' is invalid!\n"+
+			"'fillerCharsRepeatCount' has a value greater than one-million (1,000,000).\n"+
+			"fillerCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			fillerCharsRepeatCount)
+
+		return strBuilder, err
+	}
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
 	fillerFieldDto := TextFieldFillerDto{
 		FormatType:                 TxtFieldType.Filler(),
 		LeftMarginStr:              leftMarginStr,
@@ -2031,6 +2111,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 		lock:                       nil,
 	}
+
 	return textStrBuilderAtom{}.ptr().buildFillerFieldWithDto(
 		fillerFieldDto,
 		ePrefix.XCpy(
@@ -2314,6 +2395,22 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 		return strBuilder, err
 	}
 
+	if textFillerDto.FillerCharsRepeatCount > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFillerDto.FillerCharsRepeatCount' is invalid!\n"+
+			"'textFillerDto.FillerCharsRepeatCount' has a value greater than one-million (1,000,000).\n"+
+			"textFillerDto.FillerCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			textFillerDto.FillerCharsRepeatCount)
+
+		return strBuilder, err
+	}
+
+	if textFillerDto.MaxLineLength < 1 {
+		textFillerDto.MaxLineLength = -1
+	}
+
 	return textStrBuilderAtom{}.ptr().buildFillerFieldWithDto(
 		textFillerDto.CopyOut(),
 		ePrefix.XCpy(
@@ -2410,8 +2507,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //
 //       If this parameter is submitted with a value less than
 //       minus one (-1) or greater than 1-million (1,000,000),
-//       an error will be returned when attempting to build the
-//       final text output.
+//       an error will be returned.
 //
 //
 //  fieldJustify               TextJustify
@@ -2475,7 +2571,10 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //
 //       Set this parameter to minus one (-1) to specify an
 //       unlimited line length for this text line.
-///
+//
+//       If the value of 'maxLineLength' is less than one (1), it
+//       will be automatically converted to minus one (-1).
+//
 //       'maxLineLength' is used in conjunction with parameter
 //       'turnAutoLineLengthBreaksOn' to automatically place text
 //       fields on separate text lines when that text exceeds the
@@ -2483,9 +2582,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //       paramter 'turnAutoLineLengthBreaksOn' controls whether
 //       automatic line breaks using 'maxLineLength' will be
 //       applied.
-//
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
 //
 //
 //  turnAutoLineLengthBreaksOn bool
@@ -2638,6 +2734,23 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 
 	}
 
+	if fieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value greater than one-million (1000000).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
 	labelFieldDto := TextFieldLabelDto{
 		FormatType:                 TxtFieldType.Label(),
 		LeftMarginStr:              leftMarginStr,
@@ -2659,7 +2772,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 
 // FieldLabelDto - Formats a single text label field and writes the
 // output string to an instance of strings.Builder which is
-// returned to the calling function. This text label field is
+// returned to the calling function. This text label string is
 // created from a Text Field Label Data Transfer Object
 // (TextFieldLabelDto) passed as an input parameter.
 //
@@ -2745,8 +2858,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //
 //           If this parameter is submitted with a value less than
 //           minus one (-1) or greater than 1-million (1,000,000),
-//           an error will be generated when attempting to format
-//           text.
+//           an error will be returned.
 //
 //         FieldJustify                TextJustify
 //           An enumeration which specifies the justification of
@@ -3007,8 +3119,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //       characters in the Text Spacer Field.
 //
 //       If the value of this parameter is less than zero and greater
-//       than one-million (1,000,000), an error will be generated when
-//       attempting to create formatted text output.
+//       than one-million (1,000,000), an error will be returned.
 //
 //       Examples:
 //        fieldLen = 1 produces text field " "  // 1-white space
@@ -3041,7 +3152,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //
 //       Set this parameter to minus one (-1) to specify an
 //       unlimited line length for this text line.
-///
+//
 //       'maxLineLength' is used in conjunction with parameter
 //       'turnAutoLineLengthBreaksOn' to automatically place text
 //       fields on separate text lines when that text exceeds the
@@ -3050,7 +3161,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //       automatic line breaks using 'maxLineLength' will be
 //       applied.
 //
-//       If the value of 'maxLineLength' is less than zero (0), it
+//       If the value of 'maxLineLength' is less than one (1), it
 //       will be automatically converted to minus one (-1).
 //
 //
@@ -3179,6 +3290,23 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 
 	}
 
+	if fieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
 	txtFieldSpacerDto := TextFieldSpacerDto{
 		FormatType:                 TxtFieldType.Spacer(),
 		LeftMarginStr:              leftMarginStr,
@@ -3263,9 +3391,8 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //         An integer value used to specify the number of white
 //         space characters in the Text Spacer Field.
 //
-//         Values less than zero and greater than one million
-//         (1,000,001) will generate errors when attempting to
-//         format text output.
+//         Values less than one (1) and greater than one million
+//         (1,000,000) will generate errors.
 //
 //         Examples:
 //          fieldLen = 1 produces text field " "
@@ -3437,6 +3564,23 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
 
 		return strBuilder, err
 
+	}
+
+	if txtFieldSpacerDto.FieldLength > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtFieldSpacerDto.FieldLength' is invalid!\n"+
+			"'txtFieldSpacerDto.FieldLength' has a value greater than one-million (1,000,000).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			txtFieldSpacerDto.FieldLength)
+
+		return strBuilder, err
+
+	}
+
+	if txtFieldSpacerDto.MaxLineLength < 1 {
+		txtFieldSpacerDto.MaxLineLength = -1
 	}
 
 	return textStrBuilderAtom{}.ptr().
@@ -4184,22 +4328,57 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 	return strBuilder, err
 }
 
-// LineSolid - Designed to produce one or more separate lines of
-// text.
+// LineSolid - Formats a single Solid Text Line and writes the
+// output string to an instance of strings.Builder which is
+// returned to the calling function.
 //
-// Each line consists of three text elements: a left margin
-// string, a Text Filler Field, and a right margin strings.
+// A solid line, as defined here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by
+// input parameter, 'SolidLineCharRepeatCount'.
 //
-// These three text elements can be configured as independent
-// lines of text or concatenated together depending on the value
-// applied to input parameters 'interiorLineTerminator' and
-// 'finalLineTerminator'.
+// Therefore, the number of solid line characters produced is
+// equal to:
+//   (Number of  solid line characters 'solidLineChars')
+//        x 'solidLineCharRepeatCount'
 //
-// This method is similar to method:
-//   TextStrBuilder.FieldsSingleFiller()
+// By default, all solid lines are terminated with a new line
+// character ('\n'). This means that each instance of a solid line
+// will be formatted as a single line of text. Users have the
+// option to alter this behavior and control the content and
+// application of line termination characters through two input
+// parameters, 'turnLineTerminationOff' and 'lineTerminator'.
 //
-// However, this method is capable of producing multiple lines
-// of filler text.
+//       Example-1:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = ""
+//         Final Solid Line String = "*****\n"
+//
+//       Example-2:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****\n\n"
+//
+//       Example-3:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = true
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****"
 //
 //
 // ----------------------------------------------------------------
@@ -4207,117 +4386,192 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 // Input Parameters
 //
 //  leftMarginStr              string
-//     - The contents of the string will be used as the left margin
-//       for 'labelText field.
+//     - A string containing the text characters to be positioned
+//       on the Left side of the Solid Line.
 //
-//       If no left margin is required, set 'LeftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
+//       If no Left margin is required, set this parameter to an
+//       empty string ("").
 //
+//       Example A-1:
+//         LeftMarginStr = "xxx"
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         RightMarginStr = "" // Empty string
+//         Solid Line = "xxx*****"
 //
-//  fillerCharacters           string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//       Example A-2:
+//         LeftMarginStr = ""
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         RightMarginStr = "" // Empty string
+//         Solid Line = "*****"
 //
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharacters' is submitted as an empty or zero
-//       length string, this method will return an error.
+//       If the 'LeftMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned when
+//       attempting to create formatted text output.
 //
 //
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
+//  solidLineChars             string
+//     - This string specifies the character or characters which
+//       will comprise the solid line string for screen display,
+//       file output or printing.
 //
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
+//       Example B-1:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
 //
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
+//       If this parameter is submitted as a zero length string, an
+//       error will be returned.
 //
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
 //
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//  solidLineCharRepeatCount   int
+//     - This integer value specifies the number of times that
+//       parameter 'solidLineChars' will be repeated in
+//       constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), it will be automatically converted to one (1).
+//
+//       Example C-1:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         Solid line = "*****"
 //
 //
 //  rightMarginStr             string
-//     - The contents of the string will be used as the right
-//       margin for the Text Filler Field.
+//     - A string containing the text characters to positioned on
+//       the Right side of the Solid Line.
 //
-//       If no right margin is required, set 'RightMarginStr' to a
-//       zero length or empty string, and no right margin will be
-//       created.
+//       If no Right margin is required, set this parameter to an
+//       empty string.
+//
+//       Example D-1:
+//         solidLineChars = "*"
+//         solidLineCharsRepeatCount = 5
+//         leftMarginStr = "" // Empty string
+//         RightMarginStr = "xxx"
+//         Solid line = "*****xxx"
+//
+//       If the 'RightMarginStr' string length is greater than
+//       one-million (1,000,000), an error will be returned when
+//       attempting to created formatted text output.
 //
 //
-//  interiorLineTerminator     string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted text thereby converting
-//       this text element into a valid line of text.
+//  turnLineTerminationOff     bool
+//     - If this parameter is set to 'true' no Line Termination
+//       Sequence will be applied for this text line (Example E-3).
 //
-//       Be sure to coordinate 'interiorLineTerminator' with input
-//       parameter 'finalLineTerminator'. 'interiorLineTerminator'
-//       is applied after each line of text is generated.
-//       'finalLineTerminator' is applied after all lines of text
-//       have been generated.
+//             Example E-1:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = ""
+//               Final Solid Line String = "*****\n"
 //
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text label field and no other text
-//       elements.
+//             Example E-2:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****\n\n"
+//
+//             Example E-3:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = true
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****"
+//
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which
+//       will be used to terminate the formatted line of text
+//       output.
 //
 //       The most common usage sets this string to a new line
 //       character ("\n").
 //
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
+//       If 'LineTerminator' is configured as an empty string
+//       (string length zero), a single new line character ('\n')
+//       will be automatically applied to produce line termination.
+//
+//       LineTerminator works in conjunction with member variable
+//       'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+//       controls the application of a line terminator. Setting
+//       'TurnLineTerminationOff' to 'true' means that NO line
+//       terminator will be applied to this instance of Text Solid
+//       Line (Example F-3).
+//
+//             Example F-1:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = ""
+//               Final Solid Line String = "*****\n"
+//
+//             Example F-2:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = false
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****\n\n"
+//
+//             Example F-3:
+//               SolidLineChars = "*"
+//               SolidLineCharRepeatCount = 5
+//               LeftMarginStr = ""
+//               RightMarginStr = ""
+//               TurnLineTerminationOff = true
+//               LineTerminator = "\n\n"
+//               Final Solid Line String = "*****"
 //
 //
-//  numOfLines                 int
-//     - The number of times the combination of left margin string,
-//       Text Filler Field, right margin string and interior line
-//       terminator string will be repeated.
+//  maxLineLength              int
+//     - The maximum length of the line on which the solid line
+//       text characters will be presented.
 //
-//       Essentially, this the repeat count for the Text Filler
-//       Lines.
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
 //
-//       If this value is less than one (+1), an error will be
-//       returned. Likewise, if this value is greater than
-//       one-million (1,000,000), an error will be returned.
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//       If the value of 'maxLineLength' is less than one (1),
+//       it will be automatically converted to minus one (-1).
 //
 //
-//  finalLineTerminator        string
-//     - After all the text lines have been generated according to
-//       input parameter 'numOfLines', this line termination
-//       sequence will be applied to the final text output string.
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are positioned
+//       on the following line as a separate line of text.
 //
-//       Be sure to coordinate 'finalLineTerminator' with input
-//       parameter 'interiorLineTerminator'.
+//       To apply automatic line breaking at the maximum line
+//       length ('maxLineLength'), set the value of this parameter
+//       to 'true'.
 //
-//       'interiorLineTerminator' is applied after each line of
-//       text is generated. 'finalLineTerminator' is applied after
-//       all lines of text have been generated.
+//       When this parameter is set to 'true', text fields which
+//       extend beyond the maximum line length ('maxLineLength')
+//       will be formatted as a separate line of text on the
+//       following line.
 //
 //
 //  errorPrefix                interface{}
@@ -4389,12 +4643,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 //
 func (txtStrBuildr *TextStrBuilder) LineSolid(
 	leftMarginStr string,
-	fillerCharacters string,
-	fillerCharsRepeatCount int,
+	solidLineChars string,
+	solidLineCharRepeatCount int,
 	rightMarginStr string,
-	interiorLineTerminator string,
-	numOfLines int,
-	finalLineTerminator string,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) (
 	strings.Builder,
 	error) {
@@ -4424,25 +4679,419 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 		return strBuilder, err
 	}
 
-	if len(fillerCharacters) == 0 {
+	if len(solidLineChars) == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is invalid!\n"+
-			"'fillerCharacters' is an empty string with a string\n"+
+			"Error: Input parameter 'solidLineChars' is invalid!\n"+
+			"'solidLineChars' is an empty string with a string\n"+
 			"length of zero (0).\n",
 			ePrefix.String())
 
 		return strBuilder, err
 	}
 
-	return textStrBuilderNanobot{}.ptr().lineSolidWithMargins(
-		leftMarginStr,
-		fillerCharacters,
-		fillerCharsRepeatCount,
-		rightMarginStr,
-		interiorLineTerminator,
-		numOfLines,
-		finalLineTerminator,
+	if solidLineCharRepeatCount < 1 {
+
+		solidLineCharRepeatCount = 1
+	}
+
+	if maxLineLength < 1 {
+
+		maxLineLength = -1
+	}
+
+	txtLineSolidDto := TextLineSolidDto{
+		FormatType:                 TxtFieldType.SolidLine(),
+		LeftMarginStr:              leftMarginStr,
+		SolidLineChars:             solidLineChars,
+		SolidLineCharRepeatCount:   solidLineCharRepeatCount,
+		RightMarginStr:             rightMarginStr,
+		TurnLineTerminationOff:     turnLineTerminationOff,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		lock:                       nil,
+	}
+
+	return textStrBuilderAtom{}.ptr().buildTextLineSolidWithDto(
+		txtLineSolidDto,
+		ePrefix.XCpy(
+			"strBuilder<-fillerCharacters"))
+
+}
+
+// LineSolidDto - Formats a single Solid Text Line and writes the
+// output string to an instance of strings.Builder which is
+// returned to the calling function. This Solid Text Line string is
+// created from a Text Line Sold Data Transfer Object
+// (TextLineSolidDto) passed as an input parameter.
+//
+// A solid line, as defined here, consists of a single character or
+// multiple characters used in a repeating sequence to construct
+// a solid line. Typically, solid lines consist of dashes ("---"),
+// underscore characters ("____"), equal signs ("====="), asterisks
+// ("*****") and other similar line break presentations. Multiple
+// characters may be used to produce more complex line sequences
+// ("--*--*--*"). The length of a solid line is specified by
+// input parameter, 'SolidLineCharRepeatCount'.
+//
+// Therefore, the number of solid line characters produced is
+// equal to:
+//   (Number of  solid line characters 'solidLineChars')
+//        x 'solidLineCharRepeatCount'
+//
+// By default, all solid lines are terminated with a new line
+// character ('\n'). This means that each instance of a solid line
+// will be formatted as a single line of text. Users have the
+// option to alter this behavior and control the content and
+// application of line termination characters through two input
+// parameters, 'turnLineTerminationOff' and 'lineTerminator'.
+//
+//       Example-1:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = ""
+//         Final Solid Line String = "*****\n"
+//
+//       Example-2:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = false
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****\n\n"
+//
+//       Example-3:
+//         SolidLineChars = "*"
+//         SolidLineCharRepeatCount = 5
+//         LeftMarginStr = ""
+//         RightMarginStr = ""
+//         TurnLineTerminationOff = true
+//         LineTerminator = "\n\n"
+//         Final Solid Line String = "*****"
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtLineSolidDto            TextLineSolidDto
+//     - An instance of TextLineSolidDto which contains all the
+//       data parameters required to produce a Text Solid Line.
+//
+//       The Text Line Solid Transfer Object is defined as
+//       follows:
+//       type TextLineSolidDto struct {
+//
+//        FormatType                   TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For TextLineSolidDto 'FormatType' this parameter should
+//         be set to: TxtFieldType.SolidLine()
+//
+//        LeftMarginStr                string
+//         A string containing the text characters to be positioned
+//         on the Left side of the Solid Line.
+//
+//         If no Left margin is required, set this parameter to an
+//         empty string.
+//
+//         Example:
+//           LeftMarginStr = "xxx"
+//           SolidLineChars = "*"
+//           SolidLineCharRepeatCount = 5
+//           RightMarginStr = "" // Empty string
+//           Solid Line = "xxx*****"
+//
+//         If the 'LeftMarginStr' string length is greater than
+//         one-million (1,000,000), an error will be returned when
+//         attempting to create formatted text output.
+//
+//        SolidLineChars               string
+//         This string specifies the character or characters which
+//         will comprise the solid line string for screen display,
+//         file output or printing.
+//
+//         Example:
+//           solidLineChars = "*"
+//           solidLineCharsRepeatCount = 5
+//           Solid line = "*****"
+//
+//         If this parameter is submitted as a zero length string,
+//         an error will be returned when attempting to create
+//         formatted.
+//
+//        SolidLineCharRepeatCount     int
+//         This integer value specifies the number of times that
+//         parameter 'solidLineChars' will be repeated in
+//         constructing the solid line.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), it will be automatically converted to one (1).
+//
+//         Example:
+//           solidLineChars = "*"
+//           solidLineCharsRepeatCount = 5
+//           Solid line = "*****"
+//
+//        RightMarginStr               string
+//         A string containing the text characters to positioned on
+//         the Right side of the Solid Line.
+//
+//         If no Right margin is required, set this parameter to an
+//         empty string.
+//
+//         Example:
+//           solidLineChars = "*"
+//           solidLineCharsRepeatCount = 5
+//           leftMarginStr = "" // Empty string
+//           RightMarginStr = "xxx"
+//           Solid line = "*****xxx"
+//
+//         If the 'RightMarginStr' string length is greater than
+//         one-million (1,000,000), an error will be returned.
+//
+//        TurnLineTerminationOff     bool
+//         If this parameter is set to 'true' no Line Termination
+//         Sequence will be applied for this text line (Example-3).
+//
+//              Example-1:
+//                SolidLineChars = "*"
+//                SolidLineCharRepeatCount = 5
+//                LeftMarginStr = ""
+//                RightMarginStr = ""
+//                TurnLineTerminationOff = false
+//                LineTerminator = ""
+//                Final Solid Line String = "*****\n"
+//
+//              Example-2:
+//                SolidLineChars = "*"
+//                SolidLineCharRepeatCount = 5
+//                LeftMarginStr = ""
+//                RightMarginStr = ""
+//                TurnLineTerminationOff = false
+//                LineTerminator = "\n\n"
+//                Final Solid Line String = "*****\n\n"
+//
+//              Example-3:
+//                SolidLineChars = "*"
+//                SolidLineCharRepeatCount = 5
+//                LeftMarginStr = ""
+//                RightMarginStr = ""
+//                TurnLineTerminationOff = true
+//                LineTerminator = "\n\n"
+//                Final Solid Line String = "*****"
+//
+//        LineTerminator               string
+//         This string holds the character or characters which
+//         will be used to terminate the formatted line of text
+//         output.
+//
+//         The most common usage sets this string to a new line
+//         character ("\n").
+//
+//         If 'LineTerminator' is configured as an empty string
+//         (string length zero), a single new line character ('\n')
+//         will be automatically applied to produce line termination.
+//
+//         LineTerminator works in conjunction with member variable
+//         'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+//         controls the application of a line terminator. Setting
+//         'TurnLineTerminationOff' to 'true' means that NO line
+//         terminator will be applied to this instance of Text Solid
+//         Line.
+//
+//               Example-1:
+//                 SolidLineChars = "*"
+//                 SolidLineCharRepeatCount = 5
+//                 LeftMarginStr = ""
+//                 RightMarginStr = ""
+//                 TurnLineTerminationOff = false
+//                 LineTerminator = ""
+//                 Final Solid Line String = "*****\n"
+//
+//               Example-2:
+//                 SolidLineChars = "*"
+//                 SolidLineCharRepeatCount = 5
+//                 LeftMarginStr = ""
+//                 RightMarginStr = ""
+//                 TurnLineTerminationOff = false
+//                 LineTerminator = "\n\n"
+//                 Final Solid Line String = "*****\n\n"
+//
+//               Example-3:
+//                 SolidLineChars = "*"
+//                 SolidLineCharRepeatCount = 5
+//                 LeftMarginStr = ""
+//                 RightMarginStr = ""
+//                 TurnLineTerminationOff = true
+//                 LineTerminator = "\n\n"
+//                 Final Solid Line String = "*****"
+//
+//        MaxLineLength                int
+//         The maximum length of the line on which the solid line
+//         text characters will be presented.
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         'MaxLineLength' is used in conjunction with parameter
+//         'TurnAutoLineLengthBreaksOn' to automatically place text
+//         fields on separate text lines when that text exceeds the
+//         maximum text line length ('MaxLineLength'). Therefore,
+//         paramter 'TurnAutoLineLengthBreaksOn' controls whether
+//         automatic line breaks using 'MaxLineLength' will be
+//         applied.
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         If the value of 'MaxLineLength' is less than one (1),
+//         it will be automatically converted to minus one (-1).
+//
+//         TurnAutoLineLengthBreaksOn   bool
+//         This parameter controls whether text lines which exceed
+//         the maximum line length ('MaxLineLength') are
+//         positioned on the following line as a separate line of
+//         text.
+//
+//         To apply automatic line breaking at the maximum line
+//         length, set the value of this parameter to 'true'.
+//
+//         When this parameter is set to 'true', text fields which
+//         extend beyond the maximum line length 'MaxLineLength'
+//         will be formatted as a separate line of text on the
+//         following line.
+//
+//       }
+//
+//
+//  errorPrefix                       interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) LineSolidDto(
+	txtLineSolidDto TextLineSolidDto,
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"LineSolidDto()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if len(txtLineSolidDto.SolidLineChars) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtLineSolidDto.SolidLineChars' is invalid!\n"+
+			"'txtLineSolidDto.SolidLineChars' is an empty string with a string\n"+
+			"length of zero (0).\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	if txtLineSolidDto.SolidLineCharRepeatCount < 1 {
+
+		txtLineSolidDto.SolidLineCharRepeatCount = 1
+	}
+
+	if txtLineSolidDto.MaxLineLength < 1 {
+
+		txtLineSolidDto.MaxLineLength = -1
+	}
+
+	return textStrBuilderAtom{}.ptr().buildTextLineSolidWithDto(
+		txtLineSolidDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerCharacters"))
 

@@ -2965,14 +2965,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 //
 // Therefore, the number of solid line characters produced is
 // equal to:
-//   (Number of 'solidLineChars') x 'solidLineCharRepeatCount'
+//   (Number of  solid line characters 'solidLineChars')
+//        x 'solidLineCharRepeatCount'
 //
-// By default, all solid lines are terminated by a new line
-// character ('\n'). This means that each instance of a solid will
-// be formatted as a single line of text. Users have the option
-// to alter this behavior and control the content and application
-// of line termination characters through two input parameters,
-// 'turnLineTerminationOff' and 'lineTerminator'.
+// By default, all solid lines are terminated with a new line
+// character ('\n'). This means that each instance of a solid line
+// will be formatted as a single line of text. Users have the
+// option to alter this behavior and control the content and
+// application of line termination characters through two input
+// parameters, 'turnLineTerminationOff' and 'lineTerminator'.
 //
 //       Example-1:
 //         SolidLineChars = "*"
@@ -3005,7 +3006,6 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  leftMarginStr              string
 //     - A string containing the text characters to be positioned
@@ -3276,14 +3276,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 //
 // Therefore, the number of solid line characters produced is
 // equal to:
-//   (Number of 'solidLineChars') x 'solidLineCharRepeatCount'
+//   (Number of  solid line characters 'solidLineChars')
+//        x 'solidLineCharRepeatCount'
 //
-// By default, all solid lines are terminated by a new line
-// character ('\n'). This means that each instance of a solid will
-// be formatted as a single line of text. Users have the option
-// to alter this behavior and control the content and application
-// of line termination characters through two input parameters,
-// 'turnLineTerminationOff' and 'lineTerminator'.
+// By default, all solid lines are terminated with a new line
+// character ('\n'). This means that each instance of a solid line
+// will be formatted as a single line of text. Users have the
+// option to alter this behavior and control the content and
+// application of line termination characters through two input
+// parameters, 'turnLineTerminationOff' and 'lineTerminator'.
 //
 //       Example-1:
 //         SolidLineChars = "*"
@@ -3316,7 +3317,6 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  txtLineSolidDto            TextLineSolidDto
 //     - An instance of TextLineSolidDto which contains all the
@@ -3370,8 +3370,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 //         parameter 'solidLineChars' will be repeated in
 //         constructing the solid line.
 //
-//         If this parameter is submitted with a value less than one
-//         (1), an error will be returned.
+//         If this parameter is submitted with a value less than
+//         one (1), it will be automatically converted to one (1).
 //
 //         Example:
 //           solidLineChars = "*"
@@ -3487,11 +3487,11 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 //         automatic line breaks using 'MaxLineLength' will be
 //         applied.
 //
-//         If the value of 'MaxLineLength' is less than one (1),
-//         it will be automatically converted to minus one (-1).
-//
 //         Set this parameter to minus one (-1) to specify an
 //         unlimited line length for this text line.
+//
+//         If the value of 'MaxLineLength' is less than one (1),
+//         it will be automatically converted to minus one (-1).
 //
 //         TurnAutoLineLengthBreaksOn bool
 //         This parameter controls whether text lines which exceed
