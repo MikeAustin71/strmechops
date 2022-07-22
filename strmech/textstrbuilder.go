@@ -1508,8 +1508,8 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 }
 
 // FieldDateTimeDto - Creates a date time value formatted as a text
-// field using parameters supplied by Text Field Date Time Data
-// Transfer Object TextFieldDateTimeDto.
+// field using parameters supplied by a Text Field Date Time Data
+// Transfer Object, TextFieldDateTimeDto.
 //
 // Users have the option to format this date time text
 // field with a line terminator (a.k.a. new line character '\n')
@@ -1762,6 +1762,16 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 // some number of times to create the entire length of the Filler
 // Text Field.
 //
+// Text Filler Fields are commonly used as margins containing
+// multiple white space characters, or line separators containing
+// multiple dashes, equal signs or underscore characters. Text
+// Filler Fields consist of filler characters ('fillerCharacters')
+// and the filler characters repeat count
+// ('fillerCharsRepeatCount'). A filler field is made up of one or
+// more filler characters. These filler characters are repeated one
+// or more times in order to construct the complete filler field as
+// shown in the following examples:
+//
 //  Example 1:
 //   Filler Characters = "-"
 //   Filler Characters Repeat Count = 3
@@ -1882,6 +1892,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //       To apply automatic line breaking at the maximum line
 //       length, set the value of this parameter to 'true'.
 //
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -1976,7 +1987,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextStrBuilder."+
-			"FieldLabel()",
+			"FieldFiller()",
 		"")
 
 	if err != nil {
@@ -2022,6 +2033,289 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		fillerFieldDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerFieldDto"))
+}
+
+// FieldFillerDto - Creates a Filler Text Field string using
+// parameters supplied by a Text Field Filler Data Transfer Object,
+// TextFieldFillerDto.
+//
+// The Text Filler Field consists of a single character or multiple
+// character sequence which is replicated some number of times to
+// create the entire length of the Filler Text Field.
+//
+// Text Filler Fields are commonly used as margins containing
+// multiple white space characters, or line separators containing
+// multiple dashes, equal signs or underscore characters. Text
+// Filler Fields consist of filler characters ('fillerCharacters')
+// and the filler characters repeat count
+// ('fillerCharsRepeatCount'). A filler field is made up of one or
+// more filler characters. These filler characters are repeated one
+// or more times in order to construct the complete filler field as
+// shown in the following examples:
+//
+//  Example 1:
+//   Filler Characters = "-"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "---"
+//
+//  Example 2:
+//   Filler Characters = "-*"
+//   Filler Characters Repeat Count = 3
+//   Formatted Text = "-*-*-*"
+//
+// This single Filler Text Field can be configured as a complete
+// line of text depending on the value applied to input parameter
+// 'lineTerminator'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textFillerDto              TextFieldFillerDto
+//     - An instance of TextFieldFillerDto which contains all the
+//       necessary data parameters to produce a Text Filler Field.
+//
+//       The Text Field Filler Data Transfer Object is defined as
+//       follows:
+//
+//       type TextFieldFillerDto struct {
+//
+//        FormatType                   TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For the TextFieldFillerDto Format Type, this value
+//         should always be set to:
+//           TxtFieldType.Filler()
+//
+//        LeftMarginStr                string
+//         The contents of the string will be used as the left
+//         margin for the Text Field.
+//
+//         If no left margin is required, set 'LeftMarginStr' to a
+//         zero length or empty string, and no left margin will be
+//         created.
+//
+//        FillerCharacters             string
+//         A string containing the text characters which will be
+//         included in the Text Filler Field. The final Text Filler
+//         Field will be constructed from the filler characters
+//         repeated one or more times as specified by the
+//         'FillerCharsRepeatCount' parameter.
+//
+//          Text Field Filler Length =
+//            Length of fillerCharacters X fillerCharsRepeatCount
+//
+//            Example #1: FillerCharacters = "-*"
+//                        FillerCharsRepeatCount = 3
+//                        Final Text Filler Field = "-*-*-*"
+//
+//            Example #2: FillerCharacters = "-"
+//                        FillerCharsRepeatCount = 3
+//                        Final Text Filler Field = "---"
+//
+//
+//        FillerCharsRepeatCount       int
+//         Controls the number of times 'FillerCharacters' is
+//         repeated when constructing the final Text Filler Field.
+//         The actual length of the string which will populate the
+//         completed Text Filler Field is equal to the length of
+//         'FillerCharacters' times the value of
+//         'FillerCharsRepeatCount'.
+//
+//          Text Field Filler Length =
+//            Length of FillerCharacters X FillerCharsRepeatCount
+//
+//            Example #1: FillerCharacters = "-*"
+//                        FillerRepeatCount = 3
+//                        Final Text Filler Field = "-*-*-*"
+//
+//            Example #2: FillerCharacters = "-"
+//                        FillerRepeatCount = 3
+//                        Final Text Filler Field = "---"
+//
+//         If 'FillerCharsRepeatCount' has a value less than one
+//         (1) or greater than one-million (1,000,000), an error
+//         will be returned when attempting to format text.
+//
+//        RightMarginStr               string
+//         The contents of the string will be used as the right
+//         margin for the Text Filler Field.
+//
+//         If no right margin is required, set 'RightMarginStr' to
+//         a zero length or empty string, and no right margin will
+//         be created.
+//
+//        LineTerminator               string
+//         This string holds the character or characters which will
+//         be used to terminate the formatted line of text output
+//         thereby converting this text element into a valid
+//         stand-alone line of text. Line Termination is optional.
+//         Populate this string only if this text output should be
+//         formatted as a separate line of text.
+//
+//         The most common usage sets this string to a new line
+//         character ("\n").
+//
+//         If no Line Terminator is required, set 'lineTerminator'
+//         to a zero length or empty string and no line termination
+//         characters will be created.
+//
+//        MaxLineLength                int
+//         The maximum length of the line on which this label text
+//         will be presented.
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         'MaxLineLength' is used in conjunction with parameter
+//         'TurnAutoLineLengthBreaksOn' to automatically place text
+//         fields on separate text lines when that text exceeds the
+//         maximum text line length ('MaxLineLength'). Therefore,
+//         paramter 'turnAutoLineLengthBreaksOn' controls whether
+//         automatic line breaks using 'MaxLineLength' will be
+//         applied.
+//
+//         If the value of 'maxLineLength' is less than one (1), it
+//         will be automatically converted to minus one (-1).
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//        TurnAutoLineLengthBreaksOn   bool
+//         This parameter controls whether text lines which exceed
+//         the maximum line length ('MaxLineLength') are broken up
+//         and presented on the following line.
+//
+//         To apply automatic line breaking at the maximum line
+//         length, set the value of this parameter to 'true'.
+//       }
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strBuilder                 strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
+	textFillerDto TextFieldFillerDto,
+	errorPrefix interface{}) (
+	strBuilder strings.Builder,
+	err error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	strBuilder.Grow(256)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldFillerDto()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if len(textFillerDto.FillerCharacters) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFillerDto.FillerCharacters' is invalid!\n"+
+			"'textFillerDto.FillerCharacters' is an empty string with a string\n"+
+			"length of zero (0).\n",
+			ePrefix.String())
+
+		return strBuilder, err
+
+	}
+
+	if textFillerDto.FillerCharsRepeatCount < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textFillerDto.FillerCharsRepeatCount' is invalid!\n"+
+			"'textFillerDto.FillerCharsRepeatCount' has a value less than one (1).\n"+
+			"textFillerDto.FillerCharsRepeatCount = '%v'\n",
+			ePrefix.String(),
+			textFillerDto.FillerCharsRepeatCount)
+
+		return strBuilder, err
+	}
+
+	return textStrBuilderAtom{}.ptr().buildFillerFieldWithDto(
+		textFillerDto.CopyOut(),
+		ePrefix.XCpy(
+			"strBuilder<-textFillerDto"))
 }
 
 // FieldLabel - Formats a single text label and writes the output string
@@ -2354,227 +2648,6 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 			"",
 			ePrefix.XCpy(
 				"strBuilder<-Spacer FieldLength"))
-}
-
-// FieldsSingleFiller - Designed to produce three text elements
-// consolidated and formatted as a single text field.
-//
-// The three text elements consist of a left margin string, a Text
-// Filler Field and a right margin string.
-//
-// These three text elements can be configured as a complete line
-// of text depending on the value applied to input parameter
-// 'lineTerminator'.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  leftMarginStr              string
-//     - The contents of the string will be used as the left margin
-//       for 'labelText field.
-//
-//       If no left margin is required, set 'LeftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  fillerCharacters           string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharacters' is submitted as an empty or zero
-//       length string, this method will return an error.
-//
-//
-//  fillerCharsRepeatCount     int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
-//
-//
-//  rightMarginStr             string
-//     - The contents of the string will be used as the right
-//       margin for the Text Filler Field.
-//
-//       If no right margin is required, set 'RightMarginStr' to a
-//       zero length or empty string, and no right margin will be
-//       created.
-//
-//
-//  lineTerminator             string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted text thereby converting
-//       this text element into a valid line of text.
-//
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text label field and no other text
-//       elements.
-//
-//       The most common usage sets this string to a new line
-//       character ("\n").
-//
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted
-//       text characters.
-//
-//
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-func (txtStrBuildr *TextStrBuilder) FieldsSingleFiller(
-	leftMarginStr string,
-	fillerCharacters string,
-	fillerCharsRepeatCount int,
-	rightMarginStr string,
-	lineTerminator string,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
-
-	if txtStrBuildr.lock == nil {
-		txtStrBuildr.lock = new(sync.Mutex)
-	}
-
-	txtStrBuildr.lock.Lock()
-
-	defer txtStrBuildr.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-	var strBuilder strings.Builder
-
-	strBuilder.Grow(128)
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"TextStrBuilder."+
-			"FieldsSingleFiller()",
-		"")
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	if len(fillerCharacters) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is invalid!\n"+
-			"'fillerCharacters' is an empty string with a string\n"+
-			"length of zero (0).\n",
-			ePrefix.String())
-
-		return strBuilder, err
-
-	}
-
-	return textStrBuilderAtom{}.ptr().fieldFillerWithMargins(
-		leftMarginStr,
-		fillerCharacters,
-		fillerCharsRepeatCount,
-		rightMarginStr,
-		lineTerminator,
-		ePrefix.XCpy(
-			"strBuilder<-fillerCharacters"))
 }
 
 // FieldsSingleLabel - Designed to produce three text elements
