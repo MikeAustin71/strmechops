@@ -2957,27 +2957,110 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 			"strBuilder<-textLabelDto"))
 }
 
-// FieldSpacer - Creates a string consisting of white space
-// characters (" "). The number of white space characters included
-// in the text field is determined by input parameter,
-// 'fieldLength'.
+// FieldSpacer - Creates and formats a Text Spacer Field and writes
+// the output string to an instance of strings.Builder which is
+// returned to the calling function.
+//
+// Text Spacer Fields consist of one or more white space characters
+// (" ").
+//
+// Text Spacer Field Example-1:
+//
+//  LeftMarginStr = ""
+//  FieldLength = 3
+//  RightMarginStr = ""
+//  LineTerminator = ""
+//  Final Text Spacer string = "   " // 3-white spaces
+//
+// Text Spacer Field Example-2:
+//
+//  LeftMarginStr = ""
+//  FieldLength = 3
+//  RightMarginStr = ""
+//  LineTerminator = "\n"
+//  Final Text Spacer string = "   \n" // 3-white spaces and
+//                                     // 1-new line character
+//                                     // ('\n')
+//
+// Typically, Text Spacer Fields are designed to be configured
+// within a line of text. However, users have the option of
+// configuring a Text Filler Field as a separate stand-alone
+// line of text by configuring the input parameter
+// 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
+//  leftMarginStr              string
+//     - The contents of this string will be used as the left
+//       margin for the Text Spacer Field.
+//
+//       If no left margin is required, set 'leftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
+//
+//
 //  fieldLength                int
-//     - An integer value which is used to specify the number of
-//       white space characters (" ") in the Text Spacer Field.
+//     - An integer value used to specify the number of white space
+//       characters in the Text Spacer Field.
+//
+//       If the value of this parameter is less than zero and greater
+//       than one-million (1,000,000), an error will be generated when
+//       attempting to create formatted text output.
 //
 //       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
+//        fieldLen = 1 produces text field " "  // 1-white space
+//        fieldLen = 2 produces text field "  " // 2-white spaces
+//        fieldLen = 5 produces text field "     " // 5-white spaces
 //
-//        If the value of 'fieldLength' is less than 1 or greater
-//        than one-million, an error will be returned.
+//
+//  lineTerminator             string
+//     - This string holds the character or characters which will
+//       be used to terminate the formatted text thereby converting
+//       this text element into a valid line of text.
+//
+//       If a text line is required, setting this string to include
+//       a new line character ('\n') will ensure that the text line
+//       consists of the text spacer field and no other text
+//       elements. Any string of text characters will be accepted
+//       for this parameter.
+//
+//       Again, the most common usage sets this string to a new
+//       line character ("\n").
+//
+//       If Line Termination is NOT required, set 'lineTerminator'
+//       to a zero length or empty string and no line termination
+//       characters will be created.
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this Text Spacer
+//       Field will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+///
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
 //
 //
 //  errorPrefix                interface{}
@@ -3048,7 +3131,12 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldSpacer(
+	leftMarginStr string,
 	fieldLength int,
+	rightMarginStr string,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) (
 	strings.Builder,
 	error) {
@@ -3078,14 +3166,35 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 		return strBuilder, err
 	}
 
-	return textStrBuilderElectron{}.ptr().
-		fieldSpacerWithMargins(
-			"",
-			fieldLength,
-			"",
-			"",
+	if fieldLength < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value less than one (1).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return strBuilder, err
+
+	}
+
+	txtFieldSpacerDto := TextFieldSpacerDto{
+		FormatType:                 TxtFieldType.Spacer(),
+		LeftMarginStr:              leftMarginStr,
+		FieldLength:                fieldLength,
+		RightMarginStr:             rightMarginStr,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		lock:                       nil,
+	}
+
+	return textStrBuilderAtom{}.ptr().
+		buildSpacerFieldWithDto(
+			txtFieldSpacerDto,
 			ePrefix.XCpy(
-				"strBuilder<-Spacer FieldLength"))
+				"strBuilder<-txtFieldSpacerDto"))
 }
 
 // FieldsSingleLabel - Designed to produce three text elements

@@ -1459,8 +1459,8 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 // AddFieldSpacer - Adds a Text Spacer Field to the Formatter
 // Collection.
 //
-// Text Spacer Fields consist of one or more white space
-// characters (" ").
+// Text Spacer Fields consist of one or more white space characters
+// (" ").
 //
 // Text Spacer Field Example-1:
 //
@@ -1483,14 +1483,13 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 // Typically, Text Spacer Fields are designed to be configured
 // within a line of text. However, users have the option of
 // configuring a Text Filler Field as a separate stand-alone
-// line of text by means of the input parameter 'lineTerminator'.
-// line of text by means of the input parameter 'lineTerminator'.
+// line of text by configuring the input parameter
+// 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left
