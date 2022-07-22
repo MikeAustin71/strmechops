@@ -1011,8 +1011,11 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 }
 
 // AddFieldLabel - Adds a single text label field to the Formatter
-// Collection. Users have the option to format this text label with
-// a line terminator (a.k.a. new line character '\n').
+// Collection.
+//
+// Users have the option to format this text label with a line
+// terminator (a.k.a. new line character '\n') thereby creating a
+// a separate stand-alone line of text.
 //
 // Text Label Example 1:
 //   leftMarginStr = "" // Empty String
@@ -1040,7 +1043,6 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left

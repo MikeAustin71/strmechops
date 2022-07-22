@@ -2318,43 +2318,104 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 			"strBuilder<-textFillerDto"))
 }
 
-// FieldLabel - Formats a single text label and writes the output string
-// to an instance of strings.Builder passed as an input parameter
-// by the calling function.
+// FieldLabel - Formats a single text label field and writes the
+// output string to an instance of strings.Builder which is
+// returned to the calling function.
+//
+// Users have the option to format this text label with a line
+// terminator (a.k.a. new line character '\n') thereby creating
+// a separate stand-alone line of text.
+//
+// Text Label Example 1:
+//   leftMarginStr = "" // Empty String
+//   fieldText = "Hello"  // Length = 5 characters
+//   fieldLength = 7
+//   fieldJustify = TxtJustify.Center()
+//   rightMarginStr = "" // Empty String
+//   lineTerminator = "" // Empty String
+//   maxLineLength = -1
+//   turnAutoLineLengthBreaksOn = false
+//   Final Text Label string = " Hello "
+//
+// Text Label Example 2:
+//   leftMarginStr = "" // Empty String
+//   fieldText = "Hello"  // Length = 5 characters
+//   fieldLength = 7
+//   fieldJustify = TxtJustify.Center()
+//   rightMarginStr = "" // Empty String
+//   lineTerminator = "\n" // Empty String
+//   maxLineLength = -1
+//   turnAutoLineLengthBreaksOn = false
+//   Final Text Label string = " Hello \n"
 //
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  labelText                  string
-//     - This strings holds the text characters which will be
-//       formatted as a text label.
+//  leftMarginStr              string
+//     - The contents of this string will be used as the left
+//       margin for the text label field.
 //
-//       If 'labelText' is submitted as a zero length or empty
-//       string, an error will be returned.
+//       If no left margin is required, set 'leftMarginStr' to a
+//       zero length or empty string, and no left margin will be
+//       created.
 //
 //
-//  labelFieldLength           int
+//  fieldText                  interface{}
+//     - This parameter is an empty interface which must contain
+//       one of several specific types. This empty interface type
+//       will be converted to a string and configured as the text
+//       field for this label.
+//
+//       Supported types which may be submitted through this empty
+//       interface parameter are listed as follows:
+//          time.Time (Converted using default format)
+//          string
+//          bool
+//          uint, uint8, uint16, uint32, uint64,
+//          int, int8, int16, int32, int64
+//          float32, float64
+//          *big.Int *big.Float
+//          fmt.Stringer (types that support this interface)
+//          TextInputParamFieldDateTimeDto
+//                (Converts date time to string)
+//
+//       If the 'fieldText' is not convertible to one of the
+//       supported types, the 'column1Field' string will be
+//       populated with an error message.
+//
+//       If the converted string value for 'column1Field' is empty,
+//       it will be defaulted to a single white space character
+//       (" ").
+//
+//
+//  fieldLength                int
 //     - Used to format Text Label Fields. This is the length of
-//       the text field in which the formatted 'labelText' string
-//       will be displayed. If 'labelFieldLength' is less than the
-//       length of the 'labelText' string, it will be automatically
+//       the text field in which the formatted 'fieldText' string
+//       will be displayed. If 'fieldLength' is less than the
+//       length of the 'fieldText' string, it will be automatically
 //       set equal to the 'labelText' string length.
 //
-//       To automatically set the value of 'labelFieldLength' to
-//       the length of 'labelText', set this parameter to a value
+//       If 'fieldLength' is greater than the length of the
+//       'fieldText' text string, the 'fieldJustify' parameter will
+//       be used to configure or justify the text within the
+//       boundaries of the text field defined by 'fieldLength'.
+//
+//       To automatically set the value of 'fieldLength' to the
+//       length of 'fieldText', set this parameter to a value
 //       of  minus one (-1).
 //
 //       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//       minus one (-1) or greater than 1-million (1,000,000),
+//       an error will be returned when attempting to build the
+//       final text output.
 //
 //
-//  labelTextJustify           TextJustify
+//  fieldJustify               TextJustify
 //      An enumeration value specifying the justification of the
-//      'labelText' string within the text field specified by
-//      'labelFieldLength'.
+//      'fieldText' string within the text field specified by
+//      'fieldLength'.
 //
 //      Text justification can only be evaluated in the context of
 //      a text label, field length and a Text Justification object
@@ -2378,6 +2439,15 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //          TxtJustify.Center()
 //
 //
+//  rightMarginStr             string
+//     - The contents of this string will be used as the right
+//       margin for the text label field.
+//
+//       If no right margin is required, set 'rightMarginStr' to a
+//       zero length or empty string, and no right margin will be
+//       created.
+//
+//
 //  lineTerminator             string
 //     - This string holds the character or characters which will
 //       be used to terminate the formatted text thereby converting
@@ -2386,14 +2456,43 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //       If a text line is required, setting this string to include
 //       a new line character ('\n') will ensure that the text line
 //       consists of the text label field and no other text
-//       elements.
+//       elements. Any string of text characters will be accepted
+//       for this parameter.
 //
-//       The most common usage sets this string to a new line
-//       character ("\n").
+//       Again, the most common usage sets this string to a new
+//       line character ("\n").
 //
 //       If Line Termination is NOT required, set 'lineTerminator'
 //       to a zero length or empty string and no line termination
 //       characters will be created.
+//
+//
+//  maxLineLength              int
+//     - The maximum length of the line on which this label text
+//       will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+///
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       fields on separate text lines when that text exceeds the
+//       maximum text line length ('maxLineLength'). Therefore,
+//       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//       automatic line breaks using 'maxLineLength' will be
+//       applied.
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
+//
+//  turnAutoLineLengthBreaksOn bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are broken up
+//       and presented on the following line.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
 //
 //
 //  errorPrefix                interface{}
@@ -2464,10 +2563,14 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldLabel(
-	labelText string,
-	labelFieldLength int,
-	labelTextJustify TextJustify,
+	leftMarginStr string,
+	fieldText interface{},
+	fieldLength int,
+	fieldJustify TextJustify,
+	rightMarginStr string,
 	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) (
 	strings.Builder,
 	error) {
@@ -2484,8 +2587,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 	var err error
 	var strBuilder strings.Builder
 
-	strBuilder.Grow(128)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -2497,26 +2598,61 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		return strBuilder, err
 	}
 
-	if len(labelText) == 0 {
+	var fieldTextStr string
+
+	fieldTextStr,
+		err = textSpecificationAtom{}.ptr().
+		convertParamEmptyInterfaceToString(
+			fieldText,
+			"fieldText",
+			ePrefix.XCpy(
+				"fieldTextStr<-fieldText"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if len(fieldTextStr) == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'labelText' is invalid!\n"+
-			"'labelText' is an empty string with a string length\n"+
-			"of zero (0).\n",
+			"Error: Input parameter 'fieldText' is invalid!\n"+
+			"'fieldText' converted as an empty string with a\n"+
+			"string length of zero (0).\n",
 			ePrefix.String())
 
 		return strBuilder, err
 	}
 
-	return textStrBuilderAtom{}.ptr().fieldLabelWithMargins(
-		"",
-		labelText,
-		labelFieldLength,
-		labelTextJustify,
-		"",
-		lineTerminator,
+	if fieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fieldLength' is invalid!\n"+
+			"'fieldLength' has a value less than minus one (-1).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			fieldLength)
+
+		return strBuilder, err
+
+	}
+
+	labelFieldDto := TextFieldLabelDto{
+		FormatType:                 TxtFieldType.Label(),
+		LeftMarginStr:              leftMarginStr,
+		FieldText:                  fieldTextStr,
+		FieldLength:                fieldLength,
+		FieldJustify:               fieldJustify,
+		RightMarginStr:             rightMarginStr,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		lock:                       nil,
+	}
+
+	return textStrBuilderAtom{}.ptr().buildLabelFieldWithDto(
+		labelFieldDto,
 		ePrefix.XCpy(
-			"strBuilder<-labelText"))
+			"strBuilder<-labelFieldDto"))
 }
 
 // FieldSpacer - Creates a string consisting of white space
