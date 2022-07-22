@@ -1651,7 +1651,6 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //
 // Input Parameters
 //
-//
 //  txtFieldSpacerDto          TextFieldSpacerDto
 //     - An instance of TextFieldSpacerDto which contains all the
 //       necessary data parameters to produce a Text Spacer Field.

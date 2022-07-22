@@ -3197,6 +3197,255 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 				"strBuilder<-txtFieldSpacerDto"))
 }
 
+// FieldSpacerDto - Creates and formats a Text Spacer Field and
+// writes the output string to an instance of strings.Builder which
+// is returned to the calling function. This text label field is
+// created from a Text Field Spacer Data Transfer Object
+// (TextFieldSpacerDto) passed as an input parameter.
+//
+// Text Spacer Fields consist of one or more white space characters
+// (" ").
+//
+// Text Spacer Field Example-1:
+//
+//  LeftMarginStr = ""
+//  FieldLength = 3
+//  RightMarginStr = ""
+//  LineTerminator = ""
+//  Final Text Spacer string = "   " // 3-white spaces
+//
+// Text Spacer Field Example-2:
+//
+//  LeftMarginStr = ""
+//  FieldLength = 3
+//  RightMarginStr = ""
+//  LineTerminator = "\n"
+//  Final Text Spacer string = "   \n" // 3-white spaces and
+//                                     // 1-new line character
+//                                     // ('\n')
+//
+// Typically, Text Spacer Fields are designed to be configured
+// within a line of text. However, users have the option of
+// configuring a Text Filler Field as a separate stand-alone
+// line of text by configuring the input parameter
+// 'lineTerminator'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  txtFieldSpacerDto          TextFieldSpacerDto
+//     - An instance of TextFieldSpacerDto which contains all the
+//       necessary data parameters to produce a Text Spacer Field.
+//
+//       The Text Field Spacer Data Transfer Object is defined as
+//       follows:
+//
+//       type TextFieldSpacerDto struct {
+//
+//        FormatType                   TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For the TextFieldSpacerDto Format Type, this value
+//         should always be set to: TxtFieldType.Spacer()
+//
+//        LeftMarginStr                string
+//         The contents of the string will be used as the left
+//         margin for the Text Spacer Field.
+//
+//         If no left margin is required, set 'leftMarginStr' to a
+//         zero length or empty string, and no left margin will be
+//         created.
+//
+//        FieldLength                  int
+//         An integer value used to specify the number of white
+//         space characters in the Text Spacer Field.
+//
+//         Values less than zero and greater than one million
+//         (1,000,001) will generate errors when attempting to
+//         format text output.
+//
+//         Examples:
+//          fieldLen = 1 produces text field " "
+//              // 1-white space
+//
+//          fieldLen = 2 produces text field "  "
+//             // 2-white spaces
+//
+//          fieldLen = 5 produces text field "     "
+//             // 5-white spaces
+//
+//        RightMarginStr               string
+//         The contents of the string will be used as the right
+//         margin for the Text Spacer Field.
+//
+//         If no right margin is required, set 'rightMarginStr' to
+//         a zero length or empty string, and no right margin will
+//         be created.
+//
+//        LineTerminator               string
+//         This string holds the character or characters which will
+//         be used to terminate the formatted line of text output.
+//
+//         The most common usage sets this string to a new line
+//         character ("\n").
+//
+//         If no Line Terminator is required, set 'lineTerminator'
+//         to a zero length or empty string and no line
+//         termination characters will be created.
+//
+//        MaxLineLength                int
+//         The maximum length of the line on which this label text
+//         will be presented.
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//         'MaxLineLength' is used in conjunction with parameter
+//         'TurnAutoLineLengthBreaksOn' to automatically place text
+//         fields on separate text lines when that text exceeds the
+//         maximum text line length ('MaxLineLength'). Therefore,
+//         paramter 'turnAutoLineLengthBreaksOn' controls whether
+//         automatic line breaks using 'MaxLineLength' will be
+//         applied.
+//
+//         If the value of 'maxLineLength' is less than one (1), it
+//         will be automatically converted to minus one (-1).
+//
+//         Set this parameter to minus one (-1) to specify an
+//         unlimited line length for this text line.
+//
+//        TurnAutoLineLengthBreaksOn   bool
+//         This parameter controls whether text lines which exceed
+//         the maximum line length ('MaxLineLength') are broken up
+//         and presented on the following line.
+//
+//         To apply automatic line breaking at the maximum line
+//         length, set the value of this parameter to 'true'.
+//
+//       }
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted
+//       text characters.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
+	txtFieldSpacerDto TextFieldSpacerDto,
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	strBuilder.Grow(128)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldSpacerDto()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if txtFieldSpacerDto.FieldLength < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtFieldSpacerDto.FieldLength' is invalid!\n"+
+			"'txtFieldSpacerDto.FieldLength' has a value less than one (1).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			txtFieldSpacerDto.FieldLength)
+
+		return strBuilder, err
+
+	}
+
+	return textStrBuilderAtom{}.ptr().
+		buildSpacerFieldWithDto(
+			txtFieldSpacerDto,
+			ePrefix.XCpy(
+				"strBuilder<-txtFieldSpacerDto"))
+}
+
 // FieldsSingleLabel - Designed to produce three text elements
 // consolidated and formatted as a single text field.
 //
