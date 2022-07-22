@@ -1243,7 +1243,8 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 // FieldDateTime - Creates a date time value formatted as a text
 // field. Users have the option to format this date time text
 // field with a line terminator (a.k.a. new line character '\n')
-// thereby converting this text field to a complete line of text.
+// thereby converting this text field to a separate stand-alone
+// line of text.
 //
 // The resulting formatted text is returned as an instance of
 // strings.Builder.
@@ -1513,7 +1514,8 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 //
 // Users have the option to format this date time text
 // field with a line terminator (a.k.a. new line character '\n')
-// thereby converting this field to a complete line of text.
+// thereby converting this field to a separate stand-alone line of
+// text.
 //
 // The resulting formatted text is returned as an instance of
 // strings.Builder.
@@ -1782,9 +1784,9 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "-*-*-*"
 //
-// This single Filler Text Field can be configured as a complete
-// line of text depending on the value applied to input parameter
-// 'lineTerminator'.
+// This single Filler Text Field can be configured as a separate
+// stand-alone line of text depending on the value applied to input
+// parameter 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -2063,9 +2065,9 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //   Filler Characters Repeat Count = 3
 //   Formatted Text = "-*-*-*"
 //
-// This single Filler Text Field can be configured as a complete
-// line of text depending on the value applied to input parameter
-// 'lineTerminator'.
+// This single Filler Text Field can be configured as a separate
+// stand-alone line of text depending on the value applied to input
+// parameter 'lineTerminator'.
 //
 //
 // ----------------------------------------------------------------
@@ -2653,6 +2655,306 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		labelFieldDto,
 		ePrefix.XCpy(
 			"strBuilder<-labelFieldDto"))
+}
+
+// FieldLabelDto - Formats a single text label field and writes the
+// output string to an instance of strings.Builder which is
+// returned to the calling function. This text label field is
+// created from a Text Field Label Data Transfer Object
+// (TextFieldLabelDto) passed as an input parameter.
+//
+// Users have the option to format this text label with a line
+// terminator (a.k.a. new line character '\n') thereby creating
+// a separate stand-alone line of text.
+//
+// Text Label Example 1:
+//   leftMarginStr = "" // Empty String
+//   fieldText = "Hello"  // Length = 5 characters
+//   fieldLength = 7
+//   fieldJustify = TxtJustify.Center()
+//   rightMarginStr = "" // Empty String
+//   lineTerminator = "" // Empty String
+//   maxLineLength = -1
+//   turnAutoLineLengthBreaksOn = false
+//   Final Text Label string = " Hello "
+//
+// Text Label Example 2:
+//   leftMarginStr = "" // Empty String
+//   fieldText = "Hello"  // Length = 5 characters
+//   fieldLength = 7
+//   fieldJustify = TxtJustify.Center()
+//   rightMarginStr = "" // Empty String
+//   lineTerminator = "\n" // Empty String
+//   maxLineLength = -1
+//   turnAutoLineLengthBreaksOn = false
+//   Final Text Label string = " Hello \n"
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  textLabelDto                       TextFieldLabelDto
+//     - An instance of TextFieldLabelDto which contains all the
+//       necessary data parameters to produce a text label.
+//
+//       The Text Field Label Data Transfer Object is defined as
+//       follows:
+//
+//       type TextFieldLabelDto struct {
+//
+//         FormatType                  TextFieldType
+//           Required. This enumeration value specifies the type of
+//           Text Format Operation to be performed.
+//
+//           For TextFieldLabelDto Format Type, this value should
+//           always be set to:
+//             TxtFieldType.Label()
+//
+//         LeftMarginStr               string
+//           The contents of the string will be used as the left
+//           margin for the Text Field.
+//
+//           If no left margin is required, set 'LeftMarginStr' to
+//           a zero length or empty string, and no left margin will
+//           be created.
+//
+//         FieldText                   string
+//           The Text Field string or contents. If this string is
+//           empty (has a zero (0) length) it will be automatically
+//           converted to a single white space character (" ").
+//
+//           This string represents the contents of the Text Field.
+//
+//         FieldLength                 int
+//           Used to format FieldText string. This is the length of
+//           the text field in which the 'FieldText' will be
+//           displayed. If 'FieldLength' is less than the length of
+//           the 'FieldText' string, it will be automatically set
+//           equal to the 'FieldText' string length.
+//
+//           If 'FieldLength' is greater than the length of the
+//           'FieldText' text string, the 'FieldJustify' parameter
+//           will be used to configure or justify the text within
+//           the boundaries of the text field defined by
+//           'FieldLength'.
+//
+//           To automatically set the value of 'FieldLength' to the
+//           length of 'FieldText', set this parameter to a value
+//           of minus one (-1).
+//
+//           If this parameter is submitted with a value less than
+//           minus one (-1) or greater than 1-million (1,000,000),
+//           an error will be generated when attempting to format
+//           text.
+//
+//         FieldJustify                TextJustify
+//           An enumeration which specifies the justification of
+//           the 'FieldText' string within the text field specified
+//           by 'FieldLength'.
+//
+//           Text justification can only be evaluated in the
+//           context of a text label, field length and a Text
+//           Justification object of type TextJustify. This is
+//           because text labels with a field length equal to or
+//           less than the length of the text label never use text
+//           justification. In these cases, text justification is
+//           completely ignored.
+//
+//           If the field length is greater than the length of the
+//           text label, text justification must be equal to one of
+//           these three valid values:
+//               TextJustify(0).Left()
+//               TextJustify(0).Right()
+//               TextJustify(0).Center()
+//
+//           You can also use the abbreviated text justification
+//           enumeration syntax as follows:
+//
+//               TxtJustify.Left()
+//               TxtJustify.Right()
+//               TxtJustify.Center()
+//
+//         RightMarginStr              string
+//           The contents of the string will be used as the right
+//           margin for the Text Field.
+//
+//           If no right margin is required, set 'RightMarginStr'
+//           to a zero length or empty string, and no right margin
+//           will be created.
+//
+//         LineTerminator              string
+//           This string holds the character or characters which
+//           will be used to terminate the formatted line of text
+//           output thereby converting this text element into a
+//           valid line of text. Line Termination is optional.
+//           Populate this string only if this text output should
+//           be formatted as a separate line of text.
+//
+//           The most common usage sets this string to a new line
+//           character ("\n"); however, any string of text
+//           characters will be accepted.
+//
+//           If no Line Terminator is required, set
+//           'LineTerminator' to a zero length or empty string and
+//           no line termination characters will be created.
+//
+//         MaxLineLength               int
+//           The maximum length of the line on which this label
+//           text will be presented.
+//
+//           Set this parameter to minus one (-1) to specify an
+//           unlimited line length for this text line.
+//
+//           'MaxLineLength' is used in conjunction with parameter
+//           'TurnAutoLineLengthBreaksOn' to automatically place
+//           text fields on separate text lines when that text
+//           exceeds the maximum text line length('MaxLineLength').
+//           Therefore, parameter 'turnAutoLineLengthBreaksOn'
+//           controls whether automatic line breaks using
+//           'MaxLineLength' will be applied.
+//
+//           If the value of 'MaxLineLength' is less than one (1),
+//           it will be automatically converted to minus one (-1).
+//
+//           Set this parameter to minus one (-1) to specify an
+//           unlimited line length for this text line.
+//
+//         TurnAutoLineLengthBreaksOn  bool
+//           This parameter controls whether text lines which
+//           exceed the maximum line length ('MaxLineLength') are
+//           broken up and presented on the following line.
+//
+//           To apply automatic line breaking at the maximum line
+//           length, set the value of this parameter to 'true'.
+//
+//       }
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing formatted text
+//       characters.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
+	textLabelDto TextFieldLabelDto,
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldLabelDto()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if len(textLabelDto.FieldText) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLabelDto.FieldText' is invalid!\n"+
+			"'textLabelDto.FieldText' is an empty string with a\n"+
+			"string length of zero (0).\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	if textLabelDto.FieldLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'textLabelDto.FieldLength' is invalid!\n"+
+			"'textLabelDto.FieldLength' has a value less than minus one (-1).\n"+
+			"fieldLength = '%v'\n",
+			ePrefix.String(),
+			textLabelDto.FieldLength)
+
+		return strBuilder, err
+
+	}
+
+	return textStrBuilderAtom{}.ptr().buildLabelFieldWithDto(
+		textLabelDto.CopyOut(),
+		ePrefix.XCpy(
+			"strBuilder<-textLabelDto"))
 }
 
 // FieldSpacer - Creates a string consisting of white space

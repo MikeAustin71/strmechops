@@ -25,9 +25,11 @@ type TextFormatterCollection struct {
 }
 
 // AddFieldDateTime - Adds a date time value formatted as a text
-// field to the Formatter Collection. Users have the option to format
-// this date time text field with a line terminator (a.k.a. new
-// line character '\n').
+// field to the Formatter Collection.
+//
+// Users have the option to format this Text Date Time Field with
+// a line terminator (a.k.a. new line character '\n') thereby
+// creating a separate stand-alone line of text.
 //
 //
 // ----------------------------------------------------------------
@@ -1015,7 +1017,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 //
 // Users have the option to format this text label with a line
 // terminator (a.k.a. new line character '\n') thereby creating a
-// a separate stand-alone line of text.
+// separate stand-alone line of text.
 //
 // Text Label Example 1:
 //   leftMarginStr = "" // Empty String
