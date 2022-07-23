@@ -316,23 +316,9 @@ func (txtLabelDto *TextFieldLabelDto) Empty() {
 
 	txtLabelDto.lock.Lock()
 
-	txtLabelDto.FormatType = TxtFieldType.None()
-
-	txtLabelDto.LeftMarginStr = ""
-
-	txtLabelDto.FieldText = ""
-
-	txtLabelDto.FieldLength = -99
-
-	txtLabelDto.FieldJustify = TxtJustify.None()
-
-	txtLabelDto.RightMarginStr = ""
-
-	txtLabelDto.LineTerminator = ""
-
-	txtLabelDto.MaxLineLength = -99
-
-	txtLabelDto.TurnAutoLineLengthBreaksOn = false
+	textFieldLabelDtoAtom{}.ptr().
+		empty(
+			txtLabelDto)
 
 	txtLabelDto.lock.Unlock()
 
@@ -388,61 +374,11 @@ func (txtLabelDto *TextFieldLabelDto) Equal(
 
 	defer txtLabelDto.lock.Unlock()
 
-	if txtLabelDto.FormatType !=
-		incomingTxtLabelDto.FormatType {
+	return textFieldLabelDtoAtom{}.ptr().
+		equal(
+			txtLabelDto,
+			&incomingTxtLabelDto)
 
-		return false
-	}
-
-	if txtLabelDto.LeftMarginStr !=
-		incomingTxtLabelDto.LeftMarginStr {
-
-		return false
-	}
-
-	if txtLabelDto.FieldText !=
-		incomingTxtLabelDto.FieldText {
-
-		return false
-	}
-
-	if txtLabelDto.FieldLength !=
-		incomingTxtLabelDto.FieldLength {
-
-		return false
-	}
-
-	if txtLabelDto.FieldJustify !=
-		incomingTxtLabelDto.FieldJustify {
-
-		return false
-	}
-
-	if txtLabelDto.RightMarginStr !=
-		incomingTxtLabelDto.RightMarginStr {
-
-		return false
-	}
-
-	if txtLabelDto.LineTerminator !=
-		incomingTxtLabelDto.LineTerminator {
-
-		return false
-	}
-
-	if txtLabelDto.MaxLineLength !=
-		incomingTxtLabelDto.MaxLineLength {
-
-		return false
-	}
-
-	if txtLabelDto.TurnAutoLineLengthBreaksOn !=
-		incomingTxtLabelDto.TurnAutoLineLengthBreaksOn {
-
-		return false
-	}
-
-	return true
 }
 
 // textFieldLabelDtoNanobot - Provides helper methods for
@@ -502,6 +438,9 @@ func (txtLabelDtoNanobot *textFieldLabelDtoNanobot) copy(
 		return err
 	}
 
+	textFieldLabelDtoAtom{}.ptr().empty(
+		destinationTxtLabelDto)
+
 	destinationTxtLabelDto.FormatType =
 		sourceTxtLabelDto.FormatType
 
@@ -546,6 +485,157 @@ func (txtLabelDtoNanobot textFieldLabelDtoNanobot) ptr() *textFieldLabelDtoNanob
 	defer txtLabelDtoNanobot.lock.Unlock()
 
 	return &textFieldLabelDtoNanobot{
+		lock: new(sync.Mutex),
+	}
+}
+
+// textFieldLabelDtoAtom - Provides helper methods for
+// TextFieldLabelDto
+type textFieldLabelDtoAtom struct {
+	lock *sync.Mutex
+}
+
+// empty - Receives a pointer to an instance of TextFieldLabelDto
+// and proceeds to set all the internal member variables to their
+// zero or uninitialized states.
+//
+// This method will therefore delete all data currently held
+// by this instance of TextFieldLabelDto.
+//
+func (txtLabelDtoAtom *textFieldLabelDtoAtom) empty(
+	txtLabelDto *TextFieldLabelDto) {
+
+	if txtLabelDtoAtom.lock == nil {
+		txtLabelDtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtLabelDtoAtom.lock.Lock()
+
+	defer txtLabelDtoAtom.lock.Unlock()
+
+	if txtLabelDto == nil {
+
+		return
+	}
+
+	txtLabelDto.FormatType = TxtFieldType.None()
+
+	txtLabelDto.LeftMarginStr = ""
+
+	txtLabelDto.FieldText = ""
+
+	txtLabelDto.FieldLength = -99
+
+	txtLabelDto.FieldJustify = TxtJustify.None()
+
+	txtLabelDto.RightMarginStr = ""
+
+	txtLabelDto.LineTerminator = ""
+
+	txtLabelDto.MaxLineLength = -99
+
+	txtLabelDto.TurnAutoLineLengthBreaksOn = false
+
+	return
+}
+
+// equal - Receives pointers to two instances of TextFieldLabelDto
+// and proceeds to compare all the member data variables for both
+// instances.
+//
+// If the two instances of TextFieldLabelDto are found to be equal
+// in all respects, this method will return a boolean value of
+// 'true'.
+//
+func (txtLabelDtoAtom *textFieldLabelDtoAtom) equal(
+	txtLabelDto1 *TextFieldLabelDto,
+	txtLabelDto2 *TextFieldLabelDto) bool {
+
+	if txtLabelDtoAtom.lock == nil {
+		txtLabelDtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtLabelDtoAtom.lock.Lock()
+
+	defer txtLabelDtoAtom.lock.Unlock()
+
+	if txtLabelDto1 == nil ||
+		txtLabelDto2 == nil {
+
+		return false
+	}
+
+	if txtLabelDto1.FormatType !=
+		txtLabelDto2.FormatType {
+
+		return false
+	}
+
+	if txtLabelDto1.LeftMarginStr !=
+		txtLabelDto2.LeftMarginStr {
+
+		return false
+	}
+
+	if txtLabelDto1.FieldText !=
+		txtLabelDto2.FieldText {
+
+		return false
+	}
+
+	if txtLabelDto1.FieldLength !=
+		txtLabelDto2.FieldLength {
+
+		return false
+	}
+
+	if txtLabelDto1.FieldJustify !=
+		txtLabelDto2.FieldJustify {
+
+		return false
+	}
+
+	if txtLabelDto1.RightMarginStr !=
+		txtLabelDto2.RightMarginStr {
+
+		return false
+	}
+
+	if txtLabelDto1.LineTerminator !=
+		txtLabelDto2.LineTerminator {
+
+		return false
+	}
+
+	if txtLabelDto1.MaxLineLength !=
+		txtLabelDto2.MaxLineLength {
+
+		return false
+	}
+
+	if txtLabelDto1.TurnAutoLineLengthBreaksOn !=
+		txtLabelDto2.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFieldLabelDtoAtom.
+//
+func (txtLabelDtoAtom textFieldLabelDtoAtom) ptr() *textFieldLabelDtoAtom {
+
+	if txtLabelDtoAtom.lock == nil {
+		txtLabelDtoAtom.lock = new(sync.Mutex)
+	}
+
+	txtLabelDtoAtom.lock.Lock()
+
+	defer txtLabelDtoAtom.lock.Unlock()
+
+	return &textFieldLabelDtoAtom{
 		lock: new(sync.Mutex),
 	}
 }
