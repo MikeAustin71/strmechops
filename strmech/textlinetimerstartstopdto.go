@@ -166,15 +166,15 @@ type TextLineTimerStartStopDto struct {
 	// 'endTimeLabel' and 'timeDurationLabel') from the output or
 	// data values displayed on the same line.
 	//  Example:
-	//  Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+	//  Start Time[RightMarginStr]2010-01-02 15:04:05.000000000 -0700 MST
 	//
 	// Often this parameter is set to a single white space
 	// character (" ") or a colon plus white space character,
 	// (": ").
 	//
 	// If this string is submitted as a zero length or empty
-	// string, 'LabelRightMarginStr' will be assigned a
-	// default value of  ": ".
+	// string, 'RightMarginStr' will be assigned a default value
+	// of  ": ".
 	//  Example Output:
 	//  Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 	//
