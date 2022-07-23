@@ -208,12 +208,13 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 		},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -387,14 +388,15 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeDto(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.DateTime(),
-		DateTime:    textDateTimeDto.CopyOut(),
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		FormatType:          TxtFieldType.DateTime(),
+		DateTime:            textDateTimeDto.CopyOut(),
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -599,12 +601,13 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 		},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -794,11 +797,12 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 			lock:                       nil,
 		},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -994,14 +998,15 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 	textFillerDto.FormatType = TxtFieldType.Filler()
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.Filler(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      textFillerDto.CopyOut(),
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		FormatType:          TxtFieldType.Filler(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              textFillerDto.CopyOut(),
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -1249,10 +1254,11 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 		},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -1438,14 +1444,15 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.Label(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       textLabelDto.CopyOut(),
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		FormatType:          TxtFieldType.Label(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               textLabelDto.CopyOut(),
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -1602,9 +1609,10 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 			lock:                       nil,
 		},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -1766,14 +1774,15 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacerDto(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.Spacer(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      txtFieldSpacerDto.CopyOut(),
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		FormatType:          TxtFieldType.Spacer(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              txtFieldSpacerDto.CopyOut(),
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -2004,14 +2013,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLine1Cols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLine1Cols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -2296,14 +2306,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLine1Cols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLine1Cols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -2387,8 +2398,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
 			LineTerminator:  lineTerminator,
 			lock:            nil,
 		},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -2480,14 +2492,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlankDto(
 	defer txtFmtCollection.lock.Unlock()
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.BlankLine(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   txtLineBlankDto.CopyOut(),
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: TextLineColumnsDto{},
+		FormatType:          TxtFieldType.BlankLine(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           txtLineBlankDto.CopyOut(),
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -2701,14 +2714,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLineCols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLineCols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -2933,14 +2947,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLineCols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLineCols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -3249,7 +3264,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 			lock:                       nil,
 		},
 
-		LineColumns: TextLineColumnsDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -3536,15 +3552,264 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolidDto(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType: TxtFieldType.SolidLine(),
-		DateTime:   TextFieldDateTimeDto{},
-		Filler:     TextFieldFillerDto{},
-		Label:      TextFieldLabelDto{},
-		Spacer:     TextFieldSpacerDto{},
-		BlankLine:  TextLineBlankDto{},
-		SolidLine:  txtLineSolidDto.CopyOut(),
+		FormatType:          TxtFieldType.SolidLine(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           txtLineSolidDto.CopyOut(),
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
+	}
 
-		LineColumns: TextLineColumnsDto{},
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
+// AddLineTimerStartStop - Adds Timer Start Stop Text Lines to the
+// Formatter Collection.
+//
+// Text Line Timer Start Stop type records, computes and formats an
+// elapsed time. This format process requires user input specifying
+// a start time and ending time.
+//
+// The final formatted output string is composed of four lines of
+// text for output to screen display, file output or printing.
+//
+// The first line of text shows the Starting Time. The second line
+// shows the Ending Time. The third line displays the time duration
+// or the difference between starting time and ending time. The
+// fourth line displays the total elapsed time in nanoseconds.
+//
+// The third line contains Time duration, or elapsed time, and is
+// broken down by days, hours, minutes, seconds, microseconds,
+// milliseconds and nanoseconds. The display has a variable line
+// length and will begin with the first category containing valid
+// time duration data.
+//
+// Sample Output
+//
+//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//  Elapsed Time: 55 Microseconds 0 Nanoseconds
+//                Total Elapsed Nanoseconds: 55,000
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMarginStr              string
+//     - The character or characters which will comprise the left
+//       margin of the text label.
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('testLabelFieldLength') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//       If leftMarginStr is submitted as an empty or zero length
+//       string, no error will be triggered and the left margin
+//       will simply be omitted.
+//
+//
+//  startTimeLabel             string
+//     - A string containing the text characters constituting the
+//       starting time text label.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'startTimeLabel' will be assigned a default value
+//       of "Start Time".
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('testLabelFieldLength') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  startTime                  time.Time
+//     - A time value which will be used in conjunction with
+//       'endTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'startTime' will be defaulted to value of July 4, 1776
+//       9:30AM UTC.
+//
+//
+//  endTimeLabel               string
+//     - A string containing the text characters constituting the
+//       ending time text label.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'endTimeLabel' will be assigned a default value of
+//       "End Time".
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('testLabelFieldLength') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  endTime                    time.Time
+//     - A time value which will be used in conjunction with
+//       'startTime' parameter to compute the time duration or
+//       elapsed for the timer event.
+//
+//       If this parameter is submitted as a zero time value,
+//       'endTime' will be defaulted to value of 'startTime'.
+//
+//
+//  timeFormat                 string
+//     - This string holds the time format parameters used to
+//       format starting time and ending time values for text
+//       display and output.
+//
+//       If this parameter is submitted as an empty string,
+//       parameter 'timeFormat' will be assigned a default value
+//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//
+//  timeDurationLabel          string
+//     - The text label used to describe the time duration or
+//       elapsed time computed from the 'startTime' and 'endTime'
+//       parameters.
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'timeDurationLabel' will be assigned a default
+//       value of "Elapsed Time".
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('testLabelFieldLength') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  testLabelFieldLength          int
+//     - A user entered value which defines the length of the text
+//       field used by all three text labels, 'startTimeLabel',
+//       'endTimeLabel' and 'timeDurationLabel'.
+//
+//       The length of the text fields which will be used to
+//       position and display the three text labels provided by
+//       input parameters 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel'.
+//
+//       If 'testLabelFieldLength' is less than the length of the
+//       longest text label it will be defaulted to the length
+//       of the longest text label ('startTimeLabel',
+//       'endTimeLabel' or 'timeDurationLabel').
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('testLabelFieldLength') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//
+//  textLabelJustification         TextJustify
+//     - An enumeration which specifies the justification of the
+//       three text labels 'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel' within the field length specified by
+//       'testLabelFieldLength'.
+//
+//       Label justification must be equal to one of these three
+//       valid values:
+//           TextJustify(0).Left()
+//           TextJustify(0).Right()
+//           TextJustify(0).Center()
+//
+//       The abbreviated text justification enumeration syntax can
+//       also be used:
+//
+//           TxtJustify.Left()
+//           TxtJustify.Right()
+//           TxtJustify.Center()
+//
+//
+//  rightMarginStr      string
+//     - This string contains the character or characters which
+//       will be used to separate the text labels
+//       ('startTimeLabel', 'endTimeLabel' and 'timeDurationLabel')
+//       from the output or data values displayed on the same line.
+//       Example:
+//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       Often this parameter is set to a single white space
+//       character (" ") or a colon plus white space character,
+//       (": ").
+//
+//       If this string is submitted as a zero length or empty
+//       string, 'rightMarginStr' will be assigned a
+//       default value of  ": ". Example Output:
+//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//       If the string length of 'leftMarginStr' plus
+//       'rightMarginStr' plus the text label field length
+//       ('testLabelFieldLength') exceeds the maximum length of
+//       55-characters, this method will return an error.
+//
+//       If leftMarginStr is submitted as a zero length
+//       string, no error will be triggered. In this case, the left
+//       margin will simply be omitted.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStop(
+	leftMarginStr string,
+	startTimeLabel string,
+	startTime time.Time,
+	endTimeLabel string,
+	endTime time.Time,
+	timeFormat string,
+	timeDurationLabel string,
+	textLabelFieldLength int,
+	textLabelJustification TextJustify,
+	rightMarginStr string) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	timerStartStopDto := TextLineTimerStartStopDto{
+		FormatType:             TxtFieldType.TimerStartStop(),
+		LeftMarginStr:          leftMarginStr,
+		StartTimeLabel:         startTimeLabel,
+		StartTime:              startTime,
+		EndTimeLabel:           endTimeLabel,
+		EndTime:                endTime,
+		TimeFormat:             timeFormat,
+		TimeDurationLabel:      timeDurationLabel,
+		TextLabelFieldLength:   textLabelFieldLength,
+		TextLabelJustification: textLabelJustification,
+		RightMarginStr:         rightMarginStr,
+		lock:                   nil,
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:          TxtFieldType.TimerStartStop(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: timerStartStopDto,
+		lock:                nil,
 	}
 
 	txtFmtCollection.fmtCollection =
@@ -4061,14 +4326,15 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLine1Cols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLine1Cols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	if saveFmtParamsAsDefault == true {
@@ -4629,14 +4895,15 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLine1Cols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLine1Cols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	if saveFmtParamsAsDefault == true {
@@ -4963,14 +5230,15 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 	}
 
 	newTextFormatter := TextFormatterDto{
-		FormatType:  TxtFieldType.LineColumns(),
-		DateTime:    TextFieldDateTimeDto{},
-		Filler:      TextFieldFillerDto{},
-		Label:       TextFieldLabelDto{},
-		Spacer:      TextFieldSpacerDto{},
-		BlankLine:   TextLineBlankDto{},
-		SolidLine:   TextLineSolidDto{},
-		LineColumns: newTextLineCols,
+		FormatType:          TxtFieldType.LineColumns(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         newTextLineCols,
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
 	}
 
 	if saveFmtParamsAsDefault == true {

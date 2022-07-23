@@ -5456,13 +5456,23 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 // parameters necessary to format and output a complete timer
 // event.
 //
-// The purpose of the Start/Stop Time Lines text display is to
-// capture all the essential elements of a timer event and
-// format that information for text display, file output or
-// printing.
+// Text Line Timer Start Stop type records, computes and formats an
+// elapsed time. This format process requires user input specifying
+// a start time and ending time.
 //
-// This method is designed to be used when both start time and
-// ending time for the timer event are known quantities.
+// The final formatted output string is composed of four lines of
+// text for output to screen display, file output or printing.
+//
+// The first line of text shows the Starting Time. The second line
+// shows the Ending Time. The third line displays the time duration
+// or the difference between starting time and ending time. The
+// fourth line displays the total elapsed time in nanoseconds.
+//
+// The third line contains Time duration, or elapsed time, and is
+// broken down by days, hours, minutes, seconds, microseconds,
+// milliseconds and nanoseconds. The display has a variable line
+// length and will begin with the first category containing valid
+// time duration data.
 //
 // Sample Output
 //
@@ -5482,7 +5492,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 //       If the string length of 'leftMarginStr' plus
 //       'rightMarginStr' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
+//       ('testLabelFieldLength') exceeds the maximum length of
 //       55-characters, this method will return an error.
 //
 //       If leftMarginStr is submitted as an empty or zero length
@@ -5500,7 +5510,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 //       If the string length of 'leftMarginStr' plus
 //       'rightMarginStr' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
+//       ('testLabelFieldLength') exceeds the maximum length of
 //       55-characters, this method will return an error.
 //
 //
@@ -5524,7 +5534,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 //       If the string length of 'leftMarginStr' plus
 //       'rightMarginStr' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
+//       ('testLabelFieldLength') exceeds the maximum length of
 //       55-characters, this method will return an error.
 //
 //
@@ -5558,11 +5568,11 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 //       If the string length of 'leftMarginStr' plus
 //       'rightMarginStr' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
+//       ('testLabelFieldLength') exceeds the maximum length of
 //       55-characters, this method will return an error.
 //
 //
-//  textLabelFieldLen          int
+//  testLabelFieldLength          int
 //     - A user entered value which defines the length of the text
 //       field used by all three text labels, 'startTimeLabel',
 //       'endTimeLabel' and 'timeDurationLabel'.
@@ -5572,14 +5582,14 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
-//       If 'textLabelFieldLen' is less than the length of the
+//       If 'testLabelFieldLength' is less than the length of the
 //       longest text label it will be defaulted to the length
 //       of the longest text label ('startTimeLabel',
 //       'endTimeLabel' or 'timeDurationLabel').
 //
 //       If the string length of 'leftMarginStr' plus
 //       'rightMarginStr' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
+//       ('testLabelFieldLength') exceeds the maximum length of
 //       55-characters, this method will return an error.
 //
 //
@@ -5587,7 +5597,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //     - An enumeration which specifies the justification of the
 //       three text labels 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//       'testLabelFieldLength'.
 //
 //       Label justification must be equal to one of these three
 //       valid values:
@@ -5605,11 +5615,11 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 //  rightMarginStr      string
 //     - This string contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
+//       will be used to separate the text labels
+//       ('startTimeLabel', 'endTimeLabel' and 'timeDurationLabel')
+//       from the output or data values displayed on the same line.
 //       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//       Start Time[rightMarginStr]2010-01-02 15:04:05.000000000 -0700 MST
 //
 //       Often this parameter is set to a single white space
 //       character (" ") or a colon plus white space character,
@@ -5622,7 +5632,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 //       If the string length of 'leftMarginStr' plus
 //       'rightMarginStr' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
+//       ('testLabelFieldLength') exceeds the maximum length of
 //       55-characters, this method will return an error.
 //
 //       If leftMarginStr is submitted as a zero length

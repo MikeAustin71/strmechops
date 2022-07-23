@@ -357,6 +357,9 @@ func (textFMtDtoNanobot *textFormatterDtoNanobot) copyData(
 	destinationTxtFormatterDto.LineColumns.CopyIn(
 		sourceTxtFormatterDto.LineColumns)
 
+	destinationTxtFormatterDto.LinesTimerStartStop.CopyIn(
+		sourceTxtFormatterDto.LinesTimerStartStop)
+
 	return err
 }
 
@@ -421,6 +424,8 @@ func (textFmtDtoMolecule *textFormatterDtoMolecule) empty(
 	txtFormatterDto.SolidLine.Empty()
 
 	txtFormatterDto.LineColumns.Empty()
+
+	txtFormatterDto.LinesTimerStartStop.Empty()
 
 	return
 }
@@ -494,6 +499,12 @@ func (textFmtDtoMolecule *textFormatterDtoMolecule) equal(
 
 	if !txtFormatterDto1.LineColumns.Equal(
 		txtFormatterDto2.LineColumns) {
+
+		return false
+	}
+
+	if !txtFormatterDto1.LinesTimerStartStop.Equal(
+		txtFormatterDto2.LinesTimerStartStop) {
 
 		return false
 	}
