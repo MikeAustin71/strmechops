@@ -1,6 +1,8 @@
 package strmech
 
 import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 	"time"
 )
@@ -182,4 +184,484 @@ type TextLineTimerStartStopDto struct {
 	// of 55-characters, this method will return an error.
 
 	lock *sync.Mutex
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// TextFormatterDto ('incomingTxtFmtDto') to the data fields
+// of the current TextFormatterDto instance
+// ('txtFmtDto').
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// All the data fields in current TextFormatterDto instance
+// ('txtFmtDto') will be deleted and overwritten.
+//
+// NO DATA VALIDATION IS performed on input parameter,
+// 'incomingTxtFmtDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTimerStartStopDto  TextLineTimerStartStopDto
+//     - An instance of TextLineTimerStartStopDto. This method will
+//       NOT change the data values of member variables contained
+//       in this instance.
+//
+//       All data values in this TextLineTimerStartStopDto instance
+//       ('incomingTimerStartStopDto') will be copied to the
+//       current TextLineTimerStartStopDto instance
+//       ('lineTimerStartStopDto').
+//
+//       No data validation is performed on input parameter,
+//       'incomingTimerStartStopDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyIn(
+	incomingTimerStartStopDto TextLineTimerStartStopDto) {
+
+	if lineTimerStartStopDto.lock == nil {
+		lineTimerStartStopDto.lock = new(sync.Mutex)
+	}
+
+	lineTimerStartStopDto.lock.Lock()
+
+	defer lineTimerStartStopDto.lock.Unlock()
+
+	_ = textLineTimerStartStopDtoNanobot{}.ptr().
+		copyData(
+			lineTimerStartStopDto,
+			&incomingTimerStartStopDto,
+			nil)
+
+	return
+}
+
+// CopyOut - Returns a deep copy of the current
+// TextLineTimerStartStopDto instance.
+//
+// NO DATA VALIDATION is performed on the current instance of
+// TextLineTimerStartStopDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  deepCopyTimerStartStopDto     TextLineTimerStartStopDto
+//     - This parameter will return a deep copy of the current
+//       TextLineTimerStartStopDto instance.
+//
+func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyOut() (
+	deepCopyTimerStartStopDto TextLineTimerStartStopDto) {
+
+	if lineTimerStartStopDto.lock == nil {
+		lineTimerStartStopDto.lock = new(sync.Mutex)
+	}
+
+	lineTimerStartStopDto.lock.Lock()
+
+	defer lineTimerStartStopDto.lock.Unlock()
+
+	_ = textLineTimerStartStopDtoNanobot{}.ptr().
+		copyData(
+			&deepCopyTimerStartStopDto,
+			lineTimerStartStopDto,
+			nil)
+
+	return deepCopyTimerStartStopDto
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of TextLineTimerStartStopDto to their zero or
+// uninitialized states. This method will leave the current
+// instance of TextLineTimerStartStopDto in an invalid state and
+// unavailable for immediate reuse.
+//
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of TextLineTimerStartStopDto. All member
+// variable data values will be reset to their zero or
+// uninitialized states.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  NONE
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (lineTimerStartStopDto *TextLineTimerStartStopDto) Empty() {
+
+	if lineTimerStartStopDto.lock == nil {
+		lineTimerStartStopDto.lock = new(sync.Mutex)
+	}
+
+	lineTimerStartStopDto.lock.Lock()
+
+	textLineTimerStartStopDtoAtom{}.ptr().
+		empty(
+			lineTimerStartStopDto)
+
+	lineTimerStartStopDto.lock.Unlock()
+
+	lineTimerStartStopDto.lock = nil
+
+}
+
+// Equal - Receives another instance of TextLineTimerStartStopDto
+// and proceeds to compare the member variables to those of the
+// current TextLineTimerStartStopDto instance in order to
+// determine if they are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  incomingTimerStartStopDto     TextLineTimerStartStopDto
+//     - An incoming instance of TextLineTimerStartStopDto. This
+//       method will compare all member variable data values in
+//       this instance against those contained in the current
+//       instance of TextLineTimerStartStopDto. If the data values
+//       in both instances are found to be equal in all respects,
+//       this method will return a boolean value of 'true'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If the member variable data values contained in input
+//       parameter 'incomingTimerStartStopDto' are equal in all
+//       respects to those contained in the current instance of
+//       TextLineTimerStartStopDto, this method will return a
+//       boolean value of 'true'. Otherwise a value of 'false'
+//       will be returned to the calling function.
+//
+func (lineTimerStartStopDto *TextLineTimerStartStopDto) Equal(
+	incomingTimerStartStopDto TextLineTimerStartStopDto) bool {
+
+	if lineTimerStartStopDto.lock == nil {
+		lineTimerStartStopDto.lock = new(sync.Mutex)
+	}
+
+	lineTimerStartStopDto.lock.Lock()
+
+	defer lineTimerStartStopDto.lock.Unlock()
+
+	return textLineTimerStartStopDtoAtom{}.ptr().
+		equal(
+			lineTimerStartStopDto,
+			&incomingTimerStartStopDto)
+}
+
+// textLineTimerStartStopDtoNanobot - Provides helper methods for
+// TextLineTimerStartStopDto
+type textLineTimerStartStopDtoNanobot struct {
+	lock *sync.Mutex
+}
+
+// copyDta - Copies all data from a source instance of
+// TextLineTimerStartStopDto to a destination instance of
+// TextLineTimerStartStopDto.
+func (timerStartStopDtoNanobot *textLineTimerStartStopDtoNanobot) copyData(
+	destinationTimerDto *TextLineTimerStartStopDto,
+	sourceTimerDto *TextLineTimerStartStopDto,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if timerStartStopDtoNanobot.lock == nil {
+		timerStartStopDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	timerStartStopDtoNanobot.lock.Lock()
+
+	defer timerStartStopDtoNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textLineTimerStartStopDtoNanobot."+
+			"copyData()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	if sourceTimerDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'sourceTimerDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if destinationTimerDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'destinationTimerDto' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	textLineTimerStartStopDtoAtom{}.ptr().
+		empty(destinationTimerDto)
+
+	destinationTimerDto.FormatType =
+		sourceTimerDto.FormatType
+
+	destinationTimerDto.LeftMarginStr =
+		sourceTimerDto.LeftMarginStr
+
+	destinationTimerDto.StartTimeLabel =
+		sourceTimerDto.StartTimeLabel
+
+	destinationTimerDto.StartTime =
+		sourceTimerDto.StartTime
+
+	destinationTimerDto.EndTimeLabel =
+		sourceTimerDto.EndTimeLabel
+
+	destinationTimerDto.EndTime =
+		sourceTimerDto.EndTime
+
+	destinationTimerDto.TimeFormat =
+		sourceTimerDto.TimeFormat
+
+	destinationTimerDto.TimeDurationLabel =
+		sourceTimerDto.TimeDurationLabel
+
+	destinationTimerDto.TextLabelFieldLength =
+		sourceTimerDto.TextLabelFieldLength
+
+	destinationTimerDto.TextLabelJustification =
+		sourceTimerDto.TextLabelJustification
+
+	destinationTimerDto.RightMarginStr =
+		sourceTimerDto.RightMarginStr
+
+	return err
+}
+
+// ptr - Returns a pointer to a new instance of
+// textLineTimerStartStopDtoNanobot.
+//
+func (timerStartStopDtoNanobot textLineTimerStartStopDtoNanobot) ptr() *textLineTimerStartStopDtoNanobot {
+
+	if timerStartStopDtoNanobot.lock == nil {
+		timerStartStopDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	timerStartStopDtoNanobot.lock.Lock()
+
+	defer timerStartStopDtoNanobot.lock.Unlock()
+
+	return &textLineTimerStartStopDtoNanobot{
+		lock: new(sync.Mutex),
+	}
+}
+
+// textLineTimerStartStopDtoAtom - Provides helper methods for
+// TextLineTimerStartStopDto
+type textLineTimerStartStopDtoAtom struct {
+	lock *sync.Mutex
+}
+
+// empty - Receives a pointer to an instance of
+// TextLineTimerStartStopDto and proceeds to set all the
+// internal member variables to their zero or uninitialized
+// states.
+//
+// This method will therefore delete all data currently held
+// by this instance of TextLineTimerStartStopDto.
+//
+func (timerStartStopDtoAtom *textLineTimerStartStopDtoAtom) empty(
+	txtTimerStartStopDto *TextLineTimerStartStopDto) {
+
+	if timerStartStopDtoAtom.lock == nil {
+		timerStartStopDtoAtom.lock = new(sync.Mutex)
+	}
+
+	timerStartStopDtoAtom.lock.Lock()
+
+	defer timerStartStopDtoAtom.lock.Unlock()
+
+	txtTimerStartStopDto.FormatType = TxtFieldType.None()
+
+	txtTimerStartStopDto.LeftMarginStr = ""
+
+	txtTimerStartStopDto.StartTimeLabel = ""
+
+	txtTimerStartStopDto.StartTime = time.Time{}
+
+	txtTimerStartStopDto.EndTimeLabel = ""
+
+	txtTimerStartStopDto.EndTime = time.Time{}
+
+	txtTimerStartStopDto.TimeFormat = ""
+
+	txtTimerStartStopDto.TimeDurationLabel = ""
+
+	txtTimerStartStopDto.TextLabelFieldLength = -99
+
+	txtTimerStartStopDto.TextLabelJustification = TxtJustify.None()
+
+	txtTimerStartStopDto.RightMarginStr = ""
+
+	return
+}
+
+// equal - Receives pointers to two instances of
+// TextLineTimerStartStopDto and proceeds to compare all the member
+// data variables for both instances.
+//
+// If the two instances of TextLineTimerStartStopDto are found to
+// be equal in all respects, this method will return a boolean
+// value of 'true'.
+//
+func (timerStartStopDtoAtom *textLineTimerStartStopDtoAtom) equal(
+	timerStartStopDto1 *TextLineTimerStartStopDto,
+	timerStartStopDto2 *TextLineTimerStartStopDto) bool {
+
+	if timerStartStopDtoAtom.lock == nil {
+		timerStartStopDtoAtom.lock = new(sync.Mutex)
+	}
+
+	timerStartStopDtoAtom.lock.Lock()
+
+	defer timerStartStopDtoAtom.lock.Unlock()
+
+	if timerStartStopDto1 == nil ||
+		timerStartStopDto2 == nil {
+
+		return false
+	}
+
+	if timerStartStopDto1.FormatType !=
+		timerStartStopDto2.FormatType {
+
+		return false
+	}
+
+	if timerStartStopDto1.LeftMarginStr !=
+		timerStartStopDto2.LeftMarginStr {
+
+		return false
+	}
+
+	if timerStartStopDto1.StartTimeLabel !=
+		timerStartStopDto2.StartTimeLabel {
+
+		return false
+	}
+
+	if timerStartStopDto1.StartTime !=
+		timerStartStopDto2.StartTime {
+
+		return false
+	}
+
+	if timerStartStopDto1.EndTimeLabel !=
+		timerStartStopDto2.EndTimeLabel {
+
+		return false
+	}
+
+	if timerStartStopDto1.EndTime !=
+		timerStartStopDto2.EndTime {
+
+		return false
+	}
+
+	if timerStartStopDto1.TimeFormat !=
+		timerStartStopDto2.TimeFormat {
+
+		return false
+	}
+
+	if timerStartStopDto1.TimeDurationLabel !=
+		timerStartStopDto2.TimeDurationLabel {
+
+		return false
+	}
+
+	if timerStartStopDto1.TextLabelFieldLength !=
+		timerStartStopDto2.TextLabelFieldLength {
+
+		return false
+	}
+
+	if timerStartStopDto1.TextLabelJustification !=
+		timerStartStopDto2.TextLabelJustification {
+
+		return false
+	}
+
+	if timerStartStopDto1.RightMarginStr !=
+		timerStartStopDto2.RightMarginStr {
+
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// textLineTimerStartStopDtoAtom.
+//
+func (timerStartStopDtoAtom textLineTimerStartStopDtoAtom) ptr() *textLineTimerStartStopDtoAtom {
+
+	if timerStartStopDtoAtom.lock == nil {
+		timerStartStopDtoAtom.lock = new(sync.Mutex)
+	}
+
+	timerStartStopDtoAtom.lock.Lock()
+
+	defer timerStartStopDtoAtom.lock.Unlock()
+
+	return &textLineTimerStartStopDtoAtom{
+		lock: new(sync.Mutex),
+	}
 }

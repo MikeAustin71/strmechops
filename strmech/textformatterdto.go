@@ -64,7 +64,7 @@ type TextFormatterDto struct {
 
 	LinesTimerStartStop TextLineTimerStartStopDto
 	// A structure containing data elements necessary for the
-	// creation of a series of text lines decribing a timer
+	// creation of a series of text lines describing a timer
 	// event containing a start time, end time and time
 	// duration or elapsed time.
 
@@ -122,7 +122,7 @@ func (txtFmtDto *TextFormatterDto) CopyIn(
 	defer txtFmtDto.lock.Unlock()
 
 	_ = textFormatterDtoNanobot{}.ptr().
-		copy(
+		copyData(
 			txtFmtDto,
 			&incomingTxtFmtDto,
 			nil)
@@ -164,7 +164,7 @@ func (txtFmtDto *TextFormatterDto) CopyOut() (
 	defer txtFmtDto.lock.Unlock()
 
 	_ = textFormatterDtoNanobot{}.ptr().
-		copy(
+		copyData(
 			&deepCopyTxtFmtDto,
 			txtFmtDto,
 			nil)
@@ -279,10 +279,10 @@ type textFormatterDtoNanobot struct {
 	lock *sync.Mutex
 }
 
-// copy - Copies all data from a source instance of
+// copyDta - Copies all data from a source instance of
 // TextFmtParamsLineColumnsDto to a destination instance of
 // TextFmtParamsLineColumnsDto.
-func (textFMtDtoNanobot *textFormatterDtoNanobot) copy(
+func (textFMtDtoNanobot *textFormatterDtoNanobot) copyData(
 	destinationTxtFormatterDto *TextFormatterDto,
 	sourceTxtFormatterDto *TextFormatterDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -303,7 +303,7 @@ func (textFMtDtoNanobot *textFormatterDtoNanobot) copy(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textFormatterDtoNanobot."+
-			"copy()",
+			"copyData()",
 		"")
 
 	if err != nil {
