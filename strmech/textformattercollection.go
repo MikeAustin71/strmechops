@@ -4830,7 +4830,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 //  lineTerminator             string
 //     - If this parameter is set to an empty string, the default
 //       line terminator, a new line character '\n', will be
-//       applied to this 'Line1Column' Text Line.
+//       applied to this '2-Column' Text Line.
 //
 //       If this string is populated and the string length is
 //       greater than zero (0), an alternate line termination
