@@ -18,32 +18,35 @@ var mTextFieldTypeCodeToString = map[TextFieldType]string{
 	TextFieldType(5): "BlankLine",
 	TextFieldType(6): "SolidLine",
 	TextFieldType(7): "LineColumns",
+	TextFieldType(8): "TimerStartStop",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
-	"None":        TextFieldType(0),
-	"Label":       TextFieldType(1),
-	"DateTime":    TextFieldType(2),
-	"Date Time":   TextFieldType(2),
-	"Date":        TextFieldType(2),
-	"Filler":      TextFieldType(3),
-	"Spacer":      TextFieldType(4),
-	"BlankLine":   TextFieldType(5),
-	"SolidLine":   TextFieldType(6),
-	"LineColumns": TextFieldType(7),
+	"None":           TextFieldType(0),
+	"Label":          TextFieldType(1),
+	"DateTime":       TextFieldType(2),
+	"Date Time":      TextFieldType(2),
+	"Date":           TextFieldType(2),
+	"Filler":         TextFieldType(3),
+	"Spacer":         TextFieldType(4),
+	"BlankLine":      TextFieldType(5),
+	"SolidLine":      TextFieldType(6),
+	"LineColumns":    TextFieldType(7),
+	"TimerStartStop": TextFieldType(8),
 }
 
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
-	"none":        TextFieldType(0),
-	"label":       TextFieldType(1),
-	"datetime":    TextFieldType(2),
-	"date time":   TextFieldType(2),
-	"date":        TextFieldType(2),
-	"filler":      TextFieldType(3),
-	"spacer":      TextFieldType(4),
-	"blankline":   TextFieldType(5),
-	"solidline":   TextFieldType(6),
-	"linecolumns": TextFieldType(7),
+	"none":           TextFieldType(0),
+	"label":          TextFieldType(1),
+	"datetime":       TextFieldType(2),
+	"date time":      TextFieldType(2),
+	"date":           TextFieldType(2),
+	"filler":         TextFieldType(3),
+	"spacer":         TextFieldType(4),
+	"blankline":      TextFieldType(5),
+	"solidline":      TextFieldType(6),
+	"linecolumns":    TextFieldType(7),
+	"timerstartstop": TextFieldType(8),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
@@ -187,6 +190,19 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    column in addition to providing input parameters for
 //    line-termination characters such as new line characters
 //    ('\n').
+//
+//  TimerStartStop              8
+//  - Identifies a display of four text lines presenting the
+//    results of a timer event. This timer event is described with
+//    a start time, stop time and time duration or elapsed time.
+//
+//    The first line of text shows the Starting Time. The second
+//    line shows the Ending Time. The third line displays the time
+//    duration or the difference between starting time and ending
+//    time. The fourth line displays the total elapsed time in
+//    nanoseconds.
+//
+//    For more information reference type TextLineSpecTimerLines.
 //
 //
 // ----------------------------------------------------------------
@@ -348,6 +364,29 @@ func (txtFieldType TextFieldType) LineColumns() TextFieldType {
 	return TextFieldType(7)
 }
 
+// TimerStartStop - Identifies a display of four text lines
+// presenting the results of a timer event. This timer event is
+// described with a start time, stop time and time duration or
+// elapsed time.
+//
+// The first line of text shows the Starting Time. The second line
+// shows the Ending Time. The third line displays the time duration
+// or the difference between starting time and ending time. The
+// fourth line displays the total elapsed time in nanoseconds.
+//
+// For more information reference type TextLineSpecTimerLines.
+//
+//
+//
+func (txtFieldType TextFieldType) TimerStartStop() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(8)
+}
+
 // String - Returns a string with the name of the enumeration
 // associated with this current instance of 'TextFieldType'.
 //
@@ -486,6 +525,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "BlankLine"
 //           "SolidLine"
 //           "LineColumns"
+//           "TimerStartStop"
 //
 //       If 'false', a case-insensitive search is conducted for the
 //       enumeration name. In this example, 'label'
@@ -503,6 +543,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "blankline"
 //           "solidline"
 //           "linecolumns"
+//           "timerstartstop"
 //
 //
 // ----------------------------------------------------------------
@@ -633,6 +674,7 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //  TxtFieldType.BlankLine()
 //  TxtFieldType.SolidLine()
 //  TxtFieldType.LineColumns()
+//  TxtFieldType.TimerStartStop()
 //
 const TxtFieldType = TextFieldType(0)
 
@@ -668,7 +710,7 @@ func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
 	defer textFieldNanobot.lock.Unlock()
 
 	if textFieldType < 1 ||
-		textFieldType > 7 {
+		textFieldType > 8 {
 
 		return false
 	}

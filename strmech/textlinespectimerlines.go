@@ -14,15 +14,14 @@ import (
 // a start time and ending time.
 //
 // The final formatted output string is composed of four lines of
-// text for output as text display, file output or printing.
+// text for output to screen display, file output or printing.
 //
 // The first line of text shows the Starting Time. The second line
 // shows the Ending Time. The third line displays the time duration
-// or the difference between starting time and ending
-// time. The fourth line displays the total elapsed time in
-// nanoseconds.
+// or the difference between starting time and ending time. The
+// fourth line displays the total elapsed time in nanoseconds.
 //
-// The third line contains Time duration , or elapsed time, and is
+// The third line contains Time duration, or elapsed time, and is
 // broken down by days, hours, minutes, seconds, microseconds,
 // milliseconds and nanoseconds. The display has a variable line
 // length and will begin with the first category containing valid
@@ -2083,12 +2082,13 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //
 //
 //  textLabelFieldLen          int
-//     - A user entered value which defines the length of the text
-//       field used by all three text labels, 'startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel'.
+//     - A user entered value which defines the length of the
+//       text field used by all three text labels,
+//       'startTimeLabel', 'endTimeLabel' and
+//       'timeDurationLabel'.
 //
-//       The length of the text fields which will be used to
-//       position and display the three text labels provided by
+//       This text length value will be used to position and
+//       display the three text labels provided by
 //       input parameters 'startTimeLabel', 'endTimeLabel' and
 //       'timeDurationLabel'.
 //
@@ -2144,10 +2144,6 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewEmptyTimerEvent() TextLineSpe
 //       'labelRightMarginChars' plus the text label field length
 //       ('textLabelFieldLen') exceeds the maximum length of
 //       55-characters, this method will return an error.
-//
-//       If labelLeftMarginChars is submitted as a zero length
-//       string, no error will be triggered. In this case, the left
-//       margin will simply be omitted.
 //
 //
 //  errorPrefix                     interface{}
@@ -2327,7 +2323,7 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //  startTime                  time.Time
 //     - A time value which will be used in conjunction with
 //       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//       elapsed time for the timer event.
 //
 //       If this parameter is submitted as a zero time value,
 //       'startTime' will be defaulted to value of July 4, 1776
@@ -2351,8 +2347,8 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //
 //  endTime                    time.Time
 //     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//       the 'startTime' parameter to compute the time duration
+//       or elapsed time for the timer event.
 //
 //       If this parameter is submitted as a zero time value,
 //       'endTime' will be defaulted to value of 'startTime'.
@@ -2364,8 +2360,9 @@ func (txtSpecTimerLines TextLineSpecTimerLines) NewFullTimerEvent(
 //       display and output.
 //
 //       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//       parameter 'timeFormat' will be assigned a default
+//       value of:
+//          "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
 //  timeDurationLabel          []rune

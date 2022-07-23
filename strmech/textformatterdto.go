@@ -62,6 +62,12 @@ type TextFormatterDto struct {
 	// A structure containing data elements necessary for the
 	// creation of a text line containing one or more Text Columns.
 
+	LinesTimerStartStop TextLineTimerStartStopDto
+	// A structure containing data elements necessary for the
+	// creation of a series of text lines decribing a timer
+	// event containing a start time, end time and time
+	// duration or elapsed time.
+
 	lock *sync.Mutex
 }
 

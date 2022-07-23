@@ -64,7 +64,7 @@ type TextFieldLabelDto struct {
 	//
 	// For TextFieldLabelDto Format Type, this value
 	// should always be set to:
-	//   TxtFieldType.Label()       - Valid
+	//   TxtFieldType.Label()
 
 	LeftMarginStr string
 	// The contents of the string will be used as the left margin
