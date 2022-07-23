@@ -4469,7 +4469,7 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextStrBuilder."+
-			"FieldsLabelParameterDateTime()",
+			"LineBlank()",
 		"")
 
 	if err != nil {
@@ -4507,6 +4507,179 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 		ePrefix.XCpy(fmt.Sprintf(
 			"strBuilder<-txtLineBlankDto blank lines =='%v'",
 			numOfBlankLines)))
+}
+
+// LineBlankDto - Formats one or more blank or empty lines and
+// writes the output string to an instances of strings.Builder
+// which is returned to the calling function.
+//
+// Blank Lines typically consist of one or more new line characters
+// ('\n') and nothing more. However, users have the option to
+// provide alternate or custom line termination characters which
+// will be applied instead.
+//
+// The number of blank lines created is controlled by input
+// parameter 'numOfBlankLines'.
+//
+//  Example-1 :
+//   NumOfBlankLines = 3
+//   LineTerminator = ""
+//   Final Blank Line Text = "\n\n\n" // 3-new line characters
+//
+//  Example-2 :
+//   NumOfBlankLines = 2
+//   LineTerminator = "\n x \n"
+//   Final Blank Line Text = "\n x \n\n x \n"
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  numOfBlankLines            int
+//     - Specifies the number of blank lines which will be created.
+//       Essentially, this parameter controls the number of new
+//       line characters, or line terminators, configured in the
+//       resulting text string.
+//
+//       If this parameter is submitted with a value less than one
+//       (1), it will be converted to one (1).
+//
+//       If this paramter is submitted with a value greater than
+//       one-million (1,000,000), an error will be returned.
+//
+//
+//  lineTerminator             string
+//     - If this parameter is submitted as an empty string,
+//       the default new line terminator ('\n') will be applied as
+//       a line termination sequence.
+//
+//       If this parameter is populated, this character sequence
+//       will be used as the Line Terminator for this text blank
+//       line.
+//
+//
+//  errorPrefix                     interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned containing a formatted
+//       string of text characters.
+//
+//
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) LineBlankDto(
+	txtLineBlankDto TextLineBlankDto,
+	errorPrefix interface{}) (
+	strings.Builder,
+	error) {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strBuilder strings.Builder
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"LineBlankDto()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if txtLineBlankDto.NumOfBlankLines < 1 {
+
+		txtLineBlankDto.NumOfBlankLines = 1
+
+	}
+
+	if txtLineBlankDto.NumOfBlankLines > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtLineBlankDto.NumOfBlankLines' is invalid!\n"+
+			"'txtLineBlankDto.NumOfBlankLines' has a value greater than one-million (1,000,000).\n"+
+			"txtLineBlankDto.NumOfBlankLines = '%v'\n",
+			ePrefix.String(),
+			txtLineBlankDto.NumOfBlankLines)
+
+		return strBuilder, err
+
+	}
+
+	return textStrBuilderAtom{}.ptr().buildTextLineBlankWithDto(
+		txtLineBlankDto,
+		ePrefix.XCpy(fmt.Sprintf(
+			"strBuilder<-txtLineBlankDtoDto blank lines =='%v'",
+			txtLineBlankDto.NumOfBlankLines)))
 }
 
 // LineSolid - Formats a single Solid Text Line and writes the
