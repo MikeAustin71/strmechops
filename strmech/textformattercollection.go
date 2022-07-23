@@ -3826,9 +3826,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStop(
 	return
 }
 
-// AddLineTimerStartStopDto - Adds Timer Start Stop Text Lines to the
-// Formatter Collection generated from an input parameter of type
-// TextLineTimerStartStopDto.
+// AddLineTimerStartStopDto - Adds Timer Start Stop Text Lines to
+// the Formatter Collection generated from an input parameter of
+// type TextLineTimerStartStopDto.
 //
 // Text Line Timer Start Stop type records, computes and formats an
 // elapsed time. This format process requires user input specifying

@@ -525,93 +525,6 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineBlankWithDto(
 	return strBuilder, err
 }
 
-func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
-	solidLineDto TextLineSolidDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strBuilder strings.Builder,
-	err error) {
-
-	if txtBuilderAtom.lock == nil {
-		txtBuilderAtom.lock = new(sync.Mutex)
-	}
-
-	txtBuilderAtom.lock.Lock()
-
-	defer txtBuilderAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textStrBuilderAtom."+
-			"fieldFillerWithMargins()",
-		"")
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	if solidLineDto.SolidLineCharRepeatCount < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'solidLineDto.SolidLineCharRepeatCount' is invalid!\n"+
-			"'solidLineDto.SolidLineCharRepeatCount' has a value less than one (+1).\n"+
-			"This means that no Solid Line Characters will be generated.\n"+
-			"solidLineDto.SolidLineCharRepeatCount = '%v'\n",
-			ePrefix.String(),
-			solidLineDto.SolidLineCharRepeatCount)
-
-		return strBuilder, err
-
-	}
-
-	if solidLineDto.SolidLineCharRepeatCount > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'solidLineDto.SolidLineCharRepeatCount' is invalid!\n"+
-			"'solidLineDto.SolidLineCharRepeatCount' has a value greater than one-million (1,000,000).\n"+
-			"solidLineDto.SolidLineCharRepeatCount = '%v'\n",
-			ePrefix.String(),
-			solidLineDto.SolidLineCharRepeatCount)
-
-		return strBuilder, err
-	}
-
-	var txtSpecSolidLine TextLineSpecSolidLine
-
-	txtSpecSolidLine,
-		err = TextLineSpecSolidLine{}.NewFullSolidLineConfig(
-		solidLineDto.LeftMarginStr,
-		solidLineDto.RightMarginStr,
-		solidLineDto.SolidLineChars,
-		solidLineDto.SolidLineCharRepeatCount,
-		solidLineDto.LineTerminator,
-		ePrefix.XCpy(
-			"txtSpecSolidLine"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtSpecSolidLine.TextBuilder(
-		ePrefix.XCpy(
-			"txtSpecSolidLine"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
-}
-
 // buildTextLineColumns - This method is used to generate text for
 // Text Line Column configurations. A Text Line Column
 // specification describes a single line of text consisting of
@@ -893,6 +806,147 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 	}
 
 	return strBuilder, err
+}
+
+func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
+	solidLineDto TextLineSolidDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
+	err error) {
+
+	if txtBuilderAtom.lock == nil {
+		txtBuilderAtom.lock = new(sync.Mutex)
+	}
+
+	txtBuilderAtom.lock.Lock()
+
+	defer txtBuilderAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderAtom."+
+			"fieldFillerWithMargins()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if solidLineDto.SolidLineCharRepeatCount < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineDto.SolidLineCharRepeatCount' is invalid!\n"+
+			"'solidLineDto.SolidLineCharRepeatCount' has a value less than one (+1).\n"+
+			"This means that no Solid Line Characters will be generated.\n"+
+			"solidLineDto.SolidLineCharRepeatCount = '%v'\n",
+			ePrefix.String(),
+			solidLineDto.SolidLineCharRepeatCount)
+
+		return strBuilder, err
+
+	}
+
+	if solidLineDto.SolidLineCharRepeatCount > 1000000 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineDto.SolidLineCharRepeatCount' is invalid!\n"+
+			"'solidLineDto.SolidLineCharRepeatCount' has a value greater than one-million (1,000,000).\n"+
+			"solidLineDto.SolidLineCharRepeatCount = '%v'\n",
+			ePrefix.String(),
+			solidLineDto.SolidLineCharRepeatCount)
+
+		return strBuilder, err
+	}
+
+	var txtSpecSolidLine TextLineSpecSolidLine
+
+	txtSpecSolidLine,
+		err = TextLineSpecSolidLine{}.NewFullSolidLineConfig(
+		solidLineDto.LeftMarginStr,
+		solidLineDto.RightMarginStr,
+		solidLineDto.SolidLineChars,
+		solidLineDto.SolidLineCharRepeatCount,
+		solidLineDto.LineTerminator,
+		ePrefix.XCpy(
+			"txtSpecSolidLine"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtSpecSolidLine.TextBuilder(
+		ePrefix.XCpy(
+			"txtSpecSolidLine"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	return strBuilder, err
+}
+
+func (txtBuilderAtom *textStrBuilderAtom) buildTextLinesTimerStartStop(
+	timerStartStopDto TextLineTimerStartStopDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
+	err error) {
+
+	if txtBuilderAtom.lock == nil {
+		txtBuilderAtom.lock = new(sync.Mutex)
+	}
+
+	txtBuilderAtom.lock.Lock()
+
+	defer txtBuilderAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderAtom."+
+			"buildTextLinesTimerStartStop()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	var timerLinesSpec *TextLineSpecTimerLines
+
+	timerLinesSpec,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		timerStartStopDto.LeftMarginStr,
+		timerStartStopDto.StartTimeLabel,
+		timerStartStopDto.StartTime,
+		timerStartStopDto.EndTimeLabel,
+		timerStartStopDto.EndTime,
+		timerStartStopDto.TimeFormat,
+		timerStartStopDto.TimeDurationLabel,
+		timerStartStopDto.TextLabelFieldLength,
+		timerStartStopDto.TextLabelJustification,
+		timerStartStopDto.RightMarginStr,
+		ePrefix.XCpy(
+			"timerLinesSpec<-timerStartStopDto"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	return timerLinesSpec.TextBuilder(
+		ePrefix.XCpy(
+			"strBuilder<-timerLinesSpec"))
+
 }
 
 // fieldDateTimeWithMargins - Is designed to produce three text
