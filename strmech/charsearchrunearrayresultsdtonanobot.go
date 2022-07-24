@@ -555,43 +555,57 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 70
+	const maxLineLen = 70
 
 	// Max Label Field Length = 24
 	const maxLabelFieldLen = 24
 
-	txtBuilder := TextStrBuilder{}
+	txtFormatCol := TextFormatterCollection{}
 
 	// Leading Title Marquee
-	var fmtrs []TextFormatterDto
 
 	// Blank Line
-	txtFmt := TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
+
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		"",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		ePrefix.XCpy(
+			"1-Column Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title Line 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchRuneArrayResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchRuneArrayResultsDto",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	txtStrParam :=
 		runeSearchResultsDto.SearchResultsName
@@ -599,561 +613,732 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	if len(txtStrParam) > 0 {
 
 		// Title Line 2
-		txtFmt = TextFormatterDto{}
-		txtFmt.FormatType = TxtFieldType.Label()
-		txtFmt.Label.LeftMarginStr = ""
-		txtFmt.Label.FieldText = txtStrParam
-		txtFmt.Label.FieldLength = maxFieldLen
-		txtFmt.Label.FieldJustify = TxtJustify.Center()
-		txtFmt.Label.RightMarginStr = ""
-		txtFmt.Label.LineTerminator = "\n"
-		fmtrs = append(fmtrs, txtFmt)
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Top-Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
 
 	}
 
 	// Title Line 3
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line  4 Date/Time
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"Top-Title Line 3"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Title Line  4 Date/Time
 
-	strBuilder2.Reset()
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
 
-	fmtrs = nil
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// End Of Marquee
 
 	// Begin Label Parameter Pairs
 
 	colonSpace := ": "
-
-	var labelParams []TextLabelValueStrings
-
-	// Build SearchResultsName Name
-	labelParam := TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsName"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.SearchResultsName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build SearchResultsFunctionChain
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsFunctionChain"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.SearchResultsFunctionChain
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsFunctionChain is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundSearchTarget
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundSearchTarget"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.FoundSearchTarget)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundSearchTarget is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundFirstNumericDigitInNumStr
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundFirstNumericDigitInNumStr"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.FoundFirstNumericDigitInNumStr)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundDecimalSeparatorSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundDecimalSeparatorSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.FoundDecimalSeparatorSymbols)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundNonZeroValue
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundNonZeroValue"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.FoundNonZeroValue)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetInputParametersName"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TargetInputParametersName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetInputParametersName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringSearchLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringAdjustedSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringAdjustedSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringAdjustedSearchLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringStartingSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringStartingSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringStartingSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringCurrentSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringCurrentSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringCurrentSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringLastSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringNextSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringNextSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TargetStringNextSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription1"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TargetStringDescription1
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringDescription1 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription2"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TargetStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringDescription2 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestInputParametersName"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TestInputParametersName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestInputParametersName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringName"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TestStringName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TestStringLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLengthName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLengthName"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TestStringLengthName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLengthName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TestStringStartingIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndexName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndexName"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TestStringStartingIndexName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringStartingIndexName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TestStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TestStringLastFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription1"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TestStringDescription1
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription1 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription2"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.TestStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription2 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build CollectionTestObjIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "CollectionTestObjIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.CollectionTestObjIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TextCharSearchType
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TextCharSearchType"
-
-	if !runeSearchResultsDto.TextCharSearchType.XIsValid() {
-		runeSearchResultsDto.TextCharSearchType =
-			CharSearchType.None()
-	}
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		runeSearchResultsDto.TextCharSearchType.String())
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build ReplacementString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "ReplacementString"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.ReplacementString.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "ReplacementString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RemainderString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "RemainderString"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.RemainderString.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "RemainderString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundRuneArrayChars
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundRuneArrayChars"
-
-	labelParam.ParamValue =
-		runeSearchResultsDto.FoundRuneArrayChars.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundRuneArrayChars is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Write Label/Parameter Values to String Builder
-	strBuilder2,
-		err = txtBuilder.BuildLabelsValues(
-		labelParams,
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
 		maxLabelFieldLen,
 		TxtJustify.Right(),
 		colonSpace,
 		-1,
 		TxtJustify.Left(),
-		" ",
-		"\n",
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
 		ePrefix.XCpy(
-			"labelParams #2"))
-
-	labelParams = nil
+			"Set 2-Column Params"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Build SearchResultsName Name
 
-	strBuilder2.Reset()
+	txtStrLabel := "SearchResultsName"
+
+	txtStrParam =
+		runeSearchResultsDto.SearchResultsName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "SearchResultsName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build SearchResultsFunctionChain
+
+	txtStrLabel = "SearchResultsFunctionChain"
+
+	txtStrParam = runeSearchResultsDto.SearchResultsFunctionChain
+
+	if len(txtStrParam) == 0 {
+
+		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				""))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			" ",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			-1,
+			false)
+
+		spacer := strings.Repeat(" ", 16)
+
+		txtStrParam = strings.Replace(
+			txtStrParam,
+			"\n",
+			"\n"+spacer,
+			-1)
+
+		txtStrParam = "\n" + spacer + txtStrParam
+
+		txtFormatCol.AddFieldLabel(
+			"",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			-1,
+			false)
+
+	}
+
+	// Build FoundSearchTarget
+
+	txtStrLabel = "FoundSearchTarget"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.FoundSearchTarget,
+		ePrefix.XCpy(
+			"FoundSearchTarget"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundFirstNumericDigitInNumStr
+
+	txtStrLabel = "FoundFirstNumericDigitInNumStr"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.FoundFirstNumericDigitInNumStr,
+		ePrefix.XCpy(
+			"FoundFirstNumericDigitInNumStr"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundDecimalSeparatorSymbols
+
+	txtStrLabel = "FoundDecimalSeparatorSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.FoundDecimalSeparatorSymbols,
+		ePrefix.XCpy(
+			"FoundDecimalSeparatorSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundNonZeroValue
+
+	txtStrLabel = "FoundNonZeroValue"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.FoundNonZeroValue,
+		ePrefix.XCpy(
+			"FoundNonZeroValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetInputParametersName
+
+	txtStrLabel = "TargetInputParametersName"
+
+	txtStrParam =
+		runeSearchResultsDto.TargetInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetInputParametersName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"FoundNonZeroValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLength
+
+	txtStrLabel = "TargetStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringLength,
+		ePrefix.XCpy(
+			"TargetStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringSearchLength
+
+	txtStrLabel = "TargetStringSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringSearchLength,
+		ePrefix.XCpy(
+			"TargetStringSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringAdjustedSearchLength
+
+	txtStrLabel = "TargetStringAdjustedSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringAdjustedSearchLength,
+		ePrefix.XCpy(
+			"TargetStringAdjustedSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringStartingSearchIndex
+
+	txtStrLabel = "TargetStringStartingSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringStartingSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringStartingSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringCurrentSearchIndex
+
+	txtStrLabel = "TargetStringCurrentSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringCurrentSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringCurrentSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringFirstFoundIndex
+
+	txtStrLabel = "TargetStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastSearchIndex
+
+	txtStrLabel = "TargetStringLastSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringLastSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringLastSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringNextSearchIndex
+
+	txtStrLabel = "TargetStringNextSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TargetStringNextSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringNextSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription1
+
+	txtStrLabel = "TargetStringDescription1"
+
+	txtStrParam =
+		runeSearchResultsDto.TargetStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription1 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription2
+
+	txtStrLabel = "TargetStringDescription2"
+
+	txtStrParam =
+		runeSearchResultsDto.TargetStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription2 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestInputParametersName
+
+	txtStrLabel = "TestInputParametersName"
+
+	txtStrParam =
+		runeSearchResultsDto.TestInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestInputParametersName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringName
+
+	txtStrLabel = "TestStringName"
+
+	txtStrParam =
+		runeSearchResultsDto.TestStringName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLength
+
+	txtStrLabel = "TestStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TestStringLength,
+		ePrefix.XCpy(
+			"TestStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLengthName
+
+	txtStrLabel = "TestStringLengthName"
+
+	txtStrParam =
+		runeSearchResultsDto.TestStringLengthName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringLengthName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringLengthName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndex
+
+	txtStrLabel = "TestStringStartingIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TestStringStartingIndex,
+		ePrefix.XCpy(
+			"TestStringStartingIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndexName
+
+	txtStrLabel = "TestStringStartingIndexName"
+
+	txtStrParam =
+		runeSearchResultsDto.TestStringStartingIndexName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringStartingIndexName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringStartingIndexName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringFirstFoundIndex
+
+	txtStrLabel = "TestStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TestStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TestStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLastFoundIndex
+
+	txtStrLabel = "TestStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TestStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TestStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription1
+
+	txtStrLabel = "TestStringDescription1"
+
+	txtStrParam =
+		runeSearchResultsDto.TestStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription1 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription2
+
+	txtStrLabel = "TestStringDescription2"
+
+	txtStrParam =
+		runeSearchResultsDto.TestStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription2 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build CollectionTestObjIndex
+
+	txtStrLabel = "CollectionTestObjIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.CollectionTestObjIndex,
+		ePrefix.XCpy(
+			"CollectionTestObjIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TextCharSearchType
+
+	txtStrLabel = "TextCharSearchType"
+
+	if !runeSearchResultsDto.TextCharSearchType.XIsValid() {
+		runeSearchResultsDto.TextCharSearchType =
+			CharSearchType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.TextCharSearchType,
+		ePrefix.XCpy(
+			"TextCharSearchType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build ReplacementString
+
+	txtStrLabel = "ReplacementString"
+
+	txtStrParam =
+		runeSearchResultsDto.ReplacementString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "ReplacementString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"ReplacementString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build RemainderString
+
+	txtStrLabel = "RemainderString"
+
+	txtStrParam =
+		runeSearchResultsDto.RemainderString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "RemainderString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"RemainderString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundRuneArrayChars
+
+	txtStrLabel = "FoundRuneArrayChars"
+
+	txtStrParam =
+		runeSearchResultsDto.FoundRuneArrayChars.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "FoundRuneArrayChars is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"FoundRuneArrayChars"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Trailing Title Marquee
 	// Top Blank Line
-	fmtrs = nil
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchRuneArrayResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchRuneArrayResultsDto",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title # 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "End of Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"End of Parameter Listing",
+		ePrefix.XCpy(
+			"Bottom-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		2,
+		"")
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+		err = txtFormatCol.BuildText(
 		ePrefix.XCpy(
-			"Marquee-Bottom"))
-	fmtrs = nil
+			"Final Text Output"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	strBuilder.WriteString(strBuilder2.String())
 
