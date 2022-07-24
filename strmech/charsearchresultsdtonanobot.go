@@ -634,935 +634,822 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		return strBuilder, err
 	}
 
-	const maxLineLen = 78
-
-	// Total available Length of Marquee Output Line
-	const maxFieldLen = 70
+	const maxLineLen = 79
 
 	// Max Label Field Length = 33
 	const maxLabelFieldLen = 33
 
-	txtBuilder := TextStrBuilder{}
+	txtFormatCol := TextFormatterCollection{}
+
+	solidLineDto := TextLineSolidDto{
+		FormatType:                 TxtFieldType.SolidLine(),
+		LeftMarginStr:              " ",
+		SolidLineChars:             "=",
+		SolidLineCharRepeatCount:   maxLineLen - 2,
+		RightMarginStr:             " ",
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "",
+		MaxLineLength:              -1,
+		TurnAutoLineLengthBreaksOn: false,
+		lock:                       nil,
+	}
+
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		"",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		ePrefix.XCpy(
+			"1-Column Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Leading Title Marquee
 
-	var fmtrs []TextFormatterDto
-
 	// Blank Line
-	txtFmt := TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(
+		solidLineDto)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchResultsDto",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
 
-	if len(searchResultsDto.SearchResultsName) > 0 {
+	if err != nil {
+		return strBuilder, err
+	}
+
+	txtStrParam :=
+		searchResultsDto.SearchResultsName
+
+	if len(txtStrParam) > 0 {
 		// Title # 2
-		txtFmt = TextFormatterDto{}
-		txtFmt.FormatType = TxtFieldType.Label()
-		txtFmt.Label.LeftMarginStr = ""
-		txtFmt.Label.FieldText =
-			searchResultsDto.SearchResultsName
-		txtFmt.Label.FieldLength = maxFieldLen
-		txtFmt.Label.FieldJustify = TxtJustify.Center()
-		txtFmt.Label.RightMarginStr = ""
-		txtFmt.Label.LineTerminator = "\n"
-		fmtrs = append(fmtrs, txtFmt)
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Top-Title Line 2"))
 
 	}
 
 	// Title Line 3
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Text Line 4 Date Time
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"Top-Title Line 3"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Text Line 4 Date Time
 
-	strBuilder2.Reset()
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
 
-	fmtrs = nil
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Configure Parameter Label-Value Pairs
 
 	colonSpace := ": "
 
-	var labelParams []TextLabelValueStrings
-
-	// Build SearchResultsName Parameter
-	labelParam := TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsName"
-
-	labelParam.ParamValue = searchResultsDto.SearchResultsName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build SearchResultsFunctionChain
-
-	if len(searchResultsDto.SearchResultsFunctionChain) <=
-		maxFieldLen-3 {
-
-		labelParam := TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "SearchResultsFunctionChain"
-
-		labelParam.ParamValue =
-			searchResultsDto.SearchResultsFunctionChain
-
-		if len(labelParam.ParamValue) == 0 {
-			labelParam.ParamValue = "SearchResultsFunctionChain is EMPTY!"
-		}
-
-		labelParams = append(labelParams, labelParam)
-
-	} else {
-		// MUST BE
-		// len(searchResultsDto.SearchResultsFunctionChain) >
-		//	maxFieldLen - 3
-
-		// Write existing Parameter Label-Value Pairs
-		// to string (strBuilder)
-
-		strBuilder2,
-			err = txtBuilder.BuildLabelsValues(
-			labelParams,
-			" ",
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			ePrefix.XCpy(
-				"labelParams #1"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		labelParams = nil
-
-		strBuilder2,
-			err = txtBuilder.FieldsSingleLabel(
-			" ",
-			"SearchResultsFunctionChain",
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			ePrefix.XCpy(
-				"SearchResultsFunctionChain Label"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		strBuilder2,
-			err = txtBuilder.FieldsSingleLabel(
-			"  ",
-			searchResultsDto.SearchResultsFunctionChain,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			ePrefix.XCpy(
-				"SearchResultsFunctionChain Param Value"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		strBuilder2,
-			err = txtBuilder.LineBlank(
-			1,
-			ePrefix.XCpy(
-				"Blank Line After "+
-					"SearchResultsFunctionChain"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-	}
-
-	// Build FoundSearchTarget Parameter
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundSearchTarget"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.FoundSearchTarget)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundSearchTargetOnPreviousSearch
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundSearchTargetOnPreviousSearch"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.FoundSearchTargetOnPreviousSearch)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundFirstNumericDigitInNumStr
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundFirstNumericDigitInNumStr"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.FoundFirstNumericDigitInNumStr)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundDecimalSeparatorSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundDecimalSeparatorSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.FoundDecimalSeparatorSymbols)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundNonZeroValue
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundNonZeroValue"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.FoundNonZeroValue)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetInputParametersName"
-
-	labelParam.ParamValue =
-		searchResultsDto.TargetInputParametersName
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringSearchLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringAdjustedSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringAdjustedSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringAdjustedSearchLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringStartingSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringStartingSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringStartingSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringCurrentSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringCurrentSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringCurrentSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringLastFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringLastSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringNextSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringNextSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TargetStringNextSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription1"
-
-	labelParam.ParamValue =
-		searchResultsDto.TargetStringDescription1
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription2"
-
-	labelParam.ParamValue =
-		searchResultsDto.TargetStringDescription2
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TestStringLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TestStringStartingIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TestStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.TestStringLastFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription1"
-
-	labelParam.ParamValue =
-		searchResultsDto.TestStringDescription1
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription2"
-
-	labelParam.ParamValue =
-		searchResultsDto.TestStringDescription2
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build CollectionTestObjIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "CollectionTestObjIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchResultsDto.CollectionTestObjIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RemainderString
-
-	if searchResultsDto.RemainderString.
-		GetRuneArrayLength() <=
-		(maxLineLen - maxLabelFieldLen - 3) {
-
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "RemainderString"
-
-		labelParam.ParamValue =
-			searchResultsDto.RemainderString.
-				GetCharacterString()
-
-		if len(labelParam.ParamValue) == 0 {
-			labelParam.ParamValue =
-				"RemainderString is Empty. Length==Zero."
-		}
-
-		labelParams = append(labelParams, labelParam)
-
-	} else {
-		// Must be
-		//  searchResultsDto.RemainderString.
-		//  	GetRuneArrayLength() >
-		//  	(maxLineLen - maxLabelFieldLen -3)
-
-		// Write existing Parameter Label-Value Pairs
-		// to string (strBuilder)
-		strBuilder2,
-			err = txtBuilder.BuildLabelsValues(
-			labelParams,
-			" ",
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			-1,
-			TxtJustify.Left(),
-			" ",
-			"\n",
-			ePrefix.XCpy(
-				"labelParams #1"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		labelParams = nil
-
-		strBuilder2,
-			err = txtBuilder.FieldsSingleLabel(
-			" ",
-			"RemainderString",
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			ePrefix.XCpy(
-				"RemainderString"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		strBuilder2,
-			err = txtBuilder.FieldsSingleLabel(
-			"  ",
-			searchResultsDto.RemainderString.GetCharacterString(),
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			ePrefix.XCpy(
-				"RemainderString"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		strBuilder2,
-			err = txtBuilder.LineBlank(
-			1,
-			ePrefix.XCpy(
-				"Blank Line After RemainderString"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-	}
-
-	// Build ReplacementString
-	if searchResultsDto.ReplacementString.
-		GetRuneArrayLength() <=
-		(maxLineLen - maxLabelFieldLen - 3) {
-
-		labelParam = TextLabelValueStrings{}
-
-		labelParam.ParamLabel = "ReplacementString"
-
-		labelParam.ParamValue =
-			searchResultsDto.ReplacementString.
-				GetCharacterString()
-
-		if len(labelParam.ParamValue) == 0 {
-			labelParam.ParamValue =
-				"ReplacementString is Empty. Length==Zero."
-		}
-
-		labelParams = append(labelParams, labelParam)
-
-	} else {
-		// Must be
-		//  searchResultsDto.ReplacementString.
-		//  	GetRuneArrayLength() >
-		//  	(maxLineLen - maxLabelFieldLen -3)
-
-		// No need to do this if
-		// len(labelParams) == 0
-		if len(labelParams) > 0 {
-
-			// Write existing Parameter Label-Value Pairs
-			// to string (strBuilder)
-			strBuilder2,
-				err = txtBuilder.BuildLabelsValues(
-				labelParams,
-				" ",
-				maxLabelFieldLen,
-				TxtJustify.Right(),
-				colonSpace,
-				-1,
-				TxtJustify.Left(),
-				" ",
-				"\n",
-				ePrefix.XCpy(
-					"labelParams #1"))
-
-			if err != nil {
-
-				return strBuilder, err
-			}
-
-			labelParams = nil
-
-			strBuilder.WriteString(strBuilder2.String())
-
-			strBuilder2.Reset()
-
-		}
-
-		strBuilder2,
-			err = txtBuilder.FieldsSingleLabel(
-			" ",
-			"ReplacementString",
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			ePrefix.XCpy(
-				"ReplacementString"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		strBuilder2,
-			err = txtBuilder.FieldsSingleLabel(
-			"  ",
-			searchResultsDto.ReplacementString.GetCharacterString(),
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			ePrefix.XCpy(
-				"ReplacementString"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-		strBuilder2,
-			err = txtBuilder.LineBlank(
-			1,
-			ePrefix.XCpy(
-				"Blank Line After ReplacementString"))
-
-		if err != nil {
-
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
-	}
-
-	// Build NumValueType
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumValueType"
-
-	if !searchResultsDto.NumValueType.XIsValid() {
-		searchResultsDto.NumValueType =
-			NumValType.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.NumValueType.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumStrFormatType
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumStrFormatType"
-
-	if !searchResultsDto.NumStrFormatType.XIsValid() {
-		searchResultsDto.NumStrFormatType =
-			NumStrFmtType.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.NumStrFormatType.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumSymLocation
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumSymLocation"
-
-	if !searchResultsDto.NumSymbolLocation.XIsValid() {
-		searchResultsDto.NumSymbolLocation =
-			NumSymLocation.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.NumSymbolLocation.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumSymbolClass
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumSymbolClass"
-
-	if !searchResultsDto.NumSymbolClass.XIsValid() {
-		searchResultsDto.NumSymbolClass =
-			NumSymClass.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.NumSymbolClass.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumSignValue
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumSignValue"
-
-	if !searchResultsDto.NumSignValue.XIsValid() {
-		searchResultsDto.NumSignValue =
-			NumSignVal.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.NumSignValue.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build PrimaryNumSignPosition
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "PrimaryNumSignPosition"
-
-	if !searchResultsDto.PrimaryNumSignPosition.XIsValid() {
-		searchResultsDto.PrimaryNumSignPosition =
-			NumSignSymPos.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.PrimaryNumSignPosition.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build SecondaryNumSignPosition
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SecondaryNumSignPosition"
-
-	if !searchResultsDto.SecondaryNumSignPosition.XIsValid() {
-		searchResultsDto.SecondaryNumSignPosition =
-			NumSignSymPos.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.SecondaryNumSignPosition.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TextCharSearchType
-
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TextCharSearchType"
-
-	if !searchResultsDto.TextCharSearchType.XIsValid() {
-		searchResultsDto.TextCharSearchType =
-			CharSearchType.None()
-	}
-
-	labelParam.ParamValue =
-		searchResultsDto.TextCharSearchType.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Write existing Parameter Label-Value Pairs
-	// to string (strBuilder)
-	strBuilder2,
-		err = txtBuilder.BuildLabelsValues(
-		labelParams,
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
 		maxLabelFieldLen,
 		TxtJustify.Right(),
 		colonSpace,
 		-1,
 		TxtJustify.Left(),
-		" ",
-		"\n",
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
 		ePrefix.XCpy(
-			"labelParams #1"))
+			"Set 2-Column Params"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Build SearchResultsName Parameter
 
-	strBuilder2.Reset()
+	txtStrLabel := "SearchResultsName"
+
+	txtStrParam = searchResultsDto.SearchResultsName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "SearchResultsName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build SearchResultsFunctionChain
+
+	txtStrLabel = "SearchResultsFunctionChain"
+
+	txtStrParam = searchResultsDto.SearchResultsFunctionChain
+
+	if len(txtStrParam) == 0 {
+
+		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				""))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			" ",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			-1,
+			false)
+
+		spacer := strings.Repeat(" ", 16)
+
+		txtStrParam = strings.Replace(
+			txtStrParam,
+			"\n",
+			"\n"+spacer,
+			-1)
+
+		txtStrParam = "\n" + spacer + txtStrParam
+
+		txtFormatCol.AddFieldLabel(
+			"",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			-1,
+			false)
+
+	}
+
+	// Build FoundSearchTarget Parameter
+
+	txtStrLabel = "FoundSearchTarget"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.FoundSearchTarget,
+		ePrefix.XCpy(
+			"FoundSearchTarget"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundSearchTargetOnPreviousSearch
+
+	txtStrLabel = "FoundSearchTargetOnPreviousSearch"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.FoundSearchTargetOnPreviousSearch,
+		ePrefix.XCpy(
+			"FoundSearchTargetOnPreviousSearch"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundFirstNumericDigitInNumStr
+
+	txtStrLabel = "FoundFirstNumericDigitInNumStr"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.FoundFirstNumericDigitInNumStr,
+		ePrefix.XCpy(
+			"FoundFirstNumericDigitInNumStr"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundDecimalSeparatorSymbols
+
+	txtStrLabel = "FoundDecimalSeparatorSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.FoundDecimalSeparatorSymbols,
+		ePrefix.XCpy(
+			"FoundDecimalSeparatorSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundNonZeroValue
+
+	txtStrLabel = "FoundNonZeroValue"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.FoundNonZeroValue,
+		ePrefix.XCpy(
+			"FoundNonZeroValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetInputParametersName
+
+	txtStrLabel = "TargetInputParametersName"
+
+	txtStrParam =
+		searchResultsDto.TargetInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetInputParametersName is Empty!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLength
+
+	txtStrLabel = "TargetStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringLength,
+		ePrefix.XCpy(
+			"TargetStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringSearchLength
+
+	txtStrLabel = "TargetStringSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringSearchLength,
+		ePrefix.XCpy(
+			"TargetStringSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringAdjustedSearchLength
+
+	txtStrLabel = "TargetStringAdjustedSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringAdjustedSearchLength,
+		ePrefix.XCpy(
+			"TargetStringAdjustedSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringStartingSearchIndex
+
+	txtStrLabel = "TargetStringStartingSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringStartingSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringStartingSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringCurrentSearchIndex
+
+	txtStrLabel = "TargetStringCurrentSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringCurrentSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringCurrentSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringFirstFoundIndex
+
+	txtStrLabel = "TargetStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastFoundIndex
+
+	txtStrLabel = "TargetStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastSearchIndex
+
+	txtStrLabel = "TargetStringLastSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringLastSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringLastSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringNextSearchIndex
+
+	txtStrLabel = "TargetStringNextSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TargetStringNextSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringNextSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription1
+
+	txtStrLabel = "TargetStringDescription1"
+
+	txtStrParam =
+		searchResultsDto.TargetStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription1 is Empty."
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription2
+
+	txtStrLabel = "TargetStringDescription2"
+
+	txtStrParam =
+		searchResultsDto.TargetStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription2 is Empty."
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLength
+
+	txtStrLabel = "TestStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TestStringLength,
+		ePrefix.XCpy(
+			"TestStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndex
+
+	txtStrLabel = "TestStringStartingIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TestStringStartingIndex,
+		ePrefix.XCpy(
+			"TestStringStartingIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringFirstFoundIndex
+
+	txtStrLabel = "TestStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TestStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TestStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLastFoundIndex
+
+	txtStrLabel = "TestStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TestStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TestStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription1
+
+	txtStrLabel = "TestStringDescription1"
+
+	txtStrParam =
+		searchResultsDto.TestStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription1 is Empty."
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription2
+
+	txtStrLabel = "TestStringDescription2"
+
+	txtStrParam =
+		searchResultsDto.TestStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription2 is Empty."
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build CollectionTestObjIndex
+
+	txtStrLabel = "CollectionTestObjIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.CollectionTestObjIndex,
+		ePrefix.XCpy(
+			"CollectionTestObjIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build RemainderString
+
+	txtStrLabel = "RemainderString"
+
+	txtStrParam =
+		searchResultsDto.RemainderString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "RemainderString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"RemainderString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build ReplacementString
+
+	txtStrLabel = "ReplacementString"
+
+	txtStrParam =
+		searchResultsDto.ReplacementString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "ReplacementString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"ReplacementString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumValueType
+
+	txtStrLabel = "NumValueType"
+
+	if !searchResultsDto.NumValueType.XIsValid() {
+		searchResultsDto.NumValueType =
+			NumValType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.NumValueType,
+		ePrefix.XCpy(
+			"NumValueType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumStrFormatType
+
+	txtStrLabel = "NumStrFormatType"
+
+	if !searchResultsDto.NumStrFormatType.XIsValid() {
+		searchResultsDto.NumStrFormatType =
+			NumStrFmtType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.NumStrFormatType,
+		ePrefix.XCpy(
+			"NumStrFormatType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumSymLocation
+
+	txtStrLabel = "NumSymLocation"
+
+	if !searchResultsDto.NumSymbolLocation.XIsValid() {
+		searchResultsDto.NumSymbolLocation =
+			NumSymLocation.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.NumSymbolLocation,
+		ePrefix.XCpy(
+			"NumSymbolLocation"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumSymbolClass
+
+	txtStrLabel = "NumSymbolClass"
+
+	if !searchResultsDto.NumSymbolClass.XIsValid() {
+		searchResultsDto.NumSymbolClass =
+			NumSymClass.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.NumSymbolClass,
+		ePrefix.XCpy(
+			"NumSymbolClass"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumSignValue
+
+	txtStrLabel = "NumSignValue"
+
+	if !searchResultsDto.NumSignValue.XIsValid() {
+		searchResultsDto.NumSignValue =
+			NumSignVal.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.NumSignValue,
+		ePrefix.XCpy(
+			"NumSignValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build PrimaryNumSignPosition
+
+	txtStrLabel = "PrimaryNumSignPosition"
+
+	if !searchResultsDto.PrimaryNumSignPosition.XIsValid() {
+		searchResultsDto.PrimaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.PrimaryNumSignPosition,
+		ePrefix.XCpy(
+			"PrimaryNumSignPosition"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build SecondaryNumSignPosition
+
+	txtStrLabel = "SecondaryNumSignPosition"
+
+	if !searchResultsDto.SecondaryNumSignPosition.XIsValid() {
+		searchResultsDto.SecondaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.SecondaryNumSignPosition,
+		ePrefix.XCpy(
+			"SecondaryNumSignPosition"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TextCharSearchType
+
+	txtStrLabel = "TextCharSearchType"
+
+	if !searchResultsDto.TextCharSearchType.XIsValid() {
+		searchResultsDto.TextCharSearchType =
+			CharSearchType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchResultsDto.TextCharSearchType,
+		ePrefix.XCpy(
+			"TextCharSearchType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Trailing Title Marquee
-	fmtrs = nil
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(
+		solidLineDto)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchResultsDto",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title # 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "End of Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"End of Parameter Listing",
+		ePrefix.XCpy(
+			"Bottom-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(
+		solidLineDto)
 
 	// Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		2,
+		"")
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+		err = txtFormatCol.BuildText(
 		ePrefix.XCpy(
-			"Marquee-Bottom"))
-	fmtrs = nil
+			"Final Text Output"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	strBuilder.WriteString(strBuilder2.String())
 

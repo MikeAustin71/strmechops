@@ -562,24 +562,18 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	txtFormatCol := TextFormatterCollection{}
 
-	// Leading Title Marquee
-
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
+	solidLineDto := TextLineSolidDto{
+		FormatType:                 TxtFieldType.SolidLine(),
+		LeftMarginStr:              " ",
+		SolidLineChars:             "=",
+		SolidLineCharRepeatCount:   maxLineLen - 2,
+		RightMarginStr:             " ",
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "",
+		MaxLineLength:              -1,
+		TurnAutoLineLengthBreaksOn: false,
+		lock:                       nil,
+	}
 
 	err = txtFormatCol.SetStdFormatParamsLine1Col(
 		"",
@@ -596,6 +590,17 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	if err != nil {
 		return strBuilder, err
 	}
+
+	// Leading Title Marquee
+
+	// Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
+
+	// Filler =======
+	// Marquee Top
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Title Line 1
 	err = txtFormatCol.AddLine1Col(
@@ -650,15 +655,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	// Filler Line '========='
 	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Trailing Blank Line
 	txtFormatCol.AddLineBlank(
@@ -670,6 +667,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	// Begin Label Parameter Pairs
 
 	colonSpace := ": "
+
 	// Set up 2-Column Parameters
 	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
@@ -1282,15 +1280,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	// Filler =======
 	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Title # 1
 	err = txtFormatCol.AddLine1Col(
@@ -1314,15 +1304,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	// Filler =======
 	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Blank Line
 	txtFormatCol.AddLineBlank(
