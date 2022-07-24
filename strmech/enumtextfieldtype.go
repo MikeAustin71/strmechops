@@ -19,6 +19,7 @@ var mTextFieldTypeCodeToString = map[TextFieldType]string{
 	TextFieldType(6): "SolidLine",
 	TextFieldType(7): "LineColumns",
 	TextFieldType(8): "TimerStartStop",
+	TextFieldType(9): "TextAdHoc",
 }
 
 var mTextFieldTypeStringToCode = map[string]TextFieldType{
@@ -33,6 +34,7 @@ var mTextFieldTypeStringToCode = map[string]TextFieldType{
 	"SolidLine":      TextFieldType(6),
 	"LineColumns":    TextFieldType(7),
 	"TimerStartStop": TextFieldType(8),
+	"TextAdHoc":      TextFieldType(9),
 }
 
 var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
@@ -47,6 +49,7 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 	"solidline":      TextFieldType(6),
 	"linecolumns":    TextFieldType(7),
 	"timerstartstop": TextFieldType(8),
+	"textadhoc":      TextFieldType(9),
 }
 
 // TextFieldType - The 'Text Field Type' is an enumeration of type
@@ -203,6 +206,11 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //    nanoseconds.
 //
 //    For more information reference type TextLineSpecTimerLines.
+//
+//  TextAdHoc                   9
+//  - Identifies a string of ad hoc text which will be inserted
+//    into the stream of formatted text as is, without any
+//    additional formatting being applied.
 //
 //
 // ----------------------------------------------------------------
@@ -376,8 +384,6 @@ func (txtFieldType TextFieldType) LineColumns() TextFieldType {
 //
 // For more information reference type TextLineSpecTimerLines.
 //
-//
-//
 func (txtFieldType TextFieldType) TimerStartStop() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -385,6 +391,19 @@ func (txtFieldType TextFieldType) TimerStartStop() TextFieldType {
 	defer lockTextFieldType.Unlock()
 
 	return TextFieldType(8)
+}
+
+// TextAdHoc - Identifies a string of ad hoc text which will be
+// inserted into the stream of formatted text as is, without any
+// additional formatting being applied.
+//
+func (txtFieldType TextFieldType) TextAdHoc() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	return TextFieldType(9)
 }
 
 // String - Returns a string with the name of the enumeration
@@ -526,6 +545,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "SolidLine"
 //           "LineColumns"
 //           "TimerStartStop"
+//           "TextAdHoc"
 //
 //       If 'false', a case-insensitive search is conducted for the
 //       enumeration name. In this example, 'label'
@@ -544,6 +564,7 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //           "solidline"
 //           "linecolumns"
 //           "timerstartstop"
+//           "textadhoc"
 //
 //
 // ----------------------------------------------------------------
@@ -710,7 +731,7 @@ func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
 	defer textFieldNanobot.lock.Unlock()
 
 	if textFieldType < 1 ||
-		textFieldType > 8 {
+		textFieldType > 9 {
 
 		return false
 	}
