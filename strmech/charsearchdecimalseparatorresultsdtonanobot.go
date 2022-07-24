@@ -606,43 +606,50 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 70
+	const maxLineLen = 79
 
 	// Max Label Field Length = 38
 	const maxLabelFieldLen = 38
 
-	txtBuilder := TextStrBuilder{}
-
 	// Leading Title Marquee
-	var fmtrs []TextFormatterDto
+	txtFormatCol := TextFormatterCollection{}
 
 	// Blank Line
-	txtFmt := TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Title Line 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchDecimalSeparatorResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	// 1-Column Setup
+	err = txtFormatCol.CfgLine1Col(
+		" ",
+		"CharSearchDecimalSeparatorResultsDto",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		true,
+		ePrefix.XCpy(
+			"Column-1 Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	txtStrParam :=
 		decimalSeparatorResults.SearchResultsName
@@ -650,77 +657,57 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	if len(txtStrParam) > 0 {
 
 		// Title Line 2
-		txtFmt = TextFormatterDto{}
-		txtFmt.FormatType = TxtFieldType.Label()
-		txtFmt.Label.LeftMarginStr = ""
-		txtFmt.Label.FieldText = txtStrParam
-		txtFmt.Label.FieldLength = maxFieldLen
-		txtFmt.Label.FieldJustify = TxtJustify.Center()
-		txtFmt.Label.RightMarginStr = ""
-		txtFmt.Label.LineTerminator = "\n"
-		fmtrs = append(fmtrs, txtFmt)
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Top-Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
 
 	}
 
 	// Title Line 3
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line  4 Date/Time
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"Top-Title Line 3"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Title Line  4 Date/Time
 
-	strBuilder2.Reset()
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
 
-	fmtrs = nil
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// End Of Marquee
 
@@ -728,549 +715,737 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	colonSpace := ": "
 
-	var labelParams []TextLabelValueStrings
-
-	// Build SearchResultsName Name
-	labelParam := TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsName"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.SearchResultsName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build SearchResultsFunctionChain
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsFunctionChain"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.SearchResultsFunctionChain
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsFunctionChain is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundDecimalSeparatorSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundDecimalSeparatorSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.FoundDecimalSeparatorSymbols)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundDecimalSepSymbolsOnPreviousSearch
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundDecimalSepSymbolsOnPreviousSearch"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.FoundDecimalSepSymbolsOnPreviousSearch)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundFirstNumericDigitInNumStr
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundFirstNumericDigitInNumStr"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.FoundFirstNumericDigitInNumStr)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundNonZeroValue
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundNonZeroValue"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.FoundNonZeroValue)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetInputParametersName"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TargetInputParametersName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetInputParametersName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringLength)
-
-	labelParams = append(labelParams, labelParam)
-	// Build TargetStringSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringSearchLength)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringSearchLength is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringAdjustedSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringAdjustedSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringAdjustedSearchLength)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringAdjustedSearchLength is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringStartingSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringStartingSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringStartingSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringCurrentSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringCurrentSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringCurrentSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringLastFoundIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringLastFoundIndex is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringLastSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringNextSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringNextSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TargetStringNextSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription1"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TargetStringDescription1
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringDescription1 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription2"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TargetStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringDescription2 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestInputParametersName"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TargetStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestInputParametersName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringName"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TestStringName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TestStringLength)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLength is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLengthName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLengthName"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TestStringLengthName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLengthName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TestStringStartingIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndexName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndexName"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TestStringStartingIndexName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringStartingIndexName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TestStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TestStringLastFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription1"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TestStringDescription1
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription1 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription2"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.TestStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription2 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build CollectionTestObjIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "CollectionTestObjIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.CollectionTestObjIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumValueType
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumValueType"
-
-	if !decimalSeparatorResults.NumValueType.XIsValid() {
-		decimalSeparatorResults.NumValueType =
-			NumValType.None()
-	}
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.NumValueType.String())
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumSymbolLocation
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumSymbolLocation"
-
-	if !decimalSeparatorResults.NumSymbolLocation.XIsValid() {
-		decimalSeparatorResults.NumSymbolLocation =
-			NumSymLocation.None()
-	}
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.NumValueType.String())
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TextCharSearchType
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TextCharSearchType"
-
-	if !decimalSeparatorResults.TextCharSearchType.XIsValid() {
-		decimalSeparatorResults.TextCharSearchType =
-			CharSearchType.None()
-	}
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		decimalSeparatorResults.TextCharSearchType.String())
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build DecimalSeparatorSymbolsSpec
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "DecimalSeparatorSymbolsSpec"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.DecimalSeparatorSymbolsSpec.
-			GetDecimalSeparatorStr()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "DecimalSeparatorSymbolsSpec is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build ReplacementString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "ReplacementString"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.ReplacementString.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "ReplacementString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RemainderString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "RemainderString"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.RemainderString.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "RemainderString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundRuneArrayChars
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundRuneArrayChars"
-
-	labelParam.ParamValue =
-		decimalSeparatorResults.FoundRuneArrayChars.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundRuneArrayChars is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Write Label/Parameter Values to String Builder
-	strBuilder2,
-		err = txtBuilder.BuildLabelsValues(
-		labelParams,
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
 		maxLabelFieldLen,
 		TxtJustify.Right(),
 		colonSpace,
 		-1,
 		TxtJustify.Left(),
-		" ",
-		"\n",
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
 		ePrefix.XCpy(
-			"labelParams #2"))
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	labelParams = nil
+			"Set 2-Column Params"))
 
 	if err != nil {
+		return strBuilder, err
+	}
 
+	// Build SearchResultsName Name
+
+	txtStrLabel := "SearchResultsName"
+
+	txtStrParam =
+		decimalSeparatorResults.SearchResultsName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "SearchResultsName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build SearchResultsFunctionChain
+
+	txtStrLabel = "SearchResultsFunctionChain"
+
+	txtStrParam = decimalSeparatorResults.SearchResultsFunctionChain
+
+	if len(txtStrParam) == 0 {
+
+		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				""))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			" ",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			-1,
+			false)
+
+		spacer := strings.Repeat(" ", 16)
+
+		txtStrParam = strings.Replace(
+			txtStrParam,
+			"\n",
+			"\n"+spacer,
+			-1)
+
+		txtStrParam = "\n" + spacer + txtStrParam
+
+		txtFormatCol.AddFieldLabel(
+			"",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			-1,
+			false)
+
+	}
+
+	// Build FoundDecimalSeparatorSymbols
+
+	txtStrLabel = "FoundDecimalSeparatorSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.FoundDecimalSeparatorSymbols,
+		ePrefix.XCpy(
+			"FoundDecimalSeparatorSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundDecimalSepSymbolsOnPreviousSearch
+
+	txtStrLabel = "FoundDecimalSepSymbolsOnPreviousSearch"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.FoundDecimalSepSymbolsOnPreviousSearch,
+		ePrefix.XCpy(
+			"FoundDecimalSepSymbolsOnPreviousSearch"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundFirstNumericDigitInNumStr
+
+	txtStrLabel = "FoundFirstNumericDigitInNumStr"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.FoundFirstNumericDigitInNumStr,
+		ePrefix.XCpy(
+			"FoundFirstNumericDigitInNumStr"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundNonZeroValue
+
+	txtStrLabel = "FoundNonZeroValue"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.FoundNonZeroValue,
+		ePrefix.XCpy(
+			"FoundNonZeroValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetInputParametersName
+
+	txtStrLabel = "TargetInputParametersName"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetInputParametersName,
+		ePrefix.XCpy(
+			"TargetInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLength
+
+	txtStrLabel = "TargetStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringLength,
+		ePrefix.XCpy(
+			"TargetStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringSearchLength
+
+	txtStrLabel = "TargetStringSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringSearchLength,
+		ePrefix.XCpy(
+			"TargetStringSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringAdjustedSearchLength
+
+	txtStrLabel = "TargetStringAdjustedSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringAdjustedSearchLength,
+		ePrefix.XCpy(
+			"TargetStringAdjustedSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringStartingSearchIndex
+
+	txtStrLabel = "TargetStringStartingSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringStartingSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringStartingSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringCurrentSearchIndex
+
+	txtStrLabel = "TargetStringCurrentSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringCurrentSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringCurrentSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringFirstFoundIndex
+
+	txtStrLabel = "TargetStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastFoundIndex
+
+	txtStrLabel = "TargetStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastSearchIndex
+
+	txtStrLabel = "TargetStringLastSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringLastSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringLastSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringNextSearchIndex
+
+	txtStrLabel = "TargetStringNextSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TargetStringNextSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringNextSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription1
+
+	txtStrLabel = "TargetStringDescription1"
+
+	txtStrParam = decimalSeparatorResults.TargetStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription1 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription2
+
+	txtStrLabel = "TargetStringDescription2"
+
+	txtStrParam = decimalSeparatorResults.TargetStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription2 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestInputParametersName
+
+	txtStrLabel = "TestInputParametersName"
+
+	txtStrParam = decimalSeparatorResults.TestInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestInputParametersName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringName
+
+	txtStrLabel = "TestStringName"
+
+	txtStrParam = decimalSeparatorResults.TestStringName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLength
+
+	txtStrLabel = "TestStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TestStringLength,
+		ePrefix.XCpy(
+			"TestStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLengthName
+
+	txtStrLabel = "TestStringLengthName"
+
+	txtStrParam = decimalSeparatorResults.TestStringLengthName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringLengthName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringLengthName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndex
+
+	txtStrLabel = "TestStringStartingIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TestStringStartingIndex,
+		ePrefix.XCpy(
+			"TestStringStartingIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndexName
+
+	txtStrLabel = "TestStringStartingIndexName"
+
+	txtStrParam = decimalSeparatorResults.TestStringStartingIndexName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringStartingIndexName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringStartingIndexName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringFirstFoundIndex
+
+	txtStrLabel = "TestStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TestStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TestStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLastFoundIndex
+
+	txtStrLabel = "TestStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TestStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TestStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription1
+
+	txtStrLabel = "TestStringDescription1"
+
+	txtStrParam = decimalSeparatorResults.TestStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription1 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription2
+
+	txtStrLabel = "TestStringDescription2"
+
+	txtStrParam = decimalSeparatorResults.TestStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription2 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build CollectionTestObjIndex
+
+	txtStrLabel = "CollectionTestObjIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.CollectionTestObjIndex,
+		ePrefix.XCpy(
+			"CollectionTestObjIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumValueType
+
+	txtStrLabel = "NumValueType"
+
+	if !decimalSeparatorResults.NumValueType.XIsValid() {
+		decimalSeparatorResults.NumValueType =
+			NumValType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.NumValueType,
+		ePrefix.XCpy(
+			"NumValueType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumSymbolLocation
+
+	txtStrLabel = "NumSymbolLocation"
+
+	if !decimalSeparatorResults.NumSymbolLocation.XIsValid() {
+		decimalSeparatorResults.NumSymbolLocation =
+			NumSymLocation.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.NumSymbolLocation,
+		ePrefix.XCpy(
+			"NumSymbolLocation"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TextCharSearchType
+
+	txtStrLabel = "TextCharSearchType"
+
+	if !decimalSeparatorResults.TextCharSearchType.XIsValid() {
+		decimalSeparatorResults.TextCharSearchType =
+			CharSearchType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.TextCharSearchType,
+		ePrefix.XCpy(
+			"TextCharSearchType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build DecimalSeparatorSymbolsSpec
+
+	txtStrLabel = "DecimalSeparatorSymbolsSpec"
+
+	txtStrParam = decimalSeparatorResults.
+		DecimalSeparatorSymbolsSpec.
+		GetDecimalSeparatorStr()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "DecimalSeparatorSymbolsSpec is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"DecimalSeparatorSymbolsSpec"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build ReplacementString
+
+	txtStrLabel = "ReplacementString"
+
+	txtStrParam = decimalSeparatorResults.
+		ReplacementString.
+		GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "ReplacementString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"ReplacementString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build RemainderString
+
+	txtStrLabel = "RemainderString"
+
+	txtStrParam = decimalSeparatorResults.
+		RemainderString.
+		GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "RemainderString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"RemainderString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundRuneArrayChars
+
+	txtStrLabel = "FoundRuneArrayChars"
+
+	txtStrParam = decimalSeparatorResults.
+		FoundRuneArrayChars.
+		GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "FoundRuneArrayChars is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"FoundRuneArrayChars"))
+
+	if err != nil {
 		return strBuilder, err
 	}
 
 	// Trailing Title Marquee
 	// Top Blank Line
-	fmtrs = nil
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchDecimalSeparatorResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchDecimalSeparatorResultsDto",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title # 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "End of Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"End of Parameter Listing",
+		ePrefix.XCpy(
+			"Bottom-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+		err = txtFormatCol.BuildText(
 		ePrefix.XCpy(
-			"Marquee-Bottom"))
-	fmtrs = nil
+			"Final Output"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	strBuilder.WriteString(strBuilder2.String())
 

@@ -494,6 +494,22 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	// Leading Title Marquee
 	txtFormatCol := TextFormatterCollection{}
 
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		" ",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		ePrefix.XCpy(
+			"1-Column Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
 	// Blank Line
 	txtFormatCol.AddLineBlank(
 		1,
@@ -512,15 +528,14 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		false)
 
 	// Title Line 1
-	txtFormatCol.AddFieldLabel(
-		"",
+	err = txtFormatCol.AddLine1Col(
 		"CharSearchNumStrParseResultsDto",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		"\n",
-		-1,
-		false)
+		ePrefix.XCpy(
+			"Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	txtStrParam :=
 		numStrParseResults.SearchResultsName
@@ -528,40 +543,40 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	if len(txtStrParam) > 0 {
 
 		// Title Line 2
-		txtFormatCol.AddFieldLabel(
-			"",
+		err = txtFormatCol.AddLine1Col(
 			txtStrParam,
-			maxLineLen,
-			TxtJustify.Center(),
-			"",
-			"\n",
-			-1,
-			false)
+			ePrefix.XCpy(
+				"Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
 
 	}
 
 	// Title Line 3
-	txtFormatCol.AddFieldLabel(
-		"",
+	err = txtFormatCol.AddLine1Col(
 		"Parameter Listing",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		"\n",
-		-1,
-		false)
+		ePrefix.XCpy(
+			"Title Line 3"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title Line  4 Date/Time
-	txtFormatCol.AddFieldDateTime(
-		"",
-		time.Now(),
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		"\n",
-		-1,
-		false)
+
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler Line '========='
 	// Marquee Bottom
@@ -618,37 +633,57 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	txtFormatCol.AddLineBlank(1, "")
 
 	// Build SearchResultsFunctionChain
-	txtFormatCol.AddFieldLabel(
-		" ",
-		"SearchResultsFunctionChain",
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		"\n",
-		-1,
-		false)
 
-	strParam := numStrParseResults.SearchResultsFunctionChain
+	txtStrLabel := "SearchResultsFunctionChain"
 
-	spacer := strings.Repeat(" ", 16)
+	txtStrParam = numStrParseResults.SearchResultsFunctionChain
+	if len(txtStrParam) == 0 {
 
-	strParam = strings.Replace(
-		strParam,
-		"\n",
-		"\n"+spacer,
-		-1)
+		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
 
-	strParam = "\n" + spacer + strParam
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				""))
 
-	txtFormatCol.AddFieldLabel(
-		"",
-		strParam,
-		-1,
-		TxtJustify.Left(),
-		"",
-		"\n",
-		-1,
-		false)
+		if err != nil {
+			return strBuilder, err
+		}
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			" ",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			-1,
+			false)
+
+		spacer := strings.Repeat(" ", 16)
+
+		txtStrParam = strings.Replace(
+			txtStrParam,
+			"\n",
+			"\n"+spacer,
+			-1)
+
+		txtStrParam = "\n" + spacer + txtStrParam
+
+		txtFormatCol.AddFieldLabel(
+			"",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			-1,
+			false)
+
+	}
 
 	// Build FoundNumericDigits
 	err = txtFormatCol.AddLine2Col(
@@ -735,16 +770,16 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 		strLabel := "RemainderString"
 
-		strParam =
+		txtStrParam =
 			numStrParseResults.RemainderString.GetCharacterString()
 
-		if len(strParam) == 0 {
-			strParam = "RemainderString is EMPTY!"
+		if len(txtStrParam) == 0 {
+			txtStrParam = "RemainderString is EMPTY!"
 		}
 
 		err = txtFormatCol.AddLine2Col(
 			strLabel,
-			strParam,
+			txtStrParam,
 			ePrefix.XCpy(
 				"Build RemainderString"))
 

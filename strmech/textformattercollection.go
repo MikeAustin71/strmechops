@@ -6187,8 +6187,8 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 	column1FieldLength int,
 	column1FieldJustify TextJustify,
 	rightMarginStr string,
-	lineTerminator string,
 	turnLineTerminationOff bool,
+	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) error {
@@ -6542,8 +6542,8 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 	column2FieldLength int,
 	column2FieldJustify TextJustify,
 	column2RightMarginStr string,
-	lineTerminator string,
 	turnLineTerminationOff bool,
+	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) error {
