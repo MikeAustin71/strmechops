@@ -755,6 +755,16 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetNegNumSignPosition() NumSig
 //
 // Input Parameters
 //
+//  tagDescription             string
+//     - An optional string containing a tag or text description
+//       which will be included in the formatted text output
+//       returned by this method.
+//
+//       If this parameter is submitted as an empty string, no
+//       text description will be applied to the formatted text
+//       output and no error will be generated.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -827,6 +837,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetNegNumSignPosition() NumSig
 //       attached at the beginning of the error message.
 //
 func (negNumSearchSpec *NegativeNumberSearchSpec) GetParameterTextListing(
+	tagDescription string,
 	errorPrefix interface{}) (
 	strings.Builder,
 	error) {
@@ -855,6 +866,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) GetParameterTextListing(
 
 	return negNumSignSearchNanobot{}.ptr().getParameterTextListing(
 		negNumSearchSpec,
+		tagDescription,
 		ePrefix.XCpy(
 			"negNumSearchSpec"))
 }

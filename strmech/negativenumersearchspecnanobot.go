@@ -529,7 +529,17 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 //       NegativeNumberSearchSpec.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
+//  tagDescription         string
+//     - An optional string containing a tag or text description
+//       which will be included in the formatted text output
+//       returned by this method.
+//
+//       If this parameter is submitted as an empty string, no
+//       text description will be applied to the formatted text
+//       output and no error will be generated.
+//
+//
+//  errPrefDto             *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods listed
@@ -567,6 +577,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 	negNumSearchSpec *NegativeNumberSearchSpec,
+	tagDescription string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strings.Builder,
 	error) {
@@ -658,17 +669,31 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 		return strBuilder, err
 	}
 
-	// Title Line 2
+	if len(tagDescription) > 0 {
+
+		// Title Line 1
+		err = txtFormatCol.AddLine1Col(
+			"tagDescription",
+			ePrefix.XCpy(
+				"Top-Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	}
+
+	// Title Line 3
 	err = txtFormatCol.AddLine1Col(
 		"Parameter Listing",
 		ePrefix.XCpy(
-			"Top-Title Line 2"))
+			"Top-Title Line 3"))
 
 	if err != nil {
 		return strBuilder, err
 	}
 
-	// Title Line  3 Date/Time
+	// Title Line  4 Date/Time
 
 	err = txtFormatCol.AddLine1Col(
 		TextInputParamFieldDateTimeDto{
@@ -676,7 +701,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
 		},
 		ePrefix.XCpy(
-			"Top-Title Line 3"))
+			"Top-Title Line 4"))
 
 	if err != nil {
 		return strBuilder, err
@@ -893,11 +918,25 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 		return strBuilder, err
 	}
 
-	// Title Line 2
+	if len(tagDescription) > 0 {
+
+		// Title Line 1
+		err = txtFormatCol.AddLine1Col(
+			"tagDescription",
+			ePrefix.XCpy(
+				"Bottom-Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	}
+
+	// Title Line 3
 	err = txtFormatCol.AddLine1Col(
 		"End Of Parameter Listing",
 		ePrefix.XCpy(
-			"Bottom-Title Line 2"))
+			"Bottom-Title Line 3"))
 
 	if err != nil {
 		return strBuilder, err
