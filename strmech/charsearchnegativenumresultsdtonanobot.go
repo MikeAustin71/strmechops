@@ -646,43 +646,57 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 79
+	const maxLineLen = 79
 
 	// Max Label Field Length = 24
 	const maxLabelFieldLen = 24
 
-	txtBuilder := TextStrBuilder{}
+	txtFormatCol := TextFormatterCollection{}
 
 	// Leading Title Marquee
-	var fmtrs []TextFormatterDto
 
 	// Blank Line
-	txtFmt := TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
+
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		"",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		ePrefix.XCpy(
+			"1-Column Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title Line 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchNegativeNumberResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchNegativeNumberResultsDto",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	txtStrParam :=
 		searchNegNumResults.SearchResultsName
@@ -690,77 +704,57 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	if len(txtStrParam) > 0 {
 
 		// Title Line 2
-		txtFmt = TextFormatterDto{}
-		txtFmt.FormatType = TxtFieldType.Label()
-		txtFmt.Label.LeftMarginStr = ""
-		txtFmt.Label.FieldText = txtStrParam
-		txtFmt.Label.FieldLength = maxFieldLen
-		txtFmt.Label.FieldJustify = TxtJustify.Center()
-		txtFmt.Label.RightMarginStr = ""
-		txtFmt.Label.LineTerminator = "\n"
-		fmtrs = append(fmtrs, txtFmt)
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Top-Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
 
 	}
 
 	// Title Line 3
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line  4 Date/Time
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"Top-Title Line 3"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Title Line  4 Date/Time
 
-	strBuilder2.Reset()
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
 
-	fmtrs = nil
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// End Of Marquee
 
@@ -768,603 +762,814 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	colonSpace := ": "
 
-	var labelParams []TextLabelValueStrings
-
-	// Build SearchResultsName Name
-	labelParam := TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsName"
-
-	labelParam.ParamValue =
-		searchNegNumResults.SearchResultsName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build SearchResultsFunctionChain
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SearchResultsFunctionChain"
-
-	labelParam.ParamValue =
-		searchNegNumResults.SearchResultsFunctionChain
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SearchResultsFunctionChain is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundNegativeNumberSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundNegativeNumberSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundNegativeNumberSymbols)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundNegNumSymbolsOnPreviousSearch
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundNegNumSymbolsOnPreviousSearch"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundLeadingNegNumSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundLeadingNegNumSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundLeadingNegNumSymbols)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundTrailingNegNumSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundTrailingNegNumSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundTrailingNegNumSymbols)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundFirstNumericDigitInNumStr
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundFirstNumericDigitInNumStr"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundFirstNumericDigitInNumStr)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundDecimalSeparatorSymbols
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundDecimalSeparatorSymbols"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundDecimalSeparatorSymbols)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundDecimalSeparatorSymbols is EMPTY!"
-	}
-
-	// Build FoundNonZeroValue
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundNonZeroValue"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.FoundNonZeroValue)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundNonZeroValue is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetInputParametersName"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TargetInputParametersName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetInputParametersName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringSearchLength)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringAdjustedSearchLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringAdjustedSearchLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringAdjustedSearchLength)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringAdjustedSearchLength is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringStartingSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringStartingSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringStartingSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringCurrentSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringCurrentSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringCurrentSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringLastFoundIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringLastFoundIndex is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringLastSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringLastSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringLastSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringNextSearchIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringNextSearchIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TargetStringNextSearchIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription1"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TargetStringDescription1
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringDescription1 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TargetStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TargetStringDescription2"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TargetStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TargetStringDescription2 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestInputParametersName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestInputParametersName"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TargetStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestInputParametersName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringName"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TestStringName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLength
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLength"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TestStringLength)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLength is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLengthName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLengthName"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TestStringLengthName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLengthName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TestStringStartingIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringStartingIndexName
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringStartingIndexName"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TestStringStartingIndexName
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringStartingIndexName is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringFirstFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringFirstFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TestStringFirstFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringLastFoundIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringLastFoundIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TestStringLastFoundIndex)
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription1
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription1"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TestStringDescription1
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription1 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TestStringDescription2
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TestStringDescription2"
-
-	labelParam.ParamValue =
-		searchNegNumResults.TestStringDescription2
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription2 is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build CollectionTestObjIndex
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "CollectionTestObjIndex"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.CollectionTestObjIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "CollectionTestObjIndex is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumSignValue
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NumSignValue"
-
-	if !searchNegNumResults.NumSignValue.XIsValid() {
-		searchNegNumResults.NumSignValue =
-			NumSignVal.None()
-	}
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.NumSignValue.String())
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build PrimaryNumSignPosition
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "PrimaryNumSignPosition"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.PrimaryNumSignPosition)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "PrimaryNumSignPosition is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build SecondaryNumSignPosition
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "SecondaryNumSignPosition"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.SecondaryNumSignPosition.String())
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "SecondaryNumSignPosition is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build TextCharSearchType
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "TextCharSearchType"
-
-	if !searchNegNumResults.TextCharSearchType.XIsValid() {
-		searchNegNumResults.TextCharSearchType =
-			CharSearchType.None()
-	}
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchNegNumResults.TextCharSearchType.String())
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NegativeNumberSymbolsSpec
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "NegativeNumberSymbolsSpec"
-
-	if searchNegNumResults.NegativeNumberSymbolsSpec.
-		IsValidInstance() {
-		labelParam.ParamValue = "NegativeNumberSymbolsSpec is populated and valid."
-	} else {
-		labelParam.ParamValue = "NegativeNumberSymbolsSpec is invalid and empty."
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build ReplacementString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "ReplacementString"
-
-	labelParam.ParamValue =
-		searchNegNumResults.ReplacementString.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "ReplacementString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RemainderString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "RemainderString"
-
-	labelParam.ParamValue =
-		searchNegNumResults.RemainderString.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "RemainderString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build FoundRuneArrayChars
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "FoundRuneArrayChars"
-
-	labelParam.ParamValue =
-		searchNegNumResults.FoundRuneArrayChars.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "FoundRuneArrayChars is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Write Label/Parameter Values to String Builder
-	strBuilder2,
-		err = txtBuilder.BuildLabelsValues(
-		labelParams,
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
 		maxLabelFieldLen,
 		TxtJustify.Right(),
 		colonSpace,
 		-1,
 		TxtJustify.Left(),
-		" ",
-		"\n",
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
 		ePrefix.XCpy(
-			"labelParams #2"))
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	labelParams = nil
+			"Set 2-Column Params"))
 
 	if err != nil {
+		return strBuilder, err
+	}
 
+	// Build SearchResultsName Name
+
+	txtStrLabel := "SearchResultsName"
+
+	txtStrParam =
+		searchNegNumResults.SearchResultsName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "SearchResultsName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			""))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build SearchResultsFunctionChain
+
+	txtStrLabel = "SearchResultsFunctionChain"
+
+	txtStrParam = searchNegNumResults.SearchResultsFunctionChain
+
+	if len(txtStrParam) == 0 {
+
+		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				""))
+
+		if err != nil {
+			return strBuilder, err
+		}
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			" ",
+			txtStrLabel,
+			maxLabelFieldLen,
+			TxtJustify.Right(),
+			colonSpace,
+			"\n",
+			-1,
+			false)
+
+		spacer := strings.Repeat(" ", 16)
+
+		txtStrParam = strings.Replace(
+			txtStrParam,
+			"\n",
+			"\n"+spacer,
+			-1)
+
+		txtStrParam = "\n" + spacer + txtStrParam
+
+		txtFormatCol.AddFieldLabel(
+			"",
+			txtStrParam,
+			-1,
+			TxtJustify.Left(),
+			"",
+			"\n",
+			-1,
+			false)
+
+	}
+
+	// Build FoundNegativeNumberSymbols
+
+	txtStrLabel = "FoundNegativeNumberSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundNegativeNumberSymbols,
+		ePrefix.XCpy(
+			"FoundNegativeNumberSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundNegNumSymbolsOnPreviousSearch
+
+	txtStrLabel = "FoundNegNumSymbolsOnPreviousSearch"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundNegNumSymbolsOnPreviousSearch,
+		ePrefix.XCpy(
+			"FoundNegNumSymbolsOnPreviousSearch"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundLeadingNegNumSymbols
+
+	txtStrLabel = "FoundLeadingNegNumSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundLeadingNegNumSymbols,
+		ePrefix.XCpy(
+			"FoundLeadingNegNumSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundTrailingNegNumSymbols
+
+	txtStrLabel = "FoundTrailingNegNumSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundTrailingNegNumSymbols,
+		ePrefix.XCpy(
+			"FoundTrailingNegNumSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundFirstNumericDigitInNumStr
+
+	txtStrLabel = "FoundFirstNumericDigitInNumStr"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundFirstNumericDigitInNumStr,
+		ePrefix.XCpy(
+			"FoundFirstNumericDigitInNumStr"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundDecimalSeparatorSymbols
+
+	txtStrLabel = "FoundDecimalSeparatorSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundDecimalSeparatorSymbols,
+		ePrefix.XCpy(
+			"FoundDecimalSeparatorSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundNonZeroValue
+
+	txtStrLabel = "FoundNonZeroValue"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.FoundNonZeroValue,
+		ePrefix.XCpy(
+			"FoundNonZeroValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetInputParametersName
+
+	txtStrLabel = "TargetInputParametersName"
+
+	txtStrParam =
+		searchNegNumResults.TargetInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetInputParametersName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLength
+
+	txtStrLabel = "TargetStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringLength,
+		ePrefix.XCpy(
+			"TargetStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringSearchLength
+
+	txtStrLabel = "TargetStringSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringSearchLength,
+		ePrefix.XCpy(
+			"TargetStringSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringAdjustedSearchLength
+
+	txtStrLabel = "TargetStringAdjustedSearchLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringAdjustedSearchLength,
+		ePrefix.XCpy(
+			"TargetStringAdjustedSearchLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringStartingSearchIndex
+
+	txtStrLabel = "TargetStringStartingSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringStartingSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringStartingSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringCurrentSearchIndex
+
+	txtStrLabel = "TargetStringCurrentSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringCurrentSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringCurrentSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringFirstFoundIndex
+
+	txtStrLabel = "TargetStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastFoundIndex
+
+	txtStrLabel = "TargetStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TargetStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringLastSearchIndex
+
+	txtStrLabel = "TargetStringLastSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringLastSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringLastSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringNextSearchIndex
+
+	txtStrLabel = "TargetStringNextSearchIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TargetStringNextSearchIndex,
+		ePrefix.XCpy(
+			"TargetStringNextSearchIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription1
+
+	txtStrLabel = "TargetStringDescription1"
+
+	txtStrParam =
+		searchNegNumResults.TargetStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription1 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TargetStringDescription2
+
+	txtStrLabel = "TargetStringDescription2"
+
+	txtStrParam =
+		searchNegNumResults.TargetStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TargetStringDescription2 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TargetStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestInputParametersName
+
+	txtStrLabel = "TestInputParametersName"
+
+	txtStrParam =
+		searchNegNumResults.TestInputParametersName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestInputParametersName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringName
+
+	txtStrLabel = "TestStringName"
+
+	txtStrParam =
+		searchNegNumResults.TestStringName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLength
+
+	txtStrLabel = "TestStringLength"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TestStringLength,
+		ePrefix.XCpy(
+			"TestStringLength"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLengthName
+
+	txtStrLabel = "TestStringLengthName"
+
+	txtStrParam =
+		searchNegNumResults.TestStringLengthName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringLengthName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringLengthName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndex
+
+	txtStrLabel = "TestStringStartingIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TestStringStartingIndex,
+		ePrefix.XCpy(
+			"TestStringStartingIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringStartingIndexName
+
+	txtStrLabel = "TestStringStartingIndexName"
+
+	txtStrParam =
+		searchNegNumResults.TestStringStartingIndexName
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringStartingIndexName is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringStartingIndexName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringFirstFoundIndex
+
+	txtStrLabel = "TestStringFirstFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TestStringFirstFoundIndex,
+		ePrefix.XCpy(
+			"TestStringFirstFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringLastFoundIndex
+
+	txtStrLabel = "TestStringLastFoundIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TestStringLastFoundIndex,
+		ePrefix.XCpy(
+			"TestStringLastFoundIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription1
+
+	txtStrLabel = "TestStringDescription1"
+
+	txtStrParam =
+		searchNegNumResults.TestStringDescription1
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription1 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TestStringDescription2
+
+	txtStrLabel = "TestStringDescription2"
+
+	txtStrParam =
+		searchNegNumResults.TestStringDescription2
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription2 is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build CollectionTestObjIndex
+
+	txtStrLabel = "CollectionTestObjIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.CollectionTestObjIndex,
+		ePrefix.XCpy(
+			"CollectionTestObjIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumSignValue
+
+	txtStrLabel = "NumSignValue"
+
+	if !searchNegNumResults.NumSignValue.XIsValid() {
+		searchNegNumResults.NumSignValue =
+			NumSignVal.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.NumSignValue,
+		ePrefix.XCpy(
+			"NumSignValue"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build PrimaryNumSignPosition
+
+	txtStrLabel = "PrimaryNumSignPosition"
+
+	if !searchNegNumResults.PrimaryNumSignPosition.XIsValid() {
+		searchNegNumResults.PrimaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.PrimaryNumSignPosition,
+		ePrefix.XCpy(
+			"PrimaryNumSignPosition"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build SecondaryNumSignPosition
+
+	txtStrLabel = "SecondaryNumSignPosition"
+
+	if !searchNegNumResults.SecondaryNumSignPosition.XIsValid() {
+		searchNegNumResults.SecondaryNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.SecondaryNumSignPosition,
+		ePrefix.XCpy(
+			"SecondaryNumSignPosition"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build TextCharSearchType
+
+	txtStrLabel = "TextCharSearchType"
+
+	if !searchNegNumResults.TextCharSearchType.XIsValid() {
+		searchNegNumResults.TextCharSearchType =
+			CharSearchType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.TextCharSearchType,
+		ePrefix.XCpy(
+			"TextCharSearchType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NegativeNumberSymbolsSpec
+
+	txtStrLabel = "NegativeNumberSymbolsSpec"
+
+	if !searchNegNumResults.NegativeNumberSymbolsSpec.
+		IsValidInstance() {
+		txtStrParam = "NegativeNumberSymbolsSpec is populated and valid."
+	} else {
+		txtStrParam = "NegativeNumberSymbolsSpec is invalid and empty."
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"NegativeNumberSymbolsSpec"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build ReplacementString
+
+	txtStrLabel = "ReplacementString"
+
+	txtStrParam =
+		searchNegNumResults.ReplacementString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "ReplacementString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"ReplacementString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build RemainderString
+
+	txtStrLabel = "RemainderString"
+
+	txtStrParam =
+		searchNegNumResults.RemainderString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "RemainderString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"ReplacementString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build FoundRuneArrayChars
+
+	txtStrLabel = "FoundRuneArrayChars"
+
+	txtStrParam =
+		searchNegNumResults.FoundRuneArrayChars.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "FoundRuneArrayChars is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"ReplacementString"))
+
+	if err != nil {
 		return strBuilder, err
 	}
 
 	// Trailing Title Marquee
 	// Top Blank Line
-	fmtrs = nil
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchNegativeNumberResultsDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchNegativeNumberResultsDto",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title # 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "End of Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"End of Parameter Listing",
+		ePrefix.XCpy(
+			"Bottom-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		2,
+		"")
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+		err = txtFormatCol.BuildText(
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Write Final Output String
 	strBuilder.WriteString(strBuilder2.String())
 
 	strBuilder2.Reset()
-
-	fmtrs = nil
 
 	return strBuilder, err
 }
