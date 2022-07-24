@@ -651,6 +651,12 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Equal(
 //
 // Input Parameters
 //
+//  displayFunctionChain       bool
+//     - Set 'displayFunctionChain' to 'true' and a list of the
+//       functions which led to this result will be included in
+//       the text output.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -723,6 +729,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameterTextListing(
+	displayFunctionChain bool,
 	errorPrefix interface{}) (
 	strings.Builder,
 	error) {
@@ -752,6 +759,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameter
 	return charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
 			decSepSearchResultsDto,
+			displayFunctionChain,
 			ePrefix.XCpy(
 				"decSepSearchResultsDto"))
 }
@@ -1094,6 +1102,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) String() str
 		err = charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
 			decSepSearchResultsDto,
+			true,
 			ePrefix.XCpy(
 				"decSepSearchResultsDto"))
 

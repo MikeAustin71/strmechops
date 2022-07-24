@@ -525,6 +525,12 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 //       CharSearchDecimalSeparatorResultsDto.
 //
 //
+//  displayFunctionChain       bool
+//     - Set 'displayFunctionChain' to 'true' and a list of the
+//       functions which led to this result will be included in
+//       the text output.
+//
+//
 //  errPrefDto              *ePref.ErrPrefixDto
 //     - This object encapsulates an error prefix string which is
 //       included in all returned error messages. Usually, it
@@ -563,6 +569,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 //
 func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobot) getParameterTextListing(
 	decimalSeparatorResults *CharSearchDecimalSeparatorResultsDto,
+	displayFunctionChain bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strings.Builder,
 	error) {
@@ -759,56 +766,59 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	// Build SearchResultsFunctionChain
 
-	txtStrLabel = "SearchResultsFunctionChain"
+	if displayFunctionChain {
 
-	txtStrParam = decimalSeparatorResults.SearchResultsFunctionChain
+		txtStrLabel = "SearchResultsFunctionChain"
 
-	if len(txtStrParam) == 0 {
+		txtStrParam = decimalSeparatorResults.SearchResultsFunctionChain
 
-		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+		if len(txtStrParam) == 0 {
 
-		err = txtFormatCol.AddLine2Col(
-			txtStrLabel,
-			txtStrParam,
-			ePrefix.XCpy(
-				""))
+			txtStrParam = "SearchResultsFunctionChain is EMPTY!"
 
-		if err != nil {
-			return strBuilder, err
+			err = txtFormatCol.AddLine2Col(
+				txtStrLabel,
+				txtStrParam,
+				ePrefix.XCpy(
+					""))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+		} else {
+
+			txtFormatCol.AddFieldLabel(
+				" ",
+				txtStrLabel,
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				"\n",
+				-1,
+				false)
+
+			spacer := strings.Repeat(" ", 16)
+
+			txtStrParam = strings.Replace(
+				txtStrParam,
+				"\n",
+				"\n"+spacer,
+				-1)
+
+			txtStrParam = "\n" + spacer + txtStrParam
+
+			txtFormatCol.AddFieldLabel(
+				"",
+				txtStrParam,
+				-1,
+				TxtJustify.Left(),
+				"",
+				"\n",
+				-1,
+				false)
+
 		}
-
-	} else {
-
-		txtFormatCol.AddFieldLabel(
-			" ",
-			txtStrLabel,
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			-1,
-			false)
-
-		spacer := strings.Repeat(" ", 16)
-
-		txtStrParam = strings.Replace(
-			txtStrParam,
-			"\n",
-			"\n"+spacer,
-			-1)
-
-		txtStrParam = "\n" + spacer + txtStrParam
-
-		txtFormatCol.AddFieldLabel(
-			"",
-			txtStrParam,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			-1,
-			false)
-
 	}
 
 	// Build FoundDecimalSeparatorSymbols

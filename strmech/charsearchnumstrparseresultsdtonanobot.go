@@ -804,6 +804,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		strBuilder2,
 			err = numStrParseResults.DecimalSeparatorSearchResults.
 			GetParameterTextListing(
+				true,
 				ePrefix.XCpy(
 					"numStrParseResults"))
 
