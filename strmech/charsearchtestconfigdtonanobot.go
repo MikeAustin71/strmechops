@@ -452,42 +452,62 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 	}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 70
+	const maxLineLen = 79
 
 	// Max Label Field Length = 36
 	const maxLabelFieldLen = 36
 
-	txtBuilder := TextStrBuilder{}
+	txtFormatCol := TextFormatterCollection{}
+
+	solidLineDto := TextLineSolidDto{
+		FormatType:                 TxtFieldType.SolidLine(),
+		LeftMarginStr:              " ",
+		SolidLineChars:             "=",
+		SolidLineCharRepeatCount:   maxLineLen - 2,
+		RightMarginStr:             " ",
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "",
+		MaxLineLength:              -1,
+		TurnAutoLineLengthBreaksOn: false,
+		lock:                       nil,
+	}
+
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		"",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		ePrefix.XCpy(
+			"1-Column Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Leading Title Marquee
-	var fmtrs []TextFormatterDto
+
 	// Blank Line
-	txtFmt := TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Title Line 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchTestConfigDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchTestConfigDto",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	txtStrParam :=
 		searchTestCfgDto.TestInputParametersName
@@ -495,267 +515,317 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 	if len(txtStrParam) > 0 {
 
 		// Title Line 2
-		txtFmt = TextFormatterDto{}
-		txtFmt.FormatType = TxtFieldType.Label()
-		txtFmt.Label.LeftMarginStr = ""
-		txtFmt.Label.FieldText = txtStrParam
-		txtFmt.Label.FieldLength = maxFieldLen
-		txtFmt.Label.FieldJustify = TxtJustify.Center()
-		txtFmt.Label.RightMarginStr = ""
-		txtFmt.Label.LineTerminator = "\n"
-		fmtrs = append(fmtrs, txtFmt)
+
+		// Title Line 2
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Top-Title Line 2"))
+
+		if err != nil {
+			return strBuilder, err
+		}
 
 	}
 
 	// Title Line 3
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line 4 Date/Time
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"Top-Title Line 3"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Title Line 4 Date/Time
 
-	strBuilder2.Reset()
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
 
-	fmtrs = nil
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// End Of Marquee
 
 	colonSpace := ": "
 
-	var labelParams []TextLabelValueStrings
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
+		" ",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		-1,
+		TxtJustify.Left(),
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
+		ePrefix.XCpy(
+			"Set 2-Column Params"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestInputParametersName
-	labelParam := TextLabelValueStrings{}
 
-	labelParam.ParamLabel = "TestInputParametersName"
+	txtStrLabel := "TestInputParametersName"
 
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.TestInputParametersName
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestInputParametersName is EMPTY!"
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestInputParametersName is EMPTY!"
 	}
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestInputParametersName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestStringName
-	labelParam = TextLabelValueStrings{}
 
-	labelParam.ParamLabel = "TestStringName"
+	txtStrLabel = "TestStringName"
 
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.TestStringName
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringName is EMPTY!"
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringName is EMPTY!"
 	}
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestStringLengthName
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "TestStringLengthName"
 
-	labelParam.ParamLabel = "TestStringLengthName"
-
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.TestStringLengthName
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringLengthName is EMPTY!"
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringLengthName is EMPTY!"
 	}
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringLengthName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestStringStartingIndex
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "TestStringStartingIndex"
 
-	labelParam.ParamLabel = "TestStringStartingIndex"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.TestStringStartingIndex,
+		ePrefix.XCpy(
+			"TestStringStartingIndex"))
 
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchTestCfgDto.TestStringStartingIndex)
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestStringStartingIndexName
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "TestStringStartingIndexName"
 
-	labelParam.ParamLabel = "TestStringStartingIndexName"
-
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.TestStringStartingIndexName
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringStartingIndexName is EMPTY!"
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringStartingIndexName is EMPTY!"
 	}
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringStartingIndexName"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestStringDescription1
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "TestStringDescription1"
 
-	labelParam.ParamLabel = "TestStringDescription1"
-
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.TestStringDescription1
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription1 is EMPTY!"
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription1 is EMPTY!"
 	}
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TestStringDescription2
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "TestStringDescription2"
 
-	labelParam.ParamLabel = "TestStringDescription2"
-
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.TestStringDescription2
 
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "TestStringDescription2 is EMPTY!"
+	if len(txtStrParam) == 0 {
+		txtStrParam = "TestStringDescription2 is EMPTY!"
 	}
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"TestStringDescription2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build CollectionTestObjIndex
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "CollectionTestObjIndex"
 
-	labelParam.ParamLabel = "CollectionTestObjIndex"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.CollectionTestObjIndex,
+		ePrefix.XCpy(
+			"CollectionTestObjIndex"))
 
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchTestCfgDto.CollectionTestObjIndex)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "CollectionTestObjIndex is EMPTY!"
+	if err != nil {
+		return strBuilder, err
 	}
-
-	labelParams = append(labelParams, labelParam)
 
 	// Build NumValueType
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "NumValueType"
 
-	labelParam.ParamLabel = "NumValueType"
-
-	labelParam.ParamValue =
+	txtStrParam =
 		searchTestCfgDto.NumValueType.
 			XReturnNoneIfInvalid().String()
 
-	labelParams = append(labelParams, labelParam)
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"NumValueType"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build NumStrFormatType
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "NumStrFormatType"
 
 	if !searchTestCfgDto.NumStrFormatType.XIsValid() {
 		searchTestCfgDto.NumStrFormatType = NumStrFmtType.None()
 	}
 
-	labelParam.ParamLabel = "NumStrFormatType"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.NumStrFormatType,
+		ePrefix.XCpy(
+			"NumStrFormatType"))
 
-	labelParam.ParamValue =
-		searchTestCfgDto.NumStrFormatType.String()
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build NumSymbolLocation
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "NumSymbolLocation"
 
 	if !searchTestCfgDto.NumSymbolLocation.XIsValid() {
 		searchTestCfgDto.NumSymbolLocation = NumSymLocation.None()
 	}
 
-	labelParam.ParamLabel = "NumSymbolLocation"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.NumSymbolLocation,
+		ePrefix.XCpy(
+			"NumSymbolLocation"))
 
-	labelParam.ParamValue =
-		searchTestCfgDto.NumSymbolLocation.String()
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build NumSymbolClass
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "NumSymbolClass"
 
 	if !searchTestCfgDto.NumSymbolClass.XIsValid() {
 		searchTestCfgDto.NumSymbolClass = NumSymClass.None()
 	}
 
-	labelParam.ParamLabel = "NumSymbolClass"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.NumSymbolClass,
+		ePrefix.XCpy(
+			"NumSymbolClass"))
 
-	labelParam.ParamValue =
-		searchTestCfgDto.NumSymbolClass.String()
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build NumSignValue
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "NumSignValue"
 
 	if !searchTestCfgDto.NumSignValue.XIsValid() {
 		searchTestCfgDto.NumSignValue = NumSignVal.None()
 	}
 
-	labelParam.ParamLabel = "NumSignValue"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.NumSignValue,
+		ePrefix.XCpy(
+			"NumSignValue"))
 
-	labelParam.ParamValue =
-		searchTestCfgDto.NumSignValue.String()
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build PrimaryNumSignPosition
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "PrimaryNumSignPosition"
 
 	if !searchTestCfgDto.PrimaryNumSignPosition.XIsValid() {
 
@@ -764,16 +834,19 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 
 	}
 
-	labelParam.ParamLabel = "PrimaryNumSignPosition"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.PrimaryNumSignPosition,
+		ePrefix.XCpy(
+			"PrimaryNumSignPosition"))
 
-	labelParam.ParamValue =
-		searchTestCfgDto.PrimaryNumSignPosition.String()
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build SecondaryNumSignPosition
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "SecondaryNumSignPosition"
 
 	if !searchTestCfgDto.SecondaryNumSignPosition.XIsValid() {
 
@@ -782,16 +855,19 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 
 	}
 
-	labelParam.ParamLabel = "SecondaryNumSignPosition"
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.SecondaryNumSignPosition,
+		ePrefix.XCpy(
+			"SecondaryNumSignPosition"))
 
-	labelParam.ParamValue =
-		searchTestCfgDto.SecondaryNumSignPosition.String()
-
-	labelParams = append(labelParams, labelParam)
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Build TextCharSearchType
 
-	labelParam = TextLabelValueStrings{}
+	txtStrLabel = "TextCharSearchType"
 
 	if !searchTestCfgDto.TextCharSearchType.XIsValid() {
 
@@ -799,145 +875,105 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			CharSearchType.None()
 
 	}
-	labelParam.ParamLabel = "TextCharSearchType"
 
-	labelParam.ParamValue =
-		searchTestCfgDto.TextCharSearchType.String()
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RequestFoundTestCharacters
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "RequestFoundTestCharacters"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchTestCfgDto.RequestFoundTestCharacters)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "RequestFoundTestCharacters is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RequestRemainderString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "RequestRemainderString"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchTestCfgDto.RequestRemainderString)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "RequestRemainderString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build RequestReplacementString
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "RequestReplacementString"
-
-	labelParam.ParamValue = fmt.Sprintf("%v",
-		searchTestCfgDto.RequestReplacementString)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "RequestReplacementString is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Label and Parameter values to String Builder
-	strBuilder2,
-		err = txtBuilder.BuildLabelsValues(
-		labelParams,
-		" ",
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		-1,
-		TxtJustify.Left(),
-		" ",
-		"\n",
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.TextCharSearchType,
 		ePrefix.XCpy(
-			"labelParams #2"))
-
-	labelParams = nil
+			"TextCharSearchType"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Build RequestFoundTestCharacters
+	txtStrLabel = "RequestFoundTestCharacters"
 
-	strBuilder2.Reset()
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.RequestFoundTestCharacters,
+		ePrefix.XCpy(
+			"RequestFoundTestCharacters"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build RequestRemainderString
+	txtStrLabel = "RequestRemainderString"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.RequestRemainderString,
+		ePrefix.XCpy(
+			"RequestRemainderString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build RequestReplacementString
+	txtStrLabel = "RequestReplacementString"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchTestCfgDto.RequestReplacementString,
+		ePrefix.XCpy(
+			"RequestReplacementString"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Trailing Title Marquee
 	// Top Blank Line
-	fmtrs = nil
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "CharSearchTestConfigDto"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"CharSearchTestConfigDto",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title # 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "End of Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"End of Parameter Listing",
+		ePrefix.XCpy(
+			"Bottom-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		2,
+		"")
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+		err = txtFormatCol.BuildText(
 		ePrefix.XCpy(
-			"Marquee-Bottom"))
-	fmtrs = nil
+			"Final Text Output"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	strBuilder.WriteString(strBuilder2.String())
 
