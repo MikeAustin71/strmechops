@@ -527,6 +527,12 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 //
 // Input Parameters
 //
+//  displayFunctionChain       bool
+//     - Set 'displayFunctionChain' to 'true' and a list of the
+//       functions which led to this result will be included in
+//       the formatted text output.
+//
+//
 //  printDetail                bool
 //     - If this parameter is set to 'true', detail information for
 //       subsidiary types RemainderString,
@@ -607,6 +613,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTextListing(
+	displayFunctionChain bool,
 	printDetail bool,
 	errorPrefix interface{}) (
 	strings.Builder,
@@ -637,6 +644,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTex
 	return charSearchNumStrParseResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
 			searchNumStrParseResults,
+			displayFunctionChain,
 			printDetail,
 			ePrefix.XCpy(
 				"searchNumStrParseResults"))
@@ -724,6 +732,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) String() string
 		err = charSearchNumStrParseResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
 			searchNumStrParseResults,
+			true,
 			false,
 			ePrefix.XCpy(
 				"searchNumStrParseResults"))

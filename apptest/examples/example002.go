@@ -217,6 +217,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	strBuilder2,
 		err = searchResults.GetParameterTextListing(
+		true,
 		false,
 		ePrefix.XCpy("searchResults"))
 

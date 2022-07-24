@@ -396,6 +396,12 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //       CharSearchNumStrParseResultsDto.
 //
 //
+//  displayFunctionChain       bool
+//     - Set 'displayFunctionChain' to 'true' and a list of the
+//       functions which led to this result will be included in
+//       the text output.
+//
+//
 //  printDetail         bool
 //     - If this parameter is set to 'true', detail information for
 //       subsidiary types RemainderString,
@@ -442,6 +448,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //
 func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) getParameterTextListing(
 	numStrParseResults *CharSearchNumStrParseResultsDto,
+	displayFunctionChain bool,
 	printDetail bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strings.Builder,
@@ -634,54 +641,58 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	// Build SearchResultsFunctionChain
 
-	txtStrLabel := "SearchResultsFunctionChain"
+	if displayFunctionChain == true {
 
-	txtStrParam = numStrParseResults.SearchResultsFunctionChain
-	if len(txtStrParam) == 0 {
+		txtStrLabel := "SearchResultsFunctionChain"
 
-		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+		txtStrParam = numStrParseResults.SearchResultsFunctionChain
+		if len(txtStrParam) == 0 {
 
-		err = txtFormatCol.AddLine2Col(
-			txtStrLabel,
-			txtStrParam,
-			ePrefix.XCpy(
-				""))
+			txtStrParam = "SearchResultsFunctionChain is EMPTY!"
 
-		if err != nil {
-			return strBuilder, err
+			err = txtFormatCol.AddLine2Col(
+				txtStrLabel,
+				txtStrParam,
+				ePrefix.XCpy(
+					""))
+
+			if err != nil {
+				return strBuilder, err
+			}
+
+		} else {
+
+			txtFormatCol.AddFieldLabel(
+				" ",
+				txtStrLabel,
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				"\n",
+				-1,
+				false)
+
+			spacer := strings.Repeat(" ", 16)
+
+			txtStrParam = strings.Replace(
+				txtStrParam,
+				"\n",
+				"\n"+spacer,
+				-1)
+
+			txtStrParam = "\n" + spacer + txtStrParam
+
+			txtFormatCol.AddFieldLabel(
+				"",
+				txtStrParam,
+				-1,
+				TxtJustify.Left(),
+				"",
+				"\n",
+				-1,
+				false)
+
 		}
-
-	} else {
-
-		txtFormatCol.AddFieldLabel(
-			" ",
-			txtStrLabel,
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			-1,
-			false)
-
-		spacer := strings.Repeat(" ", 16)
-
-		txtStrParam = strings.Replace(
-			txtStrParam,
-			"\n",
-			"\n"+spacer,
-			-1)
-
-		txtStrParam = "\n" + spacer + txtStrParam
-
-		txtFormatCol.AddFieldLabel(
-			"",
-			txtStrParam,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			-1,
-			false)
 
 	}
 

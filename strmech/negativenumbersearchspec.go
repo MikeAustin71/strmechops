@@ -60,11 +60,14 @@ import (
 //
 //
 type NegativeNumberSearchSpec struct {
-	negNumSignPosition NumSignSymbolPosition // Before(), After(), BeforeAndAfter()
-	//                                                   Negative Number Signs are classified
-	//                                                   by their location relative to the
-	//                                                   numeric digits in a number string.
-	leadingNegNumSignSymbols  RuneArrayDto
+	negNumSignPosition NumSignSymbolPosition
+	// Before(), After(), BeforeAndAfter()
+	// Negative Number Signs are classified
+	// by their location relative to the
+	// numeric digits in a number string.
+
+	leadingNegNumSignSymbols RuneArrayDto
+
 	trailingNegNumSignSymbols RuneArrayDto
 
 	// Processing flags
