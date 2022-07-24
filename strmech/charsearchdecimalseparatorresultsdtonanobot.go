@@ -611,8 +611,9 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 	// Max Label Field Length = 38
 	const maxLabelFieldLen = 38
 
-	// Leading Title Marquee
 	txtFormatCol := TextFormatterCollection{}
+
+	// Leading Title Marquee
 
 	// Blank Line
 	txtFormatCol.AddLineBlank(

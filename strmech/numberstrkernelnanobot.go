@@ -442,103 +442,95 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 70
+	const maxLineLen = 79
 
 	// Max Label Field Length = 38
 	const maxLabelFieldLen = 38
 
-	txtBuilder := TextStrBuilder{}
+	txtFormatCol := TextFormatterCollection{}
 
-	// Leading Title Marquee
-	var fmtrs []TextFormatterDto
+	solidLineDto := TextLineSolidDto{
+		FormatType:                 TxtFieldType.SolidLine(),
+		LeftMarginStr:              " ",
+		SolidLineChars:             "=",
+		SolidLineCharRepeatCount:   maxLineLen - 2,
+		RightMarginStr:             " ",
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "",
+		MaxLineLength:              -1,
+		TurnAutoLineLengthBreaksOn: false,
+		lock:                       nil,
+	}
 
-	// Blank Line
-	txtFmt := TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler =======
-	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "NumberStrKernel"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line  3 Date/Time
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		"",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"1-Column Setup"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Leading Title Marquee
 
-	strBuilder2.Reset()
+	// Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
-	fmtrs = nil
+	// Filler =======
+	// Marquee Top
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Title Line 1
+	err = txtFormatCol.AddLine1Col(
+		"NumberStrKernel",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Title Line 2
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Title Line  3 Date/Time
+
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// End Of Marquee
 
@@ -546,177 +538,167 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	colonSpace := ": "
 
-	var labelParams []TextLabelValueStrings
-
-	// Build Integer Digits
-	labelParam := TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "Integer Digits"
-
-	labelParam.ParamValue =
-		numStrKernel.integerDigits.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "Integer Digits is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build Fractional Digits
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "Fractional Digits"
-
-	labelParam.ParamValue =
-		numStrKernel.fractionalDigits.GetCharacterString()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "Fractional Digits is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumericValueType
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "Numeric Value Type"
-
-	if !numStrKernel.numericValueType.XIsValid() {
-		numStrKernel.numericValueType = NumValType.None()
-	}
-
-	labelParam.ParamValue =
-		numStrKernel.numericValueType.String()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "Numeric Value Type is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build NumberSign
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "Number Sign"
-
-	if !numStrKernel.numberSign.XIsValid() {
-		numStrKernel.numberSign = NumSignVal.None()
-	}
-
-	labelParam.ParamValue =
-		numStrKernel.numericValueType.String()
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "Number Sign Type is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Build Is Non Zero Value
-	labelParam = TextLabelValueStrings{}
-
-	labelParam.ParamLabel = "Is Non Zero Value"
-
-	labelParam.ParamValue =
-		fmt.Sprintf("%v",
-			numStrKernel.isNonZeroValue)
-
-	if len(labelParam.ParamValue) == 0 {
-		labelParam.ParamValue = "Is Non Zero Value is EMPTY!"
-	}
-
-	labelParams = append(labelParams, labelParam)
-
-	// Write Label/Parameter Values to String Builder
-	strBuilder2,
-		err = txtBuilder.BuildLabelsValues(
-		labelParams,
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
 		maxLabelFieldLen,
 		TxtJustify.Right(),
 		colonSpace,
 		-1,
 		TxtJustify.Left(),
-		" ",
-		"\n",
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
 		ePrefix.XCpy(
-			"labelParams #2"))
-
-	labelParams = nil
+			"Set 2-Column Params"))
 
 	if err != nil {
-
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Build Integer Digits
 
-	strBuilder2.Reset()
+	txtStrLabel := "Integer Digits"
+
+	txtStrParam :=
+		numStrKernel.integerDigits.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "Integer Digits is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"Integer Digits"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build Fractional Digits
+
+	txtStrLabel = "Fractional Digits"
+
+	txtStrParam =
+		numStrKernel.fractionalDigits.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "Fractional Digits is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"Fractional Digits"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumericValueType
+
+	txtStrLabel = "Numeric Value Type"
+
+	if !numStrKernel.numericValueType.XIsValid() {
+		numStrKernel.numericValueType = NumValType.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		numStrKernel.numericValueType,
+		ePrefix.XCpy(
+			"Numeric Value Type"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build NumberSign
+
+	txtStrLabel = "Number Sign"
+
+	if !numStrKernel.numberSign.XIsValid() {
+		numStrKernel.numberSign = NumSignVal.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		numStrKernel.numberSign,
+		ePrefix.XCpy(
+			"Number Sign"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build Is Non Zero Value
+
+	txtStrLabel = "Is Non Zero Value"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		numStrKernel.isNonZeroValue,
+		ePrefix.XCpy(
+			"Is Non Zero Value"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Trailing Title Marquee
 	// Top Blank Line
-	fmtrs = nil
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Title # 1
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "NumberStrKernel"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"NumberStrKernel",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Title # 2
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "End of Parameter Listing"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"End of Parameter Listing",
+		ePrefix.XCpy(
+			"Top-Title Line 3"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolidDto(solidLineDto)
 
 	// Blank Line
-	txtFmt = TextFormatterDto{}
-	txtFmt.FormatType = TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineBlank(
+		2,
+		"")
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+		err = txtFormatCol.BuildText(
 		ePrefix.XCpy(
-			"Marquee-Bottom"))
-	fmtrs = nil
+			"Final Text Output"))
+
+	if err != nil {
+		return strBuilder, err
+	}
 
 	strBuilder.WriteString(strBuilder2.String())
 
