@@ -473,11 +473,11 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 // Input Parameters
 //
 //  runeSearchResultsDto       *CharSearchRuneArrayResultsDto
-//     - A pointer to an instance of CharSearchRuneArrayResultsDto. Formatted
-//       text output will be generated listing the member variable
-//       names and their corresponding values. The formatted text
-//       can then be used for text displays, file output or
-//       printing.
+//     - A pointer to an instance of CharSearchRuneArrayResultsDto.
+//       Formatted text output will be generated listing the member
+//       variable names and their corresponding values. The
+//       formatted text can then be used for screen displays, file
+//       output or printing.
 //
 //       No data validation is performed on this instance of
 //       CharSearchRuneArrayResultsDto.
@@ -506,7 +506,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 //       the formatted text output listing the member variable
 //       names and their corresponding values for input parameter
 //       'runeSearchResultsDto' . This formatted text can them be used
-//       for text displays, file output or printing.
+//       for screen displays, file output or printing.
 //
 //
 //  error
@@ -555,7 +555,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	}
 
 	// Total available Length of Output Line
-	const maxLineLen = 70
+	const maxLineLen = 78
 
 	// Max Label Field Length = 24
 	const maxLabelFieldLen = 24

@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
+	"time"
 )
 
 type negNumSignSearchNanobot struct {
@@ -504,6 +506,428 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 					"copyOfNegNumSearchSpec.trailingNegNumSignSymbols"))
 
 	return copyOfNegNumSearchSpec, err
+}
+
+// getParameterTextListing - Returns formatted text output
+// detailing the member variable names and corresponding values
+// contained in the 'negNumSearchSpec' instance of
+// NegativeNumberSearchSpec.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  negNumSearchSpec       *NegativeNumberSearchSpec
+//     - A pointer to an instance of NegativeNumberSearchSpec.
+//       Formatted text output will be generated listing the member
+//       variable names and their corresponding values. The
+//       formatted text can then be used for screen displays, file
+//       output or printing.
+//
+//       No data validation is performed on this instance of
+//       NegativeNumberSearchSpec.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  strings.Builder
+//     - If this method completes successfully, an instance of
+//       strings.Builder will be returned. This instance contains
+//       the formatted text output listing the member variable
+//       names and their corresponding values for input parameter
+//       'negNumSearchSpec' . This formatted text can them be used
+//       for text displays, file output or printing.
+//
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
+func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
+	negNumSearchSpec *NegativeNumberSearchSpec,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strings.Builder,
+	error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	strBuilder := strings.Builder{}
+
+	strBuilder.Grow(1024)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"negNumSignSearchNanobot."+
+			"getParameterTextListing()",
+		"")
+
+	if err != nil {
+
+		return strBuilder, err
+
+	}
+
+	if negNumSearchSpec == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	// Total available Length of Output Line
+	const maxLineLen = 70
+
+	// Max Label Field Length = 30
+	const maxLabelFieldLen = 31
+
+	txtFormatCol := TextFormatterCollection{}
+
+	solidLineDto := TextLineSolidDto{
+		FormatType:                 TxtFieldType.SolidLine(),
+		LeftMarginStr:              " ",
+		SolidLineChars:             "=",
+		SolidLineCharRepeatCount:   maxLineLen - 2,
+		RightMarginStr:             " ",
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "",
+		MaxLineLength:              -1,
+		TurnAutoLineLengthBreaksOn: false,
+		lock:                       nil,
+	}
+
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		"",
+		maxLineLen,
+		TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
+		ePrefix.XCpy(
+			"1-Column Setup"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Leading Title Marquee
+
+	// Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
+
+	// Filler =======
+	// Marquee Top
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Title Line 1
+	err = txtFormatCol.AddLine1Col(
+		"NegativeNumberSearchSpec",
+		ePrefix.XCpy(
+			"Top-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Title Line 2
+	err = txtFormatCol.AddLine1Col(
+		"Parameter Listing",
+		ePrefix.XCpy(
+			"Top-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Title Line  3 Date/Time
+
+	err = txtFormatCol.AddLine1Col(
+		TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 3"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
+
+	// End Of Marquee
+
+	// Begin Label Parameter Pairs
+
+	colonSpace := ": "
+
+	// Set up 2-Column Parameters
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
+		" ",
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
+		-1,
+		TxtJustify.Left(),
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
+		ePrefix.XCpy(
+			"Set 2-Column Params"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.negNumSignPosition
+	// negNumSignPosition NumSignSymbolPosition
+
+	txtStrLabel := "Negative Number Sign Position"
+
+	if !negNumSearchSpec.negNumSignPosition.XIsValid() {
+		negNumSearchSpec.negNumSignPosition =
+			NumSignSymPos.None()
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.negNumSignPosition,
+		ePrefix.XCpy(
+			"negNumSignPosition"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.leadingNegNumSignSymbols
+	//  RuneArrayDto
+
+	txtStrLabel = "Leading Negative Number Sign"
+
+	txtStrParam :=
+		negNumSearchSpec.leadingNegNumSignSymbols.
+			GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "Leading Negative Number Sign is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"leadingNegNumSignSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.trailingNegNumSignSymbols
+	//  RuneArrayDto
+
+	txtStrLabel = "Trailing Negative Number Sign"
+
+	txtStrParam =
+		negNumSearchSpec.trailingNegNumSignSymbols.
+			GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "Trailing Negative Number Sign is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"trailingNegNumSignSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.foundFirstNumericDigitInNumStr
+	//  RuneArrayDto
+
+	txtStrLabel = "foundFirstNumericDigitInNumStr"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.foundFirstNumericDigitInNumStr,
+		ePrefix.XCpy(
+			"foundFirstNumericDigitInNumStr"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.foundNegNumSignSymbols
+	//  RuneArrayDto
+
+	txtStrLabel = "foundNegNumSignSymbols"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.foundNegNumSignSymbols,
+		ePrefix.XCpy(
+			"foundNegNumSignSymbols"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.foundLeadingNegNumSign
+	//  RuneArrayDto
+
+	txtStrLabel = "foundLeadingNegNumSign"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.foundLeadingNegNumSign,
+		ePrefix.XCpy(
+			"foundLeadingNegNumSign"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.foundLeadingNegNumSignIndex
+	//  RuneArrayDto
+
+	txtStrLabel = "foundLeadingNegNumSignIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.foundLeadingNegNumSignIndex,
+		ePrefix.XCpy(
+			"foundLeadingNegNumSignIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.foundTrailingNegNumSign
+	//  RuneArrayDto
+
+	txtStrLabel = "foundTrailingNegNumSign"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.foundTrailingNegNumSign,
+		ePrefix.XCpy(
+			"foundTrailingNegNumSign"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Build negNumSearchSpec.foundTrailingNegNumSignIndex
+	//  RuneArrayDto
+
+	txtStrLabel = "foundTrailingNegNumSignIndex"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		negNumSearchSpec.foundTrailingNegNumSignIndex,
+		ePrefix.XCpy(
+			"foundTrailingNegNumSignIndex"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Trailing Title Marquee
+	// Top Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
+
+	// Filler =======
+	// Marquee Top
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Title Line 1
+	err = txtFormatCol.AddLine1Col(
+		"NegativeNumberSearchSpec",
+		ePrefix.XCpy(
+			"Bottom-Title Line 1"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Title Line 2
+	err = txtFormatCol.AddLine1Col(
+		"End Of Parameter Listing",
+		ePrefix.XCpy(
+			"Bottom-Title Line 2"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	// Filler =======
+	// Marquee Bottom
+	txtFormatCol.AddLineSolidDto(solidLineDto)
+
+	// Blank Line
+	txtFormatCol.AddLineBlank(
+		2,
+		"")
+
+	var strBuilder2 strings.Builder
+
+	strBuilder2,
+		err = txtFormatCol.BuildText(
+		ePrefix.XCpy(
+			"Final Text Output"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	strBuilder.WriteString(strBuilder2.String())
+
+	strBuilder2.Reset()
+
+	return strBuilder, err
 }
 
 // ptr - Returns a pointer to a new instance of
