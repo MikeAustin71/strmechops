@@ -703,7 +703,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 		txtStrLabel,
 		txtStrParam,
 		ePrefix.XCpy(
-			""))
+			"SearchResultsName"))
 
 	if err != nil {
 		return strBuilder, err
