@@ -168,7 +168,9 @@ type TextLineSolidDto struct {
 	//
 	// If 'LineTerminator' is configured as an empty string
 	// (string length zero), a single new line character ('\n')
-	// will be automatically applied to produce line termination.
+	// will be automatically applied to produce line termination,
+	// depending on the setting for parameter
+	// 'TurnLineTerminationOff'.
 	//
 	// LineTerminator works in conjunction with member variable
 	// 'TurnLineTerminationOff'. 'TurnLineTerminationOff'
@@ -219,11 +221,11 @@ type TextLineSolidDto struct {
 	// automatic line breaks using 'MaxLineLength' will be
 	// applied.
 	//
-	// If the value of 'MaxLineLength' is less than one (1),
-	// it will be automatically converted to minus one (-1).
-	//
 	// Set this parameter to minus one (-1) to specify an
 	// unlimited line length for this text line.
+	//
+	// If the value of 'MaxLineLength' is less than one (1),
+	// it will be automatically converted to minus one (-1).
 
 	TurnAutoLineLengthBreaksOn bool
 	// This parameter controls whether text lines which exceed
@@ -292,7 +294,7 @@ func (txtSolidLineDto *TextLineSolidDto) CopyIn(
 
 	defer txtSolidLineDto.lock.Unlock()
 
-	_ = textLineSolidLineDtoNanobot{}.ptr().copy(
+	_ = textLineSolidLineDtoNanobot{}.ptr().copyData(
 		txtSolidLineDto,
 		&incomingSolidLineDto,
 		nil)
@@ -333,7 +335,7 @@ func (txtSolidLineDto *TextLineSolidDto) CopyOut() (
 
 	defer txtSolidLineDto.lock.Unlock()
 
-	_ = textLineSolidLineDtoNanobot{}.ptr().copy(
+	_ = textLineSolidLineDtoNanobot{}.ptr().copyData(
 		&deepCopyTxtLineSolidDto,
 		txtSolidLineDto,
 		nil)
@@ -378,25 +380,12 @@ func (txtSolidLineDto *TextLineSolidDto) Empty() {
 
 	txtSolidLineDto.lock.Lock()
 
-	defer txtSolidLineDto.lock.Unlock()
+	textLineSolidLineDtoMolecule{}.ptr().empty(
+		txtSolidLineDto)
 
-	txtSolidLineDto.FormatType = TxtFieldType.None()
+	txtSolidLineDto.lock.Unlock()
 
-	txtSolidLineDto.LeftMarginStr = ""
-
-	txtSolidLineDto.SolidLineChars = ""
-
-	txtSolidLineDto.SolidLineCharRepeatCount = 0
-
-	txtSolidLineDto.RightMarginStr = ""
-
-	txtSolidLineDto.TurnLineTerminationOff = false
-
-	txtSolidLineDto.LineTerminator = ""
-
-	txtSolidLineDto.MaxLineLength = -99
-
-	txtSolidLineDto.TurnAutoLineLengthBreaksOn = false
+	txtSolidLineDto.lock = nil
 
 	return
 }
@@ -448,61 +437,9 @@ func (txtSolidLineDto *TextLineSolidDto) Equal(
 
 	defer txtSolidLineDto.lock.Unlock()
 
-	if txtSolidLineDto.FormatType !=
-		incomingTxtLineSolidDto.FormatType {
-
-		return false
-	}
-
-	if txtSolidLineDto.LeftMarginStr !=
-		incomingTxtLineSolidDto.LeftMarginStr {
-
-		return false
-	}
-
-	if txtSolidLineDto.SolidLineChars !=
-		incomingTxtLineSolidDto.SolidLineChars {
-
-		return false
-	}
-
-	if txtSolidLineDto.SolidLineCharRepeatCount !=
-		incomingTxtLineSolidDto.SolidLineCharRepeatCount {
-
-		return false
-	}
-
-	if txtSolidLineDto.RightMarginStr !=
-		incomingTxtLineSolidDto.RightMarginStr {
-
-		return false
-	}
-
-	if txtSolidLineDto.TurnLineTerminationOff !=
-		incomingTxtLineSolidDto.TurnLineTerminationOff {
-
-		return false
-	}
-
-	if txtSolidLineDto.LineTerminator !=
-		incomingTxtLineSolidDto.LineTerminator {
-
-		return false
-	}
-
-	if txtSolidLineDto.MaxLineLength !=
-		incomingTxtLineSolidDto.MaxLineLength {
-
-		return false
-	}
-
-	if txtSolidLineDto.TurnAutoLineLengthBreaksOn !=
-		incomingTxtLineSolidDto.TurnAutoLineLengthBreaksOn {
-
-		return false
-	}
-
-	return true
+	return textLineSolidLineDtoMolecule{}.ptr().equal(
+		txtSolidLineDto,
+		&incomingTxtLineSolidDto)
 }
 
 // textLineSolidLineDtoNanobot - Provides helper methods for
@@ -511,10 +448,10 @@ type textLineSolidLineDtoNanobot struct {
 	lock *sync.Mutex
 }
 
-// copy - Copies all data from a source instance of
+// copyData - Copies all data from a source instance of
 // TextLineSolidDto to a destination instance of
 // TextLineSolidDto.
-func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copy(
+func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copyData(
 	destinationSolidLineDto *TextLineSolidDto,
 	sourceSolidLineDto *TextLineSolidDto,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -562,6 +499,9 @@ func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copy(
 		return err
 	}
 
+	textLineSolidLineDtoMolecule{}.ptr().empty(
+		destinationSolidLineDto)
+
 	destinationSolidLineDto.FormatType =
 		sourceSolidLineDto.FormatType
 
@@ -593,7 +533,7 @@ func (txtSolidLineDtoNanobot *textLineSolidLineDtoNanobot) copy(
 }
 
 // ptr - Returns a pointer to a new instance of
-// textFieldSpacerDtoNanobot.
+// textLineSolidLineDtoNanobot.
 //
 func (txtSolidLineDtoNanobot textLineSolidLineDtoNanobot) ptr() *textLineSolidLineDtoNanobot {
 
@@ -606,6 +546,151 @@ func (txtSolidLineDtoNanobot textLineSolidLineDtoNanobot) ptr() *textLineSolidLi
 	defer txtSolidLineDtoNanobot.lock.Unlock()
 
 	return &textLineSolidLineDtoNanobot{
+		lock: new(sync.Mutex),
+	}
+}
+
+// textLineSolidLineDtoMolecule - Provides helper methods for
+// TextLineSolidDto.
+type textLineSolidLineDtoMolecule struct {
+	lock *sync.Mutex
+}
+
+// empty - Receives a pointer to an instance of TextLineSolidDto
+// and proceeds to set all the internal member variables to their
+// zero or uninitialized states.
+//
+// This method will therefore delete all data currently held
+// by this instance of TextLineSolidDto.
+//
+func (txtSolidLineDtoMolecule *textLineSolidLineDtoMolecule) empty(
+	solidLineDto *TextLineSolidDto) {
+
+	if txtSolidLineDtoMolecule.lock == nil {
+		txtSolidLineDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtSolidLineDtoMolecule.lock.Lock()
+
+	defer txtSolidLineDtoMolecule.lock.Unlock()
+
+	solidLineDto.FormatType = TxtFieldType.None()
+
+	solidLineDto.LeftMarginStr = ""
+
+	solidLineDto.SolidLineChars = ""
+
+	solidLineDto.SolidLineCharRepeatCount = 0
+
+	solidLineDto.RightMarginStr = ""
+
+	solidLineDto.TurnLineTerminationOff = false
+
+	solidLineDto.LineTerminator = ""
+
+	solidLineDto.MaxLineLength = -99
+
+	solidLineDto.TurnAutoLineLengthBreaksOn = false
+
+	return
+}
+
+// equal - Receives pointers to two instances of TextLineSolidDto
+// and proceeds to compare all the member data variables for both
+// instances.
+//
+// If the two instances of TextLineSolidDto are found to be equal
+// in all respects, this method will return a boolean value of
+// 'true'.
+//
+func (txtSolidLineDtoMolecule *textLineSolidLineDtoMolecule) equal(
+	solidLineDto1 *TextLineSolidDto,
+	solidLineDto2 *TextLineSolidDto) bool {
+
+	if txtSolidLineDtoMolecule.lock == nil {
+		txtSolidLineDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtSolidLineDtoMolecule.lock.Lock()
+
+	defer txtSolidLineDtoMolecule.lock.Unlock()
+
+	if solidLineDto1 == nil ||
+		solidLineDto2 == nil {
+		return false
+	}
+
+	if solidLineDto1.FormatType !=
+		solidLineDto2.FormatType {
+
+		return false
+	}
+
+	if solidLineDto1.LeftMarginStr !=
+		solidLineDto2.LeftMarginStr {
+
+		return false
+	}
+
+	if solidLineDto1.SolidLineChars !=
+		solidLineDto2.SolidLineChars {
+
+		return false
+	}
+
+	if solidLineDto1.SolidLineCharRepeatCount !=
+		solidLineDto2.SolidLineCharRepeatCount {
+
+		return false
+	}
+
+	if solidLineDto1.RightMarginStr !=
+		solidLineDto2.RightMarginStr {
+
+		return false
+	}
+
+	if solidLineDto1.TurnLineTerminationOff !=
+		solidLineDto2.TurnLineTerminationOff {
+
+		return false
+	}
+
+	if solidLineDto1.LineTerminator !=
+		solidLineDto2.LineTerminator {
+
+		return false
+	}
+
+	if solidLineDto1.MaxLineLength !=
+		solidLineDto2.MaxLineLength {
+
+		return false
+	}
+
+	if solidLineDto1.TurnAutoLineLengthBreaksOn !=
+		solidLineDto2.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	return true
+}
+
+// ptr - Returns a pointer to a new instance of
+// textFieldSpacerDtoMolecule.
+//
+func (txtSolidLineDtoMolecule textLineSolidLineDtoMolecule) ptr() *textLineSolidLineDtoMolecule {
+
+	if txtSolidLineDtoMolecule.lock == nil {
+		txtSolidLineDtoMolecule.lock = new(sync.Mutex)
+	}
+
+	txtSolidLineDtoMolecule.lock.Lock()
+
+	defer txtSolidLineDtoMolecule.lock.Unlock()
+
+	return &textLineSolidLineDtoMolecule{
 		lock: new(sync.Mutex),
 	}
 }

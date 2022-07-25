@@ -696,6 +696,7 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //  TxtFieldType.SolidLine()
 //  TxtFieldType.LineColumns()
 //  TxtFieldType.TimerStartStop()
+//  TxtFieldType.TextAdHoc()
 //
 const TxtFieldType = TextFieldType(0)
 

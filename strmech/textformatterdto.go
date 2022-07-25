@@ -23,6 +23,7 @@ type TextFormatterDto struct {
 	//  TxtFieldType.BlankLine()
 	//  TxtFieldType.SolidLine()
 	//  TxtFieldType.LineColumns()
+	//  TxtFieldType.TextAdHoc()
 
 	DateTime TextFieldDateTimeDto
 	// A structure containing data elements necessary for the
@@ -67,6 +68,17 @@ type TextFormatterDto struct {
 	// creation of a series of text lines describing a timer
 	// event containing a start time, end time and time
 	// duration or elapsed time.
+
+	TextAdHoc TextAdHocDto
+	// The Text Ad Hoc Data Transfer Object is used to/ transfer
+	// data parameters required for to inject a user generated
+	// string of text into the stream of text characters being
+	// formatted for screen display, file output or printing.
+	//
+	// Except for line breaks configured at the user's discretion,
+	// no additional formatting is performed on this text, and it is
+	// inserted "as is" in to the final output of formatted text.
+	//
 
 	lock *sync.Mutex
 }
@@ -360,6 +372,9 @@ func (textFMtDtoNanobot *textFormatterDtoNanobot) copyData(
 	destinationTxtFormatterDto.LinesTimerStartStop.CopyIn(
 		sourceTxtFormatterDto.LinesTimerStartStop)
 
+	destinationTxtFormatterDto.TextAdHoc.CopyIn(
+		sourceTxtFormatterDto.TextAdHoc)
+
 	return err
 }
 
@@ -426,6 +441,8 @@ func (textFmtDtoMolecule *textFormatterDtoMolecule) empty(
 	txtFormatterDto.LineColumns.Empty()
 
 	txtFormatterDto.LinesTimerStartStop.Empty()
+
+	txtFormatterDto.TextAdHoc.Empty()
 
 	return
 }
@@ -505,6 +522,12 @@ func (textFmtDtoMolecule *textFormatterDtoMolecule) equal(
 
 	if !txtFormatterDto1.LinesTimerStartStop.Equal(
 		txtFormatterDto2.LinesTimerStartStop) {
+
+		return false
+	}
+
+	if !txtFormatterDto1.TextAdHoc.Equal(
+		txtFormatterDto2.TextAdHoc) {
 
 		return false
 	}
