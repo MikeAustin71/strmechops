@@ -146,8 +146,6 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 			return "", err
 		}
 
-		ePrefix.SetCtxEmpty()
-
 		if begIdx == -1 {
 
 			if b.Len() == 0 {
@@ -523,7 +521,7 @@ func (sMechAtom *strMechAtom) copyOut(
 //
 //       The most likely source of errors are invalid input parameters.
 //       Input parameters 'targetStr', 'startIdx', 'leadingFieldSeparators',
-//       'trailingFieldSeparators' and 'endOfStringDelimiters' are required input
+//       'trailingFieldSeparators' and 'endOfStringDelimiters' are required
 //       parameters and must be populated with valid data.
 //
 //       If an error message is returned, the text value for input

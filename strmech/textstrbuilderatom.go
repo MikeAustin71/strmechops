@@ -72,6 +72,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildAdHocTextWithDto(
 	}
 
 	var maximumLineLength = txtAdHocDto.MaxLineLength
+	var turnAutoLineLengthBreaksOn = txtAdHocDto.TurnAutoLineLengthBreaksOn
 
 	if maximumLineLength == 0 {
 
@@ -82,7 +83,9 @@ func (txtBuilderAtom *textStrBuilderAtom) buildAdHocTextWithDto(
 
 		return strBuilder, err
 
-	} else if maximumLineLength < -1 {
+	}
+
+	if maximumLineLength < -1 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Format Parameter Maximum Line Length is invalid!\n"+
@@ -94,42 +97,145 @@ func (txtBuilderAtom *textStrBuilderAtom) buildAdHocTextWithDto(
 
 		return strBuilder, err
 
-	} else if maximumLineLength == -1 ||
-		txtAdHocDto.TurnAutoLineLengthBreaksOn == false {
+	}
 
+	if maximumLineLength > -1 &&
+		maximumLineLength < 5 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'txtAdHocDto.MaxLineLength' has a value less than five (5).\n"+
+			"txtAdHocDto.MaxLineLength= '%v'\n",
+			ePrefix.String(),
+			maximumLineLength)
+
+		return strBuilder, err
+
+	}
+
+	if turnAutoLineLengthBreaksOn == false {
+
+		maximumLineLength = math.MaxInt32
+
+	} else if maximumLineLength == -1 &&
+		turnAutoLineLengthBreaksOn == true {
+
+		turnAutoLineLengthBreaksOn = false
 		maximumLineLength = math.MaxInt32
 
 	}
 
+	var lineTerminatorStr = txtAdHocDto.LineTerminator
+
 	lenLeftMargin := len(txtAdHocDto.LeftMarginStr)
 	lenRightMargin := len(txtAdHocDto.RightMarginStr)
-	lenLineTerminator := len(txtAdHocDto.LineTerminator)
+	lenLineTerminator := len(lineTerminatorStr)
 
-	strBuilder.Grow(lenLeftMargin +
-		lenAdHocText +
-		lenRightMargin +
-		lenLineTerminator + 5)
-
-	if lenLeftMargin > 0 {
-		strBuilder.WriteString(txtAdHocDto.LeftMarginStr)
+	if txtAdHocDto.TurnLineTerminationOff == true {
+		lenLineTerminator = 0
+	} else {
+		// txtAdHocDto.TurnLineTerminationOff == false
+		if lenLineTerminator == 0 {
+			lenLineTerminator = 1
+			lineTerminatorStr = "\n"
+		}
 	}
 
-	strBuilder.WriteString(txtAdHocDto.AdHocText)
+	var newAdHocStr string
+	var adjustedMaximumLineLength = maximumLineLength -
+		lenLeftMargin -
+		lenRightMargin
 
-	if lenRightMargin > 0 {
+	if lenAdHocText > adjustedMaximumLineLength {
 
-		strBuilder.WriteString(txtAdHocDto.RightMarginStr)
+		sMechAtom := strMechAtom{}
 
+		newAdHocStr,
+			err =
+			sMechAtom.breakTextAtLineLength(
+				txtAdHocDto.AdHocText,
+				adjustedMaximumLineLength,
+				'\n',
+				ePrefix.XCpy(
+					fmt.Sprintf("txtAdHocDto.AdHocText maxLen='%v'",
+						adjustedMaximumLineLength)))
+
+		if err != nil {
+			return strBuilder, err
+		}
 	}
 
-	if txtAdHocDto.TurnLineTerminationOff == false {
+	if len(newAdHocStr) > 0 {
+
+		if lenLeftMargin > 0 &&
+			lenRightMargin == 0 {
+
+			newAdHocStr = txtAdHocDto.LeftMarginStr +
+				newAdHocStr
+
+			newAdHocStr = strings.Replace(
+				newAdHocStr,
+				"\n",
+				"\n"+txtAdHocDto.LeftMarginStr,
+				-1)
+
+		} else if lenLeftMargin == 0 &&
+			lenRightMargin > 0 {
+
+			newAdHocStr = strings.Replace(
+				newAdHocStr,
+				"\n",
+				txtAdHocDto.RightMarginStr+"\n",
+				-1)
+
+		} else if lenLeftMargin > 0 &&
+			lenRightMargin > 0 {
+
+			newAdHocStr = txtAdHocDto.LeftMarginStr +
+				newAdHocStr
+
+			newAdHocStr = strings.Replace(
+				newAdHocStr,
+				"\n",
+				txtAdHocDto.RightMarginStr+
+					"\n"+
+					txtAdHocDto.LeftMarginStr,
+				-1)
+
+		}
+	}
+
+	lenNewAdHocStr := len(newAdHocStr)
+
+	if lenNewAdHocStr > 0 {
 
 		if lenLineTerminator > 0 {
+			newAdHocStr += lineTerminatorStr
+		}
 
-			strBuilder.WriteString(txtAdHocDto.LineTerminator)
+		strBuilder.Grow(lenNewAdHocStr + lenLineTerminator)
 
-		} else {
-			strBuilder.WriteString("\n")
+		strBuilder.WriteString(newAdHocStr)
+
+	} else {
+
+		strBuilder.Grow(lenLeftMargin +
+			lenAdHocText +
+			lenRightMargin +
+			lenLineTerminator + 5)
+
+		if lenLeftMargin > 0 {
+			strBuilder.WriteString(txtAdHocDto.LeftMarginStr)
+		}
+
+		strBuilder.WriteString(txtAdHocDto.AdHocText)
+
+		if lenRightMargin > 0 {
+			strBuilder.WriteString(txtAdHocDto.RightMarginStr)
+		}
+
+		if lenLineTerminator > 0 {
+			strBuilder.WriteString(lineTerminatorStr)
 		}
 
 	}
@@ -169,6 +275,55 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 		return strBuilder, err
 	}
 
+	if dateTimeFieldDto.FieldDateTime.IsZero() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Date Time is invalid!\n"+
+			"'dateTimeFieldDto.FieldDateTime' has a time value of zero.\n",
+			ePrefix.String())
+
+		return strBuilder, err
+
+	}
+
+	var maximumLineLength = dateTimeFieldDto.MaxLineLength
+	var turnAutoLineLengthBreaksOn = dateTimeFieldDto.TurnAutoLineLengthBreaksOn
+
+	if maximumLineLength == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'dateTimeFieldDto.MaxLineLength' has a value of zero (0).\n",
+			ePrefix.String())
+
+		return strBuilder, err
+
+	}
+
+	if maximumLineLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'dateTimeFieldDto.MaxLineLength' has a value less than minus one (-1).\n"+
+			"dateTimeFieldDto.MaxLineLength= '%v'\n",
+			ePrefix.String(),
+			maximumLineLength)
+
+		return strBuilder, err
+
+	}
+
+	if turnAutoLineLengthBreaksOn == false {
+
+		maximumLineLength = 900000
+
+	} else {
+		// turnAutoLineLengthBreaksOn == true
+		if maximumLineLength < 5 {
+			turnAutoLineLengthBreaksOn = false
+		}
+	}
+
 	dateTimeFormat := dateTimeFieldDto.FieldDateTimeFormat
 
 	if len(dateTimeFormat) == 0 {
@@ -177,8 +332,30 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 				getDefaultDateTimeFormat()
 	}
 
-	if len(dateTimeFieldDto.LeftMarginStr) > 0 {
+	var currentLineLength = 0
+	var lengthOfNextItem = 0
+	var nextCurrentLineLength = 0
+
+	lengthOfNextItem = len(dateTimeFieldDto.LeftMarginStr)
+
+	if lengthOfNextItem > 0 {
+
+		if turnAutoLineLengthBreaksOn == true {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			currentLineLength += lengthOfNextItem
+
+		}
+
 		strBuilder.WriteString(dateTimeFieldDto.LeftMarginStr)
+
 	}
 
 	var txtDateTimeField TextFieldSpecDateTime
@@ -207,11 +384,46 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	lengthOfNextItem = strBuilder2.Len()
+
+	if lengthOfNextItem > 0 {
+
+		if turnAutoLineLengthBreaksOn == true {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			currentLineLength += lengthOfNextItem
+
+		}
+
+		strBuilder.WriteString(strBuilder2.String())
+
+	}
 
 	strBuilder2.Reset()
 
-	if len(dateTimeFieldDto.RightMarginStr) > 0 {
+	lengthOfNextItem = len(dateTimeFieldDto.RightMarginStr)
+
+	if lengthOfNextItem > 0 {
+
+		if turnAutoLineLengthBreaksOn == true {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			currentLineLength += lengthOfNextItem
+
+		}
+
 		strBuilder.WriteString(dateTimeFieldDto.RightMarginStr)
 	}
 
@@ -238,8 +450,6 @@ func (txtBuilderAtom *textStrBuilderAtom) buildFillerFieldWithDto(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	strBuilder.Grow(256)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -253,13 +463,77 @@ func (txtBuilderAtom *textStrBuilderAtom) buildFillerFieldWithDto(
 
 	fillerCharacters := fillerFieldDto.FillerCharacters
 
-	if len(fillerCharacters) == 0 {
+	lenFillerChars := len(fillerCharacters)
+
+	if lenFillerChars == 0 {
 
 		fillerCharacters = " "
 
+		lenFillerChars = 1
 	}
 
-	if len(fillerFieldDto.LeftMarginStr) > 0 {
+	var maximumLineLength = fillerFieldDto.MaxLineLength
+	var turnAutoLineLengthBreaksOn = fillerFieldDto.TurnAutoLineLengthBreaksOn
+
+	if turnAutoLineLengthBreaksOn == false {
+
+		maximumLineLength = 900000
+
+	} else {
+		// turnAutoLineLengthBreaksOn == true
+
+		if maximumLineLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Format Parameter Maximum Line Length is invalid!\n"+
+				"'fillerFieldDto.MaxLineLength' has a value of zero (0).\n"+
+				"'fillerFieldDto.TurnAutoLineLengthBreaksOn' == 'true'\n",
+				ePrefix.String())
+
+			return strBuilder, err
+
+		}
+
+		if maximumLineLength < -1 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Format Parameter Maximum Line Length is invalid!\n"+
+				"'fillerFieldDto.MaxLineLength' has a value less than minus one (-1).\n"+
+				"'fillerFieldDto.TurnAutoLineLengthBreaksOn' == 'true'\n"+
+				"fillerFieldDto.MaxLineLength= '%v'\n",
+				ePrefix.String(),
+				maximumLineLength)
+
+			return strBuilder, err
+
+		}
+	}
+
+	var currentLineLength = 0
+	var lengthOfNextItem = 0
+	var nextCurrentLineLength = 0
+
+	strBuilder.Grow(
+		(lenFillerChars * fillerFieldDto.FillerCharsRepeatCount) +
+			50)
+
+	lengthOfNextItem = len(fillerFieldDto.LeftMarginStr)
+
+	if lengthOfNextItem > 0 {
+
+		if turnAutoLineLengthBreaksOn == true {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			currentLineLength += lengthOfNextItem
+
+		}
+
 		strBuilder.WriteString(fillerFieldDto.LeftMarginStr)
 	}
 
@@ -287,11 +561,72 @@ func (txtBuilderAtom *textStrBuilderAtom) buildFillerFieldWithDto(
 		return strBuilder, err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
+	lengthOfNextItem = strBuilder2.Len()
 
-	strBuilder2.Reset()
+	if lengthOfNextItem > 0 {
 
-	if len(fillerFieldDto.RightMarginStr) > 0 {
+		if turnAutoLineLengthBreaksOn {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			currentLineLength += lengthOfNextItem
+
+		}
+
+		if lengthOfNextItem > maximumLineLength {
+
+			var newColStr string
+			newColStr,
+				err = strMechAtom{}.ptr().
+				breakTextAtLineLength(
+					strBuilder2.String(),
+					maximumLineLength,
+					'\n',
+					ePrefix.XCpy(
+						"txtLabelSpec Very Long Column"))
+
+			if err != nil {
+
+				strBuilder2.Reset()
+				return strBuilder, err
+			}
+
+			strBuilder2.Reset()
+			strBuilder.WriteString(newColStr)
+			lengthOfNextItem = 0
+			currentLineLength = 0
+
+		} else {
+
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		}
+	}
+
+	lengthOfNextItem = len(fillerFieldDto.RightMarginStr)
+
+	if lengthOfNextItem > 0 {
+
+		if turnAutoLineLengthBreaksOn {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			currentLineLength += lengthOfNextItem
+
+		}
+
 		strBuilder.WriteString(fillerFieldDto.RightMarginStr)
 	}
 
@@ -332,6 +667,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 	}
 
 	var maximumLineLength = labelFieldDto.MaxLineLength
+	var turnAutoLineLengthBreaksOn = labelFieldDto.TurnAutoLineLengthBreaksOn
 
 	if maximumLineLength == 0 {
 
@@ -349,7 +685,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 		err = fmt.Errorf("%v\n"+
 			"Error: Format Parameter Maximum Line Length is invalid!\n"+
 			"'labelFieldDto.MaxLineLength' has a value less than minus one (-1).\n"+
-			"lineCols.FmtParameters.MaxLineLength= '%v'\n",
+			"labelFieldDto.MaxLineLength= '%v'\n",
 			ePrefix.String(),
 			maximumLineLength)
 
@@ -358,8 +694,16 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 	}
 
 	if maximumLineLength == -1 ||
-		labelFieldDto.TurnAutoLineLengthBreaksOn == false {
+		turnAutoLineLengthBreaksOn == false {
 		maximumLineLength = math.MaxInt32
+	}
+
+	if maximumLineLength == -1 &&
+		turnAutoLineLengthBreaksOn == true {
+
+		maximumLineLength = math.MaxInt32
+		turnAutoLineLengthBreaksOn = false
+
 	}
 
 	labelText := labelFieldDto.FieldText
@@ -371,19 +715,25 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 	}
 
 	var currentLineLength = 0
-	lenItems := len(labelFieldDto.LeftMarginStr)
+	var lengthOfNextItem = 0
+	var nextCurrentLineLength = 0
 
-	if lenItems > 0 {
+	lengthOfNextItem = len(labelFieldDto.LeftMarginStr)
 
-		if currentLineLength+lenItems >= maximumLineLength {
+	if lengthOfNextItem > 0 {
+
+		nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+		if nextCurrentLineLength > maximumLineLength {
 			currentLineLength = 0
 			strBuilder.WriteString("\n")
 		}
 
 		strBuilder.WriteString(labelFieldDto.LeftMarginStr)
 
-		currentLineLength += lenItems
+		currentLineLength += lengthOfNextItem
 
+		lengthOfNextItem = 0
 	}
 
 	var txtLabelSpec TextFieldSpecLabel
@@ -411,24 +761,24 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 		return strBuilder, err
 	}
 
-	lenItems = strBuilder2.Len()
+	lengthOfNextItem = strBuilder2.Len()
 
-	if currentLineLength+lenItems >= maximumLineLength {
+	if currentLineLength+lengthOfNextItem > maximumLineLength {
 		currentLineLength = 0
 		strBuilder.WriteString("\n")
 	}
 
-	currentLineLength += lenItems
+	currentLineLength += lengthOfNextItem
 
 	strBuilder.WriteString(strBuilder2.String())
 
 	strBuilder2.Reset()
 
-	lenItems = len(labelFieldDto.RightMarginStr)
+	lengthOfNextItem = len(labelFieldDto.RightMarginStr)
 
-	if lenItems > 0 {
+	if lengthOfNextItem > 0 {
 
-		if currentLineLength+lenItems >= maximumLineLength {
+		if currentLineLength+lengthOfNextItem > maximumLineLength {
 			currentLineLength = 0
 			strBuilder.WriteString("\n")
 		}
@@ -745,9 +1095,9 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 		return strBuilder, err
 	}
 
-	lenItems := len(lineCols.FmtParameters.FieldFormatParams)
+	lenFmtParams := len(lineCols.FmtParameters.FieldFormatParams)
 
-	if lenItems != numOfTextFields {
+	if lenFmtParams != numOfTextFields {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'lineCols is invalid!\n"+
@@ -757,14 +1107,17 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 			"'lineCols.FmtParameters.FieldFormatParams' Length = '%v'\n",
 			ePrefix.String(),
 			numOfTextFields,
-			lenItems)
+			lenFmtParams)
 
 		return strBuilder, err
 
 	}
 
 	var columnText, actualDateTimeFormat string
+
 	var maximumLineLength = lineCols.FmtParameters.MaxLineLength
+
+	var turnAutoLineLengthBreaksOn = lineCols.FmtParameters.TurnAutoLineLengthBreaksOn
 
 	if maximumLineLength == 0 {
 
@@ -791,12 +1144,20 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 
 	}
 
-	if maximumLineLength == -1 ||
-		lineCols.FmtParameters.TurnAutoLineLengthBreaksOn == false {
-		maximumLineLength = math.MaxInt32
+	if turnAutoLineLengthBreaksOn == false {
+
+		maximumLineLength = 900000
+
+	} else {
+		// turnAutoLineLengthBreaksOn == true
+		if maximumLineLength < 5 {
+			turnAutoLineLengthBreaksOn = false
+		}
 	}
 
 	var currentLineLength = 0
+	var lengthOfNextItem = 0
+	var nextCurrentLineLength = 0
 
 	defaultDateTimeFormat := textSpecificationMolecule{}.ptr().
 		getDefaultDateTimeFormat()
@@ -824,26 +1185,32 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 		}
 
 		// Build Left Margin Str
-		lenItems =
+		lengthOfNextItem =
 			len(lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr)
 
-		if lenItems > 0 {
+		if lengthOfNextItem > 0 {
 
-			if currentLineLength+lenItems >= maximumLineLength {
-				currentLineLength = 0
-				strBuilder.WriteString("\n")
+			if turnAutoLineLengthBreaksOn {
+
+				nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+				if nextCurrentLineLength > maximumLineLength {
+					currentLineLength = 0
+					strBuilder.WriteString("\n")
+				}
+
+				currentLineLength += lengthOfNextItem
+
 			}
-
-			currentLineLength += lenItems
 
 			strBuilder.WriteString(
 				lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr)
+
 		}
 
 		// Build Column Field Text
-		lenItems = len(columnText)
 
-		if lenItems == 0 {
+		if len(columnText) == 0 {
 			columnText = " "
 		}
 
@@ -870,40 +1237,77 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 			return strBuilder, err
 		}
 
-		lenItems = strBuilder2.Len()
+		lengthOfNextItem = strBuilder2.Len()
 
-		if currentLineLength+lenItems >= maximumLineLength {
-			currentLineLength = 0
-			strBuilder.WriteString("\n")
+		if turnAutoLineLengthBreaksOn {
+
+			nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+			if nextCurrentLineLength > maximumLineLength {
+				currentLineLength = 0
+				strBuilder.WriteString("\n")
+			}
+
+			if lengthOfNextItem > maximumLineLength {
+				var newColStr string
+				newColStr,
+					err = strMechAtom{}.ptr().
+					breakTextAtLineLength(
+						strBuilder2.String(),
+						maximumLineLength,
+						'\n',
+						ePrefix.XCpy(
+							"txtLabelSpec Very Long Column"))
+
+				if err != nil {
+
+					strBuilder2.Reset()
+					return strBuilder, err
+				}
+
+				strBuilder2.Reset()
+				strBuilder.WriteString(newColStr)
+				lengthOfNextItem = 0
+				currentLineLength = 0
+
+				continue
+			}
+
+			currentLineLength += lengthOfNextItem
 		}
 
-		currentLineLength += lenItems
+		if lengthOfNextItem > 0 {
 
-		strBuilder.WriteString(strBuilder2.String())
+			strBuilder.WriteString(strBuilder2.String())
+
+			strBuilder2.Reset()
+
+		}
 
 		// Build Right Margin Str
 
-		lenItems =
+		lengthOfNextItem =
 			len(lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr)
 
-		if lenItems > 0 {
+		if lengthOfNextItem > 0 {
 
-			if currentLineLength+lenItems >= maximumLineLength {
-				currentLineLength = 0
-				strBuilder.WriteString("\n")
+			if turnAutoLineLengthBreaksOn {
+
+				nextCurrentLineLength = currentLineLength + lengthOfNextItem
+
+				if nextCurrentLineLength > maximumLineLength {
+					currentLineLength = 0
+					strBuilder.WriteString("\n")
+				}
+
+				currentLineLength += lengthOfNextItem
 			}
 
 			strBuilder.WriteString(
 				lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr)
 
-			currentLineLength += lenItems
-
-			if currentLineLength >= maximumLineLength {
-				currentLineLength = 0
-				strBuilder.WriteString("\n")
-			}
-
 		}
+
 	} // End of Text Field Loop
 
 	if lineCols.FmtParameters.TurnLineTerminationOff == true {
