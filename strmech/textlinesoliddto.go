@@ -213,19 +213,15 @@ type TextLineSolidDto struct {
 	// Set this parameter to minus one (-1) to specify an
 	// unlimited line length for this text line.
 	//
-	// 'MaxLineLength' is used in conjunction with parameter
-	// 'TurnAutoLineLengthBreaksOn' to automatically place text
-	// fields on separate text lines when that text exceeds the
-	// maximum text line length ('MaxLineLength'). Therefore,
-	// paramter 'TurnAutoLineLengthBreaksOn' controls whether
-	// automatic line breaks using 'MaxLineLength' will be
-	// applied.
-	//
-	// Set this parameter to minus one (-1) to specify an
-	// unlimited line length for this text line.
-	//
 	// If the value of 'MaxLineLength' is less than one (1),
 	// it will be automatically converted to minus one (-1).
+	//
+	// 'MaxLineLength' is used in conjunction with parameter
+	// 'TurnAutoLineLengthBreaksOn' to automatically place text
+	// on separate text lines when that text exceeds the maximum
+	// text line length ('MaxLineLength'). Therefore, paramter
+	// 'TurnAutoLineLengthBreaksOn' controls whether automatic
+	// line breaks using 'MaxLineLength' will be applied.
 
 	TurnAutoLineLengthBreaksOn bool
 	// This parameter controls whether text lines which exceed

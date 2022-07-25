@@ -70,7 +70,7 @@ type TextFormatterDto struct {
 	// duration or elapsed time.
 
 	TextAdHoc TextAdHocDto
-	// The Text Ad Hoc Data Transfer Object is used to/ transfer
+	// The Text Ad Hoc Data Transfer Object is used to transfer
 	// data parameters required for to inject a user generated
 	// string of text into the stream of text characters being
 	// formatted for screen display, file output or printing.

@@ -24,6 +24,169 @@ type TextFormatterCollection struct {
 	lock *sync.Mutex
 }
 
+// AddAdHocText adds raw, or ad hoc text to the Formatter
+// Collection.
+//
+// The input parameters for this method are used to inject user
+// generated into the stream of text characters being formatted
+// for screen display, file output or printing.
+//
+// Except for line breaks configured at the user's discretion,
+// no additional formatting is performed on this text, and it is
+// inserted raw, or "as is", in to the final output of formatted
+// text.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMarginStr                      string
+//     - A string containing the text characters to be positioned
+//       on the Left side of the Ad Hoc Text.
+//
+//       If no Left margin is required, set this parameter to an
+//       empty string.
+//
+//
+//  adHocText                          string
+//     - This strings holds the raw, ad hoc text which will be
+//       inserted "as is", into the final output of formatted
+//       text.
+//
+//
+//  rightMarginStr                     string
+//     - The contents of the string will be used as the right
+//       margin for the Text Ad Hoc string.
+//
+//       If no right margin is required, set 'rightMarginStr' to
+//       a zero length or empty string, and no right margin will
+//       be created.
+//
+//
+//  turnLineTerminationOff             bool
+//     - By default, a new line string terminator ('\n') will be
+//       appended to the Ad Hoc text ('AdHocText'). If this
+//       parameter is set to 'true', no line termination sequence
+//       will be applied.
+//
+//       This parameter controls the operation of parameter
+//       'LineTerminator'. If 'TurnLineTerminationOff' is set to
+//       'true', 'LineTerminator' will be completely ignored and
+//        have no effect.
+//
+//
+//  lineTerminator                     string
+//     - This string holds the character or characters which
+//       will be used to terminate the formatted line of text
+//       output, if parameter 'TurnLineTerminationOff' is set
+//       to 'false'.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If 'lineTerminator' is configured as an empty string
+//       (string length zero), a single new line character ('\n')
+//       will be automatically applied to produce line termination
+//       depending on the setting for parameter
+//       'turnLineTerminationOff'.
+//
+//       LineTerminator works in conjunction with parameter
+//       'turnLineTerminationOff'. 'turnLineTerminationOff'
+//       controls the application of a line terminator. Setting
+//       'turnLineTerminationOff' to 'true' means that NO line
+//       terminator will be applied.
+//
+//       Setting 'turnLineTerminationOff' to 'true' means that
+//       parameter 'lineTerminator' will be completely ignored
+//       and have no effect.
+//
+//
+//  maxLineLength                      int
+//     - The maximum length of the line on which the solid line
+//       text characters will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//       If the value of 'maxLineLength' is less than one (1),
+//       it will be automatically converted to minus one (-1).
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       on separate text lines when that text exceeds the maximum
+//       text line length ('maxLineLength'). Therefore, parameter
+//       'turnAutoLineLengthBreaksOn' controls whether automatic
+//       line breaks using 'maxLineLength' will be applied.
+//
+//
+//  turnAutoLineLengthBreaksOn         bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are positioned
+//       on the following line as a separate line of text.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
+//
+//       When this parameter is set to 'true', text fields which
+//       extend beyond the maximum line length ('maxLineLength')
+//       will be formatted as a separate line of text on the
+//       following line.
+//
+func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
+	leftMarginStr string,
+	adHocText string,
+	rightMarginStr string,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if maxLineLength < 1 {
+		maxLineLength = -1
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:          TxtFieldType.TextAdHoc(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
+		TextAdHoc: TextAdHocDto{
+			FormatType:                 TxtFieldType.TextAdHoc(),
+			LeftMarginStr:              leftMarginStr,
+			AdHocText:                  adHocText,
+			RightMarginStr:             rightMarginStr,
+			TurnLineTerminationOff:     turnLineTerminationOff,
+			LineTerminator:             lineTerminator,
+			MaxLineLength:              maxLineLength,
+			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+			lock:                       nil,
+		},
+
+		lock: nil,
+	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
 // AddFieldDateTime - Adds a date time value formatted as a text
 // field to the Formatter Collection.
 //
@@ -1171,7 +1334,10 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 //
 //       Set this parameter to minus one (-1) to specify an
 //       unlimited line length for this text line.
-///
+//
+//       If the value of 'maxLineLength' is less than zero (0), it
+//       will be automatically converted to minus one (-1).
+//
 //       'maxLineLength' is used in conjunction with parameter
 //       'turnAutoLineLengthBreaksOn' to automatically place text
 //       fields on separate text lines when that text exceeds the
@@ -1179,9 +1345,6 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 //       paramter 'turnAutoLineLengthBreaksOn' controls whether
 //       automatic line breaks using 'maxLineLength' will be
 //       applied.
-//
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
 //
 //
 //  turnAutoLineLengthBreaksOn bool
@@ -3182,19 +3345,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 //       Set this parameter to minus one (-1) to specify an
 //       unlimited line length for this text line.
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength'). Therefore,
-//       paramter 'turnAutoLineLengthBreaksOn' controls whether
-//       automatic line breaks using 'maxLineLength' will be
-//       applied.
-//
 //       If the value of 'maxLineLength' is less than one (1),
 //       it will be automatically converted to minus one (-1).
 //
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       on separate text lines when that text exceeds the maximum
+//       text line length ('maxLineLength'). Therefore, paramter
+//       'turnAutoLineLengthBreaksOn' controls whether automatic
+//       line breaks using 'maxLineLength' will be applied.
 //
 //
 //  turnAutoLineLengthBreaksOn bool
@@ -3488,12 +3647,15 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 //                 LineTerminator = "\n\n"
 //                 Final Solid Line String = "*****"
 //
-//        MaxLineLength                int
+//        MaxLineLength               int
 //         The maximum length of the line on which the solid line
 //         text characters will be presented.
 //
 //         Set this parameter to minus one (-1) to specify an
 //         unlimited line length for this text line.
+//
+//         If the value of 'MaxLineLength' is less than one (1),
+//         it will be automatically converted to minus one (-1).
 //
 //         'MaxLineLength' is used in conjunction with parameter
 //         'TurnAutoLineLengthBreaksOn' to automatically place text
@@ -3503,13 +3665,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 //         automatic line breaks using 'MaxLineLength' will be
 //         applied.
 //
-//         Set this parameter to minus one (-1) to specify an
-//         unlimited line length for this text line.
-//
-//         If the value of 'MaxLineLength' is less than one (1),
-//         it will be automatically converted to minus one (-1).
-//
-//         TurnAutoLineLengthBreaksOn bool
+//         TurnAutoLineLengthBreaksOn  bool
 //         This parameter controls whether text lines which exceed
 //         the maximum line length ('MaxLineLength') are
 //         positioned on the following line as a separate line of

@@ -42,9 +42,15 @@ type TextAdHocDto struct {
 	// be created.
 
 	TurnLineTerminationOff bool
-	// By default, a new line string terminator will be added to
-	// the Ad Hoc text. If this parameter is set to 'true', no
-	// line termination sequence will be applied.
+	// By default, a new line string terminator ('\n') will be
+	// appended to the Ad Hoc text ('AdHocText'). If this
+	// parameter is set to 'true', no line termination sequence
+	// will be applied.
+	//
+	// This parameter controls the operation of parameter
+	// 'LineTerminator'. If 'TurnLineTerminationOff' is set
+	// to 'true', 'LineTerminator' will be completely
+	// ignored and have no effect.
 
 	LineTerminator string
 	// This string holds the character or characters which
@@ -65,29 +71,28 @@ type TextAdHocDto struct {
 	// 'TurnLineTerminationOff'. 'TurnLineTerminationOff'
 	// controls the application of a line terminator. Setting
 	// 'TurnLineTerminationOff' to 'true' means that NO line
-	// terminator will be applied to this instance of Text Solid
-	// Line.
+	// terminator will be applied.
+	//
+	// Setting 'TurnLineTerminationOff' to 'true' means that
+	// parameter 'LineTerminator' will be completely ignored
+	// and have no effect.
 
 	MaxLineLength int
-	// The maximum length of the line on which the solid line
-	// text characters will be presented.
-	//
-	// Set this parameter to minus one (-1) to specify an
-	// unlimited line length for this text line.
-	//
-	// 'MaxLineLength' is used in conjunction with parameter
-	// 'TurnAutoLineLengthBreaksOn' to automatically place text
-	// fields on separate text lines when that text exceeds the
-	// maximum text line length ('MaxLineLength'). Therefore,
-	// paramter 'TurnAutoLineLengthBreaksOn' controls whether
-	// automatic line breaks using 'MaxLineLength' will be
-	// applied.
+	// The maximum length of the line on which the ad hoc
+	// text characters ('AdHocText') will be presented.
 	//
 	// Set this parameter to minus one (-1) to specify an
 	// unlimited line length for this text line.
 	//
 	// If the value of 'MaxLineLength' is less than one (1),
 	// it will be automatically converted to minus one (-1).
+	//
+	// 'MaxLineLength' is used in conjunction with parameter
+	// 'TurnAutoLineLengthBreaksOn' to automatically place text
+	// on separate text lines when that text exceeds the maximum
+	// text line length ('MaxLineLength'). Therefore, paramter
+	// 'TurnAutoLineLengthBreaksOn' controls whether automatic
+	// line breaks using 'MaxLineLength' will be applied.
 
 	TurnAutoLineLengthBreaksOn bool
 	// This parameter controls whether text lines which exceed
