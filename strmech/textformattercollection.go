@@ -54,6 +54,11 @@ type TextFormatterCollection struct {
 //       inserted "as is", into the final output of formatted
 //       text.
 //
+//       If this parameter is submitted as an empty or zero
+//       length string, an error will be generated when
+//       attempting to create formatted text output.
+//
+//
 //
 //  rightMarginStr                     string
 //     - The contents of the string will be used as the right
@@ -133,6 +138,13 @@ type TextFormatterCollection struct {
 //       will be formatted as a separate line of text on the
 //       following line.
 //
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
 func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 	leftMarginStr string,
 	adHocText string,
@@ -178,6 +190,184 @@ func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 
 		lock: nil,
 	}
+
+	txtFmtCollection.fmtCollection =
+		append(
+			txtFmtCollection.fmtCollection,
+			newTextFormatter)
+
+	return
+}
+
+// AddAdHocTextDto - Adds raw, or ad hoc text to the Formatter
+// Collection.
+//
+// The ad hoc text is configured from an instance of TextAdHocDto
+// passed as an input parameter.
+//
+// The input parameters for this method are used to inject user
+// generated into the stream of text characters being formatted
+// for screen display, file output or printing.
+//
+// Except for line breaks configured at the user's discretion,
+// no additional formatting is performed on this text, and it is
+// inserted raw, or "as is", in to the final output of formatted
+// text.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  txtAdHocDto                        TextAdHocDto
+//     - An instance of TextFieldLabelDto which contains all the
+//       necessary data parameters to produce a text label.
+//
+//       The Text Field Label Data Transfer Object is defined as
+//       follows:
+//
+//        type TextAdHocDto struct {
+//
+//         FormatType                  TextFieldType
+//          Required. This enumeration value specifies the type of
+//          Text Format Operation to be performed.
+//
+//          For TextAdHocDto 'FormatType' this parameter should
+//          be set to: TxtFieldType.TextAdHoc()
+//
+//         LeftMarginStr               string
+//          A string containing the text characters to be
+//          positioned on the Left side of the Ad Hoc Text.
+//
+//          If no Left margin is required, set this parameter to an
+//          empty string.
+//
+//         AdHocText                   string
+//          This strings holds the raw ad hoc text.
+//
+//         RightMarginStr              string
+//          The contents of the string will be used as the right
+//          margin for the Text Ad Hoc string.
+//
+//          If no right margin is required, set 'RightMarginStr' to
+//          a zero length or empty string, and no right margin will
+//          be created.
+//
+//         TurnLineTerminationOff      bool
+//          By default, a new line string terminator ('\n') will be
+//          appended to the Ad Hoc text ('AdHocText'). If this
+//          parameter is set to 'true', no line termination
+//          sequence will be applied.
+//
+//          This parameter controls the operation of parameter
+//          'LineTerminator'. If 'TurnLineTerminationOff' is set
+//          to 'true', 'LineTerminator' will be completely
+//          ignored and have no effect.
+//
+//         LineTerminator              string
+//          This string holds the character or characters which
+//          will be used to terminate the formatted line of text
+//          output, if parameter 'TurnLineTerminationOff' is set
+//          to 'false'.
+//
+//          The most common usage sets this string to a new line
+//          character ("\n").
+//
+//          If 'LineTerminator' is configured as an empty string
+//          (string length zero), a single new line character
+//          ('\n') will be automatically applied to produce line
+//          termination depending on the setting for parameter
+//          'TurnLineTerminationOff'.
+//
+//          LineTerminator works in conjunction with member
+//          variable 'TurnLineTerminationOff'.
+//
+//          'TurnLineTerminationOff' controls the application of a
+//          line terminator. Setting 'TurnLineTerminationOff' to
+//          'true' means that NO line terminator will be applied.
+//
+//          Setting 'TurnLineTerminationOff' to 'true' means that
+//          parameter 'LineTerminator' will be completely ignored
+//          and have no effect.
+//
+//         MaxLineLength               int
+//          The maximum length of the line on which the ad hoc
+//          text characters ('AdHocText') will be presented.
+//
+//          Set this parameter to minus one (-1) to specify an
+//          unlimited line length for this text line.
+//
+//          If the value of 'MaxLineLength' is less than one (1),
+//          it will be automatically converted to minus one (-1).
+//
+//          'MaxLineLength' is used in conjunction with parameter
+//          'TurnAutoLineLengthBreaksOn' to automatically place
+//          text on separate text lines when that text exceeds the
+//          maximum text line length ('MaxLineLength'). Therefore,
+//          paramter 'TurnAutoLineLengthBreaksOn' controls whether
+//          automatic line breaks using 'MaxLineLength' will be
+//          applied.
+//
+//         TurnAutoLineLengthBreaksOn  bool
+//          This parameter controls whether text lines which exceed
+//          the maximum line length ('MaxLineLength') are
+//          positioned on the following line as a separate line of
+//          text.
+//
+//          To apply automatic line breaking at the maximum line
+//          length, set the value of this parameter to 'true'.
+//
+//          When this parameter is set to 'true', text fields which
+//          extend beyond the maximum line length 'MaxLineLength'
+//          will be formatted as a separate line of text on the
+//          following line.
+//        }
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  NONE
+//
+func (txtFmtCollection *TextFormatterCollection) AddAdHocTextDto(
+	txtAdHocDto TextAdHocDto) {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	if txtAdHocDto.MaxLineLength < 1 {
+		txtAdHocDto.MaxLineLength = -1
+	}
+
+	if txtAdHocDto.FormatType != TxtFieldType.TextAdHoc() {
+
+		txtAdHocDto.FormatType = TxtFieldType.TextAdHoc()
+	}
+
+	newTextFormatter := TextFormatterDto{
+		FormatType:          TxtFieldType.TextAdHoc(),
+		DateTime:            TextFieldDateTimeDto{},
+		Filler:              TextFieldFillerDto{},
+		Label:               TextFieldLabelDto{},
+		Spacer:              TextFieldSpacerDto{},
+		BlankLine:           TextLineBlankDto{},
+		SolidLine:           TextLineSolidDto{},
+		LineColumns:         TextLineColumnsDto{},
+		LinesTimerStartStop: TextLineTimerStartStopDto{},
+		TextAdHoc:           txtAdHocDto.CopyOut(),
+
+		lock: nil,
+	}
+
+	newTextFormatter.TextAdHoc.CopyIn(
+		txtAdHocDto)
 
 	txtFmtCollection.fmtCollection =
 		append(
