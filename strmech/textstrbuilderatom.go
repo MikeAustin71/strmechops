@@ -16,6 +16,127 @@ type textStrBuilderAtom struct {
 	lock *sync.Mutex
 }
 
+func (txtBuilderAtom *textStrBuilderAtom) buildAdHocTextWithDto(
+	txtAdHocDto TextAdHocDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strBuilder strings.Builder,
+	err error) {
+
+	if txtBuilderAtom.lock == nil {
+		txtBuilderAtom.lock = new(sync.Mutex)
+	}
+
+	txtBuilderAtom.lock.Lock()
+
+	defer txtBuilderAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderAtom."+
+			"buildDateTimeFieldWithDto()",
+		"")
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if txtAdHocDto.FormatType !=
+		TxtFieldType.TextAdHoc() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'txtAdHocDto.FormatType' is invalid!\n"+
+			"'txtAdHocDto.FormatType' should be set to \n"+
+			"TxtFieldType.TextAdHoc(). It is NOT!\n"+
+			"'txtAdHocDto.FormatType' String Value  = '%v'\n"+
+			"'txtAdHocDto.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			txtAdHocDto.FormatType.String(),
+			txtAdHocDto.FormatType.XValueInt())
+
+		return strBuilder, err
+	}
+
+	lenAdHocText := len(txtAdHocDto.AdHocText)
+
+	if lenAdHocText == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtAdHocDto.AdHocText' is invalid!\n"+
+			"'txtAdHocDto.AdHocText' is empty an contains zero (0) characters.\n",
+			ePrefix.String())
+
+		return strBuilder, err
+	}
+
+	var maximumLineLength = txtAdHocDto.MaxLineLength
+
+	if maximumLineLength == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'txtAdHocDto.MaxLineLength' has a value of zero.\n",
+			ePrefix.String())
+
+		return strBuilder, err
+
+	} else if maximumLineLength < -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Format Parameter Maximum Line Length is invalid!\n"+
+			"'txtAdHocDto.MaxLineLength' has a value less than minus\n"+
+			"one (-1).\n"+
+			"txtAdHocDto.MaxLineLength= '%v'\n",
+			ePrefix.String(),
+			maximumLineLength)
+
+		return strBuilder, err
+
+	} else if maximumLineLength == -1 ||
+		txtAdHocDto.TurnAutoLineLengthBreaksOn == false {
+
+		maximumLineLength = math.MaxInt32
+
+	}
+
+	lenLeftMargin := len(txtAdHocDto.LeftMarginStr)
+	lenRightMargin := len(txtAdHocDto.RightMarginStr)
+	lenLineTerminator := len(txtAdHocDto.LineTerminator)
+
+	strBuilder.Grow(lenLeftMargin +
+		lenAdHocText +
+		lenRightMargin +
+		lenLineTerminator + 5)
+
+	if lenLeftMargin > 0 {
+		strBuilder.WriteString(txtAdHocDto.LeftMarginStr)
+	}
+
+	strBuilder.WriteString(txtAdHocDto.AdHocText)
+
+	if lenRightMargin > 0 {
+
+		strBuilder.WriteString(txtAdHocDto.RightMarginStr)
+
+	}
+
+	if txtAdHocDto.TurnLineTerminationOff == false {
+
+		if lenLineTerminator > 0 {
+
+			strBuilder.WriteString(txtAdHocDto.LineTerminator)
+
+		} else {
+			strBuilder.WriteString("\n")
+		}
+
+	}
+
+	return strBuilder, err
+}
+
 // buildDateTimeFieldWithDto - Receives a Date Time Field Data
 // Transfer Objects and generates a Date Time Text string which
 // is returned in a strings.Builder instance.
@@ -609,9 +730,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineColumns(
 			lineCols.FormatType.String(),
 			lineCols.FormatType.XValueInt())
 
-		if err != nil {
-			return strBuilder, err
-		}
+		return strBuilder, err
 	}
 
 	numOfTextFields := len(lineCols.TextFieldsContent)
@@ -895,7 +1014,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLineSolidWithDto(
 	return strBuilder, err
 }
 
-func (txtBuilderAtom *textStrBuilderAtom) buildTextLinesTimerStartStop(
+func (txtBuilderAtom *textStrBuilderAtom) buildTextLinesTimerStartStopWithDto(
 	timerStartStopDto TextLineTimerStartStopDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	strBuilder strings.Builder,
@@ -915,7 +1034,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildTextLinesTimerStartStop(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderAtom."+
-			"buildTextLinesTimerStartStop()",
+			"buildTextLinesTimerStartStopWithDto()",
 		"")
 
 	if err != nil {

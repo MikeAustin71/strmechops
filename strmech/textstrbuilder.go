@@ -862,7 +862,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			TxtFieldType.TimerStartStop() {
 
 			strBuilder2,
-				err = txtBuilderAtom.buildTextLinesTimerStartStop(
+				err = txtBuilderAtom.buildTextLinesTimerStartStopWithDto(
 				txtFmtSpecs.fmtCollection[i].LinesTimerStartStop,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -872,6 +872,9 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			if err != nil {
 				return strBuilder, err
 			}
+
+		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
+			TxtFieldType.TextAdHoc() {
 
 		} else {
 
