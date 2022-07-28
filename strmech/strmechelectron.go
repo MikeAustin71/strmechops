@@ -12,6 +12,148 @@ type strMechElectron struct {
 	lock *sync.Mutex
 }
 
+// cutStringAtIndex - Receives a target string ('targetString')
+// and proceeds to cut of a sub-string of characters at target
+// string index 'cutAtIndex'. This sub-string is returned in
+// parameter 'cutStr'. The remain characters in 'targetString' not
+// included in 'cutStr' are returned via parameter 'remainderStr'
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStr                  string
+//     - The original string. A segment of this string will be
+//       "cut" and returned in parameter 'cutStr'. The "cut" will
+//       occur at index 'cutAtIndex' and all characters prior to
+//       'cutAtIndex' will be returned in parameter 'cutStr'.
+//
+//       The returned parameter 'remainderStr' will include all
+//       those remaining characters in 'targetStr' which were NOT
+//
+//       If this parameter ('targetStr') is an empty or zero length
+//       string, an error will be returned.
+//
+//
+//  cutAtIndex                 int
+//      - The index in 'targetStr' at which marks the dividing line
+//        between return parameters 'cutStr' and 'remainderStr'.
+//        All characters to the left of index 'cutAtIndex' will be
+//        returned in parameter 'cutStr'. All characters to the
+//        right of cutAtIndex, including the character designated
+//        by 'cutAtIndex', will returned in parameter
+//        'remainderStr'.
+//
+//       If this parameter has a value less than zero, an error
+//       will be returned.
+//
+//       If this parameter has a value greater than the string
+//       length of 'targetStr', no error will be generated,
+//       return parameter 'cutStr' will contain a copy of the
+//       entire 'targetStr', and 'remainderStr' will return an
+//       empty string.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  cutStr                     string
+//     - If this method completes successfully, all the characters
+//       in input parameter 'targetStr' to the left of index
+//       'cutAtIndex', excluding the character at index
+//       'cutAtIndex', will be returned in this parameter.
+//
+//
+//  remainderStr               string
+//     - If this method completes successfully, all the characters
+//       in 'targetStr' to the right of index 'cutAtIndex',
+//       including the character at index 'cutAtIndex', will be
+//       returned in this paramter.
+//
+//
+//  lenOfRemainderStr          int
+//     - Specifies the length of the remainder string returned in
+//       parameter 'remainderStr'.
+//
+//
+//  err                        error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (sMechElectron *strMechElectron) cutStringAtIndex(
+	targetStr string,
+	cutAtIndex int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	cutStr string,
+	remainderStr string,
+	lenOfRemainderStr int,
+	err error) {
+
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
+	}
+
+	sMechElectron.lock.Lock()
+
+	defer sMechElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechElectron."+
+			"cutStringAtIndex()",
+		"")
+
+	if err != nil {
+		return cutStr, remainderStr, lenOfRemainderStr, err
+	}
+
+	if cutAtIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'cutAtIndex' invalid!\n"+
+			"'cutAtIndex' has a value less than zero.\n",
+			ePrefix.String())
+
+		return cutStr, remainderStr, lenOfRemainderStr, err
+	}
+
+	lenOfTargetStr := len(targetStr)
+
+	if cutAtIndex > lenOfTargetStr {
+		cutAtIndex = lenOfTargetStr
+	}
+
+	cutStr = targetStr[:cutAtIndex]
+	remainderStr = targetStr[cutAtIndex:]
+	lenOfRemainderStr = len(remainderStr)
+
+	return cutStr, remainderStr, lenOfRemainderStr, err
+}
+
 // findFirstNonSpaceChar - Returns the string index of the first non-space character in
 // a string segment. The string to be searched is input parameter 'targetStr'. The string
 // segment which will be searched from left to right in 'targetStr' is defined by the
@@ -264,6 +406,158 @@ func (sMechElectron *strMechElectron) getValidString(
 	}
 
 	return string(actualValidRunes), err
+}
+
+// insertStringAtIndex - Inserts string 'insertString' at
+// index 'targetStrIndex' in string 'targetStr'.
+//
+// After the insertion, the first character in 'insertString'
+// will reside at index 'targetStrIndex' in the new version of
+// 'targetString' returned by this method.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStr                  string
+//     - The original string in which another string will be
+//       inserted.  'insertStr' will be inserted into 'targetStr'
+//       at index 'targetStrIndex'.
+//
+//       If this parameter is an empty or zero length string, an
+//       error will be returned.
+//
+//
+//  insertStr                  string
+//     - The string which will be inserted into 'targetStr'.
+//
+//       If this parameter is an empty or zero length string, an
+//       error will be returned.
+//
+//
+//  targetStrIndex             int
+//      - The index in 'targetStr' at which 'insertStr' will be
+//        inserted.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - A string containing a new version of 'targetStr' with
+//       'insertStr' inserted at index 'targetStrIndex'.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (sMechElectron *strMechElectron) insertStringAtIndex(
+	targetStr string,
+	insertStr string,
+	targetStrIndex int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	string,
+	error) {
+
+	if sMechElectron.lock == nil {
+		sMechElectron.lock = new(sync.Mutex)
+	}
+
+	sMechElectron.lock.Lock()
+
+	defer sMechElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"strMechElectron."+
+			"insertStringAtIndex()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	if len(insertStr) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'insertStr' invalid!\n"+
+			"'insertStr' is a zero length or empty string.\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	if targetStrIndex < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetStrIndex' invalid!\n"+
+			"'targetStrIndex' has a value less than zero (0).\n"+
+			"targetStrIndex = '%v'\n",
+			ePrefix.String(),
+			targetStrIndex)
+
+		return "", err
+
+	}
+
+	lenTargetStr := len(targetStr)
+
+	if lenTargetStr == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetStr' invalid!\n"+
+			"'targetStr' is a zero length or empty string.\n",
+			ePrefix.String())
+
+		return "", err
+	}
+
+	if targetStrIndex > lenTargetStr {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetStrIndex' invalid!\n"+
+			"'targetStrIndex' has a value greater than the\n"+
+			"length of 'targetStr'.\n"+
+			"Maximum Index value = '%v'\n"+
+			"targetStrIndex = '%v'\n",
+			ePrefix.String(),
+			lenTargetStr,
+			targetStrIndex)
+
+		return "", err
+
+	}
+
+	return targetStr[:targetStrIndex] +
+			insertStr +
+			targetStr[targetStrIndex:],
+		err
 }
 
 // ptr - Returns a pointer to a new instance of

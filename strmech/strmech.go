@@ -8,6 +8,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"strings"
@@ -871,6 +872,171 @@ func (sMech *StrMech) CopyOut() *StrMech {
 	return newStrOps
 }
 
+// CutStringAtIndex - Receives a target string ('targetString')
+// and proceeds to cut of a sub-string of characters at target
+// string index 'cutAtIndex'. This sub-string is returned in
+// parameter 'cutStr'. The remain characters in 'targetString' not
+// included in 'cutStr' are returned via parameter 'remainderStr'
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStr                  string
+//     - The original string. A segment of this string will be
+//       "cut" and returned in parameter 'cutStr'. The "cut" will
+//       occur at index 'cutAtIndex' and all characters prior to
+//       'cutAtIndex' will be returned in parameter 'cutStr'.
+//
+//       The returned parameter 'remainderStr' will include all
+//       those remaining characters in 'targetStr' which were NOT
+//
+//       If this parameter ('targetStr') is an empty or zero length
+//       string, an error will be returned.
+//
+//
+//  cutAtIndex                 int
+//      - The index in 'targetStr' at which marks the dividing line
+//        between return parameters 'cutStr' and 'remainderStr'.
+//        All characters to the left of index 'cutAtIndex' will be
+//        returned in parameter 'cutStr'. All characters to the
+//        right of cutAtIndex, including the character designated
+//        by 'cutAtIndex', will returned in parameter
+//        'remainderStr'.
+//
+//       If this parameter has a value less than zero, an error
+//       will be returned.
+//
+//       If this parameter has a value greater than the string
+//       length of 'targetStr', no error will be generated,
+//       return parameter 'cutStr' will contain a copy of the
+//       entire 'targetStr', and 'remainderStr' will return an
+//       empty string.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  cutStr                     string
+//     - If this method completes successfully, all the characters
+//       in input parameter 'targetStr' to the left of index
+//       'cutAtIndex', excluding the character at index
+//       'cutAtIndex', will be returned in this parameter.
+//
+//
+//  remainderStr               string
+//     - If this method completes successfully, all the characters
+//       in 'targetStr' to the right of index 'cutAtIndex',
+//       including the character at index 'cutAtIndex', will be
+//       returned in this paramter.
+//
+//
+//  lenOfRemainderStr          int
+//     - Specifies the length of the remainder string returned in
+//       parameter 'remainderStr'.
+//
+//
+//  err                        error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (sMech *StrMech) CutStringAtIndex(
+	targetStr string,
+	cutAtIndex int,
+	errorPrefix interface{}) (
+	cutStr string,
+	remainderStr string,
+	lenOfRemainderStr int,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.CutStringAtIndex()",
+		"")
+
+	if err != nil {
+		return cutStr, remainderStr, lenOfRemainderStr, err
+	}
+
+	cutStr,
+		remainderStr,
+		lenOfRemainderStr,
+		err = strMechElectron{}.ptr().cutStringAtIndex(
+		targetStr,
+		cutAtIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("targetStr cutAtIndex='%v'",
+				cutAtIndex)))
+
+	return cutStr, remainderStr, lenOfRemainderStr, err
+}
+
 // DoesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
@@ -1024,14 +1190,14 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //       End of line characters will terminate the search for a data field.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1046,16 +1212,16 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1067,7 +1233,8 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1335,14 +1502,14 @@ func (sMech *StrMech) ExtractDataField(
 //         Extracted Number String = "1.8%"
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1357,16 +1524,16 @@ func (sMech *StrMech) ExtractDataField(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1378,7 +1545,8 @@ func (sMech *StrMech) ExtractDataField(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1623,14 +1791,14 @@ func (sMech *StrMech) ExtractNumberRunes(
 //       returned by this method.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1645,16 +1813,16 @@ func (sMech *StrMech) ExtractNumberRunes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1666,7 +1834,8 @@ func (sMech *StrMech) ExtractNumberRunes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1789,14 +1958,14 @@ func (sMech *StrMech) ExtractTextLines(
 //       the ending index for the search.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1811,16 +1980,16 @@ func (sMech *StrMech) ExtractTextLines(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1832,7 +2001,8 @@ func (sMech *StrMech) ExtractTextLines(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -1928,14 +2098,14 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 //       is actually the starting index for the search.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -1950,16 +2120,16 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -1971,7 +2141,8 @@ func (sMech *StrMech) FindFirstNonSpaceChar(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2075,14 +2246,14 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 //       marked by the input parameter, 'startIdx'.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2097,16 +2268,16 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2118,7 +2289,8 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2264,14 +2436,14 @@ func (sMech *StrMech) FindLastSpace(
 //       in 'targetStr'.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2286,16 +2458,16 @@ func (sMech *StrMech) FindLastSpace(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2307,7 +2479,8 @@ func (sMech *StrMech) FindLastSpace(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2466,14 +2639,14 @@ func (sMech *StrMech) FindRegExIndex(
 //       will be returned.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2488,16 +2661,16 @@ func (sMech *StrMech) FindRegExIndex(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2509,7 +2682,8 @@ func (sMech *StrMech) FindRegExIndex(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2643,14 +2817,14 @@ func (sMech *StrMech) GetStringData() string {
 //       bytes. Invalid characters will be discarded.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2665,16 +2839,16 @@ func (sMech *StrMech) GetStringData() string {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2686,7 +2860,8 @@ func (sMech *StrMech) GetStringData() string {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2783,14 +2958,14 @@ func (sMech *StrMech) GetValidBytes(
 //       runes. Invalid characters will be discarded.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2805,16 +2980,16 @@ func (sMech *StrMech) GetValidBytes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2826,7 +3001,8 @@ func (sMech *StrMech) GetValidBytes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -2926,14 +3102,14 @@ func (sMech *StrMech) GetValidRunes(
 //       returned as a new string. Invalid characters are discarded.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -2948,16 +3124,16 @@ func (sMech *StrMech) GetValidRunes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -2969,7 +3145,8 @@ func (sMech *StrMech) GetValidRunes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -3046,6 +3223,146 @@ func (sMech *StrMech) GetValidString(
 			targetStr,
 			validRunes,
 			ePrefix)
+}
+
+// InsertStrAtIndex - Inserts one string inside another string.
+//
+// String 'insertString' is inserted at index 'targetStrIndex' in
+// string 'targetStr'.
+//
+// After the insertion, the first character in 'insertString'
+// will reside at index 'targetStrIndex' in the new version of
+// 'targetString' returned by this method.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  targetStr                  string
+//     - The original string in which another string will be
+//       inserted.  'insertStr' will be inserted into 'targetStr'
+//       at index 'targetStrIndex'.
+//
+//       If this parameter is an empty or zero length string, an
+//       error will be returned.
+//
+//
+//  insertStr                  string
+//     - The string which will be inserted into 'targetStr'.
+//
+//       If this parameter is an empty or zero length string, an
+//       error will be returned.
+//
+//
+//  targetStrIndex             int
+//      - The index in 'targetStr' at which 'insertStr' will be
+//        inserted.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - A string containing a new version of 'targetStr' with
+//       'insertStr' inserted at index 'targetStrIndex'.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' (error prefix) will be inserted or
+//       prefixed at the beginning of the error message.
+//
+func (sMech *StrMech) InsertStrAtIndex(
+	targetStr string,
+	insertStr string,
+	targetStrIndex int,
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.InsertStrAtIndex()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return strMechElectron{}.ptr().insertStringAtIndex(
+		targetStr,
+		insertStr,
+		targetStrIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("targetStrIndex='%v'",
+				targetStrIndex)))
 }
 
 // IntSeparateNumStr - Inserts integer separators into an array of
@@ -3139,13 +3456,51 @@ func (sMech *StrMech) GetValidString(
 //       method will return an error.
 //
 //
-//  errPrefDto                 *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods.
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -3351,14 +3706,14 @@ func (sMech *StrMech) IsTargetRunesIndex(
 //       array and an error will be returned.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -3373,16 +3728,16 @@ func (sMech *StrMech) IsTargetRunesIndex(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3394,7 +3749,8 @@ func (sMech *StrMech) IsTargetRunesIndex(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -3669,14 +4025,14 @@ func (sMech *StrMech) IsValidRuneIntArray(
 //                           Example: "   TextString   "
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -3691,16 +4047,16 @@ func (sMech *StrMech) IsValidRuneIntArray(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3712,7 +4068,8 @@ func (sMech *StrMech) IsValidRuneIntArray(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -3843,14 +4200,14 @@ func (sMech *StrMech) LowerCaseFirstLetter(str string) string {
 //       characters.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -3865,16 +4222,16 @@ func (sMech *StrMech) LowerCaseFirstLetter(str string) string {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -3886,7 +4243,8 @@ func (sMech *StrMech) LowerCaseFirstLetter(str string) string {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -4155,14 +4513,14 @@ func (sMech *StrMech) ReadStringFromBytes(
 //       returned.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -4177,16 +4535,16 @@ func (sMech *StrMech) ReadStringFromBytes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -4198,7 +4556,8 @@ func (sMech *StrMech) ReadStringFromBytes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // -----------------------------------------------------------------
@@ -4286,14 +4645,14 @@ func (sMech *StrMech) RemoveStringChar(
 //       it will be eliminated or removed from the returned byte array ([]byte).
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -4308,16 +4667,16 @@ func (sMech *StrMech) RemoveStringChar(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -4329,7 +4688,8 @@ func (sMech *StrMech) RemoveStringChar(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -4447,14 +4807,14 @@ func (sMech *StrMech) ReplaceBytes(
 //       from replaceArray[i][1].
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -4469,16 +4829,16 @@ func (sMech *StrMech) ReplaceBytes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -4490,7 +4850,8 @@ func (sMech *StrMech) ReplaceBytes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -4678,14 +5039,14 @@ func (sMech *StrMech) ReplaceNewLines(
 //       method will return an error.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -4700,16 +5061,16 @@ func (sMech *StrMech) ReplaceNewLines(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -4721,7 +5082,8 @@ func (sMech *StrMech) ReplaceNewLines(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -4860,14 +5222,14 @@ func (sMech *StrMech) ReplaceRunes(
 //       within the 'targetStr' beginning with index zero (0).
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -4882,16 +5244,16 @@ func (sMech *StrMech) ReplaceRunes(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -4903,7 +5265,8 @@ func (sMech *StrMech) ReplaceRunes(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -4994,14 +5357,14 @@ func (sMech *StrMech) ReplaceStringChar(
 //       returned string.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -5016,16 +5379,16 @@ func (sMech *StrMech) ReplaceStringChar(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -5037,7 +5400,8 @@ func (sMech *StrMech) ReplaceStringChar(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -5177,14 +5541,14 @@ func (sMech *StrMech) SetStringData(str string) {
 //       will be centered.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -5199,16 +5563,16 @@ func (sMech *StrMech) SetStringData(str string) {
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -5220,7 +5584,8 @@ func (sMech *StrMech) SetStringData(str string) {
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -5323,14 +5688,14 @@ func (sMech *StrMech) StrCenterInStrLeft(
 //       will be centered.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -5345,16 +5710,16 @@ func (sMech *StrMech) StrCenterInStrLeft(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -5366,7 +5731,8 @@ func (sMech *StrMech) StrCenterInStrLeft(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -5783,14 +6149,14 @@ func (sMech *StrMech) StripTrailingChars(
 //       parameter 'strToJustify' will be left-justified.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -5805,16 +6171,16 @@ func (sMech *StrMech) StripTrailingChars(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -5826,7 +6192,8 @@ func (sMech *StrMech) StripTrailingChars(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -5933,14 +6300,14 @@ func (sMech *StrMech) StrLeftJustify(
 //       will be centered.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -5955,16 +6322,16 @@ func (sMech *StrMech) StrLeftJustify(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -5976,7 +6343,8 @@ func (sMech *StrMech) StrLeftJustify(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -6089,14 +6457,14 @@ func (sMech *StrMech) StrPadLeftToCenter(
 //       will be right-justified.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -6111,16 +6479,16 @@ func (sMech *StrMech) StrPadLeftToCenter(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -6132,7 +6500,8 @@ func (sMech *StrMech) StrPadLeftToCenter(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -6265,14 +6634,14 @@ func (sMech *StrMech) StrRightJustify(
 //       will be replaced with 'newRune'.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -6287,16 +6656,16 @@ func (sMech *StrMech) StrRightJustify(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -6308,7 +6677,8 @@ func (sMech *StrMech) StrRightJustify(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -6426,14 +6796,14 @@ func (sMech *StrMech) SwapRune(
 //       character.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -6448,16 +6818,16 @@ func (sMech *StrMech) SwapRune(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -6469,7 +6839,8 @@ func (sMech *StrMech) SwapRune(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
@@ -6566,14 +6937,14 @@ func (sMech StrMech) TrimMultipleChars(
 //       'targetStr' it will be ignored and NOT deleted.
 //
 //
-//  errorPrefix         interface{}
+//  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
 //       contains the name of the calling method or methods
 //       listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
 //
 //       This empty interface must be convertible to one of the
 //       following types:
@@ -6588,16 +6959,16 @@ func (sMech StrMech) TrimMultipleChars(
 //       3. []string A one-dimensional slice of strings containing
 //                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings containing
-//                      error prefix and error context information.
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
 //
 //       5. ErrPrefixDto - An instance of ErrPrefixDto. The
 //                         ErrorPrefixInfo from this object will be
 //                         copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
 //
 //       7. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
@@ -6609,7 +6980,8 @@ func (sMech StrMech) TrimMultipleChars(
 //       invalid and trigger the return of an error.
 //
 //       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package, "github.com/MikeAustin71/errpref".
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
 //
 //
 // ------------------------------------------------------------------------
