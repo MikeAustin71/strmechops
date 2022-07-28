@@ -1186,7 +1186,9 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 		lock:                       nil,
 	}
 
-	return textStrBuilderAtom{}.ptr().buildDateTimeFieldWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildDateTimeFieldWithDto(
 		dateTimeDto,
 		ePrefix.XCpy(
 			"strBuilder<-dateTime"))
@@ -1467,7 +1469,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 		textDateTimeDto.MaxLineLength = -1
 	}
 
-	return textStrBuilderAtom{}.ptr().buildDateTimeFieldWithDto(
+	return new(textStrBuilderAtom).buildDateTimeFieldWithDto(
 		textDateTimeDto,
 		ePrefix.XCpy(
 			"strBuilder<-textDateTimeDto"))
@@ -1762,7 +1764,9 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		lock:                       nil,
 	}
 
-	return textStrBuilderAtom{}.ptr().buildFillerFieldWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildFillerFieldWithDto(
 		fillerFieldDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerFieldDto"))
@@ -2061,7 +2065,9 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 		textFillerDto.MaxLineLength = -1
 	}
 
-	return textStrBuilderAtom{}.ptr().buildFillerFieldWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildFillerFieldWithDto(
 		textFillerDto.CopyOut(),
 		ePrefix.XCpy(
 			"strBuilder<-textFillerDto"))
@@ -2414,7 +2420,9 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		lock:                       nil,
 	}
 
-	return textStrBuilderAtom{}.ptr().buildLabelFieldWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildLabelFieldWithDto(
 		labelFieldDto,
 		ePrefix.XCpy(
 			"strBuilder<-labelFieldDto"))
@@ -2713,7 +2721,9 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 
 	}
 
-	return textStrBuilderAtom{}.ptr().buildLabelFieldWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildLabelFieldWithDto(
 		textLabelDto.CopyOut(),
 		ePrefix.XCpy(
 			"strBuilder<-textLabelDto"))
@@ -2968,7 +2978,9 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 		lock:                       nil,
 	}
 
-	return textStrBuilderAtom{}.ptr().
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.
 		buildSpacerFieldWithDto(
 			txtFieldSpacerDto,
 			ePrefix.XCpy(
@@ -3233,7 +3245,9 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
 		txtFieldSpacerDto.MaxLineLength = -1
 	}
 
-	return textStrBuilderAtom{}.ptr().
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.
 		buildSpacerFieldWithDto(
 			txtFieldSpacerDto,
 			ePrefix.XCpy(
@@ -3257,7 +3271,7 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
-//       for 'labelText field.
+//       for 'labelText' field.
 //
 //       If no left margin is required, set 'LeftMarginStr' to a
 //       zero length or empty string, and no left margin will be
@@ -3460,7 +3474,9 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 		return strBuilder, err
 	}
 
-	return textStrBuilderAtom{}.ptr().fieldLabelWithMargins(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.fieldLabelWithMargins(
 		leftMarginStr,
 		labelText,
 		labelFieldLength,
@@ -3488,7 +3504,7 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleLabel(
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
-//       for 'labelText field.
+//       for 'labelText' field.
 //
 //       If no left margin is required, set 'LeftMarginStr' to a
 //       zero length or empty string, and no left margin will be
@@ -3636,14 +3652,13 @@ func (txtStrBuildr *TextStrBuilder) FieldsSingleSpacer(
 		return strBuilder, err
 	}
 
-	return textStrBuilderElectron{}.ptr().
-		fieldSpacerWithMargins(
-			leftMarginStr,
-			fieldLength,
-			rightMarginStr,
-			lineTerminator,
-			ePrefix.XCpy(
-				"strBuilder<-Spacer FieldLength"))
+	return new(textStrBuilderElectron).fieldSpacerWithMargins(
+		leftMarginStr,
+		fieldLength,
+		rightMarginStr,
+		lineTerminator,
+		ePrefix.XCpy(
+			"strBuilder<-Spacer FieldLength"))
 }
 
 // FieldsLabelParameterValue - Is designed to five text elements
@@ -4152,7 +4167,9 @@ func (txtStrBuildr *TextStrBuilder) LineBlank(
 		lock:            nil,
 	}
 
-	return textStrBuilderAtom{}.ptr().buildTextLineBlankWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildTextLineBlankWithDto(
 		txtLineBlankDto,
 		ePrefix.XCpy(fmt.Sprintf(
 			"strBuilder<-txtLineBlankDto blank lines =='%v'",
@@ -4325,7 +4342,9 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 
 	}
 
-	return textStrBuilderAtom{}.ptr().buildTextLineBlankWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildTextLineBlankWithDto(
 		txtLineBlankDto,
 		ePrefix.XCpy(fmt.Sprintf(
 			"strBuilder<-txtLineBlankDtoDto blank lines =='%v'",
@@ -4717,7 +4736,9 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 		lock:                       nil,
 	}
 
-	return textStrBuilderAtom{}.ptr().buildTextLineSolidWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildTextLineSolidWithDto(
 		txtLineSolidDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerCharacters"))
@@ -5094,7 +5115,9 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 		txtLineSolidDto.MaxLineLength = -1
 	}
 
-	return textStrBuilderAtom{}.ptr().buildTextLineSolidWithDto(
+	txtStrBuilderAtom := textStrBuilderAtom{}
+
+	return txtStrBuilderAtom.buildTextLineSolidWithDto(
 		txtLineSolidDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerCharacters"))

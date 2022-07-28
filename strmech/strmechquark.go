@@ -2734,7 +2734,7 @@ func (sMechQuark *strMechQuark) replaceSubString(
 //   testString := "@@Some@@@@@@@@@Stri@@ng@@"
 //
 //   actualString, actualStrLen :=
-//         StrMech{}.Ptr().StripBadChars(
+//         new(StrMech).StripBadChars(
 //                            testString,
 //                            badChars)
 //
@@ -2886,7 +2886,7 @@ Done:
 //   "..........      ./../.\\.\\..\\////   SomeString"
 //
 //  actualString, actualStrLen :=
-//      StrMech{}.Ptr().StripLeadingChars(
+//      new(StrMech).StripLeadingChars(
 //                       testString,
 //                       badChars)
 //
@@ -3030,7 +3030,7 @@ Done:
 //   "SomeString..........      ./../.\\.\\..\\////   "
 //
 //  actualString, actualStrLen :=
-//    StrMech{}.Ptr().StripTrailingChars(
+//    new(StrMech).StripTrailingChars(
 //                      testString,
 //                      badChars)
 //

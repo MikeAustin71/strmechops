@@ -40,7 +40,7 @@ func TestStrMech_ExtractNumericDigits_01(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -140,7 +140,7 @@ func TestStrMech_ExtractNumericDigits_02(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -149,7 +149,7 @@ func TestStrMech_ExtractNumericDigits_02(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -213,7 +213,7 @@ func TestStrMech_ExtractNumericDigits_03(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -222,7 +222,7 @@ func TestStrMech_ExtractNumericDigits_03(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -286,7 +286,7 @@ func TestStrMech_ExtractNumericDigits_04(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -295,7 +295,7 @@ func TestStrMech_ExtractNumericDigits_04(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -359,7 +359,7 @@ func TestStrMech_ExtractNumericDigits_05(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -368,7 +368,7 @@ func TestStrMech_ExtractNumericDigits_05(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -432,7 +432,7 @@ func TestStrMech_ExtractNumericDigits_06(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -441,7 +441,7 @@ func TestStrMech_ExtractNumericDigits_06(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -505,7 +505,7 @@ func TestStrMech_ExtractNumericDigits_07(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -514,7 +514,7 @@ func TestStrMech_ExtractNumericDigits_07(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -578,7 +578,7 @@ func TestStrMech_ExtractNumericDigits_08(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -587,7 +587,7 @@ func TestStrMech_ExtractNumericDigits_08(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -651,7 +651,7 @@ func TestStrMech_ExtractNumericDigits_09(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -660,7 +660,7 @@ func TestStrMech_ExtractNumericDigits_09(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -724,7 +724,7 @@ func TestStrMech_ExtractNumericDigits_10(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -733,7 +733,7 @@ func TestStrMech_ExtractNumericDigits_10(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -793,7 +793,7 @@ func TestStrMech_ExtractNumericDigits_11(t *testing.T) {
 	expectedNextTargetStrIndex := -1
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -802,7 +802,7 @@ func TestStrMech_ExtractNumericDigits_11(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -855,7 +855,7 @@ func TestStrMech_ExtractNumericDigits_12(t *testing.T) {
 	keepTrailingChars := ""
 
 	_,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -864,7 +864,7 @@ func TestStrMech_ExtractNumericDigits_12(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n" +
+		t.Error("Expected an error return from new(StrMech).ExtractNumericDigits(targetStr, 0)\n" +
 			"because input parameter 'targetStr' is an empty string.\n" +
 			"However, NO ERROR WAS RETURNED!!")
 		return
@@ -893,7 +893,7 @@ func TestStrMech_ExtractNumericDigits_13(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -902,7 +902,7 @@ func TestStrMech_ExtractNumericDigits_13(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -966,7 +966,7 @@ func TestStrMech_ExtractNumericDigits_14(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -975,7 +975,7 @@ func TestStrMech_ExtractNumericDigits_14(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -1039,7 +1039,7 @@ func TestStrMech_ExtractNumericDigits_15(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1048,7 +1048,7 @@ func TestStrMech_ExtractNumericDigits_15(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -1112,7 +1112,7 @@ func TestStrMech_ExtractNumericDigits_16(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1121,7 +1121,7 @@ func TestStrMech_ExtractNumericDigits_16(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -1185,7 +1185,7 @@ func TestStrMech_ExtractNumericDigits_17(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1194,7 +1194,7 @@ func TestStrMech_ExtractNumericDigits_17(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}
@@ -1247,7 +1247,7 @@ func TestStrMech_ExtractNumericDigits_18(t *testing.T) {
 	keepTrailingChars := ""
 
 	_,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1256,7 +1256,7 @@ func TestStrMech_ExtractNumericDigits_18(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrMech{}.Ptr().ExtractNumericDigits()\n" +
+		t.Error("Expected an error return from new(StrMech).ExtractNumericDigits()\n" +
 			"because input parameter 'targetStr' is an empty string.\n" +
 			"However, NO ERROR WAS RETURNED!!\n")
 	}
@@ -1273,7 +1273,7 @@ func TestStrMech_ExtractNumericDigits_19(t *testing.T) {
 	keepTrailingChars := ""
 
 	_,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1282,7 +1282,7 @@ func TestStrMech_ExtractNumericDigits_19(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrMech{}.Ptr().ExtractNumericDigits()\n" +
+		t.Error("Expected an error return from new(StrMech).ExtractNumericDigits()\n" +
 			"because input parameter 'startIdx' is less than zero.\n" +
 			"However, NO ERROR WAS RETURNED!!\n")
 	}
@@ -1299,7 +1299,7 @@ func TestStrMech_ExtractNumericDigits_20(t *testing.T) {
 	keepTrailingChars := ""
 
 	_,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1308,7 +1308,7 @@ func TestStrMech_ExtractNumericDigits_20(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrMech{}.Ptr().ExtractNumericDigits()\n" +
+		t.Error("Expected an error return from new(StrMech).ExtractNumericDigits()\n" +
 			"because input parameter 'startIdx' is beyond the maximum boundary for 'targetStr'.\n" +
 			"However, NO ERROR WAS RETURNED!!\n")
 	}
@@ -1336,7 +1336,7 @@ func TestStrMech_ExtractNumericDigits_21(t *testing.T) {
 	}
 
 	nStrDto,
-		err := StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -1345,7 +1345,7 @@ func TestStrMech_ExtractNumericDigits_21(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractNumericDigits(targetStr, 0)\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractNumericDigits(targetStr, 0)\n"+
 			"targetStr='%v'\nError='%v'\n", targetStr, err.Error())
 		return
 	}

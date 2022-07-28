@@ -395,7 +395,7 @@ func (sMechElectron *strMechElectron) getValidString(
 	}
 
 	actualValidRunes, err :=
-		strMechQuark{}.ptr().
+		new(strMechQuark).
 			getValidRunes(
 				[]rune(targetStr),
 				validRunes,
@@ -1104,7 +1104,7 @@ func (sMechElectron *strMechElectron) replaceStringChars(
 
 	outputStr,
 		err :=
-		strMechQuark{}.ptr().
+		new(strMechQuark).
 			replaceRunes(
 				[]rune(targetStr),
 				replacementRunes,

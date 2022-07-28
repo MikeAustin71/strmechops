@@ -63,7 +63,7 @@ func TestStrMech_BreakTextAtLineLength_01(t *testing.T) {
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = new(StrMech).ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected string='%v'. Instead, string='%v'.",
@@ -104,7 +104,7 @@ func TestStrMech_BreakTextAtLineLength_02(t *testing.T) {
 	expected := "Did you know? The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrMech{}.NewPtr().
+	actualTxt, err := new(StrMech).
 		BreakTextAtLineLength(tstStr,
 			20,
 			'\n',
@@ -115,7 +115,7 @@ func TestStrMech_BreakTextAtLineLength_02(t *testing.T) {
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = new(StrMech).ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'. Instead, text='%v' ",
@@ -136,7 +136,7 @@ func TestStrMech_BreakTextAtLineLength_03(t *testing.T) {
 	expected := "Did you know? XX The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrMech{}.NewPtr().
+	actualTxt, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			20,
@@ -148,7 +148,7 @@ func TestStrMech_BreakTextAtLineLength_03(t *testing.T) {
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = new(StrMech).ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'. Instead, text='%v' ",
@@ -169,7 +169,7 @@ func TestStrMech_BreakTextAtLineLength_04(t *testing.T) {
 	expected := "Did you know? The%" +
 		"Cow Jumped Over The%Moon!%"
 
-	actualTxt, err := StrMech{}.NewPtr().
+	actualTxt, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			20,
@@ -181,7 +181,7 @@ func TestStrMech_BreakTextAtLineLength_04(t *testing.T) {
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = new(StrMech).ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'. Instead, text='%v' ",
@@ -227,7 +227,7 @@ func TestStrMech_BreakTextAtLineLength_05(t *testing.T) {
 		"pellentesque.%Proin vestibulum accumsan erat vel%commodo. Maecenas sapien mauris,%faucibus nec " +
 		"consectetur eu, ultricies%sit amet elit. Suspendisse.%"
 
-	actualTxt, err := StrMech{}.NewPtr().
+	actualTxt, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			40,
@@ -239,7 +239,7 @@ func TestStrMech_BreakTextAtLineLength_05(t *testing.T) {
 			"tstStr, 40, '\n' ). Error='%v' ", err.Error())
 	}
 
-	actualTxt = StrMech{}.Ptr().ReplaceNewLines(actualTxt, "%")
+	actualTxt = new(StrMech).ReplaceNewLines(actualTxt, "%")
 
 	if expected != actualTxt {
 		t.Errorf("Error: Expected text='%v'\n\n. Instead, text='%v'\n",
@@ -256,7 +256,7 @@ func TestStrMech_BreakTextAtLineLength_06(t *testing.T) {
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
 
-	_, err := StrMech{}.NewPtr().
+	_, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			0,
@@ -278,7 +278,7 @@ func TestStrMech_BreakTextAtLineLength_07(t *testing.T) {
 		"sapien consectetur faucibus eget eu arcu. Lorem ipsum dolor sit amet, consectetur adipiscing " +
 		"elit. Curabitur vel aliquet massa. Integer id vehicula mi. Cras elementum, nisi in ultrices. "
 
-	_, err := StrMech{}.NewPtr().
+	_, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			50,
@@ -297,7 +297,7 @@ func TestStrMech_BreakTextAtLineLength_08(t *testing.T) {
 
 	tstStr := "                           "
 
-	returnStr, err := StrMech{}.NewPtr().
+	returnStr, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			10,
@@ -321,7 +321,7 @@ func TestStrMech_BreakTextAtLineLength_09(t *testing.T) {
 
 	tstStr := ""
 
-	_, err := StrMech{}.NewPtr().
+	_, err := new(StrMech).
 		BreakTextAtLineLength(
 			tstStr,
 			10,
@@ -385,7 +385,8 @@ func TestStrMech_ConvertNonPrintableChars_02(t *testing.T) {
 	testRunes := []rune(testStr)
 	expectedStr := "Hello[SPACE]world![SPACE]How[SPACE]are[SPACE]you[SPACE]doing[SPACE]today?\\n"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, true)
+	actualStr := new(StrMech).
+		ConvertNonPrintableChars(testRunes, true)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -402,7 +403,8 @@ func TestStrMech_ConvertNonPrintableChars_03(t *testing.T) {
 	//goland:noinspection ALL
 	expectedStr := "Hello world!\\tHow\\rare\\ayou\\bdoing\\ftoday?\\v\\n"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := new(StrMech).
+		ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -418,7 +420,7 @@ func TestStrMech_ConvertNonPrintableChars_04(t *testing.T) {
 	testRunes := []rune(testStr)
 	expectedStr := "[EMPTY]"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := new(StrMech).ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -440,7 +442,7 @@ func TestStrMech_ConvertNonPrintableChars_05(t *testing.T) {
 
 	expectedStr := "Hello[NULL]"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := new(StrMech).ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -467,7 +469,7 @@ func TestStrMech_ConvertNonPrintableChars_06(t *testing.T) {
 
 	expectedStr := "Hello[SOH][STX][ETX][EOT][ENQ][ACK]"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := new(StrMech).ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -489,7 +491,7 @@ func TestStrMech_ConvertNonPrintableChars_07(t *testing.T) {
 
 	expectedStr := "Hello\\"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := new(StrMech).ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -512,7 +514,7 @@ func TestStrMech_ConvertNonPrintableChars_08(t *testing.T) {
 
 	expectedStr := "Hello[SO][SI]"
 
-	actualStr := StrMech{}.NewPtr().ConvertNonPrintableChars(testRunes, false)
+	actualStr := new(StrMech).ConvertNonPrintableChars(testRunes, false)
 
 	if expectedStr != actualStr {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -983,7 +985,7 @@ func TestStrMech_CopyRuneArrays000100(t *testing.T) {
 
 	sourceRuneArray := []rune("Hello World!")
 
-	err := StrMech{}.Ptr().CopyRuneArrays(
+	err := new(StrMech).CopyRuneArrays(
 		&targetRuneArray,
 		&sourceRuneArray,
 		false,
@@ -1035,7 +1037,7 @@ func TestStrMech_CopyRuneArrays000100(t *testing.T) {
 		}
 	}
 
-	err = StrMech{}.Ptr().CopyRuneArrays(
+	err = new(StrMech).CopyRuneArrays(
 		&targetRuneArray,
 		&sourceRuneArray,
 		false,
@@ -1104,7 +1106,7 @@ func TestStrMech_CopyRuneArrays000200(t *testing.T) {
 		return
 	}
 
-	areEqual := strMechQuark{}.ptr().equalRuneArraysNil(
+	areEqual := new(strMechQuark).equalRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
@@ -1152,7 +1154,7 @@ func TestStrMech_CopyRuneArrays000300(t *testing.T) {
 		return
 	}
 
-	areEqual := strMechQuark{}.ptr().equalRuneArraysNil(
+	areEqual := new(strMechQuark).equalRuneArraysNil(
 		targetRuneArray,
 		sourceRuneArray)
 
@@ -1237,13 +1239,13 @@ func TestStrMech_CopyRuneArrays000400(t *testing.T) {
 		return
 	}
 
-	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+	areEqual = new(StrMech).EqualRuneArrays(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"new(StrMech).EqualRuneArrays()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
 			"This is wrong. 'targetRuneArray' should be equal\n"+
 			"to sourceRuneArray!\n",
@@ -1339,13 +1341,13 @@ func TestStrMech_CopyRuneArrays000500(t *testing.T) {
 		return
 	}
 
-	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+	areEqual = new(StrMech).EqualRuneArrays(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"new(StrMech).EqualRuneArrays()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
 			"This is wrong. 'targetRuneArray' should be equal\n"+
 			"to sourceRuneArray!\n",
@@ -1442,13 +1444,13 @@ func TestStrMech_CopyRuneArrays000600(t *testing.T) {
 		return
 	}
 
-	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+	areEqual = new(StrMech).EqualRuneArrays(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"new(StrMech).EqualRuneArrays()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
 			"This is wrong. 'targetRuneArray' should be equal\n"+
 			"to sourceRuneArray!\n",
@@ -1545,13 +1547,13 @@ func TestStrMech_CopyRuneArrays000700(t *testing.T) {
 		return
 	}
 
-	areEqual = StrMech{}.Ptr().EqualRuneArrays(
+	areEqual = new(StrMech).EqualRuneArrays(
 		targetRuneArray,
 		sourceRuneArray)
 
 	if !areEqual {
 		t.Errorf("%v - Error\n"+
-			"StrMech{}.Ptr().EqualRuneArrays()\n"+
+			"new(StrMech).EqualRuneArrays()\n"+
 			"'targetRuneArray' and 'sourceRuneArray' are NOT EQUAL!"+
 			"This is wrong. 'targetRuneArray' should be equal\n"+
 			"to sourceRuneArray!\n",
@@ -1635,7 +1637,7 @@ func TestStrMech_DoesLastCharExist_01(t *testing.T) {
 
 	testString := "What in the world is Garfield doing!"
 
-	actualReturn := StrMech{}.DoesLastCharExist(testString, lastChar)
+	actualReturn := new(StrMech).DoesLastCharExist(testString, lastChar)
 
 	if true != actualReturn {
 		t.Errorf("Expected return value='true'. Instead, return value='%v' ",
@@ -1652,7 +1654,7 @@ func TestStrMech_DoesLastCharExist_02(t *testing.T) {
 
 	testString := "What in the world is Garfield doing!"
 
-	actualReturn := StrMech{}.DoesLastCharExist(testString, lastChar)
+	actualReturn := new(StrMech).DoesLastCharExist(testString, lastChar)
 
 	if false != actualReturn {
 		t.Errorf("Expected return value='false'. Instead, return value='%v' ",
@@ -1669,7 +1671,7 @@ func TestStrMech_DoesLastCharExist_03(t *testing.T) {
 
 	testString := ""
 
-	actualReturn := StrMech{}.DoesLastCharExist(testString, lastChar)
+	actualReturn := new(StrMech).DoesLastCharExist(testString, lastChar)
 
 	if false != actualReturn {
 		t.Error("Expected return value='false' because 'testString' was an empty string\n" +

@@ -295,24 +295,6 @@ func (txtBuilderElectron *textStrBuilderElectron) lineBlank(
 	return strBuilder, err
 }
 
-// ptr - Returns a pointer to a new instance of
-// textStrBuilderElectron.
-//
-func (txtBuilderElectron textStrBuilderElectron) ptr() *textStrBuilderElectron {
-
-	if txtBuilderElectron.lock == nil {
-		txtBuilderElectron.lock = new(sync.Mutex)
-	}
-
-	txtBuilderElectron.lock.Lock()
-
-	defer txtBuilderElectron.lock.Unlock()
-
-	return &textStrBuilderElectron{
-		lock: new(sync.Mutex),
-	}
-}
-
 // writeLeftMargin - Writes left margin string to the formatted
 // text stream.
 //
@@ -845,10 +827,19 @@ func (txtBuilderElectron *textStrBuilderElectron) writeRightMargin(
 //  maxLineLength              int
 //     - The total length of the output line.
 //
+//       It is assumed that maxLineLength has been previously
+//       validated.
+//
 //
 //  currentLineLength          int
 //     - The number of characters previously written to the current
 //       line.
+//
+//
+//  leftMarginStr              string
+//     - The left margin string associated with this text.
+//       'leftMarginStr' is optional and may be passed as an empty
+//       string.
 //
 //
 //  textStr                    string
@@ -857,6 +848,12 @@ func (txtBuilderElectron *textStrBuilderElectron) writeRightMargin(
 //
 //  lineTerminatorStr          string
 //     - The string of characters used to terminate a line of text.
+//
+//
+//  rightMarginStr             string
+//     - The right margin string associated with this line of text.
+//       'rightMarginStr' is optional and may be passed as an empty
+//       string.
 //
 //
 //  turnAutoLineBreaksOn       bool
@@ -907,7 +904,9 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 	strBuilder *strings.Builder,
 	maxLineLength int,
 	currentLineLength int,
+	leftMarginStr string,
 	textStr string,
+	rightMarginStr string,
 	lineTerminatorStr string,
 	turnAutoLineBreaksOn bool,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -993,11 +992,22 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 	// turnAutoLineBreaksOn == true
 	// lenLineTerminatorStr > 0
 
-	netMaximumLength := maxLineLength -
+	currLineNetMaxLen := maxLineLength -
 		currentLineLength -
 		lenLineTerminatorStr
 
-	if netMaximumLength < 0 {
+	nextLineNetMaxLen := maxLineLength -
+		lenLineTerminatorStr
+
+	lenLeftMarginStr := len(leftMarginStr)
+	lenRightMarginStr := len(rightMarginStr)
+
+	longLineMaxLen := maxLineLength -
+		lenLineTerminatorStr -
+		lenLeftMarginStr -
+		lenRightMarginStr
+
+	if currLineNetMaxLen < 0 {
 		// Deal with this error condition
 		strBuilder.WriteString(textStr + lineTerminatorStr)
 
@@ -1010,7 +1020,61 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 			err
 	}
 
-	if lenTextStr < netMaximumLength {
+	isTextStrEmptyOrWhiteSpace :=
+		new(strMechQuark).isEmptyOrWhiteSpace(
+			textStr)
+
+	if lenTextStr > (currLineNetMaxLen+nextLineNetMaxLen) &&
+		isTextStrEmptyOrWhiteSpace == false {
+
+		strBuilder.WriteString(
+			lineTerminatorStr +
+				leftMarginStr)
+
+		textStr =
+			strings.Replace(
+				textStr,
+				"\n",
+				"",
+				-1)
+
+		textStr,
+			err =
+			strMechAtom{}.ptr().breakTextAtLineLength(
+				textStr,
+				longLineMaxLen,
+				'\n',
+				ePrefix.XCpy(
+					fmt.Sprintf("textStr nextLineNetMaxLen='%v'",
+						nextLineNetMaxLen)))
+
+		if err != nil {
+
+			return newCurrentLineLength,
+				lastWriteWasLineTerminator,
+				err
+		}
+
+		textStr = strings.Replace(
+			textStr,
+			"\n",
+			rightMarginStr+"\n"+leftMarginStr,
+			-1)
+
+		strBuilder.WriteString(
+			textStr +
+				lineTerminatorStr)
+
+		newCurrentLineLength = 0
+		lastWriteWasLineTerminator = true
+
+		return newCurrentLineLength,
+			lastWriteWasLineTerminator,
+			err
+
+	}
+
+	if lenTextStr < currLineNetMaxLen {
 
 		strBuilder.WriteString(textStr)
 
@@ -1021,7 +1085,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 			err
 	}
 
-	if lenTextStr == netMaximumLength {
+	if lenTextStr == currLineNetMaxLen {
 
 		strBuilder.WriteString(textStr + lineTerminatorStr)
 
@@ -1035,12 +1099,13 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 	}
 
 	// MUST BE
-	// lenTextStr > netMaximumLength
+	// lenTextStr > currLineNetMaxLen &&
+	// lenTextStr <= (currLineNetMaxLen+nextLineNetMaxLen)
 
 	maxEffectiveLineLen :=
 		maxLineLength - lenLineTerminatorStr
 
-	if lenTextStr > netMaximumLength &&
+	if lenTextStr > currLineNetMaxLen &&
 		lenTextStr < maxEffectiveLineLen {
 
 		// If text fits on a single line,
@@ -1064,11 +1129,11 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 	sMecElectron := strMechElectron{}
 	var writeTextStr string
 
-	// MUST BE lenTextStr > netMaximumLength
+	// MUST BE lenTextStr > currLineNetMaxLen
 
 	for lenTextStr > 0 {
 
-		if lenTextStr > netMaximumLength {
+		if lenTextStr > currLineNetMaxLen {
 
 			writeTextStr,
 				textStr,
@@ -1076,7 +1141,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 				err =
 				sMecElectron.cutStringAtIndex(
 					textStr,
-					netMaximumLength+1,
+					currLineNetMaxLen,
 					ePrefix.XCpy(
 						"Cut textStr"))
 
@@ -1092,7 +1157,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 			strBuilder.WriteString(
 				writeTextStr + lineTerminatorStr)
 
-			netMaximumLength = maxLineLength - lenLineTerminatorStr
+			currLineNetMaxLen = maxLineLength - lenLineTerminatorStr
 
 			lastWriteWasLineTerminator = true
 
@@ -1100,7 +1165,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 
 			continue
 
-		} else if lenTextStr == netMaximumLength {
+		} else if lenTextStr == currLineNetMaxLen {
 
 			strBuilder.WriteString(textStr + lineTerminatorStr)
 
@@ -1115,7 +1180,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 		} else {
 
 			// MUST BE
-			// lenTextStr < netMaximumLength
+			// lenTextStr < currLineNetMaxLen
 
 			strBuilder.WriteString(textStr)
 

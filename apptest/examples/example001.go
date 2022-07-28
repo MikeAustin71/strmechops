@@ -63,7 +63,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 
 	var output string
 
-	stdLine01 := strmech.TextLineSpecStandardLine{}.NewPtr()
+	stdLine01 := strmech.TextLineSpecStandardLine{}
 
 	rightMarginLen := 5
 
@@ -186,7 +186,7 @@ func (mt MainTest) TextLineSpecStandardLine02() {
 
 	err =
 		stdLine02.CopyIn(
-			stdLine01,
+			&stdLine01,
 			ePrefix.XCpy(
 				"stdLine02<-stdLine01 invalid newLinesChars"))
 
@@ -3322,7 +3322,7 @@ func (mt MainTest) ExampleExtractNumStr01() {
 	startTime = time.Now()
 
 	nStrDto,
-		err := strmech.StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(strmech.StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -3450,7 +3450,7 @@ func (mt MainTest) ExampleExtractNumStr02() {
 	startTime = time.Now()
 
 	nStrDto,
-		err := strmech.StrMech{}.Ptr().ExtractNumericDigits(
+		err := new(strmech.StrMech).ExtractNumericDigits(
 		targetStr,
 		startIndex,
 		keepLeadingChars,
@@ -3567,7 +3567,7 @@ func (mt MainTest) ExampleStripLeadingChars01() {
 	testString := "..........      ./../.\\.\\..\\////   " + expectedStr
 
 	actualString, actualStrLen :=
-		strmech.StrMech{}.Ptr().StripLeadingChars(testString, badChars)
+		new(strmech.StrMech).StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		fmt.Printf("ERROR: Expected result string='%v'\n"+
@@ -3872,11 +3872,11 @@ func (mt MainTest) ExampleWrite03() {
 
 	originalStr := "Original base string written to sops1"
 
-	sops1 := strmech.StrMech{}.NewPtr()
+	sops1 := new(strmech.StrMech)
 
 	sops1.SetStringData(originalStr)
 
-	sops2 := strmech.StrMech{}.Ptr()
+	sops2 := new(strmech.StrMech)
 
 	n, err := io.Copy(sops2, sops1)
 
@@ -3910,7 +3910,7 @@ func (mt MainTest) ExampleWrite01() {
 
 	originalStr := "Hello World"
 
-	sops1 := strmech.StrMech{}.Ptr()
+	sops1 := new(strmech.StrMech)
 
 	lenOriginalStr := len(originalStr)
 
@@ -3970,7 +3970,7 @@ func (mt MainTest) ExampleWrite02() {
 
 	originalStr := "Original base string written to sops1"
 
-	sops1 := strmech.StrMech{}.NewPtr()
+	sops1 := new(strmech.StrMech)
 
 	lenOriginalStr := len(originalStr)
 
@@ -4012,7 +4012,7 @@ func (mt MainTest) ExampleRead01() {
 
 	originalStr := "Original sops1 base string"
 
-	sops1 := strmech.StrMech{}.NewPtr()
+	sops1 := new(strmech.StrMech)
 	sops1.SetStringData(originalStr)
 
 	p := make([]byte, 5, 15)
@@ -4067,7 +4067,7 @@ func (mt MainTest) ExampleRead02() {
 
 	originalStr := "Original sops1 base string"
 
-	sops1 := strmech.StrMech{}.NewPtr()
+	sops1 := new(strmech.StrMech)
 	sops1.SetStringData(originalStr)
 
 	p := make([]byte, 3, 100)
@@ -4080,7 +4080,7 @@ func (mt MainTest) ExampleRead02() {
 		return
 	}
 
-	sops2 := strmech.StrMech{}.NewPtr()
+	sops2 := new(strmech.StrMech)
 	n, err := sops2.Write(p)
 
 	fmt.Println("        Original Str: ", originalStr)
@@ -4097,9 +4097,9 @@ func (mt MainTest) ExampleIoCopy02() {
 
 	originalStr := "Original sops1 base string"
 
-	sops1 := strmech.StrMech{}.NewPtr()
+	sops1 := new(strmech.StrMech)
 	sops1.SetStringData(originalStr)
-	sops2 := strmech.StrMech{}.Ptr()
+	sops2 := new(strmech.StrMech)
 
 	n, err := io.Copy(sops2, sops1)
 

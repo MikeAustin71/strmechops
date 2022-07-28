@@ -62,7 +62,7 @@ func (txtBuilderNanobot textStrBuilderNanobot) ptr() *textStrBuilderNanobot {
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
-//       for 'labelText field.
+//       for 'labelText field'.
 //
 //       If no left margin is required, set 'LeftMarginStr' to a
 //       zero length or empty string, and no left margin will be

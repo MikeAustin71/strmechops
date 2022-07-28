@@ -130,7 +130,7 @@ func TestStrMech_StripBadChars_002(t *testing.T) {
 	expectedStr = testString
 	expectedStrLen := len(expectedStr)
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -170,7 +170,7 @@ func TestStrMech_StripBadChars_003(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -195,7 +195,7 @@ func TestStrMech_StripBadChars_004(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := "  Some         Stri  ng  "
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -220,7 +220,7 @@ func TestStrMech_StripBadChars_005(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := "@@Some@@@@@@@@@Stri@@ng@@"
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripBadChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripBadChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -289,7 +289,7 @@ func TestStrMech_StripLeadingChars_002(t *testing.T) {
 	expectedStr = testString
 	expectedStrLen := len(expectedStr)
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripLeadingChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -328,7 +328,7 @@ func TestStrMech_StripLeadingChars_003(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripLeadingChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripLeadingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -395,7 +395,7 @@ func TestStrMech_StripTrailingChars_002(t *testing.T) {
 	expectedStr = testString
 	expectedStrLen := len(expectedStr)
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripTrailingChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripTrailingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -434,7 +434,7 @@ func TestStrMech_StripTrailingChars_003(t *testing.T) {
 	expectedStrLen := len(expectedStr)
 	testString := expectedStr
 
-	actualString, actualStrLen := StrMech{}.Ptr().StripTrailingChars(testString, badChars)
+	actualString, actualStrLen := new(StrMech).StripTrailingChars(testString, badChars)
 
 	if expectedStr != actualString {
 		t.Errorf("ERROR: Expected result string='%v'\n"+
@@ -550,7 +550,7 @@ func TestStrMech_StrCenterInStr_04(t *testing.T) {
 	strToCenter := "Hello World"
 	fieldLen := 5
 
-	_, err := StrMech{}.Ptr().StrCenterInStr(
+	_, err := new(StrMech).StrCenterInStr(
 		strToCenter,
 		fieldLen,
 		ePrefix)
@@ -567,7 +567,7 @@ func TestStrMech_StrCenterInStr_05(t *testing.T) {
 	strToCenter := "     "
 	fieldLen := 15
 
-	_, err := StrMech{}.Ptr().StrCenterInStr(
+	_, err := new(StrMech).StrCenterInStr(
 		strToCenter,
 		fieldLen,
 		ePrefix)
@@ -616,7 +616,7 @@ func TestStrMech_StrLeftJustify_02(t *testing.T) {
 	strToJustify := "      "
 	fieldLen := 45
 
-	_, err := StrMech{}.Ptr().StrLeftJustify(
+	_, err := new(StrMech).StrLeftJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -635,7 +635,7 @@ func TestStrMech_StrLeftJustify_03(t *testing.T) {
 	strToJustify := "Hello"
 	fieldLen := len(strToJustify)
 
-	justifiedStr, err := StrMech{}.Ptr().StrLeftJustify(
+	justifiedStr, err := new(StrMech).StrLeftJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -660,7 +660,7 @@ func TestStrMech_StrLeftJustify_04(t *testing.T) {
 	strToJustify := "Hello"
 	fieldLen := 2
 
-	_, err := StrMech{}.Ptr().StrLeftJustify(
+	_, err := new(StrMech).StrLeftJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -711,7 +711,7 @@ func TestStrMech_StrRightJustify_02(t *testing.T) {
 	strToJustify := "   "
 	fieldLen := 45
 
-	_, err := StrMech{}.Ptr().StrRightJustify(
+	_, err := new(StrMech).StrRightJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -730,7 +730,7 @@ func TestStrMech_StrRightJustify_03(t *testing.T) {
 	strToJustify := "1234567"
 	fieldLen := len(strToJustify)
 
-	actualStr, err := StrMech{}.Ptr().StrRightJustify(
+	actualStr, err := new(StrMech).StrRightJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -753,7 +753,7 @@ func TestStrMech_StrRightJustify_04(t *testing.T) {
 	strToJustify := "1234567"
 	fieldLen := 6
 
-	_, err := StrMech{}.Ptr().StrRightJustify(
+	_, err := new(StrMech).StrRightJustify(
 		strToJustify,
 		fieldLen,
 		ePrefix)
@@ -874,7 +874,7 @@ func TestStrMech_StrCenterInStrLeft_03(t *testing.T) {
 	strToCenter := "  "
 	fieldLen := 15
 
-	_, err := StrMech{}.Ptr().StrCenterInStrLeft(
+	_, err := new(StrMech).StrCenterInStrLeft(
 		strToCenter,
 		fieldLen,
 		ePrefix)
@@ -892,7 +892,7 @@ func TestStrMech_StrCenterInStrLeft_04(t *testing.T) {
 	strToCenter := "Hello"
 	fieldLen := 2
 
-	_, err := StrMech{}.Ptr().StrCenterInStrLeft(
+	_, err := new(StrMech).StrCenterInStrLeft(
 		strToCenter,
 		fieldLen,
 		ePrefix)
@@ -1199,7 +1199,7 @@ func TestStrMech_SwapRune_05(t *testing.T) {
 
 	newStr,
 		_,
-		err := StrMech{}.Ptr().SwapRune(
+		err := new(StrMech).SwapRune(
 		tStr,
 		'x',
 		'X',
@@ -1387,7 +1387,7 @@ func TestStrMech_TrimMultipleChars_08(t *testing.T) {
 
 	tStr := ""
 
-	_, err := StrMech{}.TrimMultipleChars(
+	_, err := new(StrMech).TrimMultipleChars(
 		tStr,
 		' ',
 		ePrefix)
@@ -1405,7 +1405,7 @@ func TestStrMech_TrimMultipleChars_09(t *testing.T) {
 
 	tStr := "Hello World"
 	replaceRune := rune(0)
-	_, err := StrMech{}.TrimMultipleChars(
+	_, err := new(StrMech).TrimMultipleChars(
 		tStr,
 		replaceRune,
 		ePrefix)
@@ -1425,7 +1425,7 @@ func TestStrMech_TrimStringEnds_01(t *testing.T) {
 	tStr := "  Hello    World  "
 	expected := "Hello    World"
 	trimChar := ' '
-	result, err := StrMech{}.Ptr().TrimStringEnds(
+	result, err := new(StrMech).TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
@@ -1448,7 +1448,7 @@ func TestStrMech_TrimStringEnds_02(t *testing.T) {
 	tStr := "Hello X World"
 	expected := "Hello X World"
 	trimChar := 'X'
-	result, err := StrMech{}.Ptr().TrimStringEnds(
+	result, err := new(StrMech).TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
@@ -1494,7 +1494,7 @@ func TestStrMech_TrimStringEnds_04(t *testing.T) {
 	tStr := "XXXHello WorlXdXXX"
 	expected := "Hello WorlXd"
 	trimChar := 'X'
-	result, err := StrMech{}.Ptr().TrimStringEnds(
+	result, err := new(StrMech).TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
@@ -1563,7 +1563,7 @@ func TestStrMech_TrimStringEnds_07(t *testing.T) {
 	tStr := "X"
 	expected := ""
 	trimChar := 'X'
-	result, err := StrMech{}.Ptr().TrimStringEnds(
+	result, err := new(StrMech).TrimStringEnds(
 		tStr,
 		trimChar,
 		ePrefix)
@@ -1633,7 +1633,7 @@ func TestStrMech_UpperCaseFirstLetter_02(t *testing.T) {
 
 	expected := "  Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := new(StrMech).UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1648,7 +1648,7 @@ func TestStrMech_UpperCaseFirstLetter_03(t *testing.T) {
 
 	expected := "Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := new(StrMech).UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1663,7 +1663,7 @@ func TestStrMech_UpperCaseFirstLetter_04(t *testing.T) {
 
 	expected := "  Now is the time for all good men to come to the aid of their country."
 
-	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := new(StrMech).UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1678,7 +1678,7 @@ func TestStrMech_UpperCaseFirstLetter_05(t *testing.T) {
 
 	expected := ""
 
-	actualStr := StrMech{}.NewPtr().UpperCaseFirstLetter(testStr)
+	actualStr := new(StrMech).UpperCaseFirstLetter(testStr)
 
 	if expected != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v' ",
@@ -1722,7 +1722,7 @@ func TestStrMech_Write_02(t *testing.T) {
 
 	originalStr := "Hello World"
 
-	sops1 := StrMech{}.NewPtr()
+	sops1 := new(StrMech)
 
 	p := make([]byte, 3)
 
@@ -1776,11 +1776,11 @@ func TestStrMech_Write_03(t *testing.T) {
 
 	lenOriginalStr := len(originalStr)
 
-	sops1 := StrMech{}.NewPtr()
+	sops1 := StrMech{}
 
 	sops1.SetStringData(originalStr)
 
-	sops2 := StrMech{}.NewPtr()
+	sops2 := StrMech{}
 
 	n, err := io.Copy(sops2, sops1)
 
@@ -1806,7 +1806,7 @@ func TestStrMech_Write_04(t *testing.T) {
 
 	originalStr := "Original base string written to sops1"
 
-	sops1 := StrMech{}.NewPtr()
+	sops1 := new(StrMech)
 	sops1.SetStringData(originalStr)
 
 	p := make([]byte, 0)

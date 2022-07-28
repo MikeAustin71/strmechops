@@ -10,7 +10,7 @@ func TestStrMech_FindFirstNonSpaceChar_01(t *testing.T) {
 	testStr := "   Hello World"
 
 	firstNonSpaceIdx, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			0,
 			4,
@@ -36,7 +36,7 @@ func TestStrMech_FindFirstNonSpaceChar_02(t *testing.T) {
 	testStr := "       Hello"
 
 	firstNonSpaceIdx, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			0,
 			6,
@@ -62,7 +62,7 @@ func TestStrMech_FindFirstNonSpaceChar_03(t *testing.T) {
 	testStr := "Hello  There"
 
 	firstNonSpaceIdx, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			7,
 			9,
@@ -88,7 +88,7 @@ func TestStrMech_FindFirstNonSpaceChar_04(t *testing.T) {
 	testStr := "xx       H"
 
 	firstNonSpaceIdx, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			2,
 			9,
@@ -114,7 +114,7 @@ func TestStrMech_FindFirstNonSpaceChar_05(t *testing.T) {
 	testStr := "      Hello World"
 
 	firstNonSpaceIdx, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			0,
 			9,
@@ -140,7 +140,7 @@ func TestStrMech_FindFirstNonSpaceChar_06(t *testing.T) {
 	testStr := "Hello World"
 
 	_, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			-1,
 			9,
@@ -160,7 +160,7 @@ func TestStrMech_FindFirstNonSpaceChar_07(t *testing.T) {
 	testStr := "        Hello "
 
 	_, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			10,
 			9,
@@ -180,7 +180,7 @@ func TestStrMech_FindFirstNonSpaceChar_08(t *testing.T) {
 	testStr := "012345 78901234"
 
 	_, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			0,
 			15,
@@ -200,7 +200,7 @@ func TestStrMech_FindFirstNonSpaceChar_09(t *testing.T) {
 	testStr := "012345 78901234"
 
 	_, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			0,
 			-1,
@@ -220,7 +220,7 @@ func TestStrMech_FindFirstNonSpaceChar_10(t *testing.T) {
 	testStr := "xx       Hxglt"
 
 	firstNonSpaceIdx, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			2,
 			9,
@@ -245,7 +245,7 @@ func TestStrMech_FindFirstNonSpaceChar_11(t *testing.T) {
 	testStr := "  "
 
 	index, err :=
-		StrMech{}.NewPtr().FindFirstNonSpaceChar(
+		new(StrMech).FindFirstNonSpaceChar(
 			testStr,
 			0,
 			4,
@@ -299,7 +299,7 @@ func TestStrMech_FindLastNonSpaceChar_02(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "Now is the time for all good men to come to the aid of their country."
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		0,
 		68,
@@ -325,7 +325,7 @@ func TestStrMech_FindLastNonSpaceChar_03(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "Now is the time for all good men to come to the aid of their country.           "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		0,
 		79,
@@ -351,7 +351,7 @@ func TestStrMech_FindLastNonSpaceChar_04(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "Now is the time for all good men to come to the aid of their country.           "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		68,
 		79,
@@ -377,7 +377,7 @@ func TestStrMech_FindLastNonSpaceChar_05(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "Now is the time for all good men to come to the aid of their country.           "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		59,
 		79,
@@ -403,7 +403,7 @@ func TestStrMech_FindLastNonSpaceChar_06(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "                                                                                 "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		0,
 		80,
@@ -429,7 +429,7 @@ func TestStrMech_FindLastNonSpaceChar_07(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "        XX        XX          XX             XXX      XXX.                       "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		40,
 		80,
@@ -455,7 +455,7 @@ func TestStrMech_FindLastNonSpaceChar_08(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := " The cow jumped over the moon."
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		10,
 		29,
@@ -481,7 +481,7 @@ func TestStrMech_FindLastNonSpaceChar_09(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := " The cow jumped over the moon.    "
 
-	_, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	_, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		34,
 		33,
@@ -500,7 +500,7 @@ func TestStrMech_FindLastNonSpaceChar_10(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := ""
 
-	_, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	_, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		0,
 		0,
@@ -519,7 +519,7 @@ func TestStrMech_FindLastNonSpaceChar_12(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "The cow jumped over the dark side of the moon.   "
 
-	_, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	_, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		0,
 		49,
@@ -538,7 +538,7 @@ func TestStrMech_FindLastNonSpaceChar_13(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "The cow jumped over the dark side of the moon.   "
 
-	_, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	_, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		49,
 		50,
@@ -557,7 +557,7 @@ func TestStrMech_FindLastNonSpaceChar_14(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "The cow jumped over the dark side of the moon.   "
 
-	_, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	_, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		-1,
 		47,
@@ -576,7 +576,7 @@ func TestStrMech_FindLastNonSpaceChar_15(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "The cow jumped over the dark side of the moon.   "
 
-	_, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	_, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		0,
 		-1,
@@ -595,7 +595,7 @@ func TestStrMech_FindLastNonSpaceChar_16(t *testing.T) {
 	//       012345678901234567890123456789012345678901234567890123456789012345678901234567890
 	tStr := "Now is the time for all good men to come to the aid of their country.           "
 
-	lastNonSpaceChar, err := StrMech{}.Ptr().FindLastNonSpaceChar(
+	lastNonSpaceChar, err := new(StrMech).FindLastNonSpaceChar(
 		tStr,
 		10,
 		62,
@@ -630,7 +630,7 @@ func TestStrMech_FindLastSpace_01(t *testing.T) {
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 0, 14). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 0, 14). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -648,14 +648,14 @@ func TestStrMech_FindLastSpace_02(t *testing.T) {
 	testStr := "xx1111111Hxglt "
 
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			14,
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 0, 14). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 0, 14). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -673,14 +673,14 @@ func TestStrMech_FindLastSpace_03(t *testing.T) {
 	testStr := " x1111111Hxgltf"
 
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			14,
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 0, 14). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 0, 14). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -698,14 +698,14 @@ func TestStrMech_FindLastSpace_04(t *testing.T) {
 	testStr := " x1111111Hxglt "
 
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			1,
 			13,
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 1, 13). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 1, 13). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -723,14 +723,14 @@ func TestStrMech_FindLastSpace_05(t *testing.T) {
 	testStr := " x1111   Hxgl  "
 
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			5,
 			12,
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 5, 12). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 5, 12). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -748,14 +748,14 @@ func TestStrMech_FindLastSpace_06(t *testing.T) {
 	testStr := "fx1111rg3luHxgl"
 
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			14,
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 0, 14). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 0, 14). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -773,14 +773,14 @@ func TestStrMech_FindLastSpace_07(t *testing.T) {
 	testStr := "fx1111  3luHxgl"
 
 	lastSpaceIdx, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			14,
 			ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by  StrMech{}.Ptr().FindLastSpace(testStr, 0, 14). "+
+		t.Errorf("Error returned by  new(StrMech).FindLastSpace(testStr, 0, 14). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -798,7 +798,7 @@ func TestStrMech_FindLastSpace_08(t *testing.T) {
 	testStr := "fx1111  3luHxgl"
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			-1,
 			14,
@@ -818,7 +818,7 @@ func TestStrMech_FindLastSpace_09(t *testing.T) {
 	testStr := "fx1111  3luHxgl"
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			-1,
@@ -838,7 +838,7 @@ func TestStrMech_FindLastSpace_10(t *testing.T) {
 	testStr := "fx1111  3luHxgl"
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			15,
@@ -858,7 +858,7 @@ func TestStrMech_FindLastSpace_11(t *testing.T) {
 	testStr := "fx1111  3luHxgl"
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			19,
 			14,
@@ -878,7 +878,7 @@ func TestStrMech_FindLastSpace_12(t *testing.T) {
 	testStr := "fx1111  3luHxgl"
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			5,
 			3,
@@ -898,7 +898,7 @@ func TestStrMech_FindLastSpace_13(t *testing.T) {
 	testStr := ""
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(
+		new(StrMech).FindLastSpace(
 			testStr,
 			0,
 			0,
@@ -918,7 +918,7 @@ func TestStrMech_FindLastSpace_14(t *testing.T) {
 	testStr := ""
 
 	_, err :=
-		StrMech{}.Ptr().FindLastSpace(testStr,
+		new(StrMech).FindLastSpace(testStr,
 			0,
 			9,
 			ePrefix)
@@ -979,7 +979,7 @@ func TestStrMech_FindLastWord_02(t *testing.T) {
 	//                    xxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			10,
 			15,
@@ -1018,7 +1018,7 @@ func TestStrMech_FindLastWord_03(t *testing.T) {
 	//          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			0,
 			72,
@@ -1057,7 +1057,7 @@ func TestStrMech_FindLastWord_04(t *testing.T) {
 	//          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			0,
 			72,
@@ -1096,7 +1096,7 @@ func TestStrMech_FindLastWord_05(t *testing.T) {
 	//          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			0,
 			72,
@@ -1135,7 +1135,7 @@ func TestStrMech_FindLastWord_06(t *testing.T) {
 	//            xxxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			2,
 			8,
@@ -1174,7 +1174,7 @@ func TestStrMech_FindLastWord_07(t *testing.T) {
 	//                                                       xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			55,
 			72,
@@ -1213,7 +1213,7 @@ func TestStrMech_FindLastWord_08(t *testing.T) {
 	//                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	begWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			40,
 			67,
@@ -1252,7 +1252,7 @@ func TestStrMech_FindLastWord_09(t *testing.T) {
 	//                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	_, _, _, _, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			-1,
 			67,
@@ -1274,7 +1274,7 @@ func TestStrMech_FindLastWord_10(t *testing.T) {
 	//                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	_, _, _, _, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			40,
 			-1,
@@ -1296,7 +1296,7 @@ func TestStrMech_FindLastWord_11(t *testing.T) {
 	//                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	_, _, _, _, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			72,
 			72,
@@ -1318,7 +1318,7 @@ func TestStrMech_FindLastWord_12(t *testing.T) {
 	//           xx
 
 	_, _, _, _, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			1,
 			2,
@@ -1340,7 +1340,7 @@ func TestStrMech_FindLastWord_13(t *testing.T) {
 	//                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	_, _, _, _, err :=
-		StrMech{}.NewPtr().FindLastWord(testStr,
+		new(StrMech).FindLastWord(testStr,
 			0,
 			71,
 			ePrefix)
@@ -1361,7 +1361,7 @@ func TestStrMech_FindLastWord_14(t *testing.T) {
 	//                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	_, _, _, _, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			6,
 			5,
@@ -1384,7 +1384,7 @@ func TestStrMech_FindLastWord_15(t *testing.T) {
 	startIndex := 67
 
 	beginWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			startIndex,
 			startIndex,
@@ -1429,7 +1429,7 @@ func TestStrMech_FindLastWord_16(t *testing.T) {
 	startIndex := 60 // A space character
 
 	beginWrdIdx, endWrdIdx, isAllOneWord, isAllSpaces, err :=
-		StrMech{}.NewPtr().FindLastWord(
+		new(StrMech).FindLastWord(
 			testStr,
 			startIndex,
 			startIndex,

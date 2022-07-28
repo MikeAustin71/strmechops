@@ -726,7 +726,7 @@ func TestTextLineSpecStandardLine_GetNewLineRunes_000100(t *testing.T) {
 	actualNewLineRunes :=
 		stdLine02.GetNewLineRunes()
 
-	areEqual := StrMech{}.Ptr().
+	areEqual := new(StrMech).
 		EqualRuneArrays(
 			expectedNewLineRunes,
 			actualNewLineRunes)

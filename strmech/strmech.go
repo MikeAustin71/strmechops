@@ -1040,7 +1040,7 @@ func (sMech *StrMech) CutStringAtIndex(
 // DoesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
-func (sMech StrMech) DoesLastCharExist(
+func (sMech *StrMech) DoesLastCharExist(
 	testStr string,
 	lastChar rune) bool {
 
@@ -1145,7 +1145,7 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //       containing 'Key Word Delimiters'. A Key Word Delimiter may be
 //       a Key Word string or a character which identifies and immediately
 //       precedes the data field. If multiple Key Word Delimiters exist
-//       in 'targetStr' the first instance of a key word in targetStr'
+//       in 'targetStr' the first instance of a key word in 'targetStr'
 //       will be designated as the Key Word Delimiter.
 //
 //       If this parameter is populated, the search for a data field
@@ -1307,7 +1307,7 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //
 //  datDto,
 //  err :=
-//    StrMech{}.Ptr().
+//    new(StrMech).
 //        ExtractDataField(
 //           targetStr,
 //           leadingKeyWordDelimiters,
@@ -1614,7 +1614,7 @@ func (sMech *StrMech) ExtractDataField(
 //
 //  nStrDto,
 //  err :=
-//    StrMech{}.Ptr().
+//    new(StrMech).
 //         ExtractNumericDigits(
 //             targetStr,
 //             startIndex,
@@ -2327,7 +2327,7 @@ func (sMech *StrMech) FindLastNonSpaceChar(
 //       testStr := "xx       Hxgltx"
 //
 //       lastSpaceIdx, err :=
-//       StrMech{}.Ptr().FindLastSpace(
+//       new(StrMech).FindLastSpace(
 //       testStr,
 //       0,
 //       14,
@@ -2893,7 +2893,7 @@ func (sMech *StrMech) GetStringData() string {
 //    validBytes := []byte{'v', 'a', 'l', 'i', 'd'}
 //    testBytes := []byte{'x', 'j', 'v', 'm', 'R', 'a', 'J', 'l', 'Z', 'i', 'F', 'd', 'S'}
 //
-//    actualBytes, err := StrMech{}.Ptr().GetValidBytes(
+//    actualBytes, err := new(StrMech).GetValidBytes(
 //    testBytes,
 //    validBytes,
 //    ePrefix)
@@ -3038,7 +3038,7 @@ func (sMech *StrMech) GetValidBytes(
 //
 //     expected := "valid"
 //
-//     actualRunes, err := StrMech{}.Ptr().GetValidRunes(
+//     actualRunes, err := new(StrMech).GetValidRunes(
 //     testRunes,
 //     validRunes,
 //     ePrefix)
@@ -3182,7 +3182,7 @@ func (sMech *StrMech) GetValidRunes(
 //
 //    testStr := "xjvmRaJlZiFdS"
 //
-//    actualStr, err := StrMech{}.Ptr().GetValidString(
+//    actualStr, err := new(StrMech).GetValidString(
 //                        testStr,
 //                        validRunes,
 //                        ePrefix)
@@ -3605,7 +3605,7 @@ func (sMech *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 //  hostRunes           []rune
 //     - An array of runes. This rune array will be searched to
 //       determine if the target runes array is present at the
-//       'hostStartIndex.
+//       'hostStartIndex'.
 //
 //       If 'hostRunes' is a zero length array, this method will
 //       return 'false'.
@@ -4301,26 +4301,6 @@ func (sMech *StrMech) MakeSingleCharString(
 		ePrefix)
 }
 
-// NewPtr - Returns a pointer to a new instance of
-// StrMech. Useful for cases requiring io.Reader
-// and io.Writer.
-func (sMech StrMech) NewPtr() *StrMech {
-
-	if sMech.stringDataMutex == nil {
-		sMech.stringDataMutex = new(sync.Mutex)
-	}
-
-	sMech.stringDataMutex.Lock()
-
-	defer sMech.stringDataMutex.Unlock()
-
-	sopsNew := StrMech{}
-
-	sopsNew.stringDataMutex = new(sync.Mutex)
-
-	return &sopsNew
-}
-
 // NumberStringParser - Parses raw number strings.
 //
 // TODO - Fix NumberStringParser
@@ -4362,34 +4342,6 @@ func (sMech *StrMech) NumberStringParser(
 	return newNumBuilder, err
 }
 
-// Ptr - Returns a pointer to a new instance of
-// StrMech. Useful for cases requiring io.Reader
-// and io.Writer.
-//
-// This method is identical to method StrMech.NewPtr().
-//
-// Example Usage:
-//
-// StrMech{}.Ptr().GetReader()
-//
-//
-func (sMech StrMech) Ptr() *StrMech {
-
-	if sMech.stringDataMutex == nil {
-		sMech.stringDataMutex = new(sync.Mutex)
-	}
-
-	sMech.stringDataMutex.Lock()
-
-	defer sMech.stringDataMutex.Unlock()
-
-	sopsNew := StrMech{}
-
-	sopsNew.stringDataMutex = new(sync.Mutex)
-
-	return &sopsNew
-}
-
 // Read - Implements io.Reader interface. Read reads up to len(p)
 // bytes into 'p'. This method supports buffered 'read' operations.
 //
@@ -4400,7 +4352,7 @@ func (sMech StrMech) Ptr() *StrMech {
 // 'StrMech.stringData' can be accessed through Getter and Setter
 // methods, GetStringData() and SetStringData()
 //
-func (sMech *StrMech) Read(p []byte) (n int, err error) {
+func (sMech StrMech) Read(p []byte) (n int, err error) {
 
 	if sMech.stringDataMutex == nil {
 		sMech.stringDataMutex = new(sync.Mutex)
@@ -4416,7 +4368,7 @@ func (sMech *StrMech) Read(p []byte) (n int, err error) {
 
 	return strMechElectron{}.ptr().
 		readBytes(
-			sMech,
+			&sMech,
 			p,
 			&ePrefix)
 
@@ -4742,7 +4694,7 @@ func (sMech *StrMech) RemoveStringChar(
 //
 //  ePrefix := "TestStrOps_ReplaceBytes_01() "
 //
-//  actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+//  actualRunes, err := new(StrMech).ReplaceBytes(
 //  testBytes,
 //  replaceBytes,
 //  ePrefix)
@@ -4895,7 +4847,7 @@ func (sMech *StrMech) ReplaceBytes(
 //  rStrs[2][1] = "l"
 //
 //
-//  actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+//  actualStr, err := new(StrMech).ReplaceMultipleStrs(
 //                      testStr,
 //                      rStrs,
 //                      ePrefix)
@@ -5136,7 +5088,7 @@ func (sMech *StrMech) ReplaceNewLines(
 //  replaceRunes[4][0] = 'e'
 //  replaceRunes[4][1] = 0
 //
-//  actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+//  actualRunes, err := new(StrMech).ReplaceRunes(
 //  testRunes,
 //  replaceRunes,
 //  ePrefix)
@@ -5453,7 +5405,7 @@ func (sMech *StrMech) ReplaceStringChar(
 //  replaceRunes[4][0] = 'e'
 //  replaceRunes[4][1] = 0
 //
-//  actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+//  actualStr, err := new(StrMech).ReplaceStringChars(
 //  testStr,
 //  replaceRunes,
 //  ePrefix)
@@ -5905,7 +5857,7 @@ func (sMech *StrMech) StrGetCharCnt(
 //   testString := "@@Some@@@@@@@@@Stri@@ng@@"
 //
 //   actualString, actualStrLen :=
-//         StrMech{}.Ptr().StripBadChars(
+//         new(StrMech).StripBadChars(
 //                            testString,
 //                            badChars)
 //
@@ -6000,7 +5952,7 @@ func (sMech *StrMech) StripBadChars(
 //   "..........      ./../.\\.\\..\\////   SomeString"
 //
 //  actualString, actualStrLen :=
-//      StrMech{}.Ptr().StripLeadingChars(
+//      new(StrMech).StripLeadingChars(
 //                       testString,
 //                       badChars)
 //
@@ -6098,7 +6050,7 @@ func (sMech *StrMech) StripLeadingChars(
 //   "SomeString..........      ./../.\\.\\..\\////   "
 //
 //  actualString, actualStrLen :=
-//    StrMech{}.Ptr().StripTrailingChars(
+//    new(StrMech).StripTrailingChars(
 //                      testString,
 //                      badChars)
 //
@@ -6882,7 +6834,7 @@ func (sMech *StrMech) SwapRune(
 //  returned string (rStr) now equal to "Hello World"
 //
 //
-func (sMech StrMech) TrimMultipleChars(
+func (sMech *StrMech) TrimMultipleChars(
 	targetStr string,
 	trimChar rune,
 	errorPrefix interface{}) (
@@ -7160,7 +7112,7 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (sMech *StrMech) Write(p []byte) (n int, err error) {
+func (sMech StrMech) Write(p []byte) (n int, err error) {
 
 	if sMech.stringDataMutex == nil {
 		sMech.stringDataMutex = new(sync.Mutex)
@@ -7176,7 +7128,7 @@ func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
 	return strMechElectron{}.ptr().
 		write(
-			sMech,
+			&sMech,
 			p,
 			&ePrefix)
 }

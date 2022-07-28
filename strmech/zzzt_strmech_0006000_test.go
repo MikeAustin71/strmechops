@@ -159,7 +159,7 @@ func TestStrMech_Read_02(t *testing.T) {
 
 	p := make([]byte, 5, 15)
 
-	s1 := StrMech{}.NewPtr()
+	s1 := new(StrMech)
 	s1.SetStringData(expected)
 	n := 0
 	var err error
@@ -205,10 +205,10 @@ func TestStrMech_Read_03(t *testing.T) {
 	expected := "Original sops1 base string"
 	lenExpected := int64(len(expected))
 
-	s1 := StrMech{}.NewPtr()
+	s1 := new(StrMech)
 	s1.SetStringData(expected)
 
-	s2 := StrMech{}.NewPtr()
+	s2 := new(StrMech)
 
 	n, err := io.Copy(s2, s1)
 
@@ -234,7 +234,7 @@ func TestStrMech_Read_03(t *testing.T) {
 func TestStrMech_Read_04(t *testing.T) {
 	originalStr := "Hello World"
 
-	sops1 := StrMech{}.NewPtr()
+	sops1 := new(StrMech)
 	sops1.SetStringData(originalStr)
 	p := make([]byte, 0)
 
@@ -282,11 +282,11 @@ func TestStrMech_ReadStringFromBytes_02(t *testing.T) {
 
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	_, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	_, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -314,9 +314,9 @@ func TestStrMech_ReadStringFromBytes_03(t *testing.T) {
 	expectedNextIdx := 26
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -344,9 +344,9 @@ func TestStrMech_ReadStringFromBytes_04(t *testing.T) {
 	expectedNextIdx := 25
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'.\nInstead, result='%v'\n",
@@ -371,7 +371,7 @@ func TestStrMech_ReadStringFromBytes_05(t *testing.T) {
 	expectedStr := "Hello World, how are you?"
 	expectedNextIdx := -1
 
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	result, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -397,9 +397,9 @@ func TestStrMech_ReadStringFromBytes_06(t *testing.T) {
 	expectedNextIdx := -1
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -420,7 +420,7 @@ func TestStrMech_ReadStringFromBytes_07(t *testing.T) {
 	expectedStr := ""
 	expectedNextIdx := -1
 
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	result, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -448,11 +448,11 @@ func TestStrMech_ReadStringFromBytes_08(t *testing.T) {
 	expectedNextIdx := -1
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	_, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	_, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'.\n Instead, result='%v'\n",
@@ -480,11 +480,11 @@ func TestStrMech_ReadStringFromBytes_09(t *testing.T) {
 	expectedNextIdx := -1
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	_, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	_, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -510,9 +510,9 @@ func TestStrMech_ReadStringFromBytes_10(t *testing.T) {
 	expectedNextIdx := -1
 	var result string
 
-	_, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	_, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
-	result, nextStartIdx = StrMech{}.Ptr().ReadStringFromBytes(bytes, nextStartIdx)
+	result, nextStartIdx = new(StrMech).ReadStringFromBytes(bytes, nextStartIdx)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -534,7 +534,7 @@ func TestStrMech_ReadStringFromBytes_11(t *testing.T) {
 	expectedStr := "Hello World!"
 	expectedNextIdx := -1
 
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	result, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -556,7 +556,7 @@ func TestStrMech_ReadStringFromBytes_12(t *testing.T) {
 	expectedStr := "Hello World!"
 	expectedNextIdx := -1
 
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	result, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -578,7 +578,7 @@ func TestStrMech_ReadStringFromBytes_13(t *testing.T) {
 	expectedStr := "Hello World!"
 	expectedNextIdx := -1
 
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	result, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -600,7 +600,7 @@ func TestStrMech_ReadStringFromBytes_14(t *testing.T) {
 	expectedStr := "Hello World!"
 	expectedNextIdx := -1
 
-	result, nextStartIdx := StrMech{}.Ptr().ReadStringFromBytes(bytes, 0)
+	result, nextStartIdx := new(StrMech).ReadStringFromBytes(bytes, 0)
 
 	if expectedStr != result {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -805,7 +805,7 @@ func TestStrMech_ReplaceBytes_01(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceBytes(testBytes, replaceBytes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceBytes(testBytes, replaceBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -848,13 +848,13 @@ func TestStrMech_ReplaceBytes_02(t *testing.T) {
 	replaceBytes[4][0] = 'e'
 	replaceBytes[4][1] = 'E'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+	actualRunes, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceBytes(testBytes, replaceBytes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceBytes(testBytes, replaceBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -897,13 +897,13 @@ func TestStrMech_ReplaceBytes_03(t *testing.T) {
 	replaceBytes[4][0] = 'v'
 	replaceBytes[4][1] = 'V'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+	actualRunes, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceBytes(testBytes, replaceBytes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceBytes(testBytes, replaceBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -945,13 +945,13 @@ func TestStrMech_ReplaceBytes_04(t *testing.T) {
 	replaceBytes[4][0] = '5'
 	replaceBytes[4][1] = '7'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+	actualRunes, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceBytes(testBytes, replaceBytes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceBytes(testBytes, replaceBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -993,13 +993,13 @@ func TestStrMech_ReplaceBytes_05(t *testing.T) {
 	replaceBytes[4][0] = 'b'
 	replaceBytes[4][1] = 0
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+	actualRunes, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceBytes(testBytes, replaceBytes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceBytes(testBytes, replaceBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1041,13 +1041,13 @@ func TestStrMech_ReplaceBytes_06(t *testing.T) {
 	replaceBytes[4][0] = 'e'
 	replaceBytes[4][1] = 0
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceBytes(
+	actualRunes, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceBytes(testBytes, replaceBytes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceBytes(testBytes, replaceBytes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1086,7 +1086,7 @@ func TestStrMech_ReplaceBytes_07(t *testing.T) {
 	replaceBytes[4][0] = 'e'
 	replaceBytes[4][1] = 0
 
-	_, err := StrMech{}.Ptr().ReplaceBytes(
+	_, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
@@ -1105,7 +1105,7 @@ func TestStrMech_ReplaceBytes_08(t *testing.T) {
 
 	replaceBytes := make([][]byte, 0, 0)
 
-	_, err := StrMech{}.Ptr().ReplaceBytes(
+	_, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
@@ -1125,7 +1125,7 @@ func TestStrMech_ReplaceBytes_09(t *testing.T) {
 
 	replaceBytes := make([][]byte, 5, 10)
 
-	_, err := StrMech{}.Ptr().ReplaceBytes(
+	_, err := new(StrMech).ReplaceBytes(
 		testBytes,
 		replaceBytes,
 		ePrefix)
@@ -1164,7 +1164,7 @@ func TestStrMech_ReplaceMultipleStrs_01(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceMultipleStrs(testStr, rStrs). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1196,13 +1196,13 @@ func TestStrMech_ReplaceMultipleStrs_02(t *testing.T) {
 
 	expectedStr := "HeWrd"
 
-	actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	actualStr, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceMultipleStrs(testStr, rStrs). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1234,13 +1234,13 @@ func TestStrMech_ReplaceMultipleStrs_03(t *testing.T) {
 
 	expectedStr := "Hello World"
 
-	actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	actualStr, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceMultipleStrs(testStr, rStrs). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1272,13 +1272,13 @@ func TestStrMech_ReplaceMultipleStrs_04(t *testing.T) {
 
 	expectedStr := "HeFFxJWxrFdJHeFFxJWxrFd"
 
-	actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	actualStr, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceMultipleStrs(testStr, rStrs). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1308,13 +1308,13 @@ func TestStrMech_ReplaceMultipleStrs_05(t *testing.T) {
 	rStrs[2][0] = "l"
 	rStrs[2][1] = "F"
 
-	_, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	_, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected error return from StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs)\n" +
+		t.Error("Expected error return from new(StrMech).ReplaceMultipleStrs(testStr, rStrs)\n" +
 			"because 'testStr' is a zero length string.\n" +
 			"However, NO ERROR WAS RETURNED!\n")
 	}
@@ -1328,13 +1328,13 @@ func TestStrMech_ReplaceMultipleStrs_06(t *testing.T) {
 
 	rStrs := make([][]string, 0)
 
-	_, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	_, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs)\n" +
+		t.Error("Expected an error return from new(StrMech).ReplaceMultipleStrs(testStr, rStrs)\n" +
 			"because 'rStrs' is a zero length array.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -1348,13 +1348,13 @@ func TestStrMech_ReplaceMultipleStrs_07(t *testing.T) {
 
 	rStrs := make([][]string, 35)
 
-	_, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	_, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return from StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs)\n" +
+		t.Error("Expected an error return from new(StrMech).ReplaceMultipleStrs(testStr, rStrs)\n" +
 			"because 'rStrs' is a 1-dimensional array.\n" +
 			"However, NO ERROR WAS RETURNED!!!\n")
 	}
@@ -1381,13 +1381,13 @@ func TestStrMech_ReplaceMultipleStrs_08(t *testing.T) {
 
 	expectedStr := "Hello World"
 
-	actualStr, err := StrMech{}.Ptr().ReplaceMultipleStrs(
+	actualStr, err := new(StrMech).ReplaceMultipleStrs(
 		testStr,
 		rStrs,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceMultipleStrs(testStr, rStrs). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceMultipleStrs(testStr, rStrs). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -1404,7 +1404,7 @@ func TestStrMech_ReplaceNewLines_01(t *testing.T) {
 	replaceStr := " "
 	expectedStr := "Hello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(
+	actualStr := new(StrMech).ReplaceNewLines(
 		testStr,
 		replaceStr)
 
@@ -1430,7 +1430,7 @@ func TestStrMech_ReplaceNewLines_02(t *testing.T) {
 	replaceStr := " "
 	expectedStr := "Hello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	actualStr := new(StrMech).ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -1446,7 +1446,7 @@ func TestStrMech_ReplaceNewLines_03(t *testing.T) {
 	expectedStr := "HelloWorld"
 	lenExpectedStr := len(expectedStr)
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	actualStr := new(StrMech).ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -1468,7 +1468,7 @@ func TestStrMech_ReplaceNewLines_04(t *testing.T) {
 	replaceStr := ""
 	expectedStr := "Hello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	actualStr := new(StrMech).ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -1492,7 +1492,7 @@ func TestStrMech_ReplaceNewLines_05(t *testing.T) {
 	replaceStr := ""
 	expectedStr := "Hello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	actualStr := new(StrMech).ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -1516,7 +1516,7 @@ func TestStrMech_ReplaceNewLines_06(t *testing.T) {
 	replaceStr := ""
 	expectedStr := "Hello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	actualStr := new(StrMech).ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",
@@ -1540,7 +1540,7 @@ func TestStrMech_ReplaceNewLines_07(t *testing.T) {
 	replaceStr := ""
 	expectedStr := "Hello World"
 
-	actualStr := StrMech{}.Ptr().ReplaceNewLines(testStr, replaceStr)
+	actualStr := new(StrMech).ReplaceNewLines(testStr, replaceStr)
 
 	if expectedStr != actualStr {
 		t.Errorf("Error: Expected result='%v'. Instead, result='%v'",

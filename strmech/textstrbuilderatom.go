@@ -322,7 +322,9 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 		lineTerminatorStr = ""
 
 	} else {
+		// MUST BE
 		// turnLineTerminationOff == false
+
 		if lenLineTerminator == 0 {
 			lenLineTerminator = 1
 			lineTerminatorStr = "\n"
@@ -344,13 +346,16 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 
 			err = fmt.Errorf("%v\n"+
 				"Error: Adjusted Maximum Line Length is invalid!\n"+
-				"'dateTimeFieldDto.MaxLineLength' has a value less than five (5).\n"+
+				"This Date Time Field has turned on automatic line breaks.\n"+
+				"This means Line Termination Character(s) will be automatically\n"+
+				"when a string of text exceeds the Maximum Line Length.\n"+
 				"'dateTimeFieldDto.TurnAutoLineLengthBreaksOn' == 'true'\n"+
 				"Adjusted Maximum Line Length is equal to Maximum Line Length\n"+
 				" minus Length of Left Margin minus Length of Right Margin\n"+
-				"minus Length of Line Termination Characters.\n"+
-				"With automatic line breaks engaged, set Maximum Line Length\n"+
-				"to a meaninful number greater than or equal to five (5).\n"+
+				"minus Length of Line Termination Characters. With automatic"+
+				"line breaks engaged, Adjusted Maximum Line Length be greater\n"+
+				"than or equal to five (5).\n"+
+				"SET Maximum Line Length to a meaningful number.\n"+
 				"               Maximum Line Length = '%v'\n"+
 				"               Left Margin Length  = '%v'\n"+
 				"               Right Margin Length = '%v'\n"+
@@ -422,14 +427,18 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 		return strBuilder, err
 	}
 
+	var lastWriteWasLineTerminator bool
+
 	currentLineLength,
-		_,
+		lastWriteWasLineTerminator,
 		err =
 		txtBuilderElectron.writeText(
 			&strBuilder,
 			maximumLineLength,
 			currentLineLength,
+			dateTimeFieldDto.LeftMarginStr,
 			dateTimeStr,
+			dateTimeFieldDto.RightMarginStr,
 			lineTerminatorStr,
 			turnAutoLineLengthBreaksOn,
 			ePrefix.XCpy(
@@ -438,8 +447,6 @@ func (txtBuilderAtom *textStrBuilderAtom) buildDateTimeFieldWithDto(
 	if err != nil {
 		return strBuilder, err
 	}
-
-	var lastWriteWasLineTerminator bool
 
 	currentLineLength,
 		lastWriteWasLineTerminator,
@@ -628,7 +635,9 @@ func (txtBuilderAtom *textStrBuilderAtom) buildFillerFieldWithDto(
 			&strBuilder,
 			maximumLineLength,
 			currentLineLength,
+			fillerFieldDto.LeftMarginStr,
 			fillerCharsStr,
+			fillerFieldDto.RightMarginStr,
 			lineTerminatorStr,
 			turnAutoLineLengthBreaksOn,
 			ePrefix.XCpy(
@@ -827,7 +836,9 @@ func (txtBuilderAtom *textStrBuilderAtom) buildLabelFieldWithDto(
 			&strBuilder,
 			maximumLineLength,
 			currentLineLength,
+			labelFieldDto.LeftMarginStr,
 			labelStr,
+			labelFieldDto.RightMarginStr,
 			lineTerminatorStr,
 			turnAutoLineLengthBreaksOn,
 			ePrefix.XCpy(
@@ -1790,7 +1801,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldDateTimeWithMargins(
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
-//       for 'labelText field.
+//       for 'labelText' field.
 //
 //       If no left margin is required, set 'LeftMarginStr' to a
 //       zero length or empty string, and no left margin will be
@@ -2000,7 +2011,7 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldFillerWithMargins(
 //
 //  leftMarginStr              string
 //     - The contents of the string will be used as the left margin
-//       for 'labelText field.
+//       for 'labelText' field.
 //
 //       If no left margin is required, set 'LeftMarginStr' to a
 //       zero length or empty string, and no left margin will be
@@ -2200,22 +2211,4 @@ func (txtBuilderAtom *textStrBuilderAtom) fieldLabelWithMargins(
 	}
 
 	return strBuilder, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textStrBuilderAtom.
-//
-func (txtBuilderAtom textStrBuilderAtom) ptr() *textStrBuilderAtom {
-
-	if txtBuilderAtom.lock == nil {
-		txtBuilderAtom.lock = new(sync.Mutex)
-	}
-
-	txtBuilderAtom.lock.Lock()
-
-	defer txtBuilderAtom.lock.Unlock()
-
-	return &textStrBuilderAtom{
-		lock: new(sync.Mutex),
-	}
 }

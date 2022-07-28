@@ -556,7 +556,7 @@ func (sMechAtom *strMechAtom) copyOut(
 //
 //  datDto,
 //  err :=
-//    StrMech{}.Ptr().
+//    new(StrMech).
 //        ExtractDataField(
 //           targetStr,
 //           leadingKeyWordDelimiters,
@@ -1169,7 +1169,7 @@ exitMainTargetLoop:
 //
 //  nStrDto,
 //  err :=
-//    StrMech{}.Ptr().
+//    new(StrMech).
 //         ExtractNumericDigits(
 //             targetStr,
 //             startIndex,

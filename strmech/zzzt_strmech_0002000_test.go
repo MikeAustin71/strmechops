@@ -341,8 +341,8 @@ func TestStrMech_ExtractDataField_01(t *testing.T) {
 	if expectedDataFieldTrailingDelimiter != datDto.DataFieldTrailingDelimiter {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiter='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedDataFieldTrailingDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedDataFieldTrailingDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), true))
 	}
 
 	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
@@ -366,8 +366,8 @@ func TestStrMech_ExtractDataField_01(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -379,8 +379,8 @@ func TestStrMech_ExtractDataField_01(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -461,7 +461,7 @@ func TestStrMech_ExtractDataField_02(t *testing.T) {
 	}
 
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -553,8 +553,8 @@ func TestStrMech_ExtractDataField_02(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -566,8 +566,8 @@ func TestStrMech_ExtractDataField_02(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -617,7 +617,7 @@ func TestStrMech_ExtractDataField_03(t *testing.T) {
 	expectedNextTargetIdx := -1
 
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -709,8 +709,8 @@ func TestStrMech_ExtractDataField_03(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -722,8 +722,8 @@ func TestStrMech_ExtractDataField_03(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -780,7 +780,7 @@ func TestStrMech_ExtractDataField_04(t *testing.T) {
 	}
 
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -872,8 +872,8 @@ func TestStrMech_ExtractDataField_04(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -885,8 +885,8 @@ func TestStrMech_ExtractDataField_04(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -938,7 +938,7 @@ func TestStrMech_ExtractDataField_05(t *testing.T) {
 	expectedCommentDelimiterIndex := strings.Index(targetStr, "#")
 
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -949,7 +949,7 @@ func TestStrMech_ExtractDataField_05(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 			"targetStr='%v'\tstartIdx='%v'\n"+
 			"Error='%v'\n", targetStr, startIdx, err.Error())
 		return
@@ -1030,8 +1030,8 @@ func TestStrMech_ExtractDataField_05(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -1043,8 +1043,8 @@ func TestStrMech_ExtractDataField_05(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -1094,7 +1094,7 @@ func TestStrMech_ExtractDataField_06(t *testing.T) {
 	expectedCommentDelimiterIndex := strings.Index(targetStr, "#")
 
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1105,7 +1105,7 @@ func TestStrMech_ExtractDataField_06(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 			"targetStr='%v'\tstartIdx='%v'\n"+
 			"Error='%v'\n", targetStr, startIdx, err.Error())
 		return
@@ -1186,8 +1186,8 @@ func TestStrMech_ExtractDataField_06(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -1199,8 +1199,8 @@ func TestStrMech_ExtractDataField_06(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -1260,7 +1260,7 @@ func TestStrMech_ExtractDataField_07(t *testing.T) {
 	for i := 0; i < 3; i++ {
 
 		datDto,
-			err = StrMech{}.Ptr().ExtractDataField(
+			err = new(StrMech).ExtractDataField(
 			targetStr,
 			leadingKeyWordDelimiters,
 			startIdx,
@@ -1271,7 +1271,7 @@ func TestStrMech_ExtractDataField_07(t *testing.T) {
 			ePrefix)
 
 		if err != nil {
-			t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+			t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 				"Cycle No='%v'\n"+
 				"targetStr='%v'\tstartIdx='%v'\n"+
 				"Error='%v'\n", i, targetStr, startIdx, err.Error())
@@ -1356,8 +1356,8 @@ func TestStrMech_ExtractDataField_07(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -1369,8 +1369,8 @@ func TestStrMech_ExtractDataField_07(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -1424,7 +1424,7 @@ func TestStrMech_ExtractDataField_08(t *testing.T) {
 	var err error
 
 	datDto,
-		err = StrMech{}.Ptr().ExtractDataField(
+		err = new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1435,7 +1435,7 @@ func TestStrMech_ExtractDataField_08(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 			"targetStr='%v'\tstartIdx='%v'\n"+
 			"Error='%v'\n", targetStr, startIdx, err.Error())
 		return
@@ -1516,8 +1516,8 @@ func TestStrMech_ExtractDataField_08(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -1529,8 +1529,8 @@ func TestStrMech_ExtractDataField_08(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -1560,7 +1560,7 @@ func TestStrMech_ExtractDataField_09(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Link:", "Zone:", "Duplicate:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1571,7 +1571,7 @@ func TestStrMech_ExtractDataField_09(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for  StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for  new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'leadingFieldDelimiters' is a zero length string array.\n" +
 			"However, NO ERROR WAS RETURNED!")
 	}
@@ -1598,7 +1598,7 @@ func TestStrMech_ExtractDataField_10(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Link:", "Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1609,7 +1609,7 @@ func TestStrMech_ExtractDataField_10(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField(...)\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField(...)\n" +
 			"because input parameter 'trailingFieldDelimiters' is a zero length string array.\n" +
 			"However, NO ERROR WAS RETURNED!")
 	}
@@ -1640,7 +1640,7 @@ func TestStrMech_ExtractDataField_11(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1651,7 +1651,7 @@ func TestStrMech_ExtractDataField_11(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField(...)\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField(...)\n" +
 			"because input parameter 'targetStr' is an empty string.\n" +
 			"However, NO ERROR WAS RETURNED!")
 	}
@@ -1683,7 +1683,7 @@ func TestStrMech_ExtractDataField_12(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1725,7 +1725,7 @@ func TestStrMech_ExtractDataField_13(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1736,7 +1736,7 @@ func TestStrMech_ExtractDataField_13(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'startIdx' is exceeds the outer boundary of 'targetStr'.\n" +
 			"However, NO ERROR WAS RETURNED!")
 	}
@@ -1782,7 +1782,7 @@ func TestStrMech_ExtractDataField_14(t *testing.T) {
 	expectedNextTargetIdx := -1
 
 	datDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1793,7 +1793,7 @@ func TestStrMech_ExtractDataField_14(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 			"targetStr='%v'\tstartIdx='%v'\n"+
 			"Error='%v'\n", targetStr, startIdx, err.Error())
 		return
@@ -1850,8 +1850,8 @@ func TestStrMech_ExtractDataField_14(t *testing.T) {
 	if expectedDataFieldTrailingDelimiter != datDto.DataFieldTrailingDelimiter {
 		t.Errorf("ERROR: Expected datDto.DataFieldTrailingDelimiter='%v'.\n"+
 			"Instead, datDto.DataFieldTrailingDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedDataFieldTrailingDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedDataFieldTrailingDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.DataFieldTrailingDelimiter), true))
 	}
 
 	if expectedDataFieldTrailingDelimiterType != datDto.DataFieldTrailingDelimiterType {
@@ -1875,8 +1875,8 @@ func TestStrMech_ExtractDataField_14(t *testing.T) {
 	if expectedEndOfLineDelimiter != datDto.EndOfLineDelimiter {
 		t.Errorf("ERROR: Expected datDto.EndOfLineDelimiter='%v'.\n"+
 			"Instead, datDto.EndOfLineDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedEndOfLineDelimiter), false),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.EndOfLineDelimiter), false))
 	}
 
 	if expectedEndOfLineDelimiterIdx != datDto.EndOfLineDelimiterIndex {
@@ -1888,8 +1888,8 @@ func TestStrMech_ExtractDataField_14(t *testing.T) {
 	if expectedCommentDelimiter != datDto.CommentDelimiter {
 		t.Errorf("ERROR: Expected datDto.CommentDelimiter='%v'.\n"+
 			"Instead, datDto.CommentDelimiter='%v'.\n",
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
-			StrMech{}.NewPtr().ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
+			new(StrMech).ConvertNonPrintableChars([]rune(expectedCommentDelimiter), true),
+			new(StrMech).ConvertNonPrintableChars([]rune(datDto.CommentDelimiter), true))
 	}
 
 	if expectedCommentDelimiterIndex != datDto.CommentDelimiterIndex {
@@ -1924,7 +1924,7 @@ func TestStrMech_ExtractDataField_15(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1935,7 +1935,7 @@ func TestStrMech_ExtractDataField_15(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'leadingFieldDelimiters' array consists entirely\n" +
 			"of empty strings. \n" +
 			"However, NO ERROR WAS RETURNED!\n")
@@ -1966,7 +1966,7 @@ func TestStrMech_ExtractDataField_16(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -1977,7 +1977,7 @@ func TestStrMech_ExtractDataField_16(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'trailingFieldDelimiters' array consists entirely\n" +
 			"of empty strings. \n" +
 			"However, NO ERROR WAS RETURNED!\n")
@@ -2009,7 +2009,7 @@ func TestStrMech_ExtractDataField_17(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -2020,7 +2020,7 @@ func TestStrMech_ExtractDataField_17(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'endOfLineDelimiters' array consists entirely\n" +
 			"of empty strings. \n" +
 			"However, NO ERROR WAS RETURNED!\n")
@@ -2052,7 +2052,7 @@ func TestStrMech_ExtractDataField_18(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:"}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -2063,7 +2063,7 @@ func TestStrMech_ExtractDataField_18(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'commentDelimiters' array consists entirely\n" +
 			"of empty strings. \n" +
 			"However, NO ERROR WAS RETURNED!\n")
@@ -2095,7 +2095,7 @@ func TestStrMech_ExtractDataField_19(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:", "Link:"}
 
 	fieldDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -2106,7 +2106,7 @@ func TestStrMech_ExtractDataField_19(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -2142,7 +2142,7 @@ func TestStrMech_ExtractDataField_20(t *testing.T) {
 	leadingKeyWordDelimiters := []string{"Zone:", "Link:"}
 
 	fieldDto,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -2153,7 +2153,7 @@ func TestStrMech_ExtractDataField_20(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ExtractDataField()\n"+
+		t.Errorf("Error returned by new(StrMech).ExtractDataField()\n"+
 			"Error='%v'\n", err.Error())
 		return
 	}
@@ -2192,7 +2192,7 @@ func TestStrMech_ExtractDataField_21(t *testing.T) {
 		""}
 
 	_,
-		err := StrMech{}.Ptr().ExtractDataField(
+		err := new(StrMech).ExtractDataField(
 		targetStr,
 		leadingKeyWordDelimiters,
 		startIdx,
@@ -2203,7 +2203,7 @@ func TestStrMech_ExtractDataField_21(t *testing.T) {
 		ePrefix)
 
 	if err == nil {
-		t.Error("Expected an error return for StrMech{}.Ptr().ExtractDataField()\n" +
+		t.Error("Expected an error return for new(StrMech).ExtractDataField()\n" +
 			"because input parameter 'leadingKeyWordDelimiters' array consists entirely\n" +
 			"of empty strings. \n" +
 			"However, NO ERROR WAS RETURNED!\n")

@@ -279,7 +279,7 @@ func TestStrMech_ReplaceStringChars_03(t *testing.T) {
 	replaceRunes[4][0] = 'v'
 	replaceRunes[4][1] = 'V'
 
-	actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+	actualStr, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -319,7 +319,7 @@ func TestStrMech_ReplaceStringChars_04(t *testing.T) {
 	replaceRunes[4][0] = '5'
 	replaceRunes[4][1] = '7'
 
-	actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+	actualStr, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -360,7 +360,7 @@ func TestStrMech_ReplaceStringChars_05(t *testing.T) {
 	replaceRunes[4][0] = 'b'
 	replaceRunes[4][1] = 0
 
-	actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+	actualStr, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -401,7 +401,7 @@ func TestStrMech_ReplaceStringChars_06(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 0
 
-	actualStr, err := StrMech{}.Ptr().ReplaceStringChars(
+	actualStr, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -440,7 +440,7 @@ func TestStrMech_ReplaceStringChars_07(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 0
 
-	_, err := StrMech{}.Ptr().ReplaceStringChars(
+	_, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -458,7 +458,7 @@ func TestStrMech_ReplaceStringChars_08(t *testing.T) {
 
 	replaceRunes := make([][2]rune, 0)
 
-	_, err := StrMech{}.Ptr().ReplaceStringChars(
+	_, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -477,7 +477,7 @@ func TestStrMech_ReplaceStringChars_09(t *testing.T) {
 
 	replaceRunes := make([][2]rune, 5)
 
-	_, err := StrMech{}.Ptr().ReplaceStringChars(
+	_, err := new(StrMech).ReplaceStringChars(
 		testStr,
 		replaceRunes,
 		ePrefix)
@@ -524,7 +524,7 @@ func TestStrMech_ReplaceRunes_01(t *testing.T) {
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceRunes(testRunes, replaceRunes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceRunes(testRunes, replaceRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -563,13 +563,13 @@ func TestStrMech_ReplaceRunes_02(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 'E'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+	actualRunes, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceRunes(testRunes, replaceRunes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceRunes(testRunes, replaceRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -608,13 +608,13 @@ func TestStrMech_ReplaceRunes_03(t *testing.T) {
 	replaceRunes[4][0] = 'v'
 	replaceRunes[4][1] = 'V'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+	actualRunes, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceRunes(testRunes, replaceRunes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceRunes(testRunes, replaceRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -652,13 +652,13 @@ func TestStrMech_ReplaceRunes_04(t *testing.T) {
 	replaceRunes[4][0] = '5'
 	replaceRunes[4][1] = '7'
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+	actualRunes, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceRunes(testRunes, replaceRunes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceRunes(testRunes, replaceRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -696,13 +696,13 @@ func TestStrMech_ReplaceRunes_05(t *testing.T) {
 	replaceRunes[4][0] = 'b'
 	replaceRunes[4][1] = 0
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+	actualRunes, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceRunes(testRunes, replaceRunes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceRunes(testRunes, replaceRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -740,13 +740,13 @@ func TestStrMech_ReplaceRunes_06(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 0
 
-	actualRunes, err := StrMech{}.Ptr().ReplaceRunes(
+	actualRunes, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
 
 	if err != nil {
-		t.Errorf("Error returned by StrMech{}.Ptr().ReplaceRunes(testRunes, replaceRunes). "+
+		t.Errorf("Error returned by new(StrMech).ReplaceRunes(testRunes, replaceRunes). "+
 			"Error='%v' ", err.Error())
 	}
 
@@ -781,7 +781,7 @@ func TestStrMech_ReplaceRunes_07(t *testing.T) {
 	replaceRunes[4][0] = 'e'
 	replaceRunes[4][1] = 0
 
-	_, err := StrMech{}.Ptr().ReplaceRunes(
+	_, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
@@ -802,7 +802,7 @@ func TestStrMech_ReplaceRunes_08(t *testing.T) {
 
 	replaceRunes = nil
 
-	_, err := StrMech{}.Ptr().ReplaceRunes(
+	_, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
@@ -824,7 +824,7 @@ func TestStrMech_ReplaceRunes_09(t *testing.T) {
 
 	replaceRunes := make([][2]rune, 0)
 
-	_, err := StrMech{}.Ptr().ReplaceRunes(
+	_, err := new(StrMech).ReplaceRunes(
 		testRunes,
 		replaceRunes,
 		ePrefix)
