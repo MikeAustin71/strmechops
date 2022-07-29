@@ -1096,7 +1096,7 @@ func (sMechPreon *strMechPreon) getRepeatRuneChar(
 //  hostRunes           []rune
 //     - An array of runes. This rune array will be searched to
 //       determine if the target runes array is present at the
-//       'hostStartIndex.
+//       'hostStartIndex'.
 //
 //       If 'hostRunes' is a zero length array, this method will
 //       return 'false'.
