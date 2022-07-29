@@ -747,6 +747,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 
 	}
 
+	txtBuilderMolecule := textStrBuilderMolecule{}
 	txtBuilderAtom := textStrBuilderAtom{}
 
 	for i := 0; i < lenTextFormatterCol; i++ {
@@ -771,8 +772,8 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.DateTime() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildDateTimeFieldWithDto(
+			err = txtBuilderMolecule.buildDateTimeFieldWithDto(
+				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].DateTime,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -1094,6 +1095,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldDateTime(
+	strBuilder *strings.Builder,
 	leftMarginStr string,
 	fieldDateTime time.Time,
 	fieldDateTimeFormat string,
@@ -1103,9 +1105,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -1118,8 +1118,6 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1128,7 +1126,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	if fieldDateTime.IsZero() {
@@ -1138,7 +1136,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 			"'fieldDateTime' has a zero Date/Time value.\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -1151,7 +1149,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 			ePrefix.String(),
 			fieldLength)
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -1164,7 +1162,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 			ePrefix.String(),
 			fieldLength)
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -1186,12 +1184,13 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 		lock:                       nil,
 	}
 
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildDateTimeFieldWithDto(
+	err = new(textStrBuilderMolecule).buildDateTimeFieldWithDto(
+		strBuilder,
 		dateTimeDto,
 		ePrefix.XCpy(
 			"strBuilder<-dateTime"))
+
+	return err
 }
 
 // FieldDateTimeDto - Creates a date time value formatted as a text
@@ -1399,10 +1398,9 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
+	strBuilder *strings.Builder,
 	textDateTimeDto TextFieldDateTimeDto,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -1415,8 +1413,6 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1425,7 +1421,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	if textDateTimeDto.FieldDateTime.IsZero() {
@@ -1435,7 +1431,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 			"'textDateTimeDto.FieldDateTime' has a zero Date/Time value.\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -1448,7 +1444,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 			ePrefix.String(),
 			textDateTimeDto.FieldLength)
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -1461,7 +1457,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 			ePrefix.String(),
 			textDateTimeDto.FieldLength)
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -1469,10 +1465,13 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 		textDateTimeDto.MaxLineLength = -1
 	}
 
-	return new(textStrBuilderAtom).buildDateTimeFieldWithDto(
+	err = new(textStrBuilderMolecule).buildDateTimeFieldWithDto(
+		strBuilder,
 		textDateTimeDto,
 		ePrefix.XCpy(
 			"strBuilder<-textDateTimeDto"))
+
+	return err
 }
 
 // FieldFiller - The Filler Text Field consists of a single
