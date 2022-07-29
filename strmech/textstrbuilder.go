@@ -803,12 +803,13 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Spacer() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildSpacerFieldWithDto(
+			err = txtBuilderMolecule.buildSpacerFieldWithDto(
+				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].Spacer,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].Spacer.FieldText",
+						"strBuilder<-"+
+							"txtFormatters[%v].Spacer.FieldText",
 						i)))
 
 			if err != nil {
@@ -2622,6 +2623,12 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Filler Text
+//       Field will be written to this instance of strings.Builder.
+//
+//
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left
 //       margin for the Text Spacer Field.
@@ -2742,12 +2749,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted
-//       text characters.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -2759,15 +2760,14 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldSpacer(
+	strBuilder *strings.Builder,
 	leftMarginStr string,
 	fieldLength int,
 	rightMarginStr string,
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2779,9 +2779,6 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
-
-	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2791,37 +2788,7 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 		"")
 
 	if err != nil {
-		return strBuilder, err
-	}
-
-	if fieldLength < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value less than one (1).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			fieldLength)
-
-		return strBuilder, err
-
-	}
-
-	if fieldLength > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value greater than one-million (1,000,000).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			fieldLength)
-
-		return strBuilder, err
-
-	}
-
-	if maxLineLength < 1 {
-		maxLineLength = -1
+		return err
 	}
 
 	txtFieldSpacerDto := TextFieldSpacerDto{
@@ -2835,10 +2802,9 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 		lock:                       nil,
 	}
 
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.
+	return new(textStrBuilderMolecule).
 		buildSpacerFieldWithDto(
+			strBuilder,
 			txtFieldSpacerDto,
 			ePrefix.XCpy(
 				"strBuilder<-txtFieldSpacerDto"))
@@ -2881,6 +2847,12 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Filler Text
+//       Field will be written to this instance of strings.Builder.
+//
 //
 //  txtFieldSpacerDto          TextFieldSpacerDto
 //     - An instance of TextFieldSpacerDto which contains all the
@@ -3025,12 +2997,6 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted
-//       text characters.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -3042,10 +3008,9 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
+	strBuilder *strings.Builder,
 	txtFieldSpacerDto TextFieldSpacerDto,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -3057,9 +3022,6 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
-
-	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3069,43 +3031,12 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	if txtFieldSpacerDto.FieldLength < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtFieldSpacerDto.FieldLength' is invalid!\n"+
-			"'txtFieldSpacerDto.FieldLength' has a value less than one (1).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			txtFieldSpacerDto.FieldLength)
-
-		return strBuilder, err
-
-	}
-
-	if txtFieldSpacerDto.FieldLength > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtFieldSpacerDto.FieldLength' is invalid!\n"+
-			"'txtFieldSpacerDto.FieldLength' has a value greater than one-million (1,000,000).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			txtFieldSpacerDto.FieldLength)
-
-		return strBuilder, err
-
-	}
-
-	if txtFieldSpacerDto.MaxLineLength < 1 {
-		txtFieldSpacerDto.MaxLineLength = -1
-	}
-
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.
+	return new(textStrBuilderMolecule).
 		buildSpacerFieldWithDto(
+			strBuilder,
 			txtFieldSpacerDto,
 			ePrefix.XCpy(
 				"strBuilder<-txtFieldSpacerDto"))

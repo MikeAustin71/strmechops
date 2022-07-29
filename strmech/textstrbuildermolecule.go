@@ -168,7 +168,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildFillerFieldWithDto(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderMolecule."+
-			"buildLabelFieldWithDto()",
+			"buildFillerFieldWithDto()",
 		"")
 
 	if err != nil {
@@ -335,6 +335,94 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
 		lastWriteWasLineTerminator: false,
 		sourceTag:                  "Label Field",
 		sourceDtoTag:               "labelFieldDto",
+		errPrefDto:                 ePrefix,
+	}
+
+	return new(textStrBuilderAtom).preBuildScreening(
+		&txtBuilderParams)
+}
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildSpacerFieldWithDto(
+	strBuilder *strings.Builder,
+	spacerFieldDto TextFieldSpacerDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildSpacerFieldWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if spacerFieldDto.FieldLength < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'spacerFieldDto.FieldLength' is invalid!\n"+
+			"'spacerFieldDto.FieldLength' has a value less than one (1).\n",
+			ePrefix.String())
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	var txtFieldSpecSpacer TextFieldSpecSpacer
+
+	txtFieldSpecSpacer,
+		err = TextFieldSpecSpacer{}.NewSpacer(
+		spacerFieldDto.FieldLength,
+		ePrefix.XCpy(
+			fmt.Sprintf("spacerFieldDto.FieldLength='%v'",
+				spacerFieldDto.FieldLength)))
+
+	if err != nil {
+		return err
+	}
+
+	var spacerFieldText string
+
+	spacerFieldText,
+		err = txtFieldSpecSpacer.GetFormattedText(
+		ePrefix.XCpy(
+			"spacerFieldText<-txtFieldSpecSpacer"))
+
+	if err != nil {
+		return err
+	}
+
+	txtBuilderParams := textStrBuilderParamsDto{
+		strBuilder:                 strBuilder,
+		leftMarginStr:              spacerFieldDto.LeftMarginStr,
+		lenLeftMarginStr:           len(spacerFieldDto.LeftMarginStr),
+		textStr:                    spacerFieldText,
+		lenTextStr:                 len(spacerFieldText),
+		rightMarginStr:             spacerFieldDto.RightMarginStr,
+		lenRightMarginStr:          len(spacerFieldDto.RightMarginStr),
+		turnLineTerminationOff:     true,
+		lineTerminatorStr:          spacerFieldDto.LineTerminator,
+		lenLineTerminatorStr:       0,
+		maxLineLength:              spacerFieldDto.MaxLineLength,
+		currentLineLength:          0,
+		turnAutoLineLengthBreaksOn: spacerFieldDto.TurnAutoLineLengthBreaksOn,
+		lastWriteWasLineTerminator: false,
+		sourceTag:                  "Spacer Field",
+		sourceDtoTag:               "spacerFieldDto",
 		errPrefDto:                 ePrefix,
 	}
 
