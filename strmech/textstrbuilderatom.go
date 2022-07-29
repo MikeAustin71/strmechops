@@ -134,104 +134,66 @@ func (txtBuilderAtom *textStrBuilderAtom) buildAdHocTextWithDto(
 		}
 	}
 
-	if turnAutoLineLengthBreaksOn == true &&
-		lenAdHocText > adjustedMaximumLineLength {
+	txtBuilderElectron := textStrBuilderElectron{}
 
-		var newAdHocStr = txtAdHocDto.AdHocText
+	var currentLineLength = 0
 
-		sMechAtom := strMechAtom{}
+	currentLineLength,
+		err =
+		txtBuilderElectron.writeLeftMargin(
+			&strBuilder,
+			maximumLineLength,
+			currentLineLength,
+			txtAdHocDto.LeftMarginStr,
+			lineTerminatorStr,
+			turnAutoLineLengthBreaksOn,
+			ePrefix.XCpy(
+				"txtAdHocDto.LeftMarginStr"))
 
-		// Delete existing new line chars ('\n')
-		newAdHocStr =
-			strings.Replace(
-				newAdHocStr,
-				"\n",
-				"",
-				-1)
-
-		newAdHocStr,
-			err =
-			sMechAtom.breakTextAtLineLength(
-				newAdHocStr,
-				adjustedMaximumLineLength,
-				'\n',
-				ePrefix.XCpy(
-					fmt.Sprintf("txtAdHocDto.AdHocText maxLen='%v'",
-						adjustedMaximumLineLength)))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-		if lenLeftMargin > 0 &&
-			lenRightMargin == 0 {
-
-			newAdHocStr = txtAdHocDto.LeftMarginStr +
-				newAdHocStr
-
-			newAdHocStr = strings.Replace(
-				newAdHocStr,
-				"\n",
-				"\n"+txtAdHocDto.LeftMarginStr,
-				-1)
-
-		} else if lenLeftMargin == 0 &&
-			lenRightMargin > 0 {
-
-			newAdHocStr = strings.Replace(
-				newAdHocStr,
-				"\n",
-				txtAdHocDto.RightMarginStr+"\n",
-				-1)
-
-		} else if lenLeftMargin > 0 &&
-			lenRightMargin > 0 {
-
-			newAdHocStr = txtAdHocDto.LeftMarginStr +
-				newAdHocStr
-
-			newAdHocStr = strings.Replace(
-				newAdHocStr,
-				"\n",
-				txtAdHocDto.RightMarginStr+
-					"\n"+
-					txtAdHocDto.LeftMarginStr,
-				-1)
-
-		}
-
-		if lenLineTerminator > 0 {
-			newAdHocStr += lineTerminatorStr
-		}
-
-		strBuilder.Grow(len(newAdHocStr) + lenLineTerminator)
-
-		strBuilder.WriteString(newAdHocStr)
-
-		// EXIT METHOD HERE!
+	if err != nil {
 		return strBuilder, err
-
-	} // End of  turnAutoLineLengthBreaksOn == true &&
-	// lenAdHocText > adjustedMaximumLineLength
-
-	// No Auto Line Length Breaks Required
-	strBuilder.Grow(
-		lenLeftMargin +
-			lenAdHocText +
-			lenRightMargin +
-			lenLineTerminator + 5)
-
-	if lenLeftMargin > 0 {
-		strBuilder.WriteString(txtAdHocDto.LeftMarginStr)
 	}
 
-	strBuilder.WriteString(txtAdHocDto.AdHocText)
+	var lastWriteWasLineTerminator bool
 
-	if lenRightMargin > 0 {
-		strBuilder.WriteString(txtAdHocDto.RightMarginStr)
+	currentLineLength,
+		lastWriteWasLineTerminator,
+		err =
+		txtBuilderElectron.writeText(
+			&strBuilder,
+			maximumLineLength,
+			currentLineLength,
+			txtAdHocDto.LeftMarginStr,
+			txtAdHocDto.AdHocText,
+			txtAdHocDto.RightMarginStr,
+			lineTerminatorStr,
+			turnAutoLineLengthBreaksOn,
+			ePrefix.XCpy(
+				"txtAdHocDto.AdHocText"))
+
+	if err != nil {
+		return strBuilder, err
 	}
 
-	if lenLineTerminator > 0 {
+	currentLineLength,
+		lastWriteWasLineTerminator,
+		err =
+		txtBuilderElectron.writeRightMargin(
+			&strBuilder,
+			maximumLineLength,
+			currentLineLength,
+			txtAdHocDto.RightMarginStr,
+			lineTerminatorStr,
+			turnAutoLineLengthBreaksOn,
+			ePrefix.XCpy(
+				"txtAdHocDto.RightMarginStr"))
+
+	if err != nil {
+		return strBuilder, err
+	}
+
+	if !lastWriteWasLineTerminator &&
+		len(lineTerminatorStr) > 0 {
 		strBuilder.WriteString(lineTerminatorStr)
 	}
 
