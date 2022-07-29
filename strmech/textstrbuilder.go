@@ -757,12 +757,13 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Label() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildLabelFieldWithDto(
+			err = txtBuilderMolecule.buildLabelFieldWithDto(
+				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].Label,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].Label.FieldText",
+						"strBuilder<-"+
+							"txtFormatters[%v].Label.FieldText",
 						i)))
 
 			if err != nil {
@@ -2107,6 +2108,12 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this label will be
+//       written to this instance of strings.Builder.
+//
+//
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left
 //       margin for the text label field.
@@ -2299,12 +2306,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted text
-//       characters.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -2316,6 +2317,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldLabel(
+	strBuilder *strings.Builder,
 	leftMarginStr string,
 	fieldText interface{},
 	fieldLength int,
@@ -2324,9 +2326,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2338,7 +2338,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2348,7 +2347,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	var fieldTextStr string
@@ -2362,7 +2361,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 				"fieldTextStr<-fieldText"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	if len(fieldTextStr) == 0 {
@@ -2373,7 +2372,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 			"string length of zero (0).\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	if fieldLength < -1 {
@@ -2385,7 +2384,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 			ePrefix.String(),
 			fieldLength)
 
-		return strBuilder, err
+		return err
 
 	}
 
@@ -2398,12 +2397,8 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 			ePrefix.String(),
 			fieldLength)
 
-		return strBuilder, err
+		return err
 
-	}
-
-	if maxLineLength < 1 {
-		maxLineLength = -1
 	}
 
 	labelFieldDto := TextFieldLabelDto{
@@ -2419,9 +2414,8 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		lock:                       nil,
 	}
 
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildLabelFieldWithDto(
+	return new(textStrBuilderMolecule).buildLabelFieldWithDto(
+		strBuilder,
 		labelFieldDto,
 		ePrefix.XCpy(
 			"strBuilder<-labelFieldDto"))
@@ -2463,6 +2457,12 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this label will be
+//       written to this instance of strings.Builder.
+//
 //
 //  textLabelDto                       TextFieldLabelDto
 //     - An instance of TextFieldLabelDto which contains all the
@@ -2668,10 +2668,9 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
+	strBuilder *strings.Builder,
 	textLabelDto TextFieldLabelDto,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -2683,7 +2682,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2693,7 +2691,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	if len(textLabelDto.FieldText) == 0 {
@@ -2704,7 +2702,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 			"string length of zero (0).\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	if textLabelDto.FieldLength < -1 {
@@ -2716,13 +2714,12 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 			ePrefix.String(),
 			textLabelDto.FieldLength)
 
-		return strBuilder, err
+		return err
 
 	}
 
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildLabelFieldWithDto(
+	return new(textStrBuilderMolecule).buildLabelFieldWithDto(
+		strBuilder,
 		textLabelDto.CopyOut(),
 		ePrefix.XCpy(
 			"strBuilder<-textLabelDto"))

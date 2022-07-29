@@ -129,8 +129,8 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildDateTimeFieldWithDto(
 		textStr:                    dateTimeStr,
 		lenTextStr:                 len(dateTimeStr),
 		rightMarginStr:             dateTimeFieldDto.RightMarginStr,
-		turnLineTerminationOff:     true,
 		lenRightMarginStr:          len(dateTimeFieldDto.RightMarginStr),
+		turnLineTerminationOff:     true,
 		lineTerminatorStr:          dateTimeFieldDto.LineTerminator,
 		lenLineTerminatorStr:       0,
 		maxLineLength:              dateTimeFieldDto.MaxLineLength,
@@ -139,6 +139,67 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildDateTimeFieldWithDto(
 		lastWriteWasLineTerminator: false,
 		sourceTag:                  "DateTime",
 		sourceDtoTag:               "dateTimeFieldDto",
+		errPrefDto:                 ePrefix,
+	}
+
+	err = new(textStrBuilderAtom).preBuildScreening(
+		&txtBuilderParams)
+
+	return err
+}
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
+	strBuilder *strings.Builder,
+	labelFieldDto TextFieldLabelDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLabelFieldWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	labelText := labelFieldDto.FieldText
+
+	if len(labelText) == 0 {
+
+		labelText = " "
+
+	}
+
+	txtBuilderParams := textStrBuilderParamsDto{
+		strBuilder:                 strBuilder,
+		leftMarginStr:              labelFieldDto.LeftMarginStr,
+		lenLeftMarginStr:           len(labelFieldDto.LeftMarginStr),
+		textStr:                    labelText,
+		lenTextStr:                 len(labelText),
+		rightMarginStr:             labelFieldDto.RightMarginStr,
+		lenRightMarginStr:          len(labelFieldDto.RightMarginStr),
+		turnLineTerminationOff:     true,
+		lineTerminatorStr:          labelFieldDto.LineTerminator,
+		lenLineTerminatorStr:       0,
+		maxLineLength:              labelFieldDto.MaxLineLength,
+		currentLineLength:          0,
+		turnAutoLineLengthBreaksOn: labelFieldDto.TurnAutoLineLengthBreaksOn,
+		lastWriteWasLineTerminator: false,
+		sourceTag:                  "Label Field",
+		sourceDtoTag:               "labelFieldDto",
 		errPrefDto:                 ePrefix,
 	}
 
