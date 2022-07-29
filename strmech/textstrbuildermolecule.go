@@ -148,6 +148,111 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildDateTimeFieldWithDto(
 	return err
 }
 
+func (txtBuilderMolecule *textStrBuilderMolecule) buildFillerFieldWithDto(
+	strBuilder *strings.Builder,
+	fillerFieldDto TextFieldFillerDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLabelFieldWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fillerCharacters := fillerFieldDto.FillerCharacters
+
+	lenFillerChars := len(fillerCharacters)
+
+	if lenFillerChars == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerFieldDto.FillerCharacters' is invalid!\n"+
+			"'fillerFieldDto.FillerCharacters' is an empty string.\n",
+			ePrefix.String())
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if fillerFieldDto.FillerCharsRepeatCount < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fillerFieldDto.FillerCharsRepeatCount' is invalid!\n"+
+			"'fillerFieldDto.FillerCharsRepeatCount' is an empty string.\n",
+			ePrefix.String())
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	var txtFillerFieldSpec TextFieldSpecFiller
+
+	txtFillerFieldSpec,
+		err = TextFieldSpecFiller{}.NewTextFiller(
+		fillerCharacters,
+		fillerFieldDto.FillerCharsRepeatCount,
+		ePrefix.XCpy(
+			"txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	var fillerCharsStr string
+
+	fillerCharsStr,
+		err = txtFillerFieldSpec.GetFormattedText(
+		ePrefix.XCpy(
+			"txtFillerFieldSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	txtBuilderParams := textStrBuilderParamsDto{
+		strBuilder:                 strBuilder,
+		leftMarginStr:              fillerFieldDto.LeftMarginStr,
+		lenLeftMarginStr:           len(fillerFieldDto.LeftMarginStr),
+		textStr:                    fillerCharsStr,
+		lenTextStr:                 len(fillerCharsStr),
+		rightMarginStr:             fillerFieldDto.RightMarginStr,
+		lenRightMarginStr:          len(fillerFieldDto.RightMarginStr),
+		turnLineTerminationOff:     true,
+		lineTerminatorStr:          fillerFieldDto.LineTerminator,
+		lenLineTerminatorStr:       0,
+		maxLineLength:              fillerFieldDto.MaxLineLength,
+		currentLineLength:          0,
+		turnAutoLineLengthBreaksOn: fillerFieldDto.TurnAutoLineLengthBreaksOn,
+		lastWriteWasLineTerminator: false,
+		sourceTag:                  "Filler Field",
+		sourceDtoTag:               "fillerFieldDto",
+		errPrefDto:                 ePrefix,
+	}
+
+	return new(textStrBuilderAtom).preBuildScreening(
+		&txtBuilderParams)
+}
+
 func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
 	strBuilder *strings.Builder,
 	labelFieldDto TextFieldLabelDto,
@@ -175,12 +280,42 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
 		return err
 	}
 
-	labelText := labelFieldDto.FieldText
+	if len(labelFieldDto.FieldText) == 0 {
 
-	if len(labelText) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'labelFieldDto.FieldText' is invalid!\n"+
+			"'labelFieldDto.FieldText' is an empty string.\n",
+			ePrefix.String())
 
-		labelText = " "
+		if err != nil {
+			return err
+		}
 
+	}
+
+	var txtLabelSpec TextFieldSpecLabel
+
+	txtLabelSpec,
+		err = TextFieldSpecLabel{}.NewTextLabel(
+		labelFieldDto.FieldText,
+		labelFieldDto.FieldLength,
+		labelFieldDto.FieldJustify,
+		ePrefix.XCpy(
+			"txtLabelSpec<-labelText"))
+
+	if err != nil {
+		return err
+	}
+
+	var labelText string
+
+	labelText,
+		err = txtLabelSpec.GetFormattedText(
+		ePrefix.XCpy(
+			"txtLabelSpec"))
+
+	if err != nil {
+		return err
 	}
 
 	txtBuilderParams := textStrBuilderParamsDto{
@@ -203,8 +338,6 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
 		errPrefDto:                 ePrefix,
 	}
 
-	err = new(textStrBuilderAtom).preBuildScreening(
+	return new(textStrBuilderAtom).preBuildScreening(
 		&txtBuilderParams)
-
-	return err
 }

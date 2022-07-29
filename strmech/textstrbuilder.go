@@ -788,8 +788,8 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Filler() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildFillerFieldWithDto(
+			err = txtBuilderMolecule.buildFillerFieldWithDto(
+				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].Filler,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -1509,6 +1509,12 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Filler Text
+//       Field will be written to this instance of strings.Builder.
+//
+//
 //  leftMarginStr              string
 //     - The contents of this string will be used as the left
 //       margin for the Text Filler Field.
@@ -1662,12 +1668,6 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //
 // Return Values
 //
-//  strBuilder                 strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted
-//       text characters.
-//
-//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -1679,6 +1679,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldFiller(
+	strBuilder *strings.Builder,
 	leftMarginStr string,
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -1687,7 +1688,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
 	errorPrefix interface{}) (
-	strBuilder strings.Builder,
 	err error) {
 
 	if txtStrBuildr.lock == nil {
@@ -1709,47 +1709,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		"")
 
 	if err != nil {
-		return strBuilder, err
-	}
-
-	if len(fillerCharacters) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharacters' is invalid!\n"+
-			"'fillerCharacters' is an empty string with a string\n"+
-			"length of zero (0).\n",
-			ePrefix.String())
-
-		return strBuilder, err
-
-	}
-
-	if fillerCharsRepeatCount < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is invalid!\n"+
-			"'fillerCharsRepeatCount' has a value less than one (1).\n"+
-			"fillerCharsRepeatCount = '%v'\n",
-			ePrefix.String(),
-			fillerCharsRepeatCount)
-
-		return strBuilder, err
-	}
-
-	if fillerCharsRepeatCount > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fillerCharsRepeatCount' is invalid!\n"+
-			"'fillerCharsRepeatCount' has a value greater than one-million (1,000,000).\n"+
-			"fillerCharsRepeatCount = '%v'\n",
-			ePrefix.String(),
-			fillerCharsRepeatCount)
-
-		return strBuilder, err
-	}
-
-	if maxLineLength < 1 {
-		maxLineLength = -1
+		return err
 	}
 
 	fillerFieldDto := TextFieldFillerDto{
@@ -1764,9 +1724,8 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		lock:                       nil,
 	}
 
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildFillerFieldWithDto(
+	return new(textStrBuilderMolecule).buildFillerFieldWithDto(
+		strBuilder,
 		fillerFieldDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerFieldDto"))
@@ -1808,6 +1767,12 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Filler Text
+//       Field will be written to this instance of strings.Builder.
+//
 //
 //  textFillerDto              TextFieldFillerDto
 //     - An instance of TextFieldFillerDto which contains all the
@@ -1981,12 +1946,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //
 // Return Values
 //
-//  strBuilder                 strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted
-//       text characters.
-//
-//
 //  err                        error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -1998,9 +1957,9 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
+	strBuilder *strings.Builder,
 	textFillerDto TextFieldFillerDto,
 	errorPrefix interface{}) (
-	strBuilder strings.Builder,
 	err error) {
 
 	if txtStrBuildr.lock == nil {
@@ -2012,7 +1971,6 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 	defer txtStrBuildr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	strBuilder.Grow(256)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2022,52 +1980,11 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	if len(textFillerDto.FillerCharacters) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFillerDto.FillerCharacters' is invalid!\n"+
-			"'textFillerDto.FillerCharacters' is an empty string with a string\n"+
-			"length of zero (0).\n",
-			ePrefix.String())
-
-		return strBuilder, err
-
-	}
-
-	if textFillerDto.FillerCharsRepeatCount < 1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFillerDto.FillerCharsRepeatCount' is invalid!\n"+
-			"'textFillerDto.FillerCharsRepeatCount' has a value less than one (1).\n"+
-			"textFillerDto.FillerCharsRepeatCount = '%v'\n",
-			ePrefix.String(),
-			textFillerDto.FillerCharsRepeatCount)
-
-		return strBuilder, err
-	}
-
-	if textFillerDto.FillerCharsRepeatCount > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textFillerDto.FillerCharsRepeatCount' is invalid!\n"+
-			"'textFillerDto.FillerCharsRepeatCount' has a value greater than one-million (1,000,000).\n"+
-			"textFillerDto.FillerCharsRepeatCount = '%v'\n",
-			ePrefix.String(),
-			textFillerDto.FillerCharsRepeatCount)
-
-		return strBuilder, err
-	}
-
-	if textFillerDto.MaxLineLength < 1 {
-		textFillerDto.MaxLineLength = -1
-	}
-
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildFillerFieldWithDto(
+	return new(textStrBuilderMolecule).buildFillerFieldWithDto(
+		strBuilder,
 		textFillerDto.CopyOut(),
 		ePrefix.XCpy(
 			"strBuilder<-textFillerDto"))
@@ -2375,32 +2292,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		return err
 	}
 
-	if fieldLength < -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value less than minus one (-1).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			fieldLength)
-
-		return err
-
-	}
-
-	if fieldLength > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fieldLength' is invalid!\n"+
-			"'fieldLength' has a value greater than one-million (1000000).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			fieldLength)
-
-		return err
-
-	}
-
 	labelFieldDto := TextFieldLabelDto{
 		FormatType:                 TxtFieldType.Label(),
 		LeftMarginStr:              leftMarginStr,
@@ -2651,12 +2542,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing formatted text
-//       characters.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered, this return value is set to 'nil'. Otherwise,
@@ -2692,30 +2577,6 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 
 	if err != nil {
 		return err
-	}
-
-	if len(textLabelDto.FieldText) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLabelDto.FieldText' is invalid!\n"+
-			"'textLabelDto.FieldText' is an empty string with a\n"+
-			"string length of zero (0).\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if textLabelDto.FieldLength < -1 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'textLabelDto.FieldLength' is invalid!\n"+
-			"'textLabelDto.FieldLength' has a value less than minus one (-1).\n"+
-			"fieldLength = '%v'\n",
-			ePrefix.String(),
-			textLabelDto.FieldLength)
-
-		return err
-
 	}
 
 	return new(textStrBuilderMolecule).buildLabelFieldWithDto(

@@ -251,7 +251,7 @@ func (txtBuilderAtom *textStrBuilderAtom) buildAdHocTextWithDto(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'' is a nil pointer.\n",
+			"'strBuilder' is a nil pointer.\n",
 			ePrefix.String())
 
 		if err != nil {
