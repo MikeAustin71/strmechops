@@ -834,12 +834,13 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.SolidLine() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildTextLineSolidWithDto(
+			err = txtBuilderMolecule.buildLineSolidWithDto(
+				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].SolidLine,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].SolidLine",
+						"strBuilder<-"+
+							"txtFormatters[%v].SolidLine",
 						i)))
 
 			if err != nil {
@@ -849,12 +850,13 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.LineColumns() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildTextLineColumns(
+			err = txtBuilderMolecule.buildLineColumnsWithDto(
+				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].LineColumns,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].LineColumns",
+						"strBuilder<-txtFormatters[%v]."+
+							"LineColumns",
 						i)))
 
 			if err != nil {
@@ -4255,9 +4257,8 @@ func (txtStrBuildr *TextStrBuilder) LineAdHocTextDto(
 			"strBuilder<-txtAdHocDto"))
 }
 
-// LineBlankDto - Formats one or more blank or empty lines and
-// writes the output string to an instances of strings.Builder
-// which is returned to the calling function.
+// LineBlank - Formats one or more blank or empty lines and
+// writes the output string to an instances of strings.Builder.
 //
 // Blank Lines typically consist of one or more new line characters
 // ('\n') and nothing more. However, users have the option to
@@ -4282,6 +4283,12 @@ func (txtStrBuildr *TextStrBuilder) LineAdHocTextDto(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Solid Line
+//       Text will be written to this instance of strings.Builder.
+//
 //
 //  numOfBlankLines            int
 //     - Specifies the number of blank lines which will be created.
@@ -4357,11 +4364,177 @@ func (txtStrBuildr *TextStrBuilder) LineAdHocTextDto(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing a formatted
-//       string of text characters.
+//  error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
 //
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) LineBlank(
+	strBuilder *strings.Builder,
+	numOfBlankLines int,
+	lineTerminator string,
+	errorPrefix interface{}) error {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"LineBlank()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	txtLineBlankDto := TextLineBlankDto{
+		FormatType:      TxtFieldType.BlankLine(),
+		NumOfBlankLines: numOfBlankLines,
+		LineTerminator:  lineTerminator,
+		lock:            nil,
+	}
+
+	return new(textStrBuilderMolecule).buildLineBlankWithDto(
+		strBuilder,
+		txtLineBlankDto,
+		ePrefix.XCpy(fmt.Sprintf(
+			"strBuilder<-txtLineBlankDtoDto"+
+				" blank lines =='%v'",
+			txtLineBlankDto.NumOfBlankLines)))
+}
+
+// LineBlankDto - Formats one or more blank or empty lines and
+// writes the output string to an instances of strings.Builder.
+//
+// Blank Lines typically consist of one or more new line characters
+// ('\n') and nothing more. However, users have the option to
+// provide alternate or custom line termination characters which
+// will be applied instead.
+//
+// The number of blank lines created is controlled by input
+// parameter 'numOfBlankLines'.
+//
+//  Example-1 :
+//   NumOfBlankLines = 3
+//   LineTerminator = ""
+//   Final Blank Line Text = "\n\n\n" // 3-new line characters
+//
+//  Example-2 :
+//   NumOfBlankLines = 2
+//   LineTerminator = "\n x \n"
+//   Final Blank Line Text = "\n x \n\n x \n"
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Solid Line
+//       Text will be written to this instance of strings.Builder.
+//
+//
+//  txtLineBlankDto            TextLineBlankDto
+//     - An instance of TextLineBlankDto which contains all the
+//       necessary data parameters to produce one or more Blank
+//       Text Lines.
+//
+//       The Text Line Blank Data Transfer Object is defined as
+//       follows:
+//
+//       type TextLineBlankDto struct {
+//
+//        FormatType                 TextFieldType
+//         Required. This enumeration value specifies the type of
+//         Text Format Operation to be performed.
+//
+//         For the TextLineBlankDto Format Type, this value
+//         should always be set to: TxtFieldType.BlankLine()
+//
+//        NumOfBlankLines            int
+//         The number of blank lines which will be generated by this
+//         method.
+//
+//         If this value is less than one (+1) or greater than
+//         one-million, an error will be returned when attempting
+//         to format the Text Blank Line for text output.
+//
+//        LineTerminator             string
+//        If this parameter is submitted as an empty string,
+//        the default new line terminator ('\n') will be applied.
+//        If this parameter is populated, this character sequence
+//        will be used as the Line Terminator for this Text Blank
+//        Line.
+//       }
+//
+//
+//  errorPrefix                     interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
 //
 //  error
 //     - If this method completes successfully and no errors are
@@ -4374,10 +4547,9 @@ func (txtStrBuildr *TextStrBuilder) LineAdHocTextDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineBlankDto(
+	strBuilder *strings.Builder,
 	txtLineBlankDto TextLineBlankDto,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -4389,7 +4561,6 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -4399,34 +4570,15 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	if txtLineBlankDto.NumOfBlankLines < 1 {
-
-		txtLineBlankDto.NumOfBlankLines = 1
-
-	}
-
-	if txtLineBlankDto.NumOfBlankLines > 1000000 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtLineBlankDto.NumOfBlankLines' is invalid!\n"+
-			"'txtLineBlankDto.NumOfBlankLines' has a value greater than one-million (1,000,000).\n"+
-			"txtLineBlankDto.NumOfBlankLines = '%v'\n",
-			ePrefix.String(),
-			txtLineBlankDto.NumOfBlankLines)
-
-		return strBuilder, err
-
-	}
-
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildTextLineBlankWithDto(
+	return new(textStrBuilderMolecule).buildLineBlankWithDto(
+		strBuilder,
 		txtLineBlankDto,
 		ePrefix.XCpy(fmt.Sprintf(
-			"strBuilder<-txtLineBlankDtoDto blank lines =='%v'",
+			"strBuilder<-txtLineBlankDtoDto"+
+				" blank lines =='%v'",
 			txtLineBlankDto.NumOfBlankLines)))
 }
 
@@ -4486,6 +4638,13 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Solid Line
+//       Text will be written to this instance of strings.Builder.
+//
 //
 //  leftMarginStr              string
 //     - A string containing the text characters to be positioned
@@ -4727,12 +4886,6 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing a formatted
-//       string of text characters.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -4744,6 +4897,7 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineSolid(
+	strBuilder *strings.Builder,
 	leftMarginStr string,
 	solidLineChars string,
 	solidLineCharRepeatCount int,
@@ -4752,9 +4906,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -4766,9 +4918,6 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
-
-	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -4778,28 +4927,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 		"")
 
 	if err != nil {
-		return strBuilder, err
-	}
-
-	if len(solidLineChars) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'solidLineChars' is invalid!\n"+
-			"'solidLineChars' is an empty string with a string\n"+
-			"length of zero (0).\n",
-			ePrefix.String())
-
-		return strBuilder, err
-	}
-
-	if solidLineCharRepeatCount < 1 {
-
-		solidLineCharRepeatCount = 1
-	}
-
-	if maxLineLength < 1 {
-
-		maxLineLength = -1
+		return err
 	}
 
 	txtLineSolidDto := TextLineSolidDto{
@@ -4815,20 +4943,19 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 		lock:                       nil,
 	}
 
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildTextLineSolidWithDto(
+	return new(textStrBuilderMolecule).buildLineSolidWithDto(
+		strBuilder,
 		txtLineSolidDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerCharacters"))
-
 }
 
 // LineSolidDto - Formats a single Solid Text Line and writes the
-// output string to an instance of strings.Builder which is
-// returned to the calling function. This Solid Text Line string is
-// created from a Text Line Sold Data Transfer Object
-// (TextLineSolidDto) passed as an input parameter.
+// output string to an instance of strings.Builder.
+//
+// This Solid Text Line string is created from a Text Line Solid
+// Line Data Transfer Object (TextLineSolidDto) passed as an input
+// parameter.
 //
 // A solid line, as defined here, consists of a single character or
 // multiple characters used in a repeating sequence to construct
@@ -4882,6 +5009,12 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Solid Line
+//       Text will be written to this instance of strings.Builder.
+//
 //
 //  txtLineSolidDto            TextLineSolidDto
 //     - An instance of TextLineSolidDto which contains all the
@@ -5126,12 +5259,6 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned containing a formatted
-//       string of text characters.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -5143,10 +5270,9 @@ func (txtStrBuildr *TextStrBuilder) LineSolid(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineSolidDto(
+	strBuilder *strings.Builder,
 	txtLineSolidDto TextLineSolidDto,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -5158,9 +5284,6 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
-
-	strBuilder.Grow(128)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -5170,37 +5293,14 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	if len(txtLineSolidDto.SolidLineChars) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtLineSolidDto.SolidLineChars' is invalid!\n"+
-			"'txtLineSolidDto.SolidLineChars' is an empty string with a string\n"+
-			"length of zero (0).\n",
-			ePrefix.String())
-
-		return strBuilder, err
-	}
-
-	if txtLineSolidDto.SolidLineCharRepeatCount < 1 {
-
-		txtLineSolidDto.SolidLineCharRepeatCount = 1
-	}
-
-	if txtLineSolidDto.MaxLineLength < 1 {
-
-		txtLineSolidDto.MaxLineLength = -1
-	}
-
-	txtStrBuilderAtom := textStrBuilderAtom{}
-
-	return txtStrBuilderAtom.buildTextLineSolidWithDto(
+	return new(textStrBuilderMolecule).buildLineSolidWithDto(
+		strBuilder,
 		txtLineSolidDto,
 		ePrefix.XCpy(
 			"strBuilder<-fillerCharacters"))
-
 }
 
 // LineTimerStartStop - Creates and returns a new instance of

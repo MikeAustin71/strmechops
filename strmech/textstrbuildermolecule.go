@@ -360,7 +360,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldLabelWithDto(
 		lenRightMarginStr:          len(labelFieldDto.RightMarginStr),
 		turnLineTerminationOff:     true,
 		lineTerminatorStr:          labelFieldDto.LineTerminator,
-		lenLineTerminatorStr:       0,
+		lenLineTerminatorStr:       len(labelFieldDto.LineTerminator),
 		maxLineLength:              labelFieldDto.MaxLineLength,
 		currentLineLength:          0,
 		turnAutoLineLengthBreaksOn: labelFieldDto.TurnAutoLineLengthBreaksOn,
@@ -650,6 +650,226 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineBlankWithDto(
 	}
 
 	strBuilder.WriteString(blankLinesText)
+
+	return err
+}
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildLineColumnsWithDto(
+	strBuilder *strings.Builder,
+	lineCols TextLineColumnsDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLineColumnsWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if lineCols.FormatType != TxtFieldType.LineColumns() {
+		err = fmt.Errorf("%v\n"+
+			"Error: 'lineCols.FormatType' is invalid!\n"+
+			"'lineCols.FormatType' should be set to \n"+
+			"TxtFieldType.LineColumns(). It is NOT!\n"+
+			"'lineCols.FormatType' String Value  = '%v'\n"+
+			"'lineCols.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			lineCols.FormatType.String(),
+			lineCols.FormatType.XValueInt())
+
+		return err
+	}
+
+	numOfTextFields := len(lineCols.TextFieldsContent)
+
+	if numOfTextFields == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineCols.TextFieldsContent' is invalid!\n"+
+			"'lineCols.TextFieldsContent' is empty an contains zero (0) elements.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	lenFmtParams := len(lineCols.FmtParameters.FieldFormatParams)
+
+	if lenFmtParams != numOfTextFields {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineCols is invalid!\n"+
+			"The number of Field Format Parameters does\n"+
+			"NOT MATCH the number text fields.\n"+
+			"'lineCols.TextFieldsContent' Length = '%v'\n"+
+			"'lineCols.FmtParameters.FieldFormatParams' Length = '%v'\n",
+			ePrefix.String(),
+			numOfTextFields,
+			lenFmtParams)
+
+		return err
+	}
+
+	var columnText, actualDateTimeFormat string
+
+	var txtBuilderParams textStrBuilderParamsDto
+
+	defaultDateTimeFormat := textSpecificationMolecule{}.ptr().
+		getDefaultDateTimeFormat()
+
+	for i := 0; i < numOfTextFields; i++ {
+
+		if !lineCols.TextFieldsContent[i].TextFieldDateTime.IsZero() {
+			// Extract DateTime or String for Column Text
+			actualDateTimeFormat = lineCols.FmtParameters.FieldFormatParams[i].DateTimeFormat
+
+			if len(actualDateTimeFormat) == 0 {
+				actualDateTimeFormat = defaultDateTimeFormat
+			}
+
+			columnText =
+				lineCols.TextFieldsContent[i].TextFieldDateTime.Format(
+					actualDateTimeFormat)
+		} else {
+
+			columnText = lineCols.TextFieldsContent[i].TextFieldString
+
+		}
+
+		txtBuilderParams = textStrBuilderParamsDto{
+			strBuilder:                 strBuilder,
+			leftMarginStr:              lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr,
+			lenLeftMarginStr:           len(lineCols.FmtParameters.FieldFormatParams[i].LeftMarginStr),
+			textStr:                    columnText,
+			lenTextStr:                 len(columnText),
+			rightMarginStr:             lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr,
+			lenRightMarginStr:          len(lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr),
+			turnLineTerminationOff:     lineCols.FmtParameters.TurnLineTerminationOff,
+			lineTerminatorStr:          lineCols.FmtParameters.LineTerminator,
+			lenLineTerminatorStr:       len(lineCols.FmtParameters.LineTerminator),
+			maxLineLength:              lineCols.FmtParameters.MaxLineLength,
+			currentLineLength:          0,
+			turnAutoLineLengthBreaksOn: lineCols.FmtParameters.TurnAutoLineLengthBreaksOn,
+			lastWriteWasLineTerminator: false,
+			sourceTag: fmt.Sprintf("Column-%v",
+				i+1),
+			sourceDtoTag: fmt.Sprintf("lineCols.FmtParameters."+
+				"FieldFormatParams[%v].",
+				i+1),
+			errPrefDto: ePrefix,
+		}
+
+		err = new(textStrBuilderAtom).preBuildScreening(
+			&txtBuilderParams)
+
+		if err != nil {
+			return err
+		}
+
+		txtBuilderParams.strBuilder = nil
+
+	}
+
+	return err
+}
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildLineSolidWithDto(
+	strBuilder *strings.Builder,
+	solidLineDto TextLineSolidDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLineSolidWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if solidLineDto.SolidLineCharRepeatCount < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'solidLineDto.SolidLineCharRepeatCount' is invalid!\n"+
+			"'solidLineDto.SolidLineCharRepeatCount' has a value less than one (+1).\n"+
+			"This means that no Solid Line Characters will be generated.\n"+
+			"solidLineDto.SolidLineCharRepeatCount = '%v'\n",
+			ePrefix.String(),
+			solidLineDto.SolidLineCharRepeatCount)
+
+		return err
+
+	}
+
+	var txtSpecSolidLine TextLineSpecSolidLine
+
+	txtSpecSolidLine,
+		err = TextLineSpecSolidLine{}.NewFullSolidLineConfig(
+		solidLineDto.LeftMarginStr,
+		solidLineDto.RightMarginStr,
+		solidLineDto.SolidLineChars,
+		solidLineDto.SolidLineCharRepeatCount,
+		solidLineDto.LineTerminator,
+		ePrefix.XCpy(
+			"txtSpecSolidLine"))
+
+	if err != nil {
+		return err
+	}
+
+	var solidLineText string
+
+	solidLineText,
+		err = txtSpecSolidLine.GetFormattedText(
+		ePrefix.XCpy(
+			"solidLineText<-txtSpecSolidLine"))
+
+	if err != nil {
+		return err
+	}
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	lenSolidLineText := len(solidLineText)
+
+	requiredCapacity :=
+		lenSolidLineText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
+
+	strBuilder.WriteString(solidLineText)
 
 	return err
 }
