@@ -28,8 +28,8 @@ type TextFormatterCollection struct {
 // Collection.
 //
 // The input parameters for this method are used to inject user
-// generated into the stream of text characters being formatted
-// for screen display, file output or printing.
+// generated text into the stream of text characters being
+// formatted for screen display, file output or printing.
 //
 // Except for line breaks configured at the user's discretion,
 // no additional formatting is performed on this text, and it is
@@ -218,7 +218,6 @@ func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 // ----------------------------------------------------------------
 //
 // Input Parameters
-//
 //
 //  txtAdHocDto                        TextAdHocDto
 //     - An instance of TextFieldLabelDto which contains all the

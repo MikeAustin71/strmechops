@@ -34,7 +34,7 @@ type textStrBuilderMolecule struct {
 	lock *sync.Mutex
 }
 
-func (txtBuilderMolecule *textStrBuilderMolecule) buildDateTimeFieldWithDto(
+func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldDateTimeWithDto(
 	strBuilder *strings.Builder,
 	dateTimeFieldDto TextFieldDateTimeDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -54,7 +54,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildDateTimeFieldWithDto(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderMolecule."+
-			"buildDateTimeFieldWithDto()",
+			"buildFieldDateTimeWithDto()",
 		"")
 
 	if err != nil {
@@ -148,7 +148,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildDateTimeFieldWithDto(
 	return err
 }
 
-func (txtBuilderMolecule *textStrBuilderMolecule) buildFillerFieldWithDto(
+func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldFillerWithDto(
 	strBuilder *strings.Builder,
 	fillerFieldDto TextFieldFillerDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -168,10 +168,26 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildFillerFieldWithDto(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderMolecule."+
-			"buildFillerFieldWithDto()",
+			"buildFieldFillerWithDto()",
 		"")
 
 	if err != nil {
+		return err
+	}
+
+	if fillerFieldDto.FormatType !=
+		TxtFieldType.Filler() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'fillerFieldDto.FormatType' is invalid!\n"+
+			"'fillerFieldDto.FormatType' should be set to \n"+
+			"TxtFieldType.Filler(). It is NOT!\n"+
+			"'fillerFieldDto.FormatType' String Value  = '%v'\n"+
+			"'fillerFieldDto.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			fillerFieldDto.FormatType.String(),
+			fillerFieldDto.FormatType.XValueInt())
+
 		return err
 	}
 
@@ -253,7 +269,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildFillerFieldWithDto(
 		&txtBuilderParams)
 }
 
-func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
+func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldLabelWithDto(
 	strBuilder *strings.Builder,
 	labelFieldDto TextFieldLabelDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -273,10 +289,26 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderMolecule."+
-			"buildLabelFieldWithDto()",
+			"buildFieldLabelWithDto()",
 		"")
 
 	if err != nil {
+		return err
+	}
+
+	if labelFieldDto.FormatType !=
+		TxtFieldType.Label() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'labelFieldDto.FormatType' is invalid!\n"+
+			"'labelFieldDto.FormatType' should be set to \n"+
+			"TxtFieldType.Label(). It is NOT!\n"+
+			"'labelFieldDto.FormatType' String Value  = '%v'\n"+
+			"'labelFieldDto.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			labelFieldDto.FormatType.String(),
+			labelFieldDto.FormatType.XValueInt())
+
 		return err
 	}
 
@@ -342,7 +374,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLabelFieldWithDto(
 		&txtBuilderParams)
 }
 
-func (txtBuilderMolecule *textStrBuilderMolecule) buildSpacerFieldWithDto(
+func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldSpacerWithDto(
 	strBuilder *strings.Builder,
 	spacerFieldDto TextFieldSpacerDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -362,10 +394,26 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildSpacerFieldWithDto(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"textStrBuilderMolecule."+
-			"buildSpacerFieldWithDto()",
+			"buildFieldSpacerWithDto()",
 		"")
 
 	if err != nil {
+		return err
+	}
+
+	if spacerFieldDto.FormatType !=
+		TxtFieldType.Spacer() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'labelFieldDto.FormatType' is invalid!\n"+
+			"'spacerFieldDto.FormatType' should be set to \n"+
+			"TxtFieldType.Spacer(). It is NOT!\n"+
+			"'spacerFieldDto.FormatType' String Value  = '%v'\n"+
+			"'spacerFieldDto.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			spacerFieldDto.FormatType.String(),
+			spacerFieldDto.FormatType.XValueInt())
+
 		return err
 	}
 
@@ -423,6 +471,93 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildSpacerFieldWithDto(
 		lastWriteWasLineTerminator: false,
 		sourceTag:                  "Spacer Field",
 		sourceDtoTag:               "spacerFieldDto",
+		errPrefDto:                 ePrefix,
+	}
+
+	return new(textStrBuilderAtom).preBuildScreening(
+		&txtBuilderParams)
+}
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildLineAdHocTextWithDto(
+	strBuilder *strings.Builder,
+	txtAdHocDto TextAdHocDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLineAdHocTextWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if txtAdHocDto.FormatType !=
+		TxtFieldType.TextAdHoc() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: 'txtAdHocDto.FormatType' is invalid!\n"+
+			"'txtAdHocDto.FormatType' should be set to \n"+
+			"TxtFieldType.TextAdHoc(). It is NOT!\n"+
+			"'txtAdHocDto.FormatType' String Value  = '%v'\n"+
+			"'txtAdHocDto.FormatType' Integer Value = '%v'\n",
+			ePrefix.String(),
+			txtAdHocDto.FormatType.String(),
+			txtAdHocDto.FormatType.XValueInt())
+
+		return err
+	}
+
+	lenAdHocText := len(txtAdHocDto.AdHocText)
+
+	if lenAdHocText == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtAdHocDto.AdHocText' is invalid!\n"+
+			"'txtAdHocDto.AdHocText' is empty an contains zero (0) characters.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	txtBuilderParams := textStrBuilderParamsDto{
+		strBuilder:                 strBuilder,
+		leftMarginStr:              txtAdHocDto.LeftMarginStr,
+		lenLeftMarginStr:           len(txtAdHocDto.LeftMarginStr),
+		textStr:                    txtAdHocDto.AdHocText,
+		lenTextStr:                 len(txtAdHocDto.AdHocText),
+		rightMarginStr:             txtAdHocDto.RightMarginStr,
+		lenRightMarginStr:          len(txtAdHocDto.RightMarginStr),
+		turnLineTerminationOff:     true,
+		lineTerminatorStr:          txtAdHocDto.LineTerminator,
+		lenLineTerminatorStr:       0,
+		maxLineLength:              txtAdHocDto.MaxLineLength,
+		currentLineLength:          0,
+		turnAutoLineLengthBreaksOn: txtAdHocDto.TurnAutoLineLengthBreaksOn,
+		lastWriteWasLineTerminator: false,
+		sourceTag:                  "Ad Hoc Text",
+		sourceDtoTag:               "txtAdHocDto",
 		errPrefDto:                 ePrefix,
 	}
 

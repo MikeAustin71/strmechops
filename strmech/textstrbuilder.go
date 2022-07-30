@@ -757,7 +757,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Label() {
 
-			err = txtBuilderMolecule.buildLabelFieldWithDto(
+			err = txtBuilderMolecule.buildFieldLabelWithDto(
 				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].Label,
 				ePrefix.XCpy(
@@ -773,7 +773,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.DateTime() {
 
-			err = txtBuilderMolecule.buildDateTimeFieldWithDto(
+			err = txtBuilderMolecule.buildFieldDateTimeWithDto(
 				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].DateTime,
 				ePrefix.XCpy(
@@ -788,7 +788,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Filler() {
 
-			err = txtBuilderMolecule.buildFillerFieldWithDto(
+			err = txtBuilderMolecule.buildFieldFillerWithDto(
 				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].Filler,
 				ePrefix.XCpy(
@@ -803,7 +803,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Spacer() {
 
-			err = txtBuilderMolecule.buildSpacerFieldWithDto(
+			err = txtBuilderMolecule.buildFieldSpacerWithDto(
 				&strBuilder,
 				txtFmtSpecs.fmtCollection[i].Spacer,
 				ePrefix.XCpy(
@@ -878,6 +878,18 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.TextAdHoc() {
+
+			err = txtBuilderMolecule.buildLineAdHocTextWithDto(
+				&strBuilder,
+				txtFmtSpecs.fmtCollection[i].TextAdHoc,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"strBuilder<-txtFormatters[%v].TextAdHoc",
+						i)))
+
+			if err != nil {
+				return strBuilder, err
+			}
 
 		} else {
 
@@ -1186,7 +1198,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTime(
 		lock:                       nil,
 	}
 
-	err = new(textStrBuilderMolecule).buildDateTimeFieldWithDto(
+	err = new(textStrBuilderMolecule).buildFieldDateTimeWithDto(
 		strBuilder,
 		dateTimeDto,
 		ePrefix.XCpy(
@@ -1467,7 +1479,7 @@ func (txtStrBuildr *TextStrBuilder) FieldDateTimeDto(
 		textDateTimeDto.MaxLineLength = -1
 	}
 
-	err = new(textStrBuilderMolecule).buildDateTimeFieldWithDto(
+	err = new(textStrBuilderMolecule).buildFieldDateTimeWithDto(
 		strBuilder,
 		textDateTimeDto,
 		ePrefix.XCpy(
@@ -1725,7 +1737,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFiller(
 		lock:                       nil,
 	}
 
-	return new(textStrBuilderMolecule).buildFillerFieldWithDto(
+	return new(textStrBuilderMolecule).buildFieldFillerWithDto(
 		strBuilder,
 		fillerFieldDto,
 		ePrefix.XCpy(
@@ -1984,7 +1996,7 @@ func (txtStrBuildr *TextStrBuilder) FieldFillerDto(
 		return err
 	}
 
-	return new(textStrBuilderMolecule).buildFillerFieldWithDto(
+	return new(textStrBuilderMolecule).buildFieldFillerWithDto(
 		strBuilder,
 		textFillerDto.CopyOut(),
 		ePrefix.XCpy(
@@ -2306,7 +2318,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		lock:                       nil,
 	}
 
-	return new(textStrBuilderMolecule).buildLabelFieldWithDto(
+	return new(textStrBuilderMolecule).buildFieldLabelWithDto(
 		strBuilder,
 		labelFieldDto,
 		ePrefix.XCpy(
@@ -2580,7 +2592,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabelDto(
 		return err
 	}
 
-	return new(textStrBuilderMolecule).buildLabelFieldWithDto(
+	return new(textStrBuilderMolecule).buildFieldLabelWithDto(
 		strBuilder,
 		textLabelDto.CopyOut(),
 		ePrefix.XCpy(
@@ -2803,7 +2815,7 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacer(
 	}
 
 	return new(textStrBuilderMolecule).
-		buildSpacerFieldWithDto(
+		buildFieldSpacerWithDto(
 			strBuilder,
 			txtFieldSpacerDto,
 			ePrefix.XCpy(
@@ -3035,7 +3047,7 @@ func (txtStrBuildr *TextStrBuilder) FieldSpacerDto(
 	}
 
 	return new(textStrBuilderMolecule).
-		buildSpacerFieldWithDto(
+		buildFieldSpacerWithDto(
 			strBuilder,
 			txtFieldSpacerDto,
 			ePrefix.XCpy(
@@ -3779,6 +3791,468 @@ func (txtStrBuildr *TextStrBuilder) FieldsLabelParameterValue(
 	strBuilder2.Reset()
 
 	return strBuilder, err
+}
+
+// LineAdHocText - Formats raw, or ad hoc text and writes the
+// output string to an instance of strings.Builder passed as
+// an input parameter.
+//
+// The input parameters for this method are used to inject user
+// generated text into the stream of text characters being
+// formatted for screen display, file output or printing.
+//
+// Except for line breaks configured at the user's discretion,
+// no additional formatting is performed on this text, and it is
+// inserted raw, or "as is", in to the final output of formatted
+// text.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Filler Text
+//       Field will be written to this instance of strings.Builder.
+//
+//
+//  leftMarginStr                      string
+//     - A string containing the text characters to be positioned
+//       on the Left side of the Ad Hoc Text.
+//
+//       If no Left margin is required, set this parameter to an
+//       empty string.
+//
+//
+//  adHocText                          string
+//     - This strings holds the raw, ad hoc text which will be
+//       inserted "as is", into the final output of formatted
+//       text.
+//
+//       If this parameter is submitted as an empty or zero
+//       length string, an error will be generated when
+//       attempting to create formatted text output.
+//
+//
+//
+//  rightMarginStr                     string
+//     - The contents of the string will be used as the right
+//       margin for the Text Ad Hoc string.
+//
+//       If no right margin is required, set 'rightMarginStr' to
+//       a zero length or empty string, and no right margin will
+//       be created.
+//
+//
+//  turnLineTerminationOff             bool
+//     - By default, a new line string terminator ('\n') will be
+//       appended to the Ad Hoc text ('AdHocText'). If this
+//       parameter is set to 'true', no line termination sequence
+//       will be applied.
+//
+//       This parameter controls the operation of parameter
+//       'LineTerminator'. If 'TurnLineTerminationOff' is set to
+//       'true', 'LineTerminator' will be completely ignored and
+//        have no effect.
+//
+//
+//  lineTerminator                     string
+//     - This string holds the character or characters which
+//       will be used to terminate the formatted line of text
+//       output, if parameter 'TurnLineTerminationOff' is set
+//       to 'false'.
+//
+//       The most common usage sets this string to a new line
+//       character ("\n").
+//
+//       If 'lineTerminator' is configured as an empty string
+//       (string length zero), a single new line character ('\n')
+//       will be automatically applied to produce line termination
+//       depending on the setting for parameter
+//       'turnLineTerminationOff'.
+//
+//       LineTerminator works in conjunction with parameter
+//       'turnLineTerminationOff'. 'turnLineTerminationOff'
+//       controls the application of a line terminator. Setting
+//       'turnLineTerminationOff' to 'true' means that NO line
+//       terminator will be applied.
+//
+//       Setting 'turnLineTerminationOff' to 'true' means that
+//       parameter 'lineTerminator' will be completely ignored
+//       and have no effect.
+//
+//
+//  maxLineLength                      int
+//     - The maximum length of the line on which the solid line
+//       text characters will be presented.
+//
+//       Set this parameter to minus one (-1) to specify an
+//       unlimited line length for this text line.
+//
+//       If the value of 'maxLineLength' is less than one (1),
+//       it will be automatically converted to minus one (-1).
+//
+//       'maxLineLength' is used in conjunction with parameter
+//       'turnAutoLineLengthBreaksOn' to automatically place text
+//       on separate text lines when that text exceeds the maximum
+//       text line length ('maxLineLength'). Therefore, parameter
+//       'turnAutoLineLengthBreaksOn' controls whether automatic
+//       line breaks using 'maxLineLength' will be applied.
+//
+//
+//  turnAutoLineLengthBreaksOn         bool
+//     - This parameter controls whether text lines which exceed
+//       the maximum line length ('maxLineLength') are positioned
+//       on the following line as a separate line of text.
+//
+//       To apply automatic line breaking at the maximum line
+//       length, set the value of this parameter to 'true'.
+//
+//       When this parameter is set to 'true', text fields which
+//       extend beyond the maximum line length ('maxLineLength')
+//       will be formatted as a separate line of text on the
+//       following line.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) LineAdHocText(
+	strBuilder *strings.Builder,
+	leftMarginStr string,
+	adHocText string,
+	rightMarginStr string,
+	turnLineTerminationOff bool,
+	lineTerminator string,
+	maxLineLength int,
+	turnAutoLineLengthBreaksOn bool,
+	errorPrefix interface{}) error {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldsLabelParameterValue()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	textAdHocDto := TextAdHocDto{
+		FormatType:                 TxtFieldType.TextAdHoc(),
+		LeftMarginStr:              leftMarginStr,
+		AdHocText:                  adHocText,
+		RightMarginStr:             rightMarginStr,
+		TurnLineTerminationOff:     turnLineTerminationOff,
+		LineTerminator:             lineTerminator,
+		MaxLineLength:              maxLineLength,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		lock:                       nil,
+	}
+
+	return new(textStrBuilderMolecule).buildLineAdHocTextWithDto(
+		strBuilder,
+		textAdHocDto,
+		ePrefix.XCpy(
+			"strBuilder<-textAdHocDto"))
+}
+
+// LineAdHocTextDto - Formats raw, or ad hoc text and writes the
+// output string to an instance of strings.Builder passed as
+// an input parameter.
+//
+// The ad hoc text is configured from an instance of TextAdHocDto
+// passed as an input parameter.
+//
+// The input parameters for this method are used to inject user
+// generated text into the stream of text characters being
+// formatted for screen display, file output or printing.
+//
+// Except for line breaks configured at the user's discretion,
+// no additional formatting is performed on this text, and it is
+// inserted raw, or "as is", in to the final output of formatted
+// text.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this Filler Text
+//       Field will be written to this instance of strings.Builder.
+//
+//
+//  txtAdHocDto                        TextAdHocDto
+//     - An instance of TextFieldLabelDto which contains all the
+//       necessary data parameters to produce a text label.
+//
+//       The Text Field Label Data Transfer Object is defined as
+//       follows:
+//
+//        type TextAdHocDto struct {
+//
+//         FormatType                  TextFieldType
+//          Required. This enumeration value specifies the type of
+//          Text Format Operation to be performed.
+//
+//          For TextAdHocDto 'FormatType' this parameter should
+//          be set to: TxtFieldType.TextAdHoc()
+//
+//         LeftMarginStr               string
+//          A string containing the text characters to be
+//          positioned on the Left side of the Ad Hoc Text.
+//
+//          If no Left margin is required, set this parameter to an
+//          empty string.
+//
+//         AdHocText                   string
+//          This strings holds the raw ad hoc text.
+//
+//         RightMarginStr              string
+//          The contents of the string will be used as the right
+//          margin for the Text Ad Hoc string.
+//
+//          If no right margin is required, set 'RightMarginStr' to
+//          a zero length or empty string, and no right margin will
+//          be created.
+//
+//         TurnLineTerminationOff      bool
+//          By default, a new line string terminator ('\n') will be
+//          appended to the Ad Hoc text ('AdHocText'). If this
+//          parameter is set to 'true', no line termination
+//          sequence will be applied.
+//
+//          This parameter controls the operation of parameter
+//          'LineTerminator'. If 'TurnLineTerminationOff' is set
+//          to 'true', 'LineTerminator' will be completely
+//          ignored and have no effect.
+//
+//         LineTerminator              string
+//          This string holds the character or characters which
+//          will be used to terminate the formatted line of text
+//          output, if parameter 'TurnLineTerminationOff' is set
+//          to 'false'.
+//
+//          The most common usage sets this string to a new line
+//          character ("\n").
+//
+//          If 'LineTerminator' is configured as an empty string
+//          (string length zero), a single new line character
+//          ('\n') will be automatically applied to produce line
+//          termination depending on the setting for parameter
+//          'TurnLineTerminationOff'.
+//
+//          LineTerminator works in conjunction with member
+//          variable 'TurnLineTerminationOff'.
+//
+//          'TurnLineTerminationOff' controls the application of a
+//          line terminator. Setting 'TurnLineTerminationOff' to
+//          'true' means that NO line terminator will be applied.
+//
+//          Setting 'TurnLineTerminationOff' to 'true' means that
+//          parameter 'LineTerminator' will be completely ignored
+//          and have no effect.
+//
+//         MaxLineLength               int
+//          The maximum length of the line on which the ad hoc
+//          text characters ('AdHocText') will be presented.
+//
+//          Set this parameter to minus one (-1) to specify an
+//          unlimited line length for this text line.
+//
+//          If the value of 'MaxLineLength' is less than one (1),
+//          it will be automatically converted to minus one (-1).
+//
+//          'MaxLineLength' is used in conjunction with parameter
+//          'TurnAutoLineLengthBreaksOn' to automatically place
+//          text on separate text lines when that text exceeds the
+//          maximum text line length ('MaxLineLength'). Therefore,
+//          paramter 'TurnAutoLineLengthBreaksOn' controls whether
+//          automatic line breaks using 'MaxLineLength' will be
+//          applied.
+//
+//         TurnAutoLineLengthBreaksOn  bool
+//          This parameter controls whether text lines which exceed
+//          the maximum line length ('MaxLineLength') are
+//          positioned on the following line as a separate line of
+//          text.
+//
+//          To apply automatic line breaking at the maximum line
+//          length, set the value of this parameter to 'true'.
+//
+//          When this parameter is set to 'true', text fields which
+//          extend beyond the maximum line length 'MaxLineLength'
+//          will be formatted as a separate line of text on the
+//          following line.
+//        }
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered, this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+func (txtStrBuildr *TextStrBuilder) LineAdHocTextDto(
+	strBuilder *strings.Builder,
+	txtAdHocDto TextAdHocDto,
+	errorPrefix interface{}) error {
+
+	if txtStrBuildr.lock == nil {
+		txtStrBuildr.lock = new(sync.Mutex)
+	}
+
+	txtStrBuildr.lock.Lock()
+
+	defer txtStrBuildr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextStrBuilder."+
+			"FieldsLabelParameterValue()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(textStrBuilderMolecule).buildLineAdHocTextWithDto(
+		strBuilder,
+		txtAdHocDto,
+		ePrefix.XCpy(
+			"strBuilder<-txtAdHocDto"))
 }
 
 // LineBlank - Formats one or more blank or empty lines and writes
