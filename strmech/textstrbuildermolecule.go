@@ -654,6 +654,8 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineBlankWithDto(
 	return err
 }
 
+// buildLineColumnsWithDto - Creates formatted text output from
+// multiple text columns.
 func (txtBuilderMolecule *textStrBuilderMolecule) buildLineColumnsWithDto(
 	strBuilder *strings.Builder,
 	lineCols TextLineColumnsDto,
