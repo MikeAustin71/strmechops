@@ -627,6 +627,12 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will
+//       be written to this instance of strings.Builder.
+//
+//
 //  txtFmtSpecs                TextFormatterCollection
 //     - An instance of TextFormatterCollection. This type contains
 //       an array of TextFormatterDto objects used in generating
@@ -684,12 +690,6 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If the method completes successfully, it will return an
-//       instance of strings.Builder containing all the formatted
-//       text generated from input parameter 'txtFmtSpecs'.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -701,10 +701,9 @@ func (txtStrBuildr *TextStrBuilder) BuildTextFormatters(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) BuildText(
+	strBuilder *strings.Builder,
 	txtFmtSpecs *TextFormatterCollection,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -718,10 +717,6 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(512)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -730,7 +725,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	lenTextFormatterCol :=
@@ -743,22 +738,19 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			"The Text Formatter Collection is empty.\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 
 	}
 
 	txtBuilderMolecule := textStrBuilderMolecule{}
-	txtBuilderAtom := textStrBuilderAtom{}
 
 	for i := 0; i < lenTextFormatterCol; i++ {
-
-		strBuilder2 := strings.Builder{}
 
 		if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Label() {
 
 			err = txtBuilderMolecule.buildFieldLabelWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].Label,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -767,14 +759,14 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.DateTime() {
 
 			err = txtBuilderMolecule.buildFieldDateTimeWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].DateTime,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -782,14 +774,14 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Filler() {
 
 			err = txtBuilderMolecule.buildFieldFillerWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].Filler,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -797,14 +789,14 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.Spacer() {
 
 			err = txtBuilderMolecule.buildFieldSpacerWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].Spacer,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -813,14 +805,14 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.BlankLine() {
 
 			err = txtBuilderMolecule.buildLineBlankWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].BlankLine,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -828,14 +820,14 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.SolidLine() {
 
 			err = txtBuilderMolecule.buildLineSolidWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].SolidLine,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -844,14 +836,14 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.LineColumns() {
 
 			err = txtBuilderMolecule.buildLineColumnsWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].LineColumns,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -860,29 +852,30 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.TimerStartStop() {
 
-			strBuilder2,
-				err = txtBuilderAtom.buildTextLinesTimerStartStopWithDto(
+			err = txtBuilderMolecule.buildLineTimerStartStopWithDto(
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].LinesTimerStartStop,
 				ePrefix.XCpy(
 					fmt.Sprintf(
-						"strBuilder<-txtFormatters[%v].LinesTimerStartStop",
+						"strBuilder<-"+
+							"txtFormatters[%v].LinesTimerStartStop",
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else if txtFmtSpecs.fmtCollection[i].FormatType ==
 			TxtFieldType.TextAdHoc() {
 
 			err = txtBuilderMolecule.buildLineAdHocTextWithDto(
-				&strBuilder,
+				strBuilder,
 				txtFmtSpecs.fmtCollection[i].TextAdHoc,
 				ePrefix.XCpy(
 					fmt.Sprintf(
@@ -890,7 +883,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 						i)))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else {
@@ -898,13 +891,9 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 			continue
 		}
 
-		strBuilder.WriteString(strBuilder2.String())
-
-		strBuilder2.Reset()
-
 	}
 
-	return strBuilder, err
+	return err
 }
 
 // FieldDateTime - Creates a date time value formatted as a text
@@ -3844,8 +3833,7 @@ func (txtStrBuildr *TextStrBuilder) LineBlankDto(
 }
 
 // LineSolid - Formats a single Solid Text Line and writes the
-// output string to an instance of strings.Builder which is
-// returned to the calling function.
+// output string to an instance of strings.Builder.
 //
 // A solid line, as defined here, consists of a single character or
 // multiple characters used in a repeating sequence to construct
@@ -4564,10 +4552,9 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 			"strBuilder<-fillerCharacters"))
 }
 
-// LineTimerStartStop - Creates and returns a new instance of
-// the Start/Stop Time Lines which is configured with all the
-// parameters necessary to format and output a complete timer
-// event.
+// LineTimerStartStop - Formats a Start/Stop Timer Lines
+// timer event and writes the output string to an instance of
+// strings.Builder.
 //
 // Text Line Timer Start Stop type records, computes and formats an
 // elapsed time. This format process requires user input specifying
@@ -4598,6 +4585,13 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of strings.Builder. The
+//       formatted text characters produced for this Text Line
+//       Timer (Start/Stop) will be written to this instance of
+//       strings.Builder.
+//
 //
 //  leftMarginStr              string
 //     - The character or characters which will comprise the left
@@ -4804,14 +4798,6 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new instance of
-//       TextLineSpecTimerLines which is fully configured with all
-//       the parameters necessary to format a complete timer event
-//       for text display, file output or printing.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -4823,6 +4809,7 @@ func (txtStrBuildr *TextStrBuilder) LineSolidDto(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
+	strBuilder *strings.Builder,
 	leftMarginStr string,
 	startTimeLabel string,
 	startTime time.Time,
@@ -4833,9 +4820,7 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 	textLabelFieldLen int,
 	textLabelJustification TextJustify,
 	rightMarginStr string,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -4847,7 +4832,6 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -4857,43 +4841,41 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	var timerLinesSpec *TextLineSpecTimerLines
-
-	timerLinesSpec,
-		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
-		leftMarginStr,
-		startTimeLabel,
-		startTime,
-		endTimeLabel,
-		endTime,
-		timeFormat,
-		timeDurationLabel,
-		textLabelFieldLen,
-		textLabelJustification,
-		rightMarginStr,
-		ePrefix.XCpy(
-			"timerLinesSpec"))
-
-	if err != nil {
-		return strBuilder, err
+	timerStartStopDto := TextLineTimerStartStopDto{
+		FormatType:             TxtFieldType.TimerStartStop(),
+		LeftMarginStr:          leftMarginStr,
+		StartTimeLabel:         startTimeLabel,
+		StartTime:              startTime,
+		EndTimeLabel:           endTimeLabel,
+		EndTime:                endTime,
+		TimeFormat:             timeFormat,
+		TimeDurationLabel:      timeDurationLabel,
+		TextLabelFieldLength:   textLabelFieldLen,
+		TextLabelJustification: textLabelJustification,
+		RightMarginStr:         rightMarginStr,
+		lock:                   nil,
 	}
 
-	return timerLinesSpec.TextBuilder(
+	return new(textStrBuilderMolecule).buildLineTimerStartStopWithDto(
+		strBuilder,
+		timerStartStopDto,
 		ePrefix.XCpy(
-			"strBuilder<-timerLinesSpec"))
-
+			"strBuilder<-timerStartStopDto"))
 }
 
-// LineTimerStartStopDto - Creates and returns formatted Timer
-// Start Stop Text Lines generated from an input parameter of
-// type TextLineTimerStartStopDto.
+// LineTimerStartStopDto  - Formats a Start/Stop Timer Lines
+// timer event and writes the output string to an instance of
+// strings.Builder.
 //
-// Text Line Timer Start Stop type records, computes and formats an
-// elapsed time. This format process requires user input specifying
-// a start time and ending time.
+// The Timer Start Stop Text Lines are generated from an input
+// parameter of type TextLineTimerStartStopDto.
+//
+// The Text Line Timer Start Stop type records, computes and
+// formats an elapsed time. This format process requires user input
+// specifying a start time and ending time.
 //
 // The final formatted output string is composed of four lines of
 // text for output to screen display, file output or printing.
@@ -4920,6 +4902,13 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of strings.Builder. The
+//       formatted text characters produced for this Text Line
+//       Timer (Start/Stop) will be written to this instance of
+//       strings.Builder.
+//
 //
 //  timerStartStopDto          TextLineTimerStartStopDto
 //     - An instance of TextLineTimerStartStopDto which contains
@@ -5131,14 +5120,6 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 //
 // Return Values
 //
-//  *TextLineSpecTimerLines
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new instance of
-//       TextLineSpecTimerLines which is fully configured with all
-//       the parameters necessary to format a complete timer event
-//       for text display, file output or printing.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -5150,10 +5131,9 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStop(
 //       the beginning of the error message.
 //
 func (txtStrBuildr *TextStrBuilder) LineTimerStartStopDto(
+	strBuilder *strings.Builder,
 	timerStartStopDto TextLineTimerStartStopDto,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if txtStrBuildr.lock == nil {
 		txtStrBuildr.lock = new(sync.Mutex)
@@ -5165,7 +5145,6 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStopDto(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var strBuilder strings.Builder
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -5175,32 +5154,12 @@ func (txtStrBuildr *TextStrBuilder) LineTimerStartStopDto(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	var timerLinesSpec *TextLineSpecTimerLines
-
-	timerLinesSpec,
-		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
-		timerStartStopDto.LeftMarginStr,
-		timerStartStopDto.StartTimeLabel,
-		timerStartStopDto.StartTime,
-		timerStartStopDto.EndTimeLabel,
-		timerStartStopDto.EndTime,
-		timerStartStopDto.TimeFormat,
-		timerStartStopDto.TimeDurationLabel,
-		timerStartStopDto.TextLabelFieldLength,
-		timerStartStopDto.TextLabelJustification,
-		timerStartStopDto.RightMarginStr,
+	return new(textStrBuilderMolecule).buildLineTimerStartStopWithDto(
+		strBuilder,
+		timerStartStopDto,
 		ePrefix.XCpy(
-			"timerLinesSpec<-timerStartStopDto"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	return timerLinesSpec.TextBuilder(
-		ePrefix.XCpy(
-			"strBuilder<-timerLinesSpec"))
-
+			"strBuilder<-timerStartStopDto"))
 }

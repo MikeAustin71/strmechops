@@ -22,101 +22,33 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	strBuilder := strings.Builder{}
 
-	strBuilder.Grow(1024)
-
 	sMech := strmech.StrMech{}
 
 	// Total available Length of Output Line
-	const maxFieldLen = 70
+	const maxLineLen = 78
 
-	txtBuilder := strmech.TextStrBuilder{}
+	txtFormatCol := strmech.TextFormatterCollection{}
+	var err error
 
 	// Leading Title Marquee
-	var fmtrs []strmech.TextFormatterDto
 
-	// Blank Line
-	txtFmt := strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler =======
-	// Marquee Top
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line 1
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = ePrefix.String()
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = strmech.TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line 2
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "Testing StrMech.ExtractNumberRunes()"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = strmech.TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Title Line  3 Date/Time
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.DateTime()
-	txtFmt.DateTime.LeftMarginStr = ""
-	txtFmt.DateTime.FieldDateTime = time.Now()
-	txtFmt.DateTime.FieldLength = maxFieldLen
-	txtFmt.DateTime.FieldJustify = strmech.TxtJustify.Center()
-	txtFmt.DateTime.FieldDateTimeFormat =
-		"Monday 2006-01-02 15:04:05.000000000 -0700 MST"
-	txtFmt.DateTime.RightMarginStr = ""
-	txtFmt.DateTime.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
-
-	// Trailing Blank Line
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
-
-	var err error
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
+	err = txtFormatCol.SetStdFormatParamsLine1Col(
+		" ",
+		maxLineLen,
+		strmech.TxtJustify.Center(),
+		"",
+		false,
+		"",
+		-1,
+		false,
 		ePrefix.XCpy(
-			"strBuilder<-Marquee Top"))
+			"1-Column Setup"))
 
 	if err != nil {
 
 		outputStr =
 			fmt.Sprintf("%v\n"+
-				"Error: txtBuilder.BuildTextFormatters()\n"+
+				"Error: txtFormatCol.SetStdFormatParamsLine1Col()\n"+
 				"Error=\n%v\n",
 				ePrefix.String(),
 				err.Error())
@@ -126,17 +58,105 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
-	fmtrs = nil
+	// Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
-	strBuilder.WriteString(strBuilder2.String())
+	// Filler =======
+	// Marquee Top
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
-	strBuilder2.Reset()
+	// Title Line 1
+	err = txtFormatCol.AddLine1Col(
+		ePrefix.String(),
+		ePrefix.XCpy(
+			"Title Line 1"))
+
+	if err != nil {
+
+		outputStr =
+			fmt.Sprintf("%v\n"+
+				"Error: txtFormatCol.AddLine1Col()\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err.Error())
+
+		fmt.Printf(outputStr + "\n")
+
+		return
+	}
+
+	// Title Line 2
+	err = txtFormatCol.AddLine1Col(
+		"Testing StrMech.ExtractNumberRunes()",
+		ePrefix.XCpy(
+			"Title Line 1"))
+
+	if err != nil {
+
+		outputStr =
+			fmt.Sprintf("%v\n"+
+				"Error: txtFormatCol.AddLine1Col()\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err.Error())
+
+		fmt.Printf(outputStr + "\n")
+
+		return
+	}
+
+	// Title Line  3 Date/Time
+
+	err = txtFormatCol.AddLine1Col(
+		strmech.TextInputParamFieldDateTimeDto{
+			FieldDateTime:       time.Now(),
+			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+		},
+		ePrefix.XCpy(
+			"Top-Title Line 4"))
+
+	if err != nil {
+
+		outputStr =
+			fmt.Sprintf("%v\n"+
+				"Error: txtFormatCol.AddLine1Col()\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err.Error())
+
+		fmt.Printf(outputStr + "\n")
+
+		return
+	}
+
+	// Filler Line '========='
+	// Marquee Bottom
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
+
+	// Trailing Blank Line
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// End Of Marquee
-
-	fmt.Printf(strBuilder.String() + "\n")
-
-	strBuilder.Reset()
 
 	numberStr := " 1.234 "
 
@@ -213,7 +233,9 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
-	strBuilder.Reset()
+	strBuilder.Grow(1024)
+
+	var strBuilder2 strings.Builder
 
 	strBuilder2,
 		err = searchResults.GetParameterTextListing(
@@ -261,77 +283,97 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	strBuilder.WriteString(strBuilder2.String())
 	strBuilder2.Reset()
 
-	fmt.Printf(strBuilder.String() + "\n")
-	strBuilder.Reset()
-
 	// Trailing Title Marquee
 	// Top Blank Line
-	fmtrs = nil
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 1
-	fmtrs = append(fmtrs, txtFmt)
+
+	txtFormatCol.AddLineBlank(
+		1,
+		"")
 
 	// Filler =======
 	// Marquee Top
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Title # 1
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = ePrefix.String()
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = strmech.TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		ePrefix.String(),
+		ePrefix.XCpy(
+			"Title Line 1"))
+
+	if err != nil {
+		outputStr =
+			fmt.Sprintf("%v\n"+
+				"Error: txtFormatCol.AddLine1Col()\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err.Error())
+
+		fmt.Printf(outputStr + "\n")
+
+		return
+	}
 
 	// Title # 2
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Label()
-	txtFmt.Label.LeftMarginStr = ""
-	txtFmt.Label.FieldText = "SUCCESSFUL COMPLETION"
-	txtFmt.Label.FieldLength = maxFieldLen
-	txtFmt.Label.FieldJustify = strmech.TxtJustify.Center()
-	txtFmt.Label.RightMarginStr = ""
-	txtFmt.Label.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	err = txtFormatCol.AddLine1Col(
+		"SUCCESSFUL COMPLETION",
+		ePrefix.XCpy(
+			"Title Line 1"))
+
+	if err != nil {
+		outputStr =
+			fmt.Sprintf("%v\n"+
+				"Error: txtFormatCol.AddLine1Col()\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err.Error())
+
+		fmt.Printf(outputStr + "\n")
+
+		return
+	}
 
 	// Filler =======
 	// Marquee Bottom
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.Filler()
-	txtFmt.Filler.LeftMarginStr = " "
-	txtFmt.Filler.FillerCharacters = "="
-	txtFmt.Filler.FillerCharsRepeatCount = maxFieldLen - 2
-	txtFmt.Filler.RightMarginStr = " "
-	txtFmt.Filler.LineTerminator = "\n"
-	fmtrs = append(fmtrs, txtFmt)
+	txtFormatCol.AddLineSolid(
+		" ",
+		"=",
+		maxLineLen-2,
+		" ",
+		false,
+		"",
+		-1,
+		false)
 
 	// Blank Line
-	txtFmt = strmech.TextFormatterDto{}
-	txtFmt.FormatType = strmech.TxtFieldType.BlankLine()
-	txtFmt.BlankLine.NumOfBlankLines = 2
-	fmtrs = append(fmtrs, txtFmt)
+	txtStrBuilder := strmech.TextStrBuilder{}
 
-	strBuilder2,
-		err = txtBuilder.BuildTextFormatters(
-		fmtrs,
-		ePrefix.XCpy(
-			"Marquee-Bottom"))
-	fmtrs = nil
+	err =
+		txtStrBuilder.BuildText(
+			&strBuilder,
+			&txtFormatCol,
+			ePrefix.XCpy(
+				"Final Output String"))
 
-	strBuilder.WriteString(strBuilder2.String())
+	if err != nil {
+		outputStr =
+			fmt.Sprintf("%v\n"+
+				"Error: txtStrBuilder.BuildText()\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err.Error())
 
-	strBuilder2.Reset()
+		fmt.Printf(outputStr + "\n")
+
+		return
+	}
 
 	fmt.Printf(strBuilder.String() + "\n")
 

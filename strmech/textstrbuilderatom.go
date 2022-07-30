@@ -220,60 +220,6 @@ func (txtBuilderAtom *textStrBuilderAtom) preBuildScreening(
 	return err
 }
 
-func (txtBuilderAtom *textStrBuilderAtom) buildTextLinesTimerStartStopWithDto(
-	timerStartStopDto TextLineTimerStartStopDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strBuilder strings.Builder,
-	err error) {
-
-	if txtBuilderAtom.lock == nil {
-		txtBuilderAtom.lock = new(sync.Mutex)
-	}
-
-	txtBuilderAtom.lock.Lock()
-
-	defer txtBuilderAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textStrBuilderAtom."+
-			"buildTextLinesTimerStartStopWithDto()",
-		"")
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	var timerLinesSpec *TextLineSpecTimerLines
-
-	timerLinesSpec,
-		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
-		timerStartStopDto.LeftMarginStr,
-		timerStartStopDto.StartTimeLabel,
-		timerStartStopDto.StartTime,
-		timerStartStopDto.EndTimeLabel,
-		timerStartStopDto.EndTime,
-		timerStartStopDto.TimeFormat,
-		timerStartStopDto.TimeDurationLabel,
-		timerStartStopDto.TextLabelFieldLength,
-		timerStartStopDto.TextLabelJustification,
-		timerStartStopDto.RightMarginStr,
-		ePrefix.XCpy(
-			"timerLinesSpec<-timerStartStopDto"))
-
-	if err != nil {
-		return strBuilder, err
-	}
-
-	return timerLinesSpec.TextBuilder(
-		ePrefix.XCpy(
-			"strBuilder<-timerLinesSpec"))
-
-}
-
 // fieldDateTimeWithMargins - Is designed to produce three text
 // elements consolidated and formatted as a single text field.
 //

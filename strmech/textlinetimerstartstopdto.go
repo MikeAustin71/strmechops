@@ -237,7 +237,7 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyIn(
 
 	defer lineTimerStartStopDto.lock.Unlock()
 
-	_ = textLineTimerStartStopDtoNanobot{}.ptr().
+	_ = new(textLineTimerStartStopDtoNanobot).
 		copyData(
 			lineTimerStartStopDto,
 			&incomingTimerStartStopDto,
@@ -279,7 +279,7 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) CopyOut() (
 
 	defer lineTimerStartStopDto.lock.Unlock()
 
-	_ = textLineTimerStartStopDtoNanobot{}.ptr().
+	_ = new(textLineTimerStartStopDtoNanobot).
 		copyData(
 			&deepCopyTimerStartStopDto,
 			lineTimerStartStopDto,
@@ -326,7 +326,7 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) Empty() {
 
 	lineTimerStartStopDto.lock.Lock()
 
-	textLineTimerStartStopDtoAtom{}.ptr().
+	new(textLineTimerStartStopDtoAtom).
 		empty(
 			lineTimerStartStopDto)
 
@@ -383,7 +383,7 @@ func (lineTimerStartStopDto *TextLineTimerStartStopDto) Equal(
 
 	defer lineTimerStartStopDto.lock.Unlock()
 
-	return textLineTimerStartStopDtoAtom{}.ptr().
+	return new(textLineTimerStartStopDtoAtom).
 		equal(
 			lineTimerStartStopDto,
 			&incomingTimerStartStopDto)
@@ -446,7 +446,7 @@ func (timerStartStopDtoNanobot *textLineTimerStartStopDtoNanobot) copyData(
 		return err
 	}
 
-	textLineTimerStartStopDtoAtom{}.ptr().
+	new(textLineTimerStartStopDtoAtom).
 		empty(destinationTimerDto)
 
 	destinationTimerDto.FormatType =
@@ -483,24 +483,6 @@ func (timerStartStopDtoNanobot *textLineTimerStartStopDtoNanobot) copyData(
 		sourceTimerDto.RightMarginStr
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineTimerStartStopDtoNanobot.
-//
-func (timerStartStopDtoNanobot textLineTimerStartStopDtoNanobot) ptr() *textLineTimerStartStopDtoNanobot {
-
-	if timerStartStopDtoNanobot.lock == nil {
-		timerStartStopDtoNanobot.lock = new(sync.Mutex)
-	}
-
-	timerStartStopDtoNanobot.lock.Lock()
-
-	defer timerStartStopDtoNanobot.lock.Unlock()
-
-	return &textLineTimerStartStopDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }
 
 // textLineTimerStartStopDtoAtom - Provides helper methods for
@@ -646,22 +628,4 @@ func (timerStartStopDtoAtom *textLineTimerStartStopDtoAtom) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineTimerStartStopDtoAtom.
-//
-func (timerStartStopDtoAtom textLineTimerStartStopDtoAtom) ptr() *textLineTimerStartStopDtoAtom {
-
-	if timerStartStopDtoAtom.lock == nil {
-		timerStartStopDtoAtom.lock = new(sync.Mutex)
-	}
-
-	timerStartStopDtoAtom.lock.Lock()
-
-	defer timerStartStopDtoAtom.lock.Unlock()
-
-	return &textLineTimerStartStopDtoAtom{
-		lock: new(sync.Mutex),
-	}
 }

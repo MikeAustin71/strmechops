@@ -875,3 +875,81 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineSolidWithDto(
 
 	return err
 }
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildLineTimerStartStopWithDto(
+	strBuilder *strings.Builder,
+	timerStartStopDto TextLineTimerStartStopDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLineSolidWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var timerLinesSpec *TextLineSpecTimerLines
+
+	timerLinesSpec,
+		err = TextLineSpecTimerLines{}.NewFullTimerEvent(
+		timerStartStopDto.LeftMarginStr,
+		timerStartStopDto.StartTimeLabel,
+		timerStartStopDto.StartTime,
+		timerStartStopDto.EndTimeLabel,
+		timerStartStopDto.EndTime,
+		timerStartStopDto.TimeFormat,
+		timerStartStopDto.TimeDurationLabel,
+		timerStartStopDto.TextLabelFieldLength,
+		timerStartStopDto.TextLabelJustification,
+		timerStartStopDto.RightMarginStr,
+		ePrefix.XCpy(
+			"timerLinesSpec<-timerStartStopDto"))
+
+	if err != nil {
+		return err
+	}
+
+	var timerLinesText string
+
+	timerLinesText,
+		err = timerLinesSpec.GetFormattedText(
+		ePrefix.XCpy(
+			"timerLinesText<-timerLinesSpec"))
+
+	if err != nil {
+		return err
+	}
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	lenSolidLineText := len(timerLinesText)
+
+	requiredCapacity :=
+		lenSolidLineText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
+
+	strBuilder.WriteString(timerLinesText)
+
+	return err
+}
