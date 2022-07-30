@@ -151,7 +151,7 @@ func (txtBuilderAtom *textStrBuilderAtom) preBuildScreening(
 
 	if requiredCapacity > 0 {
 
-		textParams.strBuilder.Grow(requiredCapacity + 10)
+		textParams.strBuilder.Grow(requiredCapacity + 16)
 	}
 
 	txtBuilderElectron := textStrBuilderElectron{}

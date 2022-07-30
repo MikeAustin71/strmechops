@@ -492,14 +492,6 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineAdHocTextWithDto(
 
 	defer txtBuilderMolecule.lock.Unlock()
 
-	if txtBuilderMolecule.lock == nil {
-		txtBuilderMolecule.lock = new(sync.Mutex)
-	}
-
-	txtBuilderMolecule.lock.Lock()
-
-	defer txtBuilderMolecule.lock.Unlock()
-
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
@@ -563,4 +555,101 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineAdHocTextWithDto(
 
 	return new(textStrBuilderAtom).preBuildScreening(
 		&txtBuilderParams)
+}
+
+func (txtBuilderMolecule *textStrBuilderMolecule) buildLineBlankWithDto(
+	strBuilder *strings.Builder,
+	blankLineDto TextLineBlankDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if txtBuilderMolecule.lock == nil {
+		txtBuilderMolecule.lock = new(sync.Mutex)
+	}
+
+	txtBuilderMolecule.lock.Lock()
+
+	defer txtBuilderMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textStrBuilderMolecule."+
+			"buildLineBlankWithDto()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if blankLineDto.NumOfBlankLines < 1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'blankLineDto.NumOfBlankLines' is invalid!\n"+
+			"'blankLineDto.NumOfBlankLines' has a value less than one (+1).\n"+
+			"blankLineDto.NumOfBlankLines = '%v'\n",
+			ePrefix.String(),
+			blankLineDto.NumOfBlankLines)
+
+		return err
+	}
+
+	var blankLinesSpec TextLineSpecBlankLines
+
+	if len(blankLineDto.LineTerminator) == 0 {
+
+		blankLinesSpec,
+			err = TextLineSpecBlankLines{}.NewDefaultBlankLines(
+			blankLineDto.NumOfBlankLines,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"blankLineDto.NumOfBlankLines='%v'\n",
+					blankLineDto.NumOfBlankLines)))
+
+	} else {
+
+		blankLinesSpec,
+			err = TextLineSpecBlankLines{}.NewBlankLines(
+			blankLineDto.NumOfBlankLines,
+			blankLineDto.LineTerminator,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"blankLineDto.NumOfBlankLines='%v'\n",
+					blankLineDto.NumOfBlankLines)))
+
+	}
+
+	if err != nil {
+		return err
+	}
+
+	var blankLinesText string
+
+	blankLinesText,
+		err = blankLinesSpec.GetFormattedText(
+		"blankLinesText<-blankLinesSpec")
+
+	if err != nil {
+		return err
+	}
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	lenBlankLinesText := len(blankLinesText)
+
+	requiredCapacity :=
+		lenBlankLinesText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
+
+	strBuilder.WriteString(blankLinesText)
+
+	return err
 }

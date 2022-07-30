@@ -101,7 +101,7 @@ func (txtLineBlankDto *TextLineBlankDto) CopyIn(
 
 	defer txtLineBlankDto.lock.Unlock()
 
-	_ = textLineBlankDtoNanobot{}.ptr().copy(
+	_ = new(textLineBlankDtoNanobot).copy(
 		txtLineBlankDto,
 		&incomingTxtBlankLineDto,
 		nil)
@@ -142,7 +142,7 @@ func (txtLineBlankDto *TextLineBlankDto) CopyOut() (
 
 	defer txtLineBlankDto.lock.Unlock()
 
-	_ = textLineBlankDtoNanobot{}.ptr().copy(
+	_ = new(textLineBlankDtoNanobot).copy(
 		&deepCopyTxtBlankLineDto,
 		txtLineBlankDto,
 		nil)
@@ -334,22 +334,4 @@ func (txtBlankLineNanobot *textLineBlankDtoNanobot) copy(
 		sourceBlankLineDto.LineTerminator
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldSpacerDtoNanobot.
-//
-func (txtBlankLineNanobot textLineBlankDtoNanobot) ptr() *textLineBlankDtoNanobot {
-
-	if txtBlankLineNanobot.lock == nil {
-		txtBlankLineNanobot.lock = new(sync.Mutex)
-	}
-
-	txtBlankLineNanobot.lock.Lock()
-
-	defer txtBlankLineNanobot.lock.Unlock()
-
-	return &textLineBlankDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }
