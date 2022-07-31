@@ -1,4 +1,4 @@
-//  May Use Capital 'X' has currency place holder.
+//  May Use Capital 'X' has currency placeholder.
 
 //
 // Sources:

@@ -568,6 +568,12 @@ func (searchTestConfigDto *CharSearchTestConfigDto) Equal(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -619,15 +625,6 @@ func (searchTestConfigDto *CharSearchTestConfigDto) Equal(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for the current
-//       instance of CharSearchTestConfigDto. This formatted text can
-//       then be used for text displays, file output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -639,9 +636,8 @@ func (searchTestConfigDto *CharSearchTestConfigDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (searchTestConfigDto *CharSearchTestConfigDto) GetParameterTextListing(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if searchTestConfigDto.lock == nil {
 		searchTestConfigDto.lock = new(sync.Mutex)
@@ -663,12 +659,13 @@ func (searchTestConfigDto *CharSearchTestConfigDto) GetParameterTextListing(
 
 	if err != nil {
 
-		return strings.Builder{}, err
+		return err
 
 	}
 
 	return charSearchTestConfigDtoNanobot{}.ptr().
 		getParameterTextListing(
+			strBuilder,
 			searchTestConfigDto,
 			ePrefix.XCpy(
 				"searchTestConfigDto"))

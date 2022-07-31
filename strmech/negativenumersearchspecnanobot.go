@@ -576,18 +576,13 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 //       attached at the beginning of the error message.
 //
 func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	negNumSearchSpec *NegativeNumberSearchSpec,
 	tagDescription string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -598,9 +593,20 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 
 	if err != nil {
 
-		return strBuilder, err
+		return err
 
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	strBuilder.Grow(256)
 
 	if negNumSearchSpec == nil {
 
@@ -608,7 +614,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"ERROR: Input parameter 'negNumSearchSpec' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	// Total available Length of Output Line
@@ -645,7 +651,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"1-Column Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Leading Title Marquee
@@ -666,7 +672,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"Top-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	if len(tagDescription) > 0 {
@@ -678,7 +684,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 				"Top-Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -690,7 +696,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"Top-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line  4 Date/Time
@@ -704,7 +710,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"Top-Title Line 4"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -739,7 +745,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"Set 2-Column Params"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.negNumSignPosition
@@ -759,7 +765,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"negNumSignPosition"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.leadingNegNumSignSymbols
@@ -782,7 +788,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"leadingNegNumSignSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.trailingNegNumSignSymbols
@@ -805,7 +811,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"trailingNegNumSignSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.foundFirstNumericDigitInNumStr
@@ -820,7 +826,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"foundFirstNumericDigitInNumStr"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.foundNegNumSignSymbols
@@ -835,7 +841,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"foundNegNumSignSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.foundLeadingNegNumSign
@@ -850,7 +856,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"foundLeadingNegNumSign"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.foundLeadingNegNumSignIndex
@@ -865,7 +871,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"foundLeadingNegNumSignIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.foundTrailingNegNumSign
@@ -880,7 +886,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"foundTrailingNegNumSign"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build negNumSearchSpec.foundTrailingNegNumSignIndex
@@ -895,7 +901,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"foundTrailingNegNumSignIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Trailing Title Marquee
@@ -915,7 +921,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"Bottom-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	if len(tagDescription) > 0 {
@@ -927,7 +933,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 				"Bottom-Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -939,7 +945,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 			"Bottom-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler =======
@@ -951,22 +957,12 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 		2,
 		"")
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Final Text Output"))
 
-	if err != nil {
-		return strBuilder, err
-	}
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

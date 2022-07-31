@@ -1635,10 +1635,86 @@ func (numStrKernel *NumberStrKernel) GetNumberSignInt(
 	return numStrKernel.numberSign.XArithmeticValue(), err
 }
 
+// GetParameterTextListing - Returns formatted text output
+// detailing the member variable names and their corresponding
+// values contained in the current instance of
+// NumberStrKernel ('numStrKernel').
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, this returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message.
+//
+//       If an error message is returned, the text value for input
+//       parameter 'errPrefDto' (error prefix) will be prefixed or
+//       attached at the beginning of the error message.
+//
 func (numStrKernel *NumberStrKernel) GetParameterTextListing(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if numStrKernel.lock == nil {
 		numStrKernel.lock = new(sync.Mutex)
@@ -1659,11 +1735,12 @@ func (numStrKernel *NumberStrKernel) GetParameterTextListing(
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
 	}
 
-	return numberStrKernelNanobot{}.ptr().
+	return new(numberStrKernelNanobot).
 		getParameterTextListing(
+			strBuilder,
 			numStrKernel,
 			ePrefix.XCpy(
 				"numStrKernel"))
@@ -1878,4 +1955,65 @@ func (numStrKernel *NumberStrKernel) SetNumberSignInt(
 	numStrKernel.numberSign = NumericSignValueType(numberSign)
 
 	return err
+}
+
+// String - Returns a formatted text string detailing all the
+// internal member variable names and their corresponding values
+// for the current instance of NumberStrKernel.
+//
+// If an error is encountered, the error message is included in the
+// string returned by this method.
+//
+// This method implements the Stringer Interface.
+//
+func (numStrKernel NumberStrKernel) String() string {
+
+	if numStrKernel.lock == nil {
+		numStrKernel.lock = new(sync.Mutex)
+	}
+
+	numStrKernel.lock.Lock()
+
+	defer numStrKernel.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"CharSearchNegativeNumberResultsDto."+
+			"String()",
+		"")
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			"CharSearchNegativeNumberResultsDto.String()",
+			err.Error())
+
+		return errOut
+	}
+
+	strBuilder := strings.Builder{}
+
+	err = new(numberStrKernelNanobot).
+		getParameterTextListing(
+			&strBuilder,
+			&numStrKernel,
+			ePrefix.XCpy(
+				"numStrKernel"))
+
+	if err != nil {
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
+	}
+
+	return strBuilder.String()
 }

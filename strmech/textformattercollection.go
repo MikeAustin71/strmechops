@@ -4418,6 +4418,13 @@ func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStopDto(
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -4469,12 +4476,6 @@ func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStopDto(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If the method completes successfully with no errors, this
-//       parameter will contain all the formatted text generated
-//       from the Text Formatter Collection.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -4486,9 +4487,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStopDto(
 //       the beginning of the error message.
 //
 func (txtFmtCollection *TextFormatterCollection) BuildText(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if txtFmtCollection.lock == nil {
 		txtFmtCollection.lock = new(sync.Mutex)
@@ -4508,15 +4508,29 @@ func (txtFmtCollection *TextFormatterCollection) BuildText(
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+
 	}
 
 	txtBuilder := TextStrBuilder{}
 
-	return txtBuilder.BuildText(
+	err = txtBuilder.BuildText(
+		strBuilder,
 		txtFmtCollection,
 		ePrefix.XCpy(
 			"txtFmtCollection"))
+
+	return err
 }
 
 // CfgLine1Col - Allows the user to configure both the field value

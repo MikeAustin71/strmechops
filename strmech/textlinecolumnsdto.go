@@ -70,7 +70,7 @@ func (fmtLineCols *TextLineColumnsDto) CopyIn(
 
 	defer fmtLineCols.lock.Unlock()
 
-	_ = textLineColumnsDtoNanobot{}.ptr().
+	_ = new(textLineColumnsDtoNanobot).
 		copy(
 			fmtLineCols,
 			&incomingTxtLineCols,
@@ -112,7 +112,7 @@ func (fmtLineCols *TextLineColumnsDto) CopyOut() (
 
 	defer fmtLineCols.lock.Unlock()
 
-	_ = textLineColumnsDtoNanobot{}.ptr().
+	_ = new(textLineColumnsDtoNanobot).
 		copy(
 			&deepCopyTxtLineColsDto,
 			fmtLineCols,
@@ -159,7 +159,7 @@ func (fmtLineCols *TextLineColumnsDto) Empty() {
 
 	fmtLineCols.lock.Lock()
 
-	textLineColumnsDtoMolecule{}.ptr().
+	new(textLineColumnsDtoMolecule).
 		empty(
 			fmtLineCols)
 
@@ -215,7 +215,7 @@ func (fmtLineCols *TextLineColumnsDto) Equal(
 
 	defer fmtLineCols.lock.Unlock()
 
-	return textLineColumnsDtoMolecule{}.ptr().
+	return new(textLineColumnsDtoMolecule).
 		equal(
 			fmtLineCols,
 			&incomingTxtLineCols)
@@ -575,7 +575,7 @@ func (lineColsDtoNanobot *textLineColumnsDtoNanobot) copy(
 		return err
 	}
 
-	textLineColumnsDtoMolecule{}.ptr().
+	new(textLineColumnsDtoMolecule).
 		empty(destinationTxtLineColsDto)
 
 	destinationTxtLineColsDto.FormatType =
@@ -600,24 +600,6 @@ func (lineColsDtoNanobot *textLineColumnsDtoNanobot) copy(
 		sourceTxtLineColsDto.FmtParameters)
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineColumnsDtoNanobot.
-//
-func (lineColsDtoNanobot textLineColumnsDtoNanobot) ptr() *textLineColumnsDtoNanobot {
-
-	if lineColsDtoNanobot.lock == nil {
-		lineColsDtoNanobot.lock = new(sync.Mutex)
-	}
-
-	lineColsDtoNanobot.lock.Lock()
-
-	defer lineColsDtoNanobot.lock.Unlock()
-
-	return &textLineColumnsDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }
 
 // textLineColumnsDtoMolecule - Provides helper methods for
@@ -717,22 +699,4 @@ func (lineColsDtoMolecule *textLineColumnsDtoMolecule) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineColumnsDtoMolecule.
-//
-func (lineColsDtoMolecule textLineColumnsDtoMolecule) ptr() *textLineColumnsDtoMolecule {
-
-	if lineColsDtoMolecule.lock == nil {
-		lineColsDtoMolecule.lock = new(sync.Mutex)
-	}
-
-	lineColsDtoMolecule.lock.Lock()
-
-	defer lineColsDtoMolecule.lock.Unlock()
-
-	return &textLineColumnsDtoMolecule{
-		lock: new(sync.Mutex),
-	}
 }

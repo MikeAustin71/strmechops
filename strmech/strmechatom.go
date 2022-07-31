@@ -434,7 +434,7 @@ func (sMechAtom *strMechAtom) copyOut(
 //                                       containing 'Key Word Delimiters'. A Key Word Delimiter may be
 //                                       a Key Word string or a character which identifies and immediately
 //                                       precedes the data field. If multiple Key Word Delimiters exist
-//                                       in 'targetStr' the first instance of a key word in targetStr'
+//                                       in 'targetStr' the first instance of a key word in 'targetStr'
 //                                       will be designated as the Key Word Delimiter.
 //
 //                                       If this parameter is populated, the search for a data field

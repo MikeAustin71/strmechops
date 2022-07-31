@@ -143,6 +143,17 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 		return err
 	}
 
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
 	lenTextFormatterCol :=
 		txtFmtSpecs.GetLengthFormatterCollection()
 

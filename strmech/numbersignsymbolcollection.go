@@ -626,7 +626,7 @@ func (numSignSymCol *NumberSignSymbolCollection) IsCollectionEmpty() bool {
 //  hostRunes                  []rune
 //     - An array of runes. This rune array will be searched to
 //       determine if the leading number sign symbol is present in
-//       the array beginning at the 'hostStartIndex.
+//       the array beginning at the 'hostStartIndex'.
 //
 //       If 'hostRunes' is a zero length array, this method will
 //       return 'false'.
@@ -722,7 +722,7 @@ func (numSignSymCol *NumberSignSymbolCollection) IsLeadingNumSignAtHostIndex(
 //  hostRunes                  []rune
 //     - An array of runes. This rune array will be searched to
 //       determine if the trailing number sign symbol is present in
-//       the array beginning at the 'hostStartIndex.
+//       the array beginning at the 'hostStartIndex'.
 //
 //       If 'hostRunes' is a zero length array, this method will
 //       return 'false'.

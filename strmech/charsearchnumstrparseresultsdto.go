@@ -527,6 +527,12 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  displayFunctionChain       bool
 //     - Set 'displayFunctionChain' to 'true' and a list of the
 //       functions which led to this result will be included in
@@ -592,16 +598,6 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for the current
-//       instance of CharSearchNumStrParseResultsDto. This
-//       formatted text can then be used for text displays, file
-//       output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -613,11 +609,10 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTextListing(
+	strBuilder *strings.Builder,
 	displayFunctionChain bool,
 	printDetail bool,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if searchNumStrParseResults.lock == nil {
 		searchNumStrParseResults.lock = new(sync.Mutex)
@@ -638,11 +633,12 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTex
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
 	}
 
-	return charSearchNumStrParseResultsDtoNanobot{}.ptr().
+	return new(charSearchNumStrParseResultsDtoNanobot).
 		getParameterTextListing(
+			strBuilder,
 			searchNumStrParseResults,
 			displayFunctionChain,
 			printDetail,
@@ -726,11 +722,11 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) String() string
 		return errOut
 	}
 
-	var strBuilder strings.Builder
+	strBuilder := strings.Builder{}
 
-	strBuilder,
-		err = charSearchNumStrParseResultsDtoNanobot{}.ptr().
+	err = charSearchNumStrParseResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
+			&strBuilder,
 			searchNumStrParseResults,
 			true,
 			false,

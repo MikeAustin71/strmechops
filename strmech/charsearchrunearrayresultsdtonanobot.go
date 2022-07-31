@@ -520,17 +520,12 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 //       attached at the beginning of the error message.
 //
 func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	runeSearchResultsDto *CharSearchRuneArrayResultsDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -540,9 +535,16 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 		"")
 
 	if err != nil {
+		return err
+	}
 
-		return strBuilder, err
+	if strBuilder == nil {
 
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	if runeSearchResultsDto == nil {
@@ -551,8 +553,10 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"ERROR: Input parameter 'runeSearchResultsDto' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
+
+	strBuilder.Grow(256)
 
 	// Total available Length of Output Line
 	const maxLineLen = 78
@@ -588,7 +592,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"1-Column Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Leading Title Marquee
@@ -609,7 +613,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"Top-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	txtStrParam :=
@@ -624,7 +628,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 				"Top-Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -636,7 +640,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"Top-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line  4 Date/Time
@@ -650,7 +654,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"Top-Title Line 4"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -685,7 +689,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"Set 2-Column Params"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SearchResultsName Name
@@ -706,7 +710,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"SearchResultsName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SearchResultsFunctionChain
@@ -726,7 +730,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 				""))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	} else {
@@ -774,7 +778,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"FoundSearchTarget"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundFirstNumericDigitInNumStr
@@ -788,7 +792,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"FoundFirstNumericDigitInNumStr"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundDecimalSeparatorSymbols
@@ -802,7 +806,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"FoundDecimalSeparatorSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundNonZeroValue
@@ -816,7 +820,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"FoundNonZeroValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetInputParametersName
@@ -837,7 +841,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"FoundNonZeroValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLength
@@ -851,7 +855,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringSearchLength
@@ -865,7 +869,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringSearchLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringAdjustedSearchLength
@@ -879,7 +883,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringAdjustedSearchLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringStartingSearchIndex
@@ -893,7 +897,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringStartingSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringCurrentSearchIndex
@@ -907,7 +911,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringCurrentSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringFirstFoundIndex
@@ -921,7 +925,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringFirstFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLastSearchIndex
@@ -935,7 +939,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringLastSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringNextSearchIndex
@@ -949,7 +953,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringNextSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringDescription1
@@ -970,7 +974,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringDescription2
@@ -991,7 +995,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TargetStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestInputParametersName
@@ -1012,7 +1016,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestInputParametersName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringName
@@ -1033,7 +1037,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLength
@@ -1047,7 +1051,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLengthName
@@ -1068,7 +1072,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringLengthName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndex
@@ -1082,7 +1086,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringStartingIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndexName
@@ -1103,7 +1107,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringStartingIndexName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringFirstFoundIndex
@@ -1117,7 +1121,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringFirstFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLastFoundIndex
@@ -1131,7 +1135,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringLastFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription1
@@ -1152,7 +1156,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription2
@@ -1173,7 +1177,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TestStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build CollectionTestObjIndex
@@ -1187,7 +1191,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"CollectionTestObjIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TextCharSearchType
@@ -1206,7 +1210,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"TextCharSearchType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build ReplacementString
@@ -1227,7 +1231,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"ReplacementString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build RemainderString
@@ -1248,7 +1252,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"RemainderString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundRuneArrayChars
@@ -1269,7 +1273,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"FoundRuneArrayChars"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Trailing Title Marquee
@@ -1289,7 +1293,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"Bottom-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title # 2
@@ -1299,7 +1303,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			"Bottom-Title Line 2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler =======
@@ -1311,22 +1315,16 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 		2,
 		"")
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Final Text Output"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

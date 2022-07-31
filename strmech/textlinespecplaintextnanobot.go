@@ -770,7 +770,7 @@ func (txtLinePlainTextNanobot *textLineSpecPlainTextNanobot) setDefaultPlainText
 // This method is similar to
 // textLineSpecPlainTextAtom.setPlainTextSpec() with the sole
 // exception being that this method receives input parameter
-// 'textRunes as an array of runes instead of a string.
+// 'textRunes' as an array of runes instead of a string.
 //
 //
 // ------------------------------------------------------------------------

@@ -233,12 +233,10 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
-	strBuilder.Grow(1024)
+	strBuilder.Grow(256)
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = searchResults.GetParameterTextListing(
+	err = searchResults.GetParameterTextListing(
+		&strBuilder,
 		true,
 		false,
 		ePrefix.XCpy("searchResults"))
@@ -256,14 +254,11 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
-	strBuilder2.Reset()
-
 	fmt.Printf(strBuilder.String() + "\n")
 	strBuilder.Reset()
 
-	strBuilder2,
-		err = numStrKernel.GetParameterTextListing(
+	err = numStrKernel.GetParameterTextListing(
+		&strBuilder,
 		ePrefix.XCpy(
 			"numStrKernel"))
 
@@ -279,9 +274,6 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 		return
 	}
-
-	strBuilder.WriteString(strBuilder2.String())
-	strBuilder2.Reset()
 
 	// Trailing Title Marquee
 	// Top Blank Line

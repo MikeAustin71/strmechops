@@ -690,6 +690,12 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -741,16 +747,6 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for the current
-//       instance of CharSearchTestInputParametersDto. This
-//       formatted text can then be used for text displays, file
-//       output or printing.
-//
-//
 //  error
 //     - If this method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -762,9 +758,8 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 //       the beginning of the error message.
 //
 func (testSearchInputParms *CharSearchTestInputParametersDto) GetParameterTextListing(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if testSearchInputParms.lock == nil {
 		testSearchInputParms.lock = new(sync.Mutex)
@@ -786,12 +781,13 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) GetParameterTextLi
 
 	if err != nil {
 
-		return strings.Builder{}, err
+		return err
 
 	}
 
-	return charSearchTestInputParametersDtoNanobot{}.ptr().
+	return new(charSearchTestInputParametersDtoNanobot).
 		getParameterTextListing(
+			strBuilder,
 			testSearchInputParms,
 			ePrefix.XCpy(
 				"strBuilder<-Formatted Text"))
@@ -1180,17 +1176,23 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 		return errOut
 	}
 
-	var strBuilder strings.Builder
+	strBuilder := strings.Builder{}
 
-	strBuilder,
-		err = charSearchTestInputParametersDtoNanobot{}.ptr().
+	err = charSearchTestInputParametersDtoNanobot{}.ptr().
 		getParameterTextListing(
+			&strBuilder,
 			testSearchInputParms,
 			ePrefix.XCpy(
 				"strBuilder<-Formatted Text"))
 
 	if err != nil {
-		return ""
+		errOut := fmt.Sprintf("%v\n"+
+			"Error Message:\n"+
+			"%v",
+			ePrefix.String(),
+			err.Error())
+
+		return errOut
 	}
 
 	return strBuilder.String()

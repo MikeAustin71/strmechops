@@ -602,10 +602,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 //       attached at the beginning of the error message.
 //
 func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	searchNegNumResults *CharSearchNegativeNumberResultsDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if searchNegNumResultsNanobot.lock == nil {
 		searchNegNumResultsNanobot.lock = new(sync.Mutex)
@@ -619,10 +618,6 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -632,9 +627,20 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	if err != nil {
 
-		return strBuilder, err
+		return err
 
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	strBuilder.Grow(512)
 
 	if searchNegNumResults == nil {
 
@@ -642,7 +648,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"ERROR: Input parameter 'searchNegNumResults' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	// Total available Length of Output Line
@@ -685,7 +691,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"1-Column Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line 1
@@ -695,7 +701,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Top-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	txtStrParam :=
@@ -710,7 +716,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 				"Top-Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -722,7 +728,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Top-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line  4 Date/Time
@@ -736,7 +742,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Top-Title Line 4"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -779,7 +785,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Set 2-Column Params"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SearchResultsName Name
@@ -800,7 +806,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			""))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SearchResultsFunctionChain
@@ -820,7 +826,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 				""))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	} else {
@@ -868,7 +874,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundNegativeNumberSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundNegNumSymbolsOnPreviousSearch
@@ -882,7 +888,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundNegNumSymbolsOnPreviousSearch"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundLeadingNegNumSymbols
@@ -896,7 +902,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundLeadingNegNumSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundTrailingNegNumSymbols
@@ -910,7 +916,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundTrailingNegNumSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundFirstNumericDigitInNumStr
@@ -924,7 +930,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundFirstNumericDigitInNumStr"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundDecimalSeparatorSymbols
@@ -938,7 +944,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundDecimalSeparatorSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundNonZeroValue
@@ -952,7 +958,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"FoundNonZeroValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetInputParametersName
@@ -973,7 +979,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetInputParametersName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLength
@@ -987,7 +993,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringSearchLength
@@ -1001,7 +1007,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringSearchLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringAdjustedSearchLength
@@ -1015,7 +1021,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringAdjustedSearchLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringStartingSearchIndex
@@ -1029,7 +1035,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringStartingSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringCurrentSearchIndex
@@ -1043,7 +1049,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringCurrentSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringFirstFoundIndex
@@ -1057,7 +1063,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringFirstFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLastFoundIndex
@@ -1071,7 +1077,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringLastFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLastSearchIndex
@@ -1085,7 +1091,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringLastSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringNextSearchIndex
@@ -1099,7 +1105,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringNextSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringDescription1
@@ -1120,7 +1126,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringDescription2
@@ -1141,7 +1147,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TargetStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestInputParametersName
@@ -1162,7 +1168,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestInputParametersName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringName
@@ -1183,7 +1189,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLength
@@ -1197,7 +1203,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLengthName
@@ -1218,7 +1224,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringLengthName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndex
@@ -1232,7 +1238,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringStartingIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndexName
@@ -1253,7 +1259,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringStartingIndexName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringFirstFoundIndex
@@ -1267,7 +1273,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringFirstFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLastFoundIndex
@@ -1281,7 +1287,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringLastFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription1
@@ -1302,7 +1308,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription2
@@ -1323,7 +1329,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TestStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build CollectionTestObjIndex
@@ -1337,7 +1343,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"CollectionTestObjIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumSignValue
@@ -1356,7 +1362,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"NumSignValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build PrimaryNumSignPosition
@@ -1375,7 +1381,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"PrimaryNumSignPosition"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SecondaryNumSignPosition
@@ -1394,7 +1400,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"SecondaryNumSignPosition"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TextCharSearchType
@@ -1413,7 +1419,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"TextCharSearchType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NegativeNumberSymbolsSpec
@@ -1434,7 +1440,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"NegativeNumberSymbolsSpec"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build ReplacementString
@@ -1455,7 +1461,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"ReplacementString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build RemainderString
@@ -1476,7 +1482,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"ReplacementString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundRuneArrayChars
@@ -1497,7 +1503,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"ReplacementString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Trailing Title Marquee
@@ -1525,7 +1531,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Bottom-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title # 2
@@ -1535,7 +1541,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Bottom-Title Line 2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler =======
@@ -1555,23 +1561,12 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		2,
 		"")
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 
-	if err != nil {
-		return strBuilder, err
-	}
-
-	// Write Final Output String
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

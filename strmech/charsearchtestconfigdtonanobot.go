@@ -409,10 +409,9 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 //       attached at the beginning of the error message.
 //
 func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	searchTestCfgDto *CharSearchTestConfigDto,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if searchTestConfigNanobot.lock == nil {
 		searchTestConfigNanobot.lock = new(sync.Mutex)
@@ -425,10 +424,6 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -437,10 +432,19 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 		"")
 
 	if err != nil {
-
-		return strBuilder, err
-
+		return err
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	strBuilder.Grow(256)
 
 	if searchTestCfgDto == nil {
 
@@ -448,7 +452,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"ERROR: Input parameter 'searchTestCfgDto' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	// Total available Length of Output Line
@@ -485,7 +489,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"1-Column Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Leading Title Marquee
@@ -506,7 +510,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"Top-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	txtStrParam :=
@@ -523,7 +527,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 				"Top-Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -535,7 +539,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"Top-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line 4 Date/Time
@@ -549,7 +553,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"Top-Title Line 4"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -582,7 +586,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"Set 2-Column Params"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestInputParametersName
@@ -603,7 +607,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestInputParametersName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringName
@@ -624,7 +628,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestStringName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLengthName
@@ -644,7 +648,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestStringLengthName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndex
@@ -657,7 +661,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestStringStartingIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndexName
@@ -677,7 +681,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestStringStartingIndexName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription1
@@ -697,7 +701,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription2
@@ -717,7 +721,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TestStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build CollectionTestObjIndex
@@ -730,7 +734,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"CollectionTestObjIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumValueType
@@ -748,7 +752,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"NumValueType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumStrFormatType
@@ -766,7 +770,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"NumStrFormatType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumSymbolLocation
@@ -784,7 +788,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"NumSymbolLocation"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumSymbolClass
@@ -802,7 +806,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"NumSymbolClass"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumSignValue
@@ -820,7 +824,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"NumSignValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build PrimaryNumSignPosition
@@ -841,7 +845,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"PrimaryNumSignPosition"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SecondaryNumSignPosition
@@ -862,7 +866,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"SecondaryNumSignPosition"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TextCharSearchType
@@ -883,7 +887,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"TextCharSearchType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build RequestFoundTestCharacters
@@ -896,7 +900,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"RequestFoundTestCharacters"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build RequestRemainderString
@@ -909,7 +913,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"RequestRemainderString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build RequestReplacementString
@@ -922,7 +926,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"RequestReplacementString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Trailing Title Marquee
@@ -942,7 +946,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"Bottom-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title # 2
@@ -952,7 +956,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 			"Bottom-Title Line 2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler =======
@@ -964,22 +968,12 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 		2,
 		"")
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Final Text Output"))
 
-	if err != nil {
-		return strBuilder, err
-	}
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

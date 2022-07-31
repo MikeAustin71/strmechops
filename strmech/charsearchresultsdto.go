@@ -850,9 +850,8 @@ func (charSearchResults *CharSearchResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (charSearchResults *CharSearchResultsDto) GetParameterTextListing(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if charSearchResults.lock == nil {
 		charSearchResults.lock = new(sync.Mutex)
@@ -873,11 +872,12 @@ func (charSearchResults *CharSearchResultsDto) GetParameterTextListing(
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
 	}
 
 	return charSearchResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
+			strBuilder,
 			charSearchResults,
 			ePrefix.XCpy(
 				"charSearchResults"))

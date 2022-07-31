@@ -651,6 +651,12 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Equal(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced for this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  displayFunctionChain       bool
 //     - Set 'displayFunctionChain' to 'true' and a list of the
 //       functions which led to this result will be included in
@@ -708,16 +714,6 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Equal(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for the current
-//       instance of CharSearchDecimalSeparatorResultsDto. This
-//       formatted text can then be used for text displays, file
-//       output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -729,10 +725,9 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameterTextListing(
+	strBuilder *strings.Builder,
 	displayFunctionChain bool,
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	errorPrefix interface{}) error {
 
 	if decSepSearchResultsDto.lock == nil {
 		decSepSearchResultsDto.lock = new(sync.Mutex)
@@ -753,11 +748,12 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameter
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
 	}
 
 	return charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
+			strBuilder,
 			decSepSearchResultsDto,
 			displayFunctionChain,
 			ePrefix.XCpy(
@@ -1096,11 +1092,11 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) String() str
 		return errOut
 	}
 
-	var strBuilder strings.Builder
+	strBuilder := strings.Builder{}
 
-	strBuilder,
-		err = charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
+	err = charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
+			&strBuilder,
 			decSepSearchResultsDto,
 			true,
 			ePrefix.XCpy(

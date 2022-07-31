@@ -548,6 +548,12 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Equal(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -599,16 +605,6 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Equal(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for the current
-//       instance of CharSearchRuneArrayResultsDto. This
-//       formatted text can then be used for text displays, file
-//       output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -620,9 +616,8 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) GetParameterTextListing(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if runesSearchResultsDto.lock == nil {
 		runesSearchResultsDto.lock = new(sync.Mutex)
@@ -643,11 +638,12 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) GetParameterTextList
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
 	}
 
 	return charSearchRuneArrayResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
+			strBuilder,
 			runesSearchResultsDto,
 			ePrefix.XCpy("runesSearchResultsDto"))
 }
@@ -806,7 +802,7 @@ func (runesSearchResultsDto CharSearchRuneArrayResultsDto) New() CharSearchRuneA
 //
 // This method implements the Stringer Interface.
 //
-func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) String() string {
+func (runesSearchResultsDto CharSearchRuneArrayResultsDto) String() string {
 
 	if runesSearchResultsDto.lock == nil {
 		runesSearchResultsDto.lock = new(sync.Mutex)
@@ -836,12 +832,12 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) String() string {
 		return errOut
 	}
 
-	var strBuilder strings.Builder
+	strBuilder := strings.Builder{}
 
-	strBuilder,
-		err = charSearchRuneArrayResultsDtoNanobot{}.ptr().
+	err = charSearchRuneArrayResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
-			runesSearchResultsDto,
+			&strBuilder,
+			&runesSearchResultsDto,
 			ePrefix.XCpy("runesSearchResultsDto"))
 
 	if err != nil {

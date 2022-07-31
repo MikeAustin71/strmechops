@@ -513,6 +513,12 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  decimalSeparatorResults *CharSearchDecimalSeparatorResultsDto
 //     - A pointer to an instance of
 //       CharSearchDecimalSeparatorResultsDto instance. Formatted
@@ -548,15 +554,6 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'decimalSeparatorResults' . This formatted text can them be used
-//       for text displays, file output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -568,11 +565,10 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 //       attached at the beginning of the error message.
 //
 func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	decimalSeparatorResults *CharSearchDecimalSeparatorResultsDto,
 	displayFunctionChain bool,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if searchDecimalSepResultsNanobot.lock == nil {
 		searchDecimalSepResultsNanobot.lock = new(sync.Mutex)
@@ -586,10 +582,6 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -599,9 +591,20 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	if err != nil {
 
-		return strBuilder, err
+		return err
 
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	strBuilder.Grow(256)
 
 	if decimalSeparatorResults == nil {
 
@@ -609,7 +612,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"ERROR: Input parameter 'decimalSeparatorResults' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	// Total available Length of Output Line
@@ -656,7 +659,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Column-1 Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	txtStrParam :=
@@ -671,7 +674,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 				"Top-Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -683,7 +686,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Top-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line  4 Date/Time
@@ -697,7 +700,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Top-Title Line 4"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -740,7 +743,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Set 2-Column Params"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SearchResultsName Name
@@ -761,7 +764,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			""))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build SearchResultsFunctionChain
@@ -783,7 +786,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 					""))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else {
@@ -832,7 +835,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"FoundDecimalSeparatorSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundDecimalSepSymbolsOnPreviousSearch
@@ -846,7 +849,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"FoundDecimalSepSymbolsOnPreviousSearch"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundFirstNumericDigitInNumStr
@@ -860,7 +863,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"FoundFirstNumericDigitInNumStr"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundNonZeroValue
@@ -874,7 +877,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"FoundNonZeroValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetInputParametersName
@@ -888,7 +891,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetInputParametersName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLength
@@ -902,7 +905,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringSearchLength
@@ -916,7 +919,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringSearchLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringAdjustedSearchLength
@@ -930,7 +933,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringAdjustedSearchLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringStartingSearchIndex
@@ -944,7 +947,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringStartingSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringCurrentSearchIndex
@@ -958,7 +961,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringCurrentSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringFirstFoundIndex
@@ -972,7 +975,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringFirstFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLastFoundIndex
@@ -986,7 +989,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringLastFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringLastSearchIndex
@@ -1000,7 +1003,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringLastSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringNextSearchIndex
@@ -1014,7 +1017,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringNextSearchIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringDescription1
@@ -1034,7 +1037,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TargetStringDescription2
@@ -1054,7 +1057,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TargetStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestInputParametersName
@@ -1074,7 +1077,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestInputParametersName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringName
@@ -1094,7 +1097,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLength
@@ -1108,7 +1111,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringLength"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLengthName
@@ -1128,7 +1131,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringLengthName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndex
@@ -1142,7 +1145,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringStartingIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringStartingIndexName
@@ -1162,7 +1165,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringStartingIndexName"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringFirstFoundIndex
@@ -1176,7 +1179,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringFirstFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringLastFoundIndex
@@ -1190,7 +1193,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringLastFoundIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription1
@@ -1210,7 +1213,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringDescription1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TestStringDescription2
@@ -1230,7 +1233,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TestStringDescription2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build CollectionTestObjIndex
@@ -1244,7 +1247,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"CollectionTestObjIndex"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumValueType
@@ -1263,7 +1266,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"NumValueType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumSymbolLocation
@@ -1282,7 +1285,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"NumSymbolLocation"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build TextCharSearchType
@@ -1301,7 +1304,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"TextCharSearchType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build DecimalSeparatorSymbolsSpec
@@ -1323,7 +1326,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"DecimalSeparatorSymbolsSpec"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build ReplacementString
@@ -1345,7 +1348,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"ReplacementString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build RemainderString
@@ -1367,7 +1370,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"RemainderString"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundRuneArrayChars
@@ -1389,7 +1392,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"FoundRuneArrayChars"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Trailing Title Marquee
@@ -1417,7 +1420,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Bottom-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title # 2
@@ -1427,7 +1430,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Bottom-Title Line 2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler =======
@@ -1447,22 +1450,12 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		1,
 		"")
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Final Output"))
 
-	if err != nil {
-		return strBuilder, err
-	}
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

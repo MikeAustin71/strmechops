@@ -384,6 +384,12 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  numStrParseResults  *CharSearchNumStrParseResultsDto
 //     - A pointer to an instance of
 //       CharSearchNumStrParseResultsDto instance. Formatted
@@ -427,15 +433,6 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'numStrParseResults' . This formatted text can them be used
-//       for text displays, file output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -447,12 +444,11 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //       attached at the beginning of the error message.
 //
 func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	numStrParseResults *CharSearchNumStrParseResultsDto,
 	displayFunctionChain bool,
 	printDetail bool,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if searchNumStrParseResultsNanobot.lock == nil {
 		searchNumStrParseResultsNanobot.lock = new(sync.Mutex)
@@ -466,10 +462,6 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -478,9 +470,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		"")
 
 	if err != nil {
-
-		return strBuilder, err
-
+		return err
 	}
 
 	if numStrParseResults == nil {
@@ -489,8 +479,19 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"ERROR: Input parameter 'numStrParseResults' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	strBuilder.Grow(1024)
 
 	// Total available Length of Output Line
 	const maxLineLen = 79
@@ -514,7 +515,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"1-Column Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Blank Line
@@ -541,7 +542,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	txtStrParam :=
@@ -556,7 +557,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 				"Title Line 2"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 	}
@@ -568,7 +569,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line  4 Date/Time
@@ -582,7 +583,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Top-Title Line 4"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -634,7 +635,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		ePrefix.XCpy("Initial 2-Col Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	txtFormatCol.AddLineBlank(1, "")
@@ -657,7 +658,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 					""))
 
 			if err != nil {
-				return strBuilder, err
+				return err
 			}
 
 		} else {
@@ -704,7 +705,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Build FoundNumericDigits"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundDecimalSeparatorSymbols
@@ -715,7 +716,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Build FoundDecimalSeparatorSymbols"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundIntegerDigits
@@ -726,7 +727,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Build FoundIntegerDigits"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build FoundDecimalDigits
@@ -737,7 +738,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Build FoundDecimalDigits"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumSignValue
@@ -753,7 +754,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Build NumSignValue"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumValueType
@@ -770,10 +771,8 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 			"Build NumValueType"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
-
-	var strBuilder2 strings.Builder
 
 	if printDetail {
 
@@ -795,73 +794,46 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 				"Build RemainderString"))
 
 		if err != nil {
-			return strBuilder, err
+			return err
 		}
 
 		// Build DecimalSeparatorSearchResults
 
-		strBuilder2,
-			err = txtFormatCol.BuildText(
-			ePrefix.XCpy("Break Build DecimalSeparatorSearchResults"))
-
-		if err != nil {
-			return strBuilder, err
-		}
-
-		strBuilder.WriteString(strBuilder2.String())
-		strBuilder2.Reset()
-		txtFormatCol.EmptyFormatterCollection()
-
-		strBuilder2,
-			err = numStrParseResults.DecimalSeparatorSearchResults.
+		err = numStrParseResults.DecimalSeparatorSearchResults.
 			GetParameterTextListing(
+				strBuilder,
 				true,
 				ePrefix.XCpy(
 					"numStrParseResults"))
 
 		if err != nil {
 
-			return strBuilder, err
+			return err
 		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		// Reset to Empty
-		strBuilder2.Reset()
 
 		// Build NegativeNumberSymbolSearchResults
-		strBuilder2,
-			err = numStrParseResults.NegativeNumberSymbolSearchResults.
+		err = numStrParseResults.NegativeNumberSymbolSearchResults.
 			GetParameterTextListing(
+				strBuilder,
 				ePrefix.XCpy(
 					"numStrParseResults"))
 
 		if err != nil {
 
-			return strBuilder, err
+			return err
 		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		// Reset to Empty
-		strBuilder2.Reset()
 
 		// Build ParsingTerminatorSearchResults
-		strBuilder2,
-			err = numStrParseResults.ParsingTerminatorSearchResults.
+		err = numStrParseResults.ParsingTerminatorSearchResults.
 			GetParameterTextListing(
+				strBuilder,
 				ePrefix.XCpy(
 					"numStrParseResults"))
 
 		if err != nil {
 
-			return strBuilder, err
+			return err
 		}
-
-		strBuilder.WriteString(strBuilder2.String())
-
-		// Reset to Empty
-		strBuilder2.Reset()
 
 	}
 
@@ -922,20 +894,16 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		2,
 		"")
 
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

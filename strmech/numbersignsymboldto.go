@@ -434,7 +434,7 @@ func (nSignSymbol *NumberSignSymbolDto) EqualNumberSignRunes(
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
-// or displayed within number strings.
+// displayed within number strings.
 //      Example: '123' is assumed to be a positive value. The
 //               plus sign is implied or 'implicit'.
 //
@@ -734,7 +734,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsEmpty() bool {
 //  hostRunes                  []rune
 //     - An array of runes. This rune array will be searched to
 //       determine if the leading number sign symbol is present in
-//       the array beginning at the 'hostStartIndex.
+//       the array beginning at the 'hostStartIndex'.
 //
 //       If 'hostRunes' is a zero length array, this method will
 //       return 'false'.
@@ -850,7 +850,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsNumSignSymbolFoundInNumber() bool {
 //  hostRunes                  []rune
 //     - An array of runes. This rune array will be searched to
 //       determine if the trailing number sign symbol is present in
-//       the array beginning at the 'hostStartIndex.
+//       the array beginning at the 'hostStartIndex'.
 //
 //       If 'hostRunes' is a zero length array, this method will
 //       return 'false'.
@@ -1089,7 +1089,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 // Number Sign Symbols are usually positioned before the numeric
 // value ('USA Example: +25') or after the numeric value ('EU
 // Example 25-). However, there are cases where the number sign
-// is positioned before and after the negative value. As as shown
+// is positioned before and after the negative value. As shown
 // above, the USA uses opening and closing parentheses to designate
 // a negative number "(55)".
 //
@@ -1107,7 +1107,7 @@ func (nSignSymbol *NumberSignSymbolDto) IsValidInstanceError(
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
-// or displayed within number strings.
+// displayed within number strings.
 //      Example: '123' is assumed to be a positive value. The
 //               plus sign is implied or 'implicit'.
 //
@@ -1278,7 +1278,7 @@ func (nSignSymbol NumberSignSymbolDto) New(
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
-// or displayed within number strings.
+// displayed within number strings.
 //      Example: '123' is assumed to be a positive value. The
 //               plus sign is implied or 'implicit'.
 //
@@ -1332,7 +1332,7 @@ func (nSignSymbol NumberSignSymbolDto) NewDefaultPositive() NumberSignSymbolDto 
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
-// or displayed within number strings.
+// displayed within number strings.
 //      Example: '123' is assumed to be a positive value. The
 //               plus sign is implied or 'implicit'.
 //
@@ -1399,7 +1399,7 @@ func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 // Number Sign Symbols are usually positioned before the numeric
 // value ('USA Example: +25') or after the numeric value ('EU
 // Example 25-). However, there are cases where the number sign
-// is positioned before and after the negative value. As as shown
+// is positioned before and after the negative value. As shown
 // above, the USA uses opening and closing parentheses to designate
 // a negative number "(55)".
 //
@@ -1417,7 +1417,7 @@ func (nSignSymbol *NumberSignSymbolDto) SetDefaultPositive() {
 // Implicit Number Sign Symbols are NOT visible or displayed in a
 // number string. Instead, the Number Sign Symbol is assumed or
 // implied. Implicit Number Sign Symbols are NEVER visible or
-// or displayed within number strings.
+// displayed within number strings.
 //      Example: '123' is assumed to be a positive value. The
 //               plus sign is implied or 'implicit'.
 //

@@ -350,6 +350,12 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  numStrKernel               *NumberStrKernel
 //     - A pointer to an instance of NumberStrKernel instance.
 //       Formatted text output will be generated listing the member
@@ -378,15 +384,6 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'numStrKernel' . This formatted text can them be used for
-//       screen displays, file output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -398,10 +395,9 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 //       attached at the beginning of the error message.
 //
 func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
+	strBuilder *strings.Builder,
 	numStrKernel *NumberStrKernel,
-	errPrefDto *ePref.ErrPrefixDto) (
-	strings.Builder,
-	error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if numStrKernelNanobot.lock == nil {
 		numStrKernelNanobot.lock = new(sync.Mutex)
@@ -415,10 +411,6 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(1024)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -427,10 +419,19 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 		"")
 
 	if err != nil {
-
-		return strBuilder, err
-
+		return err
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'strBuilder' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	strBuilder.Grow(256)
 
 	if numStrKernel == nil {
 
@@ -438,7 +439,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"ERROR: Input parameter 'numStrKernel' is a nil pointer!\n",
 			ePrefix.String())
 
-		return strBuilder, err
+		return err
 	}
 
 	// Total available Length of Output Line
@@ -475,7 +476,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"1-Column Setup"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Leading Title Marquee
@@ -496,7 +497,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Top-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line 2
@@ -506,7 +507,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Top-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title Line  3 Date/Time
@@ -520,7 +521,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Top-Title Line 2"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler Line '========='
@@ -555,7 +556,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Set 2-Column Params"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build Integer Digits
@@ -576,7 +577,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Integer Digits"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build Fractional Digits
@@ -597,7 +598,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Fractional Digits"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumericValueType
@@ -615,7 +616,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Numeric Value Type"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build NumberSign
@@ -633,7 +634,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Number Sign"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Build Is Non Zero Value
@@ -647,7 +648,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Is Non Zero Value"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Trailing Title Marquee
@@ -667,7 +668,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Bottom-Title Line 1"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Title # 2
@@ -677,7 +678,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 			"Top-Title Line 3"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
 	// Filler =======
@@ -689,22 +690,12 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 		2,
 		"")
 
-	var strBuilder2 strings.Builder
-
-	strBuilder2,
-		err = txtFormatCol.BuildText(
+	err = txtFormatCol.BuildText(
+		strBuilder,
 		ePrefix.XCpy(
 			"Final Text Output"))
 
-	if err != nil {
-		return strBuilder, err
-	}
-
-	strBuilder.WriteString(strBuilder2.String())
-
-	strBuilder2.Reset()
-
-	return strBuilder, err
+	return err
 }
 
 // ptr - Returns a pointer to a new instance of

@@ -676,6 +676,12 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -727,16 +733,6 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for the current
-//       instance of CharSearchNegativeNumberResultsDto. This
-//       formatted text can then be used for text displays, file
-//       output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -748,9 +744,8 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
 //       attached at the beginning of the error message.
 //
 func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextListing(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if negNumSearchResults.lock == nil {
 		negNumSearchResults.lock = new(sync.Mutex)
@@ -771,11 +766,12 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextL
 		"")
 
 	if err != nil {
-		return strings.Builder{}, err
+		return err
 	}
 
 	return charSearchNegNumResultsDtoNanobot{}.ptr().
 		getParameterTextListing(
+			strBuilder,
 			negNumSearchResults,
 			ePrefix.XCpy(
 				"negNumSearchResults->Parameter Listing"))
@@ -1119,11 +1115,11 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) String() string {
 		return errOut
 	}
 
-	var strBuilder strings.Builder
+	strBuilder := strings.Builder{}
 
-	strBuilder,
-		err = charSearchNegNumResultsDtoNanobot{}.ptr().
+	err = new(charSearchNegNumResultsDtoNanobot).
 		getParameterTextListing(
+			&strBuilder,
 			negNumSearchResults,
 			ePrefix.XCpy(
 				"negNumSearchResults->Parameter Listing"))
