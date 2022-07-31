@@ -172,7 +172,7 @@ func TestStrMech_Read_02(t *testing.T) {
 		n, err = s1.Read(p)
 
 		if err != nil && err != io.EOF {
-			fmt.Printf("Error returned by s1.Read(p). "+
+			t.Errorf("Error returned by s1.Read(p). "+
 				"Error='%v' \n", err.Error())
 			return
 		}
@@ -188,8 +188,11 @@ func TestStrMech_Read_02(t *testing.T) {
 	actualStr := b.String()
 
 	if expected != actualStr {
+
 		t.Errorf("Error: Expected StrOut='%v'. Instead, StrOut='%v' ",
 			expected, actualStr)
+
+		return
 	}
 
 	lenActual := len(actualStr)
@@ -197,7 +200,11 @@ func TestStrMech_Read_02(t *testing.T) {
 	if lenExpected != lenActual {
 		t.Errorf("Error: Expected bytes read ='%v'. Instead, bytes read='%v' ",
 			lenExpected, lenActual)
+
+		return
 	}
+
+	return
 }
 
 func TestStrMech_Read_03(t *testing.T) {

@@ -4366,12 +4366,29 @@ func (sMech StrMech) Read(p []byte) (n int, err error) {
 		"StrMech.Read()",
 		"")
 
-	return strMechElectron{}.ptr().
+	lenStr := len(sMech.stringData)
+
+	lenP := len(p)
+
+	if lenP < lenStr {
+		n = 0
+		err = fmt.Errorf("%v\n"+
+			"Error: Length of input parameter 'p' is invalid!\n"+
+			"Length of 'p' is less then length of 'sMech.stringData'.\n"+
+			"Increase the size of 'p'.\n",
+			ePrefix.String())
+
+		return n, err
+	}
+
+	n,
+		err = new(strMechElectron).
 		readBytes(
 			&sMech,
 			p,
 			&ePrefix)
 
+	return n, err
 }
 
 // ReadStringFromBytes - Receives a byte array and retrieves a string. The beginning of
@@ -7112,7 +7129,7 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 //       parameter 'errPrefDto' (error prefix) will be prefixed or
 //       attached at the beginning of the error message.
 //
-func (sMech StrMech) Write(p []byte) (n int, err error) {
+func (sMech *StrMech) Write(p []byte) (n int, err error) {
 
 	if sMech.stringDataMutex == nil {
 		sMech.stringDataMutex = new(sync.Mutex)
@@ -7128,7 +7145,7 @@ func (sMech StrMech) Write(p []byte) (n int, err error) {
 
 	return strMechElectron{}.ptr().
 		write(
-			&sMech,
+			sMech,
 			p,
 			&ePrefix)
 }
