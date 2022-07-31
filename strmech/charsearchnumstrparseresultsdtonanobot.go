@@ -491,7 +491,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		return err
 	}
 
-	strBuilder.Grow(1024)
+	strBuilder.Grow(512)
 
 	// Total available Length of Output Line
 	const maxLineLen = 79
@@ -617,13 +617,11 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		txtStrParam = "SearchResultsName is EMPTY!"
 	}
 
-	err = txtFormatCol.CfgLine2Col(
+	err = txtFormatCol.SetStdFormatParamsLine2Col(
 		" ",
-		"SearchResultsName",
 		maxLabelFieldLen,
 		TxtJustify.Right(),
 		colonSpace,
-		txtStrParam,
 		-1,
 		TxtJustify.Left(),
 		"",
@@ -631,8 +629,34 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		"",
 		maxLineLen,
 		true,
-		true,
-		ePrefix.XCpy("Initial 2-Col Setup"))
+		ePrefix.XCpy(
+			"Set 2-Column Params"))
+
+	//err = txtFormatCol.CfgLine2Col(
+	//	" ",
+	//	"SearchResultsName",
+	//	maxLabelFieldLen,
+	//	TxtJustify.Right(),
+	//	colonSpace,
+	//	txtStrParam,
+	//	-1,
+	//	TxtJustify.Left(),
+	//	"",
+	//	false,
+	//	"",
+	//	maxLineLen,
+	//	true,
+	//	true,
+	//	ePrefix.XCpy("Initial 2-Col Setup"))
+
+	if err != nil {
+		return err
+	}
+	err = txtFormatCol.AddLine2Col(
+		"SearchResultsName",
+		txtStrParam,
+		ePrefix.XCpy(
+			"Build FoundNumericDigits"))
 
 	if err != nil {
 		return err
@@ -694,6 +718,8 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 				false)
 
 		}
+
+		txtFormatCol.AddLineBlank(1, "")
 
 	}
 
@@ -904,22 +930,4 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	}
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// charSearchNegNumResultsDtoNanobot.
-//
-func (searchNumStrParseResultsNanobot charSearchNumStrParseResultsDtoNanobot) ptr() *charSearchNumStrParseResultsDtoNanobot {
-
-	if searchNumStrParseResultsNanobot.lock == nil {
-		searchNumStrParseResultsNanobot.lock = new(sync.Mutex)
-	}
-
-	searchNumStrParseResultsNanobot.lock.Lock()
-
-	defer searchNumStrParseResultsNanobot.lock.Unlock()
-
-	return &charSearchNumStrParseResultsDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }

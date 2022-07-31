@@ -748,7 +748,28 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineColumnsWithDto(
 					actualDateTimeFormat)
 		} else {
 
-			columnText = lineCols.TextFieldsContent[i].TextFieldString
+			var txtLabelSpec TextFieldSpecLabel
+
+			txtLabelSpec,
+				err = TextFieldSpecLabel{}.NewTextLabel(
+				lineCols.TextFieldsContent[i].TextFieldString,
+				lineCols.FmtParameters.FieldFormatParams[i].FieldLength,
+				lineCols.FmtParameters.FieldFormatParams[i].FieldJustify,
+				ePrefix.XCpy(
+					"txtLabelSpec<-labelText"))
+
+			if err != nil {
+				return err
+			}
+
+			columnText,
+				err = txtLabelSpec.GetFormattedText(
+				ePrefix.XCpy(
+					"columnText<-txtLabelSpec"))
+
+			if err != nil {
+				return err
+			}
 
 		}
 
@@ -760,9 +781,9 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineColumnsWithDto(
 			lenTextStr:                 len(columnText),
 			rightMarginStr:             lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr,
 			lenRightMarginStr:          len(lineCols.FmtParameters.FieldFormatParams[i].RightMarginStr),
-			turnLineTerminationOff:     lineCols.FmtParameters.TurnLineTerminationOff,
-			lineTerminatorStr:          lineCols.FmtParameters.LineTerminator,
-			lenLineTerminatorStr:       len(lineCols.FmtParameters.LineTerminator),
+			turnLineTerminationOff:     true,
+			lineTerminatorStr:          "",
+			lenLineTerminatorStr:       0,
 			maxLineLength:              lineCols.FmtParameters.MaxLineLength,
 			currentLineLength:          0,
 			turnAutoLineLengthBreaksOn: lineCols.FmtParameters.TurnAutoLineLengthBreaksOn,
@@ -784,6 +805,17 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineColumnsWithDto(
 
 		txtBuilderParams.strBuilder = nil
 
+	}
+
+	if lineCols.FmtParameters.TurnLineTerminationOff == false {
+
+		lineTermStr := "\n"
+
+		if len(lineCols.FmtParameters.LineTerminator) > 0 {
+			lineTermStr = lineCols.FmtParameters.LineTerminator
+		}
+
+		strBuilder.WriteString(lineTermStr)
 	}
 
 	return err

@@ -289,7 +289,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyIn(
 		return err
 	}
 
-	return charSearchNumStrParseResultsDtoNanobot{}.ptr().
+	return new(charSearchNumStrParseResultsDtoNanobot).
 		copyIn(
 			searchNumStrParseResults,
 			incomingNumStrParseResults,
@@ -407,7 +407,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyOut(
 		return CharSearchNumStrParseResultsDto{}, err
 	}
 
-	return charSearchNumStrParseResultsDtoNanobot{}.ptr().
+	return new(charSearchNumStrParseResultsDtoNanobot).
 		copyOut(
 			searchNumStrParseResults,
 			ePrefix.XCpy(
@@ -724,7 +724,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) String() string
 
 	strBuilder := strings.Builder{}
 
-	err = charSearchNumStrParseResultsDtoNanobot{}.ptr().
+	err = new(charSearchNumStrParseResultsDtoNanobot).
 		getParameterTextListing(
 			&strBuilder,
 			searchNumStrParseResults,

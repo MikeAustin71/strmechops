@@ -155,7 +155,7 @@ func (txtStrBuildr *TextStrBuilder) BuildText(
 	}
 
 	lenTextFormatterCol :=
-		txtFmtSpecs.GetLengthFormatterCollection()
+		len(txtFmtSpecs.fmtCollection)
 
 	if lenTextFormatterCol == 0 {
 
