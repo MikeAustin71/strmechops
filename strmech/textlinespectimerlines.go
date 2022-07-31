@@ -906,11 +906,13 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText(
 		return formattedText, err
 	}
 
-	formattedText,
+	strBuilder := strings.Builder{}
+
+	_,
 		_,
-		_,
-		err = textLineSpecTimerLinesMolecule{}.ptr().
+		err = new(textLineSpecTimerLinesMolecule).
 		getFormattedText(
+			&strBuilder,
 			txtSpecTimerLines,
 			ePrefix)
 
@@ -1202,17 +1204,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetSingleLineLength() (
 
 	defer txtSpecTimerLines.lock.Unlock()
 	var err error
-	_,
-		maxSingleLineLen,
+
+	strBuilder := strings.Builder{}
+
+	maxSingleLineLen,
 		_,
-		err = textLineSpecTimerLinesMolecule{}.ptr().
+		err = new(textLineSpecTimerLinesMolecule).
 		getFormattedText(
+			&strBuilder,
 			txtSpecTimerLines,
 			nil)
 
 	if err != nil {
 		maxSingleLineLen = 0
 	}
+
+	strBuilder.Reset()
 
 	return maxSingleLineLen
 }
@@ -1481,17 +1488,22 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetTotalLinesLength() (
 	defer txtSpecTimerLines.lock.Unlock()
 
 	var err error
+
+	strBuilder := strings.Builder{}
+
 	_,
-		_,
 		totalLinesLength,
-		err = textLineSpecTimerLinesMolecule{}.ptr().
+		err = new(textLineSpecTimerLinesMolecule).
 		getFormattedText(
+			&strBuilder,
 			txtSpecTimerLines,
 			nil)
 
 	if err != nil {
 		totalLinesLength = 0
 	}
+
+	strBuilder.Reset()
 
 	return totalLinesLength
 }
@@ -3035,13 +3047,13 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 
 	if txtSpecTimerLines.textLineReader == nil {
 
-		var formattedText string
+		strBuilder := strings.Builder{}
 
-		formattedText,
+		_,
 			_,
-			_,
-			err = textLineSpecTimerLinesMolecule{}.ptr().
+			err = new(textLineSpecTimerLinesMolecule).
 			getFormattedText(
+				&strBuilder,
 				txtSpecTimerLines,
 				ePrefix.XCpy("txtSpecTimerLines"))
 
@@ -3050,7 +3062,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 		}
 
 		txtSpecTimerLines.textLineReader =
-			strings.NewReader(formattedText)
+			strings.NewReader(strBuilder.String())
 
 		if txtSpecTimerLines.textLineReader == nil {
 			err = fmt.Errorf("%v\n"+
@@ -3061,6 +3073,8 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 
 			return n, err
 		}
+
+		strBuilder.Reset()
 	}
 
 	n,
@@ -5924,23 +5938,28 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 		"TextLineSpecTimerLines.GetFormattedText()",
 		"")
 
-	var formattedText string
+	strBuilder := strings.Builder{}
 	var err error
 
-	formattedText,
+	_,
 		_,
-		_,
-		err = textLineSpecTimerLinesMolecule{}.ptr().
+		err = new(textLineSpecTimerLinesMolecule).
 		getFormattedText(
+			&strBuilder,
 			&txtSpecTimerLines,
 			&ePrefix)
 
 	if err != nil {
-		formattedText = fmt.Sprintf("%v\n",
-			err.Error())
+
+		strBuilder.Reset()
+
+		strBuilder.WriteString(
+			fmt.Sprintf("%v\n",
+				err.Error()))
+
 	}
 
-	return formattedText
+	return strBuilder.String()
 }
 
 // TextBuilder - Configures the lines of text produced by this
@@ -5954,6 +5973,12 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -6006,13 +6031,6 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 //
 // Return Values
 //
-//  strings.Builder
-//    - If this method completes successfully, an instance of
-//      strings.Builder will be returned containing the line of
-//      text produced by the current instance of
-//      TextLineSpecTimerLines.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -6024,9 +6042,8 @@ func (txtSpecTimerLines TextLineSpecTimerLines) String() string {
 //       the beginning of the error message.
 //
 func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if txtSpecTimerLines.lock == nil {
 		txtSpecTimerLines.lock = new(sync.Mutex)
@@ -6039,10 +6056,6 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(512)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -6050,37 +6063,28 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) TextBuilder(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	var formattedTxtStr string
+	if strBuilder == nil {
 
-	formattedTxtStr,
-		_,
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	_,
 		_,
 		err = textLineSpecTimerLinesMolecule{}.ptr().
 		getFormattedText(
+			strBuilder,
 			txtSpecTimerLines,
 			ePrefix)
 
-	if err != nil {
-		return strBuilder, err
-	}
-
-	var err2 error
-
-	_,
-		err2 = strBuilder.WriteString(formattedTxtStr)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
-			"%v\n",
-			ePrefix.String(),
-			err2.Error())
-	}
-
-	return strBuilder, err
+	return err
 }
 
 // TextLineSpecName - returns a string specifying the name

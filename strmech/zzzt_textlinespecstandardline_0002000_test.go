@@ -421,14 +421,14 @@ func TestTextLineSpecStandardLine_Read_000300(t *testing.T) {
 		return
 	}
 
-	var formattedTxtStr string
 	stdLineMolecule := textLineSpecStandardLineMolecule{}
+	sb := strings.Builder{}
 
-	formattedTxtStr,
-		_,
+	_,
 		_,
 		err =
 		stdLineMolecule.getFormattedText(
+			&sb,
 			&stdLine01,
 			ePrefix.XCpy("stdLine01"))
 
@@ -441,7 +441,9 @@ func TestTextLineSpecStandardLine_Read_000300(t *testing.T) {
 	p = make([]byte, 0)
 
 	stdLine01.textLineReader =
-		strings.NewReader(formattedTxtStr)
+		strings.NewReader(sb.String())
+
+	sb.Reset()
 
 	n,
 		err = txtSpecAtom.readBytes(
@@ -2154,10 +2156,14 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 
 	stdLine01 := TextLineSpecStandardLine{}
 
-	_,
-		_ = stdLine01.TextBuilder(
+	sb := strings.Builder{}
+
+	_ = stdLine01.TextBuilder(
+		&sb,
 		ePrefix.XCpy(
 			"stdLine01"))
+
+	sb.Reset()
 
 	expectedString := "        How Now Brown Cow!       " +
 		"\n"
@@ -2180,10 +2186,8 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 			[]rune(expectedString),
 			true)
 
-	sb := strings.Builder{}
-
-	sb,
-		err = stdLine02.TextBuilder(
+	err = stdLine02.TextBuilder(
+		&sb,
 		ePrefix.XCpy(
 			""))
 
@@ -2237,8 +2241,8 @@ func TestTextLineSpecStandardLine_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	sb,
-		err = stdLine04.TextBuilder(
+	err = stdLine04.TextBuilder(
+		&sb,
 		textLineSpecStandardLineElectron{})
 
 	if err == nil {

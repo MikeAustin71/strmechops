@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 	"time"
 )
@@ -548,10 +549,12 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 
 	txtTimerLinesMolecule := textLineSpecTimerLinesMolecule{}
 
+	sb := strings.Builder{}
+
 	_,
 		_,
-		_,
 		err = txtTimerLinesMolecule.getFormattedText(
+		&sb,
 		timerLines01,
 		ePrefix.XCpy(
 			"timerLines01"))
@@ -562,10 +565,12 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 		return
 	}
 
+	sb.Reset()
+
 	_,
 		_,
-		_,
 		err = txtTimerLinesMolecule.getFormattedText(
+		&sb,
 		nil,
 		ePrefix.XCpy(
 			"timerLines01-Test#2"))
@@ -584,10 +589,12 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 
 	timerLines02 := TextLineSpecTimerLines{}
 
+	sb.Reset()
+
 	_,
 		_,
-		_,
 		err = txtTimerLinesMolecule.getFormattedText(
+		&sb,
 		&timerLines02,
 		ePrefix.XCpy(
 			"timerLines02-Test#1"))
@@ -643,10 +650,12 @@ func TestTextLineSpecTimerLinesMolecule_getFormattedText_000100(t *testing.T) {
 
 	timerLinesMolecule02 := textLineSpecTimerLinesMolecule{}
 
+	sb.Reset()
+
 	_,
 		_,
-		_,
 		err = timerLinesMolecule02.getFormattedText(
+		&sb,
 		timerLines04,
 		ePrefix.XCpy(
 			"timerLines04-Test#1"))

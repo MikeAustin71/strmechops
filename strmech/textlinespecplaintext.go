@@ -5219,7 +5219,7 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //
 // Input Parameters
 //
-//  sBuilder                   strings.Builder
+//  strBuilder                 *strings.Builder
 //    - An instance of strings.Builder. The line of text produced
 //      by the current instance of TextLineSpecPlainText will be
 //      written to 'sBuilder'.
@@ -5274,13 +5274,6 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //
 // Return Values
 //
-//  strings.Builder
-//    - If the method completes successfully, an instance of
-//      strings.Builder will be returned containing the line of
-//      formatted text produced by the current instance of
-//      TextLineSpecPlainText.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -5292,9 +5285,8 @@ func (plainTextLine TextLineSpecPlainText) String() string {
 //       the beginning of the error message.
 //
 func (plainTextLine *TextLineSpecPlainText) TextBuilder(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if plainTextLine.lock == nil {
 		plainTextLine.lock = new(sync.Mutex)
@@ -5307,10 +5299,6 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(256)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -5318,7 +5306,17 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	var formattedTxtStr string
@@ -5330,7 +5328,21 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 			ePrefix.XCpy("plainTextLine"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
+	}
+
+	lenFormattedText := len(formattedTxtStr)
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		lenFormattedText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
 	}
 
 	var err2 error
@@ -5346,7 +5358,7 @@ func (plainTextLine *TextLineSpecPlainText) TextBuilder(
 			err2.Error())
 	}
 
-	return strBuilder, err
+	return err
 }
 
 // TextLineSpecName - returns a string specifying the name

@@ -2354,17 +2354,17 @@ func (stdLine *TextLineSpecStandardLine) GetFormattedText(
 		return "", err
 	}
 
-	var formattedText string
+	strBuilder := strings.Builder{}
 
-	formattedText,
-		_,
+	_,
 		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
+			&strBuilder,
 			stdLine,
 			ePrefix)
 
-	return formattedText, err
+	return strBuilder.String(), err
 }
 
 // GetNewLineChars - Returns a string representing
@@ -2545,17 +2545,21 @@ func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 	var singleLineLength int
 	var err error
 
-	_,
-		singleLineLength,
+	strBuilder := strings.Builder{}
+
+	singleLineLength,
 		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
+			&strBuilder,
 			stdLine,
 			nil)
 
 	if err != nil {
 		singleLineLength = 0
 	}
+
+	strBuilder.Reset()
 
 	return singleLineLength
 }
@@ -2950,11 +2954,13 @@ func (stdLine *TextLineSpecStandardLine) GetTotalLinesLength() int {
 	var totalLinesLength int
 	var err error
 
+	strBuilder := strings.Builder{}
+
 	_,
-		_,
 		totalLinesLength,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
+			&strBuilder,
 			stdLine,
 			nil)
 
@@ -5989,13 +5995,13 @@ func (stdLine *TextLineSpecStandardLine) Read(
 
 	if stdLine.textLineReader == nil {
 
-		var formattedText string
+		strBuilder := strings.Builder{}
 
-		formattedText,
-			_,
+		_,
 			_,
 			err = textLineSpecStandardLineMolecule{}.ptr().
 			getFormattedText(
+				&strBuilder,
 				stdLine,
 				ePrefix.XCpy("stdLine"))
 
@@ -6004,7 +6010,7 @@ func (stdLine *TextLineSpecStandardLine) Read(
 		}
 
 		stdLine.textLineReader =
-			strings.NewReader(formattedText)
+			strings.NewReader(strBuilder.String())
 
 		if stdLine.textLineReader == nil {
 			err = fmt.Errorf("%v\n"+
@@ -6015,6 +6021,8 @@ func (stdLine *TextLineSpecStandardLine) Read(
 
 			return n, err
 		}
+
+		strBuilder.Reset()
 	}
 
 	n,
@@ -7342,20 +7350,24 @@ func (stdLine TextLineSpecStandardLine) String() string {
 		"TextLineSpecStandardLine.GetFormattedText()",
 		"")
 
-	var formattedText string
-	var err error
+	strBuilder := strings.Builder{}
 
-	formattedText,
-		_,
+	var err error
+	var formattedText string
+
+	_,
 		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
+			&strBuilder,
 			&stdLine,
 			ePrefix.XCpy("stdLine"))
 
 	if err != nil {
 		formattedText = fmt.Sprintf("%v\n",
 			err.Error())
+	} else {
+		formattedText = strBuilder.String()
 	}
 
 	return formattedText
@@ -7372,6 +7384,12 @@ func (stdLine TextLineSpecStandardLine) String() string {
 // ----------------------------------------------------------------
 //
 // Input Parameters
+//
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
 //
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
@@ -7424,13 +7442,6 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //
 // Return Values
 //
-//  strings.Builder
-//    - If the method completes successfully, an instance of
-//      strings.Builder will be returned containing the line of
-//      formatted text produced by the current instance of
-//      TextLineSpecStandardLine.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -7442,9 +7453,8 @@ func (stdLine TextLineSpecStandardLine) String() string {
 //       the beginning of the error message.
 //
 func (stdLine *TextLineSpecStandardLine) TextBuilder(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if stdLine.lock == nil {
 		stdLine.lock = new(sync.Mutex)
@@ -7457,10 +7467,6 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(256)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -7468,37 +7474,32 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	var formattedTxtStr string
+	if strBuilder == nil {
 
-	formattedTxtStr,
-		_,
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	_,
 		_,
 		err = textLineSpecStandardLineMolecule{}.ptr().
 		getFormattedText(
+			strBuilder,
 			stdLine,
 			ePrefix.XCpy("stdLine"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
 	}
 
-	var err2 error
-
-	_,
-		err2 = strBuilder.WriteString(formattedTxtStr)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned by sBuilder.WriteString(formattedTxtStr)\n"+
-			"%v\n",
-			ePrefix.String(),
-			err2.Error())
-	}
-
-	return strBuilder, err
+	return err
 }
 
 // TextLineSpecName - returns a string specifying the name

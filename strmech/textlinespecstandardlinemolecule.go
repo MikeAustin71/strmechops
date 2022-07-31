@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
 )
 
@@ -205,6 +206,12 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  txtStdLine                 *TextLineSpecStandardLine
 //     - A pointer to an instance of TextLineSpecStandardLine. The
 //       member variables encapsulated by this instance will be
@@ -228,12 +235,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 // ------------------------------------------------------------------------
 //
 // Return Values
-//
-//  formattedText              string
-//     - If this method completes successfully, a string of
-//       formatted text will be generated from the data provided by
-//       input parameter 'txtStdLine'.
-//
 //
 //  singleLineLength           int
 //     - The length of a single text line including trailing new
@@ -259,9 +260,9 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) equal(
 //       attached at the beginning of the error message.
 //
 func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
+	strBuilder *strings.Builder,
 	txtStdLine *TextLineSpecStandardLine,
 	errPrefDto *ePref.ErrPrefixDto) (
-	formattedText string,
 	singleLineLength int,
 	totalLinesLength int,
 	err error) {
@@ -276,8 +277,6 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	formattedText = ""
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -286,7 +285,17 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 		"")
 
 	if err != nil {
-		return formattedText, singleLineLength, totalLinesLength, err
+		return singleLineLength, totalLinesLength, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return singleLineLength, totalLinesLength, err
 	}
 
 	if txtStdLine == nil {
@@ -294,7 +303,7 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 			"Error: Input parameter 'txtStdLine' is a nil pointer!\n",
 			ePrefix.String())
 
-		return formattedText, singleLineLength, totalLinesLength, err
+		return singleLineLength, totalLinesLength, err
 	}
 
 	_,
@@ -307,12 +316,12 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 	// If Text Fields Array Length has a zero length,
 	// an error is returned.
 	if err != nil {
-		return formattedText, singleLineLength, totalLinesLength, err
+		return singleLineLength, totalLinesLength, err
 	}
 
 	lenTextFields := len(txtStdLine.textFields)
 
-	var lineStr, tempStr string
+	sb2 := strings.Builder{}
 
 	for i := 0; i < lenTextFields; i++ {
 
@@ -324,37 +333,40 @@ func (txtStdLineMolecule *textLineSpecStandardLineMolecule) getFormattedText(
 					"txtStdLine.textFields[i] == nil"),
 				i)
 
-			return formattedText, singleLineLength, totalLinesLength, err
+			return singleLineLength, totalLinesLength, err
 		}
 
-		tempStr,
-			err = txtStdLine.textFields[i].GetFormattedText(
+		err = txtStdLine.textFields[i].TextBuilder(
+			&sb2,
 			ePrefix.XCpy(
 				fmt.Sprintf(
 					"txtStdLine.textFields[%v]",
 					i)))
 
 		if err != nil {
-			return formattedText, singleLineLength, totalLinesLength, err
+			return singleLineLength, totalLinesLength, err
 		}
-
-		lineStr += tempStr
 
 	}
 
 	if txtStdLine.turnLineTerminatorOff == false {
-		lineStr += string(txtStdLine.newLineChars)
+		sb2.WriteString(string(txtStdLine.newLineChars))
 	}
 
-	singleLineLength = len(lineStr)
+	singleLineLength = sb2.Len()
+
+	totalLinesLength = singleLineLength * txtStdLine.numOfStdLines
+
+	strBuilder.Grow(
+		totalLinesLength + 16)
 
 	for j := 0; j < txtStdLine.numOfStdLines; j++ {
-		formattedText += lineStr
+		strBuilder.WriteString(sb2.String())
 	}
 
-	totalLinesLength = len(formattedText)
+	sb2.Reset()
 
-	return formattedText, singleLineLength, totalLinesLength, err
+	return singleLineLength, totalLinesLength, err
 }
 
 // ptr - Returns a pointer to a new instance of

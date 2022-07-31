@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 )
 
@@ -1620,10 +1621,12 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) 
 
 	stdLineMolecule := textLineSpecStandardLineMolecule{}
 
+	sb := strings.Builder{}
+
 	_,
 		_,
-		_,
 		err := stdLineMolecule.getFormattedText(
+		&sb,
 		nil,
 		ePrefix.XCpy(
 			"txtStdLine is 'nil'"))
@@ -1655,10 +1658,12 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000100(t *testing.T) 
 
 	stdLine01.numOfStdLines = -5
 
+	sb.Reset()
+
 	_,
 		_,
-		_,
 		err = stdLineMolecule.getFormattedText(
+		&sb,
 		&stdLine01,
 		ePrefix.XCpy(
 			"txtStdLine is 'nil'"))
@@ -1700,10 +1705,12 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000200(t *testing.T) 
 
 	stdLine01.textFields = nil
 
+	sb := strings.Builder{}
+
 	_,
 		_,
-		_,
 		err = stdLineMolecule.getFormattedText(
+		&sb,
 		&stdLine01,
 		ePrefix.XCpy(
 			"stdLine01 is invalid"))
@@ -1736,10 +1743,12 @@ func TestTextLineSpecStandardLineMolecule_getFormattedText_000200(t *testing.T) 
 
 	stdLine02.textFields[1] = nil
 
+	sb.Reset()
+
 	_,
 		_,
-		_,
 		err = stdLineMolecule.getFormattedText(
+		&sb,
 		&stdLine01,
 		ePrefix.XCpy(
 			"stdLine02 is invalid"))

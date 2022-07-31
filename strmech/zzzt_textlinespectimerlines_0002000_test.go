@@ -425,14 +425,14 @@ func TestTextLineSpecTimerLines_Read_000300(t *testing.T) {
 		return
 	}
 
-	var formattedTxtStr string
 	timerLinesMolecule := textLineSpecTimerLinesMolecule{}
+	sb := strings.Builder{}
 
-	formattedTxtStr,
-		_,
+	_,
 		_,
 		err =
 		timerLinesMolecule.getFormattedText(
+			&sb,
 			timerLines01,
 			ePrefix.XCpy("timerLines01"))
 
@@ -445,7 +445,7 @@ func TestTextLineSpecTimerLines_Read_000300(t *testing.T) {
 	p = make([]byte, 0)
 
 	timerLines01.textLineReader =
-		strings.NewReader(formattedTxtStr)
+		strings.NewReader(sb.String())
 
 	n,
 		err = txtSpecAtom.readBytes(
@@ -3555,8 +3555,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	sb0 := strings.Builder{}
 
-	sb0,
-		err = timerLines02.TextBuilder(
+	err = timerLines02.TextBuilder(
+		&sb0,
 		ePrefix.XCpy(
 			"timerLines02"))
 
@@ -3586,8 +3586,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	sb0.Reset()
 
-	sb0,
-		err = timerLines03.TextBuilder(
+	err = timerLines03.TextBuilder(
+		&sb0,
 		ePrefix.XCpy(
 			"timerLines03"))
 
@@ -3628,8 +3628,8 @@ func TestTextLineSpecTimerLines_TextBuilder_000100(t *testing.T) {
 
 	sb0.Reset()
 
-	sb0,
-		err = timerLines04.TextBuilder(
+	err = timerLines04.TextBuilder(
+		&sb0,
 		StrMech{})
 
 	if err == nil {

@@ -26,6 +26,12 @@ type textLineSpecTimerLinesMolecule struct {
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  txtTimerLines              *TextLineSpecTimerLines
 //     - A pointer to an instance of TextLineSpecTimerLines. The
 //       member variables encapsulated by this instance will be
@@ -54,12 +60,6 @@ type textLineSpecTimerLinesMolecule struct {
 //
 // Return Values
 //
-//  formattedText              string
-//     - If this method completes successfully, a string of
-//       formatted text will be generated from the data provided by
-//       input parameter 'txtTimerLines'.
-//
-//
 //  maxSingleLineLen           int
 //     - The maximum string length computed from analyzing all
 //       text lines returned as 'formattedText'. This length
@@ -84,9 +84,9 @@ type textLineSpecTimerLinesMolecule struct {
 //       attached at the beginning of the error message.
 //
 func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
+	strBuilder *strings.Builder,
 	txtTimerLines *TextLineSpecTimerLines,
 	errPrefDto *ePref.ErrPrefixDto) (
-	formattedText string,
 	maxSingleLineLen int,
 	totalLinesLen int,
 	err error) {
@@ -109,15 +109,27 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		"")
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' (string builder) is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return maxSingleLineLen, totalLinesLen, err
+	}
+
+	strBuilder.Grow(512)
 
 	if txtTimerLines == nil {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'txtTimerLines' is a nil pointer!\n",
 			ePrefix.String())
 
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	txtTimerLinesAtom := textLineSpecTimerLinesAtom{}
@@ -129,7 +141,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			ePrefix.XCpy("txtTimerLines"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	// Text Formatting Setup
@@ -160,7 +172,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 					"txtTimerLines.labelLeftMarginChars"))
 
 		if err != nil {
-			return formattedText, maxSingleLineLen, totalLinesLen, err
+			return maxSingleLineLen, totalLinesLen, err
 		}
 
 		_,
@@ -170,7 +182,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"First Line: txtLabelLeftFiller"))
 
 		if err != nil {
-			return formattedText, maxSingleLineLen, totalLinesLen, err
+			return maxSingleLineLen, totalLinesLen, err
 		}
 
 	}
@@ -184,7 +196,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			"txtDescLabel: txtTimerLines.startTimeLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	_,
@@ -195,7 +207,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				" - txtTimerLines.startTimeLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	txtLabelRightFiller,
@@ -206,7 +218,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			"First Line: txtTimerLines.labelRightMarginChars"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	_,
@@ -216,7 +228,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			"First Line: txtLabelRightFiller"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	startTimeStr := txtTimerLines.startTime.Format(
@@ -231,7 +243,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			"startTimeStr: txtOutputLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	_,
@@ -242,14 +254,10 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"txtOutputLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	var err2 error
-
-	sb := strings.Builder{}
-
-	sb.Grow(512)
 
 	stdLineStr = stdLine.String()
 
@@ -260,17 +268,17 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	}
 
 	_,
-		err2 = sb.WriteString(stdLineStr)
+		err2 = strBuilder.WriteString(stdLineStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
 			"Error returned by first standard line.\n"+
-			"sb.WriteString(stdLine.String())\n"+
+			"strBuilder.WriteString(stdLine.String())\n"+
 			"%v\n",
 			ePrefix.ZCtxEmpty().String(),
 			err2.Error())
 
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	stdLine.EmptyTextFields()
@@ -287,7 +295,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 
 		if err != nil {
 
-			return formattedText, maxSingleLineLen, totalLinesLen, err
+			return maxSingleLineLen, totalLinesLen, err
 
 		}
 	}
@@ -299,7 +307,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"txtTimerLines.endTimeLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	_,
@@ -310,7 +318,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"Add txtDescLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	_,
@@ -321,7 +329,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"Second Line: txtLabelRightFiller"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	endTimeStr := txtTimerLines.endTime.Format(
@@ -334,7 +342,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"endTimeStr"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	_,
@@ -345,7 +353,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"txtOutputLabel"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	stdLineStr = stdLine.String()
@@ -357,17 +365,17 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	}
 
 	_,
-		err2 = sb.WriteString(stdLineStr)
+		err2 = strBuilder.WriteString(stdLineStr)
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
 			"Error returned by second standard line.\n"+
-			"sb.WriteString(stdLine.String())\n"+
+			"strBuilder.WriteString(stdLine.String())\n"+
 			"%v\n",
 			ePrefix.ZCtxEmpty().String(),
 			err2.Error())
 
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	// Begin summary time duration lines
@@ -392,7 +400,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 			"Summary Line Left Margin"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	var timeDurationStrs []string
@@ -407,7 +415,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 				"Timer Summary Line Calculation"))
 
 	if err != nil {
-		return formattedText, maxSingleLineLen, totalLinesLen, err
+		return maxSingleLineLen, totalLinesLen, err
 	}
 
 	for i := 0; i < len(timeDurationStrs); i++ {
@@ -427,7 +435,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 							"txtTimerLines.labelLeftMarginChars"))
 
 				if err != nil {
-					return formattedText, maxSingleLineLen, totalLinesLen, err
+					return maxSingleLineLen, totalLinesLen, err
 				}
 
 				_,
@@ -437,7 +445,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 						"Summary Third Line-First Segment: txtLabelLeftFiller"))
 
 				if err != nil {
-					return formattedText, maxSingleLineLen, totalLinesLen, err
+					return maxSingleLineLen, totalLinesLen, err
 				}
 
 			}
@@ -451,7 +459,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 					"txtTimerLines.timeDurationLabel"))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 			_,
@@ -464,7 +472,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 							"txtDescLabel", i)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 			_,
@@ -478,7 +486,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 								"txtDescLabel", i+1)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 			txtOutputLabel,
@@ -493,7 +501,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 							"txtDescLabel", i+1)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 			_,
@@ -507,7 +515,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 								"txtDescLabel", i+1)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 		} else {
@@ -523,7 +531,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 								"txtDescLabel", i+1)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 			txtOutputLabel,
@@ -538,7 +546,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 							"txtOutputLabel", i+1, i)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 			_,
@@ -551,7 +559,7 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 							"txtOutputLabel", i+1, i)))
 
 			if err != nil {
-				return formattedText, maxSingleLineLen, totalLinesLen, err
+				return maxSingleLineLen, totalLinesLen, err
 			}
 
 		} // End of 'else'
@@ -565,27 +573,25 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		}
 
 		_,
-			err2 = sb.WriteString(stdLineStr)
+			err2 = strBuilder.WriteString(stdLineStr)
 
 		if err2 != nil {
 			err = fmt.Errorf("%v\n"+
 				"Error returned by summary line #%v .\n"+
-				"sb.WriteString(stdLine.String())\n"+
+				"strBuilder.WriteString(stdLine.String())\n"+
 				"%v\n",
 				ePrefix.ZCtxEmpty().String(),
 				i+1,
 				err2.Error())
 
-			return formattedText, maxSingleLineLen, totalLinesLen, err
+			return maxSingleLineLen, totalLinesLen, err
 		}
 
 	} // End of time duration strings for loop
 
-	formattedText = sb.String()
+	totalLinesLen = strBuilder.Len()
 
-	totalLinesLen = len(formattedText)
-
-	return formattedText, maxSingleLineLen, totalLinesLen, err
+	return maxSingleLineLen, totalLinesLen, err
 }
 
 // setTxtLineSpecTimerLines - Receives a pointer to an instance of
