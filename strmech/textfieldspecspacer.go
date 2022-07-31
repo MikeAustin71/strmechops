@@ -1846,9 +1846,8 @@ func (txtFieldSpacer *TextFieldSpecSpacer) String() string {
 //       the beginning of the error message.
 //
 func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if txtFieldSpacer.lock == nil {
 		txtFieldSpacer.lock = new(sync.Mutex)
@@ -1861,10 +1860,6 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(256)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -1872,7 +1867,17 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	var formattedTxtStr string
@@ -1885,7 +1890,21 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 				"txtFieldSpacer"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
+	}
+
+	lenFormattedText := len(formattedTxtStr)
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		lenFormattedText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
 	}
 
 	var err2 error
@@ -1901,7 +1920,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) TextBuilder(
 			err2.Error())
 	}
 
-	return strBuilder, err
+	return err
 }
 
 // TextFieldName - returns a string specifying the name of the Text

@@ -4074,9 +4074,9 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 
 	strBuilder2 := strings.Builder{}
 
-	strBuilder2,
-		err =
+	err =
 		txtFieldDateTimeTwo.TextBuilder(
+			&strBuilder2,
 			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 
@@ -4120,9 +4120,11 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 		return
 	}
 
-	strBuilder2,
-		err =
+	strBuilder2.Reset()
+
+	err =
 		txtFieldDateTimeTwo.TextBuilder(
+			&strBuilder2,
 			StrMech{})
 
 	if err == nil {
@@ -4181,9 +4183,9 @@ func TestTextFieldSpecDateTime_TextBuilder_000100(t *testing.T) {
 	strBuilder.Reset()
 	strBuilder2.Reset()
 
-	strBuilder2,
-		err =
+	err =
 		txtFieldDateTimeFour.TextBuilder(
+			&strBuilder2,
 			ePrefix.XCpy(
 				"txtFieldDateTimeFour-sb"))
 
@@ -4302,9 +4304,11 @@ func TestTextFieldSpecDateTime_TextBuilder_000200(t *testing.T) {
 	// trigger an error.
 	txtFieldDateTimeTwo.fieldLen = -999
 
-	_,
-		err =
+	strBuilder3 := strings.Builder{}
+
+	err =
 		txtFieldDateTimeTwo.TextBuilder(
+			&strBuilder3,
 			ePrefix.XCpy(
 				"txtFieldDateTimeTwo->sb"))
 

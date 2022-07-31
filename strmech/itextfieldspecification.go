@@ -32,5 +32,6 @@ type ITextFieldSpecification interface {
 	TextFieldName() string
 
 	TextBuilder(
-		errorPrefix interface{}) (strings.Builder, error)
+		strBuilder *strings.Builder,
+		errorPrefix interface{}) error
 }

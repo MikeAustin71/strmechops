@@ -4711,10 +4711,9 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 	}
 
 	sb := strings.Builder{}
-
-	sb,
-		err =
+	err =
 		txtFieldLabelOne.TextBuilder(
+			&sb,
 			ePrefix.XCpy(
 				"txtFieldLabelOne->sb"))
 
@@ -4756,9 +4755,9 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	sb,
-		err =
+	err =
 		txtFieldLabelOne.TextBuilder(
+			&sb,
 			StrMech{})
 
 	if err == nil {
@@ -4816,9 +4815,9 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	sb,
-		err =
+	err =
 		txtFieldLabelThree.TextBuilder(
+			&sb,
 			StrMech{})
 
 	if err == nil {
@@ -4839,9 +4838,9 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	txtFieldLabelThree.fieldLen = -999
 
-	sb,
-		err =
+	err =
 		txtFieldLabelThree.TextBuilder(
+			&sb,
 			ePrefix.XCpy(
 				"txtFieldLabelThree is invalid!"))
 
@@ -4874,9 +4873,9 @@ func TestTextFieldSpecLabel_TextBuilder_000100(t *testing.T) {
 
 	sb.Reset()
 
-	sb,
-		err =
+	err =
 		txtFieldLabelFour.TextBuilder(
+			&sb,
 			ePrefix.XCpy(
 				"txtFieldLabelFour-sb"))
 

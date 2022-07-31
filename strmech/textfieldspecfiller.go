@@ -3315,6 +3315,12 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -3366,13 +3372,6 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //
 // Return Values
 //
-//  strings.Builder
-//    - If the method completes successfully, an instance of
-//      strings.Builder will be returned containing the line of
-//      formatted text produced by the current instance of
-//      TextFieldSpecFiller.
-//
-//
 //  error
 //     - If the method completes successfully and no errors are
 //       encountered this return value is set to 'nil'. Otherwise,
@@ -3384,9 +3383,8 @@ func (txtFillerField TextFieldSpecFiller) String() string {
 //       the beginning of the error message.
 //
 func (txtFillerField *TextFieldSpecFiller) TextBuilder(
-	errorPrefix interface{}) (
-	strings.Builder,
-	error) {
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
 
 	if txtFillerField.lock == nil {
 		txtFillerField.lock = new(sync.Mutex)
@@ -3399,10 +3397,6 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	strBuilder := strings.Builder{}
-
-	strBuilder.Grow(256)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -3410,7 +3404,17 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 		"")
 
 	if err != nil {
-		return strBuilder, err
+		return err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	var formattedTxtStr string
@@ -3423,7 +3427,21 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 				"txtFillerField->formattedTxtStr"))
 
 	if err != nil {
-		return strBuilder, err
+		return err
+	}
+
+	lenFormattedText := len(formattedTxtStr)
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		lenFormattedText - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
 	}
 
 	var err2 error
@@ -3439,7 +3457,7 @@ func (txtFillerField *TextFieldSpecFiller) TextBuilder(
 			err2.Error())
 	}
 
-	return strBuilder, err
+	return err
 }
 
 // TextFieldName - returns a string specifying the name
