@@ -539,26 +539,6 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	colonSpace := ": "
 
-	// Set up 2-Column Parameters
-	err = txtFormatCol.SetStdFormatParamsLine2Col(
-		" ",
-		maxLabelFieldLen,
-		TxtJustify.Right(),
-		colonSpace,
-		-1,
-		TxtJustify.Left(),
-		"",
-		false,
-		"",
-		maxLineLen,
-		true,
-		ePrefix.XCpy(
-			"Set 2-Column Params"))
-
-	if err != nil {
-		return err
-	}
-
 	// Build Integer Digits
 
 	txtStrLabel := "Integer Digits"
@@ -570,11 +550,25 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 		txtStrParam = "Integer Digits is EMPTY!"
 	}
 
-	err = txtFormatCol.AddLine2Col(
+	// Set up 2-Column Parameters
+
+	err = txtFormatCol.CfgLine2Col(
+		" ",
 		txtStrLabel,
+		maxLabelFieldLen,
+		TxtJustify.Right(),
+		colonSpace,
 		txtStrParam,
+		-1,
+		TxtJustify.Left(),
+		"",
+		false,
+		"",
+		maxLineLen,
+		true,
+		true,
 		ePrefix.XCpy(
-			"Integer Digits"))
+			"Set 2-Column Params Integer Digits"))
 
 	if err != nil {
 		return err
