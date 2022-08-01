@@ -1748,20 +1748,7 @@
 === RUN   TestTextLineSpecBlankLines_setTextLinesSpecBlankLines_000100
 --- PASS: TestTextLineSpecBlankLines_setTextLinesSpecBlankLines_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_IsValidInstanceError_090100
-    zzzt_textlinespeclinescollectionTestData_0001000_test.go:599: 
-        TestTextLineSpecLinesCollection_IsValidInstanceError_090100()
-         :  stdLine03
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_IsValidInstanceError_090100 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_IsValidInstanceError_090100 (0.02s)
 === RUN   TestTextLineSpecLinesCollection_AddTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_AddTextLine_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_CopyIn_000100
@@ -1769,20 +1756,7 @@
 === RUN   TestTextLineSpecLinesCollection_CopyOut_000100
 --- PASS: TestTextLineSpecLinesCollection_CopyOut_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_DeleteTextLineMember_000100
-    zzzt_textlinespeclinescollection_0001000_test.go:540: 
-        TestTextLineSpecLinesCollection_DeleteTextLineMember_000100()
-         :  txtLinesCol03
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_DeleteTextLineMember_000100 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_DeleteTextLineMember_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_Empty_000100
 --- PASS: TestTextLineSpecLinesCollection_Empty_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_EmptyTextLines_000100
@@ -1794,95 +1768,17 @@
 === RUN   TestTextLineSpecLinesCollection_GetTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_GetTextLine_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_GetTextLineCollection_000100
-    zzzt_textlinespeclinescollection_0001000_test.go:1255: 
-        TestTextLineSpecLinesCollection_GetTextLineCollection_000100()
-         :  txtLinesCol05
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_GetTextLineCollection_000100 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_GetTextLineCollection_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000100
-    zzzt_textlinespeclinescollection_0001000_test.go:1330: 
-        TestTextLineSpecLinesCollection_InsertTextLine_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_InsertTextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000200
-    zzzt_textlinespeclinescollection_0001000_test.go:1495: 
-        TestTextLineSpecLinesCollection_InsertTextLine_000200()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_InsertTextLine_000200 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000200 (0.02s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000300
-    zzzt_textlinespeclinescollection_0001000_test.go:1660: 
-        TestTextLineSpecLinesCollection_InsertTextLine_000300()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_InsertTextLine_000300 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000300 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000400
-    zzzt_textlinespeclinescollection_0001000_test.go:1826: 
-        TestTextLineSpecLinesCollection_InsertTextLine_000400()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_InsertTextLine_000400 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000400 (0.02s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000500
-    zzzt_textlinespeclinescollection_0001000_test.go:1992: 
-        TestTextLineSpecLinesCollection_InsertTextLine_000500()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_InsertTextLine_000500 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000500 (0.06s)
 === RUN   TestTextLineSpecLinesCollection_IsValidInstance_000100
 --- PASS: TestTextLineSpecLinesCollection_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_IsValidInstanceError_000100
@@ -1896,176 +1792,33 @@
 === RUN   TestTextLineSpecLinesCollection_PeekAtLastTextLine_000100
 --- PASS: TestTextLineSpecLinesCollection_PeekAtLastTextLine_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollection_PeekAtTextLine_000100
-    zzzt_textlinespeclinescollection_0002000_test.go:795: 
-        TestTextLineSpecLinesCollection_PeekAtTextLine_000100()
-         :  txtLinesCol04
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_PeekAtTextLine_000100 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_PeekAtTextLine_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollection_PeekAtTextLine_000200
-    zzzt_textlinespeclinescollection_0002000_test.go:981: 
-        TestTextLineSpecLinesCollection_PeekAtTextLine_000100()
-         :  txtLinesCol05
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_PeekAtTextLine_000200 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_PeekAtTextLine_000200 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopFirstTextLine_000100
-    zzzt_textlinespeclinescollection_0002000_test.go:1116: 
-        TestTextLineSpecLinesCollection_PopFirstTextLine_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_PopFirstTextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_PopFirstTextLine_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollection_PopLastTextLine_000100
-    zzzt_textlinespeclinescollection_0002000_test.go:1353: 
-        TestTextLineSpecLinesCollection_PopLastTextLine_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_PopLastTextLine_000100 (0.04s)
 === RUN   TestTextLineSpecLinesCollection_PopTextLine_000100
-    zzzt_textlinespeclinescollection_0002000_test.go:1606: 
-        TestTextLineSpecLinesCollection_PopTextLine_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_PopTextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_PopTextLine_000100 (0.09s)
 === RUN   TestTextLineSpecLinesCollection_ReplaceTextLine_000100
-    zzzt_textlinespeclinescollection_0002000_test.go:2359: 
-        TestTextLineSpecLinesCollection_ReplaceTextLine_000100()
-         :  txtLinesCol07
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_ReplaceTextLine_000100 (0.03s)
+--- PASS: TestTextLineSpecLinesCollection_ReplaceTextLine_000100 (0.05s)
 === RUN   TestTextLineSpecLinesCollection_SetTextLineCollection_000100
-    zzzt_textlinespeclinescollection_0002000_test.go:2511: 
-        TestTextLineSpecLinesCollection_SetTextLineCollection_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollection_SetTextLineCollection_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollection_SetTextLineCollection_000100 (0.09s)
 === RUN   TestTextLineSpecLinesCollectionAtom_emptyCollection_000100
---- PASS: TestTextLineSpecLinesCollectionAtom_emptyCollection_000100 (0.00s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_emptyCollection_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollectionAtom_equalCollections_000100
 --- PASS: TestTextLineSpecLinesCollectionAtom_equalCollections_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionAtom_insertTextLine_000100
-    zzzt_textlinespeclinescollection_0050000_test.go:184: 
-        TestTextLineSpecLinesCollectionAtom_insertTextLine_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollectionAtom_insertTextLine_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_insertTextLine_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100
 --- PASS: TestTextLineSpecLinesCollectionAtom_peekPopTextLine_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100
-    zzzt_textlinespeclinescollection_0050000_test.go:376: 
-        TestTextLineSpecLinesCollectionAtomS_testValidityOfTextLinesCollection_000100()
-         :  txtLinesCol01
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100 (0.01s)
+--- PASS: TestTextLineSpecLinesCollectionAtom_testValidityOfTextLinesCollection_000100 (0.01s)
 === RUN   TestTextLineSpecLinesCollectionNanobot_addTextLine_000100
-    zzzt_textlinespeclinescollection_0050000_test.go:498: 
-        TestTextLineSpecLinesCollectionNanobot_addTextLine_000100()
-         :  textLineCol02
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollectionNanobot_addTextLine_000100 (0.03s)
+--- PASS: TestTextLineSpecLinesCollectionNanobot_addTextLine_000100 (0.02s)
 === RUN   TestTextLineSpecLinesCollectionNanobot_copyIn_000100
-    zzzt_textlinespeclinescollection_0050000_test.go:548: 
-        TestTextLineSpecLinesCollectionNanobot_copyIn_000100()
-         :  incomingTextLineCol
-        TestDataGeneration - createTestTextLineSpecCollection03()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecLinesCollectionNanobot_copyIn_000100 (0.03s)
+--- PASS: TestTextLineSpecLinesCollectionNanobot_copyIn_000100 (0.03s)
 === RUN   TestTextLineSpecLinesCollectionNanobot_copyOut_000100
 --- PASS: TestTextLineSpecLinesCollectionNanobot_copyOut_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollectionElectron_deleteTextLineElement_000100
@@ -2151,7 +1904,7 @@
 === RUN   TestTextLineSpecPlainText_SetRightMarginChars_000100
 --- PASS: TestTextLineSpecPlainText_SetRightMarginChars_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_SetRightMarginRunes_000100
---- PASS: TestTextLineSpecPlainText_SetRightMarginRunes_000100 (0.01s)
+--- PASS: TestTextLineSpecPlainText_SetRightMarginRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_SetTextRunes_000100
 --- PASS: TestTextLineSpecPlainText_SetTextRunes_000100 (0.00s)
 === RUN   TestTextLineSpecPlainText_SetTextString_000100
@@ -2199,17 +1952,7 @@
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecStrings_000100
 --- PASS: TestTextLineSpecPlainText_setPlainTextSpecStrings_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_CopyIn_000100
-    zzzt_textlinespecsolidline_0001000_test.go:32: TestTextLineSpecSolidLine_CopyIn_000100()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_CopyIn_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_CopyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_CopyOut_000100
 --- PASS: TestTextLineSpecSolidLine_CopyOut_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_CopyOutITextLine_000100
@@ -2243,17 +1986,7 @@
 === RUN   TestTextLineSpecSolidLine_IsValidInstance_000100
 --- PASS: TestTextLineSpecSolidLine_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_IsValidInstanceError_000100
-    zzzt_textlinespecsolidline_0001000_test.go:2142: TestTextLineSpecSolidLine_IsValidInstanceError_000100()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_IsValidInstanceError_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_NewDefaultSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_NewDefaultSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_NewFullSolidLineConfig_000100
@@ -2265,17 +1998,7 @@
 === RUN   TestTextLineSpecSolidLine_NewSolidLineAllParms_000100
 --- PASS: TestTextLineSpecSolidLine_NewSolidLineAllParms_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_NewPtrDefaultSolidLine_000100
-    zzzt_textlinespecsolidline_0001000_test.go:2715: TestTextLineSpecSolidLine_NewPtrDefaultSolidLine_000100()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewPtrDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_NewPtrDefaultSolidLine_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_NewPtrDefaultSolidLine_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_NewPtrFullSolidLineConfig_000100
 --- PASS: TestTextLineSpecSolidLine_NewPtrFullSolidLineConfig_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_NewPtrFullSolidLineRunesConfig_000100
@@ -2293,17 +2016,7 @@
 === RUN   TestTextLineSpecSolidLine_Read_000400
 --- PASS: TestTextLineSpecSolidLine_Read_000400 (0.00s)
 === RUN   TestTextLineSpecSolidLine_Read_000500
-    zzzt_textlinespecsolidline_0001050_test.go:713: TestTextLineSpecSolidLine_Read_000500()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_Read_000500 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_Read_000500 (0.00s)
 === RUN   TestTextLineSpecSolidLine_ReaderInitialize_000100
 --- PASS: TestTextLineSpecSolidLine_ReaderInitialize_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetFullSolidLineConfig_000100
@@ -2313,33 +2026,13 @@
 === RUN   TestTextLineSpecSolidLine_SetLeftMargin_000100
 --- PASS: TestTextLineSpecSolidLine_SetLeftMargin_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetNewLineChars_000100
-    zzzt_textlinespecsolidline_0001050_test.go:1444: TestTextLineSpecSolidLine_SetNewLineChars_000100()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_SetNewLineChars_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_SetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetNewLineRunes_000100
 --- PASS: TestTextLineSpecSolidLine_SetNewLineRunes_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineAllParms_000100
 --- PASS: TestTextLineSpecSolidLine_SetSolidLineAllParms_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100
-    zzzt_textlinespecsolidline_0001050_test.go:2092: TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_SetSolidLineCharsRepeatCount_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetRightMargin_000100
 --- PASS: TestTextLineSpecSolidLine_SetRightMargin_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_SetSolidLine_000100
@@ -2363,17 +2056,7 @@
 === RUN   TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100
 --- PASS: TestTextLineSpecSolidLine_TurnAutoLineTerminationOn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyIn_000100
-    zzzt_textlinespecsolidline_0002000_test.go:32: TestTextLineSpecSolidLine_CopyIn_000100()
-         :  txtSolidLine01
-        TextLineSpecSolidLine.NewPtrDefaultSolidLine()
-         :  txtSolidLine
-        textLineSpecSolidLineMolecule.setTxtSolidLine()
-         :  Error: Input parameter 'leftMarginChars' is invalid!
-        strMechPreon.testValidityOfRuneCharArray()
-        Error: Input parameter 'charArray' is invalid.
-        'charArray' is a zero length array!
-        
---- FAIL: TestTextLineSpecSolidLine_copyIn_000100 (0.00s)
+--- PASS: TestTextLineSpecSolidLine_copyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_copyOut_000100
 --- PASS: TestTextLineSpecSolidLine_copyOut_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_empty_000100
@@ -2477,29 +2160,29 @@
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000400
 --- PASS: TestTextLineSpecStandardLine_InsertTextField_000400 (0.00s)
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000500
---- PASS: TestTextLineSpecStandardLine_InsertTextField_000500 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_InsertTextField_000500 (0.01s)
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000600
---- PASS: TestTextLineSpecStandardLine_InsertTextField_000600 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_InsertTextField_000600 (0.01s)
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000700
---- PASS: TestTextLineSpecStandardLine_InsertTextField_000700 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_InsertTextField_000700 (0.03s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstance_000100
 --- PASS: TestTextLineSpecStandardLine_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstanceError_000100
 --- PASS: TestTextLineSpecStandardLine_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLine_000100
---- PASS: TestTextLineSpecStandardLine_NewStandardLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewStandardLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLine_000200
---- PASS: TestTextLineSpecStandardLine_NewStandardLine_000200 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewStandardLine_000200 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000100
---- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000200
 --- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PeekAtFirstTextField_000100
@@ -2557,7 +2240,7 @@
 === RUN   TestTextLineSpecStandardLine_SetNewLineRunes_000100
 --- PASS: TestTextLineSpecStandardLine_SetNewLineRunes_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_SetStandardLine_000100
---- PASS: TestTextLineSpecStandardLine_SetStandardLine_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_SetStandardLine_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_SetStandardLineAllParms_000100
 --- PASS: TestTextLineSpecStandardLine_SetStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_SetTextFields_000100
@@ -2648,13 +2331,13 @@
         timerLines02.GetFormattedText()Expected string DOES NOT match Actual string
         Expected string = '[SPACE][SPACE]Start[SPACE]Time:[SPACE]2022-04-05[SPACE]10:00:00.000000000[SPACE]-0500[SPACE]CDT\n[SPACE][SPACE][SPACE][SPACE]End[SPACE]Time:[SPACE]2022-04-05[SPACE]10:00:00.000005999[SPACE]-0500[SPACE]CDT\nElapsed[SPACE]Time:[SPACE]5[SPACE]Microseconds[SPACE]999[SPACE]Nanoseconds\n[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]Total[SPACE]Elapsed[SPACE]Nanoseconds:[SPACE]5,999\n'
           Actual string = '[EMPTY]'
---- FAIL: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.01s)
+--- FAIL: TestTextLineSpecTimerLines_CopyOutITextLine_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_CopyOutPtr_000100
     zzzt_textlinespectimerlines_0001000_test.go:552: TestTextLineSpecTimerLines_CopyOutPtr_000100() - ERROR
         timerLines02.GetFormattedText()Expected string DOES NOT match Actual string
         Expected string = '[SPACE][SPACE]Start[SPACE]Time:[SPACE]2022-04-05[SPACE]10:00:00.000000000[SPACE]-0500[SPACE]CDT\n[SPACE][SPACE][SPACE][SPACE]End[SPACE]Time:[SPACE]2022-04-05[SPACE]10:00:00.000005999[SPACE]-0500[SPACE]CDT\nElapsed[SPACE]Time:[SPACE]5[SPACE]Microseconds[SPACE]999[SPACE]Nanoseconds\n[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]Total[SPACE]Elapsed[SPACE]Nanoseconds:[SPACE]5,999\n'
           Actual string = '[EMPTY]'
---- FAIL: TestTextLineSpecTimerLines_CopyOutPtr_000100 (0.01s)
+--- FAIL: TestTextLineSpecTimerLines_CopyOutPtr_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_Empty_000100
 --- PASS: TestTextLineSpecTimerLines_Empty_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_Equal_000100
@@ -2710,7 +2393,7 @@
 === RUN   TestTextLineSpecTimerLines_IsValidInstanceError_000100
 --- PASS: TestTextLineSpecTimerLines_IsValidInstanceError_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_IsValidInstanceError_000200
---- PASS: TestTextLineSpecTimerLines_IsValidInstanceError_000200 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_IsValidInstanceError_000200 (0.01s)
 === RUN   TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_NewDefaultFullTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_NewDefaultShellTimerEvent_000100
@@ -2836,7 +2519,7 @@
 === RUN   TestTextLineSpecTimerLinesElectron_getTotalLabelLength_000100
 --- PASS: TestTextLineSpecTimerLinesElectron_getTotalLabelLength_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesMolecule_getFormattedText_000100
---- PASS: TestTextLineSpecTimerLinesMolecule_getFormattedText_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLinesMolecule_getFormattedText_000100 (0.02s)
 === RUN   TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000100
 --- PASS: TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesMolecule_setTxtLineSpecTimerLines_000200
@@ -2848,12 +2531,12 @@
         timerLines02.GetFormattedText()Expected string DOES NOT match Actual string
         Expected string = '[SPACE][SPACE]Start[SPACE]Time:[SPACE]2021-04-20[SPACE]18:30:00.000000000[SPACE]-0700[SPACE]PDT\n[SPACE][SPACE][SPACE][SPACE]End[SPACE]Time:[SPACE]2021-04-20[SPACE]18:30:00.200005355[SPACE]-0700[SPACE]PDT\nElapsed[SPACE]Time:[SPACE]200[SPACE]Milliseconds[SPACE]5[SPACE]Microseconds[SPACE]355[SPACE]Nanoseconds\n[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]Total[SPACE]Elapsed[SPACE]Nanoseconds:[SPACE]200,005,355\n'
           Actual string = '[EMPTY]'
---- FAIL: TestTextLineSpecTimerLinesNanobot_copyOut_000100 (0.00s)
+--- FAIL: TestTextLineSpecTimerLinesNanobot_copyOut_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLinesPreon_getMaximumOutputTimerLineLen_000100
 --- PASS: TestTextLineSpecTimerLinesPreon_getMaximumOutputTimerLineLen_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100
 --- PASS: TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100 (0.00s)
 FAIL
-coverage: 44.5% of statements
+coverage: 45.3% of statements
 exit status 1
-FAIL	github.com/MikeAustin71/strmechops/strmech	2.042s
+FAIL	github.com/MikeAustin71/strmechops/strmech	2.429s

@@ -683,7 +683,9 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
-	if len(leftMarginChars) > 1000000 {
+	lenLeftMarginChars := len(leftMarginChars)
+
+	if lenLeftMarginChars > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'leftMarginChars' is invalid!\n"+
 			"'leftMarginChars' has a length greater than 1,000,000.\n"+
@@ -694,18 +696,24 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
-	_,
-		err = sMechPreon.testValidityOfRuneCharArray(
-		leftMarginChars,
-		ePrefix.XCpy(
-			"Error: Input parameter 'leftMarginChars'"+
-				" is invalid!"))
+	if lenLeftMarginChars > 0 {
 
-	if err != nil {
-		return err
+		_,
+			err = sMechPreon.testValidityOfRuneCharArray(
+			leftMarginChars,
+			ePrefix.XCpy(
+				"Error: Input parameter 'leftMarginChars'"+
+					" is invalid!"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
-	if len(rightMarginChars) > 1000000 {
+	lenRightMarginChars := len(rightMarginChars)
+
+	if lenRightMarginChars > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'rightMarginChars' is invalid!\n"+
 			"'rightMarginChars' has a length greater than 1,000,000.\n"+
@@ -716,15 +724,19 @@ func (txtSolidLineMolecule *textLineSpecSolidLineMolecule) setTxtSolidLine(
 		return err
 	}
 
-	_,
-		err = sMechPreon.testValidityOfRuneCharArray(
-		rightMarginChars,
-		ePrefix.XCpy(
-			"Error: Input parameter 'rightMarginChars'"+
-				" is invalid!"))
+	if lenRightMarginChars > 0 {
 
-	if err != nil {
-		return err
+		_,
+			err = sMechPreon.testValidityOfRuneCharArray(
+			rightMarginChars,
+			ePrefix.XCpy(
+				"Error: Input parameter 'rightMarginChars'"+
+					" is invalid!"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	lenNewLineChars := len(newLineChars)

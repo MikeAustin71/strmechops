@@ -288,7 +288,9 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
-	if len(txtSolidLine.leftMarginChars) > 1000000 {
+	lenLeftMarginChars := len(txtSolidLine.leftMarginChars)
+
+	if lenLeftMarginChars > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'txtSolidLine.leftMargin' is invalid!\n"+
 			"The length of 'txtSolidLine.leftMarginChars' is greater than 1,000,000.\n"+
@@ -299,26 +301,32 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
-	_,
-		err2 = sMechPreon.testValidityOfRuneCharArray(
-		txtSolidLine.leftMarginChars,
-		ePrefix.XCpy(
-			"txtSolidLine.leftMarginChars is invalid!"))
+	if lenLeftMarginChars > 0 {
 
-	if err2 != nil {
+		_,
+			err2 = sMechPreon.testValidityOfRuneCharArray(
+			txtSolidLine.leftMarginChars,
+			ePrefix.XCpy(
+				"txtSolidLine.leftMarginChars is invalid!"))
 
-		err = fmt.Errorf("%v - ERROR\n"+
-			"txtSolidLine.leftMarginChars contains invalid runes!\n"+
-			"%v\n"+
-			"txtSolidLine.leftMarginChars='%v'\n",
-			ePrefix.String(),
-			err2.Error(),
-			txtSolidLine.leftMarginChars)
+		if err2 != nil {
 
-		return isValid, err
+			err = fmt.Errorf("%v - ERROR\n"+
+				"txtSolidLine.leftMarginChars contains invalid runes!\n"+
+				"%v\n"+
+				"txtSolidLine.leftMarginChars='%v'\n",
+				ePrefix.String(),
+				err2.Error(),
+				txtSolidLine.leftMarginChars)
+
+			return isValid, err
+		}
+
 	}
 
-	if len(txtSolidLine.rightMarginChars) > 1000000 {
+	lenRightMarginChars := len(txtSolidLine.rightMarginChars)
+
+	if lenRightMarginChars > 1000000 {
 		err = fmt.Errorf("%v\n"+
 			"Error: 'txtSolidLine.rightMarginChars' is invalid!\n"+
 			"The length of 'txtSolidLine.rightMarginChars' is greater than 1,000,000.\n"+
@@ -329,23 +337,26 @@ func (txtSolidLineAtom *textLineSpecSolidLineAtom) testValidityOfTextSpecSolidLi
 		return isValid, err
 	}
 
-	_,
-		err2 = sMechPreon.testValidityOfRuneCharArray(
-		txtSolidLine.rightMarginChars,
-		ePrefix.XCpy(
-			"txtSolidLine.rightMarginChars is invalid!"))
+	if lenRightMarginChars > 0 {
+		_,
+			err2 = sMechPreon.testValidityOfRuneCharArray(
+			txtSolidLine.rightMarginChars,
+			ePrefix.XCpy(
+				"txtSolidLine.rightMarginChars is invalid!"))
 
-	if err2 != nil {
+		if err2 != nil {
 
-		err = fmt.Errorf("%v - ERROR\n"+
-			"txtSolidLine.rightMarginChars contains invalid runes!\n"+
-			"%v\n"+
-			"txtSolidLine.rightMarginChars='%v'\n",
-			ePrefix.String(),
-			err2.Error(),
-			txtSolidLine.rightMarginChars)
+			err = fmt.Errorf("%v - ERROR\n"+
+				"txtSolidLine.rightMarginChars contains invalid runes!\n"+
+				"%v\n"+
+				"txtSolidLine.rightMarginChars='%v'\n",
+				ePrefix.String(),
+				err2.Error(),
+				txtSolidLine.rightMarginChars)
 
-		return isValid, err
+			return isValid, err
+		}
+
 	}
 
 	lenNewLineChars := len(txtSolidLine.newLineChars)
