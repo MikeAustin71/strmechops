@@ -1486,7 +1486,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 	if fracStr != "2345" {
 		t.Errorf("%v\n"+
 			"Error: Expected fractional digits would equal '2345'.\n"+
-			"Instead, integer digits = '%v'\n",
+			"Instead, fractional digits = '%v'\n",
 			ePrefix.String(),
 			fracStr)
 
@@ -1508,6 +1508,133 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 			"Instead, Actual Parameter Text length = '%v'\n",
 			ePrefix.String(),
 			1357,
+			strBuilder.Len())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_01()",
+		"")
+
+	numberStr := " 12345 "
+
+	runeArrayDto,
+		err := RuneArrayDto{}.NewNumStr(
+		numberStr,
+		ePrefix.XCpy(
+			"runeArrayDto<-"))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = DecimalSeparatorSpec{}.New(
+		".",
+		ePrefix.XCpy("decSeparator<-"))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	var searchResults CharSearchNumStrParseResultsDto
+	var numStrKernel NumberStrKernel
+	numParsingTerminators := RuneArrayCollection{}
+	negativeNumSearchSpecs := NegNumSearchSpecCollection{}
+
+	err = negativeNumSearchSpecs.AddLeadingNegNumSearchStr(
+		"-",
+		ePrefix.XCpy("Leading minus sign '-'"))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	searchResults,
+		numStrKernel,
+		err = sMech.ExtractNumberRunes(
+		runeArrayDto,
+		0,
+		-1,
+		negativeNumSearchSpecs,
+		decSeparator,
+		numParsingTerminators,
+		false,
+		ePrefix.XCpy(
+			numberStr))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	if searchResults.FoundNumericDigits == false {
+		t.Errorf("%v\n"+
+			"Error: No numeric digits were found in the\n"+
+			"test number string! Number String Parsing FAILED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	intStr := numStrKernel.GetIntegerString()
+
+	if intStr != "12345" {
+		t.Errorf("%v\n"+
+			"Error: Expected integer digits would equal '12345'.\n"+
+			"Instead, integer digits = '%v'\n",
+			ePrefix.String(),
+			intStr)
+
+		return
+
+	}
+
+	fracStr := numStrKernel.GetFractionalString()
+
+	if fracStr != "" {
+		t.Errorf("%v\n"+
+			"Error: Expected fractional digits would equal to an empty string, \"\".\n"+
+			"Instead, fractional digits = '%v'\n",
+			ePrefix.String(),
+			fracStr)
+
+		return
+
+	}
+
+	strBuilder := strings.Builder{}
+
+	err = searchResults.GetParameterTextListing(
+		&strBuilder,
+		true,
+		true,
+		ePrefix)
+
+	if strBuilder.Len() != 8879 {
+		t.Errorf("%v\n"+
+			"Error: Expected parameter text listing would have a length of %v.\n"+
+			"Instead, Actual Parameter Text length = '%v'\n",
+			ePrefix.String(),
+			8879,
 			strBuilder.Len())
 
 		return
