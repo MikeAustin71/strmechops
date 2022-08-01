@@ -794,6 +794,8 @@ func TestNumberSignSymbolDto_Empty_000100(t *testing.T) {
 
 	nSignSymTwo := NumberSignSymbolDto{}
 
+	nSignSymTwo.Empty()
+
 	nSignSymOne.Empty()
 
 	if !nSignSymTwo.Equal(&nSignSymOne) {

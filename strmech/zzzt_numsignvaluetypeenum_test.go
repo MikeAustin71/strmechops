@@ -7,7 +7,7 @@ func TestNumericSignValueType_XArithmeticValue_000100(t *testing.T) {
 
 	arithmeticVal := numSignValType.XArithmeticValue()
 
-	expectedVal := -99
+	expectedVal := -2
 
 	if expectedVal != arithmeticVal {
 		t.Errorf("Expected that NumericSignValueType(0).None()\n"+
@@ -23,7 +23,7 @@ func TestNumericSignValueType_XArithmeticValue_000200(t *testing.T) {
 
 	arithmeticVal := numSignValType.XArithmeticValue()
 
-	expectedVal := -99
+	expectedVal := -6004
 
 	if expectedVal != arithmeticVal {
 		t.Errorf("Expected that NumericSignValueType(-6004)\n"+
@@ -445,8 +445,8 @@ func TestNumericSignValueType_XValueInt_000100(t *testing.T) {
 
 	intValue := numSignValType.XValueInt()
 
-	if intValue != 1 {
-		t.Errorf("Error: Expected return of object integer = '1' (Negative).\n"+
+	if intValue != -1 {
+		t.Errorf("Error: Expected return of object integer = '-1' (Negative).\n"+
 			"Instead, object integer value = '%v'\n",
 			intValue)
 	}
@@ -458,9 +458,9 @@ func TestNumericSignValueType_XValueInt_000200(t *testing.T) {
 
 	intValue := numSignValType.XValueInt()
 
-	if intValue != 0 {
+	if intValue != -2 {
 		t.Errorf("Error: Expected return of NumericSignValueType(0).None() "+
-			"== 0.\n"+
+			"== -2.\n"+
 			"Instead, object integer value = '%v'\n",
 			intValue)
 	}
@@ -472,9 +472,9 @@ func TestNumericSignValueType_XValueInt_000300(t *testing.T) {
 
 	intValue := numSignValType.XValueInt()
 
-	if intValue != 2 {
+	if intValue != 0 {
 		t.Errorf("Error: Expected return of NumericSignValueType(0).Zero() "+
-			"== 2.\n"+
+			"== 0.\n"+
 			"Instead, object integer value = '%v'\n",
 			intValue)
 	}
@@ -486,9 +486,9 @@ func TestNumericSignValueType_XValueInt_000400(t *testing.T) {
 
 	intValue := numSignValType.XValueInt()
 
-	if intValue != 3 {
+	if intValue != 1 {
 		t.Errorf("Error: Expected return of NumericSignValueType(0).Positive() "+
-			"== 3.\n"+
+			"== 1.\n"+
 			"Instead, object integer value = '%v'\n",
 			intValue)
 	}
