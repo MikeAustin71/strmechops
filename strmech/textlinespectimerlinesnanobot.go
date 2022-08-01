@@ -118,10 +118,8 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 		return err
 	}
 
-	targetTimerLines.textLineReader = nil
-
 	_,
-		err = textLineSpecTimerLinesAtom{}.ptr().
+		err = new(textLineSpecTimerLinesAtom).
 		testValidityOfTxtSpecTimerLines(
 			incomingTimerLines,
 			ePrefix.XCpy("incomingTimerLines"))
@@ -130,7 +128,10 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 		return err
 	}
 
-	err = textLineSpecTimerLinesMolecule{}.ptr().
+	new(textLineSpecTimerLinesElectron).empty(
+		targetTimerLines)
+
+	err = new(textLineSpecTimerLinesMolecule).
 		setTxtLineSpecTimerLines(
 			targetTimerLines,
 			incomingTimerLines.labelLeftMarginChars,
@@ -144,6 +145,10 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyIn(
 			incomingTimerLines.textLabelJustification,
 			incomingTimerLines.labelRightMarginChars,
 			ePrefix.XCpy("incomingTimerLines->targetTimerLines"))
+
+	if err != nil {
+		return err
+	}
 
 	return err
 }
@@ -245,7 +250,10 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 
 	newTxtTimerLines := TextLineSpecTimerLines{}
 
-	err = textLineSpecTimerLinesMolecule{}.ptr().
+	new(textLineSpecTimerLinesElectron).empty(
+		&newTxtTimerLines)
+
+	err = new(textLineSpecTimerLinesMolecule).
 		setTxtLineSpecTimerLines(
 			&newTxtTimerLines,
 			txtTimerLines.labelLeftMarginChars,
@@ -265,27 +273,5 @@ func (txtTimerLinesNanobot *textLineSpecTimerLinesNanobot) copyOut(
 		return TextLineSpecTimerLines{}, err
 	}
 
-	newTxtTimerLines.textLineReader = nil
-
-	newTxtTimerLines.lock = new(sync.Mutex)
-
-	return newTxtTimerLines, nil
-}
-
-// ptr - Returns a pointer to a new instance of
-// textLineSpecTimerLinesNanobot.
-//
-func (txtTimerLinesNanobot textLineSpecTimerLinesNanobot) ptr() *textLineSpecTimerLinesNanobot {
-
-	if txtTimerLinesNanobot.lock == nil {
-		txtTimerLinesNanobot.lock = new(sync.Mutex)
-	}
-
-	txtTimerLinesNanobot.lock.Lock()
-
-	defer txtTimerLinesNanobot.lock.Unlock()
-
-	return &textLineSpecTimerLinesNanobot{
-		lock: new(sync.Mutex),
-	}
+	return newTxtTimerLines, err
 }

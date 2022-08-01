@@ -312,7 +312,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyIn(
 		return err
 	}
 
-	return textLineSpecTimerLinesNanobot{}.ptr().
+	return new(textLineSpecTimerLinesNanobot).
 		copyIn(
 			txtSpecTimerLines,
 			incomingTimerLines,
@@ -422,7 +422,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOut(
 		return TextLineSpecTimerLines{}, err
 	}
 
-	return textLineSpecTimerLinesNanobot{}.ptr().copyOut(
+	return new(textLineSpecTimerLinesNanobot).copyOut(
 		txtSpecTimerLines,
 		ePrefix.XCpy("txtSpecTimerLines->"))
 }
@@ -535,7 +535,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutITextLine(
 	var newTxtLineSpecTimerLine TextLineSpecTimerLines
 
 	newTxtLineSpecTimerLine,
-		err = textLineSpecTimerLinesNanobot{}.ptr().
+		err = new(textLineSpecTimerLinesNanobot).
 		copyOut(
 			txtSpecTimerLines,
 			ePrefix.XCpy(
@@ -656,7 +656,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) CopyOutPtr(
 	var newTxtLineSpecTimerLine TextLineSpecTimerLines
 
 	newTxtLineSpecTimerLine,
-		err = textLineSpecTimerLinesNanobot{}.ptr().
+		err = new(textLineSpecTimerLinesNanobot).
 		copyOut(
 			txtSpecTimerLines,
 			ePrefix.XCpy(
@@ -679,7 +679,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Empty() {
 
 	txtSpecTimerLines.lock.Lock()
 
-	textLineSpecTimerLinesElectron{}.ptr().
+	new(textLineSpecTimerLinesElectron).
 		empty(
 			txtSpecTimerLines)
 
@@ -709,7 +709,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Equal(
 
 	defer txtSpecTimerLines.lock.Unlock()
 
-	return textLineSpecTimerLinesAtom{}.ptr().
+	return new(textLineSpecTimerLinesAtom).
 		equal(
 			txtSpecTimerLines,
 			incomingTxtSpecTimerLines)
@@ -915,6 +915,14 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) GetFormattedText(
 			&strBuilder,
 			txtSpecTimerLines,
 			ePrefix)
+
+	if err != nil {
+		return formattedText, err
+	}
+
+	formattedText = strBuilder.String()
+
+	strBuilder.Reset()
 
 	return formattedText, err
 }

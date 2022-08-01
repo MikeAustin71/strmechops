@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	mt := examples.MainTest02{}
+	mt := examples.MainTest{}
 
-	mt.StrMechRead01()
+	mt.TimerEventText09()
 
 }

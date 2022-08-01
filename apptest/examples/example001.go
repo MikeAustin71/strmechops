@@ -1895,6 +1895,117 @@ func (mt MainTest) TimerEventText08() {
 
 }
 
+func (mt MainTest) TimerEventText09() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainTest.TimerEventText01()",
+		"")
+
+	var errTxt string
+
+	var loc *time.Location
+
+	loc,
+		err := time.LoadLocation(
+		"America/Chicago")
+
+	if err != nil {
+
+		err2 := fmt.Errorf(
+			"\n%v - ERROR\n"+
+				"time.LoadLocation(\"America/Chicago\")"+
+				"%v\n",
+			ePrefix.String(),
+			err.Error())
+
+		errTxt = fmt.Sprintf("%v",
+			err2.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	startTime := time.Date(
+		2022,
+		4,
+		5,
+		10,
+		0,
+		0,
+		0,
+		loc)
+
+	endTime := startTime.Add((time.Microsecond * 5) + 999)
+
+	var timerLines01 *strmech.TextLineSpecTimerLines
+
+	timerLines01,
+		err = strmech.TextLineSpecTimerLines{}.NewDefaultFullTimerEvent(
+		startTime,
+		endTime,
+		ePrefix)
+
+	if err != nil {
+
+		errTxt = fmt.Sprintf("%v",
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	err = timerLines01.IsValidInstanceError(
+		ePrefix.XCpy(
+			"timerLines01"))
+
+	if err != nil {
+
+		errTxt = fmt.Sprintf("%v",
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	var expectedText string
+
+	expectedText,
+		err = timerLines01.GetFormattedText(
+		ePrefix.XCpy(
+			"expectedText<-timerLines01"))
+
+	if err != nil {
+
+		errTxt = fmt.Sprintf("%v",
+			err.Error())
+
+		fmt.Println(errTxt)
+
+		return
+	}
+
+	fmt.Printf("\ntimerLines01 - Formatted Text\n")
+	fmt.Printf("%v\n\n", expectedText)
+
+	sMech := strmech.StrMech{}
+
+	printableExpectedStr :=
+		sMech.ConvertNonPrintableChars(
+			[]rune(expectedText),
+			true)
+
+	fmt.Printf("\ntimerLines01 - Printable Text\n")
+	fmt.Printf("%v\n\n",
+		printableExpectedStr)
+
+	fmt.Printf("\n\nSuccessful Completion!\n")
+	fmt.Printf("%v\n\n", ePrefix.String())
+
+}
+
 func (mt MainTest) IntSeparateNumRunes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
