@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	mt := examples.MainTest{}
+	mt := examples.MainTest02{}
 
-	mt.TimerEventText09()
+	mt.ExtractNumberRunes01()
 
 }

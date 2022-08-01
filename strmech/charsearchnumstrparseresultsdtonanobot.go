@@ -632,23 +632,6 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		ePrefix.XCpy(
 			"Set 2-Column Params"))
 
-	//err = txtFormatCol.CfgLine2Col(
-	//	" ",
-	//	"SearchResultsName",
-	//	maxLabelFieldLen,
-	//	TxtJustify.Right(),
-	//	colonSpace,
-	//	txtStrParam,
-	//	-1,
-	//	TxtJustify.Left(),
-	//	"",
-	//	false,
-	//	"",
-	//	maxLineLen,
-	//	true,
-	//	true,
-	//	ePrefix.XCpy("Initial 2-Col Setup"))
-
 	if err != nil {
 		return err
 	}
@@ -800,69 +783,6 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		return err
 	}
 
-	if printDetail {
-
-		// Build RemainderString
-
-		strLabel := "RemainderString"
-
-		txtStrParam =
-			numStrParseResults.RemainderString.GetCharacterString()
-
-		if len(txtStrParam) == 0 {
-			txtStrParam = "RemainderString is EMPTY!"
-		}
-
-		err = txtFormatCol.AddLine2Col(
-			strLabel,
-			txtStrParam,
-			ePrefix.XCpy(
-				"Build RemainderString"))
-
-		if err != nil {
-			return err
-		}
-
-		// Build DecimalSeparatorSearchResults
-
-		err = numStrParseResults.DecimalSeparatorSearchResults.
-			GetParameterTextListing(
-				strBuilder,
-				true,
-				ePrefix.XCpy(
-					"numStrParseResults"))
-
-		if err != nil {
-
-			return err
-		}
-
-		// Build NegativeNumberSymbolSearchResults
-		err = numStrParseResults.NegativeNumberSymbolSearchResults.
-			GetParameterTextListing(
-				strBuilder,
-				ePrefix.XCpy(
-					"numStrParseResults"))
-
-		if err != nil {
-
-			return err
-		}
-
-		// Build ParsingTerminatorSearchResults
-		err = numStrParseResults.ParsingTerminatorSearchResults.
-			GetParameterTextListing(
-				strBuilder,
-				ePrefix.XCpy(
-					"numStrParseResults"))
-
-		if err != nil {
-
-			return err
-		}
-
-	}
-
 	// Trailing Title Marquee
 	// Top Blank Line
 	txtFormatCol.AddLineBlank(
@@ -927,6 +847,69 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	if err != nil {
 		return err
+	}
+
+	if printDetail {
+
+		// Build RemainderString
+
+		strLabel := "RemainderString"
+
+		txtStrParam =
+			numStrParseResults.RemainderString.GetCharacterString()
+
+		if len(txtStrParam) == 0 {
+			txtStrParam = "RemainderString is EMPTY!"
+		}
+
+		err = txtFormatCol.AddLine2Col(
+			strLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				"Build RemainderString"))
+
+		if err != nil {
+			return err
+		}
+
+		// Build DecimalSeparatorSearchResults
+
+		err = numStrParseResults.DecimalSeparatorSearchResults.
+			GetParameterTextListing(
+				strBuilder,
+				true,
+				ePrefix.XCpy(
+					"numStrParseResults"))
+
+		if err != nil {
+
+			return err
+		}
+
+		// Build NegativeNumberSymbolSearchResults
+		err = numStrParseResults.NegativeNumberSymbolSearchResults.
+			GetParameterTextListing(
+				strBuilder,
+				ePrefix.XCpy(
+					"numStrParseResults"))
+
+		if err != nil {
+
+			return err
+		}
+
+		// Build ParsingTerminatorSearchResults
+		err = numStrParseResults.ParsingTerminatorSearchResults.
+			GetParameterTextListing(
+				strBuilder,
+				ePrefix.XCpy(
+					"numStrParseResults"))
+
+		if err != nil {
+
+			return err
+		}
+
 	}
 
 	return err

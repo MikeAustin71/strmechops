@@ -751,7 +751,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) GetParameter
 		return err
 	}
 
-	return charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
+	return new(charSearchDecimalSeparatorResultsDtoNanobot).
 		getParameterTextListing(
 			strBuilder,
 			decSepSearchResultsDto,
