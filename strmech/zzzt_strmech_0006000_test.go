@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -157,7 +156,7 @@ func TestStrMech_Read_02(t *testing.T) {
 	expected := "Original sops1 base string"
 	lenExpected := len(expected)
 
-	p := make([]byte, 5, 15)
+	p := make([]byte, lenExpected)
 
 	s1 := new(StrMech)
 	s1.SetStringData(expected)
@@ -208,42 +207,11 @@ func TestStrMech_Read_02(t *testing.T) {
 }
 
 func TestStrMech_Read_03(t *testing.T) {
-
-	expected := "Original sops1 base string"
-	lenExpected := int64(len(expected))
-
-	s1 := new(StrMech)
-	s1.SetStringData(expected)
-
-	s2 := new(StrMech)
-
-	n, err := io.Copy(s2, s1)
-
-	if err != nil {
-		fmt.Printf("Error returned by io.Copy(sops2, sops1). "+
-			"Error='%v' \n", err.Error())
-		return
-	}
-
-	actualData := s2.GetStringData()
-
-	if expected != actualData {
-		t.Errorf("Error: Expected StrOut='%v'. Instead, String Data='%v' ",
-			expected, actualData)
-	}
-
-	if lenExpected != n {
-		t.Errorf("Error: Expected bytes read ='%v'. Instead, bytes read='%v' ",
-			lenExpected, n)
-	}
-}
-
-func TestStrMech_Read_04(t *testing.T) {
 	originalStr := "Hello World"
 
 	sops1 := new(StrMech)
 	sops1.SetStringData(originalStr)
-	p := make([]byte, 0)
+	p := make([]byte, len(originalStr))
 
 	_, err := sops1.Read(p)
 

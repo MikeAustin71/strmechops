@@ -36,8 +36,8 @@ type StrMech struct {
 	//	StrMech.Write. Accessed through methods
 	//	StrMech.GetStringData() and StrMech.SetStringData()
 	stringDataMutex *sync.Mutex // Used internally to ensure thread safe operations
-	cntBytesRead    uint64      // Used internally to track Bytes Read by StrMech.Read()
-	cntBytesWritten uint64      // Used internally to track Bytes Written by StrMech.Write()
+	// cntBytesRead    uint64      // Used internally to track Bytes Read by StrMech.Read()
+	cntBytesWritten uint64 // Used internally to track Bytes Written by StrMech.Write()
 }
 
 // BreakTextAtLineLength - Breaks string text into lines. Takes a
@@ -2787,7 +2787,6 @@ func (sMech *StrMech) GetStringData() string {
 
 	output = sMech.stringData
 	sMech.cntBytesWritten = 0
-	sMech.cntBytesRead = 0
 
 	return output
 }
@@ -4342,8 +4341,25 @@ func (sMech *StrMech) NumberStringParser(
 	return newNumBuilder, err
 }
 
-// Read - Implements io.Reader interface. Read reads up to len(p)
-// bytes into 'p'. This method supports buffered 'read' operations.
+// Read - Implements io.Reader interface. This method reads up to
+// len(p) bytes into byte array 'p'.
+//
+// The io.Reader interface represents an entity from which you can
+// read a stream of bytes. The good news is that any entity
+// implementing the io.Reader interface can utilize the 'StrMech'
+// type and read the member string variable, 'StrMech.stringData',
+// into 'p' as stream of bytes.
+//
+// io.Reader Reference:
+//  https://yourbasic.org/golang/io-reader-interface-explained/
+//
+// The bad news is that the size of the 'p' byte array must be
+// large enough to read all the 'StrMech.stringData' string. If
+// the size of 'p' is less than the size of 'StrMech.stringData',
+// an error will be returned.
+//
+// A more flexible alternative to this method can be found with
+// StrMech.GetNewReader() which returns
 //
 // The internal member string variable, 'StrMech.stringData' is
 // written into 'p'. When the end of 'StrMech.stringData' is
@@ -4351,6 +4367,44 @@ func (sMech *StrMech) NumberStringParser(
 //
 // 'StrMech.stringData' can be accessed through Getter and Setter
 // methods, GetStringData() and SetStringData()
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The size of the input parameter 'p' byte array must be equal to
+// or greater than the size of the string to be read,
+// 'StrMech.stringData'. If the size of 'p' is less than the length
+// of 'StrMech.stringData', an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  p                          []byte
+//     - The byte array into which the string 'StrMech.stringData'
+//       will be read.
+//
+//       If the size of 'p' is less than the length of
+//       'StrMech.stringData', an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  n                          int
+//     - The number of bytes read into byte array 'p'.
+//
+//  err                        error
+//     - If all the bytes from internal member variable
+//       'StrMech.stringData' are read into byte array 'p', 'err'
+//       will be set to 'io.EOF'.
+//
+//       If an operational error is encountered during processing,
+//       this error return parameter will be populated with an
+//       appropriate error message.
 //
 func (sMech StrMech) Read(p []byte) (n int, err error) {
 
@@ -4365,21 +4419,6 @@ func (sMech StrMech) Read(p []byte) (n int, err error) {
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"StrMech.Read()",
 		"")
-
-	lenStr := len(sMech.stringData)
-
-	lenP := len(p)
-
-	if lenP < lenStr {
-		n = 0
-		err = fmt.Errorf("%v\n"+
-			"Error: Length of input parameter 'p' is invalid!\n"+
-			"Length of 'p' is less then length of 'sMech.stringData'.\n"+
-			"Increase the size of 'p'.\n",
-			ePrefix.String())
-
-		return n, err
-	}
 
 	n,
 		err = new(strMechElectron).
@@ -5486,7 +5525,6 @@ func (sMech *StrMech) SetStringData(str string) {
 
 	sMech.cntBytesWritten = 0
 
-	sMech.cntBytesRead = 0
 }
 
 // StrCenterInStrLeft - returns a string which includes a left pad blank string
@@ -7077,75 +7115,4 @@ func (sMech *StrMech) UpperCaseFirstLetter(
 	sOpsQuark := strMechQuark{}
 
 	return sOpsQuark.upperCaseFirstLetter(str)
-}
-
-// Write - Implements the io.Writer interface.
-//
-// Method 'Write' writes len(p) bytes from p to the underlying
-// data stream. In this case the underlying data stream
-// is private member variable string, 'StrMech.stringData'.
-//
-// Receives a byte array 'p' and writes the contents to
-// a string, private structure data element 'StrMech.stringData'.
-//
-// 'StrMech.stringData' can be accessed through 'Getter' and
-// 'Setter' methods, 'GetStringData()' and 'SetStringData()'.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  p                          []byte
-//     - An array of bytes used as a byte buffer. Data from this
-//       byte buffer will be written to private member variable
-//       string 'StrMech.stringData'. The number of bytes written
-//       will be equal to the length of 'p'.
-//
-//       This method will never modify the contents of 'p'.
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  n                          int
-//     - 'n' contains the number of bytes written from 'p', the
-//       byte buffer, to the private member variable,
-//       StrMech.stringData'.
-//
-//
-//  err                        error
-//     - If input parameter 'plainTextLine' is judged to be valid
-//       in all respects, this return parameter will be set to
-//       'nil'.
-//
-//       Any condition encountered that caused the write operation
-//       to stop early will trigger an error. This method will
-//       return a non-nil error if return parameter "n" is less
-//       than the length of the byte buffer 'p'.
-//
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
-func (sMech *StrMech) Write(p []byte) (n int, err error) {
-
-	if sMech.stringDataMutex == nil {
-		sMech.stringDataMutex = new(sync.Mutex)
-	}
-
-	sMech.stringDataMutex.Lock()
-
-	defer sMech.stringDataMutex.Unlock()
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"StrMech.Write()",
-		"")
-
-	return strMechElectron{}.ptr().
-		write(
-			sMech,
-			p,
-			&ePrefix)
 }

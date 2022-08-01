@@ -353,7 +353,6 @@ func (sMechAtom *strMechAtom) copyIn(
 	targetStrMech.StrOut = incomingStrMech.StrOut
 
 	targetStrMech.cntBytesWritten = 0
-	targetStrMech.cntBytesRead = 0
 	targetStrMech.stringData = incomingStrMech.stringData
 
 	return err

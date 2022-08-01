@@ -578,17 +578,87 @@ func (sMechElectron strMechElectron) ptr() *strMechElectron {
 	}
 }
 
-// readBytes - Implements io.Reader interface for type StrMech.
-// 'readBytes' reads up to len(p) bytes into 'p'. This
-// method supports buffered 'read' operations.
+// readBytes - Implements io.Reader interface. This method reads up
+// to len(p) bytes into byte array 'p'.
 //
-// The internal member string variable, 'StrMech.stringData'
-// is written into 'p'. When the end of 'StrMech.stringData'
-// is written to 'p', the method returns error = 'io.EOF'.
+// The io.Reader interface represents an entity from which you can
+// read a stream of bytes. The good news is that any entity
+// implementing the io.Reader interface can utilize the 'StrMech'
+// type and read the member string variable, 'StrMech.stringData',
+// into 'p' as stream of bytes.
 //
-// 'StrMech.stringData' can be accessed through Getter and
-// Setter methods, StrMech.GetStringData() and
-// StrMech.SetStringData()
+// The bad news is that the size of the 'p' byte array must be
+// large enough to read all the 'StrMech.stringData' string. If
+// the size of 'p' is less than the length of 'StrMech.stringData',
+// an error will be returned.
+//
+// A more flexible alternative to this method can be found with
+// StrMech.GetNewReader() which returns
+//
+// The internal member string variable, 'StrMech.stringData' is
+// written into 'p'. When the end of 'StrMech.stringData' is
+// written to 'p', the method returns error = 'io.EOF'.
+//
+// 'StrMech.stringData' can be accessed through Getter and Setter
+// methods, StrMechGetStringData() and StrMechSetStringData()
+//
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// The size of the input parameter 'p' byte array must be equal to
+// or greater than the size of the string to be read,
+// 'StrMech.stringData'. If the size of 'p' is less than the length
+// of 'StrMech.stringData', an error will be returned.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+// 	strOpsInstance             *StrMech
+//     - A pointer to an instance of type 'StrMech'. The string,
+//       'StrMech.stringData' will be taken from this instance of
+//       StrMech.
+//
+//
+//  p                          []byte
+//     - The byte array into which the string 'StrMech.stringData'
+//       will be read.
+//
+//       If the size of 'p' is less than the length of
+//       'StrMech.stringData', an error will be returned.
+//
+//
+//  errPrefDto                 *ePref.ErrPrefixDto
+//     - This object encapsulates an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods listed
+//       as a function chain.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       Type ErrPrefixDto is included in the 'errpref' software
+//       package, "github.com/MikeAustin71/errpref".
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  n                          int
+//     - The number of bytes read into byte array 'p'.
+//
+//  err                        error
+//     - If all the bytes from internal member variable
+//       'StrMech.stringData' are read into byte array 'p', 'err'
+//       will be set to 'io.EOF'.
+//
+//       If an operational error is encountered during processing,
+//       this error return parameter will be populated with an
+//       appropriate error message.
 //
 func (sMechElectron *strMechElectron) readBytes(
 	strOpsInstance *StrMech,
@@ -631,7 +701,7 @@ func (sMechElectron *strMechElectron) readBytes(
 	err = io.EOF
 
 	if n == 0 {
-		strOpsInstance.cntBytesRead = 0
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Input byte array 'p' has zero length!\n",
 			ePrefix)
@@ -639,48 +709,39 @@ func (sMechElectron *strMechElectron) readBytes(
 		return 0, err
 	}
 
+	lenStr := len(strOpsInstance.stringData)
+
+	if n < lenStr {
+		n = 0
+		err = fmt.Errorf("%v\n"+
+			"Error: Length of input parameter 'p' is invalid!\n"+
+			"Length of 'p' is less then length of 'sMech.stringData'.\n"+
+			"Increase the size of 'p'.\n",
+			ePrefix.String())
+
+		return n, err
+	}
+
 	strData := strOpsInstance.stringData
 
 	w := []byte(strData)
 
-	lenW := uint64(len(w))
+	lenW := len(w)
 
-	cntBytesRead := strOpsInstance.cntBytesRead
-
-	if lenW == 0 ||
-		cntBytesRead >= lenW {
-		strOpsInstance.cntBytesRead = 0
+	if lenW == 0 {
 		n = 0
-		return n, err
-	}
-
-	startReadIdx := cntBytesRead
-
-	remainingBytesToRead := lenW - cntBytesRead
-
-	if uint64(n) < remainingBytesToRead {
-		remainingBytesToRead = startReadIdx + uint64(n)
-		err = nil
-	} else {
-		remainingBytesToRead += startReadIdx
 		err = io.EOF
+		return n, err
 	}
 
 	n = 0
 
-	for i := startReadIdx; i < remainingBytesToRead; i++ {
+	for i := 0; i < lenW; i++ {
 		p[n] = w[i]
 		n++
 	}
 
-	cntBytesRead += uint64(n)
-
-	if cntBytesRead >= lenW {
-		strOpsInstance.cntBytesRead = 0
-	} else {
-		strOpsInstance.cntBytesRead = cntBytesRead
-	}
-
+	err = io.EOF
 	return n, err
 }
 
