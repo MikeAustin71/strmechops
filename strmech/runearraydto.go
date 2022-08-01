@@ -4168,7 +4168,7 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 				"charsArrayDto"))
 }
 
-// SetRuneArrayFromString - Receives a string as an input parameter
+// SetString - Receives a string as an input parameter
 // and proceeds to populate the internal rune array with new
 // character data for the current instance of RuneArrayDto.
 //
@@ -4255,7 +4255,7 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 //       parameter 'errorPrefix' will be inserted or prefixed at
 //       the beginning of the error message.
 //
-func (charsArrayDto *RuneArrayDto) SetRuneArrayFromString(
+func (charsArrayDto *RuneArrayDto) SetString(
 	charString string,
 	errorPrefix interface{}) error {
 
@@ -4274,7 +4274,7 @@ func (charsArrayDto *RuneArrayDto) SetRuneArrayFromString(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayDto."+
-			"SetRuneArrayFromString()",
+			"SetString()",
 		"")
 
 	if err != nil {
