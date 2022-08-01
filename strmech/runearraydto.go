@@ -1458,6 +1458,154 @@ func (charsArrayDto RuneArrayDto) NewLatinAlphabet() RuneArrayDto {
 	return newRuneArrayDto
 }
 
+// NewNumStr - This method is designed to create a new instance of
+// RuneArrayDto configured on a number string passed as an input
+// parameter.
+//
+// The Character Search Type is defaulted to
+//   CharSearchType.LinearTargetStartingIndex()
+//
+// This is the character search type typically used when converting
+// number strings to numeric values.
+//
+// For more information on character search types see the source
+// code comments for type:
+//   CharacterSearchType.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  numStr                     string
+//     - A string of text characters containing numeric digits
+//
+//       If this string is empty or has a zero length, an error
+//       will be returned.
+//
+//
+//  errorPrefix                interface{}
+//     - This object encapsulates error prefix text which is
+//       included in all returned error messages. Usually, it
+//       contains the name of the calling method or methods
+//       listed as a method or function chain of execution.
+//
+//       If no error prefix information is needed, set this
+//       parameter to 'nil'.
+//
+//       This empty interface must be convertible to one of the
+//       following types:
+//
+//
+//       1. nil - A nil value is valid and generates an empty
+//                collection of error prefix and error context
+//                information.
+//
+//       2. string - A string containing error prefix information.
+//
+//       3. []string A one-dimensional slice of strings containing
+//                   error prefix information
+//
+//       4. [][2]string A two-dimensional slice of strings
+//          containing error prefix and error context information.
+//
+//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//                         ErrorPrefixInfo from this object will be
+//                         copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto - A pointer to an instance of
+//                          ErrPrefixDto. ErrorPrefixInfo from this
+//                          object will be copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       If parameter 'errorPrefix' is NOT convertible to one of
+//       the valid types listed above, it will be considered
+//       invalid and trigger the return of an error.
+//
+//       Types ErrPrefixDto and IBasicErrorPrefix are included in
+//       the 'errpref' software package,
+//       "github.com/MikeAustin71/errpref".
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  newRuneArrayDto            RuneArrayDto
+//     - If this method completes successfully a new, fully
+//       populated instance of RuneArrayDto will be returned to the
+//       calling function.
+//
+//
+//  err                        error
+//     - If this method completes successfully and no errors are
+//       encountered this return value is set to 'nil'. Otherwise,
+//       if errors are encountered, this return value will contain
+//       an appropriate error message.
+//
+//       If an error message is returned, the text value of input
+//       parameter 'errorPrefix' will be inserted or prefixed at
+//       the beginning of the error message.
+//
+//
+func (charsArrayDto RuneArrayDto) NewNumStr(
+	numStr string,
+	errorPrefix interface{}) (
+	newRuneArrayDto RuneArrayDto,
+	err error) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"NewNumStr()",
+		"")
+
+	if err != nil {
+		return newRuneArrayDto, err
+	}
+
+	if len(numStr) == 0 {
+
+		err = fmt.Errorf("%v\n" +
+			"Error: Input parameter 'numStr' is invalid!\n" +
+			"'numStr' is an empty string and has a string\n" +
+			"length of zero (0).\n" +
+			ePrefix.String())
+
+		return newRuneArrayDto, err
+
+	}
+
+	charArray := []rune(numStr)
+
+	err = runeArrayDtoElectron{}.ptr().
+		setRuneArray(
+			&newRuneArrayDto,
+			charArray,
+			ePrefix.XCpy(
+				"newRuneArrayDto"))
+
+	newRuneArrayDto.charSearchType =
+		CharSearchType.LinearTargetStartingIndex()
+
+	return newRuneArrayDto, err
+}
+
 // NewRunes - Receives an array of runes and returns a new
 // instance of RuneArrayDto.
 //
@@ -2278,7 +2426,7 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayDto."+
-			"NewRunes()",
+			"NewRunesPtr()",
 		"")
 
 	if err != nil {
@@ -2354,6 +2502,9 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 //       string search algorithm applied by the returned instance
 //       of RuneArrayDto. If 'charSearchType' is invalid, an error
 //       will be returned.
+//
+//       CharSearchType.LinearTargetStartingIndex() is the default
+//       search type.
 //
 //
 //       The Character Search Type must be set to one of the
@@ -2561,7 +2712,7 @@ func (charsArrayDto RuneArrayDto) NewString(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayDto."+
-			"NewStringAllParams()",
+			"NewString()",
 		"")
 
 	if err != nil {
@@ -3146,7 +3297,7 @@ func (charsArrayDto RuneArrayDto) NewStringPtr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"RuneArrayDto."+
-			"NewStringAllParams()",
+			"NewStringPtr()",
 		"")
 
 	if err != nil {
