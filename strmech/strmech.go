@@ -10,7 +10,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"io"
 	"strings"
 	"sync"
 )
@@ -2753,9 +2752,34 @@ func (sMech *StrMech) FindRunesInRunes(
 	return foundIndex, err
 }
 
-// GetReader - Returns an io.Reader which will read the private
-// member data element StrMech.stringData.
-func (sMech *StrMech) GetReader() io.Reader {
+// GetReader - Returns a pointer to a strings.Reader which will
+// read the private member data element 'StrMech.stringData'.
+//
+// 'StrMech.stringData' can be accessed through Getter and Setter
+// methods, GetStringData() and SetStringData()
+//
+// Reference:
+//  https://pkg.go.dev/strings#NewReader
+//  https://pkg.go.dev/strings#Reader
+//  https://devbits.app/s/200/strings.NewReader
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  None
+//
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//  *strings.Reader
+//     - This returned 'Reader' contains the internal member
+//       variable string, 'StrMech.stringData'
+//
+func (sMech *StrMech) GetReader() *strings.Reader {
 	var stringData string
 
 	if sMech.stringDataMutex == nil {
@@ -4359,7 +4383,8 @@ func (sMech *StrMech) NumberStringParser(
 // an error will be returned.
 //
 // A more flexible alternative to this method can be found with
-// StrMech.GetNewReader() which returns
+// StrMech.GetReader() which returns a pointer to a strings.Reader
+// (*strings.Reader).
 //
 // The internal member string variable, 'StrMech.stringData' is
 // written into 'p'. When the end of 'StrMech.stringData' is
