@@ -562,7 +562,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	const maxLineLen = 78
 
 	// Max Label Field Length = 24
-	const maxLabelFieldLen = 24
+	const maxLabelFieldLen = 33
 
 	txtFormatCol := TextFormatterCollection{}
 

@@ -114,7 +114,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	targetInputParms.TargetInputParametersName = "Extract Number Runes"
 	targetInputParms.TargetStringDescription2 =
-		ePrefix.String()
+		"strMechMolecule.extractNumRunes()"
 
 	if len(targetSearchStringName) == 0 {
 		targetInputParms.TargetStringName = "targetSearchString"

@@ -1713,7 +1713,7 @@ func (sMech *StrMech) ExtractNumberRunes(
 
 	searchResults,
 		numStrKernel,
-		err = strMechMolecule{}.ptr().extractNumRunes(
+		err = new(strMechMolecule).extractNumRunes(
 		rawNumStrRunes,
 		"numberStr",
 		startSearchIndex,
