@@ -673,8 +673,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	// Total available Length of Output Line
 	const maxLineLen = 79
 
-	// Max Label Field Length = 37
-	const maxLabelFieldLen = 37
+	// Max Label Field Length = 38
+	const maxLabelFieldLen = 38
 
 	txtFormatCol := TextFormatterCollection{}
 
