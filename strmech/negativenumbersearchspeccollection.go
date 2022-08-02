@@ -1520,7 +1520,7 @@ func (negNumSignCol *NegNumSearchSpecCollection) SearchForNegNumSignSymbols(
 			negNumSignCol.foundNegNumSignColIndex =
 				searchResults.CollectionTestObjIndex
 
-			break
+			return searchResults, err
 		}
 	}
 

@@ -595,6 +595,9 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 	searchResults.LoadTestBaseInputParameters(
 		testInputParms)
 
+	searchResults.SearchResultsFunctionChain =
+		ePrefix.String()
+
 	j := 0
 	k := 0
 
@@ -1404,6 +1407,9 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 	searchResults.LoadTestBaseInputParameters(
 		testInputParms)
 
+	searchResults.SearchResultsFunctionChain =
+		ePrefix.String()
+
 	j := 0
 
 	for i := targetInputParms.TargetStringCurrentSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
@@ -1940,6 +1946,9 @@ func (runeDtoElectron *runeArrayDtoElectron) singleCharacterSearch(
 
 	searchResults.LoadTestBaseInputParameters(
 		testInputParms)
+
+	searchResults.SearchResultsFunctionChain =
+		ePrefix.String()
 
 	targetChar :=
 		targetInputParms.TargetString.CharsArray[targetInputParms.TargetStringCurrentSearchIndex]

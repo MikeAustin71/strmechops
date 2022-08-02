@@ -3942,11 +3942,38 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	runeArrayNanobot := runeArrayDtoNanobot{}
 
-	return runeArrayNanobot.characterSearchExecutor(
+	var searchResults CharSearchRuneArrayResultsDto
+
+	searchResults,
+		err = runeArrayNanobot.characterSearchExecutor(
 		targetInputParms,
 		testInputParms,
 		ePrefix)
 
+	if err != nil {
+
+		return searchResults, err
+
+	}
+
+	if searchResults.FoundSearchTarget {
+
+		err = searchResults.FoundRuneArrayChars.
+			CopyIn(
+				charsArrayDto,
+				ePrefix.XCpy(
+					"searchResults.FoundRuneArrayChars"+
+						"<-charsArrayDto"))
+
+		if err != nil {
+
+			return searchResults, err
+
+		}
+
+	}
+
+	return searchResults, err
 }
 
 // SetCharacterSearchType - Sets the internal member variable used

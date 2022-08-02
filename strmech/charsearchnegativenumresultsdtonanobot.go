@@ -622,6 +622,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
 	searchNegNumResults *CharSearchNegativeNumberResultsDto,
+	displayFunctionChain bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if searchNegNumResultsNanobot.lock == nil {
@@ -672,8 +673,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	// Total available Length of Output Line
 	const maxLineLen = 79
 
-	// Max Label Field Length = 24
-	const maxLabelFieldLen = 35
+	// Max Label Field Length = 37
+	const maxLabelFieldLen = 37
 
 	txtFormatCol := TextFormatterCollection{}
 
@@ -829,55 +830,63 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	// Build SearchResultsFunctionChain
 
-	txtStrLabel = "SearchResultsFunctionChain"
+	if displayFunctionChain {
 
-	txtStrParam = searchNegNumResults.SearchResultsFunctionChain
+		txtStrLabel = "SearchResultsFunctionChain"
 
-	if len(txtStrParam) == 0 {
+		txtStrParam = searchNegNumResults.SearchResultsFunctionChain
 
-		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+		if len(txtStrParam) == 0 {
 
-		err = txtFormatCol.AddLine2Col(
-			txtStrLabel,
-			txtStrParam,
-			ePrefix.XCpy(
-				""))
+			txtStrParam = "SearchResultsFunctionChain is EMPTY!"
 
-		if err != nil {
-			return err
+			err = txtFormatCol.AddLine2Col(
+				txtStrLabel,
+				txtStrParam,
+				ePrefix.XCpy(
+					""))
+
+			if err != nil {
+				return err
+			}
+
+		} else {
+
+			txtFormatCol.AddFieldLabel(
+				" ",
+				txtStrLabel,
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				"\n",
+				-1,
+				false)
+
+			spacer := strings.Repeat(" ", 16)
+
+			txtStrParam = strings.Replace(
+				txtStrParam,
+				"\n",
+				"\n"+spacer,
+				-1)
+
+			txtStrParam = "\n" + spacer + txtStrParam
+
+			txtFormatCol.AddFieldLabel(
+				"",
+				txtStrParam,
+				-1,
+				TxtJustify.Left(),
+				"",
+				"\n",
+				-1,
+				false)
+
+			txtFormatCol.AddLineBlank(
+				1,
+				"")
+
 		}
-
-	} else {
-
-		txtFormatCol.AddFieldLabel(
-			" ",
-			txtStrLabel,
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			-1,
-			false)
-
-		spacer := strings.Repeat(" ", 16)
-
-		txtStrParam = strings.Replace(
-			txtStrParam,
-			"\n",
-			"\n"+spacer,
-			-1)
-
-		txtStrParam = "\n" + spacer + txtStrParam
-
-		txtFormatCol.AddFieldLabel(
-			"",
-			txtStrParam,
-			-1,
-			TxtJustify.Left(),
-			"",
-			"\n",
-			-1,
-			false)
 
 	}
 
@@ -1444,10 +1453,13 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	txtStrLabel = "NegativeNumberSymbolsSpec"
 
-	if !searchNegNumResults.NegativeNumberSymbolsSpec.
+	if searchNegNumResults.NegativeNumberSymbolsSpec.
 		IsValidInstance() {
+
 		txtStrParam = "NegativeNumberSymbolsSpec is populated and valid."
+
 	} else {
+
 		txtStrParam = "NegativeNumberSymbolsSpec is invalid and empty."
 	}
 
@@ -1513,7 +1525,12 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	txtStrLabel = "FoundLeadingNegNumSymbol Chars"
 
 	if lenTxtStrParam == 0 {
+
 		txtStrParam = "FoundLeadingNegNumSymbol is EMPTY!"
+
+	} else {
+
+		txtStrParam = "\"" + txtStrParam + "\""
 	}
 
 	err = txtFormatCol.AddLine2Col(
@@ -1532,7 +1549,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 		err = txtFormatCol.AddLine2Col(
 			txtStrLabel,
-			txtStrParam,
+			lenTxtStrParam,
 			ePrefix.XCpy(
 				"FoundLeadingNegNumSymbol Chars Length"))
 
@@ -1553,7 +1570,12 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	txtStrLabel = "FoundTrailingNegNumSymbol Chars"
 
 	if lenTxtStrParam == 0 {
+
 		txtStrParam = "FoundTrailingNegNumSymbol is EMPTY!"
+
+	} else {
+
+		txtStrParam = "\"" + txtStrParam + "\""
 	}
 
 	err = txtFormatCol.AddLine2Col(
@@ -1572,7 +1594,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 		err = txtFormatCol.AddLine2Col(
 			txtStrLabel,
-			txtStrParam,
+			lenTxtStrParam,
 			ePrefix.XCpy(
 				"FoundTrailingNegNumSymbol Chars Length"))
 

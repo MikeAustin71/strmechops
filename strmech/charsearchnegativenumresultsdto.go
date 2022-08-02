@@ -689,6 +689,12 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
 //       written to this instance of strings.Builder.
 //
 //
+//  displayFunctionChain       bool
+//     - Set 'displayFunctionChain' to 'true' and a list of the
+//       functions which led to this result will be included in
+//       the text output.
+//
+//
 //  errorPrefix                interface{}
 //     - This object encapsulates error prefix text which is
 //       included in all returned error messages. Usually, it
@@ -752,6 +758,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
 //
 func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextListing(
 	strBuilder *strings.Builder,
+	displayFunctionChain bool,
 	errorPrefix interface{}) error {
 
 	if negNumSearchResults.lock == nil {
@@ -780,6 +787,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextL
 		getParameterTextListing(
 			strBuilder,
 			negNumSearchResults,
+			displayFunctionChain,
 			ePrefix.XCpy(
 				"negNumSearchResults->Parameter Listing"))
 
@@ -1274,6 +1282,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) String() string {
 		getParameterTextListing(
 			&strBuilder,
 			negNumSearchResults,
+			false,
 			ePrefix.XCpy(
 				"negNumSearchResults->Parameter Listing"))
 

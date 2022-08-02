@@ -890,6 +890,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		err = numStrParseResults.NegativeNumberSymbolSearchResults.
 			GetParameterTextListing(
 				strBuilder,
+				true,
 				ePrefix.XCpy(
 					"numStrParseResults"))
 

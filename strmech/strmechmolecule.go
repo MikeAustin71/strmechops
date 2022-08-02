@@ -351,7 +351,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 				err = negativeNumSearchSpecsCol.
 				SearchForNegNumSignSymbols(
 					targetInputParms,
-					ePrefix)
+					ePrefix.XCpy(
+						"negativeNumSearchSpecsCol"))
 
 			if searchResults.NegativeNumberSymbolSearchResults.
 				FoundNegativeNumberSymbols {
