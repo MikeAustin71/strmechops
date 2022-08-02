@@ -2129,6 +2129,12 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		return searchResults, err
 	}
 
+	searchResults.SearchResultsName =
+		"Negative Number Sign Symbol Search"
+
+	searchResults.SearchResultsFunctionChain =
+		ePrefix.String()
+
 	testConfigDto := CharSearchTestConfigDto{}.New()
 
 	testInputParms := CharSearchTestInputParametersDto{}.New()
@@ -2194,6 +2200,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 					"negNumSearchSpec-Before"))
 
 		if err != nil {
+
 			return searchResults, err
 
 		}
@@ -2204,8 +2211,10 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			negNumSearchSpec.foundLeadingNegNumSignIndex =
 				runeArraySearchResults.TargetStringFirstFoundIndex
 
-			searchResults.LoadRuneArraySearchResults(
+			searchResults.LoadLeadingNegNumSymRuneArraySearchResults(
 				runeArraySearchResults)
+
+			searchResults.NumSignValue = NumSignVal.Negative()
 
 			searchResults.FoundNegativeNumberSymbols = true
 
@@ -2218,6 +2227,12 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 				negNumSearchSpec,
 				ePrefix.XCpy(
 					"searchResults<-negNumSearchSpec"))
+
+			if err != nil {
+
+				return searchResults, err
+
+			}
 		}
 
 		return searchResults, err
@@ -2291,12 +2306,17 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 			negNumSearchSpec.foundTrailingNegNumSignIndex =
 				searchResults.TargetStringFirstFoundIndex
 
-			searchResults.LoadRuneArraySearchResults(
+			searchResults.LoadTrailingNegNumSymRuneArraySearchResults(
 				runeArraySearchResults)
+
+			searchResults.NumSignValue = NumSignVal.Negative()
 
 			searchResults.FoundNegativeNumberSymbols = true
 
 			searchResults.FoundTrailingNegNumSymbols = true
+
+			searchResults.PrimaryNumSignPosition =
+				NumSignSymPos.After()
 
 			err = searchResults.NegativeNumberSymbolsSpec.CopyIn(
 				negNumSearchSpec,
@@ -2381,6 +2401,10 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 
 			searchResults.SecondaryNumSignPosition =
 				NumSignSymPos.Before()
+
+			searchResults.LoadLeadingNegNumSymRuneArraySearchResults(
+				runeArraySearchResults)
+
 		}
 
 		return searchResults, err
@@ -2444,7 +2468,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SearchForNegNumSignSymbols(
 		negNumSearchSpec.foundTrailingNegNumSignIndex =
 			searchResults.TargetStringFirstFoundIndex
 
-		searchResults.LoadRuneArraySearchResults(
+		searchResults.LoadTrailingNegNumSymRuneArraySearchResults(
 			runeArraySearchResults)
 
 		searchResults.FoundNegativeNumberSymbols = true

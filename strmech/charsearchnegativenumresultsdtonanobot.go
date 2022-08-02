@@ -274,11 +274,22 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 		return err
 	}
 
-	err = destinationNegNumResults.FoundRuneArrayChars.CopyIn(
-		&sourceNegNumResults.FoundRuneArrayChars,
+	err = destinationNegNumResults.FoundLeadingNegNumSymbol.CopyIn(
+		&sourceNegNumResults.FoundLeadingNegNumSymbol,
 		ePrefix.XCpy(
 			"destinationNegNumResults."+
-				"RemainderString<-"+
+				"FoundLeadingNegNumSymbol<-"+
+				"sourceNegNumResults"))
+
+	if err != nil {
+		return err
+	}
+
+	err = destinationNegNumResults.FoundTrailingNegNumSymbol.CopyIn(
+		&sourceNegNumResults.FoundTrailingNegNumSymbol,
+		ePrefix.XCpy(
+			"destinationNegNumResults."+
+				"FoundTrailingNegNumSymbol<-"+
 				"sourceNegNumResults"))
 
 	return err
@@ -528,17 +539,24 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 		return deepCopyNegNumResultsDto, err
 	}
 
-	err = deepCopyNegNumResultsDto.FoundRuneArrayChars.CopyIn(
-		&searchNegNumResults.FoundRuneArrayChars,
+	err = deepCopyNegNumResultsDto.FoundLeadingNegNumSymbol.CopyIn(
+		&searchNegNumResults.FoundLeadingNegNumSymbol,
 		ePrefix.XCpy(
 			"deepCopyNegNumResultsDto."+
-				"FoundRuneArrayChars<-"+
+				"FoundLeadingNegNumSymbol<-"+
 				"searchNegNumResults"))
 
 	if err != nil {
 
 		return deepCopyNegNumResultsDto, err
 	}
+
+	err = deepCopyNegNumResultsDto.FoundTrailingNegNumSymbol.CopyIn(
+		&searchNegNumResults.FoundTrailingNegNumSymbol,
+		ePrefix.XCpy(
+			"deepCopyNegNumResultsDto."+
+				"FoundTrailingNegNumSymbol<-"+
+				"searchNegNumResults"))
 
 	return deepCopyNegNumResultsDto, err
 }
@@ -1485,25 +1503,83 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		return err
 	}
 
-	// Build FoundRuneArrayChars
-
-	txtStrLabel = "FoundRuneArrayChars"
+	// Build FoundLeadingNegNumSymbol Characters
 
 	txtStrParam =
-		searchNegNumResults.FoundRuneArrayChars.GetCharacterString()
+		searchNegNumResults.FoundLeadingNegNumSymbol.GetCharacterString()
 
-	if len(txtStrParam) == 0 {
-		txtStrParam = "FoundRuneArrayChars is EMPTY!"
+	lenTxtStrParam := len(txtStrParam)
+
+	txtStrLabel = "FoundLeadingNegNumSymbol Chars"
+
+	if lenTxtStrParam == 0 {
+		txtStrParam = "FoundLeadingNegNumSymbol is EMPTY!"
 	}
 
 	err = txtFormatCol.AddLine2Col(
 		txtStrLabel,
 		txtStrParam,
 		ePrefix.XCpy(
-			"ReplacementString"))
+			"FoundLeadingNegNumSymbol"))
 
 	if err != nil {
 		return err
+	}
+
+	if lenTxtStrParam > 0 {
+
+		txtStrLabel = "FoundLeadingNegNumSymbol Chars Length"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				"FoundLeadingNegNumSymbol Chars Length"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	// Build FoundTrailingNegNumSymbol Characters
+
+	txtStrParam =
+		searchNegNumResults.FoundTrailingNegNumSymbol.
+			GetCharacterString()
+
+	lenTxtStrParam = len(txtStrParam)
+
+	txtStrLabel = "FoundTrailingNegNumSymbol Chars"
+
+	if lenTxtStrParam == 0 {
+		txtStrParam = "FoundTrailingNegNumSymbol is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"FoundTrailingNegNumSymbol"))
+
+	if err != nil {
+		return err
+	}
+
+	if lenTxtStrParam > 0 {
+
+		txtStrLabel = "FoundTrailingNegNumSymbol Chars Length"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(
+				"FoundTrailingNegNumSymbol Chars Length"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	// Trailing Title Marquee

@@ -138,9 +138,11 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) empty(
 
 	negNumSearchResultsDto.ReplacementString.Empty()
 
-	negNumSearchResultsDto.ReplacementString.Empty()
+	negNumSearchResultsDto.RemainderString.Empty()
 
-	negNumSearchResultsDto.ReplacementString.Empty()
+	negNumSearchResultsDto.FoundLeadingNegNumSymbol.Empty()
+
+	negNumSearchResultsDto.FoundTrailingNegNumSymbol.Empty()
 
 }
 
@@ -437,8 +439,14 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) equal(
 		return false
 	}
 
-	if !negNumSearchResultsDto1.FoundRuneArrayChars.Equal(
-		&negNumSearchResultsDto2.FoundRuneArrayChars) {
+	if !negNumSearchResultsDto1.FoundLeadingNegNumSymbol.Equal(
+		&negNumSearchResultsDto2.FoundLeadingNegNumSymbol) {
+
+		return false
+	}
+
+	if !negNumSearchResultsDto1.FoundTrailingNegNumSymbol.Equal(
+		&negNumSearchResultsDto2.FoundTrailingNegNumSymbol) {
 
 		return false
 	}

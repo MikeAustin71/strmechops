@@ -397,7 +397,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	// End Of Marquee
 
-	numberStr := " 1.234 "
+	numberStr := " -1.234 "
 
 	var searchResults strmech.CharSearchNumStrParseResultsDto
 	var numStrKernel strmech.NumberStrKernel
