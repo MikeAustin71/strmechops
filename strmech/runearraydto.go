@@ -3916,10 +3916,18 @@ func (charsArrayDto *RuneArrayDto) SearchForTextCharacterString(
 
 	testInputParms.TestString = charsArrayDto
 
-	testInputParms.TestStringName = "RuneArrayDto.CharsArray"
+	if len(testInputParms.TestStringName) == 0 {
 
-	testInputParms.TestStringLengthName =
-		"RuneArrayDto Length"
+		testInputParms.TestStringName = "RuneArrayDto.CharsArray"
+
+	}
+
+	if len(testInputParms.TestStringLengthName) == 0 {
+
+		testInputParms.TestStringLengthName =
+			"RuneArrayDto Length"
+
+	}
 
 	testInputParms.TestStringStartingIndex = 0
 

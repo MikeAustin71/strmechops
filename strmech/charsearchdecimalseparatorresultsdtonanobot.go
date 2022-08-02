@@ -791,6 +791,10 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 		} else {
 
+			txtFormatCol.AddLineBlank(
+				1,
+				"")
+
 			txtFormatCol.AddFieldLabel(
 				" ",
 				txtStrLabel,
@@ -820,6 +824,10 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 				"\n",
 				-1,
 				false)
+
+			txtFormatCol.AddLineBlank(
+				1,
+				"")
 
 		}
 	}
@@ -1309,14 +1317,22 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	// Build DecimalSeparatorSymbolsSpec
 
-	txtStrLabel = "DecimalSeparatorSymbolsSpec"
-
 	txtStrParam = decimalSeparatorResults.
 		DecimalSeparatorSymbolsSpec.
 		GetDecimalSeparatorStr()
 
-	if len(txtStrParam) == 0 {
+	lenTxtStrParam := len(txtStrParam)
+
+	txtStrLabel = "DecimalSeparatorSymbolsSpec"
+
+	if lenTxtStrParam == 0 {
+
 		txtStrParam = "DecimalSeparatorSymbolsSpec is EMPTY!"
+
+	} else {
+
+		txtStrParam = "\"" + txtStrParam + "\""
+
 	}
 
 	err = txtFormatCol.AddLine2Col(
@@ -1327,6 +1343,21 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	if err != nil {
 		return err
+	}
+
+	if lenTxtStrParam > 0 {
+		txtStrLabel = "DecimalSeparatorSymbols Length"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			lenTxtStrParam,
+			ePrefix.XCpy(
+				"DecimalSeparatorSymbols Length"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	// Build ReplacementString
@@ -1375,14 +1406,22 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	// Build FoundRuneArrayChars
 
+	txtStrParam = decimalSeparatorResults.
+		FoundRuneArrayChars.
+		GetCharacterString()
+
+	lenTxtStrParam = len(txtStrParam)
+
 	txtStrLabel = "FoundRuneArrayChars"
 
 	txtStrParam = decimalSeparatorResults.
 		FoundRuneArrayChars.
 		GetCharacterString()
 
-	if len(txtStrParam) == 0 {
+	if lenTxtStrParam == 0 {
 		txtStrParam = "FoundRuneArrayChars is EMPTY!"
+	} else {
+		txtStrParam = "\"" + txtStrParam + "\""
 	}
 
 	err = txtFormatCol.AddLine2Col(
@@ -1393,6 +1432,22 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	if err != nil {
 		return err
+	}
+
+	if lenTxtStrParam > 0 {
+
+		txtStrLabel = "FoundRuneArrayChars Length"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			lenTxtStrParam,
+			ePrefix.XCpy(
+				"FoundRuneArrayChars Length"))
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	// Trailing Title Marquee

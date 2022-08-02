@@ -1065,8 +1065,9 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 	}
 
 	testConfigDto := CharSearchTestConfigDto{}.New()
-	testConfigDto.TestStringName = "testString"
-	testConfigDto.TestStringLengthName = "testStringLength"
+	testConfigDto.TestStringName = "Decimal Separator"
+	testConfigDto.TestInputParametersName = "Decimal Separator Search Parameters"
+	testConfigDto.TestStringLengthName = "Decimal Separator Chars Length"
 	testConfigDto.TestStringStartingIndex = 0
 	testConfigDto.TestStringDescription1 = "Decimal Separator"
 	testConfigDto.CollectionTestObjIndex = -1
@@ -1094,6 +1095,38 @@ func (decSeparatorSpec *DecimalSeparatorSpec) SearchForDecimalSeparator(
 			runeArraySearchResults)
 
 		decimalSearchResults.FoundDecimalSeparatorSymbols = true
+
+		decimalSearchResults.NumValueType = NumValType.FloatingPoint()
+
+		if targetInputParms.FoundFirstNumericDigitInNumStr == true {
+
+			decimalSearchResults.NumSymbolLocation = NumSymLocation.Interior()
+
+		} else {
+
+			decimalSearchResults.NumSymbolLocation = NumSymLocation.Before()
+
+		}
+
+		decimalSearchResults.SearchResultsName = "Decimal Separator Search Results"
+
+		err = decimalSearchResults.FoundRuneArrayChars.CopyIn(
+			&decSeparatorSpec.decimalSeparatorChars,
+			ePrefix.XCpy("decSeparatorSpec.decimalSeparatorChars"))
+
+		if err != nil {
+			return decimalSearchResults, err
+		}
+
+		decimalSearchResults.SearchResultsFunctionChain = ePrefix.String()
+
+		err = decimalSearchResults.DecimalSeparatorSymbolsSpec.CopyIn(
+			decSeparatorSpec,
+			ePrefix.XCpy("decSeparatorSpec"))
+
+		if err != nil {
+			return decimalSearchResults, err
+		}
 
 	}
 
