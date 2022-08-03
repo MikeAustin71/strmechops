@@ -253,6 +253,16 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.NegativeNumberSymbolSearchResults.Empty()
 	searchResults.ParsingTerminatorSearchResults.Empty()
 
+	// Processing Flags
+	searchResults.ParsingTerminatorSearchResults.IsNOP =
+		numParsingTerminators.IsNOP()
+
+	searchResults.ParsingTerminatorSearchResults.SearchResultsName =
+		"Number Parsing Terminator Search Results"
+
+	numParsingTerminatorsIsNOP :=
+		searchResults.ParsingTerminatorSearchResults.IsNOP
+
 	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
 
 		targetInputParms.TargetStringCurrentSearchIndex = i
@@ -314,7 +324,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 		// Check for Parsing Terminators
 		// All Parsing Operations Cease if Delimiter is Found
-		if !numParsingTerminators.IsNOP() &&
+		if !numParsingTerminatorsIsNOP &&
 			targetInputParms.FoundFirstNumericDigitInNumStr {
 
 			searchResults.ParsingTerminatorSearchResults,

@@ -60,6 +60,8 @@ func (searchRunesResultsDtoAtom *charSearchRuneArrayResultsDtoAtom) empty(
 
 	runeSearchResults.SearchResultsFunctionChain = ""
 
+	runeSearchResults.IsNOP = false
+
 	runeSearchResults.FoundSearchTarget = false
 
 	runeSearchResults.FoundFirstNumericDigitInNumStr = false
@@ -192,6 +194,12 @@ func (searchRunesResultsDtoAtom *charSearchRuneArrayResultsDtoAtom) equal(
 
 	if runeSearchResults1.SearchResultsFunctionChain !=
 		runeSearchResults2.SearchResultsFunctionChain {
+
+		return false
+	}
+
+	if runeSearchResults1.IsNOP !=
+		runeSearchResults2.IsNOP {
 
 		return false
 	}

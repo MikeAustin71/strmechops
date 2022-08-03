@@ -903,6 +903,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		err = numStrParseResults.ParsingTerminatorSearchResults.
 			GetParameterTextListing(
 				strBuilder,
+				true,
 				ePrefix.XCpy(
 					"numStrParseResults"))
 

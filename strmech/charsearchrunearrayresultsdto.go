@@ -9,12 +9,22 @@ import (
 
 type CharSearchRuneArrayResultsDto struct {
 	SearchResultsName string
-	// Optional. The Name, Label or descriptive Tag associated with
-	// the current instance of CharSearchResultsDto.
+	// Optional. The Name, Label or descriptive Tag associated
+	// with the current instance of CharSearchResultsDto.
 
 	SearchResultsFunctionChain string
 	// Optional. A listing of the functions which led to the
 	// creation of this instance of CharSearchResultsDto.
+
+	IsNOP bool
+	// IsNOP - Stands for 'Is No Operation'. This boolean value
+	// signals whether the Rune Array used in this/ search
+	// algorithm is engaged and operational, or not.
+	//
+	// If 'IsNOP' is set to 'true', it signals that the Rune
+	// Array supporting this search activity is simply a
+	// placeholder and performs no active role in the search
+	// algorithm.
 
 	FoundSearchTarget bool
 	// Signals a successful search outcome. If set to 'true' the
@@ -550,7 +560,7 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Equal(
 //
 //  strBuilder                 *strings.Builder
 //     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
+//       formatted text characters produced for this method will be
 //       written to this instance of strings.Builder.
 //
 //
@@ -617,6 +627,7 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) Equal(
 //
 func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) GetParameterTextListing(
 	strBuilder *strings.Builder,
+	displayFunctionChain bool,
 	errorPrefix interface{}) error {
 
 	if runesSearchResultsDto.lock == nil {
@@ -645,6 +656,7 @@ func (runesSearchResultsDto *CharSearchRuneArrayResultsDto) GetParameterTextList
 		getParameterTextListing(
 			strBuilder,
 			runesSearchResultsDto,
+			displayFunctionChain,
 			ePrefix.XCpy("runesSearchResultsDto"))
 }
 
@@ -838,6 +850,7 @@ func (runesSearchResultsDto CharSearchRuneArrayResultsDto) String() string {
 		getParameterTextListing(
 			&strBuilder,
 			&runesSearchResultsDto,
+			false,
 			ePrefix.XCpy("runesSearchResultsDto"))
 
 	if err != nil {

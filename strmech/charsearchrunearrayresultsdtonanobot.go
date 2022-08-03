@@ -139,6 +139,9 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyIn(
 	destinationRuneSearchResults.SearchResultsFunctionChain =
 		sourceRuneSearchResults.SearchResultsFunctionChain
 
+	destinationRuneSearchResults.IsNOP =
+		sourceRuneSearchResults.IsNOP
+
 	destinationRuneSearchResults.FoundSearchTarget =
 		sourceRuneSearchResults.FoundSearchTarget
 
@@ -349,6 +352,9 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 	deepCopyRuneSearchResults.SearchResultsFunctionChain =
 		runeSearchResultsDto.SearchResultsFunctionChain
 
+	deepCopyRuneSearchResults.IsNOP =
+		runeSearchResultsDto.IsNOP
+
 	deepCopyRuneSearchResults.FoundSearchTarget =
 		runeSearchResultsDto.FoundSearchTarget
 
@@ -472,6 +478,12 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 //
 // Input Parameters
 //
+//  strBuilder                 *strings.Builder
+//     - A pointer to an instance of *strings.Builder. The
+//       formatted text characters produced by this method will be
+//       written to this instance of strings.Builder.
+//
+//
 //  runeSearchResultsDto       *CharSearchRuneArrayResultsDto
 //     - A pointer to an instance of CharSearchRuneArrayResultsDto.
 //       Formatted text output will be generated listing the member
@@ -481,6 +493,12 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 //
 //       No data validation is performed on this instance of
 //       CharSearchRuneArrayResultsDto.
+//
+//
+//  displayFunctionChain       bool
+//     - Set 'displayFunctionChain' to 'true' and a list of the
+//       functions which led to this result will be included in
+//       the text output.
 //
 //
 //  errPrefDto                 *ePref.ErrPrefixDto
@@ -500,15 +518,6 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'runeSearchResultsDto' . This formatted text can them be used
-//       for screen displays, file output or printing.
-//
-//
 //  error
 //     - If this method completes successfully, this returned error
 //       Type is set equal to 'nil'. If errors are encountered during
@@ -522,6 +531,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) copyOut
 func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
 	runeSearchResultsDto *CharSearchRuneArrayResultsDto,
+	displayFunctionChain bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	var ePrefix *ePref.ErrPrefixDto
@@ -561,7 +571,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 	// Total available Length of Output Line
 	const maxLineLen = 78
 
-	// Max Label Field Length = 24
+	// Max Label Field Length = 33
 	const maxLabelFieldLen = 33
 
 	txtFormatCol := TextFormatterCollection{}
@@ -715,55 +725,106 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	// Build SearchResultsFunctionChain
 
-	txtStrLabel = "SearchResultsFunctionChain"
+	if displayFunctionChain {
 
-	txtStrParam = runeSearchResultsDto.SearchResultsFunctionChain
+		txtStrLabel = "SearchResultsFunctionChain"
 
-	if len(txtStrParam) == 0 {
+		txtStrParam = runeSearchResultsDto.SearchResultsFunctionChain
 
-		txtStrParam = "SearchResultsFunctionChain is EMPTY!"
+		if len(txtStrParam) == 0 {
 
-		err = txtFormatCol.AddLine2Col(
-			txtStrLabel,
-			txtStrParam,
-			ePrefix.XCpy(
-				""))
+			txtStrParam = "SearchResultsFunctionChain is EMPTY!"
 
-		if err != nil {
-			return err
+			err = txtFormatCol.AddLine2Col(
+				txtStrLabel,
+				txtStrParam,
+				ePrefix.XCpy(
+					""))
+
+			if err != nil {
+				return err
+			}
+
+		} else {
+
+			txtFormatCol.AddFieldLabel(
+				" ",
+				txtStrLabel,
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				"\n",
+				-1,
+				false)
+
+			spacer := strings.Repeat(" ", 16)
+
+			txtStrParam = strings.Replace(
+				txtStrParam,
+				"\n",
+				"\n"+spacer,
+				-1)
+
+			txtStrParam = "\n" + spacer + txtStrParam
+
+			txtFormatCol.AddFieldLabel(
+				"",
+				txtStrParam,
+				-1,
+				TxtJustify.Left(),
+				"",
+				"\n",
+				-1,
+				false)
+
+			txtFormatCol.AddLineBlank(
+				1,
+				"")
+
 		}
 
-	} else {
+	}
 
-		txtFormatCol.AddFieldLabel(
-			" ",
+	// Build IsNOP Name
+
+	txtStrLabel = "IsNOP - Is No Operation"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		runeSearchResultsDto.IsNOP,
+		ePrefix.XCpy(
+			"SearchResultsName"))
+
+	if err != nil {
+		return err
+	}
+
+	if runeSearchResultsDto.IsNOP {
+
+		//txtFormatCol.AddLineBlank(
+		//	1,
+		//	"")
+
+		spacer := strings.Repeat(" ", maxLabelFieldLen)
+
+		// termLine := "\n" + spacer
+
+		txtStrLabel =
+			"This entity is a NOP or No Operation. " +
+				"It is configured as an empty placeholder " +
+				"and played no role in the most recent " +
+				"search operation."
+
+		txtFormatCol.AddAdHocText(
+			spacer,
 			txtStrLabel,
-			maxLabelFieldLen,
-			TxtJustify.Right(),
-			colonSpace,
-			"\n",
-			-1,
-			false)
-
-		spacer := strings.Repeat(" ", 16)
-
-		txtStrParam = strings.Replace(
-			txtStrParam,
-			"\n",
-			"\n"+spacer,
-			-1)
-
-		txtStrParam = "\n" + spacer + txtStrParam
-
-		txtFormatCol.AddFieldLabel(
 			"",
-			txtStrParam,
-			-1,
-			TxtJustify.Left(),
-			"",
+			false,
 			"\n",
-			-1,
-			false)
+			maxLineLen,
+			true)
+
+		goto exitMethodTrailer
 
 	}
 
@@ -1276,6 +1337,8 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 		return err
 	}
 
+exitMethodTrailer:
+
 	// Trailing Title Marquee
 	// Top Blank Line
 	txtFormatCol.AddLineBlank(
@@ -1296,7 +1359,24 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 		return err
 	}
 
-	// Title # 2
+	txtStrParam =
+		runeSearchResultsDto.SearchResultsName
+
+	if len(txtStrParam) > 0 {
+
+		// Title Line 2
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Bottom-Title Line 2"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	// Title # 3
 	err = txtFormatCol.AddLine1Col(
 		"End of Parameter Listing",
 		ePrefix.XCpy(
