@@ -131,7 +131,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 		return err
 	}
 
-	charSearchNumStrParseResultsDtoAtom{}.ptr().
+	new(charSearchNumStrParseResultsDtoAtom).
 		empty(destinationNumStrParseResults)
 
 	destinationNumStrParseResults.SearchResultsName =
@@ -139,6 +139,16 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 
 	destinationNumStrParseResults.SearchResultsFunctionChain =
 		sourceNumStrParseResults.SearchResultsFunctionChain
+
+	err = destinationNumStrParseResults.TargetSearchString.CopyIn(
+		&sourceNumStrParseResults.TargetSearchString,
+		ePrefix.XCpy(
+			"destinationNumStrParseResults"+
+				"<-sourceNumStrParseResults.TargetString"))
+
+	if err != nil {
+		return err
+	}
 
 	destinationNumStrParseResults.FoundNumericDigits =
 		sourceNumStrParseResults.FoundNumericDigits
@@ -301,7 +311,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 		return deepCopyNumStrParseResults, err
 	}
 
-	charSearchNumStrParseResultsDtoAtom{}.ptr().
+	new(charSearchNumStrParseResultsDtoAtom).
 		empty(&deepCopyNumStrParseResults)
 
 	deepCopyNumStrParseResults.SearchResultsName =
@@ -309,6 +319,16 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 
 	deepCopyNumStrParseResults.SearchResultsFunctionChain =
 		numStrParseResults.SearchResultsFunctionChain
+
+	err = deepCopyNumStrParseResults.TargetSearchString.CopyIn(
+		&numStrParseResults.TargetSearchString,
+		ePrefix.XCpy(
+			"deepCopyNumStrParseResults"+
+				"<-numStrParseResults.TargetSearchString"))
+
+	if err != nil {
+		return deepCopyNumStrParseResults, err
+	}
 
 	deepCopyNumStrParseResults.FoundNumericDigits =
 		numStrParseResults.FoundNumericDigits
@@ -706,6 +726,42 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	}
 
+	// Build Target Search String
+
+	txtStrParam =
+		numStrParseResults.TargetSearchString.GetCharacterString()
+
+	lenTxtStrParam := len(txtStrParam)
+
+	if lenTxtStrParam == 0 {
+		txtStrParam = "TargetSearchString is EMPTY!"
+	} else {
+
+		txtStrParam = "\"" + txtStrParam + "\""
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		"TargetSearchString",
+		txtStrParam,
+		ePrefix.XCpy(
+			"Build TargetSearchString"))
+
+	if err != nil {
+		return err
+	}
+
+	// Build Target Search String Length
+
+	err = txtFormatCol.AddLine2Col(
+		"TargetSearchString Length",
+		lenTxtStrParam,
+		ePrefix.XCpy(
+			"Build TargetSearchString Length"))
+
+	if err != nil {
+		return err
+	}
+
 	// Build FoundNumericDigits
 	err = txtFormatCol.AddLine2Col(
 		"FoundNumericDigits",
@@ -812,7 +868,24 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		-1,
 		false)
 
-	// Title # 2
+	txtStrParam =
+		numStrParseResults.SearchResultsName
+
+	if len(txtStrParam) > 0 {
+
+		// Title Line 2
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Bottom Title Line 2"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	// Title # 3
 	txtFormatCol.AddFieldLabel(
 		"",
 		"End of Parameter Listing",

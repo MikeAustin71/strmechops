@@ -253,6 +253,19 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.NegativeNumberSymbolSearchResults.Empty()
 	searchResults.ParsingTerminatorSearchResults.Empty()
 
+	err = searchResults.TargetSearchString.CopyIn(
+		&targetSearchString,
+		ePrefix.XCpy(
+			"searchResults.TargetSearchString"+
+				"<-targetSearchString"))
+
+	if err != nil {
+
+		return searchResults,
+			numStrKernel,
+			err
+	}
+
 	// Processing Flags
 
 	// Number Parsing Setup

@@ -60,6 +60,8 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 
 	numStrParseResults.SearchResultsFunctionChain = ""
 
+	numStrParseResults.TargetSearchString.Empty()
+
 	numStrParseResults.FoundNumericDigits = false
 
 	numStrParseResults.FoundNonZeroValue = false
@@ -151,6 +153,12 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 		return false
 	}
 
+	if !numStrParseResults1.TargetSearchString.Equal(
+		&numStrParseResults2.TargetSearchString) {
+
+		return false
+	}
+
 	if numStrParseResults1.FoundNumericDigits !=
 		numStrParseResults2.FoundNumericDigits {
 
@@ -218,22 +226,4 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// charSearchNumStrParseResultsDtoAtom.
-//
-func (searchNumStrParseResultsAtom charSearchNumStrParseResultsDtoAtom) ptr() *charSearchNumStrParseResultsDtoAtom {
-
-	if searchNumStrParseResultsAtom.lock == nil {
-		searchNumStrParseResultsAtom.lock = new(sync.Mutex)
-	}
-
-	searchNumStrParseResultsAtom.lock.Lock()
-
-	defer searchNumStrParseResultsAtom.lock.Unlock()
-
-	return &charSearchNumStrParseResultsDtoAtom{
-		lock: new(sync.Mutex),
-	}
 }

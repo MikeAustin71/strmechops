@@ -84,6 +84,12 @@ type CharSearchNumStrParseResultsDto struct {
 	// creation of this instance of
 	// CharSearchNumStrParseResultsDto.
 
+	TargetSearchString RuneArrayDto
+	// This instance of RuneArrayDto contains the original
+	// Target String. The Target String contains the numeric
+	// digits which are parsed and extracted by the Number
+	// String Parsing algorithm.
+
 	FoundNumericDigits bool
 	// Signals a successful Number String Parsing operation.
 	// When set to 'true', this means one or more numeric
@@ -452,7 +458,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Empty() {
 
 	searchNumStrParseResults.lock.Lock()
 
-	charSearchNumStrParseResultsDtoAtom{}.ptr().
+	new(charSearchNumStrParseResultsDtoAtom).
 		empty(searchNumStrParseResults)
 
 	searchNumStrParseResults.lock.Unlock()
@@ -511,7 +517,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 
 	defer searchNumStrParseResults.lock.Unlock()
 
-	return charSearchNumStrParseResultsDtoAtom{}.ptr().
+	return new(charSearchNumStrParseResultsDtoAtom).
 		equal(
 			searchNumStrParseResults,
 			incomingNumStrParseResults)
@@ -664,7 +670,7 @@ func (searchNumStrParseResults CharSearchNumStrParseResultsDto) New() CharSearch
 
 	newNumStrParseResults := CharSearchNumStrParseResultsDto{}
 
-	charSearchNumStrParseResultsDtoAtom{}.ptr().
+	new(charSearchNumStrParseResultsDtoAtom).
 		empty(&newNumStrParseResults)
 
 	return newNumStrParseResults
