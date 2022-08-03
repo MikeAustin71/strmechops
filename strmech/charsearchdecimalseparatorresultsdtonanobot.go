@@ -130,7 +130,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		return err
 	}
 
-	charSearchDecimalSeparatorResultsDtoAtom{}.ptr().empty(
+	new(charSearchDecimalSeparatorResultsDtoAtom).empty(
 		destinationDecSepResults)
 
 	destinationDecSepResults.SearchResultsName =
@@ -138,6 +138,9 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	destinationDecSepResults.SearchResultsFunctionChain =
 		sourceDecSepResults.SearchResultsFunctionChain
+
+	destinationDecSepResults.IsNOP =
+		sourceDecSepResults.IsNOP
 
 	destinationDecSepResults.FoundDecimalSeparatorSymbols =
 		sourceDecSepResults.FoundDecimalSeparatorSymbols
@@ -366,7 +369,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		return deepCopyDecSepResults, err
 	}
 
-	charSearchDecimalSeparatorResultsDtoAtom{}.ptr().empty(
+	new(charSearchDecimalSeparatorResultsDtoAtom).empty(
 		&deepCopyDecSepResults)
 
 	deepCopyDecSepResults.SearchResultsName =
@@ -374,6 +377,9 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	deepCopyDecSepResults.SearchResultsFunctionChain =
 		decimalSeparatorResults.SearchResultsFunctionChain
+
+	deepCopyDecSepResults.IsNOP =
+		decimalSeparatorResults.IsNOP
 
 	deepCopyDecSepResults.FoundDecimalSeparatorSymbols =
 		decimalSeparatorResults.FoundDecimalSeparatorSymbols
@@ -830,6 +836,45 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 				"")
 
 		}
+	}
+
+	var lenTxtStrParam int
+
+	// Build IsNOP Name
+
+	txtStrLabel = "IsNOP - Is No Operation"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		decimalSeparatorResults.IsNOP,
+		ePrefix.XCpy(
+			"SearchResultsName"))
+
+	if err != nil {
+		return err
+	}
+
+	if decimalSeparatorResults.IsNOP {
+
+		spacer := strings.Repeat(" ", maxLabelFieldLen)
+
+		txtStrLabel =
+			"This entity is a NOP or No Operation. " +
+				"It is configured as an empty placeholder " +
+				"and played no role in the most recent " +
+				"search operation."
+
+		txtFormatCol.AddAdHocText(
+			spacer,
+			txtStrLabel,
+			"",
+			false,
+			"\n",
+			maxLineLen,
+			true)
+
+		goto exitMethodTrailer
+
 	}
 
 	// Build FoundDecimalSeparatorSymbols
@@ -1321,7 +1366,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		DecimalSeparatorSymbolsSpec.
 		GetDecimalSeparatorStr()
 
-	lenTxtStrParam := len(txtStrParam)
+	lenTxtStrParam = len(txtStrParam)
 
 	txtStrLabel = "DecimalSeparatorSymbolsSpec"
 
@@ -1450,6 +1495,8 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	}
 
+exitMethodTrailer:
+
 	// Trailing Title Marquee
 	// Top Blank Line
 	txtFormatCol.AddLineBlank(
@@ -1478,11 +1525,28 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		return err
 	}
 
-	// Title # 2
+	txtStrParam =
+		decimalSeparatorResults.SearchResultsName
+
+	if len(txtStrParam) > 0 {
+
+		// Title Line 2
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Bottom-Title Line 2"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	// Title # 3
 	err = txtFormatCol.AddLine1Col(
 		"End of Parameter Listing",
 		ePrefix.XCpy(
-			"Bottom-Title Line 2"))
+			"Bottom-Title Line 3"))
 
 	if err != nil {
 		return err
@@ -1511,22 +1575,4 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			"Final Output"))
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// charSearchDecimalSeparatorResultsDtoNanobot.
-//
-func (searchDecimalSepResultsNanobot charSearchDecimalSeparatorResultsDtoNanobot) ptr() *charSearchDecimalSeparatorResultsDtoNanobot {
-
-	if searchDecimalSepResultsNanobot.lock == nil {
-		searchDecimalSepResultsNanobot.lock = new(sync.Mutex)
-	}
-
-	searchDecimalSepResultsNanobot.lock.Lock()
-
-	defer searchDecimalSepResultsNanobot.lock.Unlock()
-
-	return &charSearchDecimalSeparatorResultsDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }

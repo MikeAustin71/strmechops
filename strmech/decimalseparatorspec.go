@@ -497,6 +497,39 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 	return string(decSeparatorSpec.decimalSeparatorChars.CharsArray)
 }
 
+// IsNOP - Stands for 'Is No Operation'. This method returns a
+// boolean value signaling whether this instance of
+// DecimalSeparatorSpec is engaged, valid and operational with
+// respect to the current search algorithm.
+//
+// If 'IsNOP' is set to 'true', it signals that this Decimal
+// Separator Specificaiton is simply an empty placeholder and
+// performs no active role in, and is completely ignored by,
+// the search algorithm. With 'IsNOP' set to 'true', no search
+// for decimal separator characters will ever be conducted.
+//
+// If this method returns 'false', it signals that the current
+// instance of DecimalSeparatorSpec is fully populated, valid,
+// functional and ready to perform the search for decimal
+// separator characters.
+//
+func (decSeparatorSpec *DecimalSeparatorSpec) IsNOP() bool {
+
+	if decSeparatorSpec.lock == nil {
+		decSeparatorSpec.lock = new(sync.Mutex)
+	}
+
+	decSeparatorSpec.lock.Lock()
+
+	defer decSeparatorSpec.lock.Unlock()
+
+	if decSeparatorSpec.decimalSeparatorChars.GetRuneArrayLength() == 0 {
+		return true
+	}
+
+	return false
+}
+
 // IsValidInstance - Performs a diagnostic review of the data
 // values encapsulated in the current DecimalSeparatorSpec instance
 // to determine if they are valid.

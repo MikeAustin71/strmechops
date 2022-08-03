@@ -801,13 +801,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 
 	if runeSearchResultsDto.IsNOP {
 
-		//txtFormatCol.AddLineBlank(
-		//	1,
-		//	"")
-
 		spacer := strings.Repeat(" ", maxLabelFieldLen)
-
-		// termLine := "\n" + spacer
 
 		txtStrLabel =
 			"This entity is a NOP or No Operation. " +

@@ -88,6 +88,23 @@ type CharSearchDecimalSeparatorResultsDto struct {
 	// the creation of this instance of
 	// CharSearchDecimalSeparatorResultsDto.
 
+	IsNOP bool
+	// IsNOP - Stands for 'Is No Operation'. This boolean
+	// value signals whether the Decimal Separator search
+	// algorithm is engaged and operational, or not.
+	//
+	// If 'IsNOP' is set to 'true', it signals that the Decimal
+	// Separator Specification is simply an empty placeholder and
+	// performs no active role in, and is completely ignored by,
+	// the current search algorithm. With 'IsNOP' set to 'true',
+	// no search for decimal separator characters will ever be
+	// conducted.
+	//
+	// If this method returns 'false', it signals that the current
+	// Decimal Separator Specification is fully populated, valid,
+	// functional and ready to perform the search for decimal
+	// separator characters.
+
 	FoundDecimalSeparatorSymbols bool
 	// Signals a successful search outcome. If set to 'true'
 	// the/ Decimal Separator Symbol character or characters
@@ -412,7 +429,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) CopyIn(
 		return err
 	}
 
-	return charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
+	return new(charSearchDecimalSeparatorResultsDtoNanobot).
 		copyIn(
 			decSepSearchResultsDto,
 			incomingDecSepResults,
@@ -530,7 +547,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) CopyOut(
 		return CharSearchDecimalSeparatorResultsDto{}, err
 	}
 
-	return charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
+	return new(charSearchDecimalSeparatorResultsDtoNanobot).
 		copyOut(
 			decSepSearchResultsDto,
 			ePrefix.XCpy(
@@ -578,7 +595,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Empty() {
 
 	decSepSearchResultsDto.lock.Lock()
 
-	charSearchDecimalSeparatorResultsDtoAtom{}.ptr().
+	new(charSearchDecimalSeparatorResultsDtoAtom).
 		empty(decSepSearchResultsDto)
 
 	decSepSearchResultsDto.lock.Unlock()
@@ -635,7 +652,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) Equal(
 
 	defer decSepSearchResultsDto.lock.Unlock()
 
-	return charSearchDecimalSeparatorResultsDtoAtom{}.ptr().
+	return new(charSearchDecimalSeparatorResultsDtoAtom).
 		equal(
 			decSepSearchResultsDto,
 			incomingDecSepResults)
@@ -1045,7 +1062,7 @@ func (decSepSearchResultsDto CharSearchDecimalSeparatorResultsDto) New() CharSea
 
 	newDecSepSearchResults := CharSearchDecimalSeparatorResultsDto{}
 
-	charSearchDecimalSeparatorResultsDtoAtom{}.ptr().
+	new(charSearchDecimalSeparatorResultsDtoAtom).
 		empty(&newDecSepSearchResults)
 
 	return newDecSepSearchResults
@@ -1094,7 +1111,7 @@ func (decSepSearchResultsDto *CharSearchDecimalSeparatorResultsDto) String() str
 
 	strBuilder := strings.Builder{}
 
-	err = charSearchDecimalSeparatorResultsDtoNanobot{}.ptr().
+	err = new(charSearchDecimalSeparatorResultsDtoNanobot).
 		getParameterTextListing(
 			&strBuilder,
 			decSepSearchResultsDto,

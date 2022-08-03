@@ -254,6 +254,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.ParsingTerminatorSearchResults.Empty()
 
 	// Processing Flags
+
+	// Number Parsing Setup
 	searchResults.ParsingTerminatorSearchResults.IsNOP =
 		numParsingTerminators.IsNOP()
 
@@ -262,6 +264,16 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 	numParsingTerminatorsIsNOP :=
 		searchResults.ParsingTerminatorSearchResults.IsNOP
+
+	// Decimal Separator Setup
+	searchResults.DecimalSeparatorSearchResults.IsNOP =
+		decimalSeparatorSpec.IsNOP()
+
+	searchResults.DecimalSeparatorSearchResults.SearchResultsName =
+		"Decimal Separator Search Results"
+
+	decSeparatorIsNOP :=
+		searchResults.DecimalSeparatorSearchResults.IsNOP
 
 	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
 
@@ -349,6 +361,9 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 
 				}
 
+				searchResults.ParsingTerminatorSearchResults.SearchResultsName =
+					"Number Parsing Terminator Search Results"
+
 				goto computeExitStats
 			}
 		}
@@ -397,7 +412,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		}
 
 		// Check for Decimal Separators
-		if !targetInputParms.FoundDecimalSeparatorSymbols {
+		if !decSeparatorIsNOP &&
+			!targetInputParms.FoundDecimalSeparatorSymbols {
 
 			searchResults.DecimalSeparatorSearchResults,
 				err = decimalSeparatorSpec.SearchForDecimalSeparator(

@@ -62,6 +62,8 @@ func (searchDecimalSepResultsAtom *charSearchDecimalSeparatorResultsDtoAtom) emp
 
 	decimalSepResults.SearchResultsFunctionChain = ""
 
+	decimalSepResults.IsNOP = false
+
 	decimalSepResults.FoundDecimalSeparatorSymbols = false
 
 	decimalSepResults.FoundDecimalSepSymbolsOnPreviousSearch =
@@ -204,6 +206,12 @@ func (searchDecimalSepResultsAtom *charSearchDecimalSeparatorResultsDtoAtom) equ
 
 	if decimalSepResults1.SearchResultsFunctionChain !=
 		decimalSepResults2.SearchResultsFunctionChain {
+
+		return false
+	}
+
+	if decimalSepResults1.IsNOP !=
+		decimalSepResults2.IsNOP {
 
 		return false
 	}
@@ -413,22 +421,4 @@ func (searchDecimalSepResultsAtom *charSearchDecimalSeparatorResultsDtoAtom) equ
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// charSearchDecimalSeparatorResultsDtoAtom.
-//
-func (searchDecimalSepResultsAtom charSearchDecimalSeparatorResultsDtoAtom) ptr() *charSearchDecimalSeparatorResultsDtoAtom {
-
-	if searchDecimalSepResultsAtom.lock == nil {
-		searchDecimalSepResultsAtom.lock = new(sync.Mutex)
-	}
-
-	searchDecimalSepResultsAtom.lock.Lock()
-
-	defer searchDecimalSepResultsAtom.lock.Unlock()
-
-	return &charSearchDecimalSeparatorResultsDtoAtom{
-		lock: new(sync.Mutex),
-	}
 }
