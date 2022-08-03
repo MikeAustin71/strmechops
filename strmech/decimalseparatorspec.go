@@ -503,7 +503,7 @@ func (decSeparatorSpec *DecimalSeparatorSpec) GetDecimalSeparatorStr() string {
 // respect to the current search algorithm.
 //
 // If 'IsNOP' is set to 'true', it signals that this Decimal
-// Separator Specificaiton is simply an empty placeholder and
+// Separator Specification is simply an empty placeholder and
 // performs no active role in, and is completely ignored by,
 // the search algorithm. With 'IsNOP' set to 'true', no search
 // for decimal separator characters will ever be conducted.

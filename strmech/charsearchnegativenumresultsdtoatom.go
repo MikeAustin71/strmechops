@@ -60,6 +60,8 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) empty(
 
 	negNumSearchResultsDto.SearchResultsFunctionChain = ""
 
+	negNumSearchResultsDto.IsNOP = false
+
 	negNumSearchResultsDto.FoundNegativeNumberSymbols = false
 
 	negNumSearchResultsDto.FoundNegNumSymbolsOnPreviousSearch =
@@ -213,6 +215,12 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) equal(
 
 	if negNumSearchResultsDto1.SearchResultsFunctionChain !=
 		negNumSearchResultsDto2.SearchResultsFunctionChain {
+
+		return false
+	}
+
+	if negNumSearchResultsDto1.IsNOP !=
+		negNumSearchResultsDto2.IsNOP {
 
 		return false
 	}
@@ -452,22 +460,4 @@ func (searchNegNumResultsAtom *charSearchNegativeNumberResultsDtoAtom) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// charSearchNegativeNumberResultsDtoAtom.
-//
-func (searchNegNumResultsAtom charSearchNegativeNumberResultsDtoAtom) ptr() *charSearchNegativeNumberResultsDtoAtom {
-
-	if searchNegNumResultsAtom.lock == nil {
-		searchNegNumResultsAtom.lock = new(sync.Mutex)
-	}
-
-	searchNegNumResultsAtom.lock.Lock()
-
-	defer searchNegNumResultsAtom.lock.Unlock()
-
-	return &charSearchNegativeNumberResultsDtoAtom{
-		lock: new(sync.Mutex),
-	}
 }

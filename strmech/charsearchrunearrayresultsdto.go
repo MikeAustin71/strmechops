@@ -17,14 +17,20 @@ type CharSearchRuneArrayResultsDto struct {
 	// creation of this instance of CharSearchResultsDto.
 
 	IsNOP bool
-	// IsNOP - Stands for 'Is No Operation'. This boolean value
-	// signals whether the Rune Array, used in the current
-	// search algorithm is engaged and operational, or not.
+	// IsNOP - Stands for 'Is No Operation'. This boolean
+	// value signals whether the Rune Array, used in the
+	// current search algorithm is engaged and operational,
+	// or not.
 	//
 	// If 'IsNOP' is set to 'true', it signals that the Rune
-	// Array supporting this search activity is simply a
-	// placeholder and performs no active role in the search
-	// algorithm.
+	// Array supporting this search algorithm is simply an
+	// empty placeholder and is completely ignored by the
+	// search algorithm.
+	//
+	// If 'IsNOP' is set to 'false', it signals that the current
+	// Rune Array supporting this search algorithm is fully
+	// populated, valid, functional and ready to perform the
+	// search for specified text characters.
 
 	FoundSearchTarget bool
 	// Signals a successful search outcome. If set to 'true' the

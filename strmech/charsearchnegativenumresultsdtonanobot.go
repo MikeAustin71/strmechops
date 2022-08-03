@@ -130,7 +130,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 		return err
 	}
 
-	charSearchNegativeNumberResultsDtoAtom{}.ptr().
+	new(charSearchNegativeNumberResultsDtoAtom).
 		empty(destinationNegNumResults)
 
 	destinationNegNumResults.SearchResultsName =
@@ -138,6 +138,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyIn(
 
 	destinationNegNumResults.SearchResultsFunctionChain =
 		sourceNegNumResults.SearchResultsFunctionChain
+
+	destinationNegNumResults.IsNOP =
+		sourceNegNumResults.IsNOP
 
 	destinationNegNumResults.FoundNegativeNumberSymbols =
 		sourceNegNumResults.FoundNegativeNumberSymbols
@@ -392,7 +395,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 		return deepCopyNegNumResultsDto, err
 	}
 
-	charSearchNegativeNumberResultsDtoAtom{}.ptr().
+	new(charSearchNegativeNumberResultsDtoAtom).
 		empty(&deepCopyNegNumResultsDto)
 
 	deepCopyNegNumResultsDto.SearchResultsName =
@@ -400,6 +403,9 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) copyOut(
 
 	deepCopyNegNumResultsDto.SearchResultsFunctionChain =
 		searchNegNumResults.SearchResultsFunctionChain
+
+	deepCopyNegNumResultsDto.IsNOP =
+		searchNegNumResults.IsNOP
 
 	deepCopyNegNumResultsDto.FoundNegativeNumberSymbols =
 		searchNegNumResults.FoundNegativeNumberSymbols
@@ -887,6 +893,45 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 				"")
 
 		}
+
+	}
+
+	var lenTxtStrParam int
+
+	// Build IsNOP Name
+
+	txtStrLabel = "IsNOP - Is No Operation"
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		searchNegNumResults.IsNOP,
+		ePrefix.XCpy(
+			"SearchResultsName"))
+
+	if err != nil {
+		return err
+	}
+
+	if searchNegNumResults.IsNOP {
+
+		spacer := strings.Repeat(" ", maxLabelFieldLen)
+
+		txtStrLabel =
+			"This entity is a NOP or No Operation. " +
+				"It is configured as an empty placeholder " +
+				"and played no role in the most recent " +
+				"search operation."
+
+		txtFormatCol.AddAdHocText(
+			spacer,
+			txtStrLabel,
+			"",
+			false,
+			"\n",
+			maxLineLen,
+			true)
+
+		goto exitMethodTrailer
 
 	}
 
@@ -1520,7 +1565,7 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 	txtStrParam =
 		searchNegNumResults.FoundLeadingNegNumSymbol.GetCharacterString()
 
-	lenTxtStrParam := len(txtStrParam)
+	lenTxtStrParam = len(txtStrParam)
 
 	txtStrLabel = "FoundLeadingNegNumSymbol Chars"
 
@@ -1604,6 +1649,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 
 	}
 
+exitMethodTrailer:
+
 	// Trailing Title Marquee
 	// Top Blank Line
 	txtFormatCol.AddLineBlank(
@@ -1632,11 +1679,28 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		return err
 	}
 
-	// Title # 2
+	txtStrParam =
+		searchNegNumResults.SearchResultsName
+
+	if len(txtStrParam) > 0 {
+
+		// Title Line 2
+		err = txtFormatCol.AddLine1Col(
+			txtStrParam,
+			ePrefix.XCpy(
+				"Bottom-Title Line 2"))
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	// Title # 3
 	err = txtFormatCol.AddLine1Col(
 		"End of Parameter Listing",
 		ePrefix.XCpy(
-			"Bottom-Title Line 2"))
+			"Bottom-Title Line 3"))
 
 	if err != nil {
 		return err
@@ -1665,22 +1729,4 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			"Marquee-Bottom"))
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// charSearchNegNumResultsDtoNanobot.
-//
-func (searchNegNumResultsNanobot charSearchNegNumResultsDtoNanobot) ptr() *charSearchNegNumResultsDtoNanobot {
-
-	if searchNegNumResultsNanobot.lock == nil {
-		searchNegNumResultsNanobot.lock = new(sync.Mutex)
-	}
-
-	searchNegNumResultsNanobot.lock.Lock()
-
-	defer searchNegNumResultsNanobot.lock.Unlock()
-
-	return &charSearchNegNumResultsDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }

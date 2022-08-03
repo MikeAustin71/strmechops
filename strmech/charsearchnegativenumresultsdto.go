@@ -88,6 +88,23 @@ type CharSearchNegativeNumberResultsDto struct {
 	// creation of this instance of
 	// CharSearchNegativeNumberResultsDto.
 
+	IsNOP bool
+	// IsNOP - Stands for 'Is No Operation'. This boolean
+	// value signals whether the Negative Number Symbol
+	// Specification used in the current search algorithm
+	// is valid, engaged and fully operational.
+	//
+	// If 'IsNOP' is set to 'true', it signals that the
+	// Negative Number Symbol Specification supporting this
+	// search algorithm is simply an empty placeholder and
+	// is completely ignored by the search algorithm.
+	//
+	// If 'IsNOP' is set to 'false', it signals that the
+	// current Negative Number Symbol Specification
+	// supporting this search algorithm is fully populated,
+	// valid, functional and ready to perform the search for
+	// specified negative number symbols.
+
 	FoundNegativeNumberSymbols bool
 	// Signals a successful search outcome. If set to 'true' the
 	// Negative Number Symbol character or characters were found
@@ -448,7 +465,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyIn(
 		return err
 	}
 
-	return charSearchNegNumResultsDtoNanobot{}.ptr().
+	return new(charSearchNegNumResultsDtoNanobot).
 		copyIn(
 			negNumSearchResults,
 			incomingNegNumResultsDto,
@@ -566,7 +583,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) CopyOut(
 		return CharSearchNegativeNumberResultsDto{}, err
 	}
 
-	return charSearchNegNumResultsDtoNanobot{}.ptr().copyOut(
+	return new(charSearchNegNumResultsDtoNanobot).copyOut(
 		negNumSearchResults,
 		ePrefix.XCpy(
 			"<-negNumSearchResults"))
@@ -611,7 +628,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Empty() {
 
 	negNumSearchResults.lock.Lock()
 
-	charSearchNegativeNumberResultsDtoAtom{}.ptr().
+	new(charSearchNegativeNumberResultsDtoAtom).
 		empty(negNumSearchResults)
 
 	negNumSearchResults.lock.Unlock()
@@ -667,7 +684,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) Equal(
 
 	defer negNumSearchResults.lock.Unlock()
 
-	return charSearchNegativeNumberResultsDtoAtom{}.ptr().
+	return new(charSearchNegativeNumberResultsDtoAtom).
 		equal(
 			negNumSearchResults,
 			incomingNegNumSearchResultsDto)
@@ -783,7 +800,7 @@ func (negNumSearchResults *CharSearchNegativeNumberResultsDto) GetParameterTextL
 		return err
 	}
 
-	return charSearchNegNumResultsDtoNanobot{}.ptr().
+	return new(charSearchNegNumResultsDtoNanobot).
 		getParameterTextListing(
 			strBuilder,
 			negNumSearchResults,
@@ -1231,7 +1248,7 @@ func (negNumSearchResults CharSearchNegativeNumberResultsDto) New() CharSearchNe
 
 	newNegNumResultsDto := CharSearchNegativeNumberResultsDto{}
 
-	charSearchNegativeNumberResultsDtoAtom{}.ptr().
+	new(charSearchNegativeNumberResultsDtoAtom).
 		empty(&newNegNumResultsDto)
 
 	return newNegNumResultsDto
