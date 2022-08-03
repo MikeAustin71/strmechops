@@ -288,6 +288,9 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	decSeparatorIsNOP :=
 		searchResults.DecimalSeparatorSearchResults.IsNOP
 
+	var nextIdx int
+	var tempDecSepSearchResults CharSearchDecimalSeparatorResultsDto
+
 	for i := targetInputParms.TargetStringStartingSearchIndex; i < targetInputParms.TargetStringAdjustedSearchLength; i++ {
 
 		targetInputParms.TargetStringCurrentSearchIndex = i
@@ -425,45 +428,144 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		}
 
 		// Check for Decimal Separators
-		if !decSeparatorIsNOP &&
-			!targetInputParms.FoundDecimalSeparatorSymbols {
+		if decSeparatorIsNOP == false &&
+			targetInputParms.FoundDecimalSeparatorSymbols == false {
 
-			searchResults.DecimalSeparatorSearchResults,
-				err = decimalSeparatorSpec.SearchForDecimalSeparator(
-				targetInputParms,
-				ePrefix.XCpy(
-					"decimalSeparatorSpec"))
+			if targetInputParms.FoundFirstNumericDigitInNumStr == false {
 
-			if err != nil {
+				nextIdx = i + 1
 
-				return searchResults,
-					numStrKernel,
-					err
+				if nextIdx < targetInputParms.TargetStringAdjustedSearchLength &&
+					targetSearchString.CharsArray[nextIdx] >= '0' &&
+					targetSearchString.CharsArray[nextIdx] <= '9' {
 
-			}
+					tempDecSepSearchResults,
+						err = decimalSeparatorSpec.SearchForDecimalSeparator(
+						targetInputParms,
+						ePrefix.XCpy(
+							"decimalSeparatorSpec"))
 
-			if searchResults.DecimalSeparatorSearchResults.
-				FoundDecimalSeparatorSymbols {
+					if err != nil {
 
-				searchResults.FoundDecimalSeparatorSymbols = true
+						return searchResults,
+							numStrKernel,
+							err
 
-				targetInputParms.FoundDecimalSeparatorSymbols = true
+					}
 
-				i = searchResults.DecimalSeparatorSearchResults.
-					TargetStringLastSearchIndex
+					if tempDecSepSearchResults.FoundDecimalSeparatorSymbols == true {
 
-				targetInputParms.TargetStringCurrentSearchIndex = i
+						err =
+							searchResults.DecimalSeparatorSearchResults.CopyIn(
+								&tempDecSepSearchResults,
+								ePrefix.XCpy(
+									"No Int Digits: "+
+										"searchResults<-tempDecSepSearchResults"))
 
-				targetInputParms.TargetStringNextSearchIndex = i + 1
+						if err != nil {
 
-				if targetInputParms.TargetStringNextSearchIndex >=
-					targetInputParms.TargetStringLength {
+							return searchResults,
+								numStrKernel,
+								err
 
-					targetInputParms.TargetStringNextSearchIndex = -1
+						}
+
+						searchResults.FoundDecimalSeparatorSymbols = true
+
+						targetInputParms.FoundDecimalSeparatorSymbols = true
+
+						i = searchResults.DecimalSeparatorSearchResults.
+							TargetStringLastSearchIndex
+
+						targetInputParms.TargetStringCurrentSearchIndex = i
+
+						targetInputParms.TargetStringNextSearchIndex = i + 1
+
+						if targetInputParms.TargetStringNextSearchIndex >=
+							targetInputParms.TargetStringLength {
+
+							targetInputParms.TargetStringNextSearchIndex = -1
+
+						}
+
+						err = numStrKernel.AddIntegerDigit(
+							'0',
+							ePrefix.XCpy(
+								fmt.Sprintf(
+									"targetSearchString.CharsArray[%v]",
+									i)))
+
+						if err != nil {
+							return searchResults,
+								numStrKernel,
+								err
+						}
+
+						searchResults.FoundNumericDigits = true
+						targetInputParms.FoundFirstNumericDigitInNumStr = true
+						searchResults.FoundIntegerDigits = true
+
+						continue
+					}
 
 				}
 
-				continue
+			} else {
+				// MUST BE
+				// targetInputParms.FoundFirstNumericDigitInNumStr == true
+
+				tempDecSepSearchResults,
+					err = decimalSeparatorSpec.SearchForDecimalSeparator(
+					targetInputParms,
+					ePrefix.XCpy(
+						"decimalSeparatorSpec"))
+
+				if err != nil {
+
+					return searchResults,
+						numStrKernel,
+						err
+
+				}
+
+				if tempDecSepSearchResults.FoundDecimalSeparatorSymbols == true {
+
+					err =
+						searchResults.DecimalSeparatorSearchResults.CopyIn(
+							&tempDecSepSearchResults,
+							ePrefix.XCpy(
+								"Found1stNumDigit: "+
+									"searchResults<-tempDecSepSearchResults"))
+
+					if err != nil {
+
+						return searchResults,
+							numStrKernel,
+							err
+
+					}
+
+					searchResults.FoundDecimalSeparatorSymbols = true
+
+					targetInputParms.FoundDecimalSeparatorSymbols = true
+
+					i = searchResults.DecimalSeparatorSearchResults.
+						TargetStringLastSearchIndex
+
+					targetInputParms.TargetStringCurrentSearchIndex = i
+
+					targetInputParms.TargetStringNextSearchIndex = i + 1
+
+					if targetInputParms.TargetStringNextSearchIndex >=
+						targetInputParms.TargetStringLength {
+
+						targetInputParms.TargetStringNextSearchIndex = -1
+
+					}
+
+					continue
+				}
+
 			}
 		}
 	}

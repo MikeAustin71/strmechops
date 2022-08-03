@@ -259,24 +259,21 @@ func (charsArrayDto *RuneArrayDto) CopyIn(
 
 	lenIncomingCharsArray := len(incomingChars.CharsArray)
 
-	if lenIncomingCharsArray == 0 {
+	if lenIncomingCharsArray > 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'incomingChars' is invalid!\n"+
-			"The length of 'incomingChars.CharsArray' is zero.\n"+
-			"The 'incomingChars' internal Rune Array is empty.",
-			ePrefix.String())
+		charsArrayDto.CharsArray =
+			make([]rune, lenIncomingCharsArray)
 
-		return err
+		for i := 0; i < lenIncomingCharsArray; i++ {
+			charsArrayDto.CharsArray[i] =
+				incomingChars.CharsArray[i]
+		}
 
-	}
+	} else {
+		// MUST BE
+		// lenIncomingCharsArray == 0
+		charsArrayDto.CharsArray = nil
 
-	charsArrayDto.CharsArray =
-		make([]rune, lenIncomingCharsArray)
-
-	for i := 0; i < lenIncomingCharsArray; i++ {
-		charsArrayDto.CharsArray[i] =
-			incomingChars.CharsArray[i]
 	}
 
 	charsArrayDto.Description1 =

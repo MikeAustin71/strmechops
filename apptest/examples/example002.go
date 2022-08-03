@@ -263,6 +263,8 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	sMech := strmech.StrMech{}
 
+	numberStr := "- 1.234 "
+
 	// Total available Length of Output Line
 	const maxLineLen = 78
 
@@ -396,8 +398,6 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		"")
 
 	// End Of Marquee
-
-	numberStr := " -1.234 "
 
 	var searchResults strmech.CharSearchNumStrParseResultsDto
 	var numStrKernel strmech.NumberStrKernel

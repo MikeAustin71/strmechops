@@ -1,0 +1,18 @@
+$ go run main.go
+MainTest02.ExtractNumberRunes01()
+Error: sMech.ExtractNumberRunes()
+Error=
+
+MainTest02.ExtractNumberRunes01()
+ :  -1.234
+StrMech.ExtractNumberRunes()
+strMechMolecule.extractNumRunes()
+ :  Found1stNumDigit: searchResults<-tempDecSepSearchResults
+CharSearchDecimalSeparatorResultsDto.CopyIn()
+ :  decSepSearchResultsDto<-incomingDecSepResults
+charSearchDecimalSeparatorResultsDtoNanobot.copyIn()
+ :  destinationDecSepResults.ReplacementString<-sourceDecSepResults
+RuneArrayDto.CopyIn()
+ERROR: Input parameter 'incomingChars' is invalid!
+The length of 'incomingChars.CharsArray' is zero.
+The 'incomingChars' internal Rune Array is empty.
