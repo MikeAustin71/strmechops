@@ -1502,12 +1502,14 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 		false,
 		ePrefix)
 
-	if strBuilder.Len() != 1357 {
+	expectedTextLen := 1525
+
+	if strBuilder.Len() != expectedTextLen {
 		t.Errorf("%v\n"+
 			"Error: Expected parameter text listing would have a length of %v.\n"+
 			"Instead, Actual Parameter Text length = '%v'\n",
 			ePrefix.String(),
-			1357,
+			expectedTextLen,
 			strBuilder.Len())
 
 		return
@@ -1520,7 +1522,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestStrMech_ExtractNumberRunes_01()",
+		"TestStrMech_ExtractNumberRunes_02()",
 		"")
 
 	numberStr := " 12345 "
@@ -1629,13 +1631,125 @@ func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 		true,
 		ePrefix)
 
-	if strBuilder.Len() != 8879 {
+	expectedTextLen := 9251
+
+	if strBuilder.Len() != expectedTextLen {
 		t.Errorf("%v\n"+
 			"Error: Expected parameter text listing would have a length of %v.\n"+
 			"Instead, Actual Parameter Text length = '%v'\n",
 			ePrefix.String(),
-			8879,
+			expectedTextLen,
 			strBuilder.Len())
+
+		return
+
+	}
+
+	return
+}
+
+func TestStrMech_ExtractNumberRunes_03(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStrMech_ExtractNumberRunes_03()",
+		"")
+
+	numberStr := "1234567890"
+	characterSearchLength := 6
+	expectedIntStr := "123456"
+
+	runeArrayDto,
+		err := RuneArrayDto{}.NewNumStr(
+		numberStr,
+		ePrefix.XCpy(
+			"runeArrayDto<-"))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	var decSeparator DecimalSeparatorSpec
+
+	decSeparator,
+		err = DecimalSeparatorSpec{}.New(
+		".",
+		ePrefix.XCpy("decSeparator<-"))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	var searchResults CharSearchNumStrParseResultsDto
+	var numStrKernel NumberStrKernel
+	numParsingTerminators := RuneArrayCollection{}
+	negativeNumSearchSpecs := NegNumSearchSpecCollection{}
+
+	err = negativeNumSearchSpecs.AddLeadingNegNumSearchStr(
+		"-",
+		ePrefix.XCpy("Leading minus sign '-'"))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	sMech := StrMech{}
+
+	searchResults,
+		numStrKernel,
+		err = sMech.ExtractNumberRunes(
+		runeArrayDto,
+		0,
+		characterSearchLength,
+		negativeNumSearchSpecs,
+		decSeparator,
+		numParsingTerminators,
+		false,
+		ePrefix.XCpy(
+			numberStr))
+
+	if err != nil {
+		t.Errorf("%v", err.Error())
+
+		return
+	}
+
+	if searchResults.FoundNumericDigits == false {
+		t.Errorf("%v\n"+
+			"Error: No numeric digits were found in the\n"+
+			"test number string! Number String Parsing FAILED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	intStr := numStrKernel.GetIntegerString()
+
+	if intStr != expectedIntStr {
+		t.Errorf("%v\n"+
+			"Error: Expected integer digits would equal '%v'.\n"+
+			"Instead, integer digits = '%v'\n",
+			ePrefix.String(),
+			expectedIntStr,
+			intStr)
+
+		return
+
+	}
+
+	fracStr := numStrKernel.GetFractionalString()
+
+	if fracStr != "" {
+		t.Errorf("%v\n"+
+			"Error: Expected fractional digits would equal to an empty string, \"\".\n"+
+			"Instead, fractional digits = '%v'\n",
+			ePrefix.String(),
+			fracStr)
 
 		return
 
