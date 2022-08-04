@@ -261,21 +261,3 @@ func (runeDtoQuark *runeArrayDtoQuark) isValidCharacterSearchType(
 
 	return isValid, err
 }
-
-// ptr - Returns a pointer to a new instance of
-// runeArrayDtoQuark.
-//
-func (runeDtoQuark runeArrayDtoQuark) ptr() *runeArrayDtoQuark {
-
-	if runeDtoQuark.lock == nil {
-		runeDtoQuark.lock = new(sync.Mutex)
-	}
-
-	runeDtoQuark.lock.Lock()
-
-	defer runeDtoQuark.lock.Unlock()
-
-	return &runeArrayDtoQuark{
-		lock: new(sync.Mutex),
-	}
-}

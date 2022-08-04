@@ -51,7 +51,7 @@ func (runeDtoAtom *runeArrayDtoAtom) empty(
 		return
 	}
 
-	runeArrayDtoElectron{}.ptr().
+	new(runeArrayDtoElectron).
 		emptyCharsArray(runeArrayDto)
 
 	runeArrayDto.Description1 = ""
@@ -90,7 +90,7 @@ func (runeDtoAtom *runeArrayDtoAtom) equal(
 		return false
 	}
 
-	areEqual := runeArrayDtoElectron{}.ptr().
+	areEqual := new(runeArrayDtoElectron).
 		equalCharArrays(
 			runeArrayDto1,
 			runeArrayDto2)
@@ -115,22 +115,4 @@ func (runeDtoAtom *runeArrayDtoAtom) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// runeArrayDtoAtom.
-//
-func (runeDtoAtom runeArrayDtoAtom) ptr() *runeArrayDtoAtom {
-
-	if runeDtoAtom.lock == nil {
-		runeDtoAtom.lock = new(sync.Mutex)
-	}
-
-	runeDtoAtom.lock.Lock()
-
-	defer runeDtoAtom.lock.Unlock()
-
-	return &runeArrayDtoAtom{
-		lock: new(sync.Mutex),
-	}
 }

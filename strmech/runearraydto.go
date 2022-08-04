@@ -247,45 +247,11 @@ func (charsArrayDto *RuneArrayDto) CopyIn(
 		return err
 	}
 
-	if incomingChars == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'incomingChars' is a 'nil' pointer!\n",
-			ePrefix.String())
-
-		return err
-
-	}
-
-	lenIncomingCharsArray := len(incomingChars.CharsArray)
-
-	if lenIncomingCharsArray > 0 {
-
-		charsArrayDto.CharsArray =
-			make([]rune, lenIncomingCharsArray)
-
-		for i := 0; i < lenIncomingCharsArray; i++ {
-			charsArrayDto.CharsArray[i] =
-				incomingChars.CharsArray[i]
-		}
-
-	} else {
-		// MUST BE
-		// lenIncomingCharsArray == 0
-		charsArrayDto.CharsArray = nil
-
-	}
-
-	charsArrayDto.Description1 =
-		incomingChars.Description1
-
-	charsArrayDto.Description2 =
-		incomingChars.Description2
-
-	charsArrayDto.charSearchType =
-		incomingChars.charSearchType
-
-	return err
+	return new(runeArrayDtoNanobot).copyRuneArrayDto(
+		charsArrayDto,
+		incomingChars,
+		ePrefix.XCpy(
+			"charsArrayDto<-incomingChars"))
 }
 
 // CopyOut - Returns a deep copy of the current RuneArrayDto
@@ -391,25 +357,11 @@ func (charsArrayDto *RuneArrayDto) CopyOut(
 		return copyOfRuneArrayDto, err
 	}
 
-	lenOfLocalCharsArray := len(charsArrayDto.CharsArray)
-
-	if lenOfLocalCharsArray == 0 {
-
-		err = fmt.Errorf("%v\n" +
-			"ERROR: The current instance of RuneArrayDto has an empty rune array!\n" +
-			"The length of 'charsArrayDto.CharsArray' is zero.\n" +
-			ePrefix.String())
-
-		return copyOfRuneArrayDto, err
-	}
-
-	copyOfRuneArrayDto.CharsArray =
-		make([]rune, lenOfLocalCharsArray)
-
-	for i := 0; i < lenOfLocalCharsArray; i++ {
-		copyOfRuneArrayDto.CharsArray[i] =
-			charsArrayDto.CharsArray[i]
-	}
+	err = new(runeArrayDtoNanobot).copyRuneArrayDto(
+		&copyOfRuneArrayDto,
+		charsArrayDto,
+		ePrefix.XCpy(
+			"copyOfRuneArrayDto<-charsArrayDto"))
 
 	return copyOfRuneArrayDto, err
 }
@@ -446,7 +398,7 @@ func (charsArrayDto *RuneArrayDto) Empty() {
 
 	charsArrayDto.lock.Lock()
 
-	runeArrayDtoAtom{}.ptr().empty(
+	new(runeArrayDtoAtom).empty(
 		charsArrayDto)
 
 	charsArrayDto.lock.Unlock()
@@ -492,7 +444,7 @@ func (charsArrayDto *RuneArrayDto) EmptyCharsArray() {
 
 	defer charsArrayDto.lock.Unlock()
 
-	runeArrayDtoElectron{}.ptr().emptyCharsArray(
+	new(runeArrayDtoElectron).emptyCharsArray(
 		charsArrayDto)
 }
 
@@ -542,7 +494,7 @@ func (charsArrayDto *RuneArrayDto) Equal(
 
 	defer charsArrayDto.lock.Unlock()
 
-	return runeArrayDtoAtom{}.ptr().equal(
+	return new(runeArrayDtoAtom).equal(
 		charsArrayDto,
 		incomingRuneArrayDto)
 }
@@ -604,7 +556,7 @@ func (charsArrayDto *RuneArrayDto) EqualCharArrays(
 
 	defer charsArrayDto.lock.Unlock()
 
-	return runeArrayDtoElectron{}.ptr().
+	return new(runeArrayDtoElectron).
 		equalCharArrays(
 			charsArrayDto,
 			incomingRuneArrayDto)
@@ -922,6 +874,9 @@ func (charsArrayDto *RuneArrayDto) IsEmpty() bool {
 // The Character array is judged to be valid if it has an array
 // length greater than zero.
 //
+// Conversely, character arrays with a length of zero are
+// classified as invalid.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -956,7 +911,7 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterArray() bool {
 	defer charsArrayDto.lock.Unlock()
 
 	isValid,
-		_ := runeArrayDtoQuark{}.ptr().isValidCharacterArray(
+		_ := new(runeArrayDtoQuark).isValidCharacterArray(
 		charsArrayDto,
 		nil)
 
@@ -972,6 +927,10 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterArray() bool {
 //
 // If the Character Array length is greater than zero, the
 // Character Array is classified as valid.
+//
+// If the Character Array length is equal to zero, an error will be
+// returned and this instance of RuneArrayDto will be considered
+// invalid.
 //
 // The Character Array variable is styled as:
 //   RuneArrayDto.charSearchType
@@ -1072,7 +1031,7 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterArrayError(
 	}
 
 	_,
-		err = runeArrayDtoQuark{}.ptr().isValidCharacterArray(
+		err = new(runeArrayDtoQuark).isValidCharacterArray(
 		charsArrayDto,
 		ePrefix.XCpy(
 			"charsArrayDto"))
@@ -1120,7 +1079,7 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchType() bool {
 	defer charsArrayDto.lock.Unlock()
 
 	isValid,
-		_ := runeArrayDtoQuark{}.ptr().isValidCharacterSearchType(
+		_ := new(runeArrayDtoQuark).isValidCharacterSearchType(
 		charsArrayDto,
 		nil)
 
@@ -1233,7 +1192,7 @@ func (charsArrayDto *RuneArrayDto) IsValidCharacterSearchTypeError(
 	}
 
 	_,
-		err = runeArrayDtoQuark{}.ptr().isValidCharacterSearchType(
+		err = new(runeArrayDtoQuark).isValidCharacterSearchType(
 		charsArrayDto,
 		ePrefix.XCpy(
 			"charsArrayDto"))
@@ -1273,7 +1232,7 @@ func (charsArrayDto RuneArrayDto) New() RuneArrayDto {
 
 	newRuneArrayDto := RuneArrayDto{}
 
-	runeArrayDtoAtom{}.ptr().empty(
+	new(runeArrayDtoAtom).empty(
 		&newRuneArrayDto)
 
 	return newRuneArrayDto
@@ -1590,7 +1549,7 @@ func (charsArrayDto RuneArrayDto) NewNumStr(
 
 	charArray := []rune(numStr)
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			&newRuneArrayDto,
 			charArray,
@@ -1869,7 +1828,7 @@ func (charsArrayDto RuneArrayDto) NewRunes(
 		return newRuneArrayDto, err
 	}
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			&newRuneArrayDto,
 			charArray,
@@ -2172,7 +2131,7 @@ func (charsArrayDto RuneArrayDto) NewRunesAllParams(
 		return newRuneArrayDto, err
 	}
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			&newRuneArrayDto,
 			charArray,
@@ -2459,7 +2418,7 @@ func (charsArrayDto RuneArrayDto) NewRunesPtr(
 		return newRuneArrayDto, err
 	}
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			newRuneArrayDto,
 			charArray,
@@ -2747,7 +2706,7 @@ func (charsArrayDto RuneArrayDto) NewString(
 
 	charArray := []rune(stringChars)
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			&newRuneArrayDto,
 			charArray,
@@ -3045,7 +3004,7 @@ func (charsArrayDto RuneArrayDto) NewStringAllParams(
 
 	charArray := []rune(stringChars)
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			&newRuneArrayDto,
 			charArray,
@@ -3332,7 +3291,7 @@ func (charsArrayDto RuneArrayDto) NewStringPtr(
 
 	charArray := []rune(stringChars)
 
-	err = runeArrayDtoElectron{}.ptr().
+	err = new(runeArrayDtoElectron).
 		setRuneArray(
 			newRuneArrayDto,
 			charArray,
@@ -4343,7 +4302,7 @@ func (charsArrayDto *RuneArrayDto) SetRuneArray(
 		return err
 	}
 
-	return runeArrayDtoElectron{}.ptr().
+	return new(runeArrayDtoElectron).
 		setRuneArray(
 			charsArrayDto,
 			charArray,
@@ -4466,7 +4425,7 @@ func (charsArrayDto *RuneArrayDto) SetString(
 
 	charArray := []rune(charString)
 
-	return runeArrayDtoElectron{}.ptr().
+	return new(runeArrayDtoElectron).
 		setRuneArray(
 			charsArrayDto,
 			charArray,
@@ -4496,7 +4455,7 @@ func (charsArrayDto *RuneArrayDto) SetString(
 //       the internal member variable rune array
 //       'RuneArrayDto.CharsArray'.
 //
-func (charsArrayDto *RuneArrayDto) String() string {
+func (charsArrayDto RuneArrayDto) String() string {
 
 	if charsArrayDto.lock == nil {
 		charsArrayDto.lock = new(sync.Mutex)

@@ -1499,24 +1499,6 @@ func (runeDtoElectron *runeArrayDtoElectron) linearTargetStartingIndexSearch(
 	return searchResults, err
 }
 
-// ptr - Returns a pointer to a new instance of
-// runeArrayDtoElectron.
-//
-func (runeDtoElectron runeArrayDtoElectron) ptr() *runeArrayDtoElectron {
-
-	if runeDtoElectron.lock == nil {
-		runeDtoElectron.lock = new(sync.Mutex)
-	}
-
-	runeDtoElectron.lock.Lock()
-
-	defer runeDtoElectron.lock.Unlock()
-
-	return &runeArrayDtoElectron{
-		lock: new(sync.Mutex),
-	}
-}
-
 // singleCharacterSearch - Performs a Single Target Character
 // Search on the target string (rune array) specified by input
 // parameter 'targetInputParms'.
