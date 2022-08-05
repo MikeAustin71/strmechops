@@ -14,7 +14,6 @@ type textFormatterCollectionMolecule struct {
 //
 // This method will therefore delete all data currently held
 // by this instance of TextFormatterCollection.
-//
 func (textFmtCollectionMolecule *textFormatterCollectionMolecule) empty(
 	txtFormatterCollection *TextFormatterCollection) {
 
@@ -48,7 +47,6 @@ func (textFmtCollectionMolecule *textFormatterCollectionMolecule) empty(
 // If the two instances of TextFormatterCollection are found to be equal
 // in all respects, this method will return a boolean value of
 // 'true'.
-//
 func (textFmtCollectionMolecule *textFormatterCollectionMolecule) equal(
 	txtFormatterCollection1 *TextFormatterCollection,
 	txtFormatterCollection2 *TextFormatterCollection) bool {
@@ -105,22 +103,4 @@ func (textFmtCollectionMolecule *textFormatterCollectionMolecule) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFormatterCollectionMolecule.
-//
-func (textFmtCollectionMolecule textFormatterCollectionMolecule) ptr() *textFormatterCollectionMolecule {
-
-	if textFmtCollectionMolecule.lock == nil {
-		textFmtCollectionMolecule.lock = new(sync.Mutex)
-	}
-
-	textFmtCollectionMolecule.lock.Lock()
-
-	defer textFmtCollectionMolecule.lock.Unlock()
-
-	return &textFormatterCollectionMolecule{
-		lock: new(sync.Mutex),
-	}
 }

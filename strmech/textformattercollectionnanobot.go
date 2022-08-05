@@ -63,7 +63,7 @@ func (textFmtCollectionNanobot *textFormatterCollectionNanobot) copy(
 		return err
 	}
 
-	textFormatterCollectionMolecule{}.ptr().
+	new(textFormatterCollectionMolecule).
 		empty(destinationTxtFmtCol)
 
 	lenItems := len(sourceTxtFmtCol.fmtCollection)
@@ -98,22 +98,4 @@ func (textFmtCollectionNanobot *textFormatterCollectionNanobot) copy(
 	}
 
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFormatterCollectionNanobot.
-//
-func (textFmtCollectionNanobot textFormatterCollectionNanobot) ptr() *textFormatterCollectionNanobot {
-
-	if textFmtCollectionNanobot.lock == nil {
-		textFmtCollectionNanobot.lock = new(sync.Mutex)
-	}
-
-	textFmtCollectionNanobot.lock.Lock()
-
-	defer textFmtCollectionNanobot.lock.Unlock()
-
-	return &textFormatterCollectionNanobot{
-		lock: new(sync.Mutex),
-	}
 }

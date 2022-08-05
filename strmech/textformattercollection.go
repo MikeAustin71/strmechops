@@ -532,7 +532,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 
 	if len(fieldDateTimeFormat) == 0 {
 		fieldDateTimeFormat =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				getDefaultDateTimeFormat()
 	}
 
@@ -722,7 +722,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeDto(
 
 	if len(textDateTimeDto.FieldDateTimeFormat) == 0 {
 		textDateTimeDto.FieldDateTimeFormat =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				getDefaultDateTimeFormat()
 	}
 
@@ -918,7 +918,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 
 	if len(dateTimeDto.FieldDateTimeFormat) == 0 {
 		dateTimeDto.FieldDateTimeFormat =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				getDefaultDateTimeFormat()
 	}
 
@@ -1557,7 +1557,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 	var err error
 
 	fieldTextStr,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
 			fieldText,
 			"fieldText",
@@ -2275,7 +2275,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	foundStdParams,
 		stdLineColsFmt,
 		err =
-		textFormatterCollectionElectron{}.ptr().
+		new(textFormatterCollectionElectron).
 			findStdTxtLineParameters(
 				txtFmtCollection,
 				1, // This is a one column Text Line
@@ -2302,7 +2302,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	var column1FieldText string
 
 	column1FieldText,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
 			column1Field,
 			"column1Field",
@@ -2542,7 +2542,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	foundStdParams,
 		stdLineColsFmt,
 		err =
-		textFormatterCollectionElectron{}.ptr().
+		new(textFormatterCollectionElectron).
 			findStdTxtLineParameters(
 				txtFmtCollection,
 				2, // This is a two column Text Line
@@ -2569,7 +2569,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	var column1FieldText string
 
 	column1FieldText,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
 			column1Field,
 			"column1Field",
@@ -2587,7 +2587,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	var column2FieldText string
 
 	column2FieldText,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
 			column2Field,
 			"column2Field",
@@ -2963,7 +2963,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 	foundStdParams,
 		stdLineColsFmt,
 		err =
-		textFormatterCollectionElectron{}.ptr().
+		new(textFormatterCollectionElectron).
 			findStdTxtLineParameters(
 				txtFmtCollection,
 				lenTextFields, // Must Match number of text fields
@@ -2995,12 +2995,13 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 	for i := 0; i < lenTextFields; i++ {
 
 		textFieldsContent[i].TextFieldString,
-			err = textSpecificationAtom{}.ptr().
-			convertParamEmptyInterfaceToString(
-				textFields[i],
-				fmt.Sprintf("textFields[%v]", i),
-				ePrefix.XCpy(
-					fmt.Sprintf("textFields[%v]", i)))
+			err =
+			new(textSpecificationAtom).
+				convertParamEmptyInterfaceToString(
+					textFields[i],
+					fmt.Sprintf("textFields[%v]", i),
+					ePrefix.XCpy(
+						fmt.Sprintf("textFields[%v]", i)))
 
 		if err != nil {
 			return err
@@ -3186,12 +3187,13 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 		txtFieldContent := TextFieldsContentDto{}
 
 		txtFieldContent.TextFieldString,
-			err = textSpecificationAtom{}.ptr().
-			convertParamEmptyInterfaceToString(
-				txtFieldVal,
-				fmt.Sprintf("txtFieldVal[%v]", idx),
-				ePrefix.XCpy(
-					fmt.Sprintf("txtFieldVal[%v]", idx)))
+			err =
+			new(textSpecificationAtom).
+				convertParamEmptyInterfaceToString(
+					txtFieldVal,
+					fmt.Sprintf("txtFieldVal[%v]", idx),
+					ePrefix.XCpy(
+						fmt.Sprintf("txtFieldVal[%v]", idx)))
 
 		if err != nil {
 			return err
@@ -3214,7 +3216,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 	foundStdParams,
 		stdLineColsFmt,
 		err =
-		textFormatterCollectionElectron{}.ptr().
+		new(textFormatterCollectionElectron).
 			findStdTxtLineParameters(
 				txtFmtCollection,
 				lenTextFields, // Must Match number of text fields
@@ -4764,12 +4766,13 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	var column1FieldText string
 
 	column1FieldText,
-		err = textSpecificationAtom{}.ptr().
-		convertParamEmptyInterfaceToString(
-			column1Field,
-			"column1Field",
-			ePrefix.XCpy(
-				"column1Field"))
+		err =
+		new(textSpecificationAtom).
+			convertParamEmptyInterfaceToString(
+				column1Field,
+				"column1Field",
+				ePrefix.XCpy(
+					"column1Field"))
 
 	if err != nil {
 		return err
@@ -4872,12 +4875,13 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 
 	if saveFmtParamsAsDefault == true {
 
-		err = textFormatterCollectionElectron{}.ptr().
-			cfgNewStdTxtLineParameters(
-				txtFmtCollection,
-				newStdFmtParams,
-				ePrefix.XCpy(
-					"newStdFmtParams"))
+		err =
+			new(textFormatterCollectionElectron).
+				cfgNewStdTxtLineParameters(
+					txtFmtCollection,
+					newStdFmtParams,
+					ePrefix.XCpy(
+						"newStdFmtParams"))
 
 		if err != nil {
 			return err
@@ -5274,12 +5278,13 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 	var column1FieldText string
 
 	column1FieldText,
-		err = textSpecificationAtom{}.ptr().
-		convertParamEmptyInterfaceToString(
-			column1Field,
-			"column1Field",
-			ePrefix.XCpy(
-				"column1Field"))
+		err =
+		new(textSpecificationAtom).
+			convertParamEmptyInterfaceToString(
+				column1Field,
+				"column1Field",
+				ePrefix.XCpy(
+					"column1Field"))
 
 	if err != nil {
 		return err
@@ -5436,12 +5441,13 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 
 	if saveFmtParamsAsDefault == true {
 
-		err = textFormatterCollectionElectron{}.ptr().
-			cfgNewStdTxtLineParameters(
-				txtFmtCollection,
-				newStdFmtParams,
-				ePrefix.XCpy(
-					"newStdFmtParams"))
+		err =
+			new(textFormatterCollectionElectron).
+				cfgNewStdTxtLineParameters(
+					txtFmtCollection,
+					newStdFmtParams,
+					ePrefix.XCpy(
+						"newStdFmtParams"))
 
 		if err != nil {
 			return err
@@ -5766,12 +5772,13 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 
 	if saveFmtParamsAsDefault == true {
 
-		err = textFormatterCollectionElectron{}.ptr().
-			cfgNewStdTxtLineParameters(
-				txtFmtCollection,
-				newStdFmtParams,
-				ePrefix.XCpy(
-					"newStdFmtParams"))
+		err =
+			new(textFormatterCollectionElectron).
+				cfgNewStdTxtLineParameters(
+					txtFmtCollection,
+					newStdFmtParams,
+					ePrefix.XCpy(
+						"newStdFmtParams"))
 
 		if err != nil {
 			return err
@@ -6056,7 +6063,7 @@ func (txtFmtCollection *TextFormatterCollection) Empty() {
 
 	txtFmtCollection.lock.Lock()
 
-	textFormatterCollectionMolecule{}.ptr().
+	new(textFormatterCollectionMolecule).
 		empty(
 			txtFmtCollection)
 
@@ -6101,7 +6108,7 @@ func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
 
 	defer txtFmtCollection.lock.Unlock()
 
-	textFormatterCollectionAtom{}.ptr().
+	new(textFormatterCollectionAtom).
 		emptyFormatterCollection(txtFmtCollection)
 
 	return
@@ -6142,7 +6149,7 @@ func (txtFmtCollection *TextFormatterCollection) EmptyLineParamCollection() {
 
 	defer txtFmtCollection.lock.Unlock()
 
-	textFormatterCollectionAtom{}.ptr().
+	new(textFormatterCollectionAtom).
 		emptyLineParamCollection(
 			txtFmtCollection)
 
@@ -6195,7 +6202,7 @@ func (txtFmtCollection *TextFormatterCollection) Equal(
 
 	defer txtFmtCollection.lock.Unlock()
 
-	return textFormatterCollectionMolecule{}.ptr().
+	return new(textFormatterCollectionMolecule).
 		equal(
 			txtFmtCollection,
 			incomingTxtFmtCol)
@@ -6534,12 +6541,13 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 		lock:                       nil,
 	}
 
-	err = textFormatterCollectionElectron{}.ptr().
-		cfgNewStdTxtLineParameters(
-			txtFmtCollection,
-			newStdFmtParams,
-			ePrefix.XCpy(
-				"newStdFmtParams"))
+	err =
+		new(textFormatterCollectionElectron).
+			cfgNewStdTxtLineParameters(
+				txtFmtCollection,
+				newStdFmtParams,
+				ePrefix.XCpy(
+					"newStdFmtParams"))
 
 	return err
 }
@@ -6920,12 +6928,13 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 		lock:                       nil,
 	}
 
-	err = textFormatterCollectionElectron{}.ptr().
-		cfgNewStdTxtLineParameters(
-			txtFmtCollection,
-			newStdFmtParams,
-			ePrefix.XCpy(
-				"newStdFmtParams"))
+	err =
+		new(textFormatterCollectionElectron).
+			cfgNewStdTxtLineParameters(
+				txtFmtCollection,
+				newStdFmtParams,
+				ePrefix.XCpy(
+					"newStdFmtParams"))
 
 	return err
 }
@@ -7123,12 +7132,13 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 		lock:                       nil,
 	}
 
-	err = textFormatterCollectionElectron{}.ptr().
-		cfgNewStdTxtLineParameters(
-			txtFmtCollection,
-			newStdFmtParams,
-			ePrefix.XCpy(
-				"newStdFmtParams"))
+	err =
+		new(textFormatterCollectionElectron).
+			cfgNewStdTxtLineParameters(
+				txtFmtCollection,
+				newStdFmtParams,
+				ePrefix.XCpy(
+					"newStdFmtParams"))
 
 	return err
 

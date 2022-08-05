@@ -19,7 +19,6 @@ type textFormatterCollectionElectron struct {
 // If an existing TextFmtParamsLineColumnsDto cannot be located,
 // the new Standard Format Parameters object is appended to the
 // Standard Format Parameters Collection.
-//
 func (txtSolidLineElectron *textFormatterCollectionElectron) cfgNewStdTxtLineParameters(
 	txtFmtCollection *TextFormatterCollection,
 	newStdFmtParams TextFmtParamsLineColumnsDto,
@@ -179,22 +178,4 @@ func (txtSolidLineElectron *textFormatterCollectionElectron) findStdTxtLineParam
 	}
 
 	return foundTxtFormatter, lineColsFormatter, err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFormatterCollectionElectron.
-//
-func (txtSolidLineElectron textFormatterCollectionElectron) ptr() *textFormatterCollectionElectron {
-
-	if txtSolidLineElectron.lock == nil {
-		txtSolidLineElectron.lock = new(sync.Mutex)
-	}
-
-	txtSolidLineElectron.lock.Lock()
-
-	defer txtSolidLineElectron.lock.Unlock()
-
-	return &textFormatterCollectionElectron{
-		lock: new(sync.Mutex),
-	}
 }

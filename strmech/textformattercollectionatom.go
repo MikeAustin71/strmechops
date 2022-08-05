@@ -13,29 +13,29 @@ type textFormatterCollectionAtom struct {
 // elements of the Text Formatter Collection.
 //
 // Internal member variable
-//		TextFormatterCollection.fmtCollection
+//
+//	TextFormatterCollection.fmtCollection
+//
 // will be set to 'nil'.
 //
 // The TextFormatterCollection member variable that holds the Text
 // Formatter Collection is defined as follows:
 //
-//   fmtCollection []TextFormatterDto
+//	fmtCollection []TextFormatterDto
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtFormatterCollection     *TextFormatterCollection
-//     - All member elements in the
-//        txtFormatterCollection.fmtCollection will be deleted.
-//
+//	txtFormatterCollection     *TextFormatterCollection
+//	   - All member elements in the
+//	      txtFormatterCollection.fmtCollection will be deleted.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (textFmtCollectionAtom *textFormatterCollectionAtom) emptyFormatterCollection(
 	txtFormatterCollection *TextFormatterCollection) {
 
@@ -68,30 +68,30 @@ func (textFmtCollectionAtom *textFormatterCollectionAtom) emptyFormatterCollecti
 // elements in the Standard Text Line Parameters Collection.
 //
 // Internal member variable
-//		TextFormatterCollection.stdTextLineParamCollection
+//
+//	TextFormatterCollection.stdTextLineParamCollection
+//
 // will be set to 'nil'.
 //
 // The internal member variable that holds the Standard Text Line
 // Parameters Collection is defined as follows:
 //
-//   stdTextLineParamCollection []TextFmtParamsLineColumnsDto
+//	stdTextLineParamCollection []TextFmtParamsLineColumnsDto
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtFormatterCollection     *TextFormatterCollection
-//     - All member elements in the
-//        txtFormatterCollection.stdTextLineParamCollection will be
-//        deleted.
-//
+//	txtFormatterCollection     *TextFormatterCollection
+//	   - All member elements in the
+//	      txtFormatterCollection.stdTextLineParamCollection will be
+//	      deleted.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (textFmtCollectionAtom *textFormatterCollectionAtom) emptyLineParamCollection(
 	txtFormatterCollection *TextFormatterCollection) {
 
@@ -127,7 +127,6 @@ func (textFmtCollectionAtom *textFormatterCollectionAtom) emptyLineParamCollecti
 // If the two instances of TextFormatterCollection are found to be equal
 // in all respects, this method will return a boolean value of
 // 'true'.
-//
 func (textFmtCollectionAtom *textFormatterCollectionAtom) equal(
 	txtFormatterCollection1 *TextFormatterCollection,
 	txtFormatterCollection2 *TextFormatterCollection) bool {
@@ -184,22 +183,4 @@ func (textFmtCollectionAtom *textFormatterCollectionAtom) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFormatterCollectionAtom.
-//
-func (textFmtCollectionAtom textFormatterCollectionAtom) ptr() *textFormatterCollectionAtom {
-
-	if textFmtCollectionAtom.lock == nil {
-		textFmtCollectionAtom.lock = new(sync.Mutex)
-	}
-
-	textFmtCollectionAtom.lock.Lock()
-
-	defer textFmtCollectionAtom.lock.Unlock()
-
-	return &textFormatterCollectionAtom{
-		lock: new(sync.Mutex),
-	}
 }

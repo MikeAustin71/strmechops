@@ -177,3 +177,281 @@ func (strArrayDto *StringArrayDto) CopyIn(
 		ePrefix.XCpy(
 			"strArrayDto<-incomingStrArray"))
 }
+
+// CopyOut - Returns a deep copy of the current StringArrayDto
+// instance.
+//
+// No data validation is performed on the current StringArrayDto
+// instance prior to returning the deep StringArrayDto copy of
+// this instance.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	deepCopyStrArrayDto        StringArrayDto
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current StringArrayDto instance.
+//
+//
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (strArrayDto *StringArrayDto) CopyOut(
+	errorPrefix interface{}) (
+	deepCopyStrArrayDto StringArrayDto,
+	err error) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return deepCopyStrArrayDto, err
+	}
+
+	err = new(stringArrayDtoNanobot).copyStringArrayDto(
+		&deepCopyStrArrayDto,
+		strArrayDto,
+		ePrefix.XCpy(
+			"deepCopyStrArrayDto<-strArrayDto"))
+
+	return deepCopyStrArrayDto, err
+}
+
+// Empty - Resets all internal member variables for the current
+// instance of StringArrayDto to their zero or uninitialized
+// states.
+//
+// This means that the internal string array maintained by this
+// instance of StringArrayDto is to a value of 'nil'.
+//
+//	StringArrayDto.StrArray = nil
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all member variable data values in this
+// current instance of StringArrayDto. All member variable data
+// values will be reset to their zero or uninitialized states.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) Empty() {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	new(stringArrayDtoAtom).empty(
+		strArrayDto)
+
+	strArrayDto.lock.Unlock()
+
+	strArrayDto.lock = nil
+
+}
+
+// Equal - Receives a pointer to another instance of StringArrayDto
+// and proceeds to compare the member variables to those of the
+// current StringArrayDto instance in order to determine if they
+// are equivalent.
+//
+// A boolean flag showing the result of this comparison is
+// returned. If the member variables of both instances are equal in
+// all respects, this flag is set to 'true'. Otherwise, this method
+// returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	incomingStrArray           *StringArrayDto
+//	   - A pointer to an incoming instance of StringArrayDto. This
+//	     method will compare all member variable data values in
+//	     this instance against those contained in the current
+//	     instance of StringArrayDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingStrArray' are equal in all respects to
+//	     those contained in the current instance of StringArrayDto,
+//	     this method will return a boolean value of 'true'.
+//	     Otherwise, a value of 'false' will be returned to the
+//	     calling function.
+func (strArrayDto *StringArrayDto) Equal(
+	incomingStrArray *StringArrayDto) bool {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	return new(stringArrayDtoAtom).equal(
+		strArrayDto,
+		incomingStrArray)
+}
+
+// GetStringArray - Returns a deep copy of the string array
+// maintained by the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		[]string
+//	    - This method returns a deep copy of the string array
+//	      maintained by the current instance of StringArrayDto.
+//	      If this internal string array is empty, a value of
+//	      'nil' will be returned.
+func (strArrayDto *StringArrayDto) GetStringArray() []string {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+		return nil
+	}
+
+	strArray := make([]string, lenStrArray)
+
+	for i := 0; i < lenStrArray; i++ {
+		strArray[i] =
+			strArrayDto.StrArray[i]
+	}
+
+	return strArray
+}
+
+// GetStringArrayLength - Returns the length of the internal string
+// maintained by the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		int
+//	    - This method returns the length of the string array
+//	      maintained by the current instance of StringArrayDto.
+func (strArrayDto *StringArrayDto) GetStringArrayLength() int {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	return len(strArrayDto.StrArray)
+}
