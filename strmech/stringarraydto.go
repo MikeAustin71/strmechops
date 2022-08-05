@@ -440,9 +440,9 @@ func (strArrayDto *StringArrayDto) GetStringArray() []string {
 //
 // Return Values
 //
-//		int
-//	    - This method returns the length of the string array
-//	      maintained by the current instance of StringArrayDto.
+//	int
+//	   - This method returns the length of the string array
+//	     maintained by the current instance of StringArrayDto.
 func (strArrayDto *StringArrayDto) GetStringArrayLength() int {
 
 	if strArrayDto.lock == nil {
@@ -454,4 +454,111 @@ func (strArrayDto *StringArrayDto) GetStringArrayLength() int {
 	defer strArrayDto.lock.Unlock()
 
 	return len(strArrayDto.StrArray)
+}
+
+// New - Returns a new instance of StringArrayDto containing
+// an empty string array.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		StringArrayDto
+//		   - This method returns a new instance of StringArrayDto.
+//	      The internal string array maintained by this new
+//	      instance is empty and set to 'nil'.
+func (strArrayDto StringArrayDto) New() StringArrayDto {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	newStrArray := StringArrayDto{}
+
+	new(stringArrayDtoAtom).empty(
+		&newStrArray)
+
+	return newStrArray
+}
+
+// NewStringArray - Returns a new instance of StringArrayDto. The
+// internal string array for this instance will be populated from
+// another string array passed as an input parameter, 'strArray'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		strArray                   []string
+//	    - This string array will be used to populate the string
+//	      array for the new returned instance of StringArrayDto.
+//
+//
+//	 desc1                      string
+//	    - A name, label, tag or narrative text used to describe
+//	      the new returned instance of StringArrayDto.
+//
+//	      This particular text description will be assigned to the
+//	      internal member variable, 'StringArrayDto.Description1'.
+//
+//
+//	 desc2                      string
+//	    - A name, label, tag or narrative text used to describe
+//	      the new returned instance of StringArrayDto.
+//
+//	      This particular text description will be assigned to the
+//	      internal member variable, 'StringArrayDto.Description2'.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		StringArrayDto
+//		   - This method returns a new instance of StringArrayDto.
+//	      The internal string array maintained by this new
+//	      instance is empty and set to 'nil'.
+func (strArrayDto StringArrayDto) NewStringArray(
+	strArray []string,
+	desc1 string,
+	desc2 string) StringArrayDto {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	newStrArray := StringArrayDto{}
+
+	lenStrArray := len(strArray)
+
+	if lenStrArray > 0 {
+
+		newStrArray.StrArray =
+			make([]string, lenStrArray)
+
+		for i := 0; i < lenStrArray; i++ {
+			newStrArray.StrArray[i] =
+				strArray[i]
+		}
+
+	}
+
+	newStrArray.Description1 = desc1
+
+	newStrArray.Description2 = desc2
+
+	return newStrArray
 }
