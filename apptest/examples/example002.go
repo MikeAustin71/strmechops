@@ -7,7 +7,6 @@ import (
 	"io"
 	"strings"
 	"sync"
-	"time"
 )
 
 type MainTest02 struct {
@@ -278,10 +277,11 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	mt02Nanobot := mainTest02Nanobot{}
 
 	err = mt02Nanobot.SetLeadingMarquee(
+		&strBuilder,
 		funcName,
 		"Testing StrMech.ExtractNumberRunes()",
 		maxLineLen,
-		&txtFormatCol,
+		false,
 		&ePrefix)
 
 	if err != nil {
@@ -490,10 +490,11 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 	mt02Nanobot := mainTest02Nanobot{}
 
 	err = mt02Nanobot.SetLeadingMarquee(
+		&strBuilder,
 		funcName,
 		"Testing StrMech.ExtractNumberRunes()",
 		maxLineLen,
-		&txtFormatCol,
+		false,
 		&ePrefix)
 
 	if err != nil {
@@ -684,10 +685,11 @@ type mainTest02Nanobot struct {
 }
 
 func (mt02Nanobot *mainTest02Nanobot) SetLeadingMarquee(
+	strBuilder *strings.Builder,
 	funcName string,
 	testTitle string,
 	maxLineLen int,
-	txtFormatCol *strmech.TextFormatterCollection,
+	turnAutoLineLengthBreaksOn bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	err error) {
 
@@ -714,13 +716,14 @@ func (mt02Nanobot *mainTest02Nanobot) SetLeadingMarquee(
 
 	}
 
-	if txtFormatCol == nil {
+	if strBuilder == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtFormatCol' is a nil pointer.\n",
+			"Error: Input parameter 'strBuilder' is a 'nil' pointer.\n",
 			ePrefix.String())
 
 		return err
+
 	}
 
 	if len(funcName) == 0 {
@@ -752,93 +755,37 @@ func (mt02Nanobot *mainTest02Nanobot) SetLeadingMarquee(
 		return err
 	}
 
+	titles := strmech.StringArrayDto{}
+
+	titles.AddString(funcName)
+
+	titles.AddString(testTitle)
+
 	// Leading Title Marquee
 
-	err = txtFormatCol.SetStdFormatParamsLine1Col(
-		" ",
-		maxLineLen,
-		strmech.TxtJustify.Center(),
-		"",
-		false,
-		"",
-		-1,
-		false,
-		ePrefix.XCpy(
-			"1-Column Setup"))
-
-	if err != nil {
-		return err
-	}
-
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Title Line 1
-	err = txtFormatCol.AddLine1Col(
-		funcName,
-		ePrefix.XCpy(
-			"Title Line 1"))
-
-	if err != nil {
-		return err
-	}
-
-	// Title Line 2
-	err = txtFormatCol.AddLine1Col(
-		testTitle,
-		ePrefix.XCpy(
-			"Title Line 1"))
-
-	if err != nil {
-		return err
-	}
-
-	// Title Line  3 Date/Time
-
-	err = txtFormatCol.AddLine1Col(
-		strmech.TextInputParamFieldDateTimeDto{
-			FieldDateTime:       time.Now(),
-			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+	txtFmtParams := strmech.TextFmtParamsLineColumnsDto{
+		FormatType: strmech.TxtFieldType.LineColumns(),
+		FieldFormatParams: []strmech.TextFieldFmtParamsDto{
+			{
+				LeftMarginStr:  " ",
+				FieldLength:    maxLineLen,
+				FieldJustify:   strmech.TxtJustify.Center(),
+				DateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+				RightMarginStr: "",
+			},
 		},
-		ePrefix.XCpy(
-			"Top-Title Line 3"))
-
-	if err != nil {
-		return
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "\n",
+		MaxLineLength:              maxLineLen,
+		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 	}
 
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Trailing Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// End Of Marquee
+	err = new(strmech.TextUtility).BuildOneColLeadingMarquee(
+		strBuilder,
+		titles,
+		txtFmtParams,
+		ePrefix.XCpy(
+			"strBuilder<-txtFmtParams"))
 
 	return err
 }
