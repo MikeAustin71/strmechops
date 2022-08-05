@@ -5815,9 +5815,6 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 //	     ('incomingTxtFmtCol') will be copied to the current
 //	     TextFormatterCollection instance ('txtFmtCollection').
 //
-//	     If 'incomingTxtFmtCol' contains invalid member variable
-//	     data values, this method will return an error.
-//
 //
 //	errorPrefix                interface{}
 //	   - This object encapsulates error prefix text which is
@@ -5904,7 +5901,7 @@ func (txtFmtCollection *TextFormatterCollection) CopyIn(
 		return err
 	}
 
-	return textFormatterCollectionNanobot{}.ptr().
+	return new(textFormatterCollectionNanobot).
 		copy(
 			txtFmtCollection,
 			incomingTxtFmtCol,
@@ -6015,7 +6012,7 @@ func (txtFmtCollection *TextFormatterCollection) CopyOut(
 		return deepCopyTxtFmtCol, err
 	}
 
-	err = textFormatterCollectionNanobot{}.ptr().
+	err = new(textFormatterCollectionNanobot).
 		copy(
 			&deepCopyTxtFmtCol,
 			txtFmtCollection,
