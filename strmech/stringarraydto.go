@@ -383,6 +383,42 @@ func (strArrayDto *StringArrayDto) Equal(
 		incomingStrArray)
 }
 
+// GetDescription1 - Description1 is a name, label or narrative
+// text used to describe the current instance of StringArrayDto.
+//
+// 'Description1' is the first of two descriptive text strings.
+//
+// This method returns the current value of the 'Description1'
+// string for the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//		string
+//		   - This method returns the string value of internal member
+//	      variable, 'Description1'. This string is a  name, label or
+//	      narrative text used to describe the current instance of
+//	      StringArrayDto.
+func (strArrayDto *StringArrayDto) GetDescription1() string {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	return strArrayDto.Description1
+}
+
 // GetStringArray - Returns a deep copy of the string array
 // maintained by the current instance of StringArrayDto.
 //
