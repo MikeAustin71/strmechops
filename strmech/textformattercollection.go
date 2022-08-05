@@ -12,7 +12,6 @@ import (
 // Text Formatter Data Transfer Objects (TextFormatterDto). These
 // object contain the specifications used to format text fields and
 // lines of text for  screen displays, file output and printing.
-//
 type TextFormatterCollection struct {
 	fmtCollection []TextFormatterDto
 	// Text
@@ -36,115 +35,112 @@ type TextFormatterCollection struct {
 // inserted raw, or "as is", in to the final output of formatted
 // text.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr                      string
-//     - A string containing the text characters to be positioned
-//       on the Left side of the Ad Hoc Text.
+//	leftMarginStr                      string
+//	   - A string containing the text characters to be positioned
+//	     on the Left side of the Ad Hoc Text.
 //
-//       If no Left margin is required, set this parameter to an
-//       empty string.
-//
-//
-//  adHocText                          string
-//     - This strings holds the raw, ad hoc text which will be
-//       inserted "as is", into the final output of formatted
-//       text.
-//
-//       If this parameter is submitted as an empty or zero
-//       length string, an error will be generated when
-//       attempting to create formatted text output.
+//	     If no Left margin is required, set this parameter to an
+//	     empty string.
 //
 //
+//	adHocText                          string
+//	   - This strings holds the raw, ad hoc text which will be
+//	     inserted "as is", into the final output of formatted
+//	     text.
 //
-//  rightMarginStr                     string
-//     - The contents of the string will be used as the right
-//       margin for the Text Ad Hoc string.
-//
-//       If no right margin is required, set 'rightMarginStr' to
-//       a zero length or empty string, and no right margin will
-//       be created.
-//
-//
-//  turnLineTerminationOff             bool
-//     - By default, a new line string terminator ('\n') will be
-//       appended to the Ad Hoc text ('AdHocText'). If this
-//       parameter is set to 'true', no line termination sequence
-//       will be applied.
-//
-//       This parameter controls the operation of parameter
-//       'LineTerminator'. If 'TurnLineTerminationOff' is set to
-//       'true', 'LineTerminator' will be completely ignored and
-//        have no effect.
+//	     If this parameter is submitted as an empty or zero
+//	     length string, an error will be generated when
+//	     attempting to create formatted text output.
 //
 //
-//  lineTerminator                     string
-//     - This string holds the character or characters which
-//       will be used to terminate the formatted line of text
-//       output, if parameter 'TurnLineTerminationOff' is set
-//       to 'false'.
 //
-//       The most common usage sets this string to a new line
-//       character ("\n").
+//	rightMarginStr                     string
+//	   - The contents of the string will be used as the right
+//	     margin for the Text Ad Hoc string.
 //
-//       If 'lineTerminator' is configured as an empty string
-//       (string length zero), a single new line character ('\n')
-//       will be automatically applied to produce line termination
-//       depending on the setting for parameter
-//       'turnLineTerminationOff'.
-//
-//       LineTerminator works in conjunction with parameter
-//       'turnLineTerminationOff'. 'turnLineTerminationOff'
-//       controls the application of a line terminator. Setting
-//       'turnLineTerminationOff' to 'true' means that NO line
-//       terminator will be applied.
-//
-//       Setting 'turnLineTerminationOff' to 'true' means that
-//       parameter 'lineTerminator' will be completely ignored
-//       and have no effect.
+//	     If no right margin is required, set 'rightMarginStr' to
+//	     a zero length or empty string, and no right margin will
+//	     be created.
 //
 //
-//  maxLineLength                      int
-//     - The maximum length of the line on which the solid line
-//       text characters will be presented.
+//	turnLineTerminationOff             bool
+//	   - By default, a new line string terminator ('\n') will be
+//	     appended to the Ad Hoc text ('AdHocText'). If this
+//	     parameter is set to 'true', no line termination sequence
+//	     will be applied.
 //
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
-//
-//       If the value of 'maxLineLength' is less than one (1),
-//       it will be automatically converted to minus one (-1).
-//
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       on separate text lines when that text exceeds the maximum
-//       text line length ('maxLineLength'). Therefore, parameter
-//       'turnAutoLineLengthBreaksOn' controls whether automatic
-//       line breaks using 'maxLineLength' will be applied.
+//	     This parameter controls the operation of parameter
+//	     'LineTerminator'. If 'TurnLineTerminationOff' is set to
+//	     'true', 'LineTerminator' will be completely ignored and
+//	      have no effect.
 //
 //
-//  turnAutoLineLengthBreaksOn         bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are positioned
-//       on the following line as a separate line of text.
+//	lineTerminator                     string
+//	   - This string holds the character or characters which
+//	     will be used to terminate the formatted line of text
+//	     output, if parameter 'TurnLineTerminationOff' is set
+//	     to 'false'.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     The most common usage sets this string to a new line
+//	     character ("\n").
 //
-//       When this parameter is set to 'true', text fields which
-//       extend beyond the maximum line length ('maxLineLength')
-//       will be formatted as a separate line of text on the
-//       following line.
+//	     If 'lineTerminator' is configured as an empty string
+//	     (string length zero), a single new line character ('\n')
+//	     will be automatically applied to produce line termination
+//	     depending on the setting for parameter
+//	     'turnLineTerminationOff'.
 //
+//	     LineTerminator works in conjunction with parameter
+//	     'turnLineTerminationOff'. 'turnLineTerminationOff'
+//	     controls the application of a line terminator. Setting
+//	     'turnLineTerminationOff' to 'true' means that NO line
+//	     terminator will be applied.
+//
+//	     Setting 'turnLineTerminationOff' to 'true' means that
+//	     parameter 'lineTerminator' will be completely ignored
+//	     and have no effect.
+//
+//
+//	maxLineLength                      int
+//	   - The maximum length of the line on which the solid line
+//	     text characters will be presented.
+//
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
+//
+//	     If the value of 'maxLineLength' is less than one (1),
+//	     it will be automatically converted to minus one (-1).
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     on separate text lines when that text exceeds the maximum
+//	     text line length ('maxLineLength'). Therefore, parameter
+//	     'turnAutoLineLengthBreaksOn' controls whether automatic
+//	     line breaks using 'maxLineLength' will be applied.
+//
+//
+//	turnAutoLineLengthBreaksOn         bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are positioned
+//	     on the following line as a separate line of text.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
+//
+//	     When this parameter is set to 'true', text fields which
+//	     extend beyond the maximum line length ('maxLineLength')
+//	     will be formatted as a separate line of text on the
+//	     following line.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 	leftMarginStr string,
 	adHocText string,
@@ -214,122 +210,119 @@ func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 // inserted raw, or "as is", in to the final output of formatted
 // text.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtAdHocDto                        TextAdHocDto
-//     - An instance of TextFieldLabelDto which contains all the
-//       necessary data parameters to produce a text label.
+//	txtAdHocDto                        TextAdHocDto
+//	   - An instance of TextFieldLabelDto which contains all the
+//	     necessary data parameters to produce a text label.
 //
-//       The Text Field Label Data Transfer Object is defined as
-//       follows:
+//	     The Text Field Label Data Transfer Object is defined as
+//	     follows:
 //
-//        type TextAdHocDto struct {
+//	      type TextAdHocDto struct {
 //
-//         FormatType                  TextFieldType
-//          Required. This enumeration value specifies the type of
-//          Text Format Operation to be performed.
+//	       FormatType                  TextFieldType
+//	        Required. This enumeration value specifies the type of
+//	        Text Format Operation to be performed.
 //
-//          For TextAdHocDto 'FormatType' this parameter should
-//          be set to: TxtFieldType.TextAdHoc()
+//	        For TextAdHocDto 'FormatType' this parameter should
+//	        be set to: TxtFieldType.TextAdHoc()
 //
-//         LeftMarginStr               string
-//          A string containing the text characters to be
-//          positioned on the Left side of the Ad Hoc Text.
+//	       LeftMarginStr               string
+//	        A string containing the text characters to be
+//	        positioned on the Left side of the Ad Hoc Text.
 //
-//          If no Left margin is required, set this parameter to an
-//          empty string.
+//	        If no Left margin is required, set this parameter to an
+//	        empty string.
 //
-//         AdHocText                   string
-//          This strings holds the raw ad hoc text.
+//	       AdHocText                   string
+//	        This strings holds the raw ad hoc text.
 //
-//         RightMarginStr              string
-//          The contents of the string will be used as the right
-//          margin for the Text Ad Hoc string.
+//	       RightMarginStr              string
+//	        The contents of the string will be used as the right
+//	        margin for the Text Ad Hoc string.
 //
-//          If no right margin is required, set 'RightMarginStr' to
-//          a zero length or empty string, and no right margin will
-//          be created.
+//	        If no right margin is required, set 'RightMarginStr' to
+//	        a zero length or empty string, and no right margin will
+//	        be created.
 //
-//         TurnLineTerminationOff      bool
-//          By default, a new line string terminator ('\n') will be
-//          appended to the Ad Hoc text ('AdHocText'). If this
-//          parameter is set to 'true', no line termination
-//          sequence will be applied.
+//	       TurnLineTerminationOff      bool
+//	        By default, a new line string terminator ('\n') will be
+//	        appended to the Ad Hoc text ('AdHocText'). If this
+//	        parameter is set to 'true', no line termination
+//	        sequence will be applied.
 //
-//          This parameter controls the operation of parameter
-//          'LineTerminator'. If 'TurnLineTerminationOff' is set
-//          to 'true', 'LineTerminator' will be completely
-//          ignored and have no effect.
+//	        This parameter controls the operation of parameter
+//	        'LineTerminator'. If 'TurnLineTerminationOff' is set
+//	        to 'true', 'LineTerminator' will be completely
+//	        ignored and have no effect.
 //
-//         LineTerminator              string
-//          This string holds the character or characters which
-//          will be used to terminate the formatted line of text
-//          output, if parameter 'TurnLineTerminationOff' is set
-//          to 'false'.
+//	       LineTerminator              string
+//	        This string holds the character or characters which
+//	        will be used to terminate the formatted line of text
+//	        output, if parameter 'TurnLineTerminationOff' is set
+//	        to 'false'.
 //
-//          The most common usage sets this string to a new line
-//          character ("\n").
+//	        The most common usage sets this string to a new line
+//	        character ("\n").
 //
-//          If 'LineTerminator' is configured as an empty string
-//          (string length zero), a single new line character
-//          ('\n') will be automatically applied to produce line
-//          termination depending on the setting for parameter
-//          'TurnLineTerminationOff'.
+//	        If 'LineTerminator' is configured as an empty string
+//	        (string length zero), a single new line character
+//	        ('\n') will be automatically applied to produce line
+//	        termination depending on the setting for parameter
+//	        'TurnLineTerminationOff'.
 //
-//          LineTerminator works in conjunction with member
-//          variable 'TurnLineTerminationOff'.
+//	        LineTerminator works in conjunction with member
+//	        variable 'TurnLineTerminationOff'.
 //
-//          'TurnLineTerminationOff' controls the application of a
-//          line terminator. Setting 'TurnLineTerminationOff' to
-//          'true' means that NO line terminator will be applied.
+//	        'TurnLineTerminationOff' controls the application of a
+//	        line terminator. Setting 'TurnLineTerminationOff' to
+//	        'true' means that NO line terminator will be applied.
 //
-//          Setting 'TurnLineTerminationOff' to 'true' means that
-//          parameter 'LineTerminator' will be completely ignored
-//          and have no effect.
+//	        Setting 'TurnLineTerminationOff' to 'true' means that
+//	        parameter 'LineTerminator' will be completely ignored
+//	        and have no effect.
 //
-//         MaxLineLength               int
-//          The maximum length of the line on which the ad hoc
-//          text characters ('AdHocText') will be presented.
+//	       MaxLineLength               int
+//	        The maximum length of the line on which the ad hoc
+//	        text characters ('AdHocText') will be presented.
 //
-//          Set this parameter to minus one (-1) to specify an
-//          unlimited line length for this text line.
+//	        Set this parameter to minus one (-1) to specify an
+//	        unlimited line length for this text line.
 //
-//          If the value of 'MaxLineLength' is less than one (1),
-//          it will be automatically converted to minus one (-1).
+//	        If the value of 'MaxLineLength' is less than one (1),
+//	        it will be automatically converted to minus one (-1).
 //
-//          'MaxLineLength' is used in conjunction with parameter
-//          'TurnAutoLineLengthBreaksOn' to automatically place
-//          text on separate text lines when that text exceeds the
-//          maximum text line length ('MaxLineLength'). Therefore,
-//          paramter 'TurnAutoLineLengthBreaksOn' controls whether
-//          automatic line breaks using 'MaxLineLength' will be
-//          applied.
+//	        'MaxLineLength' is used in conjunction with parameter
+//	        'TurnAutoLineLengthBreaksOn' to automatically place
+//	        text on separate text lines when that text exceeds the
+//	        maximum text line length ('MaxLineLength'). Therefore,
+//	        paramter 'TurnAutoLineLengthBreaksOn' controls whether
+//	        automatic line breaks using 'MaxLineLength' will be
+//	        applied.
 //
-//         TurnAutoLineLengthBreaksOn  bool
-//          This parameter controls whether text lines which exceed
-//          the maximum line length ('MaxLineLength') are
-//          positioned on the following line as a separate line of
-//          text.
+//	       TurnAutoLineLengthBreaksOn  bool
+//	        This parameter controls whether text lines which exceed
+//	        the maximum line length ('MaxLineLength') are
+//	        positioned on the following line as a separate line of
+//	        text.
 //
-//          To apply automatic line breaking at the maximum line
-//          length, set the value of this parameter to 'true'.
+//	        To apply automatic line breaking at the maximum line
+//	        length, set the value of this parameter to 'true'.
 //
-//          When this parameter is set to 'true', text fields which
-//          extend beyond the maximum line length 'MaxLineLength'
-//          will be formatted as a separate line of text on the
-//          following line.
-//        }
-//
+//	        When this parameter is set to 'true', text fields which
+//	        extend beyond the maximum line length 'MaxLineLength'
+//	        will be formatted as a separate line of text on the
+//	        following line.
+//	      }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddAdHocTextDto(
 	txtAdHocDto TextAdHocDto) {
 
@@ -383,136 +376,133 @@ func (txtFmtCollection *TextFormatterCollection) AddAdHocTextDto(
 // a line terminator (a.k.a. new line character '\n') thereby
 // creating a separate stand-alone line of text.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the date time text field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the date time text field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  fieldDateTime              time.Time
-//     - The date/time value which will be formatted as a text
-//       string.
-//
-//       If this parameter is set equal to zero, an error will be
-//       generated when attempting to create a text field with a
-//       Text Builder method.
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  fieldDateTimeFormat        string
-//    - This string will be used to format the date/time value
-//      'fieldDateTime' as a text string.
+//	fieldDateTime              time.Time
+//	   - The date/time value which will be formatted as a text
+//	     string.
 //
-//       If this 'fieldDateTimeFormat' string is empty (has a zero
-//       length), a default Date/Time format string will be applied
-//       as follows:
-//         "2006-01-02 15:04:05.000000000 -0700 MST"
-//
-//
-//  fieldLength                int
-//     - Used to format date time text field. This is the length of
-//       the text field in which the formatted date time text
-//       string will be displayed. If 'fieldLength' is less than the
-//       length of the date time string, it will be automatically
-//       set equal to the date time string length.
-//
-//       If 'fieldLength' is greater than the length of the date
-//       time text string, the 'fieldJustify' parameter will be
-//       used to configure or justify the text within the
-//       boundaries the text field defined by 'fieldLength'.
-//
-//       To automatically set the value of 'fieldLength' to the
-//       length of the date time text field, set this parameter to
-//       a value of  minus one (-1).
+//	     If this parameter is set equal to zero, an error will be
+//	     generated when attempting to create a text field with a
+//	     Text Builder method.
 //
 //
-//  fieldJustify               TextJustify
-//      An enumeration value specifying the justification of the
-//      date time text string within the text field specified by
-//      'fieldLength'.
+//	fieldDateTimeFormat        string
+//	  - This string will be used to format the date/time value
+//	    'fieldDateTime' as a text string.
 //
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the date
-//      time text string, text justification must be equal to one
-//      of these three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	     If this 'fieldDateTimeFormat' string is empty (has a zero
+//	     length), a default Date/Time format string will be applied
+//	     as follows:
+//	       "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//  lineTerminator             string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted date time text thereby
-//       converting this text element into a valid line of text.
+//	fieldLength                int
+//	   - Used to format date time text field. This is the length of
+//	     the text field in which the formatted date time text
+//	     string will be displayed. If 'fieldLength' is less than the
+//	     length of the date time string, it will be automatically
+//	     set equal to the date time string length.
 //
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text label field and no other text
-//       elements. Any string of text characters will be accepted
-//       for this parameter.
+//	     If 'fieldLength' is greater than the length of the date
+//	     time text string, the 'fieldJustify' parameter will be
+//	     used to configure or justify the text within the
+//	     boundaries the text field defined by 'fieldLength'.
 //
-//       Again, the most common usage sets this string to a new
-//       line character ("\n").
-//
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
+//	     To automatically set the value of 'fieldLength' to the
+//	     length of the date time text field, set this parameter to
+//	     a value of  minus one (-1).
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this date time
-//       text field will be presented.
+//	fieldJustify               TextJustify
+//	    An enumeration value specifying the justification of the
+//	    date time text string within the text field specified by
+//	    'fieldLength'.
 //
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength'). Therefore,
-//       paramter 'turnAutoLineLengthBreaksOn' controls whether
-//       automatic line breaks using 'maxLineLength' will be
-//       applied.
+//	    If the field length is greater than the length of the date
+//	    time text string, text justification must be equal to one
+//	    of these three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
 //
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
+//
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	lineTerminator             string
+//	   - This string holds the character or characters which will
+//	     be used to terminate the formatted date time text thereby
+//	     converting this text element into a valid line of text.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     If a text line is required, setting this string to include
+//	     a new line character ('\n') will ensure that the text line
+//	     consists of the text label field and no other text
+//	     elements. Any string of text characters will be accepted
+//	     for this parameter.
 //
+//	     Again, the most common usage sets this string to a new
+//	     line character ("\n").
+//
+//	     If Line Termination is NOT required, set 'lineTerminator'
+//	     to a zero length or empty string and no line termination
+//	     characters will be created.
+//
+//
+//	maxLineLength              int
+//	   - The maximum length of the line on which this date time
+//	     text field will be presented.
+//
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength'). Therefore,
+//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	     automatic line breaks using 'maxLineLength' will be
+//	     applied.
+//
+//	     If the value of 'maxLineLength' is less than zero (0), it
+//	     will be automatically converted to minus one (-1).
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 	leftMarginStr string,
 	fieldDateTime time.Time,
@@ -582,138 +572,135 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTime(
 // format this date time text field with a line terminator
 // (a.k.a. new line character '\n').
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textDateTimeDto            TextFieldDateTimeDto
-//     - An instance of TextFieldDateTimeDto which contains all the
-//       necessary data parameters to produce a date time text
-//       field.
+//	textDateTimeDto            TextFieldDateTimeDto
+//	   - An instance of TextFieldDateTimeDto which contains all the
+//	     necessary data parameters to produce a date time text
+//	     field.
 //
-//       The Text Field Date Time Data Transfer Object is defined
-//       as follows:
-//
-//
-//       type TextFieldDateTimeDto struct {
-//
-//         FormatType                  TextFieldType
-//          Required. This enumeration value specifies the type of
-//          Text Format Operation to be performed.
-//
-//          For the TextFieldDateTimeDto Format Type, this value
-//          should always be set to:
-//            TxtFieldType.DateTime()
-//
-//         LeftMarginStr               string
-//          The contents of the string will be used as the left
-//          margin for the Text Field.
-//
-//          If no left margin is required, set 'LeftMarginStr' to a
-//          zero length or empty string, and no left margin will be
-//          created.
-//
-//         FieldDateTime               time.Time
-//          This time value will be converted to a string and used
-//          to populate the Date Time Text Field.
-//
-//         FieldDateTimeFormat         string
-//          This string will be used to format the Date/Time value
-//          contained in parameter 'FieldDateTime' as text.
-//
-//          If 'FieldDateTime' is set to a value greater than zero
-//          and this 'FieldDateTimeFormat' string is empty (has a
-//          zero length), a default Date/Time format string will be
-//          applied as follows:
-//                  "2006-01-02 15:04:05.000000000 -0700 MST"
-//
-//         FieldLength                 int
-//          Used to format Text Fields. This is the length of the
-//          text field in which the date time text field will be
-//          displayed. If 'FieldLength' is less than the length of
-//          the date time text string, it will be automatically set
-//          equal to the date time text string length.
-//
-//          If 'FieldLength' is greater than the length of the date
-//          time text string, the 'FieldJustify' parameter will be
-//          used to configure or justify the text with the
-//          boundaries of the text field defined by 'FieldLength'.
-//
-//          To automatically set the value of 'FieldLength' to the
-//          length of the date time text string, set this parameter
-//          to a value of minus one (-1).
-//
-//          If this parameter is submitted with a value less than
-//          minus one (-1) or greater than 1-million (1,000,000),
-//          an error will be returned when attempting to build the
-//          final text output.
+//	     The Text Field Date Time Data Transfer Object is defined
+//	     as follows:
 //
 //
-//         FieldJustify                TextJustify
-//          An enumeration which specifies the justification of the
-//          date time text string within the text field specified
-//          by 'FieldLength'.
+//	     type TextFieldDateTimeDto struct {
 //
-//          Text justification can only be evaluated in the context
-//          of a text label, field length and a Text Justification
-//          object of type TextJustify. This is because text labels
-//          with a field length equal to or less than the length of
-//          the text label never use text justification. In these
-//          cases, text justification is completely ignored.
+//	       FormatType                  TextFieldType
+//	        Required. This enumeration value specifies the type of
+//	        Text Format Operation to be performed.
 //
-//          If the field length is greater than the length of the
-//          date time text string, text justification must be equal
-//          to one of these three valid values:
-//              TextJustify(0).Left()
-//              TextJustify(0).Right()
-//              TextJustify(0).Center()
+//	        For the TextFieldDateTimeDto Format Type, this value
+//	        should always be set to:
+//	          TxtFieldType.DateTime()
 //
-//          You can also use the abbreviated text justification
-//          enumeration syntax as follows:
+//	       LeftMarginStr               string
+//	        The contents of the string will be used as the left
+//	        margin for the Text Field.
 //
-//              TxtJustify.Left()
-//              TxtJustify.Right()
-//              TxtJustify.Center()
+//	        If no left margin is required, set 'LeftMarginStr' to a
+//	        zero length or empty string, and no left margin will be
+//	        created.
 //
-//         RightMarginStr string
-//          The contents of the string will be used as the right margin
-//          for the Text Field.
+//	       FieldDateTime               time.Time
+//	        This time value will be converted to a string and used
+//	        to populate the Date Time Text Field.
 //
-//          If no right margin is required, set 'RightMarginStr' to a
-//          zero length or empty string, and no right margin will be
-//          created.
+//	       FieldDateTimeFormat         string
+//	        This string will be used to format the Date/Time value
+//	        contained in parameter 'FieldDateTime' as text.
 //
-//         LineTerminator              string
-//          This string holds the character or characters which will be
-//          used to terminate the formatted line of text output.
+//	        If 'FieldDateTime' is set to a value greater than zero
+//	        and this 'FieldDateTimeFormat' string is empty (has a
+//	        zero length), a default Date/Time format string will be
+//	        applied as follows:
+//	                "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//          The most common usage sets this string to a new line
-//          character ("\n").
+//	       FieldLength                 int
+//	        Used to format Text Fields. This is the length of the
+//	        text field in which the date time text field will be
+//	        displayed. If 'FieldLength' is less than the length of
+//	        the date time text string, it will be automatically set
+//	        equal to the date time text string length.
 //
-//          If no Line Terminator is required, set 'lineTerminator' to
-//          a zero length or empty string and no line termination
-//          characters will be created.
+//	        If 'FieldLength' is greater than the length of the date
+//	        time text string, the 'FieldJustify' parameter will be
+//	        used to configure or justify the text with the
+//	        boundaries of the text field defined by 'FieldLength'.
 //
-//         MaxLineLength               int
-//          Set this parameter to minus one -1 to specify an
-//          unlimited line length for this text line.
+//	        To automatically set the value of 'FieldLength' to the
+//	        length of the date time text string, set this parameter
+//	        to a value of minus one (-1).
 //
-//         TurnAutoLineLengthBreaksOn  bool
-//          When this parameter is set to 'true', text fields which
-//          extend beyond the maximum line length ('MaxLineLength')
-//          will be terminated with a new line character ('\n') and
-//          placed on the following line of text.
+//	        If this parameter is submitted with a value less than
+//	        minus one (-1) or greater than 1-million (1,000,000),
+//	        an error will be returned when attempting to build the
+//	        final text output.
 //
-//       }
 //
+//	       FieldJustify                TextJustify
+//	        An enumeration which specifies the justification of the
+//	        date time text string within the text field specified
+//	        by 'FieldLength'.
+//
+//	        Text justification can only be evaluated in the context
+//	        of a text label, field length and a Text Justification
+//	        object of type TextJustify. This is because text labels
+//	        with a field length equal to or less than the length of
+//	        the text label never use text justification. In these
+//	        cases, text justification is completely ignored.
+//
+//	        If the field length is greater than the length of the
+//	        date time text string, text justification must be equal
+//	        to one of these three valid values:
+//	            TextJustify(0).Left()
+//	            TextJustify(0).Right()
+//	            TextJustify(0).Center()
+//
+//	        You can also use the abbreviated text justification
+//	        enumeration syntax as follows:
+//
+//	            TxtJustify.Left()
+//	            TxtJustify.Right()
+//	            TxtJustify.Center()
+//
+//	       RightMarginStr string
+//	        The contents of the string will be used as the right margin
+//	        for the Text Field.
+//
+//	        If no right margin is required, set 'RightMarginStr' to a
+//	        zero length or empty string, and no right margin will be
+//	        created.
+//
+//	       LineTerminator              string
+//	        This string holds the character or characters which will be
+//	        used to terminate the formatted line of text output.
+//
+//	        The most common usage sets this string to a new line
+//	        character ("\n").
+//
+//	        If no Line Terminator is required, set 'lineTerminator' to
+//	        a zero length or empty string and no line termination
+//	        characters will be created.
+//
+//	       MaxLineLength               int
+//	        Set this parameter to minus one -1 to specify an
+//	        unlimited line length for this text line.
+//
+//	       TurnAutoLineLengthBreaksOn  bool
+//	        When this parameter is set to 'true', text fields which
+//	        extend beyond the maximum line length ('MaxLineLength')
+//	        will be terminated with a new line character ('\n') and
+//	        placed on the following line of text.
+//
+//	     }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeDto(
 	textDateTimeDto TextFieldDateTimeDto) {
 
@@ -768,145 +755,141 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeDto(
 // parameter 'dateTimeInputDto', an instance of
 // TextInputParamFieldDateTimeDto.
 //
-//
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
+//
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the date time text field.
+//
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the date time text field.
+//	dateTimeDto                TextInputParamFieldDateTimeDto
+//	   - A data structure containing both the date time value and
+//	     the date time format string necessary to convert the date
+//	     time value into formatted text.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
+//	     The TextInputParamFieldDateTimeDto data structure is
+//	     defined as follows:
 //
+//	      type TextInputParamFieldDateTimeDto struct {
 //
-//  dateTimeDto                TextInputParamFieldDateTimeDto
-//     - A data structure containing both the date time value and
-//       the date time format string necessary to convert the date
-//       time value into formatted text.
+//	        FieldDateTime time.Time
+//	         This time value will be used to populate a Text Field
+//	         used for screen display, file output or printing.
 //
-//       The TextInputParamFieldDateTimeDto data structure is
-//       defined as follows:
+//	        FieldDateTimeFormat string
+//	         This string will be used to format the date time value
+//	         contained in the 'FieldDateTime' data element.
 //
-//        type TextInputParamFieldDateTimeDto struct {
+//	         If 'FieldDateTime' is set to a value greater than zero
+//	         and this 'FieldDateTimeFormat' string is empty (has a
+//	         zero length), a default Date/Time format string will be
+//	         applied as follows:
+//	             "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//          FieldDateTime time.Time
-//           This time value will be used to populate a Text Field
-//           used for screen display, file output or printing.
-//
-//          FieldDateTimeFormat string
-//           This string will be used to format the date time value
-//           contained in the 'FieldDateTime' data element.
-//
-//           If 'FieldDateTime' is set to a value greater than zero
-//           and this 'FieldDateTimeFormat' string is empty (has a
-//           zero length), a default Date/Time format string will be
-//           applied as follows:
-//               "2006-01-02 15:04:05.000000000 -0700 MST"
-//
-//        }
+//	      }
 //
 //
-//  fieldLength                int
-//     - Used to format date time text field. This is the length of
-//       the text field in which the formatted date time text
-//       string will be displayed. If 'fieldLength' is less than the
-//       length of the date time string, it will be automatically
-//       set equal to the date time string length.
+//	fieldLength                int
+//	   - Used to format date time text field. This is the length of
+//	     the text field in which the formatted date time text
+//	     string will be displayed. If 'fieldLength' is less than the
+//	     length of the date time string, it will be automatically
+//	     set equal to the date time string length.
 //
-//       If 'fieldLength' is greater than the length of the date
-//       time text string, the 'fieldJustify' parameter will be
-//       used to configure or justify the text within the
-//       boundaries the text field defined by 'fieldLength'.
+//	     If 'fieldLength' is greater than the length of the date
+//	     time text string, the 'fieldJustify' parameter will be
+//	     used to configure or justify the text within the
+//	     boundaries the text field defined by 'fieldLength'.
 //
-//       To automatically set the value of 'fieldLength' to the
-//       length of the date time text field, set this parameter to
-//       a value of  minus one (-1).
-//
-//
-//  fieldJustify               TextJustify
-//      An enumeration value specifying the justification of the
-//      date time text string within the text field specified by
-//      'fieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the date
-//      time text string, text justification must be equal to one
-//      of these three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	     To automatically set the value of 'fieldLength' to the
+//	     length of the date time text field, set this parameter to
+//	     a value of  minus one (-1).
 //
 //
-//  lineTerminator             string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted date time text thereby
-//       converting this text element into a valid line of text.
+//	fieldJustify               TextJustify
+//	    An enumeration value specifying the justification of the
+//	    date time text string within the text field specified by
+//	    'fieldLength'.
 //
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text label field and no other text
-//       elements. Any string of text characters will be accepted
-//       for this parameter.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
 //
-//       Again, the most common usage sets this string to a new
-//       line character ("\n").
+//	    If the field length is greater than the length of the date
+//	    time text string, text justification must be equal to one
+//	    of these three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
 //
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
 //
-//
-//  maxLineLength              int
-//     - The maximum length of the line on which this date time
-//       text field will be presented.
-//
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
-//
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength'). Therefore,
-//       paramter 'turnAutoLineLengthBreaksOn' controls whether
-//       automatic line breaks using 'maxLineLength' will be
-//       applied.
-//
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	lineTerminator             string
+//	   - This string holds the character or characters which will
+//	     be used to terminate the formatted date time text thereby
+//	     converting this text element into a valid line of text.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     If a text line is required, setting this string to include
+//	     a new line character ('\n') will ensure that the text line
+//	     consists of the text label field and no other text
+//	     elements. Any string of text characters will be accepted
+//	     for this parameter.
 //
+//	     Again, the most common usage sets this string to a new
+//	     line character ("\n").
+//
+//	     If Line Termination is NOT required, set 'lineTerminator'
+//	     to a zero length or empty string and no line termination
+//	     characters will be created.
+//
+//
+//	maxLineLength              int
+//	   - The maximum length of the line on which this date time
+//	     text field will be presented.
+//
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength'). Therefore,
+//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	     automatic line breaks using 'maxLineLength' will be
+//	     applied.
+//
+//	     If the value of 'maxLineLength' is less than zero (0), it
+//	     will be automatically converted to minus one (-1).
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 	leftMarginStr string,
 	dateTimeDto TextInputParamFieldDateTimeDto,
@@ -983,137 +966,134 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 // or more times in order to construct the complete filler field as
 // shown in the following examples:
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 //
-//  Example 3:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Line Terminator = "\n"
-//   Formatted Text = "-*-*-*\n"
+//	Example 3:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Line Terminator = "\n"
+//	 Formatted Text = "-*-*-*\n"
 //
 // Typically, Text Filler Fields are designed to be configured
 // within a line of text. However, users have the option of
 // configuring a Text Filler Field as a separate stand-alone
 // line of text by means of the input parameter 'lineTerminator'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the Text Filler Field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the Text Filler Field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  fillerCharacters           string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: FillerCharacters = "-*"
-//                      FillerCharsRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: FillerCharacters = "-"
-//                      FillerCharsRepeatCount = 3
-//                      Final Text Filler Field = "---"
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  fillerCharsRepeatCount     int
-//       Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field.
-//       The actual length of the string which will populate the
-//       completed Text Filler Field is equal to the length of
-//       'fillerCharacters' times the value of
-//       'fillerCharsRepeatCount'.
+//	fillerCharacters           string
+//	   - A string containing the text characters which will be
+//	     included in the Text Filler Field. The final Text Filler
+//	     Field will be constructed from the filler characters
+//	     repeated one or more times as specified by the
+//	     'fillerCharsRepeatCount' parameter.
 //
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
+//	      Text Field Filler Length =
+//	        Length of fillerCharacters X fillerCharsRepeatCount
 //
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
+//	        Example #1: FillerCharacters = "-*"
+//	                    FillerCharsRepeatCount = 3
+//	                    Final Text Filler Field = "-*-*-*"
 //
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1)
-//       or greater than one-million (1,000,000), an error will be
-//       generated when attempting to format text.
+//	        Example #2: FillerCharacters = "-"
+//	                    FillerCharsRepeatCount = 3
+//	                    Final Text Filler Field = "---"
 //
 //
-//  lineTerminator             string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted text thereby converting
-//       this text element into a valid line of text.
+//	fillerCharsRepeatCount     int
+//	     Controls the number of times 'fillerCharacters' is
+//	     repeated when constructing the final Text Filler Field.
+//	     The actual length of the string which will populate the
+//	     completed Text Filler Field is equal to the length of
+//	     'fillerCharacters' times the value of
+//	     'fillerCharsRepeatCount'.
 //
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text label field and no other text
-//       elements. Any string of text characters will be accepted
-//       for this parameter.
+//	      Text Field Filler Length =
+//	        Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       Again, the most common usage sets this string to a new
-//       line character ("\n").
+//	        Example #1: fillerCharacters = "-*"
+//	                    fillerRepeatCount = 3
+//	                    Final Text Filler Field = "-*-*-*"
 //
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
+//	        Example #2: fillerCharacters = "-"
+//	                    fillerRepeatCount = 3
+//	                    Final Text Filler Field = "---"
 //
-//
-//  maxLineLength              int
-//     - The maximum length of the line on which this label text
-//       will be presented.
-//
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
-//
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength'). Therefore,
-//       paramter 'turnAutoLineLengthBreaksOn' controls whether
-//       automatic line breaks using 'maxLineLength' will be
-//       applied.
-//
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
+//	     If 'fillerCharsRepeatCount' has a value less than one (1)
+//	     or greater than one-million (1,000,000), an error will be
+//	     generated when attempting to format text.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	lineTerminator             string
+//	   - This string holds the character or characters which will
+//	     be used to terminate the formatted text thereby converting
+//	     this text element into a valid line of text.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     If a text line is required, setting this string to include
+//	     a new line character ('\n') will ensure that the text line
+//	     consists of the text label field and no other text
+//	     elements. Any string of text characters will be accepted
+//	     for this parameter.
 //
+//	     Again, the most common usage sets this string to a new
+//	     line character ("\n").
+//
+//	     If Line Termination is NOT required, set 'lineTerminator'
+//	     to a zero length or empty string and no line termination
+//	     characters will be created.
+//
+//
+//	maxLineLength              int
+//	   - The maximum length of the line on which this label text
+//	     will be presented.
+//
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength'). Therefore,
+//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	     automatic line breaks using 'maxLineLength' will be
+//	     applied.
+//
+//	     If the value of 'maxLineLength' is less than zero (0), it
+//	     will be automatically converted to minus one (-1).
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 	leftMarginStr string,
 	fillerCharacters string,
@@ -1179,159 +1159,156 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 // or more times in order to construct the complete filler field as
 // shown in the following examples:
 //
-//  Example 1:
-//   Filler Characters = "-"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "---"
+//	Example 1:
+//	 Filler Characters = "-"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "---"
 //
-//  Example 2:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Formatted Text = "-*-*-*"
+//	Example 2:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Formatted Text = "-*-*-*"
 //
-//  Example 3:
-//   Filler Characters = "-*"
-//   Filler Characters Repeat Count = 3
-//   Line Terminator = "\n"
-//   Formatted Text = "-*-*-*\n"
+//	Example 3:
+//	 Filler Characters = "-*"
+//	 Filler Characters Repeat Count = 3
+//	 Line Terminator = "\n"
+//	 Formatted Text = "-*-*-*\n"
 //
 // Typically, Text Filler Fields are designed to be configured
 // within a line of text. However, users have the option of
 // configuring a Text Filler Field as a separate stand-alone
 // line of text.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textFillerDto              TextFieldFillerDto
-//     - An instance of TextFieldFillerDto which contains all the
-//       necessary data parameters to produce a Text Filler Field.
+//	textFillerDto              TextFieldFillerDto
+//	   - An instance of TextFieldFillerDto which contains all the
+//	     necessary data parameters to produce a Text Filler Field.
 //
-//       The Text Field Filler Data Transfer Object is defined as
-//       follows:
+//	     The Text Field Filler Data Transfer Object is defined as
+//	     follows:
 //
-//       type TextFieldFillerDto struct {
+//	     type TextFieldFillerDto struct {
 //
-//        FormatType                   TextFieldType
-//         Required. This enumeration value specifies the type of
-//         Text Format Operation to be performed.
+//	      FormatType                   TextFieldType
+//	       Required. This enumeration value specifies the type of
+//	       Text Format Operation to be performed.
 //
-//         For the TextFieldFillerDto Format Type, this value
-//         should always be set to:
-//           TxtFieldType.Filler()
+//	       For the TextFieldFillerDto Format Type, this value
+//	       should always be set to:
+//	         TxtFieldType.Filler()
 //
-//        LeftMarginStr                string
-//         The contents of the string will be used as the left
-//         margin for the Text Field.
+//	      LeftMarginStr                string
+//	       The contents of the string will be used as the left
+//	       margin for the Text Field.
 //
-//         If no left margin is required, set 'LeftMarginStr' to a
-//         zero length or empty string, and no left margin will be
-//         created.
+//	       If no left margin is required, set 'LeftMarginStr' to a
+//	       zero length or empty string, and no left margin will be
+//	       created.
 //
-//        FillerCharacters             string
-//         A string containing the text characters which will be
-//         included in the Text Filler Field. The final Text Filler
-//         Field will be constructed from the filler characters
-//         repeated one or more times as specified by the
-//         'FillerCharsRepeatCount' parameter.
+//	      FillerCharacters             string
+//	       A string containing the text characters which will be
+//	       included in the Text Filler Field. The final Text Filler
+//	       Field will be constructed from the filler characters
+//	       repeated one or more times as specified by the
+//	       'FillerCharsRepeatCount' parameter.
 //
-//          Text Field Filler Length =
-//            Length of fillerCharacters X fillerCharsRepeatCount
+//	        Text Field Filler Length =
+//	          Length of fillerCharacters X fillerCharsRepeatCount
 //
-//            Example #1: FillerCharacters = "-*"
-//                        FillerCharsRepeatCount = 3
-//                        Final Text Filler Field = "-*-*-*"
+//	          Example #1: FillerCharacters = "-*"
+//	                      FillerCharsRepeatCount = 3
+//	                      Final Text Filler Field = "-*-*-*"
 //
-//            Example #2: FillerCharacters = "-"
-//                        FillerCharsRepeatCount = 3
-//                        Final Text Filler Field = "---"
+//	          Example #2: FillerCharacters = "-"
+//	                      FillerCharsRepeatCount = 3
+//	                      Final Text Filler Field = "---"
 //
 //
-//        FillerCharsRepeatCount       int
-//         Controls the number of times 'FillerCharacters' is
-//         repeated when constructing the final Text Filler Field.
-//         The actual length of the string which will populate the
-//         completed Text Filler Field is equal to the length of
-//         'FillerCharacters' times the value of
-//         'FillerCharsRepeatCount'.
+//	      FillerCharsRepeatCount       int
+//	       Controls the number of times 'FillerCharacters' is
+//	       repeated when constructing the final Text Filler Field.
+//	       The actual length of the string which will populate the
+//	       completed Text Filler Field is equal to the length of
+//	       'FillerCharacters' times the value of
+//	       'FillerCharsRepeatCount'.
 //
-//          Text Field Filler Length =
-//            Length of FillerCharacters X FillerCharsRepeatCount
+//	        Text Field Filler Length =
+//	          Length of FillerCharacters X FillerCharsRepeatCount
 //
-//            Example #1: FillerCharacters = "-*"
-//                        FillerRepeatCount = 3
-//                        Final Text Filler Field = "-*-*-*"
+//	          Example #1: FillerCharacters = "-*"
+//	                      FillerRepeatCount = 3
+//	                      Final Text Filler Field = "-*-*-*"
 //
-//            Example #2: FillerCharacters = "-"
-//                        FillerRepeatCount = 3
-//                        Final Text Filler Field = "---"
+//	          Example #2: FillerCharacters = "-"
+//	                      FillerRepeatCount = 3
+//	                      Final Text Filler Field = "---"
 //
-//         If 'FillerCharsRepeatCount' has a value less than one
-//         (1) or greater than one-million (1,000,000), an error
-//         will be returned when attempting to format text.
+//	       If 'FillerCharsRepeatCount' has a value less than one
+//	       (1) or greater than one-million (1,000,000), an error
+//	       will be returned when attempting to format text.
 //
-//        RightMarginStr               string
-//         The contents of the string will be used as the right
-//         margin for the Text Filler Field.
+//	      RightMarginStr               string
+//	       The contents of the string will be used as the right
+//	       margin for the Text Filler Field.
 //
-//         If no right margin is required, set 'RightMarginStr' to
-//         a zero length or empty string, and no right margin will
-//         be created.
+//	       If no right margin is required, set 'RightMarginStr' to
+//	       a zero length or empty string, and no right margin will
+//	       be created.
 //
-//        LineTerminator               string
-//         This string holds the character or characters which will
-//         be used to terminate the formatted line of text output
-//         thereby converting this text element into a valid
-//         stand-alone line of text. Line Termination is optional.
-//         Populate this string only if this text output should be
-//         formatted as a separate line of text.
+//	      LineTerminator               string
+//	       This string holds the character or characters which will
+//	       be used to terminate the formatted line of text output
+//	       thereby converting this text element into a valid
+//	       stand-alone line of text. Line Termination is optional.
+//	       Populate this string only if this text output should be
+//	       formatted as a separate line of text.
 //
-//         The most common usage sets this string to a new line
-//         character ("\n").
+//	       The most common usage sets this string to a new line
+//	       character ("\n").
 //
-//         If no Line Terminator is required, set 'lineTerminator'
-//         to a zero length or empty string and no line termination
-//         characters will be created.
+//	       If no Line Terminator is required, set 'lineTerminator'
+//	       to a zero length or empty string and no line termination
+//	       characters will be created.
 //
-//        MaxLineLength                int
-//         The maximum length of the line on which this label text
-//         will be presented.
+//	      MaxLineLength                int
+//	       The maximum length of the line on which this label text
+//	       will be presented.
 //
-//         Set this parameter to minus one (-1) to specify an
-//         unlimited line length for this text line.
+//	       Set this parameter to minus one (-1) to specify an
+//	       unlimited line length for this text line.
 //
-//         'MaxLineLength' is used in conjunction with parameter
-//         'TurnAutoLineLengthBreaksOn' to automatically place text
-//         fields on separate text lines when that text exceeds the
-//         maximum text line length ('MaxLineLength'). Therefore,
-//         paramter 'turnAutoLineLengthBreaksOn' controls whether
-//         automatic line breaks using 'MaxLineLength' will be
-//         applied.
+//	       'MaxLineLength' is used in conjunction with parameter
+//	       'TurnAutoLineLengthBreaksOn' to automatically place text
+//	       fields on separate text lines when that text exceeds the
+//	       maximum text line length ('MaxLineLength'). Therefore,
+//	       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	       automatic line breaks using 'MaxLineLength' will be
+//	       applied.
 //
-//         If the value of 'maxLineLength' is less than one (1), it
-//         will be automatically converted to minus one (-1).
+//	       If the value of 'maxLineLength' is less than one (1), it
+//	       will be automatically converted to minus one (-1).
 //
-//         Set this parameter to minus one (-1) to specify an
-//         unlimited line length for this text line.
+//	       Set this parameter to minus one (-1) to specify an
+//	       unlimited line length for this text line.
 //
-//        TurnAutoLineLengthBreaksOn   bool
-//         This parameter controls whether text lines which exceed
-//         the maximum line length ('MaxLineLength') are broken up
-//         and presented on the following line.
+//	      TurnAutoLineLengthBreaksOn   bool
+//	       This parameter controls whether text lines which exceed
+//	       the maximum line length ('MaxLineLength') are broken up
+//	       and presented on the following line.
 //
-//         To apply automatic line breaking at the maximum line
-//         length, set the value of this parameter to 'true'.
-//       }
-//
+//	       To apply automatic line breaking at the maximum line
+//	       length, set the value of this parameter to 'true'.
+//	     }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 	textFillerDto TextFieldFillerDto) {
 
@@ -1377,180 +1354,179 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFillerDto(
 // separate stand-alone line of text.
 //
 // Text Label Example 1:
-//   leftMarginStr = "" // Empty String
-//   fieldText = "Hello"  // Length = 5 characters
-//   fieldLength = 7
-//   fieldJustify = TxtJustify.Center()
-//   rightMarginStr = "" // Empty String
-//   lineTerminator = "" // Empty String
-//   maxLineLength = -1
-//   turnAutoLineLengthBreaksOn = false
-//   Final Text Label string = " Hello "
+//
+//	leftMarginStr = "" // Empty String
+//	fieldText = "Hello"  // Length = 5 characters
+//	fieldLength = 7
+//	fieldJustify = TxtJustify.Center()
+//	rightMarginStr = "" // Empty String
+//	lineTerminator = "" // Empty String
+//	maxLineLength = -1
+//	turnAutoLineLengthBreaksOn = false
+//	Final Text Label string = " Hello "
 //
 // Text Label Example 2:
-//   leftMarginStr = "" // Empty String
-//   fieldText = "Hello"  // Length = 5 characters
-//   fieldLength = 7
-//   fieldJustify = TxtJustify.Center()
-//   rightMarginStr = "" // Empty String
-//   lineTerminator = "\n" // Empty String
-//   maxLineLength = -1
-//   turnAutoLineLengthBreaksOn = false
-//   Final Text Label string = " Hello \n"
 //
+//	leftMarginStr = "" // Empty String
+//	fieldText = "Hello"  // Length = 5 characters
+//	fieldLength = 7
+//	fieldJustify = TxtJustify.Center()
+//	rightMarginStr = "" // Empty String
+//	lineTerminator = "\n" // Empty String
+//	maxLineLength = -1
+//	turnAutoLineLengthBreaksOn = false
+//	Final Text Label string = " Hello \n"
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the text label field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the text label field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  fieldText                  interface{}
-//     - This parameter is an empty interface which must contain
-//       one of several specific types. This empty interface type
-//       will be converted to a string and configured as the text
-//       field for this label.
-//
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
-//
-//       If the 'fieldText' is not convertible to one of the
-//       supported types, the 'column1Field' string will be
-//       populated with an error message.
-//
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  fieldLength                int
-//     - Used to format Text Label Fields. This is the length of
-//       the text field in which the formatted 'fieldText' string
-//       will be displayed. If 'fieldLength' is less than the
-//       length of the 'fieldText' string, it will be automatically
-//       set equal to the 'labelText' string length.
+//	fieldText                  interface{}
+//	   - This parameter is an empty interface which must contain
+//	     one of several specific types. This empty interface type
+//	     will be converted to a string and configured as the text
+//	     field for this label.
 //
-//       If 'fieldLength' is greater than the length of the
-//       'fieldText' text string, the 'fieldJustify' parameter will
-//       be used to configure or justify the text within the
-//       boundaries of the text field defined by 'fieldLength'.
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       To automatically set the value of 'fieldLength' to the
-//       length of 'fieldText', set this parameter to a value
-//       of  minus one (-1).
+//	     If the 'fieldText' is not convertible to one of the
+//	     supported types, the 'column1Field' string will be
+//	     populated with an error message.
 //
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000),
-//       an error will be returned when attempting to build the
-//       final text output.
-//
-//
-//  fieldJustify               TextJustify
-//      An enumeration value specifying the justification of the
-//      'fieldText' string within the text field specified by
-//      'fieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	     If the converted string value for 'column1Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
 //
 //
-//  rightMarginStr             string
-//     - The contents of this string will be used as the right
-//       margin for the text label field.
+//	fieldLength                int
+//	   - Used to format Text Label Fields. This is the length of
+//	     the text field in which the formatted 'fieldText' string
+//	     will be displayed. If 'fieldLength' is less than the
+//	     length of the 'fieldText' string, it will be automatically
+//	     set equal to the 'labelText' string length.
 //
-//       If no right margin is required, set 'rightMarginStr' to a
-//       zero length or empty string, and no right margin will be
-//       created.
+//	     If 'fieldLength' is greater than the length of the
+//	     'fieldText' text string, the 'fieldJustify' parameter will
+//	     be used to configure or justify the text within the
+//	     boundaries of the text field defined by 'fieldLength'.
 //
+//	     To automatically set the value of 'fieldLength' to the
+//	     length of 'fieldText', set this parameter to a value
+//	     of  minus one (-1).
 //
-//  lineTerminator             string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted text thereby converting
-//       this text element into a valid line of text.
-//
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text label field and no other text
-//       elements. Any string of text characters will be accepted
-//       for this parameter.
-//
-//       Again, the most common usage sets this string to a new
-//       line character ("\n").
-//
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000),
+//	     an error will be returned when attempting to build the
+//	     final text output.
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this label text
-//       will be presented.
+//	fieldJustify               TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'fieldText' string within the text field specified by
+//	    'fieldLength'.
 //
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
 //
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength'). Therefore,
-//       paramter 'turnAutoLineLengthBreaksOn' controls whether
-//       automatic line breaks using 'maxLineLength' will be
-//       applied.
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
+//
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	rightMarginStr             string
+//	   - The contents of this string will be used as the right
+//	     margin for the text label field.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     If no right margin is required, set 'rightMarginStr' to a
+//	     zero length or empty string, and no right margin will be
+//	     created.
 //
+//
+//	lineTerminator             string
+//	   - This string holds the character or characters which will
+//	     be used to terminate the formatted text thereby converting
+//	     this text element into a valid line of text.
+//
+//	     If a text line is required, setting this string to include
+//	     a new line character ('\n') will ensure that the text line
+//	     consists of the text label field and no other text
+//	     elements. Any string of text characters will be accepted
+//	     for this parameter.
+//
+//	     Again, the most common usage sets this string to a new
+//	     line character ("\n").
+//
+//	     If Line Termination is NOT required, set 'lineTerminator'
+//	     to a zero length or empty string and no line termination
+//	     characters will be created.
+//
+//
+//	maxLineLength              int
+//	   - The maximum length of the line on which this label text
+//	     will be presented.
+//
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
+//
+//	     If the value of 'maxLineLength' is less than zero (0), it
+//	     will be automatically converted to minus one (-1).
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength'). Therefore,
+//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	     automatic line breaks using 'maxLineLength' will be
+//	     applied.
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 	leftMarginStr string,
 	fieldText interface{},
@@ -1628,154 +1604,151 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 // This text label is created from an instance of TextFieldLabelDto
 // passed as an input parameter.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabelDto                       TextFieldLabelDto
-//     - An instance of TextFieldLabelDto which contains all the
-//       necessary data parameters to produce a text label.
+//	textLabelDto                       TextFieldLabelDto
+//	   - An instance of TextFieldLabelDto which contains all the
+//	     necessary data parameters to produce a text label.
 //
-//       The Text Field Label Data Transfer Object is defined as
-//       follows:
+//	     The Text Field Label Data Transfer Object is defined as
+//	     follows:
 //
-//       type TextFieldLabelDto struct {
+//	     type TextFieldLabelDto struct {
 //
-//         FormatType                  TextFieldType
-//           Required. This enumeration value specifies the type of
-//           Text Format Operation to be performed.
+//	       FormatType                  TextFieldType
+//	         Required. This enumeration value specifies the type of
+//	         Text Format Operation to be performed.
 //
-//           For TextFieldLabelDto Format Type, this value should
-//           always be set to:
-//             TxtFieldType.Label()
+//	         For TextFieldLabelDto Format Type, this value should
+//	         always be set to:
+//	           TxtFieldType.Label()
 //
-//         LeftMarginStr               string
-//           The contents of the string will be used as the left
-//           margin for the Text Field.
+//	       LeftMarginStr               string
+//	         The contents of the string will be used as the left
+//	         margin for the Text Field.
 //
-//           If no left margin is required, set 'LeftMarginStr' to
-//           a zero length or empty string, and no left margin will
-//           be created.
+//	         If no left margin is required, set 'LeftMarginStr' to
+//	         a zero length or empty string, and no left margin will
+//	         be created.
 //
-//         FieldText                   string
-//           The Text Field string or contents. If this string is
-//           empty (has a zero (0) length) it will be automatically
-//           converted to a single white space character (" ").
+//	       FieldText                   string
+//	         The Text Field string or contents. If this string is
+//	         empty (has a zero (0) length) it will be automatically
+//	         converted to a single white space character (" ").
 //
-//           This string represents the contents of the Text Field.
+//	         This string represents the contents of the Text Field.
 //
-//         FieldLength                 int
-//           Used to format FieldText string. This is the length of
-//           the text field in which the 'FieldText' will be
-//           displayed. If 'FieldLength' is less than the length of
-//           the 'FieldText' string, it will be automatically set
-//           equal to the 'FieldText' string length.
+//	       FieldLength                 int
+//	         Used to format FieldText string. This is the length of
+//	         the text field in which the 'FieldText' will be
+//	         displayed. If 'FieldLength' is less than the length of
+//	         the 'FieldText' string, it will be automatically set
+//	         equal to the 'FieldText' string length.
 //
-//           If 'FieldLength' is greater than the length of the
-//           'FieldText' text string, the 'FieldJustify' parameter
-//           will be used to configure or justify the text within
-//           the boundaries of the text field defined by
-//           'FieldLength'.
+//	         If 'FieldLength' is greater than the length of the
+//	         'FieldText' text string, the 'FieldJustify' parameter
+//	         will be used to configure or justify the text within
+//	         the boundaries of the text field defined by
+//	         'FieldLength'.
 //
-//           To automatically set the value of 'FieldLength' to the
-//           length of 'FieldText', set this parameter to a value
-//           of minus one (-1).
+//	         To automatically set the value of 'FieldLength' to the
+//	         length of 'FieldText', set this parameter to a value
+//	         of minus one (-1).
 //
-//           If this parameter is submitted with a value less than
-//           minus one (-1) or greater than 1-million (1,000,000),
-//           an error will be generated when attempting to format
-//           text.
+//	         If this parameter is submitted with a value less than
+//	         minus one (-1) or greater than 1-million (1,000,000),
+//	         an error will be generated when attempting to format
+//	         text.
 //
-//         FieldJustify                TextJustify
-//           An enumeration which specifies the justification of
-//           the 'FieldText' string within the text field specified
-//           by 'FieldLength'.
+//	       FieldJustify                TextJustify
+//	         An enumeration which specifies the justification of
+//	         the 'FieldText' string within the text field specified
+//	         by 'FieldLength'.
 //
-//           Text justification can only be evaluated in the
-//           context of a text label, field length and a Text
-//           Justification object of type TextJustify. This is
-//           because text labels with a field length equal to or
-//           less than the length of the text label never use text
-//           justification. In these cases, text justification is
-//           completely ignored.
+//	         Text justification can only be evaluated in the
+//	         context of a text label, field length and a Text
+//	         Justification object of type TextJustify. This is
+//	         because text labels with a field length equal to or
+//	         less than the length of the text label never use text
+//	         justification. In these cases, text justification is
+//	         completely ignored.
 //
-//           If the field length is greater than the length of the
-//           text label, text justification must be equal to one of
-//           these three valid values:
-//               TextJustify(0).Left()
-//               TextJustify(0).Right()
-//               TextJustify(0).Center()
+//	         If the field length is greater than the length of the
+//	         text label, text justification must be equal to one of
+//	         these three valid values:
+//	             TextJustify(0).Left()
+//	             TextJustify(0).Right()
+//	             TextJustify(0).Center()
 //
-//           You can also use the abbreviated text justification
-//           enumeration syntax as follows:
+//	         You can also use the abbreviated text justification
+//	         enumeration syntax as follows:
 //
-//               TxtJustify.Left()
-//               TxtJustify.Right()
-//               TxtJustify.Center()
+//	             TxtJustify.Left()
+//	             TxtJustify.Right()
+//	             TxtJustify.Center()
 //
-//         RightMarginStr              string
-//           The contents of the string will be used as the right
-//           margin for the Text Field.
+//	       RightMarginStr              string
+//	         The contents of the string will be used as the right
+//	         margin for the Text Field.
 //
-//           If no right margin is required, set 'RightMarginStr'
-//           to a zero length or empty string, and no right margin
-//           will be created.
+//	         If no right margin is required, set 'RightMarginStr'
+//	         to a zero length or empty string, and no right margin
+//	         will be created.
 //
-//         LineTerminator              string
-//           This string holds the character or characters which
-//           will be used to terminate the formatted line of text
-//           output thereby converting this text element into a
-//           valid line of text. Line Termination is optional.
-//           Populate this string only if this text output should
-//           be formatted as a separate line of text.
+//	       LineTerminator              string
+//	         This string holds the character or characters which
+//	         will be used to terminate the formatted line of text
+//	         output thereby converting this text element into a
+//	         valid line of text. Line Termination is optional.
+//	         Populate this string only if this text output should
+//	         be formatted as a separate line of text.
 //
-//           The most common usage sets this string to a new line
-//           character ("\n"); however, any string of text
-//           characters will be accepted.
+//	         The most common usage sets this string to a new line
+//	         character ("\n"); however, any string of text
+//	         characters will be accepted.
 //
-//           If no Line Terminator is required, set
-//           'LineTerminator' to a zero length or empty string and
-//           no line termination characters will be created.
+//	         If no Line Terminator is required, set
+//	         'LineTerminator' to a zero length or empty string and
+//	         no line termination characters will be created.
 //
-//         MaxLineLength               int
-//           The maximum length of the line on which this label
-//           text will be presented.
+//	       MaxLineLength               int
+//	         The maximum length of the line on which this label
+//	         text will be presented.
 //
-//           Set this parameter to minus one (-1) to specify an
-//           unlimited line length for this text line.
+//	         Set this parameter to minus one (-1) to specify an
+//	         unlimited line length for this text line.
 //
-//           'MaxLineLength' is used in conjunction with parameter
-//           'TurnAutoLineLengthBreaksOn' to automatically place
-//           text fields on separate text lines when that text
-//           exceeds the maximum text line length('MaxLineLength').
-//           Therefore, parameter 'turnAutoLineLengthBreaksOn'
-//           controls whether automatic line breaks using
-//           'MaxLineLength' will be applied.
+//	         'MaxLineLength' is used in conjunction with parameter
+//	         'TurnAutoLineLengthBreaksOn' to automatically place
+//	         text fields on separate text lines when that text
+//	         exceeds the maximum text line length('MaxLineLength').
+//	         Therefore, parameter 'turnAutoLineLengthBreaksOn'
+//	         controls whether automatic line breaks using
+//	         'MaxLineLength' will be applied.
 //
-//           If the value of 'MaxLineLength' is less than one (1),
-//           it will be automatically converted to minus one (-1).
+//	         If the value of 'MaxLineLength' is less than one (1),
+//	         it will be automatically converted to minus one (-1).
 //
-//           Set this parameter to minus one (-1) to specify an
-//           unlimited line length for this text line.
+//	         Set this parameter to minus one (-1) to specify an
+//	         unlimited line length for this text line.
 //
-//         TurnAutoLineLengthBreaksOn  bool
-//           This parameter controls whether text lines which
-//           exceed the maximum line length ('MaxLineLength') are
-//           broken up and presented on the following line.
+//	       TurnAutoLineLengthBreaksOn  bool
+//	         This parameter controls whether text lines which
+//	         exceed the maximum line length ('MaxLineLength') are
+//	         broken up and presented on the following line.
 //
-//           To apply automatic line breaking at the maximum line
-//           length, set the value of this parameter to 'true'.
+//	         To apply automatic line breaking at the maximum line
+//	         length, set the value of this parameter to 'true'.
 //
-//       }
-//
+//	     }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 	textLabelDto TextFieldLabelDto) {
 
@@ -1823,21 +1796,21 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 //
 // Text Spacer Field Example-1:
 //
-//  LeftMarginStr = ""
-//  FieldLength = 3
-//  RightMarginStr = ""
-//  LineTerminator = ""
-//  Final Text Spacer string = "   " // 3-white spaces
+//	LeftMarginStr = ""
+//	FieldLength = 3
+//	RightMarginStr = ""
+//	LineTerminator = ""
+//	Final Text Spacer string = "   " // 3-white spaces
 //
 // Text Spacer Field Example-2:
 //
-//  LeftMarginStr = ""
-//  FieldLength = 3
-//  RightMarginStr = ""
-//  LineTerminator = "\n"
-//  Final Text Spacer string = "   \n" // 3-white spaces and
-//                                     // 1-new line character
-//                                     // ('\n')
+//	LeftMarginStr = ""
+//	FieldLength = 3
+//	RightMarginStr = ""
+//	LineTerminator = "\n"
+//	Final Text Spacer string = "   \n" // 3-white spaces and
+//	                                   // 1-new line character
+//	                                   // ('\n')
 //
 // Typically, Text Spacer Fields are designed to be configured
 // within a line of text. However, users have the option of
@@ -1845,87 +1818,86 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 // line of text by configuring the input parameter
 // 'lineTerminator'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the Text Spacer Field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the Text Spacer Field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  fieldLength                int
-//     - An integer value used to specify the number of white space
-//       characters in the Text Spacer Field.
-//
-//       If the value of this parameter is less than zero and greater
-//       than one-million (1,000,000), an error will be generated when
-//       attempting to create formatted text output.
-//
-//       Examples:
-//        fieldLen = 1 produces text field " "  // 1-white space
-//        fieldLen = 2 produces text field "  " // 2-white spaces
-//        fieldLen = 5 produces text field "     " // 5-white spaces
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  lineTerminator             string
-//     - This string holds the character or characters which will
-//       be used to terminate the formatted text thereby converting
-//       this text element into a valid line of text.
+//	fieldLength                int
+//	   - An integer value used to specify the number of white space
+//	     characters in the Text Spacer Field.
 //
-//       If a text line is required, setting this string to include
-//       a new line character ('\n') will ensure that the text line
-//       consists of the text spacer field and no other text
-//       elements. Any string of text characters will be accepted
-//       for this parameter.
+//	     If the value of this parameter is less than zero and greater
+//	     than one-million (1,000,000), an error will be generated when
+//	     attempting to create formatted text output.
 //
-//       Again, the most common usage sets this string to a new
-//       line character ("\n").
-//
-//       If Line Termination is NOT required, set 'lineTerminator'
-//       to a zero length or empty string and no line termination
-//       characters will be created.
+//	     Examples:
+//	      fieldLen = 1 produces text field " "  // 1-white space
+//	      fieldLen = 2 produces text field "  " // 2-white spaces
+//	      fieldLen = 5 produces text field "     " // 5-white spaces
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this Text Spacer
-//       Field will be presented.
+//	lineTerminator             string
+//	   - This string holds the character or characters which will
+//	     be used to terminate the formatted text thereby converting
+//	     this text element into a valid line of text.
 //
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
-///
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength'). Therefore,
-//       paramter 'turnAutoLineLengthBreaksOn' controls whether
-//       automatic line breaks using 'maxLineLength' will be
-//       applied.
+//	     If a text line is required, setting this string to include
+//	     a new line character ('\n') will ensure that the text line
+//	     consists of the text spacer field and no other text
+//	     elements. Any string of text characters will be accepted
+//	     for this parameter.
 //
-//       If the value of 'maxLineLength' is less than zero (0), it
-//       will be automatically converted to minus one (-1).
+//	     Again, the most common usage sets this string to a new
+//	     line character ("\n").
+//
+//	     If Line Termination is NOT required, set 'lineTerminator'
+//	     to a zero length or empty string and no line termination
+//	     characters will be created.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	maxLineLength              int
+//	   - The maximum length of the line on which this Text Spacer
+//	     Field will be presented.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
 //
+// /
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength'). Therefore,
+//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	     automatic line breaks using 'maxLineLength' will be
+//	     applied.
+//
+//	     If the value of 'maxLineLength' is less than zero (0), it
+//	     will be automatically converted to minus one (-1).
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 	leftMarginStr string,
 	fieldLength int,
@@ -1984,21 +1956,21 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 //
 // Text Spacer Field Example-1:
 //
-//  LeftMarginStr = ""
-//  FieldLength = 3
-//  RightMarginStr = ""
-//  LineTerminator = ""
-//  Final Text Spacer string = "   " // 3-white spaces
+//	LeftMarginStr = ""
+//	FieldLength = 3
+//	RightMarginStr = ""
+//	LineTerminator = ""
+//	Final Text Spacer string = "   " // 3-white spaces
 //
 // Text Spacer Field Example-2:
 //
-//  LeftMarginStr = ""
-//  FieldLength = 3
-//  RightMarginStr = ""
-//  LineTerminator = "\n"
-//  Final Text Spacer string = "   \n" // 3-white spaces and
-//                                     // 1-new line character
-//                                     // ('\n')
+//	LeftMarginStr = ""
+//	FieldLength = 3
+//	RightMarginStr = ""
+//	LineTerminator = "\n"
+//	Final Text Spacer string = "   \n" // 3-white spaces and
+//	                                   // 1-new line character
+//	                                   // ('\n')
 //
 // Typically, Text Spacer Fields are designed to be configured
 // within a line of text. However, users have the option of
@@ -2006,110 +1978,107 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 // line of text by means of the input parameter 'lineTerminator'.
 // line of text by means of the input parameter 'lineTerminator'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtFieldSpacerDto          TextFieldSpacerDto
-//     - An instance of TextFieldSpacerDto which contains all the
-//       necessary data parameters to produce a Text Spacer Field.
+//	txtFieldSpacerDto          TextFieldSpacerDto
+//	   - An instance of TextFieldSpacerDto which contains all the
+//	     necessary data parameters to produce a Text Spacer Field.
 //
-//       The Text Field Spacer Data Transfer Object is defined as
-//       follows:
+//	     The Text Field Spacer Data Transfer Object is defined as
+//	     follows:
 //
-//       type TextFieldSpacerDto struct {
+//	     type TextFieldSpacerDto struct {
 //
-//        FormatType                   TextFieldType
-//         Required. This enumeration value specifies the type of
-//         Text Format Operation to be performed.
+//	      FormatType                   TextFieldType
+//	       Required. This enumeration value specifies the type of
+//	       Text Format Operation to be performed.
 //
-//         For the TextFieldSpacerDto Format Type, this value
-//         should always be set to: TxtFieldType.Spacer()
+//	       For the TextFieldSpacerDto Format Type, this value
+//	       should always be set to: TxtFieldType.Spacer()
 //
-//        LeftMarginStr                string
-//         The contents of the string will be used as the left
-//         margin for the Text Spacer Field.
+//	      LeftMarginStr                string
+//	       The contents of the string will be used as the left
+//	       margin for the Text Spacer Field.
 //
-//         If no left margin is required, set 'leftMarginStr' to a
-//         zero length or empty string, and no left margin will be
-//         created.
+//	       If no left margin is required, set 'leftMarginStr' to a
+//	       zero length or empty string, and no left margin will be
+//	       created.
 //
-//        FieldLength                  int
-//         An integer value used to specify the number of white
-//         space characters in the Text Spacer Field.
+//	      FieldLength                  int
+//	       An integer value used to specify the number of white
+//	       space characters in the Text Spacer Field.
 //
-//         Values less than zero and greater than one million
-//         (1,000,001) will generate errors when attempting to
-//         format text output.
+//	       Values less than zero and greater than one million
+//	       (1,000,001) will generate errors when attempting to
+//	       format text output.
 //
-//         Examples:
-//          fieldLen = 1 produces text field " "
-//              // 1-white space
+//	       Examples:
+//	        fieldLen = 1 produces text field " "
+//	            // 1-white space
 //
-//          fieldLen = 2 produces text field "  "
-//             // 2-white spaces
+//	        fieldLen = 2 produces text field "  "
+//	           // 2-white spaces
 //
-//          fieldLen = 5 produces text field "     "
-//             // 5-white spaces
+//	        fieldLen = 5 produces text field "     "
+//	           // 5-white spaces
 //
-//        RightMarginStr               string
-//         The contents of the string will be used as the right
-//         margin for the Text Spacer Field.
+//	      RightMarginStr               string
+//	       The contents of the string will be used as the right
+//	       margin for the Text Spacer Field.
 //
-//         If no right margin is required, set 'rightMarginStr' to
-//         a zero length or empty string, and no right margin will
-//         be created.
+//	       If no right margin is required, set 'rightMarginStr' to
+//	       a zero length or empty string, and no right margin will
+//	       be created.
 //
-//        LineTerminator               string
-//         This string holds the character or characters which will
-//         be used to terminate the formatted line of text output.
+//	      LineTerminator               string
+//	       This string holds the character or characters which will
+//	       be used to terminate the formatted line of text output.
 //
-//         The most common usage sets this string to a new line
-//         character ("\n").
+//	       The most common usage sets this string to a new line
+//	       character ("\n").
 //
-//         If no Line Terminator is required, set 'lineTerminator'
-//         to a zero length or empty string and no line
-//         termination characters will be created.
+//	       If no Line Terminator is required, set 'lineTerminator'
+//	       to a zero length or empty string and no line
+//	       termination characters will be created.
 //
-//        MaxLineLength                int
-//         The maximum length of the line on which this label text
-//         will be presented.
+//	      MaxLineLength                int
+//	       The maximum length of the line on which this label text
+//	       will be presented.
 //
-//         Set this parameter to minus one (-1) to specify an
-//         unlimited line length for this text line.
+//	       Set this parameter to minus one (-1) to specify an
+//	       unlimited line length for this text line.
 //
-//         'MaxLineLength' is used in conjunction with parameter
-//         'TurnAutoLineLengthBreaksOn' to automatically place text
-//         fields on separate text lines when that text exceeds the
-//         maximum text line length ('MaxLineLength'). Therefore,
-//         paramter 'turnAutoLineLengthBreaksOn' controls whether
-//         automatic line breaks using 'MaxLineLength' will be
-//         applied.
+//	       'MaxLineLength' is used in conjunction with parameter
+//	       'TurnAutoLineLengthBreaksOn' to automatically place text
+//	       fields on separate text lines when that text exceeds the
+//	       maximum text line length ('MaxLineLength'). Therefore,
+//	       paramter 'turnAutoLineLengthBreaksOn' controls whether
+//	       automatic line breaks using 'MaxLineLength' will be
+//	       applied.
 //
-//         If the value of 'maxLineLength' is less than one (1), it
-//         will be automatically converted to minus one (-1).
+//	       If the value of 'maxLineLength' is less than one (1), it
+//	       will be automatically converted to minus one (-1).
 //
-//         Set this parameter to minus one (-1) to specify an
-//         unlimited line length for this text line.
+//	       Set this parameter to minus one (-1) to specify an
+//	       unlimited line length for this text line.
 //
-//        TurnAutoLineLengthBreaksOn   bool
-//         This parameter controls whether text lines which exceed
-//         the maximum line length ('MaxLineLength') are broken up
-//         and presented on the following line.
+//	      TurnAutoLineLengthBreaksOn   bool
+//	       This parameter controls whether text lines which exceed
+//	       the maximum line length ('MaxLineLength') are broken up
+//	       and presented on the following line.
 //
-//         To apply automatic line breaking at the maximum line
-//         length, set the value of this parameter to 'true'.
+//	       To apply automatic line breaking at the maximum line
+//	       length, set the value of this parameter to 'true'.
 //
-//       }
-//
+//	     }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldSpacerDto(
 	txtFieldSpacerDto TextFieldSpacerDto) {
 
@@ -2164,10 +2133,9 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacerDto(
 // Line Parameters collection maintained by this instance of
 // TextFormatterCollection.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The standard parameters for 1-Column Text Lines must be
 // configured in the Standard Text Line Parameters Collection
@@ -2181,102 +2149,100 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacerDto(
 //
 // To configure the standard parameters for 1-Column Text Lines,
 // call one of the following methods:
-//   TextFormatterCollection.CfgLine1Col()
-//   TextFormatterCollection.SetStdFormatParamsLine1Col()
 //
+//	TextFormatterCollection.CfgLine1Col()
+//	TextFormatterCollection.SetStdFormatParamsLine1Col()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  column1Field               interface{}
-//     - This parameter is an empty interface which must contain
-//       one of several specific types. This empty interface type
-//       will be converted to a string and configured as the single
-//       text field in this 'Line1Column' Text Line.
+//	column1Field               interface{}
+//	   - This parameter is an empty interface which must contain
+//	     one of several specific types. This empty interface type
+//	     will be converted to a string and configured as the single
+//	     text field in this 'Line1Column' Text Line.
 //
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
+//	     If the 'column1Field' is not convertible to one of the
+//	     supported types, an error will be returned.
 //
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the converted string value for 'column1Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 	column1Field interface{},
 	errorPrefix interface{}) error {
@@ -2402,10 +2368,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 // Line Parameters collection maintained by this instance of
 // TextFormatterCollection.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The standard parameters for 2-Column Text Lines must be
 // configured in the Standard Text Line Parameters Collection
@@ -2419,133 +2384,131 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 //
 // To configure the standard parameters for 2-Column Text Lines,
 // call one of the following methods:
-//   TextFormatterCollection.CfgLine2Col()
-//   TextFormatterCollection.SetStdFormatParamsLine2Col()
 //
+//	TextFormatterCollection.CfgLine2Col()
+//	TextFormatterCollection.SetStdFormatParamsLine2Col()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  column1Field               interface{}
-//     - This is the first of two text fields used to generate a
-//       2-Column Text Line. This parameter is an empty interface
-//       which must contain one of several specific data types.
-//       This empty interface type will be converted to a string
-//       and configured as the first text field in this 2-Column
-//       Text Line.
+//	column1Field               interface{}
+//	   - This is the first of two text fields used to generate a
+//	     2-Column Text Line. This parameter is an empty interface
+//	     which must contain one of several specific data types.
+//	     This empty interface type will be converted to a string
+//	     and configured as the first text field in this 2-Column
+//	     Text Line.
 //
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
+//	     If the 'column1Field' is not convertible to one of the
+//	     supported types, an error will be returned.
 //
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
-//
-//
-//  column2Field               interface{}
-//     - This is the second of two text fields used to generate a
-//       2-Column Text Line. This parameter is an empty interface
-//       which must contain one of several specific data types.
-//       This empty interface type will be converted to a string
-//       and configured as the second text field in this 2-Column
-//       Text Line.
-//
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
-//
-//       If the 'column2Field' is not convertible to one of the
-//       supported types, an error will be returned.
-//
-//       If the converted string value for 'column2Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
+//	     If the converted string value for 'column1Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	column2Field               interface{}
+//	   - This is the second of two text fields used to generate a
+//	     2-Column Text Line. This parameter is an empty interface
+//	     which must contain one of several specific data types.
+//	     This empty interface type will be converted to a string
+//	     and configured as the second text field in this 2-Column
+//	     Text Line.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the 'column2Field' is not convertible to one of the
+//	     supported types, an error will be returned.
+//
+//	     If the converted string value for 'column2Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 	column1Field interface{},
 	column2Field interface{},
@@ -2688,44 +2651,40 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 // The number of blank lines created is controlled by input
 // parameter 'numOfBlankLines'.
 //
-//  Example-1 :
-//   NumOfBlankLines = 3
-//   LineTerminator = ""
-//   Final Blank Line Text = "\n\n\n" // 3-new line characters
+//	Example-1 :
+//	 NumOfBlankLines = 3
+//	 LineTerminator = ""
+//	 Final Blank Line Text = "\n\n\n" // 3-new line characters
 //
-//  Example-2 :
-//   NumOfBlankLines = 2
-//   LineTerminator = "\n x \n"
-//   Final Blank Line Text = "\n x \n\n x \n"
-//
-//
+//	Example-2 :
+//	 NumOfBlankLines = 2
+//	 LineTerminator = "\n x \n"
+//	 Final Blank Line Text = "\n x \n\n x \n"
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfBlankLines            int
-//     - Specifies the number of blank lines which will be created.
-//       Essentially, this parameter controls the number of new
-//       line characters configured in the resulting text string.
+//	numOfBlankLines            int
+//	   - Specifies the number of blank lines which will be created.
+//	     Essentially, this parameter controls the number of new
+//	     line characters configured in the resulting text string.
 //
 //
-//  lineTerminator             string
-//     - If this parameter is submitted as an empty string,
-//       the default new line terminator ('\n') will be applied as
-//       a line termination sequence.
+//	lineTerminator             string
+//	   - If this parameter is submitted as an empty string,
+//	     the default new line terminator ('\n') will be applied as
+//	     a line termination sequence.
 //
-//       If this parameter is populated, this character sequence
-//       will be used as the Line Terminator for this text blank
-//       line.
-//
+//	     If this parameter is populated, this character sequence
+//	     will be used as the Line Terminator for this text blank
+//	     line.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
 	numOfBlankLines int,
 	lineTerminator string) {
@@ -2775,63 +2734,58 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlank(
 // The number of blank lines created is controlled by input
 // parameter 'numOfBlankLines'.
 //
-//  Example-1 :
-//   NumOfBlankLines = 3
-//   LineTerminator = ""
-//   Final Blank Line Text = "\n\n\n" // 3-new line characters
+//	Example-1 :
+//	 NumOfBlankLines = 3
+//	 LineTerminator = ""
+//	 Final Blank Line Text = "\n\n\n" // 3-new line characters
 //
-//  Example-2 :
-//   NumOfBlankLines = 2
-//   LineTerminator = "\n x \n"
-//   Final Blank Line Text = "\n x \n\n x \n"
-//
-//
+//	Example-2 :
+//	 NumOfBlankLines = 2
+//	 LineTerminator = "\n x \n"
+//	 Final Blank Line Text = "\n x \n\n x \n"
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtLineBlankDto            TextLineBlankDto
-//     - An instance of TextLineBlankDto which contains all the
-//       necessary data parameters to produce one or more Blank
-//       Text Lines.
+//	txtLineBlankDto            TextLineBlankDto
+//	   - An instance of TextLineBlankDto which contains all the
+//	     necessary data parameters to produce one or more Blank
+//	     Text Lines.
 //
-//       The Text Line Blank Data Transfer Object is defined as
-//       follows:
+//	     The Text Line Blank Data Transfer Object is defined as
+//	     follows:
 //
-//       type TextLineBlankDto struct {
+//	     type TextLineBlankDto struct {
 //
-//        FormatType                 TextFieldType
-//         Required. This enumeration value specifies the type of
-//         Text Format Operation to be performed.
+//	      FormatType                 TextFieldType
+//	       Required. This enumeration value specifies the type of
+//	       Text Format Operation to be performed.
 //
-//         For the TextLineBlankDto Format Type, this value
-//         should always be set to: TxtFieldType.BlankLine()
+//	       For the TextLineBlankDto Format Type, this value
+//	       should always be set to: TxtFieldType.BlankLine()
 //
-//        NumOfBlankLines            int
-//         The number of blank lines which will be generated by this
-//         method.
+//	      NumOfBlankLines            int
+//	       The number of blank lines which will be generated by this
+//	       method.
 //
-//         If this value is less than one (+1) or greater than
-//         one-million, an error will be returned when attempting
-//         to format the Text Blank Line for text output.
+//	       If this value is less than one (+1) or greater than
+//	       one-million, an error will be returned when attempting
+//	       to format the Text Blank Line for text output.
 //
-//        LineTerminator             string
-//        If this parameter is submitted as an empty string,
-//        the default new line terminator ('\n') will be applied.
-//        If this parameter is populated, this character sequence
-//        will be used as the Line Terminator for this Text Blank
-//        Line.
-//       }
-//
-//
+//	      LineTerminator             string
+//	      If this parameter is submitted as an empty string,
+//	      the default new line terminator ('\n') will be applied.
+//	      If this parameter is populated, this character sequence
+//	      will be used as the Line Terminator for this Text Blank
+//	      Line.
+//	     }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddLineBlankDto(
 	txtLineBlankDto TextLineBlankDto) {
 
@@ -2868,7 +2822,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlankDto(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will assign previously configured (a.k.a. default)
 // Format Parameters to this multi-column Text Line. The prior
@@ -2884,103 +2838,101 @@ func (txtFmtCollection *TextFormatterCollection) AddLineBlankDto(
 //
 // To configure the standard parameters for Text Lines, call one of
 // the following methods:
-//   TextFormatterCollection.CfgLineMultiCol()
-//   TextFormatterCollection.SetStdFormatParamsMultiCol()
-//   TextFormatterCollection.SetStdFormatParamsManyCol()
 //
+//	TextFormatterCollection.CfgLineMultiCol()
+//	TextFormatterCollection.SetStdFormatParamsMultiCol()
+//	TextFormatterCollection.SetStdFormatParamsManyCol()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textFields                 []interface{}
-//     - An array of type empty interface ([]interface{}). Each
-//       element in this array will be converted to a string and
-//       configured as a text column in this Multi-Column Text
-//       Line.
+//	textFields                 []interface{}
+//	   - An array of type empty interface ([]interface{}). Each
+//	     element in this array will be converted to a string and
+//	     configured as a text column in this Multi-Column Text
+//	     Line.
 //
-//       Supported types which may be submitted through this empty
-//       interface array are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
+//	     Supported types which may be submitted through this empty
+//	     interface array are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       If an element in the 'textFields' array is not convertible
-//       to one of the supported types, an error will be returned.
+//	     If an element in the 'textFields' array is not convertible
+//	     to one of the supported types, an error will be returned.
 //
-//       If the converted string value for a 'textFields' element
-//       is empty (has a zero length), it will be defaulted to a
-//       single white space character (" ").
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the converted string value for a 'textFields' element
+//	     is empty (has a zero length), it will be defaulted to a
+//	     single white space character (" ").
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 	textFields []interface{},
 	errorPrefix interface{}) error {
@@ -3092,7 +3044,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will assign previously configured (a.k.a. default)
 // Format Parameters to this Multiple Column Text Line. The prior
@@ -3108,105 +3060,103 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 //
 // To configure the standard parameters for Text Lines, call one of
 // the following methods:
-//   TextFormatterCollection.CfgLineMultiCol()
-//   TextFormatterCollection.SetStdFormatParamsMultiCol()
-//   TextFormatterCollection.SetStdFormatParamsManyCol()
 //
+//	TextFormatterCollection.CfgLineMultiCol()
+//	TextFormatterCollection.SetStdFormatParamsMultiCol()
+//	TextFormatterCollection.SetStdFormatParamsManyCol()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//  textFields                 ...interface{}
-//     - This parameter accepts a variable number of arguments in
-//       the form of a series of empty interfaces (interface{}).
-//       Each argument passed through parameter will be converted
-//       to a string and configured as a text column in this
-//       Multiple Column Text Line.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       Supported types which may be submitted through the
-//       'textFields' parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
+//	     2. string - A string containing error prefix information.
 //
-//       If any of the arguments passed through parameter
-//       'textFields' is not convertible to one of the supported
-//       types, an error will be returned.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If the converted string value for a 'textFields' element
-//       is empty (has a zero length), it will be defaulted to a
-//       single white space character (" ").
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+//
+//	textFields                 ...interface{}
+//	   - This parameter accepts a variable number of arguments in
+//	     the form of a series of empty interfaces (interface{}).
+//	     Each argument passed through parameter will be converted
+//	     to a string and configured as a text column in this
+//	     Multiple Column Text Line.
+//
+//	     Supported types which may be submitted through the
+//	     'textFields' parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
+//
+//	     If any of the arguments passed through parameter
+//	     'textFields' is not convertible to one of the supported
+//	     types, an error will be returned.
+//
+//	     If the converted string value for a 'textFields' element
+//	     is empty (has a zero length), it will be defaulted to a
+//	     single white space character (" ").
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 	errorPrefix interface{},
 	textFields ...interface{}) error {
@@ -3332,8 +3282,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 //
 // Therefore, the number of solid line characters produced is
 // equal to:
-//   (Number of  solid line characters 'solidLineChars')
-//        x 'solidLineCharRepeatCount'
+//
+//	(Number of  solid line characters 'solidLineChars')
+//	     x 'solidLineCharRepeatCount'
 //
 // By default, all solid lines are terminated with a new line
 // character ('\n'). This means that each instance of a solid line
@@ -3342,230 +3293,227 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 // application of line termination characters through two input
 // parameters, 'turnLineTerminationOff' and 'lineTerminator'.
 //
-//       Example-1:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = false
-//         LineTerminator = ""
-//         Final Solid Line String = "*****\n"
+//	Example-1:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = false
+//	  LineTerminator = ""
+//	  Final Solid Line String = "*****\n"
 //
-//       Example-2:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = false
-//         LineTerminator = "\n\n"
-//         Final Solid Line String = "*****\n\n"
+//	Example-2:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = false
+//	  LineTerminator = "\n\n"
+//	  Final Solid Line String = "*****\n\n"
 //
-//       Example-3:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = true
-//         LineTerminator = "\n\n"
-//         Final Solid Line String = "*****"
-//
+//	Example-3:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = true
+//	  LineTerminator = "\n\n"
+//	  Final Solid Line String = "*****"
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - A string containing the text characters to be positioned
-//       on the Left side of the Solid Line.
+//	leftMarginStr              string
+//	   - A string containing the text characters to be positioned
+//	     on the Left side of the Solid Line.
 //
-//       If no Left margin is required, set this parameter to an
-//       empty string ("").
+//	     If no Left margin is required, set this parameter to an
+//	     empty string ("").
 //
-//       Example A-1:
-//         LeftMarginStr = "xxx"
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         RightMarginStr = "" // Empty string
-//         Solid Line = "xxx*****"
+//	     Example A-1:
+//	       LeftMarginStr = "xxx"
+//	       SolidLineChars = "*"
+//	       SolidLineCharRepeatCount = 5
+//	       RightMarginStr = "" // Empty string
+//	       Solid Line = "xxx*****"
 //
-//       Example A-2:
-//         LeftMarginStr = ""
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         RightMarginStr = "" // Empty string
-//         Solid Line = "*****"
+//	     Example A-2:
+//	       LeftMarginStr = ""
+//	       SolidLineChars = "*"
+//	       SolidLineCharRepeatCount = 5
+//	       RightMarginStr = "" // Empty string
+//	       Solid Line = "*****"
 //
-//       If the 'LeftMarginStr' string length is greater than
-//       one-million (1,000,000), an error will be returned when
-//       attempting to create formatted text output.
-//
-//
-//  solidLineChars             string
-//     - This string specifies the character or characters which
-//       will comprise the solid line string for screen display,
-//       file output or printing.
-//
-//       Example B-1:
-//         solidLineChars = "*"
-//         solidLineCharsRepeatCount = 5
-//         Solid line = "*****"
-//
-//       If this parameter is submitted as a zero length string, an
-//       error will be returned when attempting to create formatted
-//       text output.
+//	     If the 'LeftMarginStr' string length is greater than
+//	     one-million (1,000,000), an error will be returned when
+//	     attempting to create formatted text output.
 //
 //
-//  solidLineCharRepeatCount   int
-//     - This integer value specifies the number of times that
-//       parameter 'solidLineChars' will be repeated in
-//       constructing the solid line.
+//	solidLineChars             string
+//	   - This string specifies the character or characters which
+//	     will comprise the solid line string for screen display,
+//	     file output or printing.
 //
-//       If this parameter is submitted with a value less than one
-//       (1), it will be automatically converted to one (1).
+//	     Example B-1:
+//	       solidLineChars = "*"
+//	       solidLineCharsRepeatCount = 5
+//	       Solid line = "*****"
 //
-//       Example C-1:
-//         solidLineChars = "*"
-//         solidLineCharsRepeatCount = 5
-//         Solid line = "*****"
-//
-//
-//  rightMarginStr             string
-//     - A string containing the text characters to positioned on
-//       the Right side of the Solid Line.
-//
-//       If no Right margin is required, set this parameter to an
-//       empty string.
-//
-//       Example D-1:
-//         solidLineChars = "*"
-//         solidLineCharsRepeatCount = 5
-//         leftMarginStr = "" // Empty string
-//         RightMarginStr = "xxx"
-//         Solid line = "*****xxx"
-//
-//       If the 'RightMarginStr' string length is greater than
-//       one-million (1,000,000), an error will be returned when
-//       attempting to created formatted text output.
+//	     If this parameter is submitted as a zero length string, an
+//	     error will be returned when attempting to create formatted
+//	     text output.
 //
 //
-//  turnLineTerminationOff     bool
-//     - If this parameter is set to 'true' no Line Termination
-//       Sequence will be applied for this text line (Example E-3).
+//	solidLineCharRepeatCount   int
+//	   - This integer value specifies the number of times that
+//	     parameter 'solidLineChars' will be repeated in
+//	     constructing the solid line.
 //
-//             Example E-1:
-//               SolidLineChars = "*"
-//               SolidLineCharRepeatCount = 5
-//               LeftMarginStr = ""
-//               RightMarginStr = ""
-//               TurnLineTerminationOff = false
-//               LineTerminator = ""
-//               Final Solid Line String = "*****\n"
+//	     If this parameter is submitted with a value less than one
+//	     (1), it will be automatically converted to one (1).
 //
-//             Example E-2:
-//               SolidLineChars = "*"
-//               SolidLineCharRepeatCount = 5
-//               LeftMarginStr = ""
-//               RightMarginStr = ""
-//               TurnLineTerminationOff = false
-//               LineTerminator = "\n\n"
-//               Final Solid Line String = "*****\n\n"
-//
-//             Example E-3:
-//               SolidLineChars = "*"
-//               SolidLineCharRepeatCount = 5
-//               LeftMarginStr = ""
-//               RightMarginStr = ""
-//               TurnLineTerminationOff = true
-//               LineTerminator = "\n\n"
-//               Final Solid Line String = "*****"
+//	     Example C-1:
+//	       solidLineChars = "*"
+//	       solidLineCharsRepeatCount = 5
+//	       Solid line = "*****"
 //
 //
-//  lineTerminator             string
-//     - This string holds the character or characters which
-//       will be used to terminate the formatted line of text
-//       output.
+//	rightMarginStr             string
+//	   - A string containing the text characters to positioned on
+//	     the Right side of the Solid Line.
 //
-//       The most common usage sets this string to a new line
-//       character ("\n").
+//	     If no Right margin is required, set this parameter to an
+//	     empty string.
 //
-//       If 'LineTerminator' is configured as an empty string
-//       (string length zero), a single new line character ('\n')
-//       will be automatically applied to produce line termination.
+//	     Example D-1:
+//	       solidLineChars = "*"
+//	       solidLineCharsRepeatCount = 5
+//	       leftMarginStr = "" // Empty string
+//	       RightMarginStr = "xxx"
+//	       Solid line = "*****xxx"
 //
-//       LineTerminator works in conjunction with member variable
-//       'TurnLineTerminationOff'. 'TurnLineTerminationOff'
-//       controls the application of a line terminator. Setting
-//       'TurnLineTerminationOff' to 'true' means that NO line
-//       terminator will be applied to this instance of Text Solid
-//       Line (Example F-3).
-//
-//             Example F-1:
-//               SolidLineChars = "*"
-//               SolidLineCharRepeatCount = 5
-//               LeftMarginStr = ""
-//               RightMarginStr = ""
-//               TurnLineTerminationOff = false
-//               LineTerminator = ""
-//               Final Solid Line String = "*****\n"
-//
-//             Example F-2:
-//               SolidLineChars = "*"
-//               SolidLineCharRepeatCount = 5
-//               LeftMarginStr = ""
-//               RightMarginStr = ""
-//               TurnLineTerminationOff = false
-//               LineTerminator = "\n\n"
-//               Final Solid Line String = "*****\n\n"
-//
-//             Example F-3:
-//               SolidLineChars = "*"
-//               SolidLineCharRepeatCount = 5
-//               LeftMarginStr = ""
-//               RightMarginStr = ""
-//               TurnLineTerminationOff = true
-//               LineTerminator = "\n\n"
-//               Final Solid Line String = "*****"
+//	     If the 'RightMarginStr' string length is greater than
+//	     one-million (1,000,000), an error will be returned when
+//	     attempting to created formatted text output.
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which the solid line
-//       text characters will be presented.
+//	turnLineTerminationOff     bool
+//	   - If this parameter is set to 'true' no Line Termination
+//	     Sequence will be applied for this text line (Example E-3).
 //
-//       Set this parameter to minus one (-1) to specify an
-//       unlimited line length for this text line.
+//	           Example E-1:
+//	             SolidLineChars = "*"
+//	             SolidLineCharRepeatCount = 5
+//	             LeftMarginStr = ""
+//	             RightMarginStr = ""
+//	             TurnLineTerminationOff = false
+//	             LineTerminator = ""
+//	             Final Solid Line String = "*****\n"
 //
-//       If the value of 'maxLineLength' is less than one (1),
-//       it will be automatically converted to minus one (-1).
+//	           Example E-2:
+//	             SolidLineChars = "*"
+//	             SolidLineCharRepeatCount = 5
+//	             LeftMarginStr = ""
+//	             RightMarginStr = ""
+//	             TurnLineTerminationOff = false
+//	             LineTerminator = "\n\n"
+//	             Final Solid Line String = "*****\n\n"
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       on separate text lines when that text exceeds the maximum
-//       text line length ('maxLineLength'). Therefore, paramter
-//       'turnAutoLineLengthBreaksOn' controls whether automatic
-//       line breaks using 'maxLineLength' will be applied.
+//	           Example E-3:
+//	             SolidLineChars = "*"
+//	             SolidLineCharRepeatCount = 5
+//	             LeftMarginStr = ""
+//	             RightMarginStr = ""
+//	             TurnLineTerminationOff = true
+//	             LineTerminator = "\n\n"
+//	             Final Solid Line String = "*****"
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are positioned
-//       on the following line as a separate line of text.
+//	lineTerminator             string
+//	   - This string holds the character or characters which
+//	     will be used to terminate the formatted line of text
+//	     output.
 //
-//       To apply automatic line breaking at the maximum line
-//       length ('maxLineLength'), set the value of this parameter
-//       to 'true'.
+//	     The most common usage sets this string to a new line
+//	     character ("\n").
 //
-//       When this parameter is set to 'true', text fields which
-//       extend beyond the maximum line length ('maxLineLength')
-//       will be formatted as a separate line of text on the
-//       following line.
+//	     If 'LineTerminator' is configured as an empty string
+//	     (string length zero), a single new line character ('\n')
+//	     will be automatically applied to produce line termination.
 //
+//	     LineTerminator works in conjunction with member variable
+//	     'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+//	     controls the application of a line terminator. Setting
+//	     'TurnLineTerminationOff' to 'true' means that NO line
+//	     terminator will be applied to this instance of Text Solid
+//	     Line (Example F-3).
+//
+//	           Example F-1:
+//	             SolidLineChars = "*"
+//	             SolidLineCharRepeatCount = 5
+//	             LeftMarginStr = ""
+//	             RightMarginStr = ""
+//	             TurnLineTerminationOff = false
+//	             LineTerminator = ""
+//	             Final Solid Line String = "*****\n"
+//
+//	           Example F-2:
+//	             SolidLineChars = "*"
+//	             SolidLineCharRepeatCount = 5
+//	             LeftMarginStr = ""
+//	             RightMarginStr = ""
+//	             TurnLineTerminationOff = false
+//	             LineTerminator = "\n\n"
+//	             Final Solid Line String = "*****\n\n"
+//
+//	           Example F-3:
+//	             SolidLineChars = "*"
+//	             SolidLineCharRepeatCount = 5
+//	             LeftMarginStr = ""
+//	             RightMarginStr = ""
+//	             TurnLineTerminationOff = true
+//	             LineTerminator = "\n\n"
+//	             Final Solid Line String = "*****"
+//
+//
+//	maxLineLength              int
+//	   - The maximum length of the line on which the solid line
+//	     text characters will be presented.
+//
+//	     Set this parameter to minus one (-1) to specify an
+//	     unlimited line length for this text line.
+//
+//	     If the value of 'maxLineLength' is less than one (1),
+//	     it will be automatically converted to minus one (-1).
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     on separate text lines when that text exceeds the maximum
+//	     text line length ('maxLineLength'). Therefore, paramter
+//	     'turnAutoLineLengthBreaksOn' controls whether automatic
+//	     line breaks using 'maxLineLength' will be applied.
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are positioned
+//	     on the following line as a separate line of text.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length ('maxLineLength'), set the value of this parameter
+//	     to 'true'.
+//
+//	     When this parameter is set to 'true', text fields which
+//	     extend beyond the maximum line length ('maxLineLength')
+//	     will be formatted as a separate line of text on the
+//	     following line.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 	leftMarginStr string,
 	solidLineChars string,
@@ -3640,8 +3588,9 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 //
 // Therefore, the number of solid line characters produced is
 // equal to:
-//   (Number of  solid line characters 'solidLineChars')
-//        x 'solidLineCharRepeatCount'
+//
+//	(Number of  solid line characters 'solidLineChars')
+//	     x 'solidLineCharRepeatCount'
 //
 // By default, all solid lines are terminated with a new line
 // character ('\n'). This means that each instance of a solid line
@@ -3650,233 +3599,230 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolid(
 // application of line termination characters through two input
 // parameters, 'turnLineTerminationOff' and 'lineTerminator'.
 //
-//       Example-1:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = false
-//         LineTerminator = ""
-//         Final Solid Line String = "*****\n"
+//	Example-1:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = false
+//	  LineTerminator = ""
+//	  Final Solid Line String = "*****\n"
 //
-//       Example-2:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = false
-//         LineTerminator = "\n\n"
-//         Final Solid Line String = "*****\n\n"
+//	Example-2:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = false
+//	  LineTerminator = "\n\n"
+//	  Final Solid Line String = "*****\n\n"
 //
-//       Example-3:
-//         SolidLineChars = "*"
-//         SolidLineCharRepeatCount = 5
-//         LeftMarginStr = ""
-//         RightMarginStr = ""
-//         TurnLineTerminationOff = true
-//         LineTerminator = "\n\n"
-//         Final Solid Line String = "*****"
-//
+//	Example-3:
+//	  SolidLineChars = "*"
+//	  SolidLineCharRepeatCount = 5
+//	  LeftMarginStr = ""
+//	  RightMarginStr = ""
+//	  TurnLineTerminationOff = true
+//	  LineTerminator = "\n\n"
+//	  Final Solid Line String = "*****"
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtLineSolidDto            TextLineSolidDto
-//     - An instance of TextLineSolidDto which contains all the
-//       data parameters required to produce a Text Solid Line.
+//	txtLineSolidDto            TextLineSolidDto
+//	   - An instance of TextLineSolidDto which contains all the
+//	     data parameters required to produce a Text Solid Line.
 //
-//       The Text Line Solid Data Transfer Object is defined as
-//       follows:
-//       type TextLineSolidDto struct {
+//	     The Text Line Solid Data Transfer Object is defined as
+//	     follows:
+//	     type TextLineSolidDto struct {
 //
-//        FormatType                   TextFieldType
-//         Required. This enumeration value specifies the type of
-//         Text Format Operation to be performed.
+//	      FormatType                   TextFieldType
+//	       Required. This enumeration value specifies the type of
+//	       Text Format Operation to be performed.
 //
-//         For TextLineSolidDto 'FormatType' this parameter should
-//         be set to: TxtFieldType.SolidLine()
+//	       For TextLineSolidDto 'FormatType' this parameter should
+//	       be set to: TxtFieldType.SolidLine()
 //
-//        LeftMarginStr                string
-//         A string containing the text characters to be positioned
-//         on the Left side of the Solid Line.
+//	      LeftMarginStr                string
+//	       A string containing the text characters to be positioned
+//	       on the Left side of the Solid Line.
 //
-//         If no Left margin is required, set this parameter to an
-//         empty string.
+//	       If no Left margin is required, set this parameter to an
+//	       empty string.
 //
-//         Example:
-//           LeftMarginStr = "xxx"
-//           SolidLineChars = "*"
-//           SolidLineCharRepeatCount = 5
-//           RightMarginStr = "" // Empty string
-//           Solid Line = "xxx*****"
+//	       Example:
+//	         LeftMarginStr = "xxx"
+//	         SolidLineChars = "*"
+//	         SolidLineCharRepeatCount = 5
+//	         RightMarginStr = "" // Empty string
+//	         Solid Line = "xxx*****"
 //
-//         If the 'LeftMarginStr' string length is greater than
-//         one-million (1,000,000), an error will be returned when
-//         attempting to create formatted text output.
+//	       If the 'LeftMarginStr' string length is greater than
+//	       one-million (1,000,000), an error will be returned when
+//	       attempting to create formatted text output.
 //
-//        SolidLineChars               string
-//         This string specifies the character or characters which
-//         will comprise the solid line string for screen display,
-//         file output or printing.
+//	      SolidLineChars               string
+//	       This string specifies the character or characters which
+//	       will comprise the solid line string for screen display,
+//	       file output or printing.
 //
-//         Example:
-//           solidLineChars = "*"
-//           solidLineCharsRepeatCount = 5
-//           Solid line = "*****"
+//	       Example:
+//	         solidLineChars = "*"
+//	         solidLineCharsRepeatCount = 5
+//	         Solid line = "*****"
 //
-//         If this parameter is submitted as a zero length string,
-//         an error will be returned when attempting to create
-//         formatted.
+//	       If this parameter is submitted as a zero length string,
+//	       an error will be returned when attempting to create
+//	       formatted.
 //
-//        SolidLineCharRepeatCount     int
-//         This integer value specifies the number of times that
-//         parameter 'solidLineChars' will be repeated in
-//         constructing the solid line.
+//	      SolidLineCharRepeatCount     int
+//	       This integer value specifies the number of times that
+//	       parameter 'solidLineChars' will be repeated in
+//	       constructing the solid line.
 //
-//         If this parameter is submitted with a value less than
-//         one (1), it will be automatically converted to one (1).
+//	       If this parameter is submitted with a value less than
+//	       one (1), it will be automatically converted to one (1).
 //
-//         Example:
-//           solidLineChars = "*"
-//           solidLineCharsRepeatCount = 5
-//           Solid line = "*****"
+//	       Example:
+//	         solidLineChars = "*"
+//	         solidLineCharsRepeatCount = 5
+//	         Solid line = "*****"
 //
-//        RightMarginStr               string
-//         A string containing the text characters to positioned on
-//         the Right side of the Solid Line.
+//	      RightMarginStr               string
+//	       A string containing the text characters to positioned on
+//	       the Right side of the Solid Line.
 //
-//         If no Right margin is required, set this parameter to an
-//         empty string.
+//	       If no Right margin is required, set this parameter to an
+//	       empty string.
 //
-//         Example:
-//           solidLineChars = "*"
-//           solidLineCharsRepeatCount = 5
-//           leftMarginStr = "" // Empty string
-//           RightMarginStr = "xxx"
-//           Solid line = "*****xxx"
+//	       Example:
+//	         solidLineChars = "*"
+//	         solidLineCharsRepeatCount = 5
+//	         leftMarginStr = "" // Empty string
+//	         RightMarginStr = "xxx"
+//	         Solid line = "*****xxx"
 //
-//         If the 'RightMarginStr' string length is greater than
-//         one-million (1,000,000), an error will be returned.
+//	       If the 'RightMarginStr' string length is greater than
+//	       one-million (1,000,000), an error will be returned.
 //
-//        TurnLineTerminationOff     bool
-//         If this parameter is set to 'true' no Line Termination
-//         Sequence will be applied for this text line (Example-3).
+//	      TurnLineTerminationOff     bool
+//	       If this parameter is set to 'true' no Line Termination
+//	       Sequence will be applied for this text line (Example-3).
 //
-//              Example-1:
-//                SolidLineChars = "*"
-//                SolidLineCharRepeatCount = 5
-//                LeftMarginStr = ""
-//                RightMarginStr = ""
-//                TurnLineTerminationOff = false
-//                LineTerminator = ""
-//                Final Solid Line String = "*****\n"
+//	            Example-1:
+//	              SolidLineChars = "*"
+//	              SolidLineCharRepeatCount = 5
+//	              LeftMarginStr = ""
+//	              RightMarginStr = ""
+//	              TurnLineTerminationOff = false
+//	              LineTerminator = ""
+//	              Final Solid Line String = "*****\n"
 //
-//              Example-2:
-//                SolidLineChars = "*"
-//                SolidLineCharRepeatCount = 5
-//                LeftMarginStr = ""
-//                RightMarginStr = ""
-//                TurnLineTerminationOff = false
-//                LineTerminator = "\n\n"
-//                Final Solid Line String = "*****\n\n"
+//	            Example-2:
+//	              SolidLineChars = "*"
+//	              SolidLineCharRepeatCount = 5
+//	              LeftMarginStr = ""
+//	              RightMarginStr = ""
+//	              TurnLineTerminationOff = false
+//	              LineTerminator = "\n\n"
+//	              Final Solid Line String = "*****\n\n"
 //
-//              Example-3:
-//                SolidLineChars = "*"
-//                SolidLineCharRepeatCount = 5
-//                LeftMarginStr = ""
-//                RightMarginStr = ""
-//                TurnLineTerminationOff = true
-//                LineTerminator = "\n\n"
-//                Final Solid Line String = "*****"
+//	            Example-3:
+//	              SolidLineChars = "*"
+//	              SolidLineCharRepeatCount = 5
+//	              LeftMarginStr = ""
+//	              RightMarginStr = ""
+//	              TurnLineTerminationOff = true
+//	              LineTerminator = "\n\n"
+//	              Final Solid Line String = "*****"
 //
-//        LineTerminator               string
-//         This string holds the character or characters which
-//         will be used to terminate the formatted line of text
-//         output.
+//	      LineTerminator               string
+//	       This string holds the character or characters which
+//	       will be used to terminate the formatted line of text
+//	       output.
 //
-//         The most common usage sets this string to a new line
-//         character ("\n").
+//	       The most common usage sets this string to a new line
+//	       character ("\n").
 //
-//         If 'LineTerminator' is configured as an empty string
-//         (string length zero), a single new line character ('\n')
-//         will be automatically applied to produce line termination.
+//	       If 'LineTerminator' is configured as an empty string
+//	       (string length zero), a single new line character ('\n')
+//	       will be automatically applied to produce line termination.
 //
-//         LineTerminator works in conjunction with member variable
-//         'TurnLineTerminationOff'. 'TurnLineTerminationOff'
-//         controls the application of a line terminator. Setting
-//         'TurnLineTerminationOff' to 'true' means that NO line
-//         terminator will be applied to this instance of Text Solid
-//         Line.
+//	       LineTerminator works in conjunction with member variable
+//	       'TurnLineTerminationOff'. 'TurnLineTerminationOff'
+//	       controls the application of a line terminator. Setting
+//	       'TurnLineTerminationOff' to 'true' means that NO line
+//	       terminator will be applied to this instance of Text Solid
+//	       Line.
 //
-//               Example-1:
-//                 SolidLineChars = "*"
-//                 SolidLineCharRepeatCount = 5
-//                 LeftMarginStr = ""
-//                 RightMarginStr = ""
-//                 TurnLineTerminationOff = false
-//                 LineTerminator = ""
-//                 Final Solid Line String = "*****\n"
+//	             Example-1:
+//	               SolidLineChars = "*"
+//	               SolidLineCharRepeatCount = 5
+//	               LeftMarginStr = ""
+//	               RightMarginStr = ""
+//	               TurnLineTerminationOff = false
+//	               LineTerminator = ""
+//	               Final Solid Line String = "*****\n"
 //
-//               Example-2:
-//                 SolidLineChars = "*"
-//                 SolidLineCharRepeatCount = 5
-//                 LeftMarginStr = ""
-//                 RightMarginStr = ""
-//                 TurnLineTerminationOff = false
-//                 LineTerminator = "\n\n"
-//                 Final Solid Line String = "*****\n\n"
+//	             Example-2:
+//	               SolidLineChars = "*"
+//	               SolidLineCharRepeatCount = 5
+//	               LeftMarginStr = ""
+//	               RightMarginStr = ""
+//	               TurnLineTerminationOff = false
+//	               LineTerminator = "\n\n"
+//	               Final Solid Line String = "*****\n\n"
 //
-//               Example-3:
-//                 SolidLineChars = "*"
-//                 SolidLineCharRepeatCount = 5
-//                 LeftMarginStr = ""
-//                 RightMarginStr = ""
-//                 TurnLineTerminationOff = true
-//                 LineTerminator = "\n\n"
-//                 Final Solid Line String = "*****"
+//	             Example-3:
+//	               SolidLineChars = "*"
+//	               SolidLineCharRepeatCount = 5
+//	               LeftMarginStr = ""
+//	               RightMarginStr = ""
+//	               TurnLineTerminationOff = true
+//	               LineTerminator = "\n\n"
+//	               Final Solid Line String = "*****"
 //
-//        MaxLineLength               int
-//         The maximum length of the line on which the solid line
-//         text characters will be presented.
+//	      MaxLineLength               int
+//	       The maximum length of the line on which the solid line
+//	       text characters will be presented.
 //
-//         Set this parameter to minus one (-1) to specify an
-//         unlimited line length for this text line.
+//	       Set this parameter to minus one (-1) to specify an
+//	       unlimited line length for this text line.
 //
-//         If the value of 'MaxLineLength' is less than one (1),
-//         it will be automatically converted to minus one (-1).
+//	       If the value of 'MaxLineLength' is less than one (1),
+//	       it will be automatically converted to minus one (-1).
 //
-//         'MaxLineLength' is used in conjunction with parameter
-//         'TurnAutoLineLengthBreaksOn' to automatically place text
-//         fields on separate text lines when that text exceeds the
-//         maximum text line length ('MaxLineLength'). Therefore,
-//         paramter 'TurnAutoLineLengthBreaksOn' controls whether
-//         automatic line breaks using 'MaxLineLength' will be
-//         applied.
+//	       'MaxLineLength' is used in conjunction with parameter
+//	       'TurnAutoLineLengthBreaksOn' to automatically place text
+//	       fields on separate text lines when that text exceeds the
+//	       maximum text line length ('MaxLineLength'). Therefore,
+//	       paramter 'TurnAutoLineLengthBreaksOn' controls whether
+//	       automatic line breaks using 'MaxLineLength' will be
+//	       applied.
 //
-//         TurnAutoLineLengthBreaksOn  bool
-//         This parameter controls whether text lines which exceed
-//         the maximum line length ('MaxLineLength') are
-//         positioned on the following line as a separate line of
-//         text.
+//	       TurnAutoLineLengthBreaksOn  bool
+//	       This parameter controls whether text lines which exceed
+//	       the maximum line length ('MaxLineLength') are
+//	       positioned on the following line as a separate line of
+//	       text.
 //
-//         To apply automatic line breaking at the maximum line
-//         length, set the value of this parameter to 'true'.
+//	       To apply automatic line breaking at the maximum line
+//	       length, set the value of this parameter to 'true'.
 //
-//         When this parameter is set to 'true', text fields which
-//         extend beyond the maximum line length 'MaxLineLength'
-//         will be formatted as a separate line of text on the
-//         following line.
+//	       When this parameter is set to 'true', text fields which
+//	       extend beyond the maximum line length 'MaxLineLength'
+//	       will be formatted as a separate line of text on the
+//	       following line.
 //
-//       }
-//
+//	     }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddLineSolidDto(
 	txtLineSolidDto TextLineSolidDto) {
 
@@ -3939,182 +3885,179 @@ func (txtFmtCollection *TextFormatterCollection) AddLineSolidDto(
 //
 // Sample Output
 //
-//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
-//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
-//  Elapsed Time: 55 Microseconds 0 Nanoseconds
-//                Total Elapsed Nanoseconds: 55,000
-//
+//	  Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//	    End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//	Elapsed Time: 55 Microseconds 0 Nanoseconds
+//	              Total Elapsed Nanoseconds: 55,000
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The character or characters which will comprise the left
-//       margin of the text label.
+//	leftMarginStr              string
+//	   - The character or characters which will comprise the left
+//	     margin of the text label.
 //
-//       If the string length of 'leftMarginStr' plus
-//       'rightMarginStr' plus the text label field length
-//       ('testLabelFieldLength') exceeds the maximum length of
-//       55-characters, an error will be generated when
-//       attempting to create formatted text output.
+//	     If the string length of 'leftMarginStr' plus
+//	     'rightMarginStr' plus the text label field length
+//	     ('testLabelFieldLength') exceeds the maximum length of
+//	     55-characters, an error will be generated when
+//	     attempting to create formatted text output.
 //
-//       If leftMarginStr is submitted as an empty or zero length
-//       string, no error will be triggered and the left margin
-//       will simply be omitted.
-//
-//
-//  startTimeLabel             string
-//     - A string containing the text characters constituting the
-//       starting time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'startTimeLabel' will be assigned a default value
-//       of "Start Time".
-//
-//       If the string length of 'leftMarginStr' plus
-//       'rightMarginStr' plus the text label field length
-//       ('testLabelFieldLength') exceeds the maximum length of
-//       55-characters, an error will be generated when
-//       attempting to create formatted text output.
+//	     If leftMarginStr is submitted as an empty or zero length
+//	     string, no error will be triggered and the left margin
+//	     will simply be omitted.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTimeLabel             string
+//	   - A string containing the text characters constituting the
+//	     starting time text label.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'startTimeLabel' will be assigned a default value
+//	     of "Start Time".
 //
-//
-//  endTimeLabel               string
-//     - A string containing the text characters constituting the
-//       ending time text label.
-//
-//       If this string is submitted as a zero length or empty
-//       string, 'endTimeLabel' will be assigned a default value of
-//       "End Time".
-//
-//       If the string length of 'leftMarginStr' plus
-//       'rightMarginStr' plus the text label field length
-//       ('testLabelFieldLength') exceeds the maximum length of
-//       55-characters, an error will be generated when
-//       attempting to create formatted text output.
+//	     If the string length of 'leftMarginStr' plus
+//	     'rightMarginStr' plus the text label field length
+//	     ('testLabelFieldLength') exceeds the maximum length of
+//	     55-characters, an error will be generated when
+//	     attempting to create formatted text output.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of 'startTime'.
-//
-//
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
-//
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  timeDurationLabel          string
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	endTimeLabel               string
+//	   - A string containing the text characters constituting the
+//	     ending time text label.
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'timeDurationLabel' will be assigned a default
-//       value of "Elapsed Time".
+//	     If this string is submitted as a zero length or empty
+//	     string, 'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//       If the string length of 'leftMarginStr' plus
-//       'rightMarginStr' plus the text label field length
-//       ('testLabelFieldLength') exceeds the maximum length of
-//       55-characters, an error will be generated when
-//       attempting to create formatted text output.
-//
-//
-//  testLabelFieldLength          int
-//     - A user entered value which defines the length of the text
-//       field used by all three text labels, 'startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel'.
-//
-//       The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'testLabelFieldLength' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the string length of 'leftMarginStr' plus
-//       'rightMarginStr' plus the text label field length
-//       ('testLabelFieldLength') exceeds the maximum length of
-//       55-characters, an error will be generated when
-//       attempting to create formatted text output.
+//	     If the string length of 'leftMarginStr' plus
+//	     'rightMarginStr' plus the text label field length
+//	     ('testLabelFieldLength') exceeds the maximum length of
+//	     55-characters, an error will be generated when
+//	     attempting to create formatted text output.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'testLabelFieldLength'.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       Label justification must be equal to one of these three
-//       valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of 'startTime'.
 //
 //
-//  rightMarginStr      string
-//     - This string contains the character or characters which
-//       will be used to separate the text labels
-//       ('startTimeLabel', 'endTimeLabel' and 'timeDurationLabel')
-//       from the output or data values displayed on the same line.
-//       Example:
-//        Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       Often this parameter is set to a single white space
-//       character (" ") or a colon plus white space character,
-//       (": ").
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//       If this string is submitted as a zero length or empty
-//       string, 'rightMarginStr' will be assigned a
-//       default value of  ": ". Example Output:
-//        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//       If the string length of 'leftMarginStr' plus
-//       'rightMarginStr' plus the text label field length
-//       ('testLabelFieldLength') exceeds the maximum length of
-//       55-characters, an error will be generated when
-//       attempting to create formatted text output.
+//	timeDurationLabel          string
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If leftMarginStr is submitted as a zero length
-//       string, no error will be triggered. In this case, the left
-//       margin will simply be omitted.
+//	     If this string is submitted as a zero length or empty
+//	     string, 'timeDurationLabel' will be assigned a default
+//	     value of "Elapsed Time".
 //
+//	     If the string length of 'leftMarginStr' plus
+//	     'rightMarginStr' plus the text label field length
+//	     ('testLabelFieldLength') exceeds the maximum length of
+//	     55-characters, an error will be generated when
+//	     attempting to create formatted text output.
+//
+//
+//	testLabelFieldLength          int
+//	   - A user entered value which defines the length of the text
+//	     field used by all three text labels, 'startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel'.
+//
+//	     The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
+//
+//	     If 'testLabelFieldLength' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
+//
+//	     If the string length of 'leftMarginStr' plus
+//	     'rightMarginStr' plus the text label field length
+//	     ('testLabelFieldLength') exceeds the maximum length of
+//	     55-characters, an error will be generated when
+//	     attempting to create formatted text output.
+//
+//
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'testLabelFieldLength'.
+//
+//	     Label justification must be equal to one of these three
+//	     valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
+//
+//
+//	rightMarginStr      string
+//	   - This string contains the character or characters which
+//	     will be used to separate the text labels
+//	     ('startTimeLabel', 'endTimeLabel' and 'timeDurationLabel')
+//	     from the output or data values displayed on the same line.
+//	     Example:
+//	      Start Time[right margin chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (" ") or a colon plus white space character,
+//	     (": ").
+//
+//	     If this string is submitted as a zero length or empty
+//	     string, 'rightMarginStr' will be assigned a
+//	     default value of  ": ". Example Output:
+//	      Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     If the string length of 'leftMarginStr' plus
+//	     'rightMarginStr' plus the text label field length
+//	     ('testLabelFieldLength') exceeds the maximum length of
+//	     55-characters, an error will be generated when
+//	     attempting to create formatted text output.
+//
+//	     If leftMarginStr is submitted as a zero length
+//	     string, no error will be triggered. In this case, the left
+//	     margin will simply be omitted.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStop(
 	leftMarginStr string,
 	startTimeLabel string,
@@ -4195,186 +4138,183 @@ func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStop(
 //
 // Sample Output
 //
-//    Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
-//      End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
-//  Elapsed Time: 55 Microseconds 0 Nanoseconds
-//                Total Elapsed Nanoseconds: 55,000
-//
+//	  Start Time: 2021-08-13 03:19:32.462108100 -0500 CDT
+//	    End Time: 2021-08-13 03:19:32.462163100 -0500 CDT
+//	Elapsed Time: 55 Microseconds 0 Nanoseconds
+//	              Total Elapsed Nanoseconds: 55,000
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  timerStartStopDto          TextLineTimerStartStopDto
-//     - An instance of TextLineTimerStartStopDto which contains
-//       all the data parameters required to produce Timer Start
-//       Stop Text Lines describing a timer event.
+//	timerStartStopDto          TextLineTimerStartStopDto
+//	   - An instance of TextLineTimerStartStopDto which contains
+//	     all the data parameters required to produce Timer Start
+//	     Stop Text Lines describing a timer event.
 //
-//       The Text Line Timer Start Stop Data Transfer Object is
-//       defined as follows:
+//	     The Text Line Timer Start Stop Data Transfer Object is
+//	     defined as follows:
 //
-//       type TextLineTimerStartStopDto struct {
+//	     type TextLineTimerStartStopDto struct {
 //
-//        FormatType                   TextFieldType
-//         Required. This enumeration value specifies the type of
-//         Text Format Operation to be performed.
+//	      FormatType                   TextFieldType
+//	       Required. This enumeration value specifies the type of
+//	       Text Format Operation to be performed.
 //
-//         For TextLineTimerStartStopDto Format Type, this value
-//         should always be set to:
-//         TxtFieldType.TimerStartStop()
+//	       For TextLineTimerStartStopDto Format Type, this value
+//	       should always be set to:
+//	       TxtFieldType.TimerStartStop()
 //
-//        LeftMarginStr                string
-//         The contents of the string will be used as the left
-//         margin for the timer event lines.
+//	      LeftMarginStr                string
+//	       The contents of the string will be used as the left
+//	       margin for the timer event lines.
 //
-//         If no left margin is required, set 'LeftMarginStr' to a
-//         zero length or empty string, and no left margin will be
-//         created.
+//	       If no left margin is required, set 'LeftMarginStr' to a
+//	       zero length or empty string, and no left margin will be
+//	       created.
 //
-//        StartTimeLabel               string
-//         A string containing the text characters constituting the
-//         starting time text label.
+//	      StartTimeLabel               string
+//	       A string containing the text characters constituting the
+//	       starting time text label.
 //
-//         If this parameter is submitted as a zero length or empty
-//         rune array, or if the rune array contains invalid zero
-//         rune values, 'StartTimeLabel' will be assigned a default
-//         value of "Start Time".
+//	       If this parameter is submitted as a zero length or empty
+//	       rune array, or if the rune array contains invalid zero
+//	       rune values, 'StartTimeLabel' will be assigned a default
+//	       value of "Start Time".
 //
-//         If the length in characters of 'LeftMarginStr' plus
-//         'RightMarginStr' plus the text label field length
-//         ('TextLabelFieldLength') exceeds the maximum length
-//         of 55-characters, an error will be generated when
-//         attempting to create formatted text output.
+//	       If the length in characters of 'LeftMarginStr' plus
+//	       'RightMarginStr' plus the text label field length
+//	       ('TextLabelFieldLength') exceeds the maximum length
+//	       of 55-characters, an error will be generated when
+//	       attempting to create formatted text output.
 //
-//        StartTime                    time.Time
-//         A time value which will be used in conjunction with
-//         the 'EndTime' parameter to compute the time duration
-//         or elapsed time for the timer event.
+//	      StartTime                    time.Time
+//	       A time value which will be used in conjunction with
+//	       the 'EndTime' parameter to compute the time duration
+//	       or elapsed time for the timer event.
 //
-//         If this parameter is submitted as a zero time value,
-//         'startTime' will be defaulted to value of July 4, 1776
-//         9:30AM UTC.
+//	       If this parameter is submitted as a zero time value,
+//	       'startTime' will be defaulted to value of July 4, 1776
+//	       9:30AM UTC.
 //
-//        EndTimeLabel                 string
-//         A string containing the text characters constituting the
-//         ending time text label.
+//	      EndTimeLabel                 string
+//	       A string containing the text characters constituting the
+//	       ending time text label.
 //
-//         If this parameter is submitted as a zero length or empty
-//         string, 'EndTimeLabel' will be assigned a default
-//         value of "End Time".
+//	       If this parameter is submitted as a zero length or empty
+//	       string, 'EndTimeLabel' will be assigned a default
+//	       value of "End Time".
 //
-//         If the length in characters of 'LeftMarginStr' plus
-//         'RightMarginStr' plus the text label field length
-//         ('TextLabelFieldLength') exceeds the maximum length
-//         of 55-characters, an error will be generated when
-//         attempting to create formatted text output.
+//	       If the length in characters of 'LeftMarginStr' plus
+//	       'RightMarginStr' plus the text label field length
+//	       ('TextLabelFieldLength') exceeds the maximum length
+//	       of 55-characters, an error will be generated when
+//	       attempting to create formatted text output.
 //
-//        EndTime                      time.Time
-//         A time value which will be used in conjunction with
-//         the 'StartTime' parameter to compute the time duration
-//         or elapsed time for the timer event.
+//	      EndTime                      time.Time
+//	       A time value which will be used in conjunction with
+//	       the 'StartTime' parameter to compute the time duration
+//	       or elapsed time for the timer event.
 //
-//         If this parameter is submitted as a zero time value,
-//         'EndTime' will be defaulted to value of 'StartTime'.
+//	       If this parameter is submitted as a zero time value,
+//	       'EndTime' will be defaulted to value of 'StartTime'.
 //
-//        TimeFormat                   string
-//         This string holds the time format parameters used to
-//         format starting time and ending time values for text
-//         output.
+//	      TimeFormat                   string
+//	       This string holds the time format parameters used to
+//	       format starting time and ending time values for text
+//	       output.
 //
-//         If this parameter is submitted as an empty string,
-//         parameter 'TimeFormat' will be assigned a default
-//         value of:
-//          "2006-01-02 15:04:05.000000000 -0700 MST"
+//	       If this parameter is submitted as an empty string,
+//	       parameter 'TimeFormat' will be assigned a default
+//	       value of:
+//	        "2006-01-02 15:04:05.000000000 -0700 MST"
 //
-//        TimeDurationLabel            string
-//         The text label used to describe the time duration or
-//         elapsed time computed from the 'startTime' and 'endTime'
-//         parameters.
+//	      TimeDurationLabel            string
+//	       The text label used to describe the time duration or
+//	       elapsed time computed from the 'startTime' and 'endTime'
+//	       parameters.
 //
-//         If this string is submitted as a zero length or empty
-//         string, 'TimeDurationLabel' will be assigned a default
-//         value of "Elapsed Time".
+//	       If this string is submitted as a zero length or empty
+//	       string, 'TimeDurationLabel' will be assigned a default
+//	       value of "Elapsed Time".
 //
-//         If the string length of 'LeftMarginStr' plus
-//         'RightMarginStr' plus the text label field length
-//         ('TextLabelFieldLength') exceeds the maximum length
-//         of 55-characters, an error will be generated when
-//         attempting to create formatted text output.
+//	       If the string length of 'LeftMarginStr' plus
+//	       'RightMarginStr' plus the text label field length
+//	       ('TextLabelFieldLength') exceeds the maximum length
+//	       of 55-characters, an error will be generated when
+//	       attempting to create formatted text output.
 //
-//        TextLabelFieldLength         int
-//         A user entered value which defines the length of the
-//         text field used by all three text labels,
-//         'StartTimeLabel', 'EndTimeLabel' and
-//         'TimeDurationLabel'.
+//	      TextLabelFieldLength         int
+//	       A user entered value which defines the length of the
+//	       text field used by all three text labels,
+//	       'StartTimeLabel', 'EndTimeLabel' and
+//	       'TimeDurationLabel'.
 //
-//         This text length value will be used to position and
-//         display the three text labels provided by
-//         input parameters 'StartTimeLabel', 'EndTimeLabel' and
-//         'TimeDurationLabel'.
+//	       This text length value will be used to position and
+//	       display the three text labels provided by
+//	       input parameters 'StartTimeLabel', 'EndTimeLabel' and
+//	       'TimeDurationLabel'.
 //
-//         If 'TextLabelFieldLength' is less than the length of
-//         the longest text label it will be defaulted to the
-//         length of the longest text label ('StartTimeLabel',
-//         'EndTimeLabel' or 'TimeDurationLabel').
+//	       If 'TextLabelFieldLength' is less than the length of
+//	       the longest text label it will be defaulted to the
+//	       length of the longest text label ('StartTimeLabel',
+//	       'EndTimeLabel' or 'TimeDurationLabel').
 //
-//         If the string length of 'LeftMarginStr' plus
-//         'RightMarginStr' plus the text label field length
-//         ('TextLabelFieldLength') exceeds the maximum length
-//         of 55-characters, an error will be generated when
-//         attempting to create formatted text output.
+//	       If the string length of 'LeftMarginStr' plus
+//	       'RightMarginStr' plus the text label field length
+//	       ('TextLabelFieldLength') exceeds the maximum length
+//	       of 55-characters, an error will be generated when
+//	       attempting to create formatted text output.
 //
-//        TextLabelJustification       TextJustify
-//         An enumeration which specifies the text justification of
-//         the three text labels 'StartTimeLabel', 'EndTimeLabel'
-//         and 'TimeDurationLabel' within the field length
-//         specified by 'TextLabelFieldLength'.
+//	      TextLabelJustification       TextJustify
+//	       An enumeration which specifies the text justification of
+//	       the three text labels 'StartTimeLabel', 'EndTimeLabel'
+//	       and 'TimeDurationLabel' within the field length
+//	       specified by 'TextLabelFieldLength'.
 //
-//         Label justification must be equal to one of these three
-//         valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	       Label justification must be equal to one of these three
+//	       valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//         The abbreviated text justification enumeration syntax
-//         can also be used:
+//	       The abbreviated text justification enumeration syntax
+//	       can also be used:
 //
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
-//        RightMarginStr               string
-//         This string contains the character or characters which
-//         will be used to separate the text labels
-//         ('startTimeLabel', 'endTimeLabel' and
-//         'timeDurationLabel') from the output or  data values
-//         displayed on the same line.
-//          Example:
-//          Start Time[RightMarginStr]2010-01-02 15:04:05.000000000 -0700 MST
+//	      RightMarginStr               string
+//	       This string contains the character or characters which
+//	       will be used to separate the text labels
+//	       ('startTimeLabel', 'endTimeLabel' and
+//	       'timeDurationLabel') from the output or  data values
+//	       displayed on the same line.
+//	        Example:
+//	        Start Time[RightMarginStr]2010-01-02 15:04:05.000000000 -0700 MST
 //
-//         Often this parameter is set to a single white space
-//         character (" ") or a colon plus white space character,
-//         (": ").
+//	       Often this parameter is set to a single white space
+//	       character (" ") or a colon plus white space character,
+//	       (": ").
 //
-//         If this string is submitted as a zero length or empty
-//         string, 'RightMarginStr' will be assigned a default
-//         value of  ": ".
-//          Example Output:
-//          Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//	       If this string is submitted as a zero length or empty
+//	       string, 'RightMarginStr' will be assigned a default
+//	       value of  ": ".
+//	        Example Output:
+//	        Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
 //
-//         If the string length of 'LeftMarginStr' plus
-//         'RightMarginStr' plus the text label field length
-//         ('TextLabelFieldLength') exceeds the maximum length
-//         of 55-characters, an error will be generated when
-//         attempting to create formatted text output.
-//
+//	       If the string length of 'LeftMarginStr' plus
+//	       'RightMarginStr' plus the text label field length
+//	       ('TextLabelFieldLength') exceeds the maximum length
+//	       of 55-characters, an error will be generated when
+//	       attempting to create formatted text output.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStopDto(
 	timerStartStopDto TextLineTimerStartStopDto) {
 
@@ -4414,78 +4354,75 @@ func (txtFmtCollection *TextFormatterCollection) AddLineTimerStartStopDto(
 // If the Text Formatter Collection is empty (contains zero
 // elements), an error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) BuildText(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -4547,10 +4484,9 @@ func (txtFmtCollection *TextFormatterCollection) BuildText(
 // to this method provided that input parameter
 // 'saveFmtParamsAsDefault' is set to 'true'.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // When input parameter 'saveFmtParamsAsDefault' is set to 'true',
 // this method will create the Standard Format Parameters for this
@@ -4562,237 +4498,234 @@ func (txtFmtCollection *TextFormatterCollection) BuildText(
 // TextFormatterCollection.AddLine1Col() to reduce the number of
 // input parameters required to produce other '1-Column' Text Line.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the 'Column1' field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the 'Column1' field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  column1Field               interface{}
-//     - This parameter is an empty interface which must contain
-//       one of several specific types. This empty interface type
-//       will be converted to a string and configured as the single
-//       text field in this 'Line1Column' Text Line.
-//
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
-//
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
-//
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  column1FieldLength         int
-//     - This is the length of the text field in which the
-//       formatted 'column1Field' string will be displayed. If
-//       'column1FieldLength' is less than the length of the
-//       'column1Field' string, it will be automatically set equal
-//       to the 'column1Field' string length.
+//	column1Field               interface{}
+//	   - This parameter is an empty interface which must contain
+//	     one of several specific types. This empty interface type
+//	     will be converted to a string and configured as the single
+//	     text field in this 'Line1Column' Text Line.
 //
-//       If 'column1FieldLength' is greater than the length of the
-//       'column1Field' text string, the 'column1FieldJustify'
-//       parameter will be used to configure or justify the text
-//       within the boundaries of the text field defined by
-//       'column1FieldLength'.
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       To automatically set the value of 'column1FieldLength' to
-//       the length of 'column1Field', set this parameter to a
-//       value of minus one (-1).
+//	     If the 'column1Field' is not convertible to one of the
+//	     supported types, an error will be returned.
 //
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
-//
-//
-//  column1FieldJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'column1Field' string within the text field specified by
-//      'column1FieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	     If the converted string value for 'column1Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
 //
 //
-//  rightMarginStr             string
-//     - The contents of the string will be used as the right
-//       margin for the 'Column1' field.
+//	column1FieldLength         int
+//	   - This is the length of the text field in which the
+//	     formatted 'column1Field' string will be displayed. If
+//	     'column1FieldLength' is less than the length of the
+//	     'column1Field' string, it will be automatically set equal
+//	     to the 'column1Field' string length.
 //
-//       If no right margin is required, set 'rightMarginStr' to a
-//       zero length or empty string, and no right margin will be
-//       created.
+//	     If 'column1FieldLength' is greater than the length of the
+//	     'column1Field' text string, the 'column1FieldJustify'
+//	     parameter will be used to configure or justify the text
+//	     within the boundaries of the text field defined by
+//	     'column1FieldLength'.
 //
+//	     To automatically set the value of 'column1FieldLength' to
+//	     the length of 'column1Field', set this parameter to a
+//	     value of minus one (-1).
 //
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
-//
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
-//
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
-//
-//
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to this 'Line1Column' Text Line.
-//
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
-//
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Line.
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
+//	column1FieldJustify        TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'column1Field' string within the text field specified by
+//	    'column1FieldLength'.
 //
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
 //
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
 //
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
-//
-//
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
-//
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
-//
-//
-//  saveFmtParamsAsDefault     bool
-//     - When this parameter is set to 'true', the Text Field
-//       Format Parameters will be saved as the default Format
-//       Parameters for this specific number of Text Columns.
-//
-//       If this parameter is set to 'false', the Text Field
-//       Format Parameters associated with this number of Text
-//       Columns will NOT be saved as a default and therefore
-//       these format parameters will not be used in subsequent
-//       calls to the 'Add' methods.
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	rightMarginStr             string
+//	   - The contents of the string will be used as the right
+//	     margin for the 'Column1' field.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If no right margin is required, set 'rightMarginStr' to a
+//	     zero length or empty string, and no right margin will be
+//	     created.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       2. string - A string containing error prefix information.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to this 'Line1Column' Text Line.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Line.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
 //
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
+//
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
+//
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
+//
+//
+//	saveFmtParamsAsDefault     bool
+//	   - When this parameter is set to 'true', the Text Field
+//	     Format Parameters will be saved as the default Format
+//	     Parameters for this specific number of Text Columns.
+//
+//	     If this parameter is set to 'false', the Text Field
+//	     Format Parameters associated with this number of Text
+//	     Columns will NOT be saved as a default and therefore
+//	     these format parameters will not be used in subsequent
+//	     calls to the 'Add' methods.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 	leftMarginStr string,
 	column1Field interface{},
@@ -4909,7 +4842,6 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
@@ -4973,10 +4905,9 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 // to this method provided that input parameter
 // 'saveFmtParamsAsDefault' is set to 'true'.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // When input parameter 'saveFmtParamsAsDefault' is set to 'true',
 // this method will create the Standard Format Parameters for this
@@ -4988,322 +4919,319 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 // TextFormatterCollection.AddLine2Col() to reduce the number of
 // input parameters required to produce other '2-Column' Text Line.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the 'Column1' field.
-//
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  column1Field               interface{}
-//     - This parameter is an empty interface which must contain
-//       one of several specific types. This empty interface type
-//       will be converted to a string and configured as the single
-//       text field in this 'Line1Column' Text Line.
-//
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
-//
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
-//
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
-//
-//
-//  column1FieldLength         int
-//     - This is the length of the text field in which the
-//       formatted 'column1Field' string will be displayed. If
-//       'column1FieldLength' is less than the length of the
-//       'column1Field' string, it will be automatically set equal
-//       to the 'column1Field' string length.
-//
-//       If 'column1FieldLength' is greater than the length of the
-//       'column1Field' text string, the 'column1FieldJustify'
-//       parameter will be used to configure or justify the text
-//       within the boundaries of the text field defined by
-//       'column1FieldLength'.
-//
-//       To automatically set the value of 'column1FieldLength' to
-//       the length of 'column1Field', set this parameter to a
-//       value of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
-//
-//
-//  column1FieldJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'column1Field' string within the text field specified by
-//      'column1FieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
-//
-//
-//  column1RightMarginStr      string
-//     - The contents of the string will be used as the right
-//       margin for the 'Column1' field.
-//
-//       If no right margin is required, set
-//       'column1RightMarginStr' to a zero length or empty string,
-//       and no right margin will be created.
-//
-//
-//  column2Field               interface{}
-//     - This parameter is an empty interface which must contain
-//       one of several specific types. This empty interface type
-//       will be converted to a string and configured as the second
-//       text field in this '2-Column' Text Line.
-//
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
-//
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
-//
-//       If the converted string value for 'column2Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
-//
-//
-//  column2FieldLength         int
-//     - This is the length of the text field in which the
-//       formatted 'column2Field' string will be displayed. If
-//       'column2FieldLength' is less than the length of the
-//       'column2Field' string, it will be automatically set equal
-//       to the 'column2Field' string length.
-//
-//       If 'column2FieldLength' is greater than the length of the
-//       'column2Field' text string, the 'column2FieldJustify'
-//       parameter will be used to configure or justify the text
-//       within the boundaries of the text field defined by
-//       'column2FieldLength'.
-//
-//       To automatically set the value of 'column2FieldLength' to
-//       the length of the 'column2Field' string, set this
-//       parameter to a value of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
-//
-//
-//  column2FieldJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'column2Field' string within the text field specified by
-//      'column2FieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the 'Column1' field.
+//
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
+//
+//
+//	column1Field               interface{}
+//	   - This parameter is an empty interface which must contain
+//	     one of several specific types. This empty interface type
+//	     will be converted to a string and configured as the single
+//	     text field in this 'Line1Column' Text Line.
+//
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
+//
+//	     If the 'column1Field' is not convertible to one of the
+//	     supported types, an error will be returned.
+//
+//	     If the converted string value for 'column1Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
+//
+//
+//	column1FieldLength         int
+//	   - This is the length of the text field in which the
+//	     formatted 'column1Field' string will be displayed. If
+//	     'column1FieldLength' is less than the length of the
+//	     'column1Field' string, it will be automatically set equal
+//	     to the 'column1Field' string length.
+//
+//	     If 'column1FieldLength' is greater than the length of the
+//	     'column1Field' text string, the 'column1FieldJustify'
+//	     parameter will be used to configure or justify the text
+//	     within the boundaries of the text field defined by
+//	     'column1FieldLength'.
+//
+//	     To automatically set the value of 'column1FieldLength' to
+//	     the length of 'column1Field', set this parameter to a
+//	     value of minus one (-1).
+//
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
+//
+//
+//	column1FieldJustify        TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'column1Field' string within the text field specified by
+//	    'column1FieldLength'.
+//
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
+//
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
+//
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
+//
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
+//
+//
+//	column1RightMarginStr      string
+//	   - The contents of the string will be used as the right
+//	     margin for the 'Column1' field.
+//
+//	     If no right margin is required, set
+//	     'column1RightMarginStr' to a zero length or empty string,
+//	     and no right margin will be created.
+//
+//
+//	column2Field               interface{}
+//	   - This parameter is an empty interface which must contain
+//	     one of several specific types. This empty interface type
+//	     will be converted to a string and configured as the second
+//	     text field in this '2-Column' Text Line.
+//
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
+//
+//	     If the 'column1Field' is not convertible to one of the
+//	     supported types, an error will be returned.
+//
+//	     If the converted string value for 'column2Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
+//
+//
+//	column2FieldLength         int
+//	   - This is the length of the text field in which the
+//	     formatted 'column2Field' string will be displayed. If
+//	     'column2FieldLength' is less than the length of the
+//	     'column2Field' string, it will be automatically set equal
+//	     to the 'column2Field' string length.
+//
+//	     If 'column2FieldLength' is greater than the length of the
+//	     'column2Field' text string, the 'column2FieldJustify'
+//	     parameter will be used to configure or justify the text
+//	     within the boundaries of the text field defined by
+//	     'column2FieldLength'.
+//
+//	     To automatically set the value of 'column2FieldLength' to
+//	     the length of the 'column2Field' string, set this
+//	     parameter to a value of minus one (-1).
+//
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
+//
+//
+//	column2FieldJustify        TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'column2Field' string within the text field specified by
+//	    'column2FieldLength'.
+//
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
+//
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
+//
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
 //
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  column2RightMarginStr      string
-//     - The contents of the string will be used as the right
-//       margin for the 'Column2' field.
+//	column2RightMarginStr      string
+//	   - The contents of the string will be used as the right
+//	     margin for the 'Column2' field.
 //
-//       If no right margin is required, set
-//       'column2RightMarginStr' to a zero length or empty string,
-//       and no right margin will be created.
+//	     If no right margin is required, set
+//	     'column2RightMarginStr' to a zero length or empty string,
+//	     and no right margin will be created.
 //
 //
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
 //
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
 //
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to this '2-Column' Text Line.
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to this '2-Column' Text Line.
 //
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Line.
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Line.
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
 //
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
 //
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
 //
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
 //
-//  saveFmtParamsAsDefault     bool
-//     - When this parameter is set to 'true', the Text Field
-//       Format Parameters will be saved as the default Format
-//       Parameters for this specific number of Text Columns.
+//	saveFmtParamsAsDefault     bool
+//	   - When this parameter is set to 'true', the Text Field
+//	     Format Parameters will be saved as the default Format
+//	     Parameters for this specific number of Text Columns.
 //
-//       If this parameter is set to 'false', the Text Field
-//       Format Parameters associated with this number of Text
-//       Columns will NOT be saved as a default and therefore
-//       these format parameters will not be used in subsequent
-//       calls to the 'Add' methods.
+//	     If this parameter is set to 'false', the Text Field
+//	     Format Parameters associated with this number of Text
+//	     Columns will NOT be saved as a default and therefore
+//	     these format parameters will not be used in subsequent
+//	     calls to the 'Add' methods.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 	leftMarginStr string,
 	column1Field interface{},
@@ -5473,7 +5401,6 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
@@ -5535,10 +5462,9 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 // The number of 'textFields' MUST MATCH the number of Field
 // Format Parameters
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // When input parameter 'saveFmtParamsAsDefault' is set to 'true',
 // this method will create the Standard Format Parameters for this
@@ -5554,193 +5480,190 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 // the number of elements in the 'fieldFormatParams' array, an
 // error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textFields               []interface{}
-//     - This parameter is an array of empty interfaces which must
-//       contain one of several specific data types. This empty
-//       interface type will be converted to a string and configured
-//       as the text columns within this Text Lines.
+//	textFields               []interface{}
+//	   - This parameter is an array of empty interfaces which must
+//	     contain one of several specific data types. This empty
+//	     interface type will be converted to a string and configured
+//	     as the text columns within this Text Lines.
 //
-//       Supported types which may be submitted through this empty
-//       interface parameter are listed as follows:
-//          time.Time (Converted using default format)
-//          string
-//          bool
-//          uint, uint8, uint16, uint32, uint64,
-//          int, int8, int16, int32, int64
-//          float32, float64
-//          *big.Int *big.Float
-//          fmt.Stringer (types that support this interface)
-//          TextInputParamFieldDateTimeDto
-//                (Converts date time to string)
+//	     Supported types which may be submitted through this empty
+//	     interface parameter are listed as follows:
+//	        time.Time (Converted using default format)
+//	        string
+//	        bool
+//	        uint, uint8, uint16, uint32, uint64,
+//	        int, int8, int16, int32, int64
+//	        float32, float64
+//	        *big.Int *big.Float
+//	        fmt.Stringer (types that support this interface)
+//	        TextInputParamFieldDateTimeDto
+//	              (Converts date time to string)
 //
-//       If the 'column1Field' is not convertible to one of the
-//       supported types, an error will be returned.
+//	     If the 'column1Field' is not convertible to one of the
+//	     supported types, an error will be returned.
 //
-//       If the converted string value for 'column1Field' is empty,
-//       it will be defaulted to a single white space character
-//       (" ").
+//	     If the converted string value for 'column1Field' is empty,
+//	     it will be defaulted to a single white space character
+//	     (" ").
 //
-//       If the number of elements in this array does NOT MATCH the
-//       number of elements in the 'fieldFormatParams' array, an
-//       error will be returned.
-//
-//
-//  fieldFormatParams          []TextFieldFmtParamsDto
-//     - An array of Text Field Format Parameters
-//      (TextFieldFmtParamsDto).
-//
-//      If the number of elements in this array does NOT MATCH the
-//      number of elements in the 'textFields' array, an error will
-//      be returned.
-//
-//      The TextFieldFmtParamsDto type is defined as follows:
-//
-//        type TextFieldFmtParamsDto struct {
-//          LeftMarginStr  string
-//          FieldLength    int
-//          FieldJustify   TextJustify
-//          DateTimeFormat string
-//          RightMarginStr string
-//        }
+//	     If the number of elements in this array does NOT MATCH the
+//	     number of elements in the 'fieldFormatParams' array, an
+//	     error will be returned.
 //
 //
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
+//	fieldFormatParams          []TextFieldFmtParamsDto
+//	   - An array of Text Field Format Parameters
+//	    (TextFieldFmtParamsDto).
 //
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
+//	    If the number of elements in this array does NOT MATCH the
+//	    number of elements in the 'textFields' array, an error will
+//	    be returned.
 //
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
+//	    The TextFieldFmtParamsDto type is defined as follows:
 //
-//
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to this 'Line1Column' Text Line.
-//
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
-//
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Line.
+//	      type TextFieldFmtParamsDto struct {
+//	        LeftMarginStr  string
+//	        FieldLength    int
+//	        FieldJustify   TextJustify
+//	        DateTimeFormat string
+//	        RightMarginStr string
+//	      }
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
-//
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
-//
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to this 'Line1Column' Text Line.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//
-//  saveFmtParamsAsDefault     bool
-//     - When this parameter is set to 'true', the Text Field
-//       Format Parameters will be saved as the default Format
-//       Parameters for this specific number of Text Columns.
-//
-//       If this parameter is set to 'false', the Text Field
-//       Format Parameters associated with this number of Text
-//       Columns will NOT be saved as a default and therefore
-//       these format parameters will not be used in subsequent
-//       calls to the 'Add' methods.
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Line.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
+//
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
+//
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
 //
-//       2. string - A string containing error prefix information.
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	saveFmtParamsAsDefault     bool
+//	   - When this parameter is set to 'true', the Text Field
+//	     Format Parameters will be saved as the default Format
+//	     Parameters for this specific number of Text Columns.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     If this parameter is set to 'false', the Text Field
+//	     Format Parameters associated with this number of Text
+//	     Columns will NOT be saved as a default and therefore
+//	     these format parameters will not be used in subsequent
+//	     calls to the 'Add' methods.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 	textFields []interface{},
 	fieldFormatParams []TextFieldFmtParamsDto,
@@ -5819,7 +5742,6 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
@@ -5872,7 +5794,7 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFormatterCollection instance
 // ('txtFmtCollection') will be deleted and overwritten.
@@ -5880,85 +5802,82 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 // NO DATA VALIDATION is performed on input parameter
 // 'incomingTxtFmtCol'
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFmtCol     *TextFormatterCollection
-//     - A pointer to an instance of TextFormatterCollection. This
-//       method will NOT change the data values of member variables
-//       contained in this instance.
+//	incomingTxtFmtCol     *TextFormatterCollection
+//	   - A pointer to an instance of TextFormatterCollection. This
+//	     method will NOT change the data values of member variables
+//	     contained in this instance.
 //
-//       All data values in this TextFormatterCollection instance
-//       ('incomingTxtFmtCol') will be copied to the current
-//       TextFormatterCollection instance ('txtFmtCollection').
+//	     All data values in this TextFormatterCollection instance
+//	     ('incomingTxtFmtCol') will be copied to the current
+//	     TextFormatterCollection instance ('txtFmtCollection').
 //
-//       If 'incomingTxtFmtCol' contains invalid member variable
-//       data values, this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'incomingTxtFmtCol' contains invalid member variable
+//	     data values, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) CopyIn(
 	incomingTxtFmtCol *TextFormatterCollection,
 	errorPrefix interface{}) error {
@@ -6001,78 +5920,75 @@ func (txtFmtCollection *TextFormatterCollection) CopyIn(
 // TextFormatterCollection instance prior to returning the deep
 // copy of this instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtFmtCol          TextFormatterCollection
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextFormatterCollection instance.
+//	deepCopyTxtFmtCol          TextFormatterCollection
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextFormatterCollection instance.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) CopyOut(
 	errorPrefix interface{}) (
 	deepCopyTxtFmtCol TextFormatterCollection,
@@ -6115,30 +6031,26 @@ func (txtFmtCollection *TextFormatterCollection) CopyOut(
 // instance of TextFormatterCollection in an invalid state and
 // unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFormatterCollection. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) Empty() {
 
 	if txtFmtCollection.lock == nil {
@@ -6161,27 +6073,27 @@ func (txtFmtCollection *TextFormatterCollection) Empty() {
 // Text Formatter Collection.
 //
 // Internal member variable
-//		TextFormatterCollection.fmtCollection
+//
+//	TextFormatterCollection.fmtCollection
+//
 // will be set to 'nil'.
 //
 // The internal member variable that holds the Text Formatter
 // Collection is defined as follows:
 //
-//   fmtCollection []TextFormatterDto
+//	fmtCollection []TextFormatterDto
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
 
 	if txtFmtCollection.lock == nil {
@@ -6202,27 +6114,27 @@ func (txtFmtCollection *TextFormatterCollection) EmptyFormatterCollection() {
 // Standard Text Line Parameters Collection.
 //
 // Internal member variable
-//		TextFormatterCollection.stdTextLineParamCollection
+//
+//	TextFormatterCollection.stdTextLineParamCollection
+//
 // will be set to 'nil'.
 //
 // The internal member variable that holds the Standard Text Line
 // Parameters Collection is defined as follows:
 //
-//   stdTextLineParamCollection []TextFmtParamsLineColumnsDto
+//	stdTextLineParamCollection []TextFmtParamsLineColumnsDto
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFmtCollection *TextFormatterCollection) EmptyLineParamCollection() {
 
 	if txtFmtCollection.lock == nil {
@@ -6251,33 +6163,30 @@ func (txtFmtCollection *TextFormatterCollection) EmptyLineParamCollection() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFmtCol    *TextFormatterCollection
-//     - A pointer to an incoming instance of
-//       TextFormatterCollection. This method will compare all
-//       member variable data values in this instance against those
-//       contained in the current instance of
-//       TextFormatterCollection. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingTxtFmtCol    *TextFormatterCollection
+//	   - A pointer to an incoming instance of
+//	     TextFormatterCollection. This method will compare all
+//	     member variable data values in this instance against those
+//	     contained in the current instance of
+//	     TextFormatterCollection. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingTxtFmtCol' are equal in all respects to
-//       those contained in the current instance of
-//       TextFormatterCollection, this method will return a
-//       boolean value of 'true'. Otherwise a value of 'false' will
-//       be returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingTxtFmtCol' are equal in all respects to
+//	     those contained in the current instance of
+//	     TextFormatterCollection, this method will return a
+//	     boolean value of 'true'. Otherwise a value of 'false' will
+//	     be returned to the calling function.
 func (txtFmtCollection *TextFormatterCollection) Equal(
 	incomingTxtFmtCol *TextFormatterCollection) bool {
 
@@ -6303,7 +6212,6 @@ func (txtFmtCollection *TextFormatterCollection) Equal(
 // Transfer Objects (TextFormatterDto).
 //
 // The collection length is returned as an integer value.
-//
 func (txtFmtCollection *TextFormatterCollection) GetLengthFormatterCollection() int {
 
 	if txtFmtCollection.lock == nil {
@@ -6330,7 +6238,6 @@ func (txtFmtCollection *TextFormatterCollection) GetLengthFormatterCollection() 
 // label fields.
 //
 // The collection length is returned as an integer value.
-//
 func (txtFmtCollection *TextFormatterCollection) GetLengthStdTextLineParamCollection() int {
 
 	if txtFmtCollection.lock == nil {
@@ -6355,192 +6262,189 @@ func (txtFmtCollection *TextFormatterCollection) GetLengthStdTextLineParamCollec
 // order to reduce the number of input parameters required to
 // produce a 1-Column Text Line.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the 'Column1' field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the 'Column1' field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  column1FieldLength         int
-//     - This is the length of the text field in which the
-//       formatted 'column1Field' string will be displayed. If
-//       'column1FieldLength' is less than the length of the
-//       'column1Field' string, it will be automatically set equal
-//       to the 'column1Field' string length.
-//
-//       To automatically set the value of 'column1FieldLength' to
-//       the length of 'column1Field', set this parameter to a
-//       value of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  column1FieldJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'column1Field' string within the text field specified by
-//      'column1FieldLength'.
+//	column1FieldLength         int
+//	   - This is the length of the text field in which the
+//	     formatted 'column1Field' string will be displayed. If
+//	     'column1FieldLength' is less than the length of the
+//	     'column1Field' string, it will be automatically set equal
+//	     to the 'column1Field' string length.
 //
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
+//	     To automatically set the value of 'column1FieldLength' to
+//	     the length of 'column1Field', set this parameter to a
+//	     value of minus one (-1).
 //
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  rightMarginStr             string
-//     - The contents of the string will be used as the right
-//       margin for the 'Column1' field.
+//	column1FieldJustify        TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'column1Field' string within the text field specified by
+//	    'column1FieldLength'.
 //
-//       If no right margin is required, set 'rightMarginStr' to a
-//       zero length or empty string, and no right margin will be
-//       created.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
 //
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
 //
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
 //
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
-//
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
-//
-//
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to 'Line1Column' Text Lines.
-//
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
-//
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Lines.
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
+//	rightMarginStr             string
+//	   - The contents of the string will be used as the right
+//	     margin for the 'Column1' field.
 //
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
-//
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
-//
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
-//
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
+//	     If no right margin is required, set 'rightMarginStr' to a
+//	     zero length or empty string, and no right margin will be
+//	     created.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
 //
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to 'Line1Column' Text Lines.
 //
-//       2. string - A string containing error prefix information.
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Lines.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
 //
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 	leftMarginStr string,
 	column1FieldLength int,
@@ -6630,7 +6534,6 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
@@ -6655,244 +6558,241 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine1Col(
 // order to reduce the number of input parameters required to
 // produce a 1-Column Text Line.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  leftMarginStr              string
-//     - The contents of this string will be used as the left
-//       margin for the 'Column1' field.
+//	leftMarginStr              string
+//	   - The contents of this string will be used as the left
+//	     margin for the 'Column1' field.
 //
-//       If no left margin is required, set 'leftMarginStr' to a
-//       zero length or empty string, and no left margin will be
-//       created.
-//
-//
-//  column1FieldLength         int
-//     - This is the length of the text field in which the
-//       formatted 'column1Field' string will be displayed. If
-//       'column1FieldLength' is less than the length of the
-//       'column1Field' string, it will be automatically set equal
-//       to the 'column1Field' string length.
-//
-//       To automatically set the value of 'column1FieldLength' to
-//       the length of 'column1Field', set this parameter to a
-//       value of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If no left margin is required, set 'leftMarginStr' to a
+//	     zero length or empty string, and no left margin will be
+//	     created.
 //
 //
-//  column1FieldJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'column1Field' string within the text field specified by
-//      'column1FieldLength'.
+//	column1FieldLength         int
+//	   - This is the length of the text field in which the
+//	     formatted 'column1Field' string will be displayed. If
+//	     'column1FieldLength' is less than the length of the
+//	     'column1Field' string, it will be automatically set equal
+//	     to the 'column1Field' string length.
 //
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
+//	     To automatically set the value of 'column1FieldLength' to
+//	     the length of 'column1Field', set this parameter to a
+//	     value of minus one (-1).
 //
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  column1RightMarginStr      string
-//     - The contents of the string will be used as the right
-//       margin for the 'Column1' field.
+//	column1FieldJustify        TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'column1Field' string within the text field specified by
+//	    'column1FieldLength'.
 //
-//       If no right margin is required, set
-//       'column1RightMarginStr' to a zero length or empty string,
-//       and no right margin will be created.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
 //
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
 //
-//  column2FieldLength         int
-//     - This is the length of the text field in which the
-//       formatted 'column2Field' string will be displayed. If
-//       'column2FieldLength' is less than the length of the
-//       'column2Field' string, it will be automatically set equal
-//       to the 'column2Field' string length.
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
 //
-//       To automatically set the value of 'column2FieldLength' to
-//       the length of 'column2Field', set this parameter to a
-//       value of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
-//
-//
-//  column2FieldJustify        TextJustify
-//      An enumeration value specifying the justification of the
-//      'column2Field' string within the text field specified by
-//      'column2FieldLength'.
-//
-//      Text justification can only be evaluated in the context of
-//      a text label, field length and a Text Justification object
-//      of type TextJustify. This is because text labels with a
-//      field length equal to or less than the length of the text
-//      label never use text justification. In these cases, text
-//      justification is completely ignored.
-//
-//      If the field length is greater than the length of the text
-//      label, text justification must be equal to one of these
-//      three valid values:
-//          TextJustify(0).Left()
-//          TextJustify(0).Right()
-//          TextJustify(0).Center()
-//
-//      You can also use the abbreviated text justification
-//      enumeration syntax as follows:
-//
-//          TxtJustify.Left()
-//          TxtJustify.Right()
-//          TxtJustify.Center()
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  column2RightMarginStr      string
-//     - The contents of the string will be used as the right
-//       margin for the 'Column2' field.
+//	column1RightMarginStr      string
+//	   - The contents of the string will be used as the right
+//	     margin for the 'Column1' field.
 //
-//       If no right margin is required, set
-//       'column1RightMarginStr' to a zero length or empty string,
-//       and no right margin will be created.
-//
-//
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
-//
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
-//
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
+//	     If no right margin is required, set
+//	     'column1RightMarginStr' to a zero length or empty string,
+//	     and no right margin will be created.
 //
 //
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to 'Line1Column' Text Lines.
+//	column2FieldLength         int
+//	   - This is the length of the text field in which the
+//	     formatted 'column2Field' string will be displayed. If
+//	     'column2FieldLength' is less than the length of the
+//	     'column2Field' string, it will be automatically set equal
+//	     to the 'column2Field' string length.
 //
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
+//	     To automatically set the value of 'column2FieldLength' to
+//	     the length of 'column2Field', set this parameter to a
+//	     value of minus one (-1).
 //
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Lines.
-//
-//
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
-//
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
-//
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
-//
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
-//
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	column2FieldJustify        TextJustify
+//	    An enumeration value specifying the justification of the
+//	    'column2Field' string within the text field specified by
+//	    'column2FieldLength'.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	    Text justification can only be evaluated in the context of
+//	    a text label, field length and a Text Justification object
+//	    of type TextJustify. This is because text labels with a
+//	    field length equal to or less than the length of the text
+//	    label never use text justification. In these cases, text
+//	    justification is completely ignored.
+//
+//	    If the field length is greater than the length of the text
+//	    label, text justification must be equal to one of these
+//	    three valid values:
+//	        TextJustify(0).Left()
+//	        TextJustify(0).Right()
+//	        TextJustify(0).Center()
+//
+//	    You can also use the abbreviated text justification
+//	    enumeration syntax as follows:
+//
+//	        TxtJustify.Left()
+//	        TxtJustify.Right()
+//	        TxtJustify.Center()
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	column2RightMarginStr      string
+//	   - The contents of the string will be used as the right
+//	     margin for the 'Column2' field.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If no right margin is required, set
+//	     'column1RightMarginStr' to a zero length or empty string,
+//	     and no right margin will be created.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       2. string - A string containing error prefix information.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to 'Line1Column' Text Lines.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Lines.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
 //
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
+//
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
+//
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 	leftMarginStr string,
 	column1FieldLength int,
@@ -7020,7 +6920,6 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
@@ -7050,146 +6949,143 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 // parameters required to produce a Text Line with the same number
 // of columns.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldFormatParams          []TextFieldFmtParamsDto
-//     - An array of TextFieldFmtParamsDto objects containing the
-//       Text Field Format Parameters (TextFieldFmtParamsDto).
+//	fieldFormatParams          []TextFieldFmtParamsDto
+//	   - An array of TextFieldFmtParamsDto objects containing the
+//	     Text Field Format Parameters (TextFieldFmtParamsDto).
 //
-//      The TextFieldFmtParamsDto type is defined as follows:
+//	    The TextFieldFmtParamsDto type is defined as follows:
 //
-//        type TextFieldFmtParamsDto struct {
-//          LeftMarginStr  string
-//          FieldLength    int
-//          FieldJustify   TextJustify
-//          DateTimeFormat string
-//          RightMarginStr string
-//        }
-//
-//
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
-//
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
-//
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
+//	      type TextFieldFmtParamsDto struct {
+//	        LeftMarginStr  string
+//	        FieldLength    int
+//	        FieldJustify   TextJustify
+//	        DateTimeFormat string
+//	        RightMarginStr string
+//	      }
 //
 //
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to 'Line1Column' Text Lines.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
 //
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Lines.
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to 'Line1Column' Text Lines.
 //
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
-//
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
-//
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Lines.
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
 //
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
 //
-//       2. string - A string containing error prefix information.
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     2. string - A string containing error prefix information.
 //
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 	fieldFormatParams []TextFieldFmtParamsDto,
 	turnLineTerminationOff bool,
@@ -7227,7 +7123,6 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
@@ -7264,146 +7159,143 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 // parameters required to produce a Text Line with the same number
 // of columns.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
-//
-//
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
-//
-//       2. string - A string containing error prefix information.
-//
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
-//
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
-//
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
-//
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
-//
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
-//
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
-//
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//   turnLineTerminationOff    bool
-//     - When this parameter is set to 'true', no line termination
-//       sequence will be configured for this 'Line1Column' Text
-//       Line.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       Text Lines operate on the assumption that a line
-//       termination is standard operating procedure. The default
-//       line terminator for text lines is the new line character,
-//       '\n'.
+//	     2. string - A string containing error prefix information.
 //
-//       Users have the option of turning off the entire line
-//       termination sequence if this parameter is set to 'true'.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//  lineTerminator             string
-//     - If this parameter is set to an empty string, the default
-//       line terminator, a new line character '\n', will be
-//       applied to 'Line1Column' Text Lines.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       If this string is populated and the string length is
-//       greater than zero (0), an alternate line termination
-//       sequence will be configured using the characters provided
-//       in the 'lineTerminator' string.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       Remember that the application of a line termination
-//       sequence is controlled by parameter
-//       'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//       set to 'true', no line termination characters will be
-//       configured for this 'Line1Column' Text Lines.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//  maxLineLength              int
-//     - The maximum length of the line on which this 'Line1Column'
-//       Text will be presented.
-//
-//       Set this parameter to minus one (-1), and no maximum line
-//       limits will be applied.
-//
-//       'maxLineLength' is used in conjunction with parameter
-//       'turnAutoLineLengthBreaksOn' to automatically place text
-//       fields on separate text lines when that text exceeds the
-//       maximum text line length ('maxLineLength').
-//
-//       If the value of 'maxLineLength' is less than minus one
-//       (-1), an error will be returned.
-//
-//       If the value of 'maxLineLength' is zero (0), an error will
-//       be returned.
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 //
-//  turnAutoLineLengthBreaksOn bool
-//     - This parameter controls whether text lines which exceed
-//       the maximum line length ('maxLineLength') are broken up
-//       and presented on the following line.
+//	 turnLineTerminationOff    bool
+//	   - When this parameter is set to 'true', no line termination
+//	     sequence will be configured for this 'Line1Column' Text
+//	     Line.
 //
-//       To apply automatic line breaking at the maximum line
-//       length, set the value of this parameter to 'true'.
+//	     Text Lines operate on the assumption that a line
+//	     termination is standard operating procedure. The default
+//	     line terminator for text lines is the new line character,
+//	     '\n'.
+//
+//	     Users have the option of turning off the entire line
+//	     termination sequence if this parameter is set to 'true'.
 //
 //
-//  fieldFormatParams          []TextFieldFmtParamsDto
-//     - An array of TextFieldFmtParamsDto objects containing the
-//       Text Field Format Parameters (TextFieldFmtParamsDto).
+//	lineTerminator             string
+//	   - If this parameter is set to an empty string, the default
+//	     line terminator, a new line character '\n', will be
+//	     applied to 'Line1Column' Text Lines.
 //
-//      The TextFieldFmtParamsDto type is defined as follows:
+//	     If this string is populated and the string length is
+//	     greater than zero (0), an alternate line termination
+//	     sequence will be configured using the characters provided
+//	     in the 'lineTerminator' string.
 //
-//        type TextFieldFmtParamsDto struct {
-//          LeftMarginStr  string
-//          FieldLength    int
-//          FieldJustify   TextJustify
-//          DateTimeFormat string
-//          RightMarginStr string
-//        }
+//	     Remember that the application of a line termination
+//	     sequence is controlled by parameter
+//	     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//	     set to 'true', no line termination characters will be
+//	     configured for this 'Line1Column' Text Lines.
 //
+//
+//	maxLineLength              int
+//	   - The maximum length of the line on which this 'Line1Column'
+//	     Text will be presented.
+//
+//	     Set this parameter to minus one (-1), and no maximum line
+//	     limits will be applied.
+//
+//	     'maxLineLength' is used in conjunction with parameter
+//	     'turnAutoLineLengthBreaksOn' to automatically place text
+//	     fields on separate text lines when that text exceeds the
+//	     maximum text line length ('maxLineLength').
+//
+//	     If the value of 'maxLineLength' is less than minus one
+//	     (-1), an error will be returned.
+//
+//	     If the value of 'maxLineLength' is zero (0), an error will
+//	     be returned.
+//
+//
+//	turnAutoLineLengthBreaksOn bool
+//	   - This parameter controls whether text lines which exceed
+//	     the maximum line length ('maxLineLength') are broken up
+//	     and presented on the following line.
+//
+//	     To apply automatic line breaking at the maximum line
+//	     length, set the value of this parameter to 'true'.
+//
+//
+//	fieldFormatParams          []TextFieldFmtParamsDto
+//	   - An array of TextFieldFmtParamsDto objects containing the
+//	     Text Field Format Parameters (TextFieldFmtParamsDto).
+//
+//	    The TextFieldFmtParamsDto type is defined as follows:
+//
+//	      type TextFieldFmtParamsDto struct {
+//	        LeftMarginStr  string
+//	        FieldLength    int
+//	        FieldJustify   TextJustify
+//	        DateTimeFormat string
+//	        RightMarginStr string
+//	      }
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsManyCol(
 	errorPrefix interface{},
 	turnLineTerminationOff bool,
@@ -7450,19 +7342,147 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsManyCol(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
-		isValid:                    true,
 		lock:                       nil,
 	}
 
 	lenFmtParams := len(fieldFmtParameters)
 
-	err = textFormatterCollectionElectron{}.ptr().
+	err = new(textFormatterCollectionElectron).
 		cfgNewStdTxtLineParameters(
 			txtFmtCollection,
 			newStdFmtParams,
 			ePrefix.XCpy(
 				fmt.Sprintf("newStdFmtParams %v-Columns",
 					lenFmtParams)))
+
+	return err
+}
+
+// SetStdFormatParams - Sets the Standard Format Parameters
+// for a Text Line consisting of one or more columns. The number of
+// columns associated with this format is determined by the number
+// of elements passed in  input parameter, 'fieldFormatParams'.
+//
+// The Text Field Format Parameters are passed as an input
+// parameter of type TextFmtParamsLineColumnsDto.
+//
+// These Standard Format Parameters will be applied as the default
+// format for all Text Lines with same number of columns. The
+// number of columns is determined the number of
+// TextFieldFmtParamsDto objects contained in input parameter
+// 'fieldFormatParams'.
+//
+// After configuring Standard Format Parameters for this specific
+// number columns, users should configure additional Text Lines
+// with the same number of columns using method AddLineMultiCol()
+// or AddLineManyCol() in order to reduce the number of input
+// parameters required to produce a Text Line with the same number
+// of columns.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (txtFmtCollection *TextFormatterCollection) SetStdFormatParams(
+	txtFmtParams TextFmtParamsLineColumnsDto,
+	errorPrefix interface{}) error {
+
+	if txtFmtCollection.lock == nil {
+		txtFmtCollection.lock = new(sync.Mutex)
+	}
+
+	txtFmtCollection.lock.Lock()
+
+	defer txtFmtCollection.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"TextFormatterCollection."+
+			"SetStdFormatParamsManyCol()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if txtFmtParams.GetNumOfFieldFmtParams() == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtFmtParams' is invalid!\n"+
+			"The Text Field Format Parameters array is empty.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	err = new(textFormatterCollectionElectron).
+		cfgNewStdTxtLineParameters(
+			txtFmtCollection,
+			txtFmtParams,
+			ePrefix.XCpy(
+				"txtFmtCollection<-txtFmtParams"))
 
 	return err
 }

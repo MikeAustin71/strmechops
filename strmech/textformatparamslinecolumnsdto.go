@@ -16,6 +16,12 @@ type TextFmtParamsLineColumnsDto struct {
 	//   TxtFieldType.Line1Column()
 
 	FieldFormatParams []TextFieldFmtParamsDto
+	// An array of Text Field Format Parameters.
+	// The number of elements in this array must
+	// be equal to the number of text columns to
+	// be formatted. If this array is empty, the
+	// current instance of TextFmtParamsLineColumnsDto
+	// is invalid.
 
 	TurnLineTerminationOff bool
 	// If this parameter is set to 'true' no Line Termination
@@ -39,8 +45,6 @@ type TextFmtParamsLineColumnsDto struct {
 	// beyond the maximum line length 'MaxLineLength' will be placed
 	// on the following line of text.
 
-	isValid bool
-
 	lock *sync.Mutex
 }
 
@@ -51,7 +55,7 @@ type TextFmtParamsLineColumnsDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextFmtParamsLineColumnsDto instance
 // ('paramsLineCol') will be deleted and overwritten.
@@ -59,30 +63,27 @@ type TextFmtParamsLineColumnsDto struct {
 // NO DATA VALIDATION IS performed on input parameter,
 // 'incomingParams'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingParams        TextFmtParamsLineColumnsDto
-//     - An instance of TextFmtParamsLineColumnsDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingParams        TextFmtParamsLineColumnsDto
+//	   - An instance of TextFmtParamsLineColumnsDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this TextFmtParamsLineColumnsDto instance
-//       ('incomingParams') will be copied to the current
-//       TextFmtParamsLineColumnsDto instance ('paramsLineCol').
+//	     All data values in this TextFmtParamsLineColumnsDto instance
+//	     ('incomingParams') will be copied to the current
+//	     TextFmtParamsLineColumnsDto instance ('paramsLineCol').
 //
-//       No data validation is performed on input parameter,
-//       'incomingParams'.
-//
+//	     No data validation is performed on input parameter,
+//	     'incomingParams'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyIn(
 	incomingParams TextFmtParamsLineColumnsDto) {
 
@@ -94,7 +95,7 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyIn(
 
 	defer paramsLineCol.lock.Unlock()
 
-	_ = textFmtParamsLineColsNanobot{}.ptr().
+	_ = new(textFmtParamsLineColsNanobot).
 		copy(paramsLineCol,
 			&incomingParams,
 			nil)
@@ -108,22 +109,19 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyIn(
 // NO DATA VALIDATION is performed on the current instance of
 // TextFmtParamsLineColumnsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTxtFmtLineCols     TextFmtParamsLineColumnsDto
-//     - This parameter will return a deep copy of the current
-//       TextFmtParamsLineColumnsDto instance.
-//
+//	deepCopyTxtFmtLineCols     TextFmtParamsLineColumnsDto
+//	   - This parameter will return a deep copy of the current
+//	     TextFmtParamsLineColumnsDto instance.
 func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyOut() (
 	deepCopyTxtFmtLineCols TextFmtParamsLineColumnsDto) {
 
@@ -135,7 +133,7 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyOut() (
 
 	defer paramsLineCol.lock.Unlock()
 
-	_ = textFmtParamsLineColsNanobot{}.ptr().
+	_ = new(textFmtParamsLineColsNanobot).
 		copy(
 			&deepCopyTxtFmtLineCols,
 			paramsLineCol,
@@ -150,30 +148,26 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) CopyOut() (
 // instance of TextFmtParamsLineColumnsDto in an invalid state and
 // unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextFmtParamsLineColumnsDto. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (paramsLineCol *TextFmtParamsLineColumnsDto) Empty() {
 
 	if paramsLineCol.lock == nil {
@@ -182,7 +176,7 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Empty() {
 
 	paramsLineCol.lock.Lock()
 
-	textFmtParamsLineColsMolecule{}.ptr().
+	new(textFmtParamsLineColsMolecule).
 		empty(paramsLineCol)
 
 	paramsLineCol.lock.Unlock()
@@ -200,32 +194,29 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingFieldParams        TextFieldFmtParamsDto
-//     - An incoming instance of TextFieldFmtParamsDto. This method
-//       will compare all member variable data values in this
-//       instance against those contained in the current instance
-//       of TextFieldFmtParamsDto. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingFieldParams        TextFieldFmtParamsDto
+//	   - An incoming instance of TextFieldFmtParamsDto. This method
+//	     will compare all member variable data values in this
+//	     instance against those contained in the current instance
+//	     of TextFieldFmtParamsDto. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingFieldParams' are equal in all respects
-//       to those contained in the current instance of
-//       TextFieldFmtParamsDto, this method will return a boolean
-//       value of 'true'. Otherwise a value of 'false' will be
-//       returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingFieldParams' are equal in all respects
+//	     to those contained in the current instance of
+//	     TextFieldFmtParamsDto, this method will return a boolean
+//	     value of 'true'. Otherwise a value of 'false' will be
+//	     returned to the calling function.
 func (paramsLineCol *TextFmtParamsLineColumnsDto) Equal(
 	incomingFmtLineCols TextFmtParamsLineColumnsDto) bool {
 
@@ -237,7 +228,7 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Equal(
 
 	defer paramsLineCol.lock.Unlock()
 
-	return textFmtParamsLineColsMolecule{}.ptr().
+	return new(textFmtParamsLineColsMolecule).
 		equal(
 			paramsLineCol,
 			&incomingFmtLineCols)
@@ -245,24 +236,21 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) Equal(
 
 // GetTextParamsType - Returns the Text FormatType Type.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldType
-//     - This method returns an enumeration value specifying the
-//       Text Format Type associated with this instance of
-//       TextFmtParamsLineColumnsDto:
-//          TextFmtParamsLineColumnsDto.FormatType
-//
+//	TextFieldType
+//	   - This method returns an enumeration value specifying the
+//	     Text Format Type associated with this instance of
+//	     TextFmtParamsLineColumnsDto:
+//	        TextFmtParamsLineColumnsDto.FormatType
 func (paramsLineCol *TextFmtParamsLineColumnsDto) GetTextParamsType() TextFieldType {
 
 	if paramsLineCol.lock == nil {
@@ -281,24 +269,27 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) GetTextParamsType() TextFieldT
 // Format Parameters array maintained by this instance of
 // TextFmtParamsLineColumnsDto.
 //
+// The number of elements in the Text Field Format Parameters array
+// must be equal to the number of text columns to be formatted.
+//
+// If this array is empty, the current instance of
+// TextFmtParamsLineColumnsDto is invalid.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method returns an integer value specifying the number
-//       of array objects in the Format Parameters array maintained
-//       by this instance of TextFmtParamsLineColumnsDto:
-//          TextFmtParamsLineColumnsDto.FieldFormatParams
-//
+//	int
+//	   - This method returns an integer value specifying the number
+//	     of array objects in the Format Parameters array maintained
+//	     by this instance of TextFmtParamsLineColumnsDto:
+//	        TextFmtParamsLineColumnsDto.FieldFormatParams
 func (paramsLineCol *TextFmtParamsLineColumnsDto) GetNumOfFieldFmtParams() int {
 
 	if paramsLineCol.lock == nil {
@@ -310,6 +301,33 @@ func (paramsLineCol *TextFmtParamsLineColumnsDto) GetNumOfFieldFmtParams() int {
 	defer paramsLineCol.lock.Unlock()
 
 	return len(paramsLineCol.FieldFormatParams)
+}
+
+// IsValid - If the number of elements in the Text
+// Field Format Parameters array is empty, this
+// method will return false.
+//
+// The number of elements in the Text Field Format
+// Parameters array must be equal to the number of
+// text columns to be formatted.
+//
+// If this array contains one or more elements, this
+// method will return 'true'.
+func (paramsLineCol *TextFmtParamsLineColumnsDto) IsValid() bool {
+
+	if paramsLineCol.lock == nil {
+		paramsLineCol.lock = new(sync.Mutex)
+	}
+
+	paramsLineCol.lock.Lock()
+
+	defer paramsLineCol.lock.Unlock()
+
+	if len(paramsLineCol.FieldFormatParams) == 0 {
+		return false
+	}
+
+	return true
 }
 
 // textFmtParamsLineColsNanobot - Provides helper methods for
@@ -369,7 +387,7 @@ func (lineColsNanobot *textFmtParamsLineColsNanobot) copy(
 		return err
 	}
 
-	textFmtParamsLineColsMolecule{}.ptr().
+	new(textFmtParamsLineColsMolecule).
 		empty(destinationTxtParamsLineColsDto)
 
 	destinationTxtParamsLineColsDto.FormatType =
@@ -402,28 +420,7 @@ func (lineColsNanobot *textFmtParamsLineColsNanobot) copy(
 	destinationTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn =
 		sourceTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn
 
-	destinationTxtParamsLineColsDto.isValid =
-		sourceTxtParamsLineColsDto.isValid
-
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFmtParamsLineColsNanobot.
-//
-func (lineColsNanobot textFmtParamsLineColsNanobot) ptr() *textFmtParamsLineColsNanobot {
-
-	if lineColsNanobot.lock == nil {
-		lineColsNanobot.lock = new(sync.Mutex)
-	}
-
-	lineColsNanobot.lock.Lock()
-
-	defer lineColsNanobot.lock.Unlock()
-
-	return &textFmtParamsLineColsNanobot{
-		lock: new(sync.Mutex),
-	}
 }
 
 // textFmtParamsLineColsMolecule - Provides helper methods for
@@ -438,7 +435,6 @@ type textFmtParamsLineColsMolecule struct {
 //
 // Are previous data values contained in this instance of
 // TextFmtParamsLineColumnsDto will be deleted.
-//
 func (lineColsMolecule textFmtParamsLineColsMolecule) empty(
 	targetTxtParamsLineColsDto *TextFmtParamsLineColumnsDto) {
 
@@ -472,8 +468,6 @@ func (lineColsMolecule textFmtParamsLineColsMolecule) empty(
 
 	targetTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn = false
 
-	targetTxtParamsLineColsDto.isValid = false
-
 	return
 }
 
@@ -483,7 +477,6 @@ func (lineColsMolecule textFmtParamsLineColsMolecule) empty(
 //
 // If the two instances of TextFmtParamsLineColumnsDto are equal,
 // this method returns 'true'.
-//
 func (lineColsMolecule textFmtParamsLineColsMolecule) equal(
 	txtFmtParamsDto1 *TextFmtParamsLineColumnsDto,
 	txtFmtParamsDto2 *TextFmtParamsLineColumnsDto) bool {
@@ -537,29 +530,5 @@ func (lineColsMolecule textFmtParamsLineColsMolecule) equal(
 		return false
 	}
 
-	if txtFmtParamsDto1.isValid !=
-		txtFmtParamsDto2.isValid {
-
-		return false
-	}
-
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFmtParamsLineColsMolecule.
-//
-func (lineColsMolecule textFmtParamsLineColsMolecule) ptr() *textFmtParamsLineColsMolecule {
-
-	if lineColsMolecule.lock == nil {
-		lineColsMolecule.lock = new(sync.Mutex)
-	}
-
-	lineColsMolecule.lock.Lock()
-
-	defer lineColsMolecule.lock.Unlock()
-
-	return &textFmtParamsLineColsMolecule{
-		lock: new(sync.Mutex),
-	}
 }

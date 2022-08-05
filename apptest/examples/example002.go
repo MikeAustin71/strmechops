@@ -266,8 +266,8 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	sMech := strmech.StrMech{}
 
-	numberStr := "12345678"
-	characterSearchLen := 4
+	numberStr := "1 2 3 4 5678"
+	characterSearchLen := 7
 
 	// Total available Length of Output Line
 	const maxLineLen = 78
@@ -465,8 +465,10 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 func (mTest02 MainTest02) ExtractNumberRunes02() {
 
+	funcName := "MainTest02.ExtractNumberRunes02()"
+
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainTest02.ExtractNumberRunes02()",
+		funcName,
 		"")
 
 	var outputStr string
@@ -485,131 +487,42 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 
 	// Leading Title Marquee
 
-	err = txtFormatCol.SetStdFormatParamsLine1Col(
-		" ",
-		maxLineLen,
-		strmech.TxtJustify.Center(),
-		"",
-		false,
-		"",
-		-1,
-		false,
-		ePrefix.XCpy(
-			"1-Column Setup"))
+	mt02Nanobot := mainTest02Nanobot{}
 
-	if err != nil {
-
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtFormatCol.SetStdFormatParamsLine1Col()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
-
-		return
-	}
-
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Title Line 1
-	err = txtFormatCol.AddLine1Col(
-		ePrefix.String(),
-		ePrefix.XCpy(
-			"Title Line 1"))
-
-	if err != nil {
-
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtFormatCol.AddLine1Col()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
-
-		return
-	}
-
-	// Title Line 2
-	err = txtFormatCol.AddLine1Col(
+	err = mt02Nanobot.SetLeadingMarquee(
+		funcName,
 		"Testing StrMech.ExtractNumberRunes()",
-		ePrefix.XCpy(
-			"Title Line 1"))
+		maxLineLen,
+		&txtFormatCol,
+		&ePrefix)
 
 	if err != nil {
-
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtFormatCol.AddLine1Col()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
 
 		return
 	}
-
-	// Title Line  3 Date/Time
-
-	err = txtFormatCol.AddLine1Col(
-		strmech.TextInputParamFieldDateTimeDto{
-			FieldDateTime:       time.Now(),
-			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		},
-		ePrefix.XCpy(
-			"Top-Title Line 4"))
-
-	if err != nil {
-
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtFormatCol.AddLine1Col()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
-
-		return
-	}
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Trailing Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
 
 	// End Of Marquee
+
+	txtStrBuilder := strmech.TextStrBuilder{}
+
+	err = txtStrBuilder.BuildText(
+		&strBuilder,
+		&txtFormatCol,
+		ePrefix.XCpy(
+			"strBuilder<-txtFormatCol"))
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	txtFormatCol.EmptyFormatterCollection()
 
 	var searchResults strmech.CharSearchNumStrParseResultsDto
 	var numStrKernel strmech.NumberStrKernel
@@ -729,91 +642,32 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 	// Trailing Title Marquee
 	// Top Blank Line
 
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Title # 1
-	err = txtFormatCol.AddLine1Col(
-		ePrefix.String(),
+	err = mt02Nanobot.SetTrailingMarquee(
+		funcName,
+		"SUCCESSFUL COMPLETION!",
+		maxLineLen,
+		&txtFormatCol,
 		ePrefix.XCpy(
-			"Title Line 1"))
+			"Trailing Title Marquee"))
 
 	if err != nil {
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtFormatCol.AddLine1Col()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
 
 		return
 	}
 
-	// Title # 2
-	err = txtFormatCol.AddLine1Col(
-		"SUCCESSFUL COMPLETION",
+	err = txtStrBuilder.BuildText(
+		&strBuilder,
+		&txtFormatCol,
 		ePrefix.XCpy(
-			"Title Line 1"))
+			"strBuilder<-txtFormatCol"))
 
 	if err != nil {
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtFormatCol.AddLine1Col()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
-
-		return
-	}
-
-	// Filler =======
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Blank Line
-	txtStrBuilder := strmech.TextStrBuilder{}
-
-	err =
-		txtStrBuilder.BuildText(
-			&strBuilder,
-			&txtFormatCol,
-			ePrefix.XCpy(
-				"Final Output String"))
-
-	if err != nil {
-		outputStr =
-			fmt.Sprintf("%v\n"+
-				"Error: txtStrBuilder.BuildText()\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err.Error())
-
-		fmt.Printf(outputStr + "\n")
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
 
 		return
 	}

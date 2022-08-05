@@ -10,7 +10,6 @@ import (
 
 // charSearchNumStrParseResultsDtoNanobot - Provides helper
 // methods for type CharSearchNumStrParseResultsDto.
-//
 type charSearchNumStrParseResultsDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -20,7 +19,7 @@ type charSearchNumStrParseResultsDtoNanobot struct {
 // 'destinationNumStrParseResults'. Both instances are of type
 // CharSearchNumStrParseResultsDto.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // ----------------------------------------------------------------
 //
@@ -30,60 +29,57 @@ type charSearchNumStrParseResultsDtoNanobot struct {
 // Also, NO data validation is performed on
 // 'sourceNumStrParseResults'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  destinationNumStrParseResults  *CharSearchNumStrParseResultsDto
-//     - A pointer to a CharSearchNumStrParseResultsDto instance.
-//       All the member variable data fields in this object will be
-//       replaced by data values copied from input parameter
-//       'sourceNumStrParseResults'.
+//	destinationNumStrParseResults  *CharSearchNumStrParseResultsDto
+//	   - A pointer to a CharSearchNumStrParseResultsDto instance.
+//	     All the member variable data fields in this object will be
+//	     replaced by data values copied from input parameter
+//	     'sourceNumStrParseResults'.
 //
-//       'destinationNumStrParseResults' is the destination for this
-//       copy operation.
-//
-//
-//  sourceNumStrParseResults       *CharSearchNumStrParseResultsDto
-//     - A pointer to another CharSearchNumStrParseResultsDto
-//       instance. All the member variable data values from this
-//       object will be copied to corresponding member variables in
-//       'destinationNumStrParseResults'.
-//
-//       'sourceNumStrParseResults' is the source for this copy
-//       operation.
-//
-//       No data validation is performed on 'sourceNumStrParseResults'.
+//	     'destinationNumStrParseResults' is the destination for this
+//	     copy operation.
 //
 //
-//  errPrefDto                     *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceNumStrParseResults       *CharSearchNumStrParseResultsDto
+//	   - A pointer to another CharSearchNumStrParseResultsDto
+//	     instance. All the member variable data values from this
+//	     object will be copied to corresponding member variables in
+//	     'destinationNumStrParseResults'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     'sourceNumStrParseResults' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     No data validation is performed on 'sourceNumStrParseResults'.
 //
+//
+//	errPrefDto                     *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) copyIn(
 	destinationNumStrParseResults *CharSearchNumStrParseResultsDto,
 	sourceNumStrParseResults *CharSearchNumStrParseResultsDto,
@@ -220,59 +216,56 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // NO validation is performed on 'numStrParseResults'.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numStrParseResults            *CharSearchNumStrParseResultsDto
-//     - A pointer to an instance of
-//       CharSearchNumStrParseResultsDto. A deep copy of the
-//       internal member variables contained in this instance will
-//       be created and returned in a new instance of
-//       CharSearchNumStrParseResultsDto.
+//	numStrParseResults            *CharSearchNumStrParseResultsDto
+//	   - A pointer to an instance of
+//	     CharSearchNumStrParseResultsDto. A deep copy of the
+//	     internal member variables contained in this instance will
+//	     be created and returned in a new instance of
+//	     CharSearchNumStrParseResultsDto.
 //
-//       No data validation is performed on 'numStrParseResults'.
+//	     No data validation is performed on 'numStrParseResults'.
 //
 //
-//  errPrefDto                    *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                    *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyNumStrParseResults    CharSearchNumStrParseResultsDto
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'numStrParseResults' will be created and
-//       returned in a new instance of
-//       CharSearchNumStrParseResultsDto.
+//	deepCopyNumStrParseResults    CharSearchNumStrParseResultsDto
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'numStrParseResults' will be created and
+//	     returned in a new instance of
+//	     CharSearchNumStrParseResultsDto.
 //
 //
-//  err                           error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                           error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) copyOut(
 	numStrParseResults *CharSearchNumStrParseResultsDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -399,70 +392,67 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 // contained in the 'numStrParseResults' instance of
 // CharSearchNumStrParseResultsDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  numStrParseResults  *CharSearchNumStrParseResultsDto
-//     - A pointer to an instance of
-//       CharSearchNumStrParseResultsDto instance. Formatted
-//       text output will be generated listing the member variable
-//       names and their corresponding values. The formatted text
-//       can then be used for screen displays, file output or
-//       printing.
+//	numStrParseResults  *CharSearchNumStrParseResultsDto
+//	   - A pointer to an instance of
+//	     CharSearchNumStrParseResultsDto instance. Formatted
+//	     text output will be generated listing the member variable
+//	     names and their corresponding values. The formatted text
+//	     can then be used for screen displays, file output or
+//	     printing.
 //
-//       No data validation is performed on this instance of
-//       CharSearchNumStrParseResultsDto.
-//
-//
-//  displayFunctionChain       bool
-//     - Set 'displayFunctionChain' to 'true' and a list of the
-//       functions which led to this result will be included in
-//       the text output.
+//	     No data validation is performed on this instance of
+//	     CharSearchNumStrParseResultsDto.
 //
 //
-//  printDetail         bool
-//     - If this parameter is set to 'true', detail information for
-//       subsidiary types RemainderString,
-//       DecimalSeparatorSearchResults,
-//       NegativeNumberSymbolSearchResults and
-//       ParsingTerminatorSearchResults will be included in the
-//       formatted text output.
+//	displayFunctionChain       bool
+//	   - Set 'displayFunctionChain' to 'true' and a list of the
+//	     functions which led to this result will be included in
+//	     the text output.
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	printDetail         bool
+//	   - If this parameter is set to 'true', detail information for
+//	     subsidiary types RemainderString,
+//	     DecimalSeparatorSearchResults,
+//	     NegativeNumberSymbolSearchResults and
+//	     ParsingTerminatorSearchResults will be included in the
+//	     formatted text output.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
 	numStrParseResults *CharSearchNumStrParseResultsDto,
@@ -516,8 +506,8 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	// Total available Length of Output Line
 	const maxLineLen = 79
 
-	// Max Label Field Length = 33
-	const maxLabelFieldLen = 33
+	// Max Label Field Length = 35
+	const maxLabelFieldLen = 35
 
 	// Leading Title Marquee
 	txtFormatCol := TextFormatterCollection{}
@@ -741,7 +731,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	}
 
 	err = txtFormatCol.AddLine2Col(
-		"TargetSearchString",
+		"Original TargetSearchString",
 		txtStrParam,
 		ePrefix.XCpy(
 			"Build TargetSearchString"))
@@ -753,7 +743,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	// Build Target Search String Length
 
 	err = txtFormatCol.AddLine2Col(
-		"TargetSearchString Length",
+		"Original TargetSearchString Length",
 		lenTxtStrParam,
 		ePrefix.XCpy(
 			"Build TargetSearchString Length"))
