@@ -115,17 +115,18 @@ func (txtUtility *TextUtility) BuildOneColLeadingMarquee(
 			lock:                       nil,
 		}
 
-		err = txtFormatCol.
-			SetStdFormatParams(
-				txtFmtParams,
-				ePrefix.XCpy(
-					"Default txtFmtParams 1-Column"))
-
-		if err != nil {
-			return err
-		}
-
 	}
+
+	err = txtFormatCol.
+		SetStdFormatParams(
+			txtFmtParams,
+			ePrefix.XCpy(
+				"Default txtFmtParams 1-Column"))
+
+	if err != nil {
+		return err
+	}
+
 	// Blank Line
 	txtFormatCol.AddLineBlank(
 		1,
@@ -307,18 +308,18 @@ func (txtUtility *TextUtility) BuildOneColTrailingMarquee(
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
 			lock:                       nil,
 		}
-
-		err = txtFormatCol.
-			SetStdFormatParams(
-				txtFmtParams,
-				ePrefix.XCpy(
-					"Default txtFmtParams 1-Column"))
-
-		if err != nil {
-			return err
-		}
-
 	}
+
+	err = txtFormatCol.
+		SetStdFormatParams(
+			txtFmtParams,
+			ePrefix.XCpy(
+				"Default txtFmtParams 1-Column"))
+
+	if err != nil {
+		return err
+	}
+
 	// Blank Line
 	txtFormatCol.AddLineBlank(
 		1,

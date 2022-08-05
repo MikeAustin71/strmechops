@@ -2292,7 +2292,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 			"Could NOT locate Standard Text Line Parameter Format\n"+
 			"for a 1-Column Text Line.\n"+
 			"Use the 'SetStdFormatParams()' method to configure a\n"+
-			"new Standard Text Line Column Parameters Format for this"+
+			"new Standard Text Line Column Parameters Format for this\n"+
 			"1-Column Text Line Type. ",
 			ePrefix.String())
 

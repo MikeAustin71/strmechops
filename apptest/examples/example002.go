@@ -450,7 +450,6 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 	// Total available Length of Output Line
 	const maxLineLen = 78
 
-	txtFormatCol := strmech.TextFormatterCollection{}
 	var err error
 
 	// Leading Title Marquee
@@ -474,24 +473,6 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 	}
 
 	// End Of Marquee
-
-	txtStrBuilder := strmech.TextStrBuilder{}
-
-	err = txtStrBuilder.BuildText(
-		&strBuilder,
-		&txtFormatCol,
-		ePrefix.XCpy(
-			"strBuilder<-txtFormatCol"))
-
-	if err != nil {
-		fmt.Println(
-			fmt.Sprintf("%v",
-				err.Error()))
-
-		return
-	}
-
-	txtFormatCol.EmptyFormatterCollection()
 
 	var searchResults strmech.CharSearchNumStrParseResultsDto
 	var numStrKernel strmech.NumberStrKernel
@@ -619,20 +600,6 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 		false,
 		ePrefix.XCpy(
 			"Trailing Title Marquee"))
-
-	if err != nil {
-		fmt.Println(
-			fmt.Sprintf("%v",
-				err.Error()))
-
-		return
-	}
-
-	err = txtStrBuilder.BuildText(
-		&strBuilder,
-		&txtFormatCol,
-		ePrefix.XCpy(
-			"strBuilder<-txtFormatCol"))
 
 	if err != nil {
 		fmt.Println(
