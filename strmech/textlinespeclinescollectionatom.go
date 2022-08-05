@@ -13,7 +13,6 @@ type textLineSpecLinesCollectionAtom struct {
 // emptyCollection - Deletes all the text line objects from a text
 // line collection maintained by an instance of
 // TextLineSpecLinesCollection.
-//
 func (txtLinesColAtom *textLineSpecLinesCollectionAtom) emptyCollection(
 	textLinesCol *TextLineSpecLinesCollection) {
 
@@ -144,105 +143,102 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) equalCollections(
 // After this method completes, the number of elements in the Text
 // Lines Collection will be increased by one.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLinesCol               *TextLineSpecLinesCollection
-//     - A pointer to an instance of TextLineSpecLinesCollection.
-//       The Text Line Collection encapsulated by this instance
-//       will have an additional Text Line member inserted into the
-//       Collection. The Text Lines object to be inserted is
-//       specified by input parameter, 'textLine'. This Text Line
-//       will be inserted into the Text Lines Collection at the
-//       array index designated by input parameter,
-//       'zeroBasedIndex'.
+//	textLinesCol               *TextLineSpecLinesCollection
+//	   - A pointer to an instance of TextLineSpecLinesCollection.
+//	     The Text Line Collection encapsulated by this instance
+//	     will have an additional Text Line member inserted into the
+//	     Collection. The Text Lines object to be inserted is
+//	     specified by input parameter, 'textLine'. This Text Line
+//	     will be inserted into the Text Lines Collection at the
+//	     array index designated by input parameter,
+//	     'zeroBasedIndex'.
 //
 //
-//  textLine                   ITextLineSpecification
-//     - A Text Line object which implements the
-//       ITextLineSpecification interface. A deep copy of this
-//       Text Line will be inserted into the Text Lines Collection
-//       maintained by the TextLineSpecLinesCollection instance,
-//       'textLinesCol'.
+//	textLine                   ITextLineSpecification
+//	   - A Text Line object which implements the
+//	     ITextLineSpecification interface. A deep copy of this
+//	     Text Line will be inserted into the Text Lines Collection
+//	     maintained by the TextLineSpecLinesCollection instance,
+//	     'textLinesCol'.
 //
-//       After the insertion operation is completed, the
-//       'textLine' object will be located at array element
-//       'zeroBasedIndex' immediately BEFORE the original array
-//       element previously located at that array index.
+//	     After the insertion operation is completed, the
+//	     'textLine' object will be located at array element
+//	     'zeroBasedIndex' immediately BEFORE the original array
+//	     element previously located at that array index.
 //
-//       NOTE: You will need to pass the concrete instance of
-//       'textLine' as a pointer to the Text Line (&textLine).
+//	     NOTE: You will need to pass the concrete instance of
+//	     'textLine' as a pointer to the Text Line (&textLine).
 //
-//       If the 'textLine' parameter is found to be invalid, an
-//       error will be returned.
-//
-//
-//  zeroBasedIndex             int
-//     - This index number designates the array element index in
-//       the Text Lines Collection ('txtLinesCol') at which the
-//       Text Line parameter, 'textLine' will be inserted. This
-//       means that 'textLine' will be inserted immediately
-//       BEFORE the array element specified by 'zeroBasedIndex'
-//       in the final Text Lines Array.
-//
-//       For example, if 'zeroBasedIndex' is set to '4', the
-//       original Text Line object at index '4' will be moved to
-//       index position '5' after the insertion operation is completed.
-//
-//       If the value of 'zeroBasedIndex' is less than zero, it
-//       will be reset to zero. This means that the 'textLine'
-//       object will be inserted in the first array element
-//       position of the Text Fields Collection maintained by the
-//       current TextLineSpecLinesCollection instance.
-//
-//       If the value of 'zeroBasedIndex' is greater the last array
-//       element index in the Text Fields Collection, the
-//       'textLine' object will be appended to the end of the Text
-//       Lines Collection.
+//	     If the 'textLine' parameter is found to be invalid, an
+//	     error will be returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	zeroBasedIndex             int
+//	   - This index number designates the array element index in
+//	     the Text Lines Collection ('txtLinesCol') at which the
+//	     Text Line parameter, 'textLine' will be inserted. This
+//	     means that 'textLine' will be inserted immediately
+//	     BEFORE the array element specified by 'zeroBasedIndex'
+//	     in the final Text Lines Array.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     For example, if 'zeroBasedIndex' is set to '4', the
+//	     original Text Line object at index '4' will be moved to
+//	     index position '5' after the insertion operation is completed.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If the value of 'zeroBasedIndex' is less than zero, it
+//	     will be reset to zero. This means that the 'textLine'
+//	     object will be inserted in the first array element
+//	     position of the Text Fields Collection maintained by the
+//	     current TextLineSpecLinesCollection instance.
 //
+//	     If the value of 'zeroBasedIndex' is greater the last array
+//	     element index in the Text Fields Collection, the
+//	     'textLine' object will be appended to the end of the Text
+//	     Lines Collection.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  lastIndexId                int
-//     - If this method completes successfully, the internal array
-//       index of the last text line object for the Text Lines
-//       Collection maintained by the TextLineSpecLinesCollection
-//       instance 'textLinesCol' will be returned as an integer
-//       value. Remember, this is a zero based index value which is
-//       always one less than the length of the Text Line
-//       Collection.
+//	lastIndexId                int
+//	   - If this method completes successfully, the internal array
+//	     index of the last text line object for the Text Lines
+//	     Collection maintained by the TextLineSpecLinesCollection
+//	     instance 'textLinesCol' will be returned as an integer
+//	     value. Remember, this is a zero based index value which is
+//	     always one less than the length of the Text Line
+//	     Collection.
 //
-//       In the event of an error, 'lastIndexId' will be set to a
-//       value of minus one (-1).
+//	     In the event of an error, 'lastIndexId' will be set to a
+//	     value of minus one (-1).
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtLinesColAtom *textLineSpecLinesCollectionAtom) insertTextLine(
 	textLinesCol *TextLineSpecLinesCollection,
 	textLine ITextLineSpecification,
@@ -383,80 +379,77 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) insertTextLine(
 // therefore remains in the collection after the 'Peek' operation
 // is completed.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLinesCol               *TextLineSpecLinesCollection
-//     - A pointer to an instance of TextLineSpecLinesCollection. A
-//       deep copy of the designated Text Line in the Text Lines
-//       Collection for this instance of TextLineSpecLinesCollection
-//       will be returned to the calling function. The returned Text
-//       Line is designated by input parameter, 'zeroBasedIndex'.
+//	textLinesCol               *TextLineSpecLinesCollection
+//	   - A pointer to an instance of TextLineSpecLinesCollection. A
+//	     deep copy of the designated Text Line in the Text Lines
+//	     Collection for this instance of TextLineSpecLinesCollection
+//	     will be returned to the calling function. The returned Text
+//	     Line is designated by input parameter, 'zeroBasedIndex'.
 //
-//       Depending on the value of input parameter, 'popTextLine',
-//       either a 'Peek' or 'Pop' operation will be performed on
-//       the designated Text Line in the Text Lines Collection.
-//
-//
-//  zeroBasedIndex             int
-//     - The index number of the array element in the Text Lines
-//       Collection on which the 'Pop' or 'Peek' operation will be
-//       performed.
+//	     Depending on the value of input parameter, 'popTextLine',
+//	     either a 'Peek' or 'Pop' operation will be performed on
+//	     the designated Text Line in the Text Lines Collection.
 //
 //
-//  popTextLine                bool
-//     - If this parameter is set to 'true', it signals that a
-//       'Pop' operation will be performed on the designated Text
-//       Line in the Text Lines Collection encapsulated in
-//       parameter 'textLinesCol'. A 'Pop' operation will DELETE
-//       the designated Text Field from the Text Fields Collection.
-//
-//       If this parameter is set to 'false', it signals that a
-//       'Peek' operation will be performed on the designated Text
-//       Line in the Text Lines Collection encapsulated in
-//       parameter 'textLinesCol'. A 'Peek' operation means that
-//       the designated Text Line element in the Text Lines
-//       Collection WILL NOT be deleted and will remain in the
-//       collection.
+//	zeroBasedIndex             int
+//	   - The index number of the array element in the Text Lines
+//	     Collection on which the 'Pop' or 'Peek' operation will be
+//	     performed.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	popTextLine                bool
+//	   - If this parameter is set to 'true', it signals that a
+//	     'Pop' operation will be performed on the designated Text
+//	     Line in the Text Lines Collection encapsulated in
+//	     parameter 'textLinesCol'. A 'Pop' operation will DELETE
+//	     the designated Text Field from the Text Fields Collection.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this parameter is set to 'false', it signals that a
+//	     'Peek' operation will be performed on the designated Text
+//	     Line in the Text Lines Collection encapsulated in
+//	     parameter 'textLinesCol'. A 'Peek' operation means that
+//	     the designated Text Line element in the Text Lines
+//	     Collection WILL NOT be deleted and will remain in the
+//	     collection.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  iTextLine                  ITextLineSpecification
-//     - If this method completes successfully, a deep copy of
-//       if the designated member of the Text Lines Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextLineSpecification
-//       interface.
+//	iTextLine                  ITextLineSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     if the designated member of the Text Lines Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextLineSpecification
+//	     interface.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 	textLinesCol *TextLineSpecLinesCollection,
 	zeroBasedIndex int,
@@ -497,8 +490,6 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 
 	lenTextLinesCollection := len(textLinesCol.textLines)
 
-	lastIdx := lenTextLinesCollection - 1
-
 	if lenTextLinesCollection == 0 {
 
 		err = fmt.Errorf("%v - ERROR\n"+
@@ -519,6 +510,8 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 
 		return iTextLine, err
 	}
+
+	lastIdx := lenTextLinesCollection - 1
 
 	if zeroBasedIndex > lastIdx {
 
@@ -580,7 +573,6 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) peekPopTextLine(
 
 // ptr - Returns a pointer to a new instance of
 // textLineSpecLinesCollectionAtom.
-//
 func (txtLinesColAtom textLineSpecLinesCollectionAtom) ptr() *textLineSpecLinesCollectionAtom {
 
 	if txtLinesColAtom.lock == nil {
@@ -610,66 +602,63 @@ func (txtLinesColAtom textLineSpecLinesCollectionAtom) ptr() *textLineSpecLinesC
 // return a boolean flag ('isValid') of 'true' and the returned
 // error type ('err') will be set to 'nil'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLineCol                *TextLineSpecLinesCollection
-//     - A pointer to an instance of TextLineSpecLinesCollection.
-//       This object will be subjected to diagnostic analysis in
-//       order to determine if all the member variables contain
-//       valid data values.
+//	textLineCol                *TextLineSpecLinesCollection
+//	   - A pointer to an instance of TextLineSpecLinesCollection.
+//	     This object will be subjected to diagnostic analysis in
+//	     order to determine if all the member variables contain
+//	     valid data values.
 //
-//       Be advised, if the text lines collection of this
-//       TextLineSpecLinesCollection instance is empty and contains
-//       zero array elements, the TextLineSpecLinesCollection
-//       instance will be declared, 'invalid'.
+//	     Be advised, if the text lines collection of this
+//	     TextLineSpecLinesCollection instance is empty and contains
+//	     zero array elements, the TextLineSpecLinesCollection
+//	     instance will be declared, 'invalid'.
 //
-//       If any of the ITextLineSpecification objects contained in
-//       the text lines collection encapsulated within
-//       'textLineCol' are found to be invalid, the entire
-//       TextLineSpecLinesCollection instance ('textLineCol') will
-//       be declared invalid.
+//	     If any of the ITextLineSpecification objects contained in
+//	     the text lines collection encapsulated within
+//	     'textLineCol' are found to be invalid, the entire
+//	     TextLineSpecLinesCollection instance ('textLineCol') will
+//	     be declared invalid.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid                    bool
-//     - If input parameter 'textLineCol' is judged to be valid in
-//       all respects, this return parameter will be set to 'true'.
+//	isValid                    bool
+//	   - If input parameter 'textLineCol' is judged to be valid in
+//	     all respects, this return parameter will be set to 'true'.
 //
-//     - If input parameter 'textLineCol' is found to be invalid,
-//       this return parameter will be set to 'false'.
+//	   - If input parameter 'textLineCol' is found to be invalid,
+//	     this return parameter will be set to 'false'.
 //
 //
-//  err                        error
-//     - If input parameter 'textLineCol' is judged to be valid in
-//       all respects, this return parameter will be set to 'nil'.
+//	err                        error
+//	   - If input parameter 'textLineCol' is judged to be valid in
+//	     all respects, this return parameter will be set to 'nil'.
 //
-//       If input parameter, 'textLineCol' is found to be invalid,
-//       this return parameter will be configured with an appropriate
-//       error message.
+//	     If input parameter, 'textLineCol' is found to be invalid,
+//	     this return parameter will be configured with an appropriate
+//	     error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtLinesColAtom *textLineSpecLinesCollectionAtom) testValidityOfTextLinesCollection(
 	textLineCol *TextLineSpecLinesCollection,
 	errPrefDto *ePref.ErrPrefixDto) (
