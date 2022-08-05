@@ -383,8 +383,9 @@ func (strArrayDto *StringArrayDto) Equal(
 		incomingStrArray)
 }
 
-// GetDescription1 - Description1 is a name, label or narrative
-// text used to describe the current instance of StringArrayDto.
+// GetDescription1 - Description1 is a name, tag, label or
+// narrative text used to describe the current instance of
+// StringArrayDto.
 //
 // 'Description1' is the first of two descriptive text strings.
 //
@@ -633,6 +634,90 @@ func (strArrayDto StringArrayDto) NewStringArray(
 	newStrArray.Description2 = desc2
 
 	return newStrArray
+}
+
+// SetDescription1 - Receives a string and assigns that string
+// value to internal member variable 'StringArrayDto.Description1'.
+//
+// 'Description1' is a name, tag, label or narrative text used to
+// describe the current instance of StringArrayDto.
+//
+// 'Description1' is the first of two descriptive text strings.
+//
+// This method sets the value of 'Description1' from the string
+// passed as input parameter, 'desc1'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		desc1                      string
+//	    - This string will be used to set the value of internal
+//	      member variable 'StringArrayDto.Description1'.
+//
+//	      'Description1' is first of two string used to provide a
+//	       name, tag, label or narrative text for the current
+//	       instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) SetDescription1(
+	desc1 string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	strArrayDto.Description1 = desc1
+}
+
+// SetDescription2 - Receives a string and assigns that string
+// value to internal member variable 'StringArrayDto.Description2'.
+//
+// 'Description2' is a name, tag, label or narrative text used to
+// describe the current instance of StringArrayDto.
+//
+// 'Description2' is the first of two descriptive text strings.
+//
+// This method sets the value of 'Description2' from the string
+// passed as input parameter, 'desc2'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		desc2                      string
+//	    - This string will be used to set the value of internal
+//	      member variable 'StringArrayDto.Description2'.
+//
+//	      'Description2' is first of two string used to provide a
+//	       name, tag, label or narrative text for the current
+//	       instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) SetDescription2(
+	desc2 string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	strArrayDto.Description2 = desc2
 }
 
 // SetStringArray - Resets the value of the internal string array
