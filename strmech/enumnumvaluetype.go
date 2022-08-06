@@ -50,51 +50,52 @@ var mNumericValueTypeLwrCaseStringToCode = map[string]NumericValueType{
 // ------             -------
 //
 // None                 (0)
-//  - Signals that the Numeric Value type is empty and not
-//    initialized. This is an error condition.
+//   - Signals that the Numeric Value type is empty and not
+//     initialized. This is an error condition.
 //
 // FloatingPoint        (1)
-//  - Designates the numeric value as a decimal floating point
-//    number. These numeric value consists of both an integer
-//    component and a fractional component separated by a
-//    decimal separator character. In the USA, the decimal
-//    separator character is a period or decimal point ('.').
-//    Floating point numeric values will always include integer
-//    digits to the left of the decimal separator and fractional
-//    digits to the right of the decimal separator.
 //
-//    Reference:
-//      https://en.wikipedia.org/wiki/Decimal_floating_point
-//      https://www.differencebetween.info/difference-between-integer-and-float
+//   - Designates the numeric value as a decimal floating point
+//     number. These numeric value consists of both an integer
+//     component and a fractional component separated by a
+//     decimal separator character. In the USA, the decimal
+//     separator character is a period or decimal point ('.').
+//     Floating point numeric values will always include integer
+//     digits to the left of the decimal separator and fractional
+//     digits to the right of the decimal separator.
 //
-//    Examples:
-//             123.456
-//               0.5
-//               2.12345678
-//       1,765,432.12
+//     Reference:
+//     https://en.wikipedia.org/wiki/Decimal_floating_point
+//     https://www.differencebetween.info/difference-between-integer-and-float
 //
+//     Examples:
+//     123.456
+//     0.5
+//     2.12345678
+//     1,765,432.12
 //
 // Integer              (2)
-//  - Designates the numeric value as a whole number containing
-//    integer digits and no fractional digits.
 //
-//    Reference:
-//      https://en.wikipedia.org/wiki/Integer
-//      https://www.differencebetween.info/difference-between-integer-and-float
+//   - Designates the numeric value as a whole number containing
+//     integer digits and no fractional digits.
 //
-//    Examples:
-//            0
-//          123
-//    9,875,432
+//     Reference:
+//     https://en.wikipedia.org/wiki/Integer
+//     https://www.differencebetween.info/difference-between-integer-and-float
 //
-//
+//     Examples:
+//     0
+//     123
+//     9,875,432
 //
 // For easy access to these enumeration values, use the global
 // constant 'NumValType'.
-//     Example: NumValType.Integer()
+//
+//	Example: NumValType.Integer()
 //
 // Otherwise you will need to use the formal syntax.
-//     Example: NumericValueType(0).Integer()
+//
+//	Example: NumericValueType(0).Integer()
 //
 // Depending on your editor, intellisense (a.k.a. intelligent code
 // completion) may not list the NumericValueType methods in
@@ -103,7 +104,6 @@ var mNumericValueTypeLwrCaseStringToCode = map[string]NumericValueType{
 // Be advised that all 'NumericValueType' methods beginning with
 // 'X', as well as the method 'String()', are utility methods and
 // not part of the enumeration.
-//
 type NumericValueType int
 
 var lockNumericValueType sync.Mutex
@@ -112,7 +112,6 @@ var lockNumericValueType sync.Mutex
 // or uninitialized. This is an error condition
 //
 // This method is part of the standard enumeration.
-//
 func (numValType NumericValueType) None() NumericValueType {
 
 	lockNumericValueType.Lock()
@@ -132,16 +131,16 @@ func (numValType NumericValueType) None() NumericValueType {
 // to the left of the decimal separator and fractional digits to
 // the right of the decimal separator.
 //
-//    Examples:
-//             123.456
-//               0.5
-//               2.12345678
-//       1,765,432.12
+//	Examples:
+//	         123.456
+//	           0.5
+//	           2.12345678
+//	   1,765,432.12
 //
 // Reference:
-//  https://en.wikipedia.org/wiki/Decimal_floating_point
-//  https://www.differencebetween.info/difference-between-integer-and-float
 //
+//	https://en.wikipedia.org/wiki/Decimal_floating_point
+//	https://www.differencebetween.info/difference-between-integer-and-float
 func (numValType NumericValueType) FloatingPoint() NumericValueType {
 
 	lockNumericValueType.Lock()
@@ -154,15 +153,15 @@ func (numValType NumericValueType) FloatingPoint() NumericValueType {
 // Integer - Designates the numeric value as a whole number
 // containing integer digits, but no fractional digits.
 //
-//    Examples:
-//            0
-//          123
-//    9,875,432
+//	Examples:
+//	        0
+//	      123
+//	9,875,432
 //
 // Reference:
-//  https://en.wikipedia.org/wiki/Integer
-//  https://www.differencebetween.info/difference-between-integer-and-float
 //
+//	https://en.wikipedia.org/wiki/Integer
+//	https://www.differencebetween.info/difference-between-integer-and-float
 func (numValType NumericValueType) Integer() NumericValueType {
 
 	lockNumericValueType.Lock()
@@ -180,12 +179,12 @@ func (numValType NumericValueType) Integer() NumericValueType {
 //
 // ----------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t:= NumericValueType(0).Integer()
 // str := t.String()
-//     str is now equal to 'Integer'
 //
+//	str is now equal to 'Integer'
 func (numValType NumericValueType) String() string {
 
 	lockNumericValueType.Lock()
@@ -204,39 +203,30 @@ func (numValType NumericValueType) String() string {
 // XIsValid - Returns a boolean value signaling whether the current
 // Numeric Value Type Specification (NumericValueType) is valid.
 //
-// This is a standard utility method and is not part of the valid enumerations
-// for this type.
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
 // Usage
 //
-//  nStrValueSpec := NumericValueType(0).FloatingPoint()
+//	nStrValueSpec := NumericValueType(0).FloatingPoint()
 //
-//  isValid := nStrValueSpec.XIsValid()
+//	isValid := nStrValueSpec.XIsValid()
 //
-//  In this case the boolean value of 'isValid' is 'true'.
+//	In this case the boolean value of 'isValid' is 'true'.
 //
-//  Be advised, the value NumericValueType(0).None() is
-//  classified as an 'invalid' value.
-//
+//	Be advised, the value NumericValueType(0).None() is
+//	classified as an 'invalid' value.
 func (numValType NumericValueType) XIsValid() bool {
 
 	lockNumericValueType.Lock()
 
 	defer lockNumericValueType.Unlock()
 
-	return numericValueTypeNanobot{}.ptr().
+	return new(numericValueTypeNanobot).
 		isValidNumericValueType(
 			numValType)
-
-	//if numValType < 1 {
-	//	return false
-	//}
-	//
-	//_, isValid := mNumericValueTypeCodeToString[numValType]
-
-	// return isValid
 }
 
 // XParseString - Receives a string and attempts to match it with the
@@ -249,65 +239,64 @@ func (numValType NumericValueType) XIsValid() bool {
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 // valueString   string
-//     - A string which will be matched against the enumeration string
-//       values. If 'valueString' is equal to one of the enumeration
-//       names, this method will proceed to successful completion and
-//       return the correct enumeration value.
+//   - A string which will be matched against the enumeration string
+//     values. If 'valueString' is equal to one of the enumeration
+//     names, this method will proceed to successful completion and
+//     return the correct enumeration value.
 //
 // caseSensitive   bool
-//     - If 'true' the search for enumeration names will be
-//       case-sensitive and will require an exact match. Therefore,
-//       'integer' will NOT match the enumeration name, 'Integer'.
 //
-//       A case-sensitive search will match any of the following strings:
-//           "None"
-//           "FloatingPoint"
-//           "Floating Point"
-//           "Float"
-//           "Integer"
-//           "Int"
+//   - If 'true' the search for enumeration names will be
+//     case-sensitive and will require an exact match. Therefore,
+//     'integer' will NOT match the enumeration name, 'Integer'.
 //
-//       If 'false', a case-insensitive search is conducted for the
-//       enumeration name. In this example, 'integer' WILL MATCH
-//       the enumeration name, 'Integer'.
+//     A case-sensitive search will match any of the following strings:
+//     "None"
+//     "FloatingPoint"
+//     "Floating Point"
+//     "Float"
+//     "Integer"
+//     "Int"
 //
-//       A case-insensitive search will match any of the following
-//       lower case names:
-//           "none"
-//           "floatingpoint"
-//           "floating point"
-//           "float"
-//           "integer"
-//           "int"
+//     If 'false', a case-insensitive search is conducted for the
+//     enumeration name. In this example, 'integer' WILL MATCH
+//     the enumeration name, 'Integer'.
 //
+//     A case-insensitive search will match any of the following
+//     lower case names:
+//     "none"
+//     "floatingpoint"
+//     "floating point"
+//     "float"
+//     "integer"
+//     "int"
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NumericValueType
-//     - Upon successful completion, this method will return a new
-//       instance of NumericValueType set to the value of the
-//       enumeration matched by the string search performed on
-//       input parameter, 'valueString'.
+//	NumericValueType
+//	   - Upon successful completion, this method will return a new
+//	     instance of NumericValueType set to the value of the
+//	     enumeration matched by the string search performed on
+//	     input parameter, 'valueString'.
 //
-//  error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is encountered,
-//       this method will return an error type which encapsulates an
-//       appropriate error message.
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If an error condition is encountered,
+//	     this method will return an error type which encapsulates an
+//	     appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
 // Usage
 //
-//  t, err := NumericValueType(0).XParseString("Integer", true)
+//	t, err := NumericValueType(0).XParseString("Integer", true)
 //
-//     t is now equal to NumericValueType(0).Integer()
-//
+//	   t is now equal to NumericValueType(0).Integer()
 func (numValType NumericValueType) XParseString(
 	valueString string,
 	caseSensitive bool) (NumericValueType, error) {
@@ -361,7 +350,7 @@ func (numValType NumericValueType) XParseString(
 // If the current instance of NumericValueType is invalid, this
 // method will always return a value of NumericValueType(0).None().
 //
-// Background
+// # Background
 //
 // Enumeration NumericValueType has an underlying type of integer
 // (int). This means the type could conceivably be set to any
@@ -376,14 +365,13 @@ func (numValType NumericValueType) XParseString(
 // or the equivalent of NumericValueType(0).None(). This conversion
 // is useful in generating text strings for meaningful
 // informational and error messages.
-//
 func (numValType NumericValueType) XReturnNoneIfInvalid() NumericValueType {
 
 	lockNumericValueType.Lock()
 
 	defer lockNumericValueType.Unlock()
 
-	isValid := numericValueTypeNanobot{}.ptr().
+	isValid := new(numericValueTypeNanobot).
 		isValidNumericValueType(numValType)
 
 	if !isValid {
@@ -398,7 +386,6 @@ func (numValType NumericValueType) XReturnNoneIfInvalid() NumericValueType {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (numValType NumericValueType) XValue() NumericValueType {
 
 	lockNumericValueType.Lock()
@@ -413,7 +400,6 @@ func (numValType NumericValueType) XValue() NumericValueType {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (numValType NumericValueType) XValueInt() int {
 
 	lockNumericValueType.Lock()
@@ -430,21 +416,22 @@ func (numValType NumericValueType) XValueInt() int {
 //
 // For easy access to these enumeration values, use the
 // global variable NumValType.
-//  Example: NumValType.FloatingPoint()
+//
+//	Example: NumValType.FloatingPoint()
 //
 // Otherwise you will need to use the formal syntax.
-//  Example: NumericValueType(0).FloatingPoint()
+//
+//	Example: NumericValueType(0).FloatingPoint()
 //
 // Usage:
-//  NumValType.None(),
-//  NumValType.FloatingPoint(),
-//  NumValType.Integer(),
 //
+//	NumValType.None()
+//	NumValType.FloatingPoint()
+//	NumValType.Integer()
 const NumValType = NumericValueType(0)
 
 // numericValueTypeNanobot - Provides helper methods for
 // enumeration NumericValueType.
-//
 type numericValueTypeNanobot struct {
 	lock *sync.Mutex
 }
@@ -461,17 +448,16 @@ type numericValueTypeNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // NumericValueType enumeration.
-//
-func (enumNumValueType *numericValueTypeNanobot) isValidNumericValueType(
+func (enumNumValueTypeNanobot *numericValueTypeNanobot) isValidNumericValueType(
 	enumNumericValType NumericValueType) bool {
 
-	if enumNumValueType.lock == nil {
-		enumNumValueType.lock = new(sync.Mutex)
+	if enumNumValueTypeNanobot.lock == nil {
+		enumNumValueTypeNanobot.lock = new(sync.Mutex)
 	}
 
-	enumNumValueType.lock.Lock()
+	enumNumValueTypeNanobot.lock.Lock()
 
-	defer enumNumValueType.lock.Unlock()
+	defer enumNumValueTypeNanobot.lock.Unlock()
 
 	if enumNumericValType < 1 ||
 		enumNumericValType > 2 {
@@ -479,22 +465,4 @@ func (enumNumValueType *numericValueTypeNanobot) isValidNumericValueType(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// numericValueTypeNanobot.
-//
-func (enumNumValueType numericValueTypeNanobot) ptr() *numericValueTypeNanobot {
-
-	if enumNumValueType.lock == nil {
-		enumNumValueType.lock = new(sync.Mutex)
-	}
-
-	enumNumValueType.lock.Lock()
-
-	defer enumNumValueType.lock.Unlock()
-
-	return &numericValueTypeNanobot{
-		lock: new(sync.Mutex),
-	}
 }
