@@ -1502,7 +1502,7 @@ func TestStrMech_ExtractNumberRunes_01(t *testing.T) {
 		false,
 		ePrefix)
 
-	expectedTextLen := 1525
+	expectedTextLen := 1545
 
 	if strBuilder.Len() != expectedTextLen {
 		t.Errorf("%v\n"+
@@ -1631,7 +1631,7 @@ func TestStrMech_ExtractNumberRunes_02(t *testing.T) {
 		true,
 		ePrefix)
 
-	expectedTextLen := 9251
+	expectedTextLen := 9271
 
 	if strBuilder.Len() != expectedTextLen {
 		t.Errorf("%v\n"+
