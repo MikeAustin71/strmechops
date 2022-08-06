@@ -515,10 +515,11 @@ func (txtUtility *TextUtility) BuildOneColTrailingMarquee(
 			FormatType: TxtFieldType.LineColumns(),
 			FieldFormatParams: []TextFieldFmtParamsDto{
 				{
-					LeftMarginStr:  " ",
-					FieldLength:    79,
-					FieldJustify:   TxtJustify.Center(),
-					DateTimeFormat: string(new(textSpecificationAtom).getDefaultNewLineChars()),
+					LeftMarginStr: " ",
+					FieldLength:   79,
+					FieldJustify:  TxtJustify.Center(),
+					DateTimeFormat: new(textSpecificationMolecule).
+						getDefaultDateTimeFormat(),
 					RightMarginStr: "",
 					lock:           nil,
 				},
