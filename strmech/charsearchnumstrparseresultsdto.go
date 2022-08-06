@@ -15,7 +15,7 @@ import (
 //
 // ----------------------------------------------------------------
 //
-// TERMINOLOGY
+// # TERMINOLOGY
 //
 // Text Character Search algorithms typically perform comparisons
 // between two strings or groups of text characters to determine
@@ -29,16 +29,16 @@ import (
 // ('TextCharSearchType') rely on a framework consisting of a
 // 'Target Search String' and a 'Test String'.
 //
-//    Target String        - A string character or characters which
-//                           will be searched for the occurrence of
-//                           another predefined character or
-//                           characters referred to as a Test
-//                           String.
+//	Target String        - A string character or characters which
+//	                       will be searched for the occurrence of
+//	                       another predefined character or
+//	                       characters referred to as a Test
+//	                       String.
 //
 //
-//    Test String          - A string character or characters which
-//                           will be used to search for matching
-//                           characters in a Target Search String.
+//	Test String          - A string character or characters which
+//	                       will be used to search for matching
+//	                       characters in a Target Search String.
 //
 // A comparison of text characters contained in the Target Search
 // String and the Test String serves as the basis for determining
@@ -51,9 +51,9 @@ import (
 // identified, statistical data describing the 'Match' condition
 // is bundled and returned to the calling function.
 //
-//     Number String        - As used here, a Number String is a
-//                            string of text characters which
-//                            contain numeric digit characters.
+//	Number String        - As used here, a Number String is a
+//	                       string of text characters which
+//	                       contain numeric digit characters.
 //
 // Number String Parsing functions represent a specific type of
 // text character search. They are designed to review a string of
@@ -72,7 +72,6 @@ import (
 //
 // This is the primary or master type used to convey the results
 // of a number string parsing operation.
-//
 type CharSearchNumStrParseResultsDto struct {
 	SearchResultsName string
 	// Optional. The Name, Label or descriptive Tag
@@ -89,6 +88,21 @@ type CharSearchNumStrParseResultsDto struct {
 	// Target String. The Target String contains the numeric
 	// digits which are parsed and extracted by the Number
 	// String Parsing algorithm.
+
+	TargetStringSearchLength int
+	// The actual number of characters within the Target
+	// Search String that are included in the search
+	// operation. This value may be less than the actual
+	// length of the Target Search String.
+
+	TargetStringAdjustedSearchLength int
+	// The adjusted or corrected Target String Search
+	// Length. This value is guaranteed to be equal to or
+	// less than the actual Target String Length.
+
+	TargetStringStartingSearchIndex int
+	// The index in 'TargetString' at which the search
+	// operation begins.
 
 	FoundNumericDigits bool
 	// Signals a successful Number String Parsing operation.
@@ -179,7 +193,7 @@ type CharSearchNumStrParseResultsDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in the current
 // CharSearchNumStrParseResultsDto instance
@@ -188,87 +202,84 @@ type CharSearchNumStrParseResultsDto struct {
 // No Data Validation will be performed on
 // 'incomingNumStrParseResults'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingNumStrParseResults   *CharSearchNumStrParseResultsDto
-//     - A pointer to an instance of
-//       CharSearchNumStrParseResultsDto. This method will NOT
-//       change the data values of member variables contained in
-//       this instance.
+//	incomingNumStrParseResults   *CharSearchNumStrParseResultsDto
+//	   - A pointer to an instance of
+//	     CharSearchNumStrParseResultsDto. This method will NOT
+//	     change the data values of member variables contained in
+//	     this instance.
 //
-//       All data values in this CharSearchNumStrParseResultsDto
-//       instance ('incomingNumStrParseResults') will be copied to
-//       the current CharSearchNumStrParseResultsDto instance
-//       ('searchNumStrParseResults').
+//	     All data values in this CharSearchNumStrParseResultsDto
+//	     instance ('incomingNumStrParseResults') will be copied to
+//	     the current CharSearchNumStrParseResultsDto instance
+//	     ('searchNumStrParseResults').
 //
-//       No Data Validation will be performed on
-//       'incomingNumStrParseResults'.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     No Data Validation will be performed on
+//	     'incomingNumStrParseResults'.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyIn(
 	incomingNumStrParseResults *CharSearchNumStrParseResultsDto,
 	errorPrefix interface{}) error {
@@ -296,7 +307,7 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyIn(
 	}
 
 	return new(charSearchNumStrParseResultsDtoNanobot).
-		copyIn(
+		copyNumStrParseResultsDto(
 			searchNumStrParseResults,
 			incomingNumStrParseResults,
 			ePrefix.XCpy(
@@ -309,87 +320,84 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // No Data Validation will be performed on the current instance
 // of CharSearchNumStrParseResultsDto.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  CharSearchNumStrParseResultsDto
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current CharSearchNumStrParseResultsDto instance.
+//	CharSearchNumStrParseResultsDto
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current CharSearchNumStrParseResultsDto instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyOut(
 	errorPrefix interface{}) (
-	CharSearchNumStrParseResultsDto,
-	error) {
+	deepCopyNumStrParseResults CharSearchNumStrParseResultsDto,
+	err error) {
 
 	if searchNumStrParseResults.lock == nil {
 		searchNumStrParseResults.lock = new(sync.Mutex)
@@ -400,7 +408,6 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyOut(
 	defer searchNumStrParseResults.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -410,14 +417,18 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyOut(
 		"")
 
 	if err != nil {
-		return CharSearchNumStrParseResultsDto{}, err
+		return deepCopyNumStrParseResults, err
 	}
 
-	return new(charSearchNumStrParseResultsDtoNanobot).
-		copyOut(
+	err = new(charSearchNumStrParseResultsDtoNanobot).
+		copyNumStrParseResultsDto(
+			&deepCopyNumStrParseResults,
 			searchNumStrParseResults,
 			ePrefix.XCpy(
-				"<-searchNumStrParseResults"))
+				"deepCopyNumStrParseResults"+
+					"<-searchNumStrParseResults"))
+
+	return deepCopyNumStrParseResults, err
 }
 
 // Empty - Resets all internal member variables for the current
@@ -426,30 +437,26 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) CopyOut(
 // instance of CharSearchDecimalSeparatorResultsDto in an invalid
 // state and unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in the
 // current instance of CharSearchNumStrParseResultsDto. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Empty() {
 
 	if searchNumStrParseResults.lock == nil {
@@ -479,33 +486,30 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Empty() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingNumStrParseResults *CharSearchNumStrParseResultsDto
-//     - A pointer to an incoming instance of
-//       CharSearchNumStrParseResultsDto. This method will
-//       compare all member variable data values in this instance
-//       against those contained in the current instance of
-//       CharSearchNumStrParseResultsDto. If the data values
-//       in both instances are found to be equal in all respects,
-//       this method will return a boolean value of 'true'.
-//
+//	incomingNumStrParseResults *CharSearchNumStrParseResultsDto
+//	   - A pointer to an incoming instance of
+//	     CharSearchNumStrParseResultsDto. This method will
+//	     compare all member variable data values in this instance
+//	     against those contained in the current instance of
+//	     CharSearchNumStrParseResultsDto. If the data values
+//	     in both instances are found to be equal in all respects,
+//	     this method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingNumStrParseResults' are equal in all
-//       respects to those contained in the current instance of
-//       CharSearchNumStrParseResultsDto, this method will
-//       return a boolean value of 'true'. Otherwise, a value of
-//       'false' will be returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingNumStrParseResults' are equal in all
+//	     respects to those contained in the current instance of
+//	     CharSearchNumStrParseResultsDto, this method will
+//	     return a boolean value of 'true'. Otherwise, a value of
+//	     'false' will be returned to the calling function.
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 	incomingNumStrParseResults *CharSearchNumStrParseResultsDto) bool {
 
@@ -528,92 +532,89 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) Equal(
 // values contained in the current instance of
 // CharSearchNumStrParseResultsDto ('searchNumStrParseResults').
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  displayFunctionChain       bool
-//     - Set 'displayFunctionChain' to 'true' and a list of the
-//       functions which led to this result will be included in
-//       the formatted text output.
+//	displayFunctionChain       bool
+//	   - Set 'displayFunctionChain' to 'true' and a list of the
+//	     functions which led to this result will be included in
+//	     the formatted text output.
 //
 //
-//  printDetail                bool
-//     - If this parameter is set to 'true', detail information for
-//       subsidiary types RemainderString,
-//       DecimalSeparatorSearchResults,
-//       NegativeNumberSymbolSearchResults and
-//       ParsingTerminatorSearchResults will be included in the
-//       formatted text output.
+//	printDetail                bool
+//	   - If this parameter is set to 'true', detail information for
+//	     subsidiary types RemainderString,
+//	     DecimalSeparatorSearchResults,
+//	     NegativeNumberSymbolSearchResults and
+//	     ParsingTerminatorSearchResults will be included in the
+//	     formatted text output.
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTextListing(
 	strBuilder *strings.Builder,
 	displayFunctionChain bool,
@@ -657,7 +658,6 @@ func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) GetParameterTex
 //
 // All member variables in this returned instance are set to their
 // zero or uninitialized states.
-//
 func (searchNumStrParseResults CharSearchNumStrParseResultsDto) New() CharSearchNumStrParseResultsDto {
 
 	if searchNumStrParseResults.lock == nil {
@@ -688,15 +688,15 @@ func (searchNumStrParseResults CharSearchNumStrParseResultsDto) New() CharSearch
 //
 // ----------------------------------------------------------------
 //
-// BE ADVISED
+// # BE ADVISED
 //
 // This method will NOT include the detail information on subsidiary
 // types RemainderString, DecimalSeparatorSearchResults,
 // NegativeNumberSymbolSearchResults and
 // ParsingTerminatorSearchResults. If this detail information is
 // required in the formatted text output, call method:
-//   CharSearchNumStrParseResultsDto.GetParameterTextListing()
 //
+//	CharSearchNumStrParseResultsDto.GetParameterTextListing()
 func (searchNumStrParseResults *CharSearchNumStrParseResultsDto) String() string {
 
 	if searchNumStrParseResults.lock == nil {

@@ -4,7 +4,6 @@ import "sync"
 
 // charSearchNumStrParseResultsDtoAtom - Provides helper methods for
 // type CharSearchNumStrParseResultsDto.
-//
 type charSearchNumStrParseResultsDtoAtom struct {
 	lock *sync.Mutex
 }
@@ -14,33 +13,29 @@ type charSearchNumStrParseResultsDtoAtom struct {
 // data values for member variables to their initial or zero
 // values.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the member variable data values contained in input parameter
 // 'numStrParseResults' will be deleted and reset to their zero
 // values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numStrParseResults     *CharSearchNumStrParseResultsDto
-//     - A pointer to an instance of
-//       CharSearchNumStrParseResultsDto. All the internal
-//       member variables contained in this instance will be
-//       deleted and reset to their zero values.
-//
+//	numStrParseResults     *CharSearchNumStrParseResultsDto
+//	   - A pointer to an instance of
+//	     CharSearchNumStrParseResultsDto. All the internal
+//	     member variables contained in this instance will be
+//	     deleted and reset to their zero values.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 	numStrParseResults *CharSearchNumStrParseResultsDto) {
 
@@ -61,6 +56,12 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 	numStrParseResults.SearchResultsFunctionChain = ""
 
 	numStrParseResults.TargetSearchString.Empty()
+
+	numStrParseResults.TargetStringSearchLength = 0
+
+	numStrParseResults.TargetStringAdjustedSearchLength = 0
+
+	numStrParseResults.TargetStringStartingSearchIndex = 0
 
 	numStrParseResults.FoundNumericDigits = false
 
@@ -97,38 +98,35 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numStrParseResults1    *CharSearchNumStrParseResultsDto
-//     - An instance of CharSearchNumStrParseResultsDto.
-//       Internal member variables from 'numStrParseResults1'
-//       will be compared to those of 'numStrParseResults2' to
-//       determine if both instances are equivalent.
+//	numStrParseResults1    *CharSearchNumStrParseResultsDto
+//	   - An instance of CharSearchNumStrParseResultsDto.
+//	     Internal member variables from 'numStrParseResults1'
+//	     will be compared to those of 'numStrParseResults2' to
+//	     determine if both instances are equivalent.
 //
 //
-//  numStrParseResults2    *CharSearchNumStrParseResultsDto
-//     - An instance of CharSearchNumStrParseResultsDto.
-//       Internal member variables from 'numStrParseResults2'
-//       will be compared to those of 'numStrParseResults1' to
-//       determine if both instances are equivalent.
-//
+//	numStrParseResults2    *CharSearchNumStrParseResultsDto
+//	   - An instance of CharSearchNumStrParseResultsDto.
+//	     Internal member variables from 'numStrParseResults2'
+//	     will be compared to those of 'numStrParseResults1' to
+//	     determine if both instances are equivalent.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the comparison of 'numStrParseResults1' and
-//       'numStrParseResults2' shows that all internal member
-//       variables are equivalent, this method will return a
-//       boolean value of 'true'.
+//	bool
+//	   - If the comparison of 'numStrParseResults1' and
+//	     'numStrParseResults2' shows that all internal member
+//	     variables are equivalent, this method will return a
+//	     boolean value of 'true'.
 //
-//       If the two instances are NOT equal, this method will
-//       return a boolean value of 'false' to the calling function.
-//
+//	     If the two instances are NOT equal, this method will
+//	     return a boolean value of 'false' to the calling function.
 func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 	numStrParseResults1 *CharSearchNumStrParseResultsDto,
 	numStrParseResults2 *CharSearchNumStrParseResultsDto) bool {
@@ -155,6 +153,24 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 
 	if !numStrParseResults1.TargetSearchString.Equal(
 		&numStrParseResults2.TargetSearchString) {
+
+		return false
+	}
+
+	if numStrParseResults1.TargetStringSearchLength !=
+		numStrParseResults2.TargetStringSearchLength {
+
+		return false
+	}
+
+	if numStrParseResults1.TargetStringAdjustedSearchLength !=
+		numStrParseResults2.TargetStringAdjustedSearchLength {
+
+		return false
+	}
+
+	if numStrParseResults1.TargetStringStartingSearchIndex !=
+		numStrParseResults2.TargetStringStartingSearchIndex {
 
 		return false
 	}
