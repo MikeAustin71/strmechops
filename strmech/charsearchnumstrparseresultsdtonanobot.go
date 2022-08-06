@@ -5,7 +5,6 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
-	"time"
 )
 
 // charSearchNumStrParseResultsDtoNanobot - Provides helper
@@ -508,110 +507,56 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	// Max Label Field Length = 35
 	const maxLabelFieldLen = 35
-
-	// Leading Title Marquee
 	txtFormatCol := TextFormatterCollection{}
 
-	err = txtFormatCol.SetStdFormatParamsLine1Col(
-		" ",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		false,
-		"",
-		-1,
-		false,
-		ePrefix.XCpy(
-			"1-Column Setup"))
+	// Leading Title Marquee
 
-	if err != nil {
-		return err
+	txtFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType: TxtFieldType.LineColumns(),
+		FieldFormatParams: []TextFieldFmtParamsDto{
+			{
+				LeftMarginStr:  " ",
+				FieldLength:    maxLineLen,
+				FieldJustify:   TxtJustify.Center(),
+				DateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+				RightMarginStr: "",
+			},
+		},
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "\n",
+		MaxLineLength:              maxLineLen,
+		TurnAutoLineLengthBreaksOn: false,
 	}
 
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
+	titles := StringArrayDto{}
 
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Title Line 1
-	err = txtFormatCol.AddLine1Col(
-		"CharSearchNumStrParseResultsDto",
-		ePrefix.XCpy(
-			"Title Line 1"))
-
-	if err != nil {
-		return err
-	}
+	titles.AddString(
+		"CharSearchNumStrParseResultsDto")
 
 	txtStrParam :=
 		numStrParseResults.SearchResultsName
 
 	if len(txtStrParam) > 0 {
 
-		// Title Line 2
-		err = txtFormatCol.AddLine1Col(
-			txtStrParam,
-			ePrefix.XCpy(
-				"Title Line 2"))
-
-		if err != nil {
-			return err
-		}
-
+		titles.AddString(
+			txtStrParam)
 	}
 
-	// Title Line 3
-	err = txtFormatCol.AddLine1Col(
-		"Parameter Listing",
+	titles.AddString(
+		"Parameter Listing")
+
+	err = new(TextUtility).BuildOneColLeadingMarquee(
+		strBuilder,
+		titles,
+		txtFmtParams,
 		ePrefix.XCpy(
-			"Title Line 3"))
+			"strBuilder<-txtFmtParams"))
 
 	if err != nil {
+
 		return err
+
 	}
-
-	// Title Line  4 Date/Time
-
-	err = txtFormatCol.AddLine1Col(
-		TextInputParamFieldDateTimeDto{
-			FieldDateTime:       time.Now(),
-			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		},
-		ePrefix.XCpy(
-			"Top-Title Line 4"))
-
-	if err != nil {
-		return err
-	}
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Trailing Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
 
 	// End Of Marquee
 
@@ -829,84 +774,29 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		return err
 	}
 
-	// Trailing Title Marquee
-	// Top Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Title # 1
-	txtFormatCol.AddFieldLabel(
-		"",
-		"CharSearchNumStrParseResultsDto",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		"\n",
-		-1,
-		false)
-
-	txtStrParam =
-		numStrParseResults.SearchResultsName
-
-	if len(txtStrParam) > 0 {
-
-		// Title Line 2
-		err = txtFormatCol.AddLine1Col(
-			txtStrParam,
-			ePrefix.XCpy(
-				"Bottom Title Line 2"))
-
-		if err != nil {
-			return err
-		}
-
-	}
-
-	// Title # 3
-	txtFormatCol.AddFieldLabel(
-		"",
-		"End of Parameter Listing",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		"\n",
-		-1,
-		false)
-
-	// Filler =======
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		2,
-		"")
-
 	err = txtFormatCol.BuildText(
 		strBuilder,
 		ePrefix.XCpy(
 			"Marquee-Bottom"))
+
+	if err != nil {
+		return err
+	}
+
+	// Trailing Title Marquee
+
+	titles.Empty()
+
+	titles.AddManyStrings(
+		"CharSearchNumStrParseResultsDto",
+		"End of Parameter Listing")
+
+	err = new(TextUtility).BuildOneColTrailingMarquee(
+		strBuilder,
+		titles,
+		txtFmtParams,
+		ePrefix.XCpy(
+			"strBuilder<-txtFmtParams"))
 
 	if err != nil {
 		return err
