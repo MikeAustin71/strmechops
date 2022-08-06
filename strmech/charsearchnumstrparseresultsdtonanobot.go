@@ -166,8 +166,14 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 	destinationNumStrParseResults.FoundIntegerDigits =
 		sourceNumStrParseResults.FoundIntegerDigits
 
+	destinationNumStrParseResults.IdentifiedIntegerDigits =
+		sourceNumStrParseResults.IdentifiedIntegerDigits
+
 	destinationNumStrParseResults.FoundDecimalDigits =
 		sourceNumStrParseResults.FoundDecimalDigits
+
+	destinationNumStrParseResults.IdentifiedFractionalDigits =
+		sourceNumStrParseResults.IdentifiedFractionalDigits
 
 	destinationNumStrParseResults.NumSignValue =
 		sourceNumStrParseResults.NumSignValue
@@ -441,6 +447,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		txtStrLabel := "SearchResultsFunctionChain"
 
 		txtStrParam = numStrParseResults.SearchResultsFunctionChain
+
 		if len(txtStrParam) == 0 {
 
 			txtStrParam = "SearchResultsFunctionChain is EMPTY!"
@@ -595,12 +602,62 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		return err
 	}
 
+	// Build IdentifiedIntegerDigits
+
+	txtStrParam =
+		numStrParseResults.IdentifiedIntegerDigits
+
+	if len(txtStrParam) == 0 {
+
+		txtStrParam = "Identified Integer Digits is EMPTY!"
+
+	} else {
+
+		txtStrParam = "\"" + txtStrParam + "\""
+
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		"IdentifiedIntegerDigits",
+		txtStrParam,
+		ePrefix.XCpy(
+			"Build IdentifiedIntegerDigits"))
+
+	if err != nil {
+		return err
+	}
+
 	// Build FoundDecimalDigits
 	err = txtFormatCol.AddLine2Col(
 		"FoundDecimalDigits",
 		numStrParseResults.FoundDecimalDigits,
 		ePrefix.XCpy(
 			"Build FoundDecimalDigits"))
+
+	if err != nil {
+		return err
+	}
+
+	// Build IdentifiedFractionalDigits
+
+	txtStrParam =
+		numStrParseResults.IdentifiedFractionalDigits
+
+	if len(txtStrParam) == 0 {
+
+		txtStrParam = "Identified Fractional Digits is EMPTY!"
+
+	} else {
+
+		txtStrParam = "\"" + txtStrParam + "\""
+
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		"IdentifiedFractionalDigits",
+		txtStrParam,
+		ePrefix.XCpy(
+			"Build IdentifiedFractionalDigits"))
 
 	if err != nil {
 		return err

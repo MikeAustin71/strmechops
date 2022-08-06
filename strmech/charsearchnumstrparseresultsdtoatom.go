@@ -71,7 +71,11 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 
 	numStrParseResults.FoundIntegerDigits = false
 
+	numStrParseResults.IdentifiedIntegerDigits = ""
+
 	numStrParseResults.FoundDecimalDigits = false
+
+	numStrParseResults.IdentifiedFractionalDigits = ""
 
 	numStrParseResults.NumSignValue = NumSignVal.None()
 
@@ -193,14 +197,26 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 		return false
 	}
 
+	if numStrParseResults1.FoundIntegerDigits !=
+		numStrParseResults2.FoundIntegerDigits {
+
+		return false
+	}
+
+	if numStrParseResults1.IdentifiedIntegerDigits !=
+		numStrParseResults2.IdentifiedIntegerDigits {
+
+		return false
+	}
+
 	if numStrParseResults1.FoundDecimalDigits !=
 		numStrParseResults2.FoundDecimalDigits {
 
 		return false
 	}
 
-	if numStrParseResults1.FoundIntegerDigits !=
-		numStrParseResults2.FoundIntegerDigits {
+	if numStrParseResults1.IdentifiedFractionalDigits !=
+		numStrParseResults2.IdentifiedFractionalDigits {
 
 		return false
 	}

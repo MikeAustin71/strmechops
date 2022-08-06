@@ -129,11 +129,21 @@ type CharSearchNumStrParseResultsDto struct {
 	// located in the Target String to the left of the
 	// Decimal Separator Symbol (a.k.a. Decimal Point).
 
+	IdentifiedIntegerDigits string
+	// If Integer Digits (to the left of the decimal
+	// separator) were found during the character search,
+	// those digits will be stored in this string.
+
 	FoundDecimalDigits bool
 	// When set to 'true', this signals that one or more
 	// numeric digit characters ('0' through '9' inclusive)
 	// were located in the Target String to the right of
 	// the Decimal Separator Symbol (a.k.a Decimal Point).
+
+	IdentifiedFractionalDigits string
+	// If Fractional Digits (to the right of the decimal
+	// separator) were found during the character search,
+	// those digits will be stored in this string.
 
 	NumSignValue NumericSignValueType
 	// If a numeric value was extracted from the number string

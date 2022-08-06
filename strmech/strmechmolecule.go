@@ -622,6 +622,18 @@ computeExitStats:
 
 		}
 
+		if numStrKernel.GetNumberOfIntegerDigits() > 0 {
+
+			searchResults.IdentifiedIntegerDigits =
+				numStrKernel.GetIntegerString()
+		}
+
+		if numStrKernel.GetNumberOfFractionalDigits() > 0 {
+
+			searchResults.IdentifiedFractionalDigits =
+				numStrKernel.GetFractionalString()
+		}
+
 		if numStrKernel.GetNumberOfFractionalDigits() > 0 &&
 			numStrKernel.GetNumberOfIntegerDigits() == 0 {
 
