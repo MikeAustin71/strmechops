@@ -111,57 +111,64 @@ func (strArrayDtoAtom *stringArrayDtoAtom) equal(
 // element will therefore remain in the string array after the
 // 'Peek' operation is completed.
 //
+// If the string array maintained by the StringArrayDto instance is
+// empty, an error will be returned.
+//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	strArrayDto                *StringArrayDto
-//	   - A pointer to an instance of StringArrayDto. A deep copy of
-//	     the designated string in the string array for this
-//	     instance of StringArrayDto will be returned to the calling
-//	     function. The returned string array element is designated
-//	     by input parameter, 'zeroBasedIndex'.
+//		strArrayDto                *StringArrayDto
+//		   - A pointer to an instance of StringArrayDto. A deep copy of
+//		     the designated string in the string array for this
+//		     instance of StringArrayDto will be returned to the calling
+//		     function. The returned string array element is designated
+//		     by input parameter, 'zeroBasedIndex'.
 //
-//	     Depending on the value of input parameter,
-//	     'popStringArrayElement', either a 'Peek' or 'Pop'
-//	     operation will be performed on the designated string array
-//	     contained the StringArrayDto parameter, 'strArrayDto'.
-//
-//
-//	zeroBasedIndex             int
-//	   - The index number of the array element in the 'strArrayDto'
-//	     string array on which the 'Pop' or 'Peek' operation will
-//	     be performed.
+//		     Depending on the value of input parameter,
+//		     'popStringArrayElement', either a 'Peek' or 'Pop'
+//		     operation will be performed on the designated string array
+//		     contained the StringArrayDto parameter, 'strArrayDto'.
 //
 //
-//	popTextLine                bool
-//	   - If this parameter is set to 'true', it signals that a
-//	     'Pop' operation will be performed on the designated string
-//	     array in the StringArrayDto string array encapsulated in
-//	     parameter 'strArrayDto'. A 'Pop' operation will DELETE the
-//	     designated string array element from the string array
-//	     maintained by the StringArrayDto instance, 'strArrayDto'.
+//		zeroBasedIndex             int
+//		   - The index number of the array element in the 'strArrayDto'
+//		     string array on which the 'Pop' or 'Peek' operation will
+//		     be performed.
 //
-//	     If this parameter is set to 'false', it signals that a
-//	     'Peek' operation will be performed on the designated
-//	     string array encapsulated in StringArrayDto parameter
-//	     'strArrayDto'. A 'Peek' operation means that the
-//	     designated string array element in the StringArrayDto
-//	     string array WILL NOT be deleted and will remain in the
-//	     string array.
+//	      If the value of 'zeroBasedIndex' is less than zero or
+//	      greater than the last index in the string array, an
+//	      error will be returned.
 //
 //
-//	errPrefDto                 *ePref.ErrPrefixDto
-//	   - This object encapsulates an error prefix string which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods listed
-//	     as a function chain.
+//		popTextLine                bool
+//		   - If this parameter is set to 'true', it signals that a
+//		     'Pop' operation will be performed on the designated string
+//		     array in the StringArrayDto string array encapsulated in
+//		     parameter 'strArrayDto'. A 'Pop' operation will DELETE the
+//		     designated string array element from the string array
+//		     maintained by the StringArrayDto instance, 'strArrayDto'.
 //
-//	     If no error prefix information is needed, set this parameter
-//	     to 'nil'.
+//		     If this parameter is set to 'false', it signals that a
+//		     'Peek' operation will be performed on the designated
+//		     string array encapsulated in StringArrayDto parameter
+//		     'strArrayDto'. A 'Peek' operation means that the
+//		     designated string array element in the StringArrayDto
+//		     string array WILL NOT be deleted and will remain in the
+//		     string array.
 //
-//	     Type ErrPrefixDto is included in the 'errpref' software
-//	     package, "github.com/MikeAustin71/errpref".
+//
+//		errPrefDto                 *ePref.ErrPrefixDto
+//		   - This object encapsulates an error prefix string which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods listed
+//		     as a function chain.
+//
+//		     If no error prefix information is needed, set this parameter
+//		     to 'nil'.
+//
+//		     Type ErrPrefixDto is included in the 'errpref' software
+//		     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //

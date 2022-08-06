@@ -21,7 +21,7 @@ import (
 // ITextFieldSpecification interface. Text fields can be thought of
 // as the building blocks for a standard line of text.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // ----------------------------------------------------------------
 //
@@ -33,113 +33,109 @@ import (
 // However, users may control and override the application of line
 // termination characters through the following methods:
 //
-//  TextLineSpecStandardLine.SetNewLineChars()
-//  TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//  TextLineSpecStandardLine.TurnAutoLineTerminationOn()
-//
+//	TextLineSpecStandardLine.SetNewLineChars()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 // The TextLineSpecStandardLine type implements the
 // ITextLineSpecification interface.
 //
-//
-// Member Variables
+// # Member Variables
 //
 // ----------------------------------------------------------------
 //
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and
-//       formatted as a single line of text. Text fields are the
-//       building blocks for a single line of text.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and
+//	     formatted as a single line of text. Text fields are the
+//	     building blocks for a single line of text.
 //
-//       The single line of text produced by
-//       TextLineSpecStandardLine is formatted for output one or
-//       more times as specified by member variable,
-//       'numOfStdLines'.
-//
-//
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       the configured standard line text formatted for text
-//       display, file output or printing.
-//
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
-//
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
-//
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Configured Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
-//
-//         Example #2:
-//          Configured Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//         Example #3:
-//          Configured Standard Line Text = "How Now Brown Cow!"
-//          numOfStdLines = 5
-//          Text Output:
-//            "How Now Brown Cow!"
-//            "How Now Brown Cow!"
-//            "How Now Brown Cow!"
-//            "How Now Brown Cow!"
-//            "How Now Brown Cow!"
+//	     The single line of text produced by
+//	     TextLineSpecStandardLine is formatted for output one or
+//	     more times as specified by member variable,
+//	     'numOfStdLines'.
 //
 //
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     the configured standard line text formatted for text
+//	     display, file output or printing.
 //
-//       When 'turnLineTerminatorOff' is set to 'false', line
-//       terminators as defined by member variable 'newLineChars'
-//       will be applied as a line termination sequence for each
-//       line of text produced by TextLineSpecStandardLine.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       The default line terminator is the new line character
-//       ('\n') which is defined by member variable 'newLineChars'.
-//       However, this value is subject to user control and may be
-//       overridden by one or more characters supplied by the user.
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Configured Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
+//
+//	       Example #2:
+//	        Configured Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
+//
+//	       Example #3:
+//	        Configured Standard Line Text = "How Now Brown Cow!"
+//	        numOfStdLines = 5
+//	        Text Output:
+//	          "How Now Brown Cow!"
+//	          "How Now Brown Cow!"
+//	          "How Now Brown Cow!"
+//	          "How Now Brown Cow!"
+//	          "How Now Brown Cow!"
 //
 //
-//  newLineChars               []rune
-//     - By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, users have the option to
-//       override and modify this behavior by supplying an
-//       alternative character or characters to be used as a line
-//       termination sequence for each line of text produced by the
-//       current TextLineSpecStandardLine instance.
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       New Line Characters are also referred to as Line
-//       Termination Characters.
+//	     When 'turnLineTerminatorOff' is set to 'false', line
+//	     terminators as defined by member variable 'newLineChars'
+//	     will be applied as a line termination sequence for each
+//	     line of text produced by TextLineSpecStandardLine.
 //
-//       To override, change or control the behavior of
-//       'newLineChars', see the following methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
+//
+//	     The default line terminator is the new line character
+//	     ('\n') which is defined by member variable 'newLineChars'.
+//	     However, this value is subject to user control and may be
+//	     overridden by one or more characters supplied by the user.
 //
 //
+//	newLineChars               []rune
+//	   - By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, users have the option to
+//	     override and modify this behavior by supplying an
+//	     alternative character or characters to be used as a line
+//	     termination sequence for each line of text produced by the
+//	     current TextLineSpecStandardLine instance.
+//
+//	     New Line Characters are also referred to as Line
+//	     Termination Characters.
+//
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
 type TextLineSpecStandardLine struct {
 	textFields            []ITextFieldSpecification
 	numOfStdLines         int
@@ -167,111 +163,109 @@ type TextLineSpecStandardLine struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no formatted text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingStdLine            TextLineSpecStandardLine
-//     - A valid instance of TextLineSpecStandardLine. The Text
-//       Field array contained by this parameter will be added to
-//       the text field array of the current
-//       TextLineSpecStandardLine instance.
+//	incomingStdLine            TextLineSpecStandardLine
+//	   - A valid instance of TextLineSpecStandardLine. The Text
+//	     Field array contained by this parameter will be added to
+//	     the text field array of the current
+//	     TextLineSpecStandardLine instance.
 //
-//       All valid Text Field objects implement the
-//       ITextFieldSpecification interface. A deep copy of each
-//       object in the 'incomingStdLine' collection will be added
-//       to the Text Field collection maintained by the current
-//       instance of TextLineSpecStandardLine.
+//	     All valid Text Field objects implement the
+//	     ITextFieldSpecification interface. A deep copy of each
+//	     object in the 'incomingStdLine' collection will be added
+//	     to the Text Field collection maintained by the current
+//	     instance of TextLineSpecStandardLine.
 //
-//       If parameter 'incomingStdLine' is determined to be
-//       invalid, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If parameter 'incomingStdLine' is determined to be
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  LastIndexId                int
-//     - If this method completes successfully, the internal array
-//       index of the last text field object for the current
-//       TextLineSpecStandardLine instance will be returned as an
-//       integer value.
+//	LastIndexId                int
+//	   - If this method completes successfully, the internal array
+//	     index of the last text field object for the current
+//	     TextLineSpecStandardLine instance will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'LastIndexId' will be set to a
-//       value of minus one (-1).
+//	     In the event of an error, 'LastIndexId' will be set to a
+//	     value of minus one (-1).
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddStandardLine(
 	incomingStdLine *TextLineSpecStandardLine,
 	errorPrefix interface{}) (
@@ -328,108 +322,106 @@ func (stdLine *TextLineSpecStandardLine) AddStandardLine(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  iTextField                 ITextFieldSpecification
-//     - A text field object which implements the
-//       ITextFieldSpecification interface. A deep copy of this
-//       object will be added to the text field collection
-//       maintained by this instance of TextLineSpecStandardLine.
+//	iTextField                 ITextFieldSpecification
+//	   - A text field object which implements the
+//	     ITextFieldSpecification interface. A deep copy of this
+//	     object will be added to the text field collection
+//	     maintained by this instance of TextLineSpecStandardLine.
 //
-//       NOTE: You will need to pass the concrete instance of
-//       'iTextField' as a pointer to the Text Field (&textField).
+//	     NOTE: You will need to pass the concrete instance of
+//	     'iTextField' as a pointer to the Text Field (&textField).
 //
-//       If the 'iTextField' parameter are found to be invalid, an
-//       error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the 'iTextField' parameter are found to be invalid, an
+//	     error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  lastIndexId                int
-//     - If this method completes successfully, the internal array
-//       index of the last text field object for the current
-//       TextLineSpecStandardLine instance will be returned as an
-//       integer value.
+//	lastIndexId                int
+//	   - If this method completes successfully, the internal array
+//	     index of the last text field object for the current
+//	     TextLineSpecStandardLine instance will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'lastIndexId' will be set to a
-//       value of minus one (-1).
+//	     In the event of an error, 'lastIndexId' will be set to a
+//	     value of minus one (-1).
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddTextField(
 	iTextField ITextFieldSpecification,
 	errorPrefix interface{}) (
@@ -504,107 +496,105 @@ func (stdLine *TextLineSpecStandardLine) AddTextField(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textFields                 *[]ITextFieldSpecification
-//     - A pointer to a text field collection whose objects
-//       implement the ITextFieldSpecification interface. A deep
-//       copy of each object in this collection will be added to
-//       the text field collection maintained by the current
-//       instance of TextLineSpecStandardLine.
+//	textFields                 *[]ITextFieldSpecification
+//	   - A pointer to a text field collection whose objects
+//	     implement the ITextFieldSpecification interface. A deep
+//	     copy of each object in this collection will be added to
+//	     the text field collection maintained by the current
+//	     instance of TextLineSpecStandardLine.
 //
-//       If member variable data values contained in this
-//       'textFields' parameter are found to be invalid, an error
-//       will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If member variable data values contained in this
+//	     'textFields' parameter are found to be invalid, an error
+//	     will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  lastIndexId                int
-//     - If this method completes successfully, the internal array
-//       index of the last text field object for the current
-//       TextLineSpecStandardLine instance will be returned as an
-//       integer value.
+//	lastIndexId                int
+//	   - If this method completes successfully, the internal array
+//	     index of the last text field object for the current
+//	     TextLineSpecStandardLine instance will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'lastIndexId' will be set to a
-//       value of minus one (-1).
+//	     In the event of an error, 'lastIndexId' will be set to a
+//	     value of minus one (-1).
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddTextFields(
 	textFields *[]ITextFieldSpecification,
 	errorPrefix interface{}) (
@@ -656,191 +646,188 @@ func (stdLine *TextLineSpecStandardLine) AddTextFields(
 // of the new Text Field DateTime Object will be returned to the
 // calling function.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  dateTime                   time.Time
-//     - A valid date time value which is used to generate a
-//       formatted date/time text string. Type time.Time is part of
-//       the Golang time package:
-//              https://pkg.go.dev/time.
+//	dateTime                   time.Time
+//	   - A valid date time value which is used to generate a
+//	     formatted date/time text string. Type time.Time is part of
+//	     the Golang time package:
+//	            https://pkg.go.dev/time.
 //
-//       If this parameter is submitted as a zero value, an error
-//       will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the formatted
-//       'dateTime' value will be displayed.
-//
-//       If 'fieldLen' is less than the length of the formatted
-//       'dateTime' string, it will be automatically set equal to
-//       the formatted 'dateTime' string length.
-//
-//       If 'fieldLen' is greater than the length of the formatted
-//       'dateTime' string, 'dateTime' will be positioned within a
-//       text field with a length equal to 'fieldLen'. In this
-//       case, the position of the 'dateTime' string within the
-//       text field will be controlled by the text justification
-//       value contained in parameter, 'textJustification'.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of the formatted 'dateTime', set this parameter to a value
-//       of minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted as a zero value, an error
+//	     will be returned.
 //
 //
-//  dateTimeFormat             string
-//     - This string holds the date/time format parameters used to
-//       format the 'dateTime' value when generating a 'dateTime'
-//       text string. The formatted 'dateTime' text string is
-//       generated by type TextFieldSpecDateTime for use in text
-//       displays, file output or printing.
+//	fieldLen                   int
+//	   - The length of the text field in which the formatted
+//	     'dateTime' value will be displayed.
 //
-//       The date/time format is documented in the Golang time.Time
-//       package, https://pkg.go.dev/time. The format operations are
-//       documented at https://pkg.go.dev/time#Time.Format .
+//	     If 'fieldLen' is less than the length of the formatted
+//	     'dateTime' string, it will be automatically set equal to
+//	     the formatted 'dateTime' string length.
 //
-//       If this parameter is submitted as an empty string,
-//       parameter 'dateTimeFormat' will be assigned a default
-//       value of "2006-01-02 15:04:05.000000000 -0700 MST".
+//	     If 'fieldLen' is greater than the length of the formatted
+//	     'dateTime' string, 'dateTime' will be positioned within a
+//	     text field with a length equal to 'fieldLen'. In this
+//	     case, the position of the 'dateTime' string within the
+//	     text field will be controlled by the text justification
+//	     value contained in parameter, 'textJustification'.
 //
-//       Example Formats:
-//        Example 1:
-//         dateTimeFormat =
-//          "2006-01-02 15:04:05.000000000 -0700 MST"
-//        Result =
-//          "2021-10-21 14:19:03.000000000 -0500 CDT"
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of the formatted 'dateTime', set this parameter to a value
+//	     of minus one (-1).
 //
-//        Example 2:
-//         dateTimeFormat =
-//          "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
-//
-//          Result =
-//           "Thursday October 21, 2021 14:19:03.000000000 -0500 CDT"
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'dateTime' string within a text field with a field length
-//       specified by parameter 'fieldLen'.
+//	dateTimeFormat             string
+//	   - This string holds the date/time format parameters used to
+//	     format the 'dateTime' value when generating a 'dateTime'
+//	     text string. The formatted 'dateTime' text string is
+//	     generated by type TextFieldSpecDateTime for use in text
+//	     displays, file output or printing.
 //
-//       Text justification can only be evaluated in the context of
-//       a 'dateTime' text string, field length and a
-//       'textJustification' object of type TextJustify. This is
-//       because a field length ('fieldLen') value equal to or less
-//       than the length of the 'dateTime' text string will never
-//       use text justification. In these cases, text justification
-//       is completely ignored because the length of the text field
-//       ('fieldLen') is automatically set equal to the length of
-//       the 'dateTime' text string.
+//	     The date/time format is documented in the Golang time.Time
+//	     package, https://pkg.go.dev/time. The format operations are
+//	     documented at https://pkg.go.dev/time#Time.Format .
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'dateTimeFormat' will be assigned a default
+//	     value of "2006-01-02 15:04:05.000000000 -0700 MST".
 //
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
+//	     Example Formats:
+//	      Example 1:
+//	       dateTimeFormat =
+//	        "2006-01-02 15:04:05.000000000 -0700 MST"
+//	      Result =
+//	        "2021-10-21 14:19:03.000000000 -0500 CDT"
 //
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	      Example 2:
+//	       dateTimeFormat =
+//	        "Monday January 2, 2006 15:04:05.000000000 -0700 MST"
 //
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	        Result =
+//	         "Thursday October 21, 2021 14:19:03.000000000 -0500 CDT"
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'dateTime' string within a text field with a field length
+//	     specified by parameter 'fieldLen'.
 //
-//       2. string - A string containing error prefix information.
+//	     Text justification can only be evaluated in the context of
+//	     a 'dateTime' text string, field length and a
+//	     'textJustification' object of type TextJustify. This is
+//	     because a field length ('fieldLen') value equal to or less
+//	     than the length of the 'dateTime' text string will never
+//	     use text justification. In these cases, text justification
+//	     is completely ignored because the length of the text field
+//	     ('fieldLen') is automatically set equal to the length of
+//	     the 'dateTime' text string.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  indexId                    int
-//     - If this method completes successfully, the internal array
-//       index of the new text label object will be returned as an
-//       integer value.
+//	indexId                    int
+//	   - If this method completes successfully, the internal array
+//	     index of the new text label object will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'indexId' will be set to a value
-//       of minus one (-1).
+//	     In the event of an error, 'indexId' will be set to a value
+//	     of minus one (-1).
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 	dateTime time.Time,
 	fieldLen int,
@@ -909,132 +896,129 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldDateTime(
 // of the new Text Field Filler Object will be returned to the
 // calling function.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no text will be generated. The
 // number of standard line repetitions must be set to a number
 // greater than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fillerCharacters    string
-//     - A string containing the text characters which will be
-//       included in the Text Filler Field. The final Text Filler
-//       Field will be constructed from the filler characters
-//       repeated one or more times as specified by the
-//       'fillerCharsRepeatCount' parameter.
+//	fillerCharacters    string
+//	   - A string containing the text characters which will be
+//	     included in the Text Filler Field. The final Text Filler
+//	     Field will be constructed from the filler characters
+//	     repeated one or more times as specified by the
+//	     'fillerCharsRepeatCount' parameter.
 //
-//       If 'fillerCharacters' is submitted as an empty or zero
-//       length string, an error will be returned.
-//
-//
-//  fillerCharsRepeatCount    int
-//     - Controls the number of times 'fillerCharacters' is
-//       repeated when constructing the final Text Filler Field
-//       returned by this method. The actual length of the string
-//       which will populated the completed Text Filler Field is
-//       equal to the length of 'fillerCharacters' times the value
-//       of 'fillerCharsRepeatCount'.
-//
-//        Text Field Filler Length =
-//          Length of fillerCharacters X fillerCharsRepeatCount
-//
-//          Example #1: fillerCharacters = "-*"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "-*-*-*"
-//
-//          Example #2: fillerCharacters = "-"
-//                      fillerRepeatCount = 3
-//                      Final Text Filler Field = "---"
-//
-//       If 'fillerCharsRepeatCount' has a value less than one (1) or
-//       greater than one-million (1,000,000), an error will be
-//       returned.
+//	     If 'fillerCharacters' is submitted as an empty or zero
+//	     length string, an error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	fillerCharsRepeatCount    int
+//	   - Controls the number of times 'fillerCharacters' is
+//	     repeated when constructing the final Text Filler Field
+//	     returned by this method. The actual length of the string
+//	     which will populated the completed Text Filler Field is
+//	     equal to the length of 'fillerCharacters' times the value
+//	     of 'fillerCharsRepeatCount'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	      Text Field Filler Length =
+//	        Length of fillerCharacters X fillerCharsRepeatCount
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	        Example #1: fillerCharacters = "-*"
+//	                    fillerRepeatCount = 3
+//	                    Final Text Filler Field = "-*-*-*"
+//
+//	        Example #2: fillerCharacters = "-"
+//	                    fillerRepeatCount = 3
+//	                    Final Text Filler Field = "---"
+//
+//	     If 'fillerCharsRepeatCount' has a value less than one (1) or
+//	     greater than one-million (1,000,000), an error will be
+//	     returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  indexId                    int
-//     - If this method completes successfully, the internal array
-//       index of the new text filler object will be returned as an
-//       integer value.
+//	indexId                    int
+//	   - If this method completes successfully, the internal array
+//	     index of the new text filler object will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'indexId' will be set to a value
-//       of minus one (-1).
+//	     In the event of an error, 'indexId' will be set to a value
+//	     of minus one (-1).
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 	fillerCharacters string,
 	fillerCharsRepeatCount int,
@@ -1098,145 +1082,142 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldFiller(
 // of the new Text Field Filler Object will be returned to the
 // calling function.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no text will be generated. The number
 // of standard line repetitions must be set to a number greater
 // than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabel                  string
-//     - String content to be displayed within the text label.
+//	textLabel                  string
+//	   - String content to be displayed within the text label.
 //
-//       If this parameter is submitted as a zero length string,
-//       an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabel' will
-//       be displayed. If 'fieldLen' is less than the length of the
-//       'textLabel' string, it will be automatically set equal to
-//       the 'textLabel' string length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabel', set this parameter to a value of minus one
-//       (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted as a zero length string,
+//	     an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabel' within the field specified by 'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabel' will
+//	     be displayed. If 'fieldLen' is less than the length of the
+//	     'textLabel' string, it will be automatically set equal to
+//	     the 'textLabel' string length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabel', set this parameter to a value of minus one
+//	     (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabel' within the field specified by 'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  indexId                    int
-//     - If this method completes successfully, the internal array
-//       index of the new text label object will be returned as an
-//       integer value.
+//	indexId                    int
+//	   - If this method completes successfully, the internal array
+//	     index of the new text label object will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'indexId' will be set to a value
-//       of minus one (-1).
+//	     In the event of an error, 'indexId' will be set to a value
+//	     of minus one (-1).
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 	textLabel string,
 	fieldLen int,
@@ -1303,113 +1284,110 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldLabel(
 // of the new Text Field Filler Object will be returned to the
 // calling function.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Adding TextFields without setting the number of standard line
 // repetitions, means that no text will be generated. The number
 // of standard line repetitions must be set to a number greater
 // than zero. See methods:
-//     TextLineSpecStandardLine.GetNumOfStdLines()
-//     TextLineSpecStandardLine.SetNumOfStdLines()
+//
+//	TextLineSpecStandardLine.GetNumOfStdLines()
+//	TextLineSpecStandardLine.SetNumOfStdLines()
 //
 // Instances of TextLineSpecStandardLine created with one of the
 // 'New' methods are automatically defaulted with the Number of
 // Standard Lines set to a value of one (1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldLen                   int
-//     - An integer value which specifies the number of white space
-//       characters to be included in the spacer text field.
+//	fieldLen                   int
+//	   - An integer value which specifies the number of white space
+//	     characters to be included in the spacer text field.
 //
-//       Examples:
-//          fieldLen = 1 produces text field " "
-//          fieldLen = 2 produces text field "  "
-//          fieldLen = 5 produces text field "     "
+//	     Examples:
+//	        fieldLen = 1 produces text field " "
+//	        fieldLen = 2 produces text field "  "
+//	        fieldLen = 5 produces text field "     "
 //
-//       If 'fieldLen' is less than one (+1), an error will be
-//       returned.
+//	     If 'fieldLen' is less than one (+1), an error will be
+//	     returned.
 //
-//       If 'fieldLen' is greater than one-million (+1,000,000), an
-//       error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'fieldLen' is greater than one-million (+1,000,000), an
+//	     error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  indexId                    int
-//     - If this method completes successfully, the internal array
-//       index of the new text label object will be returned as an
-//       integer value.
+//	indexId                    int
+//	   - If this method completes successfully, the internal array
+//	     index of the new text label object will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'indexId' will be set to a value
-//       of minus one (-1).
+//	     In the event of an error, 'indexId' will be set to a value
+//	     of minus one (-1).
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 	fieldLen int,
 	errorPrefix interface{}) (
@@ -1464,90 +1442,87 @@ func (stdLine *TextLineSpecStandardLine) AddTextFieldSpacer(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current TextLineSpecStandardLine instance
 // ('stdLine') will be deleted and overwritten.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingStdLine     *TextLineSpecStandardLine
-//     - A pointer to an instance of TextLineSpecStandardLine. This
-//       method will NOT change the data values of member variables
-//       contained in this instance.
+//	incomingStdLine     *TextLineSpecStandardLine
+//	   - A pointer to an instance of TextLineSpecStandardLine. This
+//	     method will NOT change the data values of member variables
+//	     contained in this instance.
 //
-//       All data values in this TextLineSpecStandardLine instance
-//       ('incomingStdLine') will be copied to the current
-//       TextLineSpecStandardLine instance ('stdLine').
+//	     All data values in this TextLineSpecStandardLine instance
+//	     ('incomingStdLine') will be copied to the current
+//	     TextLineSpecStandardLine instance ('stdLine').
 //
-//       If 'incomingStdLine' contains invalid member variable data
-//       values, this method will return an error.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'incomingStdLine' contains invalid member variable data
+//	     values, this method will return an error.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyIn(
 	incomingStdLine *TextLineSpecStandardLine,
 	errorPrefix interface{}) error {
@@ -1588,78 +1563,75 @@ func (stdLine *TextLineSpecStandardLine) CopyIn(
 // If the current TextLineSpecStandardLine instance contains
 // invalid member variables, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecStandardLine
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLineSpecStandardLine instance.
+//	TextLineSpecStandardLine
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextLineSpecStandardLine instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyOut(
 	errorPrefix interface{}) (
 	TextLineSpecStandardLine,
@@ -1704,79 +1676,76 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 // This method fulfills requirements of ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  ITextLineSpecification
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextLineSpecStandardLine instance cast as an
-//       ITextLineSpecification object.
+//	ITextLineSpecification
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextLineSpecStandardLine instance cast as an
+//	     ITextLineSpecification object.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
@@ -1820,79 +1789,76 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 // If the current TextLineSpecStandardLine instance contains invalid
 // member variables, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecStandardLine
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a pointer to a
-//       deep copy of the current TextLineSpecStandardLine
-//       instance.
+//	*TextLineSpecStandardLine
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a pointer to a
+//	     deep copy of the current TextLineSpecStandardLine
+//	     instance.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextLineSpecStandardLine,
@@ -1938,78 +1904,75 @@ func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 // Field Collection array will have a length which is one
 // less than the starting array length.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  indexId                    int
-//     - The index of the Text Field Collection array element
-//       which will be deleted from the Collection for this
-//       instance of TextLineSpecStandardLine.
+//	indexId                    int
+//	   - The index of the Text Field Collection array element
+//	     which will be deleted from the Collection for this
+//	     instance of TextLineSpecStandardLine.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) DeleteTextField(
 	indexId int,
 	errorPrefix interface{}) error {
@@ -2060,27 +2023,24 @@ func (stdLine *TextLineSpecStandardLine) DeleteTextField(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in this
 // current instance of TextLineSpecStandardLine. All member
 // variable data values will be reset to their zero or
 // uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (stdLine *TextLineSpecStandardLine) Empty() {
 
 	if stdLine.lock == nil {
@@ -2113,27 +2073,24 @@ func (stdLine *TextLineSpecStandardLine) Empty() {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all Text Fields contained in the
 // internal member variable array, 'textFields', for the current
 // instance of TextLineSpecStandardLine. 'textFields' will be
 // reset to 'nil'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 
 	if stdLine.lock == nil {
@@ -2160,33 +2117,30 @@ func (stdLine *TextLineSpecStandardLine) EmptyTextFields() {
 // all respects, this flag is set to 'true'. Otherwise, this method
 // returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingStdLine    *TextLineSpecStandardLine
-//     - A pointer to an incoming instance of
-//       TextLineSpecStandardLine. This method will compare all
-//       member variable data values in this instance against those
-//       contained in the current instance of
-//       TextLineSpecStandardLine. If the data values in both
-//       instances are found to be equal in all respects, this
-//       method will return a boolean value of 'true'.
-//
+//	incomingStdLine    *TextLineSpecStandardLine
+//	   - A pointer to an incoming instance of
+//	     TextLineSpecStandardLine. This method will compare all
+//	     member variable data values in this instance against those
+//	     contained in the current instance of
+//	     TextLineSpecStandardLine. If the data values in both
+//	     instances are found to be equal in all respects, this
+//	     method will return a boolean value of 'true'.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the member variable data values contained in input
-//       parameter 'incomingStdLine' are equal in all respects to
-//       those contained in the current instance of
-//       TextLineSpecStandardLine, this method will return a
-//       boolean value of 'true'. Otherwise a value of 'false' will
-//       be returned to the calling function.
-//
+//	bool
+//	   - If the member variable data values contained in input
+//	     parameter 'incomingStdLine' are equal in all respects to
+//	     those contained in the current instance of
+//	     TextLineSpecStandardLine, this method will return a
+//	     boolean value of 'true'. Otherwise a value of 'false' will
+//	     be returned to the calling function.
 func (stdLine *TextLineSpecStandardLine) Equal(
 	incomingStdLine *TextLineSpecStandardLine) bool {
 
@@ -2216,7 +2170,6 @@ func (stdLine *TextLineSpecStandardLine) Equal(
 // method returns 'false'.
 //
 // This method is required by interface ITextLineSpecification.
-//
 func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 	iTextLine ITextLineSpecification) bool {
 
@@ -2257,77 +2210,74 @@ func (stdLine *TextLineSpecStandardLine) EqualITextLine(
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - The formatted text line generated by the current instance
-//       of TextLineSpecStandardLine.
+//	string
+//	   - The formatted text line generated by the current instance
+//	     of TextLineSpecStandardLine.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
@@ -2386,12 +2336,12 @@ func (stdLine *TextLineSpecStandardLine) GetFormattedText(
 //
 // To override, monitor or control the behavior of 'newLineChars',
 // see the following methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
+//	TextLineSpecStandardLine.GetNewLineRunes()
+//	TextLineSpecStandardLine.SetNewLineChars()
+//	TextLineSpecStandardLine.SetNewLineRunes()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 func (stdLine *TextLineSpecStandardLine) GetNewLineChars() string {
 
 	if stdLine.lock == nil {
@@ -2423,12 +2373,12 @@ func (stdLine *TextLineSpecStandardLine) GetNewLineChars() string {
 //
 // To override, monitor or control the behavior of 'newLineChars',
 // see the following methods:
-//         TextLineSpecStandardLine.GetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
+//	TextLineSpecStandardLine.GetNewLineChars()
+//	TextLineSpecStandardLine.SetNewLineChars()
+//	TextLineSpecStandardLine.SetNewLineRunes()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 func (stdLine *TextLineSpecStandardLine) GetNewLineRunes() []rune {
 
 	if stdLine.lock == nil {
@@ -2459,7 +2409,6 @@ func (stdLine *TextLineSpecStandardLine) GetNewLineRunes() []rune {
 // instance of TextLineSpecStandardLine. The number of standard
 // lines is the number of times this standard line will be output
 // printed.
-//
 func (stdLine *TextLineSpecStandardLine) GetNumOfStdLines() int {
 
 	if stdLine.lock == nil {
@@ -2481,7 +2430,6 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfStdLines() int {
 // provides verification that text fields exist and are ready for
 // formatting. Once properly formatted, text fields may be
 // presented for text display, file output or printing.
-//
 func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 
 	if stdLine.lock == nil {
@@ -2511,27 +2459,25 @@ func (stdLine *TextLineSpecStandardLine) GetNumOfTextFields() int {
 //
 // To obtain the total length of all text lines produced by the
 // current instance of TextLineSpecStandardLine, see method:
-//   TextLineSpecStandardLine.GetTotalLinesLength()
 //
+//	TextLineSpecStandardLine.GetTotalLinesLength()
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method will return an integer value specifying the
-//       length of a single formatted text line produced by the
-//       current instance of TextLineSpecStandardLine.
+//	int
+//	   - This method will return an integer value specifying the
+//	     length of a single formatted text line produced by the
+//	     current instance of TextLineSpecStandardLine.
 //
-//       In the event of an error, a zero value will be returned.
-//
+//	     In the event of an error, a zero value will be returned.
 func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 
 	if stdLine.lock == nil {
@@ -2581,140 +2527,137 @@ func (stdLine *TextLineSpecStandardLine) GetSingleLineLength() int {
 //
 // ----------------------------------------------------------------
 //
-// BE ADVISED
+// # BE ADVISED
 //
 // This method ( GetTextField() ) is functionally equivalent to
 // method:
-//   TextLineSpecStandardLine.PeekAtTextField()
 //
+//	TextLineSpecStandardLine.PeekAtTextField()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  zeroBasedIndex             int
-//     - Specifies the index of the member element in the Text
-//       Fields collection which will be returned as a deep copy
-//       of the original. If this input parameter is found to be
-//       invalid or if the Text Fields collection is empty, an
-//       error will be returned.
+//	zeroBasedIndex             int
+//	   - Specifies the index of the member element in the Text
+//	     Fields collection which will be returned as a deep copy
+//	     of the original. If this input parameter is found to be
+//	     invalid or if the Text Fields collection is empty, an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	                    containing error prefix and error context
+//	                    information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of the
-//       Text Field member element specified by input parameter
-//       'zeroBasedIndex' will be returned.
+//	ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of the
+//	     Text Field member element specified by input parameter
+//	     'zeroBasedIndex' will be returned.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.GetTextField(
-//             2, // Return Text Field at index '2'
-//             ePrefix.XCpy(
-//             "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.GetTextField(
+//	           2, // Return Text Field at index '2'
+//	           ePrefix.XCpy(
+//	           "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return err
-//     }
+//	     return err
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) GetTextField(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
@@ -2773,81 +2716,78 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 // the current TextLineSpecStandardLine instance are invalid,
 // an error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	                    containing error prefix and error context
+//	                    information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  []ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of the
-//       text field collection maintained by the current
-//       TextLineSpecStandardLine instance will be returned. These
-//       text fields are returned as an array of objects
-//       implementing the ITextFieldSpecification interface.
+//	[]ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of the
+//	     text field collection maintained by the current
+//	     TextLineSpecStandardLine instance will be returned. These
+//	     text fields are returned as an array of objects
+//	     implementing the ITextFieldSpecification interface.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 	errorPrefix interface{}) (
 	[]ITextFieldSpecification,
@@ -2920,27 +2860,25 @@ func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 // a single text line times the repeat count.
 //
 // To obtain the length of a single line of text, see method:
-//   TextLineSpecStandardLine.GetSingleLineLength()
 //
+//	TextLineSpecStandardLine.GetSingleLineLength()
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This method will return an integer value specifying the
-//       total length of all the formatted lines produced by the
-//       current instance of TextLineSpecStandardLine.
+//	int
+//	   - This method will return an integer value specifying the
+//	     total length of all the formatted lines produced by the
+//	     current instance of TextLineSpecStandardLine.
 //
-//       In the event of an error, a zero value will be returned.
-//
+//	     In the event of an error, a zero value will be returned.
 func (stdLine *TextLineSpecStandardLine) GetTotalLinesLength() int {
 
 	if stdLine.lock == nil {
@@ -2993,7 +2931,6 @@ func (stdLine *TextLineSpecStandardLine) GetTotalLinesLength() int {
 // which is defined by member variable 'newLineChars'. However,
 // this value is subject to user control and may be overridden
 // by one or more characters.
-//
 func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 
 	if stdLine.lock == nil {
@@ -3019,128 +2956,124 @@ func (stdLine *TextLineSpecStandardLine) GetTurnLineTerminatorOff() bool {
 // After this method completes, the number of elements in the Text
 // Field Collection will be increased by one.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  iTextField                 ITextFieldSpecification
-//     - A Text Field object which implements the
-//       ITextFieldSpecification interface. A deep copy of this
-//       text field will be inserted into the Text Field Collection
-//       maintained by the current instance of
-//       TextLineSpecStandardLine.
+//	iTextField                 ITextFieldSpecification
+//	   - A Text Field object which implements the
+//	     ITextFieldSpecification interface. A deep copy of this
+//	     text field will be inserted into the Text Field Collection
+//	     maintained by the current instance of
+//	     TextLineSpecStandardLine.
 //
-//       After the insertion operation is completed, the
-//       'iTextField' object will be located at array element
-//       'indexId' immediately BEFORE the original array element
-//       located at that array index in the final Text Fields
-//       Array.
+//	     After the insertion operation is completed, the
+//	     'iTextField' object will be located at array element
+//	     'indexId' immediately BEFORE the original array element
+//	     located at that array index in the final Text Fields
+//	     Array.
 //
-//       NOTE: You will need to pass the concrete instance of
-//       'iTextField' as a pointer to the Text Field (&textField).
+//	     NOTE: You will need to pass the concrete instance of
+//	     'iTextField' as a pointer to the Text Field (&textField).
 //
-//       If the 'iTextField' parameter are found to be invalid, an
-//       error will be returned.
-//
-//
-//  indexId                    int
-//     - This index number designates the array element index in
-//       the Text Fields Collection of the 'txtStdLine' instance at
-//       which the Text Fields parameter, 'iTextField' will be
-//       inserted. This means that 'iTextField' will be inserted
-//       immediately BEFORE the array element specified by
-//       'indexId' in the final Text Fields Array.
-//
-//       For example, if 'indexId' is set to '4', the original Text
-//       Field object at index '4' will be moved to index position
-//       '5' after the insertion operation is completed.
-//
-//       If the value of 'indexId' is less than zero, it will be
-//       reset to zero. This means that the 'iTextField' object
-//       will be inserted in the first array element position of
-//       the Text Fields Collection maintained by parameter,
-//       'txtStdLine'.
-//
-//       If the value of 'indexId' is greater the last array
-//       element index in the 'txtStdLine' Text Fields Collection,
-//       the 'iTextField' object will be appended to the end of
-//       that Text Fields Collection.
+//	     If the 'iTextField' parameter are found to be invalid, an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	indexId                    int
+//	   - This index number designates the array element index in
+//	     the Text Fields Collection of the 'txtStdLine' instance at
+//	     which the Text Fields parameter, 'iTextField' will be
+//	     inserted. This means that 'iTextField' will be inserted
+//	     immediately BEFORE the array element specified by
+//	     'indexId' in the final Text Fields Array.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     For example, if 'indexId' is set to '4', the original Text
+//	     Field object at index '4' will be moved to index position
+//	     '5' after the insertion operation is completed.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the value of 'indexId' is less than zero, it will be
+//	     reset to zero. This means that the 'iTextField' object
+//	     will be inserted in the first array element position of
+//	     the Text Fields Collection maintained by parameter,
+//	     'txtStdLine'.
+//
+//	     If the value of 'indexId' is greater the last array
+//	     element index in the 'txtStdLine' Text Fields Collection,
+//	     the 'iTextField' object will be appended to the end of
+//	     that Text Fields Collection.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  lastIndexId                int
-//     - If this method completes successfully, the internal array
-//       index of the last text field object for the Text Field
-//       Collection maintained by the current
-//       TextLineSpecStandardLine instance will be returned as an
-//       integer value.
+//	lastIndexId                int
+//	   - If this method completes successfully, the internal array
+//	     index of the last text field object for the Text Field
+//	     Collection maintained by the current
+//	     TextLineSpecStandardLine instance will be returned as an
+//	     integer value.
 //
-//       In the event of an error, 'lastIndexId' will be set to a
-//       value of minus one (-1).
-//
-//
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
-//
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
+//	     In the event of an error, 'lastIndexId' will be set to a
+//	     value of minus one (-1).
 //
 //
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) InsertTextField(
 	iTextField ITextFieldSpecification,
 	indexId int,
@@ -3198,24 +3131,21 @@ func (stdLine *TextLineSpecStandardLine) InsertTextField(
 // 'true'. If any data element is invalid, this method returns
 // 'false'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - If all data elements encapsulated by the current instance
-//       of TextLineSpecStandardLine are valid, this returned
-//       boolean value is set to 'true'. If any data values are
-//       invalid, this return parameter is set to 'false'.
-//
+//	isValid             bool
+//	   - If all data elements encapsulated by the current instance
+//	     of TextLineSpecStandardLine are valid, this returned
+//	     boolean value is set to 'true'. If any data values are
+//	     invalid, this return parameter is set to 'false'.
 func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
 	isValid bool) {
 
@@ -3252,71 +3182,68 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstance() (
 // This method fulfills requirements of ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextLineSpecStandardLine are found
-//       to be invalid, this method will return an error.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextLineSpecStandardLine are found
+//	     to be invalid, this method will return an error.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -3363,21 +3290,19 @@ func (stdLine *TextLineSpecStandardLine) IsValidInstanceError(
 // This means that the returned standard line instance will only
 // be output or printed once.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  numOfStdLines  - Defaults number of standard lines to one (1).
+//	numOfStdLines  - Defaults number of standard lines to one (1).
 //
-//  newLineChars   - Defaults new line character to '\n'.
-//                   To change the value of the new line character,
-//                   or characters, see methods:
-//                   TextLineSpecStandardLine.SetNewLineChars()
-//                   TextLineSpecStandardLine.SetNewLineRunes()
-//
+//	newLineChars   - Defaults new line character to '\n'.
+//	                 To change the value of the new line character,
+//	                 or characters, see methods:
+//	                 TextLineSpecStandardLine.SetNewLineChars()
+//	                 TextLineSpecStandardLine.SetNewLineRunes()
 func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 
 	if stdLine.lock == nil {
@@ -3425,122 +3350,118 @@ func (stdLine TextLineSpecStandardLine) New() TextLineSpecStandardLine {
 // for the TextLineSpecStandardLine instance returned by this
 // method is empty. Use the following methods to add text fields
 // to this collection:
-//   TextLineSpecStandardLine.AddTextField()
-//   TextLineSpecStandardLine.AddTextFieldFiller()
-//   TextLineSpecStandardLine.AddTextFieldLabel()
 //
+//	TextLineSpecStandardLine.AddTextField()
+//	TextLineSpecStandardLine.AddTextFieldFiller()
+//	TextLineSpecStandardLine.AddTextFieldLabel()
 //
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  textFields          []ITextFieldSpecification
-//     - 'textFields' is assigned a default value of 'nil' meaning
-//       that the collection of text fields for the returned
-//       instance of TextLineSpecStandardLine is empty.
+//	textFields          []ITextFieldSpecification
+//	   - 'textFields' is assigned a default value of 'nil' meaning
+//	     that the collection of text fields for the returned
+//	     instance of TextLineSpecStandardLine is empty.
 //
-//       'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
+//	     'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//
-//  numOfStdLines       int
-//     - Defaults number of standard lines to one (1).
-//
-//       'numOfStdLines' is an integer value specifying the number
-//        of repetitions for a standard line text formatted for
-//        text display, file output or printing.
-//
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
-//
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
-//
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
-//
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
-//
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
 //
-//  newLineChars        []rune{'\n'}
-//     - Defaults new line character to '\n'.
+//	numOfStdLines       int
+//	   - Defaults number of standard lines to one (1).
 //
-//       'newLineChars' is an array of runes which contains the
-//        text character or characters which will be applied as
-//        line termination characters for each line of text
-//        produced by the returned instance of TextLineSpecStandardLine.
+//	     'numOfStdLines' is an integer value specifying the number
+//	      of repetitions for a standard line text formatted for
+//	      text display, file output or printing.
 //
-//       To change the value of the new line character,
-//       or characters, see methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
+//
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
+//
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
+//
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
+//
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  turnLineTerminatorOff      bool
-//     - Defaults 'turnLineTerminatorOff' flag to 'false'.
+//	newLineChars        []rune{'\n'}
+//	   - Defaults new line character to '\n'.
 //
-//       The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
+//	     'newLineChars' is an array of runes which contains the
+//	      text character or characters which will be applied as
+//	      line termination characters for each line of text
+//	      produced by the returned instance of TextLineSpecStandardLine.
 //
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by parameter
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
+//	     To change the value of the new line character,
+//	     or characters, see methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
 //
+//	turnLineTerminatorOff      bool
+//	   - Defaults 'turnLineTerminatorOff' flag to 'false'.
+//
+//	     The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
+//
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
+//
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecStandardLine
-//     - This method will create and return a pointer to a new
-//       instance of TextLineSpecStandardLine which is fully
-//       configured except for text fields. To add text fields,
-//       see method TextLineSpecStandardLine.AddTextField()
-//
+//	*TextLineSpecStandardLine
+//	   - This method will create and return a pointer to a new
+//	     instance of TextLineSpecStandardLine which is fully
+//	     configured except for text fields. To add text fields,
+//	     see method TextLineSpecStandardLine.AddTextField()
 func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 
 	if stdLine.lock == nil {
@@ -3591,180 +3512,176 @@ func (stdLine TextLineSpecStandardLine) NewPtr() *TextLineSpecStandardLine {
 // ITextFieldSpecification objects which will be assembled and
 // formatted on a single line of text.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  newLineChars               []rune{'\n'}
-//     - By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, users have the option to
-//       override and modify this behavior by supplying an
-//       alternative character or characters to be used as a line
-//       termination sequence for each line of text produced by the
-//       current TextLineSpecStandardLine instance.
+//	newLineChars               []rune{'\n'}
+//	   - By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, users have the option to
+//	     override and modify this behavior by supplying an
+//	     alternative character or characters to be used as a line
+//	     termination sequence for each line of text produced by the
+//	     current TextLineSpecStandardLine instance.
 //
-//       This method will not change the current value of
-//       'newLineChars'.
+//	     This method will not change the current value of
+//	     'newLineChars'.
 //
-//       To override, change or control the behavior of
-//       'newLineChars', see the following methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 //
-//  turnLineTerminatorOff      false
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
+//	turnLineTerminatorOff      false
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by member variable
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by member variable
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
-//       The default line terminator is the new line character
-//       ('\n') which is defined by member variable 'newLineChars'.
-//       However, this value is subject to user control and may be
-//       overridden by one or more characters supplied by the user.
-//
+//	     The default line terminator is the new line character
+//	     ('\n') which is defined by member variable 'newLineChars'.
+//	     However, this value is subject to user control and may be
+//	     overridden by one or more characters supplied by the user.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
 //
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
-//
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
-//
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
+//
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecStandardLine
-//     - If this method completes successfully, it will create and
-//       return a new concrete instance of TextLineSpecStandardLine
-//       which is fully configured with all the parameters
-//       necessary to format a standard text line for text display,
-//       file output or printing.
+//	TextLineSpecStandardLine
+//	   - If this method completes successfully, it will create and
+//	     return a new concrete instance of TextLineSpecStandardLine
+//	     which is fully configured with all the parameters
+//	     necessary to format a standard text line for text display,
+//	     file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine TextLineSpecStandardLine) NewStandardLine(
 	numOfStdLines int,
 	textFields []ITextFieldSpecification,
@@ -3867,180 +3784,176 @@ func (stdLine TextLineSpecStandardLine) NewStandardLine(
 // ITextFieldSpecification objects which will be assembled and
 // formatted on a single line of text.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // This method will automatically set the following default values:
 //
-//  newLineChars               []rune{'\n'}
-//     - By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, users have the option to
-//       override and modify this behavior by supplying an
-//       alternative character or characters to be used as a line
-//       termination sequence for each line of text produced by the
-//       current TextLineSpecStandardLine instance.
+//	newLineChars               []rune{'\n'}
+//	   - By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, users have the option to
+//	     override and modify this behavior by supplying an
+//	     alternative character or characters to be used as a line
+//	     termination sequence for each line of text produced by the
+//	     current TextLineSpecStandardLine instance.
 //
-//       This method will not change the current value of
-//       'newLineChars'.
+//	     This method will not change the current value of
+//	     'newLineChars'.
 //
-//       To override, change or control the behavior of
-//       'newLineChars', see the following methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 //
-//  turnLineTerminatorOff      false
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
+//	turnLineTerminatorOff      false
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by member variable
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by member variable
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
-//       The default line terminator is the new line character
-//       ('\n') which is defined by member variable 'newLineChars'.
-//       However, this value is subject to user control and may be
-//       overridden by one or more characters supplied by the user.
-//
+//	     The default line terminator is the new line character
+//	     ('\n') which is defined by member variable 'newLineChars'.
+//	     However, this value is subject to user control and may be
+//	     overridden by one or more characters supplied by the user.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
 //
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
-//
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
-//
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
+//
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecStandardLine
-//     - If this method completes successfully, it will create and
-//       a pointer to a new instance of TextLineSpecStandardLine
-//       which is fully configured with all the parameters
-//       necessary to format a standard text line for text display,
-//       file output or printing.
+//	*TextLineSpecStandardLine
+//	   - If this method completes successfully, it will create and
+//	     a pointer to a new instance of TextLineSpecStandardLine
+//	     which is fully configured with all the parameters
+//	     necessary to format a standard text line for text display,
+//	     file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 	numOfStdLines int,
 	textFields []ITextFieldSpecification,
@@ -4144,177 +4057,173 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLine(
 // ITextFieldSpecification objects which will be assembled and
 // formatted on a single line of text.
 //
-//
 // ----------------------------------------------------------------
 //
 // Default Values
 //
-//  --- NONE ---   - Input parameters shown below configure all
-//                   internal member variables associated with the
-//                   returned new instance of
-//                   TextLineSpecStandardLine.
-//
+//	--- NONE ---   - Input parameters shown below configure all
+//	                 internal member variables associated with the
+//	                 returned new instance of
+//	                 TextLineSpecStandardLine.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
 //
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
-//
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
-//
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  newLineChars               []rune
-//     - An array of runes which contains the text characters which
-//       will be applied as line termination characters for each
-//       line of text produced by the returned instance of
-//       TextLineSpecStandardLine.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, this parameter allows the
-//       caller specify the character or characters to be used as a
-//       line termination sequence for each line of text produced
-//       by the returned instance of TextLineSpecStandardLine.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       If this parameter is submitted as a 'nil' value or, if
-//       'newLineChars' is a zero length array, this method will
-//       set 'newLineChars' to the default new line termination
-//       character ('\n').
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
 //
-//
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
-//
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by parameter
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
-//
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineChars               []rune
+//	   - An array of runes which contains the text characters which
+//	     will be applied as line termination characters for each
+//	     line of text produced by the returned instance of
+//	     TextLineSpecStandardLine.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, this parameter allows the
+//	     caller specify the character or characters to be used as a
+//	     line termination sequence for each line of text produced
+//	     by the returned instance of TextLineSpecStandardLine.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a 'nil' value or, if
+//	     'newLineChars' is a zero length array, this method will
+//	     set 'newLineChars' to the default new line termination
+//	     character ('\n').
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       2. string - A string containing error prefix information.
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextLineSpecStandardLine
-//     - If this method completes successfully, it will create and
-//       return a new, populated concrete instance of
-//       TextLineSpecStandardLine which is fully configured with all
-//       the parameters necessary to format one or more standard lines
-//       of text for text display, file output or printing.
+//	TextLineSpecStandardLine
+//	   - If this method completes successfully, it will create and
+//	     return a new, populated concrete instance of
+//	     TextLineSpecStandardLine which is fully configured with all
+//	     the parameters necessary to format one or more standard lines
+//	     of text for text display, file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 	numOfStdLines int,
 	textFields []ITextFieldSpecification,
@@ -4416,177 +4325,173 @@ func (stdLine TextLineSpecStandardLine) NewStandardLineAllParms(
 // ITextFieldSpecification objects which will be assembled and
 // formatted on a single line of text.
 //
-//
 // ----------------------------------------------------------------
 //
 // Default Values
 //
-//  --- NONE ---   - Input parameters shown below configure all
-//                   internal member variables associated with the
-//                   returned new instance of
-//                   TextLineSpecStandardLine.
-//
+//	--- NONE ---   - Input parameters shown below configure all
+//	                 internal member variables associated with the
+//	                 returned new instance of
+//	                 TextLineSpecStandardLine.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
 //
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
-//
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
-//
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  newLineChars               []rune
-//     - An array of runes which contains the text characters which
-//       will be applied as line termination characters for each
-//       line of text produced by the returned instance of
-//       TextLineSpecStandardLine.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, this parameter allows the
-//       caller specify the character or characters to be used as a
-//       line termination sequence for each line of text produced
-//       by the returned instance of TextLineSpecStandardLine.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       If this parameter is submitted as a 'nil' value or, if
-//       'newLineChars' is a zero length array, this method will
-//       set 'newLineChars' to the default new line termination
-//       character ('\n').
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
 //
-//
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
-//
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by parameter
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
-//
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineChars               []rune
+//	   - An array of runes which contains the text characters which
+//	     will be applied as line termination characters for each
+//	     line of text produced by the returned instance of
+//	     TextLineSpecStandardLine.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, this parameter allows the
+//	     caller specify the character or characters to be used as a
+//	     line termination sequence for each line of text produced
+//	     by the returned instance of TextLineSpecStandardLine.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a 'nil' value or, if
+//	     'newLineChars' is a zero length array, this method will
+//	     set 'newLineChars' to the default new line termination
+//	     character ('\n').
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       2. string - A string containing error prefix information.
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextLineSpecStandardLine
-//     - If this method completes successfully, it will create and
-//       return a pointer to a new, populated instance of
-//       TextLineSpecStandardLine which is fully configured with
-//       all the parameters necessary to format one or more
-//       lines of text for text display, file output or printing.
+//	*TextLineSpecStandardLine
+//	   - If this method completes successfully, it will create and
+//	     return a pointer to a new, populated instance of
+//	     TextLineSpecStandardLine which is fully configured with
+//	     all the parameters necessary to format one or more
+//	     lines of text for text display, file output or printing.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 	numOfStdLines int,
 	textFields []ITextFieldSpecification,
@@ -4672,126 +4577,121 @@ func (stdLine TextLineSpecStandardLine) NewPtrStandardLineAllParms(
 // After completion of this method, the Text Field Collection array
 // will remain unchanged.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  iTxtFieldSpec              ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTxtFieldSpec              ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     the first member of the Text Fields Collection will be
+//	     returned to the calling function. The returned object will
+//	     implement the ITextFieldSpecification interface.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.PeekAtFirstTextField(
-//             ePrefix.XCpy(
-//             "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.PeekAtFirstTextField(
+//	           ePrefix.XCpy(
+//	           "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return err
-//     }
+//	     return err
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
@@ -4844,127 +4744,122 @@ func (stdLine *TextLineSpecStandardLine) PeekAtFirstTextField(
 // After completion of this method, the Text Field Collection array
 // will remain unchanged.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  iTxtFieldSpec              ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTxtFieldSpec              ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     the designated member of the Text Fields Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextFieldSpecification
+//	     interface.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ---------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	---------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.PeekAtLastTextField(
-//           ePrefix.XCpy(
-//           "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.PeekAtLastTextField(
+//	         ePrefix.XCpy(
+//	         "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return
-//     }
+//	     return
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
@@ -5030,146 +4925,142 @@ func (stdLine *TextLineSpecStandardLine) PeekAtLastTextField(
 //
 // ----------------------------------------------------------------
 //
-// BE ADVISED
+// # BE ADVISED
 //
 // This method ( PeekAtTextField() ) is functionally equivalent to
 // method:
-//   TextLineSpecStandardLine.GetTextField()
 //
+//	TextLineSpecStandardLine.GetTextField()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  indexId                    int
-//     - This index number designates the array element in the Text
-//       Fields Collection on which the "Peek" operation will be
-//       performed.
+//	indexId                    int
+//	   - This index number designates the array element in the Text
+//	     Fields Collection on which the "Peek" operation will be
+//	     performed.
 //
-//       This method will return a deep copy of the Text Field
-//       designated by 'indexId' to the calling function.
+//	     This method will return a deep copy of the Text Field
+//	     designated by 'indexId' to the calling function.
 //
-//       The original Text Fields Collection will remain unchanged
-//       by this method.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     The original Text Fields Collection will remain unchanged
+//	     by this method.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  iTxtFieldSpec              ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTxtFieldSpec              ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     the designated member of the Text Fields Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextFieldSpecification
+//	     interface.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ---------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	---------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.PeekAtTextField(
-//           2, // Return Text Field at index '2'
-//           ePrefix.XCpy(
-//           "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.PeekAtTextField(
+//	         2, // Return Text Field at index '2'
+//	         ePrefix.XCpy(
+//	         "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return
-//     }
+//	     return
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 	indexId int,
 	errorPrefix interface{}) (
@@ -5226,141 +5117,136 @@ func (stdLine *TextLineSpecStandardLine) PeekAtTextField(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // After successful completion of this method, the Text Field
 // Collection array will have a length which is one less than the
 // starting array length.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  iTxtFieldSpec              ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       if the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTxtFieldSpec              ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     if the designated member of the Text Fields Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextFieldSpecification
+//	     interface.
 //
 //
-//  remainingNumOfTextFields   int
-//     - If this method completes successfully, the first array
-//       element in the Text Fields Collection will be deleted.
-//       After deleting that element, this parameter will return
-//       the number of array elements still remaining in the
-//       Text Fields Collection.
+//	remainingNumOfTextFields   int
+//	   - If this method completes successfully, the first array
+//	     element in the Text Fields Collection will be deleted.
+//	     After deleting that element, this parameter will return
+//	     the number of array elements still remaining in the
+//	     Text Fields Collection.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ---------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	---------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.PopFirstTextField(
-//           ePrefix.XCpy(
-//           "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.PopFirstTextField(
+//	         ePrefix.XCpy(
+//	         "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return
-//     }
+//	     return
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
@@ -5419,141 +5305,136 @@ func (stdLine *TextLineSpecStandardLine) PopFirstTextField(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // After successful completion of this method, the Text Field
 // Collection array will have a length which is one less than the
 // starting array length.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  iTxtFieldSpec              ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       if the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTxtFieldSpec              ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     if the designated member of the Text Fields Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextFieldSpecification
+//	     interface.
 //
 //
-//  remainingNumOfTxtFields    int
-//     - If this method completes successfully, the first array
-//       element in the Text Fields Collection will be deleted.
-//       After deleting that element, this parameter will return
-//       the number of array elements still remaining in the
-//       Text Fields Collection.
+//	remainingNumOfTxtFields    int
+//	   - If this method completes successfully, the first array
+//	     element in the Text Fields Collection will be deleted.
+//	     After deleting that element, this parameter will return
+//	     the number of array elements still remaining in the
+//	     Text Fields Collection.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ---------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	---------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.PopLastTextField(
-//           ePrefix.XCpy(
-//           "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.PopLastTextField(
+//	         ePrefix.XCpy(
+//	         "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return
-//     }
+//	     return
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 	errorPrefix interface{}) (
 	iTxtFieldSpec ITextFieldSpecification,
@@ -5625,153 +5506,148 @@ func (stdLine *TextLineSpecStandardLine) PopLastTextField(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // After successful completion of this method, the Text Field
 // Collection array will have a length which is one less than the
 // starting array length.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  indexId                    int
-//     - This index number designates the array element in the Text
-//       Fields Collection on which the "Pop" operation will be
-//       performed.
+//	indexId                    int
+//	   - This index number designates the array element in the Text
+//	     Fields Collection on which the "Pop" operation will be
+//	     performed.
 //
-//       This method will return a deep copy of the Text Field
-//       designated by 'indexId' to the calling function. It
-//       will then proceed to delete the original member of the
-//       Text Fields Collection located at array element 'indexId'.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This method will return a deep copy of the Text Field
+//	     designated by 'indexId' to the calling function. It
+//	     will then proceed to delete the original member of the
+//	     Text Fields Collection located at array element 'indexId'.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  iTxtFieldSpec              ITextFieldSpecification
-//     - If this method completes successfully, a deep copy of
-//       if the designated member of the Text Fields Collection
-//       will be returned to the calling function. The returned
-//       object will implement the ITextFieldSpecification
-//       interface.
+//	iTxtFieldSpec              ITextFieldSpecification
+//	   - If this method completes successfully, a deep copy of
+//	     if the designated member of the Text Fields Collection
+//	     will be returned to the calling function. The returned
+//	     object will implement the ITextFieldSpecification
+//	     interface.
 //
 //
-//  remainingNumOfTxtFields    int
-//     - If this method completes successfully, the array element
-//       designated by 'indexId' in the Text Fields Collection,
-//       will be deleted. After deleting that element, this
-//       parameter will return the number of array elements still
-//       remaining in the Text Fields Collection.
+//	remainingNumOfTxtFields    int
+//	   - If this method completes successfully, the array element
+//	     designated by 'indexId' in the Text Fields Collection,
+//	     will be deleted. After deleting that element, this
+//	     parameter will return the number of array elements still
+//	     remaining in the Text Fields Collection.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  When casting ITextFieldSpecification returned from this method,
-//  use the following syntax to cast the interface object to a
-//  concrete type.
+//	When casting ITextFieldSpecification returned from this method,
+//	use the following syntax to cast the interface object to a
+//	concrete type.
 //
-//  It is necessary to cast the interface object ('iTxtFieldSpec')
-//  as a pointer to the concrete type ('spacerField'). This is
-//  because the concrete type uses methods with pointer receivers.
+//	It is necessary to cast the interface object ('iTxtFieldSpec')
+//	as a pointer to the concrete type ('spacerField'). This is
+//	because the concrete type uses methods with pointer receivers.
 //
-//  ------------------------------------------------------------
-//     var iTxtFieldSpec ITextFieldSpecification
+//	------------------------------------------------------------
+//	   var iTxtFieldSpec ITextFieldSpecification
 //
-//     iTxtFieldSpec,
-//     err = stdLine01.PopTextField(
-//             2, // Return Text Field at index '2'
-//           ePrefix.XCpy(
-//           "stdLine01"))
+//	   iTxtFieldSpec,
+//	   err = stdLine01.PopTextField(
+//	           2, // Return Text Field at index '2'
+//	         ePrefix.XCpy(
+//	         "stdLine01"))
 //
-//     if err != nil {
-//       return err
-//     }
+//	   if err != nil {
+//	     return err
+//	   }
 //
-//     var spacerField *TextFieldSpecSpacer
+//	   var spacerField *TextFieldSpecSpacer
 //
-//     var ok bool
+//	   var ok bool
 //
-//     spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
+//	   spacerField, ok = iTxtFieldSpec.(*TextFieldSpecSpacer)
 //
-//     if !ok {
+//	   if !ok {
 //
-//       err = fmt.Errorf("%v - Error\n"+
-//       "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
-//       "Expected return of type 'TextFieldSpecSpacer'.\n"+
-//       "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
-//       ePrefix.String())
+//	     err = fmt.Errorf("%v - Error\n"+
+//	     "spacerField, ok := iTxtFieldSpec.(*TextFieldSpecSpacer)\n"+
+//	     "Expected return of type 'TextFieldSpecSpacer'.\n"+
+//	     "HOWEVER, THAT TYPE WAS NOT RETURNED!\n",
+//	     ePrefix.String())
 //
-//       return
-//     }
+//	     return
+//	   }
 //
-//     // 'spacerField' is now available for use
-//     // as a concrete object.
-//     spacerLen := spacerField.GetFieldLength()
-//
-//
+//	   // 'spacerField' is now available for use
+//	   // as a concrete object.
+//	   spacerLen := spacerField.GetFieldLength()
 func (stdLine *TextLineSpecStandardLine) PopTextField(
 	indexId int,
 	errorPrefix interface{}) (
@@ -5861,121 +5737,117 @@ func (stdLine *TextLineSpecStandardLine) PopTextField(
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  p                          []byte
-//     - The byte buffer into which the formatted text line string
-//       generated by the current TextLineSpecStandardLine instance
-//       will be written.
-//
+//	p                          []byte
+//	   - The byte buffer into which the formatted text line string
+//	     generated by the current TextLineSpecStandardLine instance
+//	     will be written.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n                          int
+//	   - The number of bytes written to byte buffer 'p'.
 //
-//       Read() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if Read() returns n < len(p), it may use
-//       all of 'p' as scratch space during the call. If some
-//       data is available but not len(p) bytes, Read()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//	     Read() reads up to len(p) bytes into p. It returns
+//	     the number of bytes read (0 <= n <= len(p)) and any error
+//	     encountered. Even if Read() returns n < len(p), it may use
+//	     all of 'p' as scratch space during the call. If some
+//	     data is available but not len(p) bytes, Read()
+//	     conventionally returns what is available instead of
+//	     waiting for more.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered
+//	     during processing, the returned error Type will
+//	     encapsulate an error message.
 //
-//       When Read() encounters an error or end-of-file condition
-//       after successfully reading n > 0 bytes, it returns the
-//       number of bytes read. It may return the (non-nil) error
-//       from the same call or return the error (and n == 0) from
-//       a subsequent call. An instance of this general case is
-//       that a Reader returning a non-zero number of bytes at the
-//       end of the input stream may return either err == EOF or
-//       err == nil. The next read operation should return 0, EOF.
-//
+//	     When Read() encounters an error or end-of-file condition
+//	     after successfully reading n > 0 bytes, it returns the
+//	     number of bytes read. It may return the (non-nil) error
+//	     from the same call or return the error (and n == 0) from
+//	     a subsequent call. An instance of this general case is
+//	     that a Reader returning a non-zero number of bytes at the
+//	     end of the input stream may return either err == EOF or
+//	     err == nil. The next read operation should return 0, EOF.
 //
 // ------------------------------------------------------------------------
 //
 // Usage Examples:
 //
-//  Example # 1
+//	Example # 1
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  sb := strings.Builder{}
+//	var n, readBytesCnt int
+//	sb := strings.Builder{}
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = stdLine01.Read(p)
+//	  n,
+//	  err = stdLine01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    sb.Write(p[:n])
-//    readBytesCnt += n
-//  }
+//	  sb.Write(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Error(
-//      "Error Returned From stdLine01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Error(
+//	    "Error Returned From stdLine01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %s\n",
-//                sb.String())
+//	fmt.Printf("Text Line String: %s\n",
+//	              sb.String())
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 //
-//  Example # 2
+//	Example # 2
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  var actualStr string
+//	var n, readBytesCnt int
+//	var actualStr string
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = stdLine01.Read(p)
+//	  n,
+//	  err = stdLine01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    actualStr += string(p[:n])
-//    readBytesCnt += n
-//  }
+//	  actualStr += string(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Error(
-//      "Error Returned From stdLine01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Error(
+//	    "Error Returned From stdLine01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %v\n",
-//                actualStr)
+//	fmt.Printf("Text Line String: %v\n",
+//	              actualStr)
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
-//
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 func (stdLine *TextLineSpecStandardLine) Read(
 	p []byte) (
 	n int,
@@ -6064,7 +5936,6 @@ func (stdLine *TextLineSpecStandardLine) Read(
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
-//
 func (stdLine *TextLineSpecStandardLine) ReaderInitialize() {
 
 	if stdLine.lock == nil {
@@ -6089,101 +5960,98 @@ func (stdLine *TextLineSpecStandardLine) ReaderInitialize() {
 // The text field object to be replaced must exist at the index
 // specified by input parameter, 'replaceAtIndex'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textField                  ITextFieldSpecification
-//     - A text line object which implements the
-//       ITextFieldSpecification interface. A deep copy of this
-//       object will replace an existing element within the
-//       text fields collection maintained by this instance of
-//       TextLineSpecStandardLine. The text line object to
-//       be replaced is identified by the collection element index
-//       supplied by input parameter 'replaceAtIndex'.
+//	textField                  ITextFieldSpecification
+//	   - A text line object which implements the
+//	     ITextFieldSpecification interface. A deep copy of this
+//	     object will replace an existing element within the
+//	     text fields collection maintained by this instance of
+//	     TextLineSpecStandardLine. The text line object to
+//	     be replaced is identified by the collection element index
+//	     supplied by input parameter 'replaceAtIndex'.
 //
-//       If member variable data values contained in this
-//       'textField' parameter are found to be invalid, an error
-//       will be returned.
-//
-//
-//  replaceAtIndex             int
-//     - The index of an element within the text fields collection
-//       maintained by the current TextLineSpecStandardLine
-//       instance which will be replaced by input parameter
-//       'textField'.
-//
-//       Remember that the text fields collection maintained by
-//       the current TextLineSpecStandardLine instance is a zero
-//       based array. Therefore, the first index in the collection
-//       is zero (0).
-//
-//       If 'replaceAtIndex' proves to be an invalid index, an error
-//       will be returned.
+//	     If member variable data values contained in this
+//	     'textField' parameter are found to be invalid, an error
+//	     will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	replaceAtIndex             int
+//	   - The index of an element within the text fields collection
+//	     maintained by the current TextLineSpecStandardLine
+//	     instance which will be replaced by input parameter
+//	     'textField'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Remember that the text fields collection maintained by
+//	     the current TextLineSpecStandardLine instance is a zero
+//	     based array. Therefore, the first index in the collection
+//	     is zero (0).
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'replaceAtIndex' proves to be an invalid index, an error
+//	     will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
 	textField ITextFieldSpecification,
 	replaceAtIndex int,
@@ -6290,23 +6158,21 @@ func (stdLine *TextLineSpecStandardLine) ReplaceTextField(
 // means that no text will be output or printed for this instance
 // of TextLineSpecStandardLine.
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	The following examples illustrate the use of
+//	'numOfStdLines':
+//	  Example #1:
+//	   Standard Line Text = "Hello World"
+//	   numOfStdLines = 1
+//	   Text Output:
+//	     "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
+//	  Example #2:
+//	   Standard Line Text = "Hello World"
+//	   numOfStdLines = 3
+//	   Text Output:
+//	     "Hello World"
+//	     "Hello World"
+//	     "Hello World"
 func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 	numOfStdLines int) {
 
@@ -6347,96 +6213,93 @@ func (stdLine *TextLineSpecStandardLine) SetNumOfStdLines(
 // application of text line terminators by calling the following
 // methods:
 //
-//   TextLineSpecStandardLine.GetNewLineRunes()
-//   TextLineSpecStandardLine.SetNewLineChars()
-//   TextLineSpecStandardLine.SetNewLineRunes()
-//   TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//   TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//	TextLineSpecStandardLine.GetNewLineRunes()
+//	TextLineSpecStandardLine.SetNewLineChars()
+//	TextLineSpecStandardLine.SetNewLineRunes()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 // This method is similar to
 // TextLineSpecStandardLine.SetNewLineRunes() with sole
 // exception being that this method receives a string instead of
 // an array of runes.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  newLineChars               string
-//     - A string containing a single text character or a series
-//       of text characters used to terminate each line of text
-//       generated by the current instance of
-//       TextLineSpecStandardLine.
+//	newLineChars               string
+//	   - A string containing a single text character or a series
+//	     of text characters used to terminate each line of text
+//	     generated by the current instance of
+//	     TextLineSpecStandardLine.
 //
-//       New Line Characters are also referred to as Line
-//       Termination Characters.
+//	     New Line Characters are also referred to as Line
+//	     Termination Characters.
 //
-//       If this parameter is submitted as a zero length or empty
-//       string, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a zero length or empty
+//	     string, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) SetNewLineChars(
 	newLineChars string,
 	errorPrefix interface{}) (
@@ -6502,92 +6365,89 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineChars(
 // application of text line terminators by calling the following
 // methods:
 //
-//   TextLineSpecStandardLine.GetNewLineChars()
-//   TextLineSpecStandardLine.GetNewLineRunes()
-//   TextLineSpecStandardLine.SetNewLineChars()
-//   TextLineSpecStandardLine.SetNewLineRunes()
-//   TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//   TextLineSpecStandardLine.TurnAutoLineTerminationOn()
-//
+//	TextLineSpecStandardLine.GetNewLineChars()
+//	TextLineSpecStandardLine.GetNewLineRunes()
+//	TextLineSpecStandardLine.SetNewLineChars()
+//	TextLineSpecStandardLine.SetNewLineRunes()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  newLineRunes               []rune
-//     - An array of runes containing the character or characters
-//       used to terminate each line of text generated by the
-//       current instance of TextLineSpecStandardLine.
+//	newLineRunes               []rune
+//	   - An array of runes containing the character or characters
+//	     used to terminate each line of text generated by the
+//	     current instance of TextLineSpecStandardLine.
 //
-//       New Line Runes are also referred to as Line Termination
-//       Runes.
+//	     New Line Runes are also referred to as Line Termination
+//	     Runes.
 //
-//       If this parameter is submitted as a zero length or empty
-//       rune array, or if the rune array contains invalid zero
-//       rune values, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a zero length or empty
+//	     rune array, or if the rune array contains invalid zero
+//	     rune values, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 	newLineRunes []rune,
 	errorPrefix interface{}) (
@@ -6647,178 +6507,174 @@ func (stdLine *TextLineSpecStandardLine) SetNewLineRunes(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The pre-existing data fields for the current instance of
 // TextLineSpecStandardLine will be overwritten and deleted.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Unchanged Values
+// # Unchanged Values
 //
 // The following member variables will remain unchanged from their
 // current values. This method will NOT modify these values:
 //
-//  newLineChars               []rune
-//     - By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, users have the option to
-//       override and modify this behavior by supplying an
-//       alternative character or characters to be used as a line
-//       termination sequence for each line of text produced by the
-//       current TextLineSpecStandardLine instance.
+//	newLineChars               []rune
+//	   - By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, users have the option to
+//	     override and modify this behavior by supplying an
+//	     alternative character or characters to be used as a line
+//	     termination sequence for each line of text produced by the
+//	     current TextLineSpecStandardLine instance.
 //
-//       This method will not change the current value of
-//       'newLineChars'.
+//	     This method will not change the current value of
+//	     'newLineChars'.
 //
-//       To override, change or control the behavior of
-//       'newLineChars', see the following methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 //
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by member variable
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by member variable
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
-//       The default line terminator is the new line character
-//       ('\n') which is defined by member variable 'newLineChars'.
-//       However, this value is subject to user control and may be
-//       overridden by one or more characters supplied by the user.
-//
+//	     The default line terminator is the new line character
+//	     ('\n') which is defined by member variable 'newLineChars'.
+//	     However, this value is subject to user control and may be
+//	     overridden by one or more characters supplied by the user.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
 //
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
-//
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
-//
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
+//
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 	numOfStdLines int,
 	textFields []ITextFieldSpecification,
@@ -6902,164 +6758,161 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLine(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The pre-existing data fields for the current instance of
 // TextLineSpecStandardLine will be deleted and overwritten.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  numOfStdLines              int
-//     - An integer value specifying the number of repetitions for
-//       a standard line text formatted for text display, file
-//       output or printing.
+//	numOfStdLines              int
+//	   - An integer value specifying the number of repetitions for
+//	     a standard line text formatted for text display, file
+//	     output or printing.
 //
-//       A 'numOfStdLines' value of 1 means the line will be output
-//       once, a value of 2 signals the line will be repeated or
-//       output twice, a value of '3' signals the line will be output
-//       3-times and so on.
+//	     A 'numOfStdLines' value of 1 means the line will be output
+//	     once, a value of 2 signals the line will be repeated or
+//	     output twice, a value of '3' signals the line will be output
+//	     3-times and so on.
 //
-//       If the 'numOfStdLines' value is set to zero, no text line
-//       will be formatted for text display, file output or printing.
+//	     If the 'numOfStdLines' value is set to zero, no text line
+//	     will be formatted for text display, file output or printing.
 //
-//       If this value is set to a value less than zero, it will be
-//       automatically reset to a value of one ('1').
+//	     If this value is set to a value less than zero, it will be
+//	     automatically reset to a value of one ('1').
 //
-//       The following examples illustrate the use of
-//       'numOfStdLines':
-//         Example #1:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 1
-//          Text Output:
-//            "Hello World"
+//	     The following examples illustrate the use of
+//	     'numOfStdLines':
+//	       Example #1:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 1
+//	        Text Output:
+//	          "Hello World"
 //
-//         Example #2:
-//          Standard Line Text = "Hello World"
-//          numOfStdLines = 3
-//          Text Output:
-//            "Hello World"
-//            "Hello World"
-//            "Hello World"
-//
-//
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
-//
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
-//
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
-//
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
+//	       Example #2:
+//	        Standard Line Text = "Hello World"
+//	        numOfStdLines = 3
+//	        Text Output:
+//	          "Hello World"
+//	          "Hello World"
+//	          "Hello World"
 //
 //
-//  newLineChars               []rune
-//     - An array of runes which contains the text characters which
-//       will be applied as line termination characters for each
-//       line of text produced by the returned instance of
-//       TextLineSpecStandardLine.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       By default, each line of text generated by
-//       TextLineSpecStandardLine will be terminated with a new
-//       line character ('\n'). However, this parameter allows the
-//       caller specify the character or characters to be used as a
-//       line termination sequence for each line of text produced
-//       by the returned instance of TextLineSpecStandardLine.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       If this parameter is submitted as a 'nil' value or, if
-//       'newLineChars' is a zero length array, this method will
-//       set 'newLineChars' to the default new line termination
-//       character ('\n').
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
 //
-//
-//  turnLineTerminatorOff      bool
-//     - The 'turnLineTerminatorOff' flag controls whether a line
-//       termination character or characters will be automatically
-//       appended to each line of text produced by
-//       TextLineSpecStandardLine.
-//
-//       When the boolean flag 'turnLineTerminatorOff' is set to
-//       'false', line terminators as defined by parameter
-//       'newLineChars' will be applied as a line termination
-//       sequence for each line of text produced by
-//       TextLineSpecStandardLine.
-//
-//       When this boolean value is set to 'true', it turns off or
-//       cancels the automatic generation of line terminators for
-//       each line of text produced by TextLineSpecStandardLine.
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	newLineChars               []rune
+//	   - An array of runes which contains the text characters which
+//	     will be applied as line termination characters for each
+//	     line of text produced by the returned instance of
+//	     TextLineSpecStandardLine.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     By default, each line of text generated by
+//	     TextLineSpecStandardLine will be terminated with a new
+//	     line character ('\n'). However, this parameter allows the
+//	     caller specify the character or characters to be used as a
+//	     line termination sequence for each line of text produced
+//	     by the returned instance of TextLineSpecStandardLine.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a 'nil' value or, if
+//	     'newLineChars' is a zero length array, this method will
+//	     set 'newLineChars' to the default new line termination
+//	     character ('\n').
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	turnLineTerminatorOff      bool
+//	   - The 'turnLineTerminatorOff' flag controls whether a line
+//	     termination character or characters will be automatically
+//	     appended to each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       2. string - A string containing error prefix information.
+//	     When the boolean flag 'turnLineTerminatorOff' is set to
+//	     'false', line terminators as defined by parameter
+//	     'newLineChars' will be applied as a line termination
+//	     sequence for each line of text produced by
+//	     TextLineSpecStandardLine.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     When this boolean value is set to 'true', it turns off or
+//	     cancels the automatic generation of line terminators for
+//	     each line of text produced by TextLineSpecStandardLine.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 	numOfStdLines int,
 	textFields []ITextFieldSpecification,
@@ -7123,122 +6976,118 @@ func (stdLine *TextLineSpecStandardLine) SetStandardLineAllParms(
 // 'newLineChars' are found to be invalid, they will be set to
 // default values. See the section on 'Default Values' below.
 //
-//
 // ------------------------------------------------------------------------
 //
-// Default Values
+// # Default Values
 //
 // Under specified conditions, this method will automatically set
 // the following default values:
 //
-//  numOfStdLines              int
-//     - If the value of "Number of Standard Lines" for the current
-//       instance of TextLineSpecStandardLine is less than one
-//       ('1'), it will be defaulted to a value of one ('1'),
+//	numOfStdLines              int
+//	   - If the value of "Number of Standard Lines" for the current
+//	     instance of TextLineSpecStandardLine is less than one
+//	     ('1'), it will be defaulted to a value of one ('1'),
 //
-//       To override, change or control the behavior of
-//       'newLineChars', see the following method:
-//         TextLineSpecStandardLine.SetNumOfStdLines()
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following method:
+//	       TextLineSpecStandardLine.SetNumOfStdLines()
 //
 //
-//  newLineChars               []rune{'\n'}
-//     - If the value of New Line Characters (newLineChars) for the
-//       current instance of TextLineSpecStandardLine is empty or
-//       has a zero length, it will be defaulted to the value
-//       of a single new line characters ('\n').
+//	newLineChars               []rune{'\n'}
+//	   - If the value of New Line Characters (newLineChars) for the
+//	     current instance of TextLineSpecStandardLine is empty or
+//	     has a zero length, it will be defaulted to the value
+//	     of a single new line characters ('\n').
 //
-//       To override, change or control the behavior of
-//       'newLineChars', see the following methods:
-//         TextLineSpecStandardLine.GetNewLineRunes()
-//         TextLineSpecStandardLine.SetNewLineChars()
-//         TextLineSpecStandardLine.SetNewLineRunes()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOff()
-//         TextLineSpecStandardLine.TurnAutoLineTerminationOn()
-//
+//	     To override, change or control the behavior of
+//	     'newLineChars', see the following methods:
+//	       TextLineSpecStandardLine.GetNewLineRunes()
+//	       TextLineSpecStandardLine.SetNewLineChars()
+//	       TextLineSpecStandardLine.SetNewLineRunes()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOff()
+//	       TextLineSpecStandardLine.TurnAutoLineTerminationOn()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textFields                 []ITextFieldSpecification
-//     - 'textFields' is a collection of objects implementing the
-//       ITextLineSpecification interface. These text fields are
-//       assembled by the TextLineSpecStandardLine type and formatted
-//       as a single line of text. This single line of text is
-//       output one or more times as specified by input parameter,
-//       'numOfStdLines'.
+//	textFields                 []ITextFieldSpecification
+//	   - 'textFields' is a collection of objects implementing the
+//	     ITextLineSpecification interface. These text fields are
+//	     assembled by the TextLineSpecStandardLine type and formatted
+//	     as a single line of text. This single line of text is
+//	     output one or more times as specified by input parameter,
+//	     'numOfStdLines'.
 //
-//       Text fields are the building blocks used to assemble a
-//       standard line of text.
+//	     Text fields are the building blocks used to assemble a
+//	     standard line of text.
 //
-//       If this parameter is submitted as a 'nil' value or a zero
-//       length array, an error will be returned.
+//	     If this parameter is submitted as a 'nil' value or a zero
+//	     length array, an error will be returned.
 //
-//       If any of the objects contained in this collection are
-//       invalid, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If any of the objects contained in this collection are
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) SetTextFields(
 	textFields []ITextFieldSpecification,
 	errorPrefix interface{}) error {
@@ -7335,7 +7184,6 @@ func (stdLine *TextLineSpecStandardLine) SetTextFields(
 //
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
-//
 func (stdLine TextLineSpecStandardLine) String() string {
 
 	if stdLine.lock == nil {
@@ -7380,78 +7228,75 @@ func (stdLine TextLineSpecStandardLine) String() string {
 // This method fulfills requirements of the ITextLineSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) TextBuilder(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -7507,7 +7352,6 @@ func (stdLine *TextLineSpecStandardLine) TextBuilder(
 //
 // This method fulfills requirements of ITextLineSpecification
 // interface.
-//
 func (stdLine *TextLineSpecStandardLine) TextLineSpecName() string {
 
 	if stdLine.lock == nil {
@@ -7526,7 +7370,6 @@ func (stdLine *TextLineSpecStandardLine) TextLineSpecName() string {
 //
 // This method fulfills requirements of ITextSpecification
 // interface.
-//
 func (stdLine *TextLineSpecStandardLine) TextTypeName() string {
 
 	if stdLine.lock == nil {
@@ -7551,7 +7394,7 @@ func (stdLine *TextLineSpecStandardLine) TextTypeName() string {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will always set 'turnLineTerminatorOff' to 'true'
 // thereby removing new line terminators for each line of text
@@ -7574,7 +7417,6 @@ func (stdLine *TextLineSpecStandardLine) TextTypeName() string {
 // Again, this method will always set 'turnLineTerminatorOff' to
 // 'true'.  This means that line terminators WILL NOT BE applied to
 // each line of text produced by this instance of TextLineSpecStandardLine.
-//
 func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOff() {
 
 	if stdLine.lock == nil {
@@ -7604,7 +7446,7 @@ func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOff() {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will always set 'turnLineTerminatorOff' to 'false'
 // thereby ensuring that line termination characters will be
@@ -7628,7 +7470,6 @@ func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOff() {
 // Again, this method will always set 'turnLineTerminatorOff' to
 // 'false' meaning that line terminators WILL BE applied to
 // each line of text produced by this instance of TextLineSpecStandardLine.
-//
 func (stdLine *TextLineSpecStandardLine) TurnAutoLineTerminationOn() {
 
 	if stdLine.lock == nil {
