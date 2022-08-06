@@ -42,6 +42,12 @@ type StringArrayDto struct {
 //	     No data validation is performed on input parameter,
 //	     'strToAdd'. If 'strToAdd' is an empty string, an empty
 //	     string will be added to the internal string array.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
 func (strArrayDto *StringArrayDto) AddString(
 	strToAdd string) {
 
@@ -55,6 +61,60 @@ func (strArrayDto *StringArrayDto) AddString(
 
 	strArrayDto.StrArray =
 		append(strArrayDto.StrArray, strToAdd)
+
+	return
+}
+
+// AddManyStrings - Adds a variable number of strings to the
+// string array maintained by the current instance of
+// StringArrayDto.
+//
+// This method is configured as a variadic function with an input
+// parameter that accepts a variable number of arguments
+// ('stringsToAdd').
+//
+// Each string in the series of strings passed through parameter
+// 'stringsToAdd' is appended to the end of the string array
+// maintained by the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		stringsToAdd               ...string
+//		   - This parameter accepts a variable number of string
+//		     arguments. Each string argument passed through this
+//		     parameter will be appended to the end of the string
+//		     array maintained by the current instance of
+//		     StringArrayDto.
+//
+//		     No data validation is performed on input parameter. If
+//	      a string value passed through 'stringsToAdd' is an empty
+//	      string, an empty string will be appended to the end of
+//	      the internal string array maintained by StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) AddManyStrings(
+	stringsToAdd ...string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	for _, val := range stringsToAdd {
+
+		strArrayDto.StrArray =
+			append(strArrayDto.StrArray, val)
+
+	}
 
 	return
 }

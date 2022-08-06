@@ -3041,7 +3041,7 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 // AddLineManyCol - Adds a single Text Line consisting of one or
 // more columns to the Text Formatter Collection. This method is
 // configured as a variadic function with an input parameter that
-// accepts a variable number of arguments.
+// accepts a variable number of arguments ('textFields').
 //
 // ----------------------------------------------------------------
 //
