@@ -865,7 +865,7 @@ func (strArrayDto *StringArrayDto) PeekAtIndex(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"StringArrayDto."+
-			"PeekAtFirstStr()",
+			"PeekAtIndex()",
 		"")
 
 	if err != nil {
@@ -882,6 +882,127 @@ func (strArrayDto *StringArrayDto) PeekAtIndex(
 				zeroBasedIndex)))
 
 	return arrayStrAtIndex, err
+}
+
+// PeekAtLastStr - Returns a copy of the last array element in
+// the string array maintained by the current instance of
+// StringArrayDto.
+//
+// Since this is a 'Peek' operation, the last array element in
+// the string array will NOT be deleted.
+//
+// After completion of this method the string array contained in
+// the current instance of StringArrayDto will remain unchanged.
+//
+// If the string array maintained by the current StringArrayDto
+// instance is empty, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	lastArrayStr              string
+//	   - If this method completes successfully, a copy of
+//	     the last member of the string array maintained by
+//	     the StringArrayDto instance will be returned.
+//
+//
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (strArrayDto *StringArrayDto) PeekAtLastStr(
+	errorPrefix interface{}) (
+	lastArrayStr string,
+	err error) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"PeekAtLastStr()",
+		"")
+
+	if err != nil {
+		return lastArrayStr, err
+	}
+
+	lastIdx := len(strArrayDto.StrArray) - 1
+
+	lastArrayStr,
+		err = new(stringArrayDtoAtom).peekPopStringArray(
+		strArrayDto,
+		lastIdx,
+		false,
+		ePrefix.XCpy(
+			"strArrayDto[0]"))
+
+	return lastArrayStr, err
 }
 
 // PopFirstStr - Returns a copy of the first array element in
@@ -994,7 +1115,7 @@ func (strArrayDto *StringArrayDto) PopFirstStr(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"StringArrayDto."+
-			"PeekAtFirstStr()",
+			"PopFirstStr()",
 		"")
 
 	if err != nil {
@@ -1005,7 +1126,7 @@ func (strArrayDto *StringArrayDto) PopFirstStr(
 		err = new(stringArrayDtoAtom).peekPopStringArray(
 		strArrayDto,
 		0,
-		false,
+		true,
 		ePrefix.XCpy(
 			"strArrayDto[0]"))
 
@@ -1148,7 +1269,7 @@ func (strArrayDto *StringArrayDto) PopAtIndex(
 		err = new(stringArrayDtoAtom).peekPopStringArray(
 		strArrayDto,
 		zeroBasedIndex,
-		false,
+		true,
 		ePrefix.XCpy(
 			fmt.Sprintf("strArrayDto[%v]",
 				zeroBasedIndex)))
@@ -1156,6 +1277,136 @@ func (strArrayDto *StringArrayDto) PopAtIndex(
 	newArrayLength = len(strArrayDto.StrArray)
 
 	return arrayStrAtIndex, newArrayLength, err
+}
+
+// PopLastStr - Returns a copy of the last array element in
+// the string array maintained by the current instance of
+// StringArrayDto.
+//
+// Since this is a 'Pop' operation, the last array element in
+// the string array will be deleted.
+//
+// After completion of this method the length of the string array
+// contained in the current instance of StringArrayDto will be
+// reduced by one (1) element.
+//
+// If the string array maintained by the StringArrayDto instance is
+// empty, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	lastArrayStr              string
+//	   - If this method completes successfully, a copy of
+//	     the last member of the string array maintained by
+//	     the StringArrayDto instance will be returned.
+//
+//
+//	newArrayLength             int
+//	   - If this method completes successfully, the last string
+//	     array element in the current the StringArrayDto instance
+//	     will be deleted. This parameter returns the new array
+//	     length after this deletion.
+//
+//
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
+//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
+func (strArrayDto *StringArrayDto) PopLastStr(
+	errorPrefix interface{}) (
+	lastArrayStr string,
+	newArrayLength int,
+	err error) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"PopLastStr()",
+		"")
+
+	if err != nil {
+		return lastArrayStr, newArrayLength, err
+	}
+
+	lastArrayStr,
+		err = new(stringArrayDtoAtom).peekPopStringArray(
+		strArrayDto,
+		0,
+		true,
+		ePrefix.XCpy(
+			"strArrayDto[0]"))
+
+	newArrayLength = len(strArrayDto.StrArray)
+
+	return lastArrayStr, newArrayLength, err
 }
 
 // SetDescription1 - Receives a string and assigns that string
