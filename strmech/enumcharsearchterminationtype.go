@@ -17,6 +17,15 @@ var mCharSearchTerminationTypeCodeToString = map[CharSearchTerminationType]strin
 	CharSearchTerminationType(5): "FoundSearchTarget",
 }
 
+var mCharSearchTerminationTypeDescription = map[CharSearchTerminationType]string{
+	CharSearchTerminationType(0): "None",
+	CharSearchTerminationType(1): "Process Error",
+	CharSearchTerminationType(2): "End Of Target String",
+	CharSearchTerminationType(3): "Search Length Limit",
+	CharSearchTerminationType(4): "Termination Delimiters",
+	CharSearchTerminationType(5): "Found Search Target",
+}
+
 var mCharSearchTerminationTypeStringToCode = map[string]CharSearchTerminationType{
 	"None":                   CharSearchTerminationType(0),
 	"ProcessError":           CharSearchTerminationType(1),
@@ -288,6 +297,30 @@ func (charSearchTerm CharSearchTerminationType) String() string {
 	return result
 }
 
+// XDescription - Returns a text description of the current
+// Character Search Termination Type styled for use in
+// informational and error messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (charSearchTerm CharSearchTerminationType) XDescription() string {
+
+	lockCharSearchTerminationType.Lock()
+
+	defer lockCharSearchTerminationType.Unlock()
+
+	result, ok := mCharSearchTerminationTypeDescription[charSearchTerm]
+
+	if !ok {
+
+		return "Error: Character Search Termination Type UNKNOWN!"
+
+	}
+
+	return result
+
+}
+
 // XIsValid - Returns a boolean value signaling whether the current
 // Character Search Termination Type (CharSearchTerminationType) is
 // valid.
@@ -451,6 +484,74 @@ func (charSearchTerm CharSearchTerminationType) XParseString(
 
 	return searchTermType, nil
 
+}
+
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration CharSearchTerminationType.
+//
+// If the current instance of CharSearchTerminationType is invalid,
+// this method will always return a value of
+// CharSearchTerminationType(0).None().
+//
+// # Background
+//
+// Enumeration CharSearchTerminationType has an underlying type of
+// integer (int). This means the type could conceivably be set to
+// any integer value. This method ensures that all invalid
+// CharSearchTerminationType instances are consistently classified
+// as 'None' (CharSearchTerminationType(0).None()). Remember that
+// 'None' is considered an invalid value.
+//
+// For example, assume that CharSearchTerminationType was set to an
+// invalid integer value of -848972. Calling this method on a
+// CharSearchTerminationType with this invalid integer value will
+// return an integer value of zero or the equivalent of
+// CharSearchTerminationType(0).None(). This conversion is useful
+// in generating text strings for meaningful informational and
+// error messages.
+func (charSearchTerm CharSearchTerminationType) XReturnNoneIfInvalid() CharSearchTerminationType {
+
+	lockCharSearchTerminationType.Lock()
+
+	defer lockCharSearchTerminationType.Unlock()
+
+	isValid := new(charSearchTerminationTypeNanobot).
+		isValidCharSearchTermType(
+			charSearchTerm)
+
+	if !isValid {
+		return CharSearchTerminationType(0)
+	}
+
+	return charSearchTerm
+}
+
+// XValue - This method returns the enumeration value of the current
+// CharSearchTerminationType instance.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (charSearchTerm CharSearchTerminationType) XValue() CharSearchTerminationType {
+
+	lockCharSearchTerminationType.Lock()
+
+	defer lockCharSearchTerminationType.Unlock()
+
+	return charSearchTerm
+}
+
+// XValueInt - This method returns the integer value of the current
+// CharSearchTerminationType.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (charSearchTerm CharSearchTerminationType) XValueInt() int {
+
+	lockCharSearchTerminationType.Lock()
+
+	defer lockCharSearchTerminationType.Unlock()
+
+	return int(charSearchTerm)
 }
 
 // CharSearchTermType - public global constant of type

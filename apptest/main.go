@@ -8,6 +8,6 @@ func main() {
 
 	mt := examples.MainTest02{}
 
-	mt.ExtractNumberRunes02()
+	mt.CharSearchTermination01()
 
 }

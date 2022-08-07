@@ -359,12 +359,13 @@ func (numValType NumericValueType) XParseString(
 // (NumericValueType(0).None()). Remember that 'None' is considered
 // an invalid value.
 //
-// For example, assume that NumericValueType was set to an integer
-// value of -848972. Calling this method on a NumericValueType with
-// this invalid integer value will return an integer value of zero
-// or the equivalent of NumericValueType(0).None(). This conversion
-// is useful in generating text strings for meaningful
-// informational and error messages.
+// For example, assume that NumericValueType was set to an invalid
+// integer value of -848972. Calling this method on a
+// NumericValueType with this invalid integer value will return an
+// integer value of zero or the equivalent of
+// NumericValueType(0).None(). This conversion is useful in
+// generating text strings for meaningful informational and error
+// messages.
 func (numValType NumericValueType) XReturnNoneIfInvalid() NumericValueType {
 
 	lockNumericValueType.Lock()
@@ -375,7 +376,7 @@ func (numValType NumericValueType) XReturnNoneIfInvalid() NumericValueType {
 		isValidNumericValueType(numValType)
 
 	if !isValid {
-		return NumericValueType(0).None()
+		return NumericValueType(0)
 	}
 
 	return numValType

@@ -13,6 +13,76 @@ type MainTest02 struct {
 	input string
 }
 
+func (mTest02 MainTest02) CharSearchTermination01() {
+
+	funcName := "MainTest02.CharSearchTermination01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	var outputStr string
+	const maxLineLen = 78
+
+	strBuilder := strings.Builder{}
+
+	mt02Nanobot := mainTest02Nanobot{}
+
+	err := mt02Nanobot.SetLeadingMarquee(
+		&strBuilder,
+		funcName,
+		"Testing StrMech.CharSearchTerminationType()",
+		maxLineLen,
+		false,
+		&ePrefix)
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	charSearchTermType := strmech.CharSearchTerminationType(-972)
+
+	strName := charSearchTermType.XReturnNoneIfInvalid()
+
+	if strName.String() != "None" {
+		outputStr = fmt.Sprintf(
+			"%v\n"+
+				"Error: Expected strName == 'None'\n"+
+				"Actual strName integer value = '%v'\n",
+			ePrefix.String(),
+			strName.XValueInt())
+
+		fmt.Println(outputStr)
+
+		return
+
+	}
+
+	// Trailing Title Marquee
+	err = mt02Nanobot.SetTrailingMarquee(
+		&strBuilder,
+		funcName,
+		"SUCCESSFUL COMPLETION!",
+		maxLineLen,
+		false,
+		ePrefix.XCpy(
+			"Trailing Title Marquee"))
+
+	if err != nil {
+		fmt.Println(
+			fmt.Sprintf("%v",
+				err.Error()))
+
+		return
+	}
+
+	fmt.Println(strBuilder.String())
+}
+
 func (mTest02 MainTest02) StrMechRead01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -265,8 +335,8 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	sMech := strmech.StrMech{}
 
-	numberStr := "1 2 3 4 5678"
-	characterSearchLen := 7
+	numberStr := " 12345 "
+	characterSearchLen := -1
 
 	// Total available Length of Output Line
 	const maxLineLen = 78
@@ -425,6 +495,16 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	}
 
 	fmt.Printf(strBuilder.String() + "\n")
+
+	fmt.Printf("\n\n String Builder Stats\n")
+	fmt.Println("=========================================")
+	fmt.Printf("      String Builder Capacity: %v\n",
+		strBuilder.Cap())
+	fmt.Printf("        String Builder Length: %v\n",
+		strBuilder.Len())
+	fmt.Println("-----------------------------------------")
+	fmt.Printf("  String Builder Net Capacity: %v\n\n",
+		strBuilder.Cap()-strBuilder.Len())
 
 	strBuilder.Reset()
 
@@ -610,6 +690,18 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 	}
 
 	fmt.Printf(strBuilder.String() + "\n")
+
+	fmt.Printf(strBuilder.String() + "\n")
+
+	fmt.Printf("\n\n String Builder Stats\n")
+	fmt.Println("=========================================")
+	fmt.Printf("      String Builder Capacity: %v\n",
+		strBuilder.Cap())
+	fmt.Printf("        String Builder Length: %v\n",
+		strBuilder.Len())
+	fmt.Println("-----------------------------------------")
+	fmt.Printf("  String Builder Net Capacity: %v\n\n",
+		strBuilder.Cap()-strBuilder.Len())
 
 	strBuilder.Reset()
 

@@ -61,7 +61,7 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //
 // ----------------------------------------------------------------
 //
-// TERMINOLOGY
+// # TERMINOLOGY
 //
 // Text Field Specifications are used to format lines to text. They
 // are designed to be configured as elements within a line of text.
@@ -78,7 +78,6 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 // The TextFieldType enumeration is used to identify Text Field
 // Specifications is in text formatting operations.
 //
-//
 // ----------------------------------------------------------------
 //
 // Type TextFieldType is styled as an enumeration. Since the Go
@@ -88,141 +87,147 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 //
 // TextFieldType is declared as a type 'int' and includes two
 // types of methods:
-//    Enumeration Methods
-//          and
-//    Utility Methods
+//
+//	Enumeration Methods
+//	      and
+//	Utility Methods
 //
 // Enumeration methods have names which collectively represent an
 // enumeration of different Text Field Specifications necessary
 // for text formatting operations.
-//    Examples Of Enumeration Method Names:
-//        Label()
-//        DateTime()
-//        Filler()
-//        Spacer()
 //
-//  Enumeration methods return an integer value used to designate
-//  a specific Text Field Specification.
+//	  Examples Of Enumeration Method Names:
+//	      Label()
+//	      DateTime()
+//	      Filler()
+//	      Spacer()
 //
-//  Utility methods make up the second type of method included in
-//  TextFieldType. These methods are NOT part of the enumeration
-//  but instead provide needed supporting services. All
-//  utility methods, with the sole exception of method String(),
-//  have names beginning with 'X' to separate them from standard
-//  enumeration methods.
-//    Examples:
-//      XIsValid()
-//      XParseString()
-//      XValue()
-//      XValueInt()
+//	Enumeration methods return an integer value used to designate
+//	a specific Text Field Specification.
 //
-//  The utility method 'String()' supports the Stringer Interface
-//  and is not part of the standard enumeration.
+//	Utility methods make up the second type of method included in
+//	TextFieldType. These methods are NOT part of the enumeration
+//	but instead provide needed supporting services. All
+//	utility methods, with the sole exception of method String(),
+//	have names beginning with 'X' to separate them from standard
+//	enumeration methods.
+//	  Examples:
+//	    XIsValid()
+//	    XParseString()
+//	    XValue()
+//	    XValueInt()
+//
+//	The utility method 'String()' supports the Stringer Interface
+//	and is not part of the standard enumeration.
 //
 // ----------------------------------------------------------------
 //
-// Enumeration Methods
+// # Enumeration Methods
 //
 // The TextFieldType enumeration methods are described below:
 //
 // Method                   Integer
-//  Name                     Value
+//
+//	Name                     Value
+//
 // ------                   -------
 //
 // None                     Zero (0)
-//  - Signals that the Text Field Type is empty and not
-//    initialized. This is an invalid or error condition.
-//
+//   - Signals that the Text Field Type is empty and not
+//     initialized. This is an invalid or error condition.
 //
 // Label                        1
-//  - Identifies the Text Field Specification as a type
-//    TextFieldSpecLabel.
 //
-//    The Label Text Field Specification is used to generate a text
-//    label string. The text label is positioned inside a text
-//    field with a given field length. Text Justification within
-//    this text field is controlled by the Text Justification
-//    specification value which may be set to 'Left', 'Right' or
-//    'Center'. A text label contains a string of text characters.
+//   - Identifies the Text Field Specification as a type
+//     TextFieldSpecLabel.
 //
+//     The Label Text Field Specification is used to generate a text
+//     label string. The text label is positioned inside a text
+//     field with a given field length. Text Justification within
+//     this text field is controlled by the Text Justification
+//     specification value which may be set to 'Left', 'Right' or
+//     'Center'. A text label contains a string of text characters.
 //
 // DateTime                     2
-//  - Identifies the Text Field Specification as a type
-//    TextFieldSpecDateTime.
 //
-//    The Date Time Text Field specification is used to produce a
-//    formatted text string from a date/time value.
+//   - Identifies the Text Field Specification as a type
+//     TextFieldSpecDateTime.
 //
+//     The Date Time Text Field specification is used to produce a
+//     formatted text string from a date/time value.
 //
 // Filler                       3
-//  - Identifies the Text Field Specification as a type
-//    TextFieldSpecFiller.
 //
-//    A Filler Text Field Specification is a single character or
-//    character sequence which is replicated multiple times to
-//    create the entire length of the Filler Text Field.
+//   - Identifies the Text Field Specification as a type
+//     TextFieldSpecFiller.
 //
+//     A Filler Text Field Specification is a single character or
+//     character sequence which is replicated multiple times to
+//     create the entire length of the Filler Text Field.
 //
 // Spacer                       4
-//  - Identifies the Text Field Specification as a type
-//    TextFieldSpecSpacer.
 //
-//    The Spacer Text Field Specification is used to create a Text
-//    Field consisting of one or more white space characters (" ").
+//   - Identifies the Text Field Specification as a type
+//     TextFieldSpecSpacer.
 //
+//     The Spacer Text Field Specification is used to create a Text
+//     Field consisting of one or more white space characters (" ").
 //
 // BlankLine                    5
-//  - Identifies a type TextLineSpecBlankLines which is used to
-//    generate Blank Lines of text.
-//
+//   - Identifies a type TextLineSpecBlankLines which is used to
+//     generate Blank Lines of text.
 //
 // SolidLine                    6
-//  - Identifies a Solid Line Specification consisting of a left
-//    margin, a 'Filler' field made up of a single or repeating
-//    character sequence, a right margin and a line termination
-//    character sequence. This type of line is implemented using
-//    the TextLineSpecSolidLine Specification.
 //
+//   - Identifies a Solid Line Specification consisting of a left
+//     margin, a 'Filler' field made up of a single or repeating
+//     character sequence, a right margin and a line termination
+//     character sequence. This type of line is implemented using
+//     the TextLineSpecSolidLine Specification.
 //
-//  LineColumns                 7
-//  - Identifies a Text Line consisting of one or more text fields
-//    or text columns.
+//     LineColumns                 7
 //
-//    The line/column architecture differs from single text fields
-//    in that text lines includes margins on both sides of the
-//    column in addition to providing input parameters for
-//    line-termination characters such as new line characters
-//    ('\n').
+//   - Identifies a Text Line consisting of one or more text fields
+//     or text columns.
 //
-//  TimerStartStop              8
-//  - Identifies a display of four text lines presenting the
-//    results of a timer event. This timer event is described with
-//    a start time, stop time and time duration or elapsed time.
+//     The line/column architecture differs from single text fields
+//     in that text lines includes margins on both sides of the
+//     column in addition to providing input parameters for
+//     line-termination characters such as new line characters
+//     ('\n').
 //
-//    The first line of text shows the Starting Time. The second
-//    line shows the Ending Time. The third line displays the time
-//    duration or the difference between starting time and ending
-//    time. The fourth line displays the total elapsed time in
-//    nanoseconds.
+//     TimerStartStop              8
 //
-//    For more information reference type TextLineSpecTimerLines.
+//   - Identifies a display of four text lines presenting the
+//     results of a timer event. This timer event is described with
+//     a start time, stop time and time duration or elapsed time.
 //
-//  TextAdHoc                   9
-//  - Identifies a string of ad hoc text which will be inserted
-//    into the stream of formatted text as is, without any
-//    additional formatting being applied.
+//     The first line of text shows the Starting Time. The second
+//     line shows the Ending Time. The third line displays the time
+//     duration or the difference between starting time and ending
+//     time. The fourth line displays the total elapsed time in
+//     nanoseconds.
 //
+//     For more information reference type TextLineSpecTimerLines.
+//
+//     TextAdHoc                   9
+//
+//   - Identifies a string of ad hoc text which will be inserted
+//     into the stream of formatted text as is, without any
+//     additional formatting being applied.
 //
 // ----------------------------------------------------------------
 //
-// USAGE
+// # USAGE
 //
 // For easy access to these enumeration values, use the global
 // constant 'TxtFieldType'.
-//     Example: TxtFieldType.Label()
+//
+//	Example: TxtFieldType.Label()
 //
 // Otherwise you will need to use the formal syntax.
-//     Example: TextFieldType(0).Label()
+//
+//	Example: TextFieldType(0).Label()
 //
 // Depending on your editor, intellisense (a.k.a. intelligent code
 // completion) may not list the TextFieldType methods in
@@ -231,7 +236,6 @@ var mTextFieldTypeLwrCaseStringToCode = map[string]TextFieldType{
 // Be advised that all 'TextFieldType' methods beginning with
 // 'X', as well as the method 'String()', are utility methods and
 // not part of the enumeration.
-//
 type TextFieldType int
 
 var lockTextFieldType sync.Mutex
@@ -240,7 +244,6 @@ var lockTextFieldType sync.Mutex
 // empty or uninitialized. This is an invalid or error condition.
 //
 // This method is part of the standard enumeration.
-//
 func (txtFieldType TextFieldType) None() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -261,7 +264,6 @@ func (txtFieldType TextFieldType) None() TextFieldType {
 // 'Center'. A text label contains a string of text characters.
 //
 // This method is part of the standard enumeration.
-//
 func (txtFieldType TextFieldType) Label() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -277,9 +279,7 @@ func (txtFieldType TextFieldType) Label() TextFieldType {
 // The Date Time Text Field specification is used to produce a
 // formatted text string from a date/time value.
 //
-//
 // This method is part of the standard enumeration.
-//
 func (txtFieldType TextFieldType) DateTime() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -297,7 +297,6 @@ func (txtFieldType TextFieldType) DateTime() TextFieldType {
 // the entire length of the Filler Text Field.
 //
 // This method is part of the standard enumeration.
-//
 func (txtFieldType TextFieldType) Filler() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -314,7 +313,6 @@ func (txtFieldType TextFieldType) Filler() TextFieldType {
 // Field consisting of one or more white space characters (" ").
 //
 // This method is part of the standard enumeration.
-//
 func (txtFieldType TextFieldType) Spacer() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -330,7 +328,6 @@ func (txtFieldType TextFieldType) Spacer() TextFieldType {
 // A Blank Line Specification is used to create one or more blank
 // lines of text. This type commonly employs the new line
 // character "\n" to generate blank or empty text lines.
-//
 func (txtFieldType TextFieldType) BlankLine() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -345,7 +342,6 @@ func (txtFieldType TextFieldType) BlankLine() TextFieldType {
 // or repeating character sequence, a right margin and a line
 // termination character sequence. This type of line is implemented
 // using the TextLineSpecSolidLine Specification.
-//
 func (txtFieldType TextFieldType) SolidLine() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -362,7 +358,6 @@ func (txtFieldType TextFieldType) SolidLine() TextFieldType {
 // in that text lines includes margins on both sides of the column
 // in addition to providing input parameters for line-termination
 // characters such as new line characters ('\n').
-//
 func (txtFieldType TextFieldType) LineColumns() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -383,7 +378,6 @@ func (txtFieldType TextFieldType) LineColumns() TextFieldType {
 // fourth line displays the total elapsed time in nanoseconds.
 //
 // For more information reference type TextLineSpecTimerLines.
-//
 func (txtFieldType TextFieldType) TimerStartStop() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -396,7 +390,6 @@ func (txtFieldType TextFieldType) TimerStartStop() TextFieldType {
 // TextAdHoc - Identifies a string of ad hoc text which will be
 // inserted into the stream of formatted text as is, without any
 // additional formatting being applied.
-//
 func (txtFieldType TextFieldType) TextAdHoc() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -414,12 +407,12 @@ func (txtFieldType TextFieldType) TextAdHoc() TextFieldType {
 //
 // ----------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t:= TextFieldType(0).Label()
 // str := t.String()
-//     str is now equal to 'Label'
 //
+//	str is now equal to 'Label'
 func (txtFieldType TextFieldType) String() string {
 
 	lockTextFieldType.Lock()
@@ -443,7 +436,7 @@ func (txtFieldType TextFieldType) String() string {
 // If the current instance of TextFieldType is invalid, this
 // method will always return a value of TextFieldType(0).None().
 //
-// Background
+// # Background
 //
 // Enumeration TextFieldType has an underlying type of integer
 // (int). This means the type could conceivably be set to any
@@ -458,18 +451,17 @@ func (txtFieldType TextFieldType) String() string {
 // or the equivalent of TextFieldType(0).None(). This conversion is
 // useful in generating text strings for meaningful informational
 // and error messages.
-//
 func (txtFieldType TextFieldType) XReturnNoneIfInvalid() TextFieldType {
 
 	lockTextFieldType.Lock()
 
 	defer lockTextFieldType.Unlock()
 
-	isValid := textFieldTypeNanobot{}.ptr().
+	isValid := new(textFieldTypeNanobot).
 		isValidTextField(txtFieldType)
 
 	if !isValid {
-		return TextFieldType(0).None()
+		return TextFieldType(0)
 	}
 
 	return txtFieldType
@@ -488,15 +480,14 @@ func (txtFieldType TextFieldType) XReturnNoneIfInvalid() TextFieldType {
 //
 // Usage
 //
-//  textType :=
-// 			TextFieldType(0).Label()
+//	 textType :=
+//				TextFieldType(0).Label()
 //
-//  isValid := textType.XIsValid() // isValid == true
+//	 isValid := textType.XIsValid() // isValid == true
 //
-//  textType = TextFieldType(0).None()
+//	 textType = TextFieldType(0).None()
 //
-//  isValid = textType.XIsValid() // isValid == false
-//
+//	 isValid = textType.XIsValid() // isValid == false
 func (txtFieldType TextFieldType) XIsValid() bool {
 
 	lockTextFieldType.Lock()
@@ -519,80 +510,78 @@ func (txtFieldType TextFieldType) XIsValid() bool {
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 // valueString   string
-//     - A string which will be matched against the enumeration string
-//       values. If 'valueString' is equal to one of the enumeration
-//       names, this method will proceed to successful completion and
-//       return the correct enumeration value.
+//   - A string which will be matched against the enumeration string
+//     values. If 'valueString' is equal to one of the enumeration
+//     names, this method will proceed to successful completion and
+//     return the correct enumeration value.
 //
 // caseSensitive   bool
-//     - If 'true' the search for enumeration names will be
-//       case-sensitive and will require an exact match. Therefore,
-//       'label' WILL NOT match the enumeration name, 'Label'.
 //
-//       A case-sensitive search will match any of the following
-//       strings:
-//           "None"
-//           "Label"
-//           "DateTime"
-//           "Date Time"
-//           "Date"
-//           "Filler"
-//           "Spacer"
-//           "BlankLine"
-//           "SolidLine"
-//           "LineColumns"
-//           "TimerStartStop"
-//           "TextAdHoc"
+//   - If 'true' the search for enumeration names will be
+//     case-sensitive and will require an exact match. Therefore,
+//     'label' WILL NOT match the enumeration name, 'Label'.
 //
-//       If 'false', a case-insensitive search is conducted for the
-//       enumeration name. In this example, 'label'
-//       WILL MATCH the enumeration name, 'Label'.
+//     A case-sensitive search will match any of the following
+//     strings:
+//     "None"
+//     "Label"
+//     "DateTime"
+//     "Date Time"
+//     "Date"
+//     "Filler"
+//     "Spacer"
+//     "BlankLine"
+//     "SolidLine"
+//     "LineColumns"
+//     "TimerStartStop"
+//     "TextAdHoc"
 //
-//       A case-insensitive search will match any of the following
-//       lower case names:
-//           "none"
-//           "label"
-//           "datetime"
-//           "date time"
-//           "date"
-//           "filler"
-//           "spacer"
-//           "blankline"
-//           "solidline"
-//           "linecolumns"
-//           "timerstartstop"
-//           "textadhoc"
+//     If 'false', a case-insensitive search is conducted for the
+//     enumeration name. In this example, 'label'
+//     WILL MATCH the enumeration name, 'Label'.
 //
+//     A case-insensitive search will match any of the following
+//     lower case names:
+//     "none"
+//     "label"
+//     "datetime"
+//     "date time"
+//     "date"
+//     "filler"
+//     "spacer"
+//     "blankline"
+//     "solidline"
+//     "linecolumns"
+//     "timerstartstop"
+//     "textadhoc"
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldType
-//     - Upon successful completion, this method will return a new
-//       instance of TextFieldType set to the value of the
-//       enumeration matched by the string search performed on
-//       input parameter, 'valueString'.
+//	TextFieldType
+//	   - Upon successful completion, this method will return a new
+//	     instance of TextFieldType set to the value of the
+//	     enumeration matched by the string search performed on
+//	     input parameter, 'valueString'.
 //
-//  error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is
-//       encountered, this method will return an error type which
-//       encapsulates an appropriate error message.
-//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If an error condition is
+//	     encountered, this method will return an error type which
+//	     encapsulates an appropriate error message.
 //
 // ----------------------------------------------------------------
 //
 // Usage
 //
-//  t, err := TextFieldType(0).
-//               XParseString("Label", true)
+//	t, err := TextFieldType(0).
+//	             XParseString("Label", true)
 //
-//  t is now equal to TextFieldType(0).Label()
-//
+//	t is now equal to TextFieldType(0).Label()
 func (txtFieldType TextFieldType) XParseString(
 	valueString string,
 	caseSensitive bool) (
@@ -649,7 +638,6 @@ func (txtFieldType TextFieldType) XParseString(
 //
 // This is a standard utility method and is NOT part of the valid
 // enumerations for this type.
-//
 func (txtFieldType TextFieldType) XValue() TextFieldType {
 
 	lockTextFieldType.Lock()
@@ -664,7 +652,6 @@ func (txtFieldType TextFieldType) XValue() TextFieldType {
 //
 // This is a standard utility method and is NOT part of the valid
 // enumerations for this type.
-//
 func (txtFieldType TextFieldType) XValueInt() int {
 
 	lockTextFieldType.Lock()
@@ -681,28 +668,29 @@ func (txtFieldType TextFieldType) XValueInt() int {
 //
 // For easy access to these enumeration values, use the
 // global variable TxtFieldType.
-//  Example: TxtFieldType.Label()
+//
+//	Example: TxtFieldType.Label()
 //
 // Otherwise you will need to use the formal syntax.
-//  Example: TextFieldType(0).Label()
+//
+//	Example: TextFieldType(0).Label()
 //
 // Usage:
-//  TxtFieldType.None()
-//  TxtFieldType.Label()
-//  TxtFieldType.DateTime()
-//  TxtFieldType.Filler()
-//  TxtFieldType.Spacer()
-//  TxtFieldType.BlankLine()
-//  TxtFieldType.SolidLine()
-//  TxtFieldType.LineColumns()
-//  TxtFieldType.TimerStartStop()
-//  TxtFieldType.TextAdHoc()
 //
+//	TxtFieldType.None()
+//	TxtFieldType.Label()
+//	TxtFieldType.DateTime()
+//	TxtFieldType.Filler()
+//	TxtFieldType.Spacer()
+//	TxtFieldType.BlankLine()
+//	TxtFieldType.SolidLine()
+//	TxtFieldType.LineColumns()
+//	TxtFieldType.TimerStartStop()
+//	TxtFieldType.TextAdHoc()
 const TxtFieldType = TextFieldType(0)
 
 // textFieldTypeNanobot - Provides helper methods for
 // enumeration TextFieldType.
-//
 type textFieldTypeNanobot struct {
 	lock *sync.Mutex
 }
@@ -719,7 +707,6 @@ type textFieldTypeNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // TextFieldType enumeration.
-//
 func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
 	textFieldType TextFieldType) bool {
 
@@ -738,22 +725,4 @@ func (textFieldNanobot *textFieldTypeNanobot) isValidTextField(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldTypeNanobot.
-//
-func (textFieldNanobot textFieldTypeNanobot) ptr() *textFieldTypeNanobot {
-
-	if textFieldNanobot.lock == nil {
-		textFieldNanobot.lock = new(sync.Mutex)
-	}
-
-	textFieldNanobot.lock.Lock()
-
-	defer textFieldNanobot.lock.Unlock()
-
-	return &textFieldTypeNanobot{
-		lock: new(sync.Mutex),
-	}
 }
