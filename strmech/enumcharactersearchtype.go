@@ -13,6 +13,7 @@ var mCharacterSearchTypeCodeToString = map[CharacterSearchType]string{
 	CharacterSearchType(0):  "LinearTargetStartingIndex",
 	CharacterSearchType(1):  "SingleTargetChar",
 	CharacterSearchType(2):  "LinearEndOfString",
+	CharacterSearchType(3):  "LatinEngAlphaLetter",
 }
 
 var mCharacterSearchTypeStringToCode = map[string]CharacterSearchType{
@@ -25,6 +26,7 @@ var mCharacterSearchTypeStringToCode = map[string]CharacterSearchType{
 	"TargetChar":                CharacterSearchType(1),
 	"LinearEndOfString":         CharacterSearchType(2),
 	"EndOfString":               CharacterSearchType(2),
+	"LatinEngAlphaLetter":       CharacterSearchType(3),
 }
 
 var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
@@ -37,6 +39,7 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 	"targetchar":                CharacterSearchType(1),
 	"linearendofstring":         CharacterSearchType(2),
 	"endofstring":               CharacterSearchType(2),
+	"latinengalphaletter":       CharacterSearchType(3),
 }
 
 // CharacterSearchType - The 'Character Search Type' is an
@@ -220,6 +223,48 @@ var mCharacterSearchTypeLwrCaseStringToCode = map[string]CharacterSearchType{
 //     terminate at that point with a successful outcome or 'Match'
 //     result.
 //
+// LatinEngAlphaLetter         (3)
+//
+//   - Designates the text character search type
+//     as a search for any letter in the Latin Alphabet - English
+//     Version.
+//
+//     The search is performed on a single character received from
+//     the Target Search String. If that character is either an
+//     upper or lower case letter in the Latin Alphabet - English
+//     Version, the comparison is classified as 'MATCH' condition
+//     or successful search outcome.
+//
+//     As a practical matter, the search algorithm will receive a
+//     single character from the Target Search String and determine
+//     whether that character is in the range 'a to z' or 'A to Z'.
+//     If the Target Search String character falls within either of
+//     those two ranges, the comparison is classified as a 'MATCH'.
+//
+//     Example-1
+//     1         2         3
+//     Index  0123456789012345678901234567890
+//     Target String: "976.532f418"
+//     Search Type: LatinEngAlphaLetter
+//
+//     In Example-1 the search algorithm uses the Latin Alphabet Letter
+//     (English-Version) search type. The search algorithm will declare
+//     a 'MATCH' and successful search outcome at Target String index 7
+//     because the lower case letter 'f' is a member of the Latin
+//     Alphabet.
+//
+//     Example-2
+//     1         2         3
+//     Index  0123456789012345678901234567890
+//     Target String: "976.5322J18"
+//     Search Type: LatinEngAlphaLetter
+//
+//     In Example-2 the search algorithm uses the Latin Alphabet
+//     Letter (English-Version) search type. The search algorithm
+//     will declare a 'MATCH' and successful search outcome at
+//     Target String index 8 because the upper case letter 'J' is
+//     a member of the Latin Alphabet.
+//
 // ----------------------------------------------------------------
 //
 // For easy access to these enumeration values, use the global
@@ -398,12 +443,12 @@ func (charSearchType CharacterSearchType) SingleTargetChar() CharacterSearchType
 //
 // In this example of a Linear End of String Search, the search
 // operation will begin comparing corresponding characters in the
-// Target Search String and the Test String beginning at index zero.
-// The comparison will fail at index zero, but the search algorithm
-// will continue attempting to find the Test String at indexes 1,2,
-// 3 & 4. The Test String will be found beginning at index number 5
-// and the search algorithm will terminate at that point with a
-// successful outcome or 'Match' result.
+// Target Search String and the Test String beginning at index
+// zero. The comparison will fail at index zero, but the search
+// algorithm will continue attempting to find the Test String at
+// indexes 1,2, 3 & 4. The Test String will be found beginning at
+// index number 5 and the search algorithm will terminate at that
+// point with a successful outcome or 'Match' result.
 //
 // This method is part of the standard enumeration.
 func (charSearchType CharacterSearchType) LinearEndOfString() CharacterSearchType {
@@ -413,6 +458,57 @@ func (charSearchType CharacterSearchType) LinearEndOfString() CharacterSearchTyp
 	defer lockCharacterSearchType.Unlock()
 
 	return CharacterSearchType(2)
+
+}
+
+// LatinEngAlphaLetter - Designates the text character search type
+// as a search for any letter in the Latin Alphabet - English
+// Version.
+//
+// The search is performed on a single character received from the
+// Target Search String. If that character is either an upper or
+// lower case letter in the Latin Alphabet - English Version, the
+// comparison is classified as 'MATCH' condition or successful
+// search outcome.
+//
+// As a practical matter, the search algorithm will receive a
+// single character from the Target Search String and determine
+// whether that character is in the range 'a to z' or 'A to Z'.
+// If the Target Search String character falls within either of
+// those two ranges, the comparison is classified as a 'MATCH'.
+//
+//	Example-1
+//	                           1         2         3
+//	          Index  0123456789012345678901234567890
+//	 Target String: "976.532f418"
+//	   Search Type: LatinEngAlphaLetter
+//
+// In Example-1 the search algorithm uses the Latin Alphabet Letter
+// (English-Version) search type. The search algorithm will declare
+// a 'MATCH' and successful search outcome at Target String index 7
+// because the lower case letter 'f' is a member of the Latin
+// Alphabet.
+//
+//	Example-2
+//	                           1         2         3
+//	          Index  0123456789012345678901234567890
+//	 Target String: "976.5322J18"
+//	   Search Type: LatinEngAlphaLetter
+//
+// In Example-2 the search algorithm uses the Latin Alphabet Letter
+// (English-Version) search type. The search algorithm will declare
+// a 'MATCH' and successful search outcome at Target String index 8
+// because the upper case letter 'J' is a member of the Latin
+// Alphabet.
+//
+// This method is part of the standard enumeration.
+func (charSearchType CharacterSearchType) LatinEngAlphaLetter() CharacterSearchType {
+
+	lockCharacterSearchType.Lock()
+
+	defer lockCharacterSearchType.Unlock()
+
+	return CharacterSearchType(3)
 
 }
 
@@ -474,13 +570,8 @@ func (charSearchType CharacterSearchType) XIsValid() bool {
 
 	defer lockCharacterSearchType.Unlock()
 
-	if charSearchType > 2 ||
-		charSearchType < 0 {
-
-		return false
-	}
-
-	return true
+	return new(characterSearchTypeNanobot).
+		isValidNumericValueType(charSearchType)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -607,6 +698,45 @@ func (charSearchType CharacterSearchType) XParseString(
 	return characterSearchType, nil
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration CharacterSearchType.
+//
+// If the current instance of CharacterSearchType is invalid, this
+// method will always return a value of
+// CharacterSearchType(0).None().
+//
+// # Background
+//
+// Enumeration CharacterSearchType has an underlying type of
+// integer (int). This means the type could conceivably be set to
+// any integer value. This method ensures that all invalid
+// CharacterSearchType instances are consistently classified as
+// 'None' (CharacterSearchType(0).None()). Remember that 'None'
+// is considered an invalid value.
+//
+// For example, assume that CharacterSearchType was set to an
+// invalid integer value of -848972. Calling this method on a
+// CharacterSearchType with this invalid integer value will return
+// an integer value of minus one (-1) or the equivalent of
+// CharacterSearchType(0).None(). This conversion is useful in
+// generating text strings for meaningful informational and error
+// messages.
+func (charSearchType CharacterSearchType) XReturnNoneIfInvalid() CharacterSearchType {
+
+	lockCharacterSearchType.Lock()
+
+	defer lockCharacterSearchType.Unlock()
+
+	isValid := new(characterSearchTypeNanobot).
+		isValidNumericValueType(charSearchType)
+
+	if !isValid {
+		return CharacterSearchType(-1)
+	}
+
+	return charSearchType
+}
+
 // XValue - This method returns the enumeration value of the current
 // CharacterSearchType instance.
 //
@@ -656,4 +786,42 @@ func (charSearchType CharacterSearchType) XValueInt() int {
 //	CharSearchType.LinearTargetStartingIndex(),
 //	CharSearchType.SingleTargetChar(),
 //	CharSearchType.LinearEndOfString(),
+//	CharSearchType.LatinEngAlphaLetter(),
 const CharSearchType = CharacterSearchType(-1)
+
+// characterSearchTypeNanobot - Provides helper methods for
+// enumeration CharacterSearchType.
+type characterSearchTypeNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidNumericValueType - Receives an instance of
+// CharacterSearchType and returns a boolean value signaling
+// whether that CharacterSearchType instance is valid.
+//
+// If the passed instance of CharacterSearchType is valid, this method
+// returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// CharacterSearchType enumeration.
+func (charSearchTypeNanobot *characterSearchTypeNanobot) isValidNumericValueType(
+	enumNumericValType CharacterSearchType) bool {
+
+	if charSearchTypeNanobot.lock == nil {
+		charSearchTypeNanobot.lock = new(sync.Mutex)
+	}
+
+	charSearchTypeNanobot.lock.Lock()
+
+	defer charSearchTypeNanobot.lock.Unlock()
+
+	if enumNumericValType < 0 ||
+		enumNumericValType > 3 {
+		return false
+	}
+
+	return true
+}
