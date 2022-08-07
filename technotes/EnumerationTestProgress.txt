@@ -2,4 +2,4 @@
 Go back and pick this one up.
 
 Start Here: 2022-08-07
-enumnumericsymbollocation.go
+enumnumstrfmttypecode.go
