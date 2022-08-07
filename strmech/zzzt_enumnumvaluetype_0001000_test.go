@@ -90,6 +90,27 @@ func NumericValueTypeTestSetup0010(
 
 	}
 
+	for i := 0; i < len(intValues); i++ {
+
+		if intValues[i] != enumValues[i].XValueInt() {
+			err = fmt.Errorf("%v\n"+
+				"Error: Integer Values DO NOT MATCH!\n"+
+				"intValues[%v] != enumValues[%v].XValueInt()\n"+
+				"intValues[%v] integer value  = '%v'\n"+
+				"enumValues[%v] integer value = '%v'\n",
+				ePrefix.String(),
+				i,
+				i,
+				i,
+				intValues[i],
+				i,
+				enumValues[i].XValueInt())
+
+			return ucNames, lcNames, intValues, enumValues, err
+		}
+
+	}
+
 	return ucNames, lcNames, intValues, enumValues, err
 }
 
