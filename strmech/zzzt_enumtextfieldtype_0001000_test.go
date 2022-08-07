@@ -320,6 +320,65 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 
 			return
 		}
+
+		_,
+			err = textFieldType6.XParseString(
+			"How Now Brown Cow",
+			true)
+
+		if err == nil {
+			t.Errorf("\n%v\n"+
+				"Expected an error return from textFieldType6.XParseString()\n"+
+				"because value string = 'How Now Brown Cow'\n"+
+				"HOWEVER, NO ERROR WAS RETURNED!\n"+
+				"i = '%v'\n"+
+				"textFieldType6 string value = '%v'\n",
+				ePrefix.String(),
+				i,
+				textFieldType6.String())
+
+			return
+		}
+
+		_,
+			err = textFieldType6.XParseString(
+			"how now brown cow",
+			false)
+
+		if err == nil {
+			t.Errorf("\n%v\n"+
+				"Expected an error return from textFieldType6.XParseString()\n"+
+				"because value string = 'now now brown cow'\n"+
+				"HOWEVER, NO ERROR WAS RETURNED!\n"+
+				"i = '%v'\n"+
+				"textFieldType6 string value = '%v'\n",
+				ePrefix.String(),
+				i,
+				textFieldType6.String())
+
+			return
+		}
+
+		_,
+			err = textFieldType6.XParseString(
+			"X",
+			true)
+
+		if err == nil {
+			t.Errorf("\n%v\n"+
+				"Expected an error return from textFieldType6.XParseString()\n"+
+				"because value string = 'X' is less than the\n"+
+				"minimum required length.\n"+
+				"HOWEVER, NO ERROR WAS RETURNED!\n"+
+				"i = '%v'\n"+
+				"textFieldType6 string value = '%v'\n",
+				ePrefix.String(),
+				i,
+				textFieldType6.String())
+
+			return
+		}
+
 	}
 
 	return
@@ -333,25 +392,76 @@ func TestTextFieldType_XReturnNoneIfInvalid_000200(t *testing.T) {
 
 	textFieldType := TextFieldType(-972)
 
-	strName := textFieldType.XReturnNoneIfInvalid()
+	valueNone := textFieldType.XReturnNoneIfInvalid()
 
-	if strName.String() != "None" {
+	if valueNone.String() != "None" {
 
 		t.Errorf("%v\n"+
 			"Error: Expected TextFieldType(-972)\n"+
 			"would return name of 'None' from \n"+
 			"textFieldType.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
-			"strName string value = '%v'\n"+
-			"   strName int value = '%v'\n",
+			"valueNone string value = '%v'\n"+
+			"   valueNone int value = '%v'\n",
 			ePrefix.String(),
-			strName.String(),
-			strName.XValueInt())
+			valueNone.String(),
+			valueNone.XValueInt())
 
 		return
 
 	}
 
+	strTextFieldType := textFieldType.String()
+
+	strTextFieldType = strings.ToLower(strTextFieldType)
+
+	if !strings.Contains(strTextFieldType, "error") {
+
+		t.Errorf("%v\n"+
+			"Error: Expected TextFieldType(-972).String()\n"+
+			"would return an error because it is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	_,
+		_,
+		_,
+		enumValues,
+		err :=
+		TextFieldTypeTestSetup0010(
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	var textFieldType2 TextFieldType
+
+	textFieldType2 = enumValues[1].XReturnNoneIfInvalid()
+
+	if textFieldType2 != enumValues[1] {
+		t.Errorf("%v\n"+
+			"Error: textFieldType2 != enumValues[1].XReturnNoneIfInvalid()\n"+
+			"enumValues[1]  string value  = '%v'\n"+
+			"enumValues[1]  integer value = '%v'\n"+
+			"textFieldType2 string value  = '%v'\n"+
+			"textFieldType2 integer value = '%v'\n",
+			ePrefix.String(),
+			enumValues[1].String(),
+			enumValues[1].XValueInt(),
+			textFieldType2.String(),
+			textFieldType2.XValueInt())
+		return
+	}
+
+	return
 }
 
 func TestTextFieldType_XValueInt_000300(t *testing.T) {
