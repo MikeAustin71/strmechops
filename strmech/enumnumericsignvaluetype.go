@@ -45,25 +45,26 @@ var mapNumSignValueTypeLwrCaseStringToCode = map[string]NumericSignValueType{
 // names effectively represent an enumeration of numeric sign
 // value types. These methods are listed as follows:
 //
-//
 // ----------------------------------------------------------------
 //
 // Method        Integer
-//  Name          Value
+//
+//	Name          Value
+//
 // ------        -------
 //
-//  None           (-2) - Signals that 'NumericSignValueType' has
-//                        not been initialized and therefore has
-//                        no value. This is an error condition.
+//	None           (-2) - Signals that 'NumericSignValueType' has
+//	                      not been initialized and therefore has
+//	                      no value. This is an error condition.
 //
-//  Negative       (-1) - Signals that the numeric value is
-//                        negative meaning that it has a value
-//                        less than zero.
+//	Negative       (-1) - Signals that the numeric value is
+//	                      negative meaning that it has a value
+//	                      less than zero.
 //
-//  Zero            (0) - Signals that the numeric value is zero.
+//	Zero            (0) - Signals that the numeric value is zero.
 //
-//  Positive        (1) - Signals that the numeric value is
-//                        greater than zero.
+//	Positive        (1) - Signals that the numeric value is
+//	                      greater than zero.
 //
 // To convert enumeration values for use in numeric computations,
 // call the utility method, XArithmeticValue() or XValueInt.
@@ -79,7 +80,6 @@ var mapNumSignValueTypeLwrCaseStringToCode = map[string]NumericSignValueType{
 // alphabetical order. Be advised that all NumericSignValueType
 // methods beginning with 'X', as well as the method 'String()',
 // are utility methods, and NOT part of the enumeration values.
-//
 type NumericSignValueType int
 
 var lockNumericSignValueType sync.Mutex
@@ -87,7 +87,6 @@ var lockNumericSignValueType sync.Mutex
 // None - Signals that 'NumericSignValueType' has not been
 // initialized and therefore has no value. This is an error
 // condition.
-//
 func (nSignValue NumericSignValueType) None() NumericSignValueType {
 
 	lockNumericSignValueType.Lock()
@@ -99,7 +98,6 @@ func (nSignValue NumericSignValueType) None() NumericSignValueType {
 
 // Negative - Signals that the numeric value is negative meaning
 // that it has a value less than zero.
-//
 func (nSignValue NumericSignValueType) Negative() NumericSignValueType {
 
 	lockNumericSignValueType.Lock()
@@ -110,7 +108,6 @@ func (nSignValue NumericSignValueType) Negative() NumericSignValueType {
 }
 
 // Zero - Signals that the numeric value is zero.
-//
 func (nSignValue NumericSignValueType) Zero() NumericSignValueType {
 
 	lockNumericSignValueType.Lock()
@@ -121,7 +118,6 @@ func (nSignValue NumericSignValueType) Zero() NumericSignValueType {
 }
 
 // Positive - Signals that the numeric value is greater than zero.
-//
 func (nSignValue NumericSignValueType) Positive() NumericSignValueType {
 
 	lockNumericSignValueType.Lock()
@@ -141,10 +137,9 @@ func (nSignValue NumericSignValueType) Positive() NumericSignValueType {
 //
 // Usage
 //
-//  t:= NumericSignValueType(0).Negative()
-//  str := t.String()
-//     str is now equal to 'Negative'
-//
+//	t:= NumericSignValueType(0).Negative()
+//	str := t.String()
+//	   str is now equal to 'Negative'
 func (nSignValue NumericSignValueType) String() string {
 
 	lockNumericSignValueType.Lock()
@@ -176,12 +171,11 @@ func (nSignValue NumericSignValueType) String() string {
 //
 // Usage
 //
-//  nSignVal := NumericSignValueType(0).Positive()
-//  // nSignVal now has integer value of '1'
+//	nSignVal := NumericSignValueType(0).Positive()
+//	// nSignVal now has integer value of '1'
 //
-//  numericSignValue := nSignVal.XArithmeticValue()
-//  // numericSignValue has an integer value of '1'
-//
+//	numericSignValue := nSignVal.XArithmeticValue()
+//	// numericSignValue has an integer value of '1'
 func (nSignValue NumericSignValueType) XArithmeticValue() int {
 
 	lockNumericSignValueType.Lock()
@@ -198,16 +192,16 @@ func (nSignValue NumericSignValueType) XArithmeticValue() int {
 // If the returned value is 'true' it signals that the current
 // NumericSignValueType type is equal to one of the two following
 // values:
-//           NumericSignValueType(0).Positive()
-//                          Or
-//           NumericSignValueType(0).Negative()
+//
+//	NumericSignValueType(0).Positive()
+//	               Or
+//	NumericSignValueType(0).Negative()
 //
 // If the NumericSignValueType is equal to any value other than the
 // two shown above, a value of 'false' is returned.
 //
 // Specifically, this means that if the NumericSignValueType value is
 // 'Zero' or 'None', a boolean value of 'false' is returned.
-//
 func (nSignValue NumericSignValueType) XIsPositiveOrNegative() bool {
 	lockNumericSignValueType.Lock()
 
@@ -228,14 +222,13 @@ func (nSignValue NumericSignValueType) XIsPositiveOrNegative() bool {
 // If the returned value is 'true' it signals that the current
 // NumericSignValueType type is equal to zero:
 //
-//           NumericSignValueType(0).Zero()
+//	NumericSignValueType(0).Zero()
 //
 // If the NumericSignValueType is equal to any value other than the
 // zero, a value of 'false' is returned.
 //
 // Specifically, this means that if the NumericSignValueType value is
 // non-zero a boolean value of 'false' is returned.
-//
 func (nSignValue NumericSignValueType) XIsZero() bool {
 	lockNumericSignValueType.Lock()
 
@@ -261,26 +254,22 @@ func (nSignValue NumericSignValueType) XIsZero() bool {
 //
 // Usage
 //
-//  numSignVal := NumericSignValueType(0).Positive()
+//	numSignVal := NumericSignValueType(0).Positive()
 //
-//  isValid := numSignVal.XIsValid() // isValid == true
+//	isValid := numSignVal.XIsValid() // isValid == true
 //
-//  numSignVal = NumericSignValueType(0).None()
+//	numSignVal = NumericSignValueType(0).None()
 //
-//  isValid = numSignVal.XIsValid() // isValid == false
-//
+//	isValid = numSignVal.XIsValid() // isValid == false
 func (nSignValue NumericSignValueType) XIsValid() bool {
 
 	lockNumericSignValueType.Lock()
 
 	defer lockNumericSignValueType.Unlock()
 
-	if nSignValue > 1 ||
-		nSignValue < -1 {
-		return false
-	}
-
-	return true
+	return new(numericSignValueTypeNanobot).
+		isValidNumSignValueType(
+			nSignValue)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -293,47 +282,48 @@ func (nSignValue NumericSignValueType) XIsValid() bool {
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 // valueString   string - A string which will be matched against the
-//                        enumeration string values. If 'valueString'
-//                        is equal to one of the enumeration names, this
-//                        method will proceed to successful completion
-//                        and return the correct enumeration value.
+//
+//	enumeration string values. If 'valueString'
+//	is equal to one of the enumeration names, this
+//	method will proceed to successful completion
+//	and return the correct enumeration value.
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
-//                        will be case-sensitive and will require an
-//                        exact match. Therefore, 'negative' will NOT
-//                        match the enumeration name, 'Negative'.
 //
-//                        If 'false' a case-insensitive search is conducted
-//                        for the enumeration name. In this case, 'negative'
-//                        will match the enumeration name 'Negative'.
+//	will be case-sensitive and will require an
+//	exact match. Therefore, 'negative' will NOT
+//	match the enumeration name, 'Negative'.
+//
+//	If 'false' a case-insensitive search is conducted
+//	for the enumeration name. In this case, 'negative'
+//	will match the enumeration name 'Negative'.
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 // NumericSignValueType
-//     - Upon successful completion, this method will return a new
-//       instance of NumericSignValueType set to the value of the
-//       enumeration matched by the string search performed on input
-//       parameter, 'valueString'.
+//   - Upon successful completion, this method will return a new
+//     instance of NumericSignValueType set to the value of the
+//     enumeration matched by the string search performed on input
+//     parameter, 'valueString'.
 //
 // error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is
-//       encountered, this method will return an error type which
-//       encapsulates an appropriate error message.
+//   - If this method completes successfully, the returned error
+//     Type is set equal to 'nil'. If an error condition is
+//     encountered, this method will return an error type which
+//     encapsulates an appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t, err := NumericSignValueType(0).XParseString("Positive", true)
 //
-//     t is now equal to NumericSignValueType(0).Positive()
-//
+//	t is now equal to NumericSignValueType(0).Positive()
 func (nSignValue NumericSignValueType) XParseString(
 	valueString string,
 	caseSensitive bool) (NumericSignValueType, error) {
@@ -383,12 +373,54 @@ func (nSignValue NumericSignValueType) XParseString(
 	return strNumSignValType, nil
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration NumericSignValueType.
+//
+// If the current instance of NumericSignValueType is invalid, this
+// method will always return a value of
+// NumericSignValueType(0).None().
+//
+// # Background
+//
+// Enumeration NumericSignValueType has an underlying type of
+// integer (int). This means the type could conceivably be set to
+// any integer value. This method ensures that all invalid
+// NumericSignValueType instances are consistently classified as
+// 'None' (NumericSignValueType(0).None()). Remember that 'None' is
+// considered an invalid value.
+//
+// For example, assume that NumericSignValueType was set to an
+// integer value of -848972. Calling this method on a
+// NumericSignValueType with this invalid integer value will return
+// an integer value of zero or the equivalent of
+// NumericSignValueType(0).None(). This conversion is useful in
+// generating text strings for meaningful informational and error
+// messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (nSignValue NumericSignValueType) XReturnNoneIfInvalid() NumericSignValueType {
+
+	lockNumericSignValueType.Lock()
+
+	defer lockNumericSignValueType.Unlock()
+
+	isValid := new(numericSignValueTypeNanobot).
+		isValidNumSignValueType(
+			nSignValue)
+
+	if !isValid {
+		return NumericSignValueType(-2)
+	}
+
+	return nSignValue
+}
+
 // XValue - This method returns the enumeration value of the current
 // NumericSignValueType instance.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (nSignValue NumericSignValueType) XValue() NumericSignValueType {
 
 	lockNumericSignValueType.Lock()
@@ -408,7 +440,6 @@ func (nSignValue NumericSignValueType) XValue() NumericSignValueType {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (nSignValue NumericSignValueType) XValueInt() int {
 
 	lockNumericSignValueType.Lock()
@@ -429,5 +460,42 @@ func (nSignValue NumericSignValueType) XValueInt() int {
 // NumSignVal.Negative(),
 // NumSignVal.Zero(),
 // NumSignVal.Positive(),
-//
 const NumSignVal = NumericSignValueType(-2)
+
+// numericSignValueTypeNanobot - Provides helper methods for
+// enumeration NumericSignValueType.
+type numericSignValueTypeNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidTextField - Receives an instance of NumericSignValueType
+// and returns a boolean value signaling whether that
+// NumericSignValueType instance is valid.
+//
+// If the passed instance of NumericSignValueType is valid, this
+// method returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// TextFieldType enumeration.
+func (numSignValTypeNanobot *numericSignValueTypeNanobot) isValidNumSignValueType(
+	numSignValueType NumericSignValueType) bool {
+
+	if numSignValTypeNanobot.lock == nil {
+		numSignValTypeNanobot.lock = new(sync.Mutex)
+	}
+
+	numSignValTypeNanobot.lock.Lock()
+
+	defer numSignValTypeNanobot.lock.Unlock()
+
+	if numSignValueType < -1 ||
+		numSignValueType > 1 {
+
+		return false
+	}
+
+	return true
+}

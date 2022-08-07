@@ -721,6 +721,9 @@ func (charSearchType CharacterSearchType) XParseString(
 // CharacterSearchType(0).None(). This conversion is useful in
 // generating text strings for meaningful informational and error
 // messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
 func (charSearchType CharacterSearchType) XReturnNoneIfInvalid() CharacterSearchType {
 
 	lockCharacterSearchType.Lock()
