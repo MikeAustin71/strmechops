@@ -48,38 +48,38 @@ var mapNumericSymClassLwrCaseStringToCode = map[string]NumericSymbolClass{
 // names effectively represent an enumeration of numeric symbol
 // classifications. These methods are listed as follows:
 //
-//  None             (0) - Signals that 'NumericSymbolClass' has
-//                         not been initialized and therefore has
-//                         no value. This is an error condition.
+//	None             (0) - Signals that 'NumericSymbolClass' has
+//	                       not been initialized and therefore has
+//	                       no value. This is an error condition.
 //
-//  NumberSign       (1) - Signals that the numeric symbol is
-//                         classified as a number sign such as a
-//                         plus ('+') or minus ('-').
-//                         (Example: -842)
+//	NumberSign       (1) - Signals that the numeric symbol is
+//	                       classified as a number sign such as a
+//	                       plus ('+') or minus ('-').
+//	                       (Example: -842)
 //
-//  CurrencySign     (2) - Signals that the numeric symbol is
-//                         classified as a currency sign such as
-//                         the USA Dollar Sign ('$').
-//                            (Example: $256.00)
+//	CurrencySign     (2) - Signals that the numeric symbol is
+//	                       classified as a currency sign such as
+//	                       the USA Dollar Sign ('$').
+//	                          (Example: $256.00)
 //
-//  IntegerSeparator (3) - Signals that the numeric symbol is
-//                         classified as an integer separator or
-//                         thousands separator. In the USA, integer
-//                         digits are commonly separated into groups
-//                         of three (thousands) separated by a comma.
-//                         The Integer Separator in this case is a
-//                         comma.
-//                            (Example:  1,000,000,000)
+//	IntegerSeparator (3) - Signals that the numeric symbol is
+//	                       classified as an integer separator or
+//	                       thousands separator. In the USA, integer
+//	                       digits are commonly separated into groups
+//	                       of three (thousands) separated by a comma.
+//	                       The Integer Separator in this case is a
+//	                       comma.
+//	                          (Example:  1,000,000,000)
 //
-//  DecimalSeparator (4) - Signals that the numeric symbol is
-//                         classified as a decimal separator.
-//                         Decimal separators are used to separate
-//                         integer and fractional portions of a
-//                         floating point number. In the USA,
-//                         integer and fractional components of a
-//                         floating point number are separated by a
-//                         decimal point.
-//                            (Example: 256.32)
+//	DecimalSeparator (4) - Signals that the numeric symbol is
+//	                       classified as a decimal separator.
+//	                       Decimal separators are used to separate
+//	                       integer and fractional portions of a
+//	                       floating point number. In the USA,
+//	                       integer and fractional components of a
+//	                       floating point number are separated by a
+//	                       decimal point.
+//	                          (Example: 256.32)
 //
 // For easy access to these enumeration values, use the global
 // constant NumSymClass. Example: NumSymClass.DecimalSeparator()
@@ -92,7 +92,6 @@ var mapNumericSymClassLwrCaseStringToCode = map[string]NumericSymbolClass{
 // alphabetical order. Be advised that all NumericSymbolClass
 // methods beginning with 'X', as well as the method 'String()',
 // are utility methods, and NOT part of the enumeration values.
-//
 type NumericSymbolClass int
 
 var lockNumericSymbolClass sync.Mutex
@@ -100,7 +99,6 @@ var lockNumericSymbolClass sync.Mutex
 // None - Signals that NumericSymbolClass has not been set or
 // initialized and therefore has no value. This is an error
 // condition.
-//
 func (nSymbolClass NumericSymbolClass) None() NumericSymbolClass {
 
 	lockNumericSymbolClass.Lock()
@@ -112,8 +110,8 @@ func (nSymbolClass NumericSymbolClass) None() NumericSymbolClass {
 
 // NumberSign - Signals that the numeric symbol is classified as a
 // number sign such as a plus ('+') or minus ('-').
-//   (Example: -842)
 //
+//	(Example: -842)
 func (nSymbolClass NumericSymbolClass) NumberSign() NumericSymbolClass {
 
 	lockNumericSymbolClass.Lock()
@@ -125,8 +123,8 @@ func (nSymbolClass NumericSymbolClass) NumberSign() NumericSymbolClass {
 
 // CurrencySign - Signals that the numeric symbol is classified as
 // a currency sign such as the USA Dollar Sign ('$').
-//  (Example: $256.00)
 //
+//	(Example: $256.00)
 func (nSymbolClass NumericSymbolClass) CurrencySign() NumericSymbolClass {
 
 	lockNumericSymbolClass.Lock()
@@ -141,8 +139,8 @@ func (nSymbolClass NumericSymbolClass) CurrencySign() NumericSymbolClass {
 // integer digits are commonly separated into groups of three
 // (thousands) separated by a comma. The Integer Separator in this
 // case is a comma.
-//  (Example:  1,000,000,000)
 //
+//	(Example:  1,000,000,000)
 func (nSymbolClass NumericSymbolClass) IntegerSeparator() NumericSymbolClass {
 
 	lockNumericSymbolClass.Lock()
@@ -157,8 +155,8 @@ func (nSymbolClass NumericSymbolClass) IntegerSeparator() NumericSymbolClass {
 // integer and fractional parts of a floating point number. In the
 // USA, integer and fractional components of a floating point
 // number are separated by a decimal point.
-//  (Example: 256.32)
 //
+//	(Example: 256.32)
 func (nSymbolClass NumericSymbolClass) DecimalSeparator() NumericSymbolClass {
 
 	lockNumericSymbolClass.Lock()
@@ -178,10 +176,9 @@ func (nSymbolClass NumericSymbolClass) DecimalSeparator() NumericSymbolClass {
 //
 // Usage
 //
-//  t:= NumericSymbolClass(0).CurrencySign()
-//  str := t.String()
-//     str is now equal to 'CurrencySign'
-//
+//	t:= NumericSymbolClass(0).CurrencySign()
+//	str := t.String()
+//	   str is now equal to 'CurrencySign'
 func (nSymbolClass NumericSymbolClass) String() string {
 
 	lockNumericSymbolClass.Lock()
@@ -211,26 +208,21 @@ func (nSymbolClass NumericSymbolClass) String() string {
 //
 // Usage
 //
-//  numSymClass := NumericSymbolClass(0).DecimalSeparator()
+//	numSymClass := NumericSymbolClass(0).DecimalSeparator()
 //
-//  isValid := numSymClass.XIsValid() // isValid == true
+//	isValid := numSymClass.XIsValid() // isValid == true
 //
-//  numSymClass = NumericSignValueType(0).None()
+//	numSymClass = NumericSignValueType(0).None()
 //
-//  isValid = numSymClass.XIsValid() // isValid == false
-//
+//	isValid = numSymClass.XIsValid() // isValid == false
 func (nSymbolClass NumericSymbolClass) XIsValid() bool {
 
 	lockNumericSymbolClass.Lock()
 
 	defer lockNumericSymbolClass.Unlock()
 
-	if nSymbolClass > 4 ||
-		nSymbolClass < 1 {
-		return false
-	}
-
-	return true
+	return new(numericSymbolClassNanobot).isValidTextField(
+		nSymbolClass)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -243,48 +235,48 @@ func (nSymbolClass NumericSymbolClass) XIsValid() bool {
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 // valueString          string
-//     - A string which will be matched against the enumeration
-//       string values. If 'valueString' is equal to one of the
-//       enumeration names, this method will proceed to successful
-//       completion and return the correct enumeration value.
+//   - A string which will be matched against the enumeration
+//     string values. If 'valueString' is equal to one of the
+//     enumeration names, this method will proceed to successful
+//     completion and return the correct enumeration value.
 //
 // caseSensitive        bool
-//     - If 'true' the search for enumeration names will be
-//       case-sensitive and will require an exact match. Therefore,
-//       "currencysign" will NOT match the enumeration name,
-//       "CurrencySign".
 //
-//       If 'false' a case-insensitive search is conducted for the
-//       enumeration name. In this case, 'currencysign' will match
-//       the enumeration name 'CurrencySign'.
+//   - If 'true' the search for enumeration names will be
+//     case-sensitive and will require an exact match. Therefore,
+//     "currencysign" will NOT match the enumeration name,
+//     "CurrencySign".
+//
+//     If 'false' a case-insensitive search is conducted for the
+//     enumeration name. In this case, 'currencysign' will match
+//     the enumeration name 'CurrencySign'.
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 // NumericSymbolClass
-//     - Upon successful completion, this method will return a new
-//       instance of NumericSymbolClass set to the value of the
-//       enumeration matched by the string search performed on input
-//       parameter, 'valueString'.
+//   - Upon successful completion, this method will return a new
+//     instance of NumericSymbolClass set to the value of the
+//     enumeration matched by the string search performed on input
+//     parameter, 'valueString'.
 //
 // error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is
-//       encountered, this method will return an error type which
-//       encapsulates an appropriate error message.
+//   - If this method completes successfully, the returned error
+//     Type is set equal to 'nil'. If an error condition is
+//     encountered, this method will return an error type which
+//     encapsulates an appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t, err := NumericSymbolClass(0).XParseString("IntegerSeparator", true)
 //
-//     t is now equal to NumericSymbolClass(0).IntegerSeparator()
-//
+//	t is now equal to NumericSymbolClass(0).IntegerSeparator()
 func (nSymbolClass NumericSymbolClass) XParseString(
 	valueString string,
 	caseSensitive bool) (NumericSymbolClass, error) {
@@ -334,12 +326,53 @@ func (nSymbolClass NumericSymbolClass) XParseString(
 	return strNumSymClass, nil
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration NumericSymbolClass.
+//
+// If the current instance of NumericSymbolClass is invalid, this
+// method will always return a value of
+// NumericSymbolClass(0).None().
+//
+// # Background
+//
+// Enumeration NumericSymbolClass has an underlying type of integer
+// (int). This means the type could conceivably be set to any
+// integer value. This method ensures that all invalid
+// NumericSymbolClass instances are consistently classified as
+// 'None' (NumericSymbolClass(0).None()). Remember that 'None' is
+// considered an invalid value.
+//
+// For example, assume that NumericSymbolClass was set to an
+// integer value of -848972. Calling this method on a
+// NumericSymbolClass with this invalid integer value will return
+// an integer value of zero or the equivalent of
+// NumericSymbolClass(0).None(). This conversion is useful in
+// generating text strings for meaningful informational and error
+// messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (nSymbolClass NumericSymbolClass) XReturnNoneIfInvalid() NumericSymbolClass {
+
+	lockNumericSymbolClass.Lock()
+
+	defer lockNumericSymbolClass.Unlock()
+
+	isValid := new(numericSymbolClassNanobot).isValidTextField(
+		nSymbolClass)
+
+	if !isValid {
+		return NumericSymbolClass(0)
+	}
+
+	return nSymbolClass
+}
+
 // XValue - This method returns the enumeration value of the current
 // NumericSymbolClass instance.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (nSymbolClass NumericSymbolClass) XValue() NumericSymbolClass {
 
 	lockNumericSymbolClass.Lock()
@@ -354,7 +387,6 @@ func (nSymbolClass NumericSymbolClass) XValue() NumericSymbolClass {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (nSymbolClass NumericSymbolClass) XValueInt() int {
 
 	lockNumericSymbolClass.Lock()
@@ -376,5 +408,42 @@ func (nSymbolClass NumericSymbolClass) XValueInt() int {
 // NumSymClass.CurrencySign(),
 // NumSymClass.IntegerSeparator(),
 // NumSymClass.DecimalSeparator(),
-//
 const NumSymClass = NumericSymbolClass(0)
+
+// numericSymbolClassNanobot - Provides helper methods for
+// enumeration NumericSymbolClass.
+type numericSymbolClassNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidTextField - Receives an instance of NumericSymbolClass
+// and returns a boolean value signaling whether that
+// NumericSymbolClass instance is valid.
+//
+// If the passed instance of NumericSymbolClass is valid, this
+// method returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// NumericSymbolClass enumeration.
+func (numSymbolClassNanobot *numericSymbolClassNanobot) isValidTextField(
+	numericSymbolClass NumericSymbolClass) bool {
+
+	if numSymbolClassNanobot.lock == nil {
+		numSymbolClassNanobot.lock = new(sync.Mutex)
+	}
+
+	numSymbolClassNanobot.lock.Lock()
+
+	defer numSymbolClassNanobot.lock.Unlock()
+
+	if numericSymbolClass < 1 ||
+		numericSymbolClass > 4 {
+
+		return false
+	}
+
+	return true
+}
