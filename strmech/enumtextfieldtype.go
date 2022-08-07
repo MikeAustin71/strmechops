@@ -430,43 +430,6 @@ func (txtFieldType TextFieldType) String() string {
 	return result
 }
 
-// XReturnNoneIfInvalid - Provides a standardized value for invalid
-// instances of enumeration TextFieldType.
-//
-// If the current instance of TextFieldType is invalid, this
-// method will always return a value of TextFieldType(0).None().
-//
-// # Background
-//
-// Enumeration TextFieldType has an underlying type of integer
-// (int). This means the type could conceivably be set to any
-// integer value. This method ensures that all invalid
-// TextFieldType instances are consistently classified as 'None'
-// (TextFieldType(0).None()). Remember that 'None' is considered
-// an invalid value.
-//
-// For example, assume that TextFieldType was set to an integer
-// value of -848972. Calling this method on a TextFieldType with
-// this invalid integer value will return an integer value of zero
-// or the equivalent of TextFieldType(0).None(). This conversion is
-// useful in generating text strings for meaningful informational
-// and error messages.
-func (txtFieldType TextFieldType) XReturnNoneIfInvalid() TextFieldType {
-
-	lockTextFieldType.Lock()
-
-	defer lockTextFieldType.Unlock()
-
-	isValid := new(textFieldTypeNanobot).
-		isValidTextField(txtFieldType)
-
-	if !isValid {
-		return TextFieldType(0)
-	}
-
-	return txtFieldType
-}
-
 // XIsValid - Returns a boolean value signaling whether the current
 // TextFieldType value is valid.
 //
@@ -631,6 +594,43 @@ func (txtFieldType TextFieldType) XParseString(
 	}
 
 	return enumTextFieldType, nil
+}
+
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration TextFieldType.
+//
+// If the current instance of TextFieldType is invalid, this
+// method will always return a value of TextFieldType(0).None().
+//
+// # Background
+//
+// Enumeration TextFieldType has an underlying type of integer
+// (int). This means the type could conceivably be set to any
+// integer value. This method ensures that all invalid
+// TextFieldType instances are consistently classified as 'None'
+// (TextFieldType(0).None()). Remember that 'None' is considered
+// an invalid value.
+//
+// For example, assume that TextFieldType was set to an integer
+// value of -848972. Calling this method on a TextFieldType with
+// this invalid integer value will return an integer value of zero
+// or the equivalent of TextFieldType(0).None(). This conversion is
+// useful in generating text strings for meaningful informational
+// and error messages.
+func (txtFieldType TextFieldType) XReturnNoneIfInvalid() TextFieldType {
+
+	lockTextFieldType.Lock()
+
+	defer lockTextFieldType.Unlock()
+
+	isValid := new(textFieldTypeNanobot).
+		isValidTextField(txtFieldType)
+
+	if !isValid {
+		return TextFieldType(0)
+	}
+
+	return txtFieldType
 }
 
 // XValue - This method returns the enumeration value of the
