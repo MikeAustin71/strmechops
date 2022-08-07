@@ -34,6 +34,12 @@
 --- PASS: TestNumericSymbolLocation_XReturnNoneIfInvalid_000200 (0.00s)
 === RUN   TestNumericSymbolLocation_XValueInt_000300
 --- PASS: TestNumericSymbolLocation_XValueInt_000300 (0.00s)
+=== RUN   TestNumSignSymbolDisplayMode_XValueInt_000100
+--- PASS: TestNumSignSymbolDisplayMode_XValueInt_000100 (0.00s)
+=== RUN   TestNumSignSymbolDisplayMode_XReturnNoneIfInvalid_000200
+--- PASS: TestNumSignSymbolDisplayMode_XReturnNoneIfInvalid_000200 (0.00s)
+=== RUN   TestNumSignSymbolDisplayMode_XValueInt_000300
+--- PASS: TestNumSignSymbolDisplayMode_XValueInt_000300 (0.00s)
 === RUN   TestNumericValueType_XValueInt_000100
 --- PASS: TestNumericValueType_XValueInt_000100 (0.00s)
 === RUN   TestNumericValueType_XReturnNoneIfInvalid_000200
@@ -78,56 +84,6 @@
 --- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000500 (0.00s)
 === RUN   TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000600
 --- PASS: TestNumberSignSymbolCollection_IsTrailingNumSignAtHostIndex_000600 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000100
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000100 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000200
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000200 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000300
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000300 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000400
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000400 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000500
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000500 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000600
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000600 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000700
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000700 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000800
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000800 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_000900
---- PASS: TestNumSignSymbolDisplayMode_XParseString_000900 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_001000
---- PASS: TestNumSignSymbolDisplayMode_XParseString_001000 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XParseString_001100
---- PASS: TestNumSignSymbolDisplayMode_XParseString_001100 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XValue_000100
---- PASS: TestNumSignSymbolDisplayMode_XValue_000100 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XValue_000200
---- PASS: TestNumSignSymbolDisplayMode_XValue_000200 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XValue_000300
---- PASS: TestNumSignSymbolDisplayMode_XValue_000300 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XValueInt_000100
---- PASS: TestNumSignSymbolDisplayMode_XValueInt_000100 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XValueInt_000200
---- PASS: TestNumSignSymbolDisplayMode_XValueInt_000200 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XValueInt_000300
---- PASS: TestNumSignSymbolDisplayMode_XValueInt_000300 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_String_000100
---- PASS: TestNumSignSymbolDisplayMode_String_000100 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_String_000200
---- PASS: TestNumSignSymbolDisplayMode_String_000200 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_String_000300
---- PASS: TestNumSignSymbolDisplayMode_String_000300 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_String_000400
---- PASS: TestNumSignSymbolDisplayMode_String_000400 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XIsValid_000100
---- PASS: TestNumSignSymbolDisplayMode_XIsValid_000100 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XIsValid_000200
---- PASS: TestNumSignSymbolDisplayMode_XIsValid_000200 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XIsValid_000300
---- PASS: TestNumSignSymbolDisplayMode_XIsValid_000300 (0.00s)
-=== RUN   TestNumSignSymbolDisplayMode_XIsValid_000400
---- PASS: TestNumSignSymbolDisplayMode_XIsValid_000400 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100
 --- PASS: TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000100 (0.00s)
 === RUN   TestNumberSignSymbolDto_ClearLeadingNumSignTracking_000200
@@ -547,11 +503,11 @@
 === RUN   TestStrMech_ExtractNumberRunes_01
 --- PASS: TestStrMech_ExtractNumberRunes_01 (0.01s)
 === RUN   TestStrMech_ExtractNumberRunes_02
---- PASS: TestStrMech_ExtractNumberRunes_02 (0.06s)
+--- PASS: TestStrMech_ExtractNumberRunes_02 (0.10s)
 === RUN   TestStrMech_ExtractNumberRunes_03
 --- PASS: TestStrMech_ExtractNumberRunes_03 (0.00s)
 === RUN   TestStrMech_ExtractTextLines_000200
---- PASS: TestStrMech_ExtractTextLines_000200 (0.02s)
+--- PASS: TestStrMech_ExtractTextLines_000200 (0.04s)
 === RUN   TestStrMech_FindFirstNonSpaceChar_01
 --- PASS: TestStrMech_FindFirstNonSpaceChar_01 (0.00s)
 === RUN   TestStrMech_FindFirstNonSpaceChar_02
@@ -1675,11 +1631,11 @@
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000200
 --- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000200 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000300
---- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000300 (0.02s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000300 (0.01s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000400
 --- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000400 (0.02s)
 === RUN   TestTextLineSpecLinesCollection_InsertTextLine_000500
---- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000500 (0.06s)
+--- PASS: TestTextLineSpecLinesCollection_InsertTextLine_000500 (0.07s)
 === RUN   TestTextLineSpecLinesCollection_IsValidInstance_000100
 --- PASS: TestTextLineSpecLinesCollection_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecLinesCollection_IsValidInstanceError_000100
@@ -1851,7 +1807,7 @@
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecRunes_000200
 --- PASS: TestTextLineSpecPlainText_setPlainTextSpecRunes_000200 (0.00s)
 === RUN   TestTextLineSpecPlainText_setPlainTextSpecStrings_000100
---- PASS: TestTextLineSpecPlainText_setPlainTextSpecStrings_000100 (0.01s)
+--- PASS: TestTextLineSpecPlainText_setPlainTextSpecStrings_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_CopyIn_000100
 --- PASS: TestTextLineSpecSolidLine_CopyIn_000100 (0.00s)
 === RUN   TestTextLineSpecSolidLine_CopyOut_000100
@@ -1969,7 +1925,7 @@
 === RUN   TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100
 --- PASS: TestTextLineSpecSolidLine_testValidityOfTextSpecSolidLine_000100 (0.01s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000100
---- PASS: TestTextLineSpecSolidLine_setTxtSolidLine_000100 (0.01s)
+--- PASS: TestTextLineSpecSolidLine_setTxtSolidLine_000100 (0.02s)
 === RUN   TestTextLineSpecSolidLine_setTxtSolidLine_000200
 --- PASS: TestTextLineSpecSolidLine_setTxtSolidLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_AddTextFields_000010
@@ -1997,7 +1953,7 @@
 === RUN   TestTextLineSpecStandardLine_AddTextFieldSpacer_000100
 --- PASS: TestTextLineSpecStandardLine_AddTextFieldSpacer_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyIn_000100
---- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_CopyIn_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_CopyOut_000100
 --- PASS: TestTextLineSpecStandardLine_CopyOut_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_CopyOutITextLine_000100
@@ -2031,9 +1987,9 @@
 === RUN   TestTextLineSpecStandardLine_GetFormattedText_000200
 --- PASS: TestTextLineSpecStandardLine_GetFormattedText_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetFormattedText_000300
---- PASS: TestTextLineSpecStandardLine_GetFormattedText_000300 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_GetFormattedText_000300 (0.01s)
 === RUN   TestTextLineSpecStandardLine_GetFormattedText_000400
---- PASS: TestTextLineSpecStandardLine_GetFormattedText_000400 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_GetFormattedText_000400 (0.01s)
 === RUN   TestTextLineSpecStandardLine_GetNewLineChars_000100
 --- PASS: TestTextLineSpecStandardLine_GetNewLineChars_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_GetNewLineRunes_000100
@@ -2065,7 +2021,7 @@
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000600
 --- PASS: TestTextLineSpecStandardLine_InsertTextField_000600 (0.00s)
 === RUN   TestTextLineSpecStandardLine_InsertTextField_000700
---- PASS: TestTextLineSpecStandardLine_InsertTextField_000700 (0.01s)
+--- PASS: TestTextLineSpecStandardLine_InsertTextField_000700 (0.02s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstance_000100
 --- PASS: TestTextLineSpecStandardLine_IsValidInstance_000100 (0.00s)
 === RUN   TestTextLineSpecStandardLine_IsValidInstanceError_000100
@@ -2079,11 +2035,11 @@
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLine_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewStandardLineAllParms_000200
 --- PASS: TestTextLineSpecStandardLine_NewStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100
---- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100 (0.00s)
+--- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000100 (0.01s)
 === RUN   TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200
 --- PASS: TestTextLineSpecStandardLine_NewPtrStandardLineAllParms_000200 (0.00s)
 === RUN   TestTextLineSpecStandardLine_PeekAtFirstTextField_000100
@@ -2215,7 +2171,7 @@
 === RUN   TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200
 --- PASS: TestTextLineSpecStandardLineNanobot_setTxtSpecStandardLine_000200 (0.00s)
 === RUN   TestTextLineSpecTimerLines_CopyIn_000100
---- PASS: TestTextLineSpecTimerLines_CopyIn_000100 (0.00s)
+--- PASS: TestTextLineSpecTimerLines_CopyIn_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOut_000100
 --- PASS: TestTextLineSpecTimerLines_CopyOut_000100 (0.01s)
 === RUN   TestTextLineSpecTimerLines_CopyOutITextLine_000100
@@ -2295,7 +2251,7 @@
 === RUN   TestTextLineSpecTimerLines_Read_000600
 --- PASS: TestTextLineSpecTimerLines_Read_000600 (0.00s)
 === RUN   TestTextLineSpecTimerLines_ReaderInitialize_000100
---- PASS: TestTextLineSpecTimerLines_ReaderInitialize_000100 (0.01s)
+--- PASS: TestTextLineSpecTimerLines_ReaderInitialize_000100 (0.02s)
 === RUN   TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100
 --- PASS: TestTextLineSpecTimerLines_SetDefaultFullTimerEvent_000100 (0.00s)
 === RUN   TestTextLineSpecTimerLines_SetDefaultShellTimerEvent_000100
@@ -2380,4 +2336,4 @@
 --- PASS: TestTextLineSpecTimerLinesPreon_getMaximumTimerLabelLen_000100 (0.00s)
 PASS
 coverage: 58.0% of statements
-ok  	github.com/MikeAustin71/strmechops/strmech	2.491s
+ok  	github.com/MikeAustin71/strmechops/strmech	2.704s

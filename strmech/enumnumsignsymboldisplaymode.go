@@ -57,38 +57,38 @@ var mapNumSignSymbolDisplayModeLwrCaseStringToCode = map[string]NumSignSymbolDis
 // names effectively represent an enumeration of number sign symbol
 // display modes. These methods are listed as follows:
 //
-//  None           (0) - Signals that the NumSignSymbolDisplayMode
-//                       has not been initialized and therefore
-//                       has no value. This is an error condition.
+//	None           (0) - Signals that the NumSignSymbolDisplayMode
+//	                     has not been initialized and therefore
+//	                     has no value. This is an error condition.
 //
-//  Explicit       (1) - Signals that the Number Sign Symbol will
-//                       be explicitly displayed with the
-//                       associated numeric value in a number
-//                       string (Example: '+123').
+//	Explicit       (1) - Signals that the Number Sign Symbol will
+//	                     be explicitly displayed with the
+//	                     associated numeric value in a number
+//	                     string (Example: '+123').
 //
-//  Implicit       (2) - Signals that the Number Sign Symbol will
-//                       NOT be explicitly displayed with the
-//                       associated numeric value in a number
-//                       string. In this mode, the Number Sign
-//                       Symbol is assumed or implied.
-//                       Example: '123' is assumed to be a positive
-//                                value of '+123'. The plus sign
-//                                ('+') is assumed or implied.
-//
+//	Implicit       (2) - Signals that the Number Sign Symbol will
+//	                     NOT be explicitly displayed with the
+//	                     associated numeric value in a number
+//	                     string. In this mode, the Number Sign
+//	                     Symbol is assumed or implied.
+//	                     Example: '123' is assumed to be a positive
+//	                              value of '+123'. The plus sign
+//	                              ('+') is assumed or implied.
 //
 // For easy access to these enumeration values, use the global
 // constant NSignSymDisplayMode.
-//   Example: NSignSymDisplayMode.Explicit()
+//
+//	Example: NSignSymDisplayMode.Explicit()
 //
 // Otherwise you will need to use the formal syntax.
-//   Example: NumSignSymbolDisplayMode(0).Explicit()
+//
+//	Example: NumSignSymbolDisplayMode(0).Explicit()
 //
 // Depending on your editor, intellisense (a.k.a. intelligent code
 // completion) may not list the NumSignSymbolDisplayMode methods in
 // alphabetical order. Be advised that all NumSignSymbolDisplayMode
 // methods beginning with 'X', as well as the method 'String()',
 // are utility methods, and are NOT part of the enumeration values.
-//
 type NumSignSymbolDisplayMode int
 
 var lockNumSignSymbolDisplayMode sync.Mutex
@@ -97,7 +97,6 @@ var lockNumSignSymbolDisplayMode sync.Mutex
 // initialized and therefore has no value.
 //
 // This is an error condition.
-//
 func (nSignSymDisMode NumSignSymbolDisplayMode) None() NumSignSymbolDisplayMode {
 
 	lockNumSignSymbolDisplayMode.Lock()
@@ -110,7 +109,6 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) None() NumSignSymbolDisplayMode 
 // Explicit - Signals that the Number Sign Symbol will be
 // explicitly displayed with the associated numeric value in a
 // number string (Example: '+123').
-//
 func (nSignSymDisMode NumSignSymbolDisplayMode) Explicit() NumSignSymbolDisplayMode {
 
 	lockNumSignSymbolDisplayMode.Lock()
@@ -128,7 +126,6 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) Explicit() NumSignSymbolDisplayM
 //
 // A value of '123' would have a Number Sign Symbol Display Mode
 // of 'Implicit' and a positive numeric value of '+123'.
-//
 func (nSignSymDisMode NumSignSymbolDisplayMode) Implicit() NumSignSymbolDisplayMode {
 
 	lockNumSignSymbolDisplayMode.Lock()
@@ -148,10 +145,9 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) Implicit() NumSignSymbolDisplayM
 //
 // Usage
 //
-//  t:= NumSignSymbolDisplayMode(0).Implicit()
-//  str := t.String()
-//     str is now equal to 'Implicit'
-//
+//	t:= NumSignSymbolDisplayMode(0).Implicit()
+//	str := t.String()
+//	   str is now equal to 'Implicit'
 func (nSignSymDisMode NumSignSymbolDisplayMode) String() string {
 
 	lockNumSignSymbolDisplayMode.Lock()
@@ -181,26 +177,22 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) String() string {
 //
 // Usage
 //
-//  numSignSymDisMode := NumSignSymbolDisplayMode(0).Explicit()
+//	numSignSymDisMode := NumSignSymbolDisplayMode(0).Explicit()
 //
-//  isValid := numSignSymDisMode.XIsValid() // isValid == true
+//	isValid := numSignSymDisMode.XIsValid() // isValid == true
 //
-//  numSignSymDisMode = NumSignSymbolDisplayMode(0).None()
+//	numSignSymDisMode = NumSignSymbolDisplayMode(0).None()
 //
-//  isValid = numSignSymDisMode.XIsValid() // isValid == false
-//
+//	isValid = numSignSymDisMode.XIsValid() // isValid == false
 func (nSignSymDisMode NumSignSymbolDisplayMode) XIsValid() bool {
 
 	lockNumSignSymbolDisplayMode.Lock()
 
 	defer lockNumSignSymbolDisplayMode.Unlock()
 
-	if nSignSymDisMode > 2 ||
-		nSignSymDisMode < 1 {
-		return false
-	}
-
-	return true
+	return new(numSignSymDisplayModeNanobot).
+		isValidTextField(
+			nSignSymDisMode)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -215,54 +207,52 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XIsValid() bool {
 //
 // Input Parameters
 //
-//  valueString   string - A string which will be matched against
-//                         the enumeration string values. If
-//                         'valueString' is equal to one of the
-//                         enumeration names, this method will
-//                         proceed to successful completion and
-//                         return the correct enumeration value.
+//	valueString   string - A string which will be matched against
+//	                       the enumeration string values. If
+//	                       'valueString' is equal to one of the
+//	                       enumeration names, this method will
+//	                       proceed to successful completion and
+//	                       return the correct enumeration value.
 //
 //
-//  caseSensitive   bool - If 'true' the search for enumeration
-//                         names will be case-sensitive and will
-//                         require an exact match. Therefore,
-//                         'explicit' will NOT match the enumeration
-//                         name, 'Explicit'.
+//	caseSensitive   bool - If 'true' the search for enumeration
+//	                       names will be case-sensitive and will
+//	                       require an exact match. Therefore,
+//	                       'explicit' will NOT match the enumeration
+//	                       name, 'Explicit'.
 //
-//                         If 'false' a case-insensitive search is
-//                         conducted for the enumeration name. In
-//                         this case, 'explicit' will match the
-//                         enumeration name 'Explicit'.
-//
+//	                       If 'false' a case-insensitive search is
+//	                       conducted for the enumeration name. In
+//	                       this case, 'explicit' will match the
+//	                       enumeration name 'Explicit'.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NumSignSymbolDisplayMode
-//     - Upon successful completion, this method will return a new
-//       instance of NumSignSymbolDisplayMode set to the value of
-//       the enumeration matched by the string search performed on
-//       input parameter, 'valueString'.
+//	NumSignSymbolDisplayMode
+//	   - Upon successful completion, this method will return a new
+//	     instance of NumSignSymbolDisplayMode set to the value of
+//	     the enumeration matched by the string search performed on
+//	     input parameter, 'valueString'.
 //
-//  error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is
-//       encountered, this method will return an error type which
-//       encapsulates an appropriate error message.
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If an error condition is
+//	     encountered, this method will return an error type which
+//	     encapsulates an appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t, err := NumSignSymbolDisplayMode(0).XParseString("Explicit", true)
 //
-//     t is now equal to NumSignSymbolDisplayMode(0).Explicit()
+//	t is now equal to NumSignSymbolDisplayMode(0).Explicit()
 //
 // t, err = NumSignSymbolDisplayMode(0).XParseString("explicit", false)
 //
-//     t is now equal to NumSignSymbolDisplayMode(0).Explicit()
-//
+//	t is now equal to NumSignSymbolDisplayMode(0).Explicit()
 func (nSignSymDisMode NumSignSymbolDisplayMode) XParseString(
 	valueString string,
 	caseSensitive bool) (NumSignSymbolDisplayMode, error) {
@@ -312,12 +302,52 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XParseString(
 	return strNumSignSymDisMode, nil
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration TextFieldType.
+//
+// If the current instance of TextFieldType is invalid, this
+// method will always return a value of TextFieldType(0).None().
+//
+// # Background
+//
+// Enumeration TextFieldType has an underlying type of integer
+// (int). This means the type could conceivably be set to any
+// integer value. This method ensures that all invalid
+// TextFieldType instances are consistently classified as 'None'
+// (TextFieldType(0).None()). Remember that 'None' is considered
+// an invalid value.
+//
+// For example, assume that TextFieldType was set to an integer
+// value of -848972. Calling this method on a TextFieldType with
+// this invalid integer value will return an integer value of zero
+// or the equivalent of TextFieldType(0).None(). This conversion is
+// useful in generating text strings for meaningful informational
+// and error messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (nSignSymDisMode NumSignSymbolDisplayMode) XReturnNoneIfInvalid() NumSignSymbolDisplayMode {
+
+	lockNumSignSymbolDisplayMode.Lock()
+
+	defer lockNumSignSymbolDisplayMode.Unlock()
+
+	isValid := new(numSignSymDisplayModeNanobot).
+		isValidTextField(
+			nSignSymDisMode)
+
+	if !isValid {
+		return NumSignSymbolDisplayMode(0)
+	}
+
+	return nSignSymDisMode
+}
+
 // XValue - This method returns the enumeration value of the
 // current NumSignSymbolDisplayMode instance.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
 func (nSignSymDisMode NumSignSymbolDisplayMode) XValue() NumSignSymbolDisplayMode {
 
 	lockNumSignSymbolDisplayMode.Lock()
@@ -332,8 +362,6 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XValue() NumSignSymbolDisplayMod
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
-//
 func (nSignSymDisMode NumSignSymbolDisplayMode) XValueInt() int {
 
 	lockNumSignSymbolDisplayMode.Lock()
@@ -351,14 +379,53 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XValueInt() int {
 //
 // For easy access to these enumeration values, use this global
 // constant NSignSymDisplayMode.
-//   Example: NSignSymDisplayMode.Explicit()
+//
+//	Example: NSignSymDisplayMode.Explicit()
 //
 // Otherwise you will need to use the formal syntax.
-//   Example: NumSignSymbolDisplayMode(0).Explicit()
+//
+//	Example: NumSignSymbolDisplayMode(0).Explicit()
 //
 // Usage:
 // NSignSymDisplayMode.None(),
 // NSignSymDisplayMode.Explicit(),
 // NSignSymDisplayMode.Implicit(),
-//
 const NSignSymDisplayMode = NumSignSymbolDisplayMode(0)
+
+// numSignSymDisplayModeNanobot - Provides helper methods for
+// enumeration NumSignSymbolDisplayMode.
+type numSignSymDisplayModeNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidTextField - Receives an instance of
+// NumSignSymbolDisplayMode and returns a boolean value signaling
+// whether that NumSignSymbolDisplayMode instance is valid.
+//
+// If the passed instance of NumSignSymbolDisplayMode is valid,
+// this method returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// NumSignSymbolDisplayMode enumeration.
+func (numSignSymModeNanobot *numSignSymDisplayModeNanobot) isValidTextField(
+	numSignSymDisplayMode NumSignSymbolDisplayMode) bool {
+
+	if numSignSymModeNanobot.lock == nil {
+		numSignSymModeNanobot.lock = new(sync.Mutex)
+	}
+
+	numSignSymModeNanobot.lock.Lock()
+
+	defer numSignSymModeNanobot.lock.Unlock()
+
+	if numSignSymDisplayMode < 1 ||
+		numSignSymDisplayMode > 2 {
+
+		return false
+	}
+
+	return true
+}
