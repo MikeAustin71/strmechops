@@ -335,8 +335,8 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	sMech := strmech.StrMech{}
 
-	numberStr := " 12345 "
-	characterSearchLen := -1
+	numberStr := "123456.78  0123 "
+	characterSearchLen := 9
 
 	// Total available Length of Output Line
 	const maxLineLen = 78
@@ -439,7 +439,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 	err = searchResults.GetParameterTextListing(
 		&strBuilder,
 		true,
-		true,
+		false,
 		ePrefix.XCpy("searchResults"))
 
 	if err != nil {

@@ -104,6 +104,27 @@ type CharSearchNumStrParseResultsDto struct {
 	// The index in 'TargetString' at which the search
 	// operation begins.
 
+	TargetStringLastSearchIndex int
+	// The index in Target Search String occupied by the
+	// last Target character searched.
+
+	TargetStringNextSearchIndex int
+	// The starting point for the next search operation.
+	// If the entire Target String was included in the
+	// last search, this value is set to -1.
+	//
+	//  Example-1:
+	//  String = "Hello"
+	//  String Length = 5
+	//  Last Search Index = 4
+	//  TargetStringNextSearchIndex = -1
+	//
+	//  Example-2:
+	//  String = "Hello"
+	//  String Length = 5
+	//  Last Search Index = 2
+	//  TargetStringNextSearchIndex = 3
+
 	ReasonForSearchTermination CharSearchTerminationType
 	// This enumeration will be set to explain why the
 	// text search operation was terminated.

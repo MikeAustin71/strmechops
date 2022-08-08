@@ -57,11 +57,15 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 
 	numStrParseResults.TargetSearchString.Empty()
 
-	numStrParseResults.TargetStringSearchLength = 0
+	numStrParseResults.TargetStringSearchLength = -1
 
-	numStrParseResults.TargetStringAdjustedSearchLength = 0
+	numStrParseResults.TargetStringAdjustedSearchLength = -1
 
-	numStrParseResults.TargetStringStartingSearchIndex = 0
+	numStrParseResults.TargetStringStartingSearchIndex = -1
+
+	numStrParseResults.TargetStringLastSearchIndex = -1
+
+	numStrParseResults.TargetStringLastSearchIndex = -1
 
 	numStrParseResults.ReasonForSearchTermination =
 		CharSearchTermType.None()
@@ -178,6 +182,18 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 
 	if numStrParseResults1.TargetStringStartingSearchIndex !=
 		numStrParseResults2.TargetStringStartingSearchIndex {
+
+		return false
+	}
+
+	if numStrParseResults1.TargetStringLastSearchIndex !=
+		numStrParseResults2.TargetStringLastSearchIndex {
+
+		return false
+	}
+
+	if numStrParseResults1.TargetStringNextSearchIndex !=
+		numStrParseResults2.TargetStringNextSearchIndex {
 
 		return false
 	}

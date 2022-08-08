@@ -271,11 +271,15 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.TargetStringAdjustedSearchLength =
 		targetInputParms.TargetStringAdjustedSearchLength
 
-	searchResults.ReasonForSearchTermination =
-		CharSearchTermType.ProcessError()
-
 	searchResults.TargetStringStartingSearchIndex =
 		targetInputParms.TargetStringStartingSearchIndex
+
+	searchResults.TargetStringLastSearchIndex = -1
+
+	searchResults.TargetStringNextSearchIndex = -1
+
+	searchResults.ReasonForSearchTermination =
+		CharSearchTermType.ProcessError()
 
 	// Processing Flags
 
@@ -378,15 +382,6 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 					TargetStringCurrentSearchIndex
 
 				targetInputParms.TargetStringCurrentSearchIndex = i
-
-				targetInputParms.TargetStringNextSearchIndex = i + 1
-
-				if targetInputParms.TargetStringNextSearchIndex >=
-					targetInputParms.TargetStringLength {
-
-					targetInputParms.TargetStringNextSearchIndex = -1
-
-				}
 
 				searchResults.ReasonForSearchTermination = CharSearchTermType.TerminationDelimiters()
 
@@ -583,14 +578,7 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		}
 	}
 
-	targetInputParms.TargetStringNextSearchIndex =
-		targetInputParms.TargetStringCurrentSearchIndex + 1
-
-	if targetInputParms.TargetStringNextSearchIndex >=
-		targetInputParms.TargetStringLength {
-
-		targetInputParms.TargetStringNextSearchIndex = -1
-	}
+	// End Of Target String Standard Loop Completion
 
 	if targetInputParms.TargetStringAdjustedSearchLength <
 		targetInputParms.TargetStringLength {
@@ -606,6 +594,31 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	}
 
 computeExitStats:
+
+	targetInputParms.TargetStringNextSearchIndex =
+		targetInputParms.TargetStringCurrentSearchIndex + 1
+
+	if targetInputParms.TargetStringNextSearchIndex >=
+		targetInputParms.TargetStringLength {
+
+		targetInputParms.TargetStringNextSearchIndex = -1
+
+		searchResults.TargetStringNextSearchIndex = -1
+
+		searchResults.TargetStringLastSearchIndex =
+			targetInputParms.TargetStringLength - 1
+
+	} else {
+		// targetInputParms.TargetStringNextSearchIndex <
+		// targetInputParms.TargetStringLength
+
+		searchResults.TargetStringNextSearchIndex =
+			targetInputParms.TargetStringNextSearchIndex
+
+		searchResults.TargetStringLastSearchIndex =
+			targetInputParms.TargetStringNextSearchIndex - 1
+
+	}
 
 	// Slice Examples
 	//arr := []int{1,2,3,4,5}

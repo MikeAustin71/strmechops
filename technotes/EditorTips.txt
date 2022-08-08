@@ -1,0 +1,6 @@
+When some words are missing in the pre-defined dictionaries, you
+can create your own. A custom dictionary is a .dic text file
+containing each word on a new line.
+
+To add new directories, open settings by pressing Ctrl+Alt+S and
+navigate to Editor | Natural Languages | Spelling.
