@@ -2,7 +2,6 @@ package strmech
 
 // DataFieldProfileDto - This type is used to encapsulate information
 // related to an extracted data field string.
-//
 type DataFieldProfileDto struct {
 	TargetStr                      string                         //  The string from which the data field  is extracted.
 	TargetStrLength                int                            //  Length of 'TargetStr'.
@@ -25,7 +24,6 @@ type DataFieldProfileDto struct {
 // ConvertToErrorState - Prepares the current DataFieldProfileDto instance
 // for return as part of an error or null state condition. All references
 // to the data field are zeroed.
-//
 func (dfProfile *DataFieldProfileDto) ConvertToErrorState() {
 	dfProfile.LeadingKeyWordDelimiter = ""
 	dfProfile.LeadingKeyWordDelimiterIndex = -1
@@ -48,7 +46,7 @@ func (dfProfile DataFieldProfileDto) New() DataFieldProfileDto {
 	newDataDto.DataFieldIndex = -1
 	newDataDto.DataFieldLength = 0
 	newDataDto.DataFieldTrailingDelimiter = ""
-	newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.Unknown()
+	newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.None()
 	newDataDto.NextTargetStrIndex = -1
 	newDataDto.CommentDelimiter = ""
 	newDataDto.CommentDelimiterIndex = -1

@@ -19,44 +19,41 @@ type strMechAtom struct {
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The string which will be parsed into text lines. If
-//       'targetStr' is an empty string an error will be returned.
-//        If 'targetStr' consists entirely of white space, this
-//        method will return a string consisting of a new-line
-//        character and an error value of 'nil'.
+//	targetStr           string
+//	   - The string which will be parsed into text lines. If
+//	     'targetStr' is an empty string an error will be returned.
+//	      If 'targetStr' consists entirely of white space, this
+//	      method will return a string consisting of a new-line
+//	      character and an error value of 'nil'.
 //
 //
-//  lineLength          int
-//     - The maximum length of each line.
+//	lineLength          int
+//	   - The maximum length of each line.
 //
 //
-//  lineDelimiter       rune
-//     - The line delimiter character which will be inserted at the
-//       end of a line break.
+//	lineDelimiter       rune
+//	   - The line delimiter character which will be inserted at the
+//	     end of a line break.
 //
 //
-//  Note: If the caller specifies a line length of 50, the line delimiter
-//  character may be placed in the 51st character position depending upon
-//  the word breaks.
-//
-//
+//	Note: If the caller specifies a line length of 50, the line delimiter
+//	character may be placed in the 51st character position depending upon
+//	the word breaks.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - If this method completes successfully, this string
-//       parameter will contain the text with line breaks delimited
-//       by the input parameter 'lineDelimiter'.
+//	string
+//	   - If this method completes successfully, this string
+//	     parameter will contain the text with line breaks delimited
+//	     by the input parameter 'lineDelimiter'.
 //
-//  error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
-//
+//	error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 func (sMechAtom *strMechAtom) breakTextAtLineLength(
 	targetStr string,
 	lineLength int,
@@ -302,7 +299,6 @@ func (sMechAtom *strMechAtom) breakTextAtLineLength(
 //
 // Be advised that the data fields in 'targetStrOps' will be
 // overwritten.
-//
 func (sMechAtom *strMechAtom) copyIn(
 	targetStrMech *StrMech,
 	incomingStrMech *StrMech,
@@ -360,7 +356,6 @@ func (sMechAtom *strMechAtom) copyIn(
 
 // CopyOut - Creates a 'deep' copy of input parameter
 // 'strOps', an instance of StrMech.
-//
 func (sMechAtom *strMechAtom) copyOut(
 	strMech *StrMech,
 	ePrefix *ePref.ErrPrefixDto) (
@@ -425,152 +420,148 @@ func (sMechAtom *strMechAtom) copyOut(
 //
 // Input Values
 //
-//  targetStr               string   - The target string from which the data field will be extracted.
+//	targetStr               string   - The target string from which the data field will be extracted.
 //
 //
-//  leadingKeyWordDelimiters []string - Data fields are often preceded by field names or field designators.
-//                                       The 'leadingKeyWordDelimiters' parameter is a string array
-//                                       containing 'Key Word Delimiters'. A Key Word Delimiter may be
-//                                       a Key Word string or a character which identifies and immediately
-//                                       precedes the data field. If multiple Key Word Delimiters exist
-//                                       in 'targetStr' the first instance of a key word in 'targetStr'
-//                                       will be designated as the Key Word Delimiter.
+//	leadingKeyWordDelimiters []string - Data fields are often preceded by field names or field designators.
+//	                                     The 'leadingKeyWordDelimiters' parameter is a string array
+//	                                     containing 'Key Word Delimiters'. A Key Word Delimiter may be
+//	                                     a Key Word string or a character which identifies and immediately
+//	                                     precedes the data field. If multiple Key Word Delimiters exist
+//	                                     in 'targetStr' the first instance of a key word in 'targetStr'
+//	                                     will be designated as the Key Word Delimiter.
 //
-//                                       If this parameter is populated, the search for a data field
-//                                       will begin immediately after the first located Key Word
-//                                       Delimiter string. If none of the Keywords in this string array
-//                                       are located in 'targetStr', an empty string will be returned
-//                                       for data field. If this parameter is populated, at least one
-//                                       of the Keywords MUST exist in 'targetStr' before a data field
-//                                       will be extracted and returned.
+//	                                     If this parameter is populated, the search for a data field
+//	                                     will begin immediately after the first located Key Word
+//	                                     Delimiter string. If none of the Keywords in this string array
+//	                                     are located in 'targetStr', an empty string will be returned
+//	                                     for data field. If this parameter is populated, at least one
+//	                                     of the Keywords MUST exist in 'targetStr' before a data field
+//	                                     will be extracted and returned.
 //
-//                                       If this parameter is an empty string array, the search for a
-//                                       data field will begin at the string index designated by
-//                                       parameter, 'startIdx'.
-//
-//
-//  startIdx                int      - The string index in parameter 'targetStr' from which the search for
-//                                       a data field will begin. Note that the starting index will be adjusted
-//                                       according to the existence of a Key Word Delimiter as explained
-//                                       above.
+//	                                     If this parameter is an empty string array, the search for a
+//	                                     data field will begin at the string index designated by
+//	                                     parameter, 'startIdx'.
 //
 //
-//  leadingFieldSeparators  []string - An array of characters or groups of characters which delimit the
-//                                       leading edge of the data field.
+//	startIdx                int      - The string index in parameter 'targetStr' from which the search for
+//	                                     a data field will begin. Note that the starting index will be adjusted
+//	                                     according to the existence of a Key Word Delimiter as explained
+//	                                     above.
 //
 //
-//  trailingFieldSeparators []string - An array of characters or groups of characters which delimit the
-//                                       end of a data field.
+//	leadingFieldSeparators  []string - An array of characters or groups of characters which delimit the
+//	                                     leading edge of the data field.
 //
 //
-//  commentDelimiters       []string - Comments effectively terminate the search for a data field. This
-//                                       array stores comment characters or phrases which signal the beginning
-//                                       of a comment.
+//	trailingFieldSeparators []string - An array of characters or groups of characters which delimit the
+//	                                     end of a data field.
 //
 //
-//  endOfLineDelimiters     []string - Those characters or groups of characters which mark the end of a line.
-//                                       Generally this includes characters like 'new line' or 'carriage return'.
-//                                       End of line characters will terminate the search for a data field.
+//	commentDelimiters       []string - Comments effectively terminate the search for a data field. This
+//	                                     array stores comment characters or phrases which signal the beginning
+//	                                     of a comment.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	endOfLineDelimiters     []string - Those characters or groups of characters which mark the end of a line.
+//	                                     Generally this includes characters like 'new line' or 'carriage return'.
+//	                                     End of line characters will terminate the search for a data field.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  DataFieldProfileDto - If successful, this method returns a structure containing
-//                        characteristics describing the extracted data field.
+//	DataFieldProfileDto - If successful, this method returns a structure containing
+//	                      characteristics describing the extracted data field.
 //
-//    type DataFieldProfileDto struct {
-//       TargetStr                      string //  The string from which the data field is extracted.
-//       TargetStrLength                int    //  Length of 'TargetStr'
-//       TargetStrStartIndex            int    //  The index with in 'TargetStr' from which the search for a data field was initiated.
-//       TargetStrLastGoodIndex         int    //  Last valid index in target string which is less than the target string length and is NOT an 'End Of Field' or 'End Of Line' Delimiter.
-//       LeadingKeyWordDelimiter        string //  The Leading Key Word Delimiter which is used to identify the beginning of the field search.
-//       LeadingKeyWordDelimiterIndex   int    //  Index of the found Leading Key Word Delimiter.
-//       DataFieldStr                   string //  The extracted data field string.
-//       DataFieldIndex                 int    //  The index in 'TargetStr' where the data field begins.
-//       DataFieldLength                int    //  The length of the extracted data field string.
-//       DataFieldTrailingDelimiter     string //  The trailing character which marked the end of the data field. A zero value indicates end of string encountered.
-//       DataFieldTrailingDelimiterType DataFieldTrailingDelimiterType // A constant or enumeration type used to describe the type of delimiter used to mark the end of a data field.
-//       NextTargetStrIndex             int    //  The index in 'TargetStr' immediately following the extracted data field.
-//       CommentDelimiter               string //  If a Comment Delimiter is detected it is stored here.
-//       CommentDelimiterIndex          int    //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
-//       EndOfLineDelimiter             string //  If an End-Of-Line Delimiter is detected it is captured and stored here.
-//       EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
-//    }
+//	  type DataFieldProfileDto struct {
+//	     TargetStr                      string //  The string from which the data field is extracted.
+//	     TargetStrLength                int    //  Length of 'TargetStr'
+//	     TargetStrStartIndex            int    //  The index with in 'TargetStr' from which the search for a data field was initiated.
+//	     TargetStrLastGoodIndex         int    //  Last valid index in target string which is less than the target string length and is NOT an 'End Of Field' or 'End Of Line' Delimiter.
+//	     LeadingKeyWordDelimiter        string //  The Leading Key Word Delimiter which is used to identify the beginning of the field search.
+//	     LeadingKeyWordDelimiterIndex   int    //  Index of the found Leading Key Word Delimiter.
+//	     DataFieldStr                   string //  The extracted data field string.
+//	     DataFieldIndex                 int    //  The index in 'TargetStr' where the data field begins.
+//	     DataFieldLength                int    //  The length of the extracted data field string.
+//	     DataFieldTrailingDelimiter     string //  The trailing character which marked the end of the data field. A zero value indicates end of string encountered.
+//	     DataFieldTrailingDelimiterType DataFieldTrailingDelimiterType // A constant or enumeration type used to describe the type of delimiter used to mark the end of a data field.
+//	     NextTargetStrIndex             int    //  The index in 'TargetStr' immediately following the extracted data field.
+//	     CommentDelimiter               string //  If a Comment Delimiter is detected it is stored here.
+//	     CommentDelimiterIndex          int    //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
+//	     EndOfLineDelimiter             string //  If an End-Of-Line Delimiter is detected it is captured and stored here.
+//	     EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
+//	  }
 //
 //
-//   error
-//     - If the method completes successfully and no errors are encountered
-//       this return value is set to 'nil'. Otherwise, if errors are encountered
-//       this return value will contain an appropriate error message.
+//	 error
+//	   - If the method completes successfully and no errors are encountered
+//	     this return value is set to 'nil'. Otherwise, if errors are encountered
+//	     this return value will contain an appropriate error message.
 //
-//       The most likely source of errors are invalid input parameters.
-//       Input parameters 'targetStr', 'startIdx', 'leadingFieldSeparators',
-//       'trailingFieldSeparators' and 'endOfStringDelimiters' are required
-//       parameters and must be populated with valid data.
+//	     The most likely source of errors are invalid input parameters.
+//	     Input parameters 'targetStr', 'startIdx', 'leadingFieldSeparators',
+//	     'trailingFieldSeparators' and 'endOfStringDelimiters' are required
+//	     parameters and must be populated with valid data.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  ePrefix := "TestStrOps_ExtractDataField_01() "
-//  endOfLineDelimiters := []string{"\n"}
-//  commentDelimiters := []string{"#"}
-//  leadingFieldDelimiters := []string{
-//  "\t",
-//  "\r",
-//  "\f",
-//  "\v",
-//  " "}
+//	ePrefix := "TestStrOps_ExtractDataField_01() "
+//	endOfLineDelimiters := []string{"\n"}
+//	commentDelimiters := []string{"#"}
+//	leadingFieldDelimiters := []string{
+//	"\t",
+//	"\r",
+//	"\f",
+//	"\v",
+//	" "}
 //
-//  trailingFieldDelimiters := []string{
-//  "\t",
-//  "\r",
-//  "\f",
-//  "\v",
-//  " "}
+//	trailingFieldDelimiters := []string{
+//	"\t",
+//	"\r",
+//	"\f",
+//	"\v",
+//	" "}
 //
-//  targetStr := " Zone:\t America/Chicago\t Link:\t US/Central\t\n"
-//  startIdx := 0
-//  leadingKeyWordDelimiters := []string{"Zone:", "Link:"}
+//	targetStr := " Zone:\t America/Chicago\t Link:\t US/Central\t\n"
+//	startIdx := 0
+//	leadingKeyWordDelimiters := []string{"Zone:", "Link:"}
 //
-//  datDto,
-//  err :=
-//    new(StrMech).
-//        ExtractDataField(
-//           targetStr,
-//           leadingKeyWordDelimiters,
-//           startIdx,
-//           leadingFieldDelimiters,
-//           trailingFieldDelimiters,
-//           commentDelimiters,
-//           endOfLineDelimiters,
-//           ePrefix)
+//	datDto,
+//	err :=
+//	  new(StrMech).
+//	      ExtractDataField(
+//	         targetStr,
+//	         leadingKeyWordDelimiters,
+//	         startIdx,
+//	         leadingFieldDelimiters,
+//	         trailingFieldDelimiters,
+//	         commentDelimiters,
+//	         endOfLineDelimiters,
+//	         ePrefix)
 //
-//  -----------------------------------------------
-//  datDto.DataFieldStr is now equal to:
-//          "America/Chicago"
-//
-//
+//	-----------------------------------------------
+//	datDto.DataFieldStr is now equal to:
+//	        "America/Chicago"
 func (sMechAtom *strMechAtom) extractDataField(
 	targetStr string,
 	leadingKeyWordDelimiters []string,
@@ -959,7 +950,7 @@ exitMainTargetLoop:
 		return newDataDto, nil
 	}
 
-	if newDataDto.DataFieldTrailingDelimiterType == DfTrailDelimiter.Unknown() {
+	if newDataDto.DataFieldTrailingDelimiterType == DfTrailDelimiter.None() {
 		newDataDto.DataFieldTrailingDelimiterType = DfTrailDelimiter.EndOfString()
 	}
 
@@ -1008,181 +999,177 @@ exitMainTargetLoop:
 //
 // Input Parameters
 //
-//  targetStr           string    - The target string to be searched for the first instance of
-//                                  a number string. A number string is usually defined as a
-//                                  string comprised of one or more consecutive numeric digits.
-//                                  Additional parameters provided by this method will allow
-//                                  the caller to insert specified non-numeric characters at
-//                                  the beginning, end or interior of a number string.
+//	targetStr           string    - The target string to be searched for the first instance of
+//	                                a number string. A number string is usually defined as a
+//	                                string comprised of one or more consecutive numeric digits.
+//	                                Additional parameters provided by this method will allow
+//	                                the caller to insert specified non-numeric characters at
+//	                                the beginning, end or interior of a number string.
 //
-//  startIdx               int    - The starting index in input parameter 'targetStr'
-//                                  from which the search for a number string will be
-//                                  initiated. This useful in extracting multiple number
-//                                  strings form a single 'targetStr'.
+//	startIdx               int    - The starting index in input parameter 'targetStr'
+//	                                from which the search for a number string will be
+//	                                initiated. This useful in extracting multiple number
+//	                                strings form a single 'targetStr'.
 //
-//  keepLeadingChars    string    - This string contains non-numeric characters which will be
-//                                  retained as a prefix to the final number string extracted
-//                                  from the 'targetStr' parameter. To be included, these characters
-//                                  must exist in 'targetStr' and must immediately precede the
-//                                  first instance of a number string.
+//	keepLeadingChars    string    - This string contains non-numeric characters which will be
+//	                                retained as a prefix to the final number string extracted
+//	                                from the 'targetStr' parameter. To be included, these characters
+//	                                must exist in 'targetStr' and must immediately precede the
+//	                                first instance of a number string.
 //
-//                                  For example, if the target string is "Hello $123789 world" and
-//                                  parameter 'keepLeadingChars' includes the USA currency character,
-//                                  '$', the returned number string would be '$123789'.  If no currency
-//                                  character was included in 'keepLeadingChars', the returned number
-//                                  string would be '123789'. It is worth noting that if the target
-//                                  string was '$ 123789' and a currency symbol, '$', was included
-//                                  in 'keepLeadingChars', the returned number string would still be
-//                                  '123789' because 'keepLeadingChars' characters must immediately
-//                                  precede the string of numeric digits in 'targetStr'.
+//	                                For example, if the target string is "Hello $123789 world" and
+//	                                parameter 'keepLeadingChars' includes the USA currency character,
+//	                                '$', the returned number string would be '$123789'.  If no currency
+//	                                character was included in 'keepLeadingChars', the returned number
+//	                                string would be '123789'. It is worth noting that if the target
+//	                                string was '$ 123789' and a currency symbol, '$', was included
+//	                                in 'keepLeadingChars', the returned number string would still be
+//	                                '123789' because 'keepLeadingChars' characters must immediately
+//	                                precede the string of numeric digits in 'targetStr'.
 //
-//                                  Specifically, if the plus ('+') and minus ('-') sign are NOT
-//                                  included in 'keepLeadingChars' those leading number signs will
-//                                  never be included in the final number string.
+//	                                Specifically, if the plus ('+') and minus ('-') sign are NOT
+//	                                included in 'keepLeadingChars' those leading number signs will
+//	                                never be included in the final number string.
 //
-//                                  Leading characters will not be repeated. If for some reason you
-//                                  wanted to retain two leading currency symbols ("$$") it would be
-//                                  necessary to include two currency characters in 'keepLeadingChars'.
+//	                                Leading characters will not be repeated. If for some reason you
+//	                                wanted to retain two leading currency symbols ("$$") it would be
+//	                                necessary to include two currency characters in 'keepLeadingChars'.
 //
-//  keepInteriorChars   string    - This string contains non-numeric characters which will be retained
-//                                  as valid characters within the final extracted number string. The
-//                                  characters must exist withing the first instance of a number string
-//                                  located in 'targetStr'. Such interior characters might include
-//                                  thousands separators (commas) or decimal points (periods).
+//	keepInteriorChars   string    - This string contains non-numeric characters which will be retained
+//	                                as valid characters within the final extracted number string. The
+//	                                characters must exist withing the first instance of a number string
+//	                                located in 'targetStr'. Such interior characters might include
+//	                                thousands separators (commas) or decimal points (periods).
 //
-//                                  For example, if a comma and a period are included in 'keepInteriorChars'
-//                                  and the target string is "Hello word 123,456,789.25 !", the returned
-//                                  number string would be "123,456,789.25".  If the comma character was
-//                                  NOT included in the 'keepInteriorChars' string, the returned number
-//                                  string would be '123', since the number string extraction parser
-//                                  would break on the comma, a non-numeric digit.
+//	                                For example, if a comma and a period are included in 'keepInteriorChars'
+//	                                and the target string is "Hello word 123,456,789.25 !", the returned
+//	                                number string would be "123,456,789.25".  If the comma character was
+//	                                NOT included in the 'keepInteriorChars' string, the returned number
+//	                                string would be '123', since the number string extraction parser
+//	                                would break on the comma, a non-numeric digit.
 //
-//                                  'keepInteriorChars' will NOT allow multiple non-numeric characters
-//                                  to exist within the interior of the final extracted number string.
-//                                  Only single non-numeric characters are allowed within a number string.
+//	                                'keepInteriorChars' will NOT allow multiple non-numeric characters
+//	                                to exist within the interior of the final extracted number string.
+//	                                Only single non-numeric characters are allowed within a number string.
 //
-//  keepTrailingChars   string    - This string contains non-numeric characters which should be retained
-//                                  at the end of the final number string. By default, a non-numeric
-//                                  character will mark the end of a number string. However, if the caller
-//                                  elects to use parameter 'keepTrailingChars' to retain non-numeric
-//                                  characters such as a trailing right-parenthesis, then those non-numeric
-//                                  characters will be retained in the final extracted number string.
+//	keepTrailingChars   string    - This string contains non-numeric characters which should be retained
+//	                                at the end of the final number string. By default, a non-numeric
+//	                                character will mark the end of a number string. However, if the caller
+//	                                elects to use parameter 'keepTrailingChars' to retain non-numeric
+//	                                characters such as a trailing right-parenthesis, then those non-numeric
+//	                                characters will be retained in the final extracted number string.
 //
-//                                  Trailing characters will not be repeated. If for some reason you
-//                                  wanted to retain two closing parentheses symbols ("))") it would be
-//                                  necessary to include closing parentheses characters in 'keepTrailingChars'.
+//	                                Trailing characters will not be repeated. If for some reason you
+//	                                wanted to retain two closing parentheses symbols ("))") it would be
+//	                                necessary to include closing parentheses characters in 'keepTrailingChars'.
 //
-//                                  It should be emphasized that 'keepTrailingChars' must immediately
-//                                  follow the first instance of a number string in parameter, 'targetStr'.
+//	                                It should be emphasized that 'keepTrailingChars' must immediately
+//	                                follow the first instance of a number string in parameter, 'targetStr'.
 //
-//                                  Example #1:
-//                                    Target String = "Hello world, (1234). Today is new day."
-//                                    keepLeadingChars = "("
-//                                    keepInteriorChars = ""
-//                                    keepTrailingChars= ")"
-//                                    Extracted Number String = "(1234)"
+//	                                Example #1:
+//	                                  Target String = "Hello world, (1234). Today is new day."
+//	                                  keepLeadingChars = "("
+//	                                  keepInteriorChars = ""
+//	                                  keepTrailingChars= ")"
+//	                                  Extracted Number String = "(1234)"
 //
-//                                  Example #2:
-//                                    Target String = "Hello world, USA GDP growth is projected at 1.8%."
-//                                    keepLeadingChars = ""
-//                                    keepInteriorChars = "."
-//                                    keepTrailingChars= "%"
-//                                    Extracted Number String = "1.8%"
+//	                                Example #2:
+//	                                  Target String = "Hello world, USA GDP growth is projected at 1.8%."
+//	                                  keepLeadingChars = ""
+//	                                  keepInteriorChars = "."
+//	                                  keepTrailingChars= "%"
+//	                                  Extracted Number String = "1.8%"
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NumStrProfileDto    - If successful, this method will return a type 'NumStrProfileDto'
-//                        populated with the extracted number string and additional profile
-//                        information related to the extracted number string.
+//	NumStrProfileDto    - If successful, this method will return a type 'NumStrProfileDto'
+//	                      populated with the extracted number string and additional profile
+//	                      information related to the extracted number string.
 //
-//     type NumStrProfileDto struct {
+//	   type NumStrProfileDto struct {
 //
-//           TargetStr            string   //  The original target string which is scanned for a
-//                                         //    number string
+//	         TargetStr            string   //  The original target string which is scanned for a
+//	                                       //    number string
 //
-//           TargetStrStartIndex  int      //  The starting index in 'TargetStr' from which the
-//                                         //    number string search was initiated.
+//	         TargetStrStartIndex  int      //  The starting index in 'TargetStr' from which the
+//	                                       //    number string search was initiated.
 //
-//           LeadingSignIndex     int      //  The string index of a leading sign in 'NumStr' below. If a
-//                                         //    leading sign character is NOT present in 'NumStr' this
-//                                         //    value is set to -1
+//	         LeadingSignIndex     int      //  The string index of a leading sign in 'NumStr' below. If a
+//	                                       //    leading sign character is NOT present in 'NumStr' this
+//	                                       //    value is set to -1
 //
-//           LeadingSignChar      string   //  If a leading sign character (plus '+' or minus '-')
-//                                         //    exists in data field 'NumStr' (below), it is stored
-//                                         //    in this string.
+//	         LeadingSignChar      string   //  If a leading sign character (plus '+' or minus '-')
+//	                                       //    exists in data field 'NumStr' (below), it is stored
+//	                                       //    in this string.
 //
-//           FirstNumCharIndex    int      //  The index in 'TargetStr' (above) where the first character
-//                                         //    of the extracted number string is located.
+//	         FirstNumCharIndex    int      //  The index in 'TargetStr' (above) where the first character
+//	                                       //    of the extracted number string is located.
 //
-//           NextTargetStrIndex   int      //  The index of the next character in 'TargetStr' immediately
-//                                         //    following the extracted number string.
+//	         NextTargetStrIndex   int      //  The index of the next character in 'TargetStr' immediately
+//	                                       //    following the extracted number string.
 //
-//           NumStrLen            int      //  The length of the extracted number string.
+//	         NumStrLen            int      //  The length of the extracted number string.
 //
-//           NumStr               string   //  The number string extracted from 'TargetStr'.
-//     }
+//	         NumStr               string   //  The number string extracted from 'TargetStr'.
+//	   }
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If 'startIndex' is less than zero or if 'startIndex'
-//       exceeds the last character index in 'targetStr', an error
-//       will be returned.
+//	     If 'startIndex' is less than zero or if 'startIndex'
+//	     exceeds the last character index in 'targetStr', an error
+//	     will be returned.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  ePrefix := "TestStrOps_ExtractNumericDigits_06() "
-//  targetStr := "Hello World! Your bank account =$(1,250,364.33).44 What do you think?"
-//  startIndex := 0
-//  keepLeadingChars := "$("
-//  keepInteriorChars := ",."
-//  keepTrailingChars := ")"
+//	ePrefix := "TestStrOps_ExtractNumericDigits_06() "
+//	targetStr := "Hello World! Your bank account =$(1,250,364.33).44 What do you think?"
+//	startIndex := 0
+//	keepLeadingChars := "$("
+//	keepInteriorChars := ",."
+//	keepTrailingChars := ")"
 //
 //
-//  nStrDto,
-//  err :=
-//    new(StrMech).
-//         ExtractNumericDigits(
-//             targetStr,
-//             startIndex,
-//             keepLeadingChars,
-//             keepInteriorChars,
-//             keepTrailingChars,
-//             ePrefix)
+//	nStrDto,
+//	err :=
+//	  new(StrMech).
+//	       ExtractNumericDigits(
+//	           targetStr,
+//	           startIndex,
+//	           keepLeadingChars,
+//	           keepInteriorChars,
+//	           keepTrailingChars,
+//	           ePrefix)
 //
-//  ----------------------------------------
+//	----------------------------------------
 //
-//  nStrDto.NumStr is now equal to:
-//     "$(1,250,364.33)"
-//
-//
+//	nStrDto.NumStr is now equal to:
+//	   "$(1,250,364.33)"
 func (sMechAtom *strMechAtom) extractNumericDigits(
 	targetStr string,
 	startIndex int,
@@ -1509,7 +1496,6 @@ func (sMechAtom *strMechAtom) extractNumericDigits(
 
 // ptr - Returns a pointer to a new instance of
 // strMechAtom.
-//
 func (sMechAtom strMechAtom) ptr() *strMechAtom {
 
 	if sMechAtom.lock == nil {

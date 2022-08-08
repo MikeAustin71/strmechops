@@ -59,7 +59,7 @@ func TextJustifyTestSetup0010(
 		append(enumValues, TextJustify(0).Center())
 
 	intValues =
-		append(intValues, TxtFieldType.None().XValueInt())
+		append(intValues, TxtJustify.None().XValueInt())
 
 	intValues =
 		append(intValues, TxtJustify.Left().XValueInt())

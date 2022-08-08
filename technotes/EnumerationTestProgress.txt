@@ -1,5 +1,5 @@
 
-Go back and pick this one up.
+G0 back and pick this one up.
 
 Start Here: 2022-08-07
 enumnumstrfmttypecode.go

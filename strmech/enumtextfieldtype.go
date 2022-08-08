@@ -611,12 +611,12 @@ func (txtFieldType TextFieldType) XParseString(
 // (TextFieldType(0).None()). Remember that 'None' is considered
 // an invalid value.
 //
-// For example, assume that TextFieldType was set to an integer
-// value of -848972. Calling this method on a TextFieldType with
-// this invalid integer value will return an integer value of zero
-// or the equivalent of TextFieldType(0).None(). This conversion is
-// useful in generating text strings for meaningful informational
-// and error messages.
+// For example, assume that TextFieldType was set to an invalid
+// integer value of -848972. Calling this method on a TextFieldType
+// with this invalid integer value will return an integer value of
+// zero or the equivalent of TextFieldType(0).None(). This
+// conversion is useful in generating text strings for meaningful
+// informational and error messages.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
