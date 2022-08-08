@@ -51,21 +51,20 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 // names effectively represent an enumeration of number sign symbol
 // position types. These methods are listed as follows:
 //
-//  None             (0) - Signals that 'NumSignSymbolPosition' has
-//                         not been initialized and therefore has no
-//                         value. This is an error condition.
+//	None             (0) - Signals that 'NumSignSymbolPosition' has
+//	                       not been initialized and therefore has no
+//	                       value. This is an error condition.
 //
-//  Before           (1) - Signals that the Numeric Symbol is
-//                         positioned 'Before' the numeric value.
+//	Before           (1) - Signals that the Numeric Symbol is
+//	                       positioned 'Before' the numeric value.
 //
-//  After            (2) - Signals that the Numeric Symbol is
-//                         positioned 'After' the numeric value.
+//	After            (2) - Signals that the Numeric Symbol is
+//	                       positioned 'After' the numeric value.
 //
-//  BeforeAndAfter   (3) - Signals that the Numeric Symbol
-//                         comprises two symbols, one positioned
-//                         'Before' the numeric value and one
-//                         positioned 'After' the numeric value.
-//
+//	BeforeAndAfter   (3) - Signals that the Numeric Symbol
+//	                       comprises two symbols, one positioned
+//	                       'Before' the numeric value and one
+//	                       positioned 'After' the numeric value.
 //
 // For easy access to these enumeration values, use the global constant
 // NumSignSymPos. Example: NumSignSymPos.Before()
@@ -78,7 +77,6 @@ var mapNumSignSymbolPosLwrCaseStringToCode = map[string]NumSignSymbolPosition{
 // alphabetical order. Be advised that all NumSignSymbolPosition
 // methods beginning with 'X', as well as the method 'String()',
 // are utility methods, and NOT part of the enumeration values.
-//
 type NumSignSymbolPosition int
 
 var lockNumSignSymbolPosition sync.Mutex
@@ -86,7 +84,6 @@ var lockNumSignSymbolPosition sync.Mutex
 // None - Signals that 'NumSignSymbolPosition' has not been
 // initialized and therefore contains no value. This is an
 // error condition.
-//
 func (nSignSymPos NumSignSymbolPosition) None() NumSignSymbolPosition {
 
 	lockNumSignSymbolPosition.Lock()
@@ -98,7 +95,6 @@ func (nSignSymPos NumSignSymbolPosition) None() NumSignSymbolPosition {
 
 // Before - Signals that the Numeric Symbol is positioned 'Before'
 // the numeric value.
-//
 func (nSignSymPos NumSignSymbolPosition) Before() NumSignSymbolPosition {
 
 	lockNumSignSymbolPosition.Lock()
@@ -110,7 +106,6 @@ func (nSignSymPos NumSignSymbolPosition) Before() NumSignSymbolPosition {
 
 // After - Signals that the Numeric Symbol is positioned 'After'
 // the numeric value.
-//
 func (nSignSymPos NumSignSymbolPosition) After() NumSignSymbolPosition {
 
 	lockNumSignSymbolPosition.Lock()
@@ -123,7 +118,6 @@ func (nSignSymPos NumSignSymbolPosition) After() NumSignSymbolPosition {
 // BeforeAndAfter - Signals that the Numeric Symbol consists of
 // two symbols, one positioned 'Before' the numeric value and one
 // positioned 'After' the numeric value.
-//
 func (nSignSymPos NumSignSymbolPosition) BeforeAndAfter() NumSignSymbolPosition {
 
 	lockNumSignSymbolPosition.Lock()
@@ -143,10 +137,9 @@ func (nSignSymPos NumSignSymbolPosition) BeforeAndAfter() NumSignSymbolPosition 
 //
 // Usage
 //
-//  t:= NumSignSymbolPosition(0).After()
-//  str := t.String()
-//     str is now equal to 'After'
-//
+//	t:= NumSignSymbolPosition(0).After()
+//	str := t.String()
+//	   str is now equal to 'After'
 func (nSignSymPos NumSignSymbolPosition) String() string {
 
 	lockNumSignSymbolPosition.Lock()
@@ -176,26 +169,21 @@ func (nSignSymPos NumSignSymbolPosition) String() string {
 //
 // Usage
 //
-//  numSignSymPos := NumSignSymbolPosition(0).Before()
+//	numSignSymPos := NumSignSymbolPosition(0).Before()
 //
-//  isValid := numSignSymPos.XIsValid() // isValid == true
+//	isValid := numSignSymPos.XIsValid() // isValid == true
 //
-//  numSignSymPos = NumSignSymbolPosition(0).None()
+//	numSignSymPos = NumSignSymbolPosition(0).None()
 //
-//  isValid = numSignSymPos.XIsValid() // isValid == false
-//
+//	isValid = numSignSymPos.XIsValid() // isValid == false
 func (nSignSymPos NumSignSymbolPosition) XIsValid() bool {
 
 	lockNumSignSymbolPosition.Lock()
 
 	defer lockNumSignSymbolPosition.Unlock()
 
-	if nSignSymPos > 3 ||
-		nSignSymPos < 1 {
-		return false
-	}
-
-	return true
+	return new(numSignSymbolPosNanobot).
+		isValidNumSignSymbolPosition(nSignSymPos)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -208,51 +196,52 @@ func (nSignSymPos NumSignSymbolPosition) XIsValid() bool {
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 // valueString   string - A string which will be matched against the
-//                        enumeration string values. If 'valueString'
-//                        is equal to one of the enumeration names, this
-//                        method will proceed to successful completion
-//                        and return the correct enumeration value.
+//
+//	enumeration string values. If 'valueString'
+//	is equal to one of the enumeration names, this
+//	method will proceed to successful completion
+//	and return the correct enumeration value.
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
-//                        will be case-sensitive and will require an
-//                        exact match. Therefore, 'before' will NOT
-//                        match the enumeration name, 'Before'.
 //
-//                        If 'false' a case-insensitive search is conducted
-//                        for the enumeration name. In this case, 'before'
-//                        will match the enumeration name 'Before'.
+//	will be case-sensitive and will require an
+//	exact match. Therefore, 'before' will NOT
+//	match the enumeration name, 'Before'.
+//
+//	If 'false' a case-insensitive search is conducted
+//	for the enumeration name. In this case, 'before'
+//	will match the enumeration name 'Before'.
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 // NumSignSymbolPosition
-//     - Upon successful completion, this method will return a new
-//       instance of NumSignSymbolPosition set to the value of the
-//       enumeration matched by the string search performed on input
-//       parameter, 'valueString'.
+//   - Upon successful completion, this method will return a new
+//     instance of NumSignSymbolPosition set to the value of the
+//     enumeration matched by the string search performed on input
+//     parameter, 'valueString'.
 //
 // error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is
-//       encountered, this method will return an error type which
-//       encapsulates an appropriate error message.
+//   - If this method completes successfully, the returned error
+//     Type is set equal to 'nil'. If an error condition is
+//     encountered, this method will return an error type which
+//     encapsulates an appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t, err := NumSignSymbolPosition(0).XParseString("Before", true)
 //
-//     t is now equal to NumSignSymbolPosition(0).Before()
+//	t is now equal to NumSignSymbolPosition(0).Before()
 //
 // t, err := NumSignSymbolPosition(0).XParseString("before", false)
 //
-//     t is now equal to NumSignSymbolPosition(0).Before()
-//
+//	t is now equal to NumSignSymbolPosition(0).Before()
 func (nSignSymPos NumSignSymbolPosition) XParseString(
 	valueString string,
 	caseSensitive bool) (NumSignSymbolPosition, error) {
@@ -302,13 +291,52 @@ func (nSignSymPos NumSignSymbolPosition) XParseString(
 	return strNumSignSymPos, nil
 }
 
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration NumSignSymbolPosition.
+//
+// If the current instance of NumSignSymbolPosition is invalid,
+// this method will always return a value of
+// NumSignSymbolPosition(0).None().
+//
+// # Background
+//
+// Enumeration NumSignSymbolPosition has an underlying type of
+// integer (int). This means the type could conceivably be set to
+// any integer value. This method ensures that all invalid
+// NumSignSymbolPosition instances are consistently classified as
+// 'None' (NumSignSymbolPosition(0).None()). Remember that 'None'
+// is considered an invalid value.
+//
+// For example, assume that NumSignSymbolPosition was set to an
+// invalid integer value of -848972. Calling this method on a
+// NumSignSymbolPosition with this invalid integer value will
+// return an integer value of zero or the equivalent of
+// NumSignSymbolPosition(0).None(). This conversion is useful in
+// generating text strings for meaningful informational and error
+// messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (nSignSymPos NumSignSymbolPosition) XReturnNoneIfInvalid() NumSignSymbolPosition {
+	lockNumSignSymbolPosition.Lock()
+
+	defer lockNumSignSymbolPosition.Unlock()
+
+	isValid := new(numSignSymbolPosNanobot).
+		isValidNumSignSymbolPosition(nSignSymPos)
+
+	if !isValid {
+		return NumSignSymbolPosition(0)
+	}
+
+	return nSignSymPos
+}
+
 // XValue - This method returns the enumeration value of the current
 // NumSignSymbolPosition instance.
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
-//
 func (nSignSymPos NumSignSymbolPosition) XValue() NumSignSymbolPosition {
 
 	lockNumSignSymbolPosition.Lock()
@@ -323,8 +351,6 @@ func (nSignSymPos NumSignSymbolPosition) XValue() NumSignSymbolPosition {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
-//
 func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 
 	lockNumSignSymbolPosition.Lock()
@@ -345,5 +371,42 @@ func (nSignSymPos NumSignSymbolPosition) XValueInt() int {
 // NumSignSymPos.Before(),
 // NumSignSymPos.After(),
 // NumSignSymPos.BeforeAndAfter(),
-//
 const NumSignSymPos = NumSignSymbolPosition(0)
+
+// numSignSymbolPosNanobot - Provides helper methods for
+// enumeration NumSignSymbolPosition.
+type numSignSymbolPosNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidNumSignSymbolPosition - Receives an instance of
+// NumSignSymbolPosition and returns a boolean value signaling
+// whether that NumSignSymbolPosition instance is valid.
+//
+// If the passed instance of NumSignSymbolPosition is valid, this
+// method returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// NumSignSymbolPosition enumeration.
+func (textFieldNanobot *numSignSymbolPosNanobot) isValidNumSignSymbolPosition(
+	numSignSymbolPos NumSignSymbolPosition) bool {
+
+	if textFieldNanobot.lock == nil {
+		textFieldNanobot.lock = new(sync.Mutex)
+	}
+
+	textFieldNanobot.lock.Lock()
+
+	defer textFieldNanobot.lock.Unlock()
+
+	if numSignSymbolPos < 1 ||
+		numSignSymbolPos > 3 {
+
+		return false
+	}
+
+	return true
+}

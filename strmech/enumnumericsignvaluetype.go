@@ -468,9 +468,9 @@ type numericSignValueTypeNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidTextField - Receives an instance of NumericSignValueType
-// and returns a boolean value signaling whether that
-// NumericSignValueType instance is valid.
+// isValidNumSignValueType - Receives an instance of
+// NumericSignValueType and returns a boolean value signaling
+// whether that NumericSignValueType instance is valid.
 //
 // If the passed instance of NumericSignValueType is valid, this
 // method returns 'true'.

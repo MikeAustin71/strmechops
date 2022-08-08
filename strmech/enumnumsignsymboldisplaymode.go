@@ -191,7 +191,7 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XIsValid() bool {
 	defer lockNumSignSymbolDisplayMode.Unlock()
 
 	return new(numSignSymDisplayModeNanobot).
-		isValidTextField(
+		isValidNumSignSymDisplayMode(
 			nSignSymDisMode)
 }
 
@@ -333,7 +333,7 @@ func (nSignSymDisMode NumSignSymbolDisplayMode) XReturnNoneIfInvalid() NumSignSy
 	defer lockNumSignSymbolDisplayMode.Unlock()
 
 	isValid := new(numSignSymDisplayModeNanobot).
-		isValidTextField(
+		isValidNumSignSymDisplayMode(
 			nSignSymDisMode)
 
 	if !isValid {
@@ -398,7 +398,7 @@ type numSignSymDisplayModeNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidTextField - Receives an instance of
+// isValidNumSignSymDisplayMode - Receives an instance of
 // NumSignSymbolDisplayMode and returns a boolean value signaling
 // whether that NumSignSymbolDisplayMode instance is valid.
 //
@@ -410,7 +410,7 @@ type numSignSymDisplayModeNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // NumSignSymbolDisplayMode enumeration.
-func (numSignSymModeNanobot *numSignSymDisplayModeNanobot) isValidTextField(
+func (numSignSymModeNanobot *numSignSymDisplayModeNanobot) isValidNumSignSymDisplayMode(
 	numSignSymDisplayMode NumSignSymbolDisplayMode) bool {
 
 	if numSignSymModeNanobot.lock == nil {

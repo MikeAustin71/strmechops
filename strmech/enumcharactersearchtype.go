@@ -571,7 +571,7 @@ func (charSearchType CharacterSearchType) XIsValid() bool {
 	defer lockCharacterSearchType.Unlock()
 
 	return new(characterSearchTypeNanobot).
-		isValidNumericValueType(charSearchType)
+		isValidCharSearchType(charSearchType)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -731,7 +731,7 @@ func (charSearchType CharacterSearchType) XReturnNoneIfInvalid() CharacterSearch
 	defer lockCharacterSearchType.Unlock()
 
 	isValid := new(characterSearchTypeNanobot).
-		isValidNumericValueType(charSearchType)
+		isValidCharSearchType(charSearchType)
 
 	if !isValid {
 		return CharacterSearchType(-1)
@@ -798,7 +798,7 @@ type characterSearchTypeNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidNumericValueType - Receives an instance of
+// isValidCharSearchType - Receives an instance of
 // CharacterSearchType and returns a boolean value signaling
 // whether that CharacterSearchType instance is valid.
 //
@@ -810,7 +810,7 @@ type characterSearchTypeNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // CharacterSearchType enumeration.
-func (charSearchTypeNanobot *characterSearchTypeNanobot) isValidNumericValueType(
+func (charSearchTypeNanobot *characterSearchTypeNanobot) isValidCharSearchType(
 	enumNumericValType CharacterSearchType) bool {
 
 	if charSearchTypeNanobot.lock == nil {

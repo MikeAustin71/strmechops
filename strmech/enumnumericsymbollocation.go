@@ -229,8 +229,9 @@ func (nSymLocation NumericSymbolLocation) XIsValid() bool {
 
 	defer lockNumericSymbolLocation.Unlock()
 
-	return new(numSymbolLocNanobot).isValidTextField(
-		nSymLocation)
+	return new(numSymbolLocNanobot).
+		isValidNumSymbolLocation(
+			nSymLocation)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -370,7 +371,8 @@ func (nSymLocation NumericSymbolLocation) XReturnNoneIfInvalid() NumericSymbolLo
 	defer lockNumericSymbolLocation.Unlock()
 
 	isValid := new(numSymbolLocNanobot).
-		isValidTextField(nSymLocation)
+		isValidNumSymbolLocation(
+			nSymLocation)
 
 	if !isValid {
 		return NumericSymbolLocation(0)
@@ -436,9 +438,9 @@ type numSymbolLocNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidTextField - Receives an instance of NumericSymbolLocation
-// and returns a boolean value signaling whether that
-// NumericSymbolLocation instance is valid.
+// isValidNumSymbolLocation - Receives an instance of
+// NumericSymbolLocation and returns a boolean value signaling
+// whether that NumericSymbolLocation instance is valid.
 //
 // If the passed instance of NumericSymbolLocation is valid, this
 // method returns 'true'.
@@ -448,7 +450,7 @@ type numSymbolLocNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // NumericSymbolLocation enumeration.
-func (numSymbolLocNanobot *numSymbolLocNanobot) isValidTextField(
+func (numSymbolLocNanobot *numSymbolLocNanobot) isValidNumSymbolLocation(
 	numSymbolLoc NumericSymbolLocation) bool {
 
 	if numSymbolLocNanobot.lock == nil {

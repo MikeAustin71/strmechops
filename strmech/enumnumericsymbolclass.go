@@ -221,8 +221,9 @@ func (nSymbolClass NumericSymbolClass) XIsValid() bool {
 
 	defer lockNumericSymbolClass.Unlock()
 
-	return new(numericSymbolClassNanobot).isValidTextField(
-		nSymbolClass)
+	return new(numericSymbolClassNanobot).
+		isValidNumSymbolClass(
+			nSymbolClass)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -358,8 +359,9 @@ func (nSymbolClass NumericSymbolClass) XReturnNoneIfInvalid() NumericSymbolClass
 
 	defer lockNumericSymbolClass.Unlock()
 
-	isValid := new(numericSymbolClassNanobot).isValidTextField(
-		nSymbolClass)
+	isValid := new(numericSymbolClassNanobot).
+		isValidNumSymbolClass(
+			nSymbolClass)
 
 	if !isValid {
 		return NumericSymbolClass(0)
@@ -416,9 +418,9 @@ type numericSymbolClassNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidTextField - Receives an instance of NumericSymbolClass
-// and returns a boolean value signaling whether that
-// NumericSymbolClass instance is valid.
+// isValidNumSymbolClass - Receives an instance of
+// NumericSymbolClass and returns a boolean value signaling whether
+// that NumericSymbolClass instance is valid.
 //
 // If the passed instance of NumericSymbolClass is valid, this
 // method returns 'true'.
@@ -428,7 +430,7 @@ type numericSymbolClassNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // NumericSymbolClass enumeration.
-func (numSymbolClassNanobot *numericSymbolClassNanobot) isValidTextField(
+func (numSymbolClassNanobot *numericSymbolClassNanobot) isValidNumSymbolClass(
 	numericSymbolClass NumericSymbolClass) bool {
 
 	if numSymbolClassNanobot.lock == nil {

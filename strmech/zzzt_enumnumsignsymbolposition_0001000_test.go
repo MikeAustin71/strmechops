@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TextFieldTypeTestSetup0010(
+func NumSignSymbolPositionTestSetup0010(
 	errorPrefix interface{}) (
 	ucNames []string,
 	lcNames []string,
 
 	intValues []int,
-	enumValues []TextFieldType,
+	enumValues []NumSignSymbolPosition,
 	err error) {
 
 	var ePrefix *ePref.ErrPrefixDto
@@ -21,7 +21,7 @@ func TextFieldTypeTestSetup0010(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"TextFieldTypeTestSetup0010()",
+		"NumSignSymbolPositionTestSetup0010()",
 		"Initial Setup")
 
 	if err != nil {
@@ -30,15 +30,9 @@ func TextFieldTypeTestSetup0010(
 
 	ucNames = []string{
 		"None",
-		"Label",
-		"DateTime",
-		"Filler",
-		"Spacer",
-		"BlankLine",
-		"SolidLine",
-		"LineColumns",
-		"TimerStartStop",
-		"TextAdHoc",
+		"Before",
+		"After",
+		"BeforeAndAfter",
 	}
 
 	lenUcNames := len(ucNames)
@@ -53,64 +47,28 @@ func TextFieldTypeTestSetup0010(
 	}
 
 	enumValues =
-		append(enumValues, TextFieldType(0).None())
+		append(enumValues, NumSignSymbolPosition(0).None())
 
 	enumValues =
-		append(enumValues, TextFieldType(0).Label())
+		append(enumValues, NumSignSymbolPosition(0).Before())
 
 	enumValues =
-		append(enumValues, TextFieldType(0).DateTime())
+		append(enumValues, NumSignSymbolPosition(0).After())
 
 	enumValues =
-		append(enumValues, TextFieldType(0).Filler())
-
-	enumValues =
-		append(enumValues, TextFieldType(0).Spacer())
-
-	enumValues =
-		append(enumValues, TextFieldType(0).BlankLine())
-
-	enumValues =
-		append(enumValues, TextFieldType(0).SolidLine())
-
-	enumValues =
-		append(enumValues, TextFieldType(0).LineColumns())
-
-	enumValues =
-		append(enumValues, TextFieldType(0).TimerStartStop())
-
-	enumValues =
-		append(enumValues, TextFieldType(0).TextAdHoc())
+		append(enumValues, NumSignSymbolPosition(0).BeforeAndAfter())
 
 	intValues =
-		append(intValues, TxtFieldType.None().XValueInt())
+		append(intValues, NumSignSymPos.None().XValueInt())
 
 	intValues =
-		append(intValues, TxtFieldType.Label().XValueInt())
+		append(intValues, NumSignSymPos.Before().XValueInt())
 
 	intValues =
-		append(intValues, TxtFieldType.DateTime().XValueInt())
+		append(intValues, NumSignSymPos.After().XValueInt())
 
 	intValues =
-		append(intValues, TxtFieldType.Filler().XValueInt())
-
-	intValues =
-		append(intValues, TxtFieldType.Spacer().XValueInt())
-
-	intValues =
-		append(intValues, TxtFieldType.BlankLine().XValueInt())
-
-	intValues =
-		append(intValues, TxtFieldType.SolidLine().XValueInt())
-
-	intValues =
-		append(intValues, TxtFieldType.LineColumns().XValueInt())
-
-	intValues =
-		append(intValues, TxtFieldType.TimerStartStop().XValueInt())
-
-	intValues =
-		append(intValues, TxtFieldType.TextAdHoc().XValueInt())
+		append(intValues, NumSignSymPos.BeforeAndAfter().XValueInt())
 
 	if lenUcNames != len(intValues) {
 		err = fmt.Errorf("%v\n"+
@@ -163,10 +121,10 @@ func TextFieldTypeTestSetup0010(
 	return ucNames, lcNames, intValues, enumValues, err
 }
 
-func TestTextFieldType_XValueInt_000100(t *testing.T) {
+func TestNumSignSymbolPosition_XValueInt_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldType_XValueInt_000100()",
+		"TestNumSignSymbolPosition_XValueInt_000100()",
 		"")
 
 	ucNames,
@@ -174,7 +132,7 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 		intValues,
 		enumValues,
 		err :=
-		TextFieldTypeTestSetup0010(
+		NumSignSymbolPositionTestSetup0010(
 			ePrefix)
 
 	if err != nil {
@@ -185,30 +143,30 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 	}
 
 	var isValid bool
-	var textFieldType1, textFieldType2,
-		textFieldType3, textFieldType4,
-		textFieldType5, textFieldType6 TextFieldType
+	var numSignSymbolPos1, numSignSymbolPos2,
+		numSignSymbolPos3, numSignSymbolPos4,
+		numSignSymbolPos5, numSignSymbolPos6 NumSignSymbolPosition
 
 	lenUcNames := len(ucNames)
 
 	for i := 0; i < lenUcNames; i++ {
 
-		textFieldType1 = enumValues[i]
+		numSignSymbolPos1 = enumValues[i]
 
-		isValid = textFieldType1.XIsValid()
+		isValid = numSignSymbolPos1.XIsValid()
 
 		if i == 0 {
 			if isValid {
 
 				t.Errorf("%v\n"+
-					"Error: TextFieldType1.None()\n"+
+					"Error: numSignSymbolPos1.None()\n"+
 					"evaluates as 'Valid'. This is actually an\n"+
 					"invalid value!\n"+
-					"textFieldType1 string value  = '%v'\n"+
-					"textFieldType1 integer value = '%v'\n",
+					"numSignSymbolPos1 string value  = '%v'\n"+
+					"numSignSymbolPos1 integer value = '%v'\n",
 					ePrefix.String(),
-					textFieldType1.String(),
-					textFieldType1.XValueInt())
+					numSignSymbolPos1.String(),
+					numSignSymbolPos1.XValueInt())
 
 				return
 			}
@@ -217,78 +175,78 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 
 			t.Errorf("%v\n"+
 				"Error: Valid value classified as invalid!\n"+
-				"textFieldType1 string value  = '%v'\n"+
-				"textFieldType1 integer value = '%v'\n"+
+				"numSignSymbolPos1 string value  = '%v'\n"+
+				"numSignSymbolPos1 integer value = '%v'\n"+
 				"This should be a valid value! It is NOT!\n",
 				ePrefix.String(),
-				textFieldType1.String(),
-				textFieldType1.XValueInt())
+				numSignSymbolPos1.String(),
+				numSignSymbolPos1.XValueInt())
 
 			return
 
 		}
 
-		textFieldType2,
-			err = textFieldType1.XParseString(
+		numSignSymbolPos2,
+			err = numSignSymbolPos1.XParseString(
 			ucNames[i],
 			true)
 
 		if err != nil {
 
 			t.Errorf("%v\n"+
-				"Error returned from  textFieldType1."+
+				"Error returned from  numSignSymbolPos1."+
 				"XParseString(ucNames[%v]\n"+
 				"ucName = %v\n"+
-				"textFieldType1 string value = '%v'\n"+
+				"numSignSymbolPos1 string value = '%v'\n"+
 				"Error:\n%v\n",
 				ePrefix.String(),
 				i,
 				ucNames[i],
-				textFieldType1.String(),
+				numSignSymbolPos1.String(),
 				err.Error())
 
 			return
 		}
 
-		if textFieldType2.String() != ucNames[i] {
+		if numSignSymbolPos2.String() != ucNames[i] {
 			t.Errorf("%v\n"+
-				"textFieldType2.String() != ucNames[%v]\n"+
+				"numSignSymbolPos2.String() != ucNames[%v]\n"+
 				"ucName = '%v'\n"+
-				"textFieldType2 string value  = '%v'\n"+
-				"textFieldType2 integer value = '%v'\n",
+				"numSignSymbolPos2 string value  = '%v'\n"+
+				"numSignSymbolPos2 integer value = '%v'\n",
 				ePrefix.String(),
 				i,
 				ucNames[i],
-				textFieldType2.String(),
-				textFieldType2.XValueInt())
+				numSignSymbolPos2.String(),
+				numSignSymbolPos2.XValueInt())
 
 			return
 		}
 
-		textFieldType3 = enumValues[i]
+		numSignSymbolPos3 = enumValues[i]
 
-		if textFieldType3.XValueInt() != intValues[i] {
+		if numSignSymbolPos3.XValueInt() != intValues[i] {
 			t.Errorf("%v\n"+
-				"Error: textFieldType3.XValueInt() != intValues[%v]\n"+
-				"textFieldType3.XValueInt() = '%v'\n"+
+				"Error: numSignSymbolPos3.XValueInt() != intValues[%v]\n"+
+				"numSignSymbolPos3.XValueInt() = '%v'\n"+
 				"             intValues[%v] = '%v'\n",
 				ePrefix.String(),
 				i,
-				textFieldType3.XValueInt(),
+				numSignSymbolPos3.XValueInt(),
 				i,
 				intValues[i])
 
 			return
 		}
 
-		textFieldType4,
-			err = textFieldType3.XParseString(
+		numSignSymbolPos4,
+			err = numSignSymbolPos3.XParseString(
 			lcNames[i],
 			false)
 
 		if err != nil {
 			t.Errorf("%v\n"+
-				"Error returned by textFieldType3.XParseString("+
+				"Error returned by numSignSymbolPos3.XParseString("+
 				"lcNames[%v])\n"+
 				"Error:\n%v\n",
 				ePrefix.String(),
@@ -298,20 +256,20 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 			return
 		}
 
-		if textFieldType4 != enumValues[i] {
+		if numSignSymbolPos4 != enumValues[i] {
 			t.Errorf("%v\n"+
-				"Error: textFieldType4 != enumValues[%v]\n"+
+				"Error: numSignSymbolPos4 != enumValues[%v]\n"+
 				"                 lcNames[%v] = '%v'\n"+
-				"textFieldType4 string value  = '%v'\n"+
-				"textFieldType4 integer value = '%v'\n"+
+				"numSignSymbolPos4 string value  = '%v'\n"+
+				"numSignSymbolPos4 integer value = '%v'\n"+
 				"enumValues[%v] string value  = '%v'\n"+
 				"enumValues[%v] integer value = '%v'\n",
 				ePrefix.String(),
 				i,
 				i,
 				lcNames[i],
-				textFieldType4.String(),
-				textFieldType4.XValueInt(),
+				numSignSymbolPos4.String(),
+				numSignSymbolPos4.XValueInt(),
 				i,
 				enumValues[i].String(),
 				i,
@@ -320,82 +278,82 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 			return
 		}
 
-		textFieldType5 = textFieldType1.XValue()
+		numSignSymbolPos5 = numSignSymbolPos1.XValue()
 
-		textFieldType6 = textFieldType2.XValue()
+		numSignSymbolPos6 = numSignSymbolPos2.XValue()
 
-		if textFieldType5 != textFieldType6 {
+		if numSignSymbolPos5 != numSignSymbolPos6 {
 			t.Errorf("%v\n"+
-				"Error: textFieldType5 != textFieldType6\n"+
-				"textFieldType5 = textFieldType1.XValue()\n"+
-				"textFieldType6 = textFieldType2.XValue()\n"+
-				"textFieldType5 string value  = '%v'\n"+
-				"textFieldType5 integer value = '%v'\n"+
-				"textFieldType6 string value  = '%v'\n"+
-				"textFieldType6 integer value = '%v'\n",
+				"Error: numSignSymbolPos5 != numSignSymbolPos6\n"+
+				"numSignSymbolPos5 = numSignSymbolPos1.XValue()\n"+
+				"numSignSymbolPos6 = numSignSymbolPos2.XValue()\n"+
+				"numSignSymbolPos5 string value  = '%v'\n"+
+				"numSignSymbolPos5 integer value = '%v'\n"+
+				"numSignSymbolPos6 string value  = '%v'\n"+
+				"numSignSymbolPos6 integer value = '%v'\n",
 				ePrefix.String(),
-				textFieldType5.String(),
-				textFieldType5.XValueInt(),
-				textFieldType6.String(),
-				textFieldType6.XValueInt())
+				numSignSymbolPos5.String(),
+				numSignSymbolPos5.XValueInt(),
+				numSignSymbolPos6.String(),
+				numSignSymbolPos6.XValueInt())
 
 			return
 		}
 
 		_,
-			err = textFieldType6.XParseString(
+			err = numSignSymbolPos6.XParseString(
 			"How Now Brown Cow",
 			true)
 
 		if err == nil {
 			t.Errorf("\n%v\n"+
-				"Expected an error return from textFieldType6.XParseString()\n"+
+				"Expected an error return from numSignSymbolPos6.XParseString()\n"+
 				"because value string = 'How Now Brown Cow'\n"+
 				"HOWEVER, NO ERROR WAS RETURNED!\n"+
 				"i = '%v'\n"+
-				"textFieldType6 string value = '%v'\n",
+				"numSignSymbolPos6 string value = '%v'\n",
 				ePrefix.String(),
 				i,
-				textFieldType6.String())
+				numSignSymbolPos6.String())
 
 			return
 		}
 
 		_,
-			err = textFieldType6.XParseString(
+			err = numSignSymbolPos6.XParseString(
 			"how now brown cow",
 			false)
 
 		if err == nil {
 			t.Errorf("\n%v\n"+
-				"Expected an error return from textFieldType6.XParseString()\n"+
+				"Expected an error return from numSignSymbolPos6.XParseString()\n"+
 				"because value string = 'now now brown cow'\n"+
 				"HOWEVER, NO ERROR WAS RETURNED!\n"+
 				"i = '%v'\n"+
-				"textFieldType6 string value = '%v'\n",
+				"numSignSymbolPos6 string value = '%v'\n",
 				ePrefix.String(),
 				i,
-				textFieldType6.String())
+				numSignSymbolPos6.String())
 
 			return
 		}
 
 		_,
-			err = textFieldType6.XParseString(
+			err = numSignSymbolPos6.XParseString(
 			"X",
 			true)
 
 		if err == nil {
 			t.Errorf("\n%v\n"+
-				"Expected an error return from textFieldType6.XParseString()\n"+
+				"Expected an error return from numSignSymbolPos6.XParseString()\n"+
 				"because value string = 'X' is less than the\n"+
 				"minimum required length.\n"+
 				"HOWEVER, NO ERROR WAS RETURNED!\n"+
 				"i = '%v'\n"+
-				"textFieldType6 string value = '%v'\n",
+				"numSignSymbolPos6 string value = '%v'\n",
 				ePrefix.String(),
 				i,
-				textFieldType6.String())
+				numSignSymbolPos6.String())
 
 			return
 		}
@@ -405,22 +363,22 @@ func TestTextFieldType_XValueInt_000100(t *testing.T) {
 	return
 }
 
-func TestTextFieldType_XReturnNoneIfInvalid_000200(t *testing.T) {
+func TestNumSignSymbolPosition_XReturnNoneIfInvalid_000200(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldType_XReturnNoneIfInvalid_000200()",
+		"TestNumSignSymbolPosition_XReturnNoneIfInvalid_000200()",
 		"")
 
-	textFieldType := TextFieldType(-972)
+	numSignSymbolPos := NumSignSymbolPosition(-972)
 
-	valueNone := textFieldType.XReturnNoneIfInvalid()
+	valueNone := numSignSymbolPos.XReturnNoneIfInvalid()
 
 	if valueNone.String() != "None" {
 
 		t.Errorf("%v\n"+
-			"Error: Expected TextFieldType(-972)\n"+
+			"Error: Expected NumSignSymbolPosition(-972)\n"+
 			"would return name of 'None' from \n"+
-			"textFieldType.XReturnNoneIfInvalid().\n"+
+			"numSignSymbolPos.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
 			"valueNone string value = '%v'\n"+
 			"   valueNone int value = '%v'\n",
@@ -432,14 +390,14 @@ func TestTextFieldType_XReturnNoneIfInvalid_000200(t *testing.T) {
 
 	}
 
-	strTextFieldType := textFieldType.String()
+	strNumSignSymbolPosition := numSignSymbolPos.String()
 
-	strTextFieldType = strings.ToLower(strTextFieldType)
+	strNumSignSymbolPosition = strings.ToLower(strNumSignSymbolPosition)
 
-	if !strings.Contains(strTextFieldType, "error") {
+	if !strings.Contains(strNumSignSymbolPosition, "error") {
 
 		t.Errorf("%v\n"+
-			"Error: Expected TextFieldType(-972).String()\n"+
+			"Error: Expected NumSignSymbolPosition(-972).String()\n"+
 			"would return an error because it is invalid.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
@@ -453,7 +411,7 @@ func TestTextFieldType_XReturnNoneIfInvalid_000200(t *testing.T) {
 		_,
 		enumValues,
 		err :=
-		TextFieldTypeTestSetup0010(
+		NumSignSymbolPositionTestSetup0010(
 			ePrefix)
 
 	if err != nil {
@@ -463,47 +421,47 @@ func TestTextFieldType_XReturnNoneIfInvalid_000200(t *testing.T) {
 		return
 	}
 
-	var textFieldType2 TextFieldType
+	var numSignSymbolPos2 NumSignSymbolPosition
 
-	textFieldType2 = enumValues[1].XReturnNoneIfInvalid()
+	numSignSymbolPos2 = enumValues[1].XReturnNoneIfInvalid()
 
-	if textFieldType2 != enumValues[1] {
+	if numSignSymbolPos2 != enumValues[1] {
 		t.Errorf("%v\n"+
-			"Error: textFieldType2 != enumValues[1].XReturnNoneIfInvalid()\n"+
+			"Error: numSignSymbolPos2 != enumValues[1].XReturnNoneIfInvalid()\n"+
 			"enumValues[1]  string value  = '%v'\n"+
 			"enumValues[1]  integer value = '%v'\n"+
-			"textFieldType2 string value  = '%v'\n"+
-			"textFieldType2 integer value = '%v'\n",
+			"numSignSymbolPos2 string value  = '%v'\n"+
+			"numSignSymbolPos2 integer value = '%v'\n",
 			ePrefix.String(),
 			enumValues[1].String(),
 			enumValues[1].XValueInt(),
-			textFieldType2.String(),
-			textFieldType2.XValueInt())
+			numSignSymbolPos2.String(),
+			numSignSymbolPos2.XValueInt())
 		return
 	}
 
 	return
 }
 
-func TestTextFieldType_XValueInt_000300(t *testing.T) {
+func TestNumSignSymbolPosition_XValueInt_000300(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestTextFieldType_XValueInt_000300()",
+		"TestNumSignSymbolPosition_XValueInt_000300()",
 		"")
 
 	expectedIntValue := -972
 
-	textFieldType := TextFieldType(expectedIntValue)
+	numSignSymbolPos := NumSignSymbolPosition(expectedIntValue)
 
-	actualIntValue := textFieldType.XValueInt()
+	actualIntValue := numSignSymbolPos.XValueInt()
 
 	if expectedIntValue != actualIntValue {
 
 		t.Errorf("%v\n"+
-			"Error: Expected textFieldType integer value\n"+
+			"Error: Expected numSignSymbolPos integer value\n"+
 			" NOT equal to actual integer value\n"+
-			"Expected textFieldType integer value = '%v'\n"+
-			"Actual textFieldType integer value   = '%v'\n",
+			"Expected numSignSymbolPos integer value = '%v'\n"+
+			"Actual numSignSymbolPos integer value   = '%v'\n",
 			ePrefix.String(),
 			expectedIntValue,
 			actualIntValue)
@@ -512,14 +470,14 @@ func TestTextFieldType_XValueInt_000300(t *testing.T) {
 
 	}
 
-	strName := textFieldType.XReturnNoneIfInvalid()
+	strName := numSignSymbolPos.XReturnNoneIfInvalid()
 
 	if strName.String() != "None" {
 
 		t.Errorf("%v\n"+
-			"Error: Expected TextFieldType(-972)\n"+
+			"Error: Expected NumSignSymbolPosition(-972)\n"+
 			"would return name of 'None' from \n"+
-			"textFieldType.XReturnNoneIfInvalid().\n"+
+			"numSignSymbolPos.XReturnNoneIfInvalid().\n"+
 			"It DID NOT!\n"+
 			"strName string value = '%v'\n"+
 			"   strName int value = '%v'\n",

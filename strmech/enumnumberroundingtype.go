@@ -774,8 +774,9 @@ func (numRoundingType NumberRoundingType) XIsValid() bool {
 
 	defer lockNumberRoundingType.Unlock()
 
-	return new(numberRoundingTypeNanobot).isValidTextField(
-		numRoundingType)
+	return new(numberRoundingTypeNanobot).
+		isValidNumRoundType(
+			numRoundingType)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -941,7 +942,7 @@ func (numRoundingType NumberRoundingType) XReturnNoneIfInvalid() NumberRoundingT
 	defer lockNumberRoundingType.Unlock()
 
 	isValid := new(numberRoundingTypeNanobot).
-		isValidTextField(numRoundingType)
+		isValidNumRoundType(numRoundingType)
 
 	if !isValid {
 		return NumberRoundingType(0)
@@ -1014,9 +1015,9 @@ type numberRoundingTypeNanobot struct {
 	lock *sync.Mutex
 }
 
-// isValidTextField - Receives an instance of NumberRoundingType
-// and returns a boolean value signaling whether that
-// NumberRoundingType instance is valid.
+// isValidNumRoundType - Receives an instance of
+// NumberRoundingType and returns a boolean value signaling whether
+// that NumberRoundingType instance is valid.
 //
 // If the passed instance of NumberRoundingType is valid, this
 // method returns 'true'.
@@ -1026,7 +1027,7 @@ type numberRoundingTypeNanobot struct {
 //
 // This is a standard utility method and is not part of the valid
 // TextFieldType enumeration.
-func (numRoundTypeNanobot *numberRoundingTypeNanobot) isValidTextField(
+func (numRoundTypeNanobot *numberRoundingTypeNanobot) isValidNumRoundType(
 	numberRoundingType NumberRoundingType) bool {
 
 	if numRoundTypeNanobot.lock == nil {
