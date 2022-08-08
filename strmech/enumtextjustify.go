@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// Lock lockStrOpsTextJustify before accessing these
+// Lock lockEnumTextJustify before accessing these
 // 'maps'.
 
 var mStrOpsTextJustifyCodeToString = map[TextJustify]string{
@@ -45,30 +45,30 @@ var mStrOpsTextJustifyLwrCaseStringToCode = map[string]TextJustify{
 // formats. These methods are listed as follows:
 //
 // None            (0) - Signals that 'TextJustify' value has NOT
-//                       been initialized. This is an error condition.
 //
+//	been initialized. This is an error condition.
 //
 // Left            (1) - Signals that the text justification format is
-//                       set to 'Left-Justify'. Strings within text
-//                       fields will be flush with the left margin.
 //
-//                           Example: "TextString      "
+//	set to 'Left-Justify'. Strings within text
+//	fields will be flush with the left margin.
 //
+//	    Example: "TextString      "
 //
 // Right           (2) - Signals that the text justification format is
-//                       set to 'Right-Justify'. Strings within text
-//                       fields will terminate at the right margin.
 //
-//                           Example: "      TextString"
+//	set to 'Right-Justify'. Strings within text
+//	fields will terminate at the right margin.
 //
+//	    Example: "      TextString"
 //
 // Center          (3) - Signals that the text justification format is
-//                       set to 'Centered'. Strings will be positioned
-//                       in the center of the text field equidistant
-//                       from the left and right margins.
 //
-//                           Example: "   TextString   "
+//	set to 'Centered'. Strings will be positioned
+//	in the center of the text field equidistant
+//	from the left and right margins.
 //
+//	    Example: "   TextString   "
 //
 // For easy access to these enumeration values, use the global variable
 // 'TxtJustify'. Example: TxtJustify.Right()
@@ -80,10 +80,9 @@ var mStrOpsTextJustifyLwrCaseStringToCode = map[string]TextJustify{
 // list the TextJustify methods in alphabetical order. Be advised that all 'TextJustify'
 // methods beginning with 'X', as well as the method 'String()', are utility methods and
 // not part of the enumeration values.
-//
 type TextJustify int
 
-var lockStrOpsTextJustify sync.Mutex
+var lockEnumTextJustify sync.Mutex
 
 // None - Signals that 'SOpsTextJustify' value has NOT been initialized.
 // This is an error condition.
@@ -91,12 +90,11 @@ var lockStrOpsTextJustify sync.Mutex
 // The 'None' TextJustify integer value is zero (0).
 //
 // This method is part of the standard enumeration.
-//
-func (sopsTxtJustify TextJustify) None() TextJustify {
+func (enumTxtJustify TextJustify) None() TextJustify {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
 	return TextJustify(0)
 }
@@ -105,18 +103,17 @@ func (sopsTxtJustify TextJustify) None() TextJustify {
 // 'Left-Justify'. Strings within text fields will be flush with
 // the left margin.
 //
-//        Example: "TextString      "
+//	Example: "TextString      "
 //
 // The 'Left' text justification has a TextJustify
 // integer value of one (+1).
 //
 // This method is part of the standard enumeration.
-//
-func (sopsTxtJustify TextJustify) Left() TextJustify {
+func (enumTxtJustify TextJustify) Left() TextJustify {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
 	return TextJustify(1)
 }
@@ -125,18 +122,17 @@ func (sopsTxtJustify TextJustify) Left() TextJustify {
 // set to 'Right-Justify'. Strings within text fields will
 // terminate at the right margin.
 //
-//        Example: "      TextString"
+//	Example: "      TextString"
 //
 // The 'Right' text justification has a TextJustify
 // integer value of two (+2).
 //
 // This method is part of the standard enumeration.
-//
-func (sopsTxtJustify TextJustify) Right() TextJustify {
+func (enumTxtJustify TextJustify) Right() TextJustify {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
 	return TextJustify(2)
 }
@@ -145,18 +141,17 @@ func (sopsTxtJustify TextJustify) Right() TextJustify {
 // set to 'Center'. Strings will be positioned in the center of the
 // text field equidistant from the left and right margins.
 //
-//        Example: "   TextString   "
+//	Example: "   TextString   "
 //
 // The 'Center' text justification has a TextJustify
 // integer value of three (+3).
 //
 // This method is part of the standard enumeration.
-//
-func (sopsTxtJustify TextJustify) Center() TextJustify {
+func (enumTxtJustify TextJustify) Center() TextJustify {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
 	return TextJustify(3)
 }
@@ -169,20 +164,20 @@ func (sopsTxtJustify TextJustify) Center() TextJustify {
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t:= TextJustify(0).Center()
 // str := t.String()
-//     str is now equal to 'Center'
 //
-func (sopsTxtJustify TextJustify) String() string {
+//	str is now equal to 'Center'
+func (enumTxtJustify TextJustify) String() string {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
 	result, ok :=
-		mStrOpsTextJustifyCodeToString[sopsTxtJustify]
+		mStrOpsTextJustifyCodeToString[enumTxtJustify]
 
 	if !ok {
 		return "Error: TextJustify code UNKNOWN!"
@@ -201,22 +196,18 @@ func (sopsTxtJustify TextJustify) String() string {
 //
 // Usage
 //
-//  textJustification := TextJustify(0).Right()
+//	textJustification := TextJustify(0).Right()
 //
-//  isValid := textJustification.XIsValid()
-//
-func (sopsTxtJustify TextJustify) XIsValid() bool {
+//	isValid := textJustification.XIsValid()
+func (enumTxtJustify TextJustify) XIsValid() bool {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
-	if sopsTxtJustify > 3 ||
-		sopsTxtJustify < 1 {
-		return false
-	}
-
-	return true
+	return new(textJustifyNanobot).
+		isValidTextJustify(
+			enumTxtJustify)
 }
 
 // XParseString - Receives a string and attempts to match it with
@@ -229,54 +220,55 @@ func (sopsTxtJustify TextJustify) XIsValid() bool {
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
 //
 // valueString   string - A string which will be matched against the
-//                        enumeration string values. If 'valueString'
-//                        is equal to one of the enumeration names, this
-//                        method will proceed to successful completion
-//                        and return the correct enumeration value.
+//
+//	enumeration string values. If 'valueString'
+//	is equal to one of the enumeration names, this
+//	method will proceed to successful completion
+//	and return the correct enumeration value.
 //
 // caseSensitive   bool - If 'true' the search for enumeration names
-//                        will be case-sensitive and will require an
-//                        exact match. Therefore, 'right' will NOT
-//                        match the enumeration name, 'Right'.
 //
-//                        If 'false' a case-insensitive search is conducted
-//                        for the enumeration name. In this case, 'right'
-//                        will match the enumeration name 'Right'.
+//	will be case-sensitive and will require an
+//	exact match. Therefore, 'right' will NOT
+//	match the enumeration name, 'Right'.
+//
+//	If 'false' a case-insensitive search is conducted
+//	for the enumeration name. In this case, 'right'
+//	will match the enumeration name 'Right'.
 //
 // ------------------------------------------------------------------------
 //
-// Return Values
+// # Return Values
 //
 // TextJustify
-//     - Upon successful completion, this method will return a new
-//       instance of TextJustify set to the value of the enumeration
-//       matched by the string search performed on input parameter,
-//       'valueString'.
+//   - Upon successful completion, this method will return a new
+//     instance of TextJustify set to the value of the enumeration
+//     matched by the string search performed on input parameter,
+//     'valueString'.
 //
 // error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If an error condition is encountered,
-//       this method will return an error type which encapsulates an
-//       appropriate error message.
+//   - If this method completes successfully, the returned error
+//     Type is set equal to 'nil'. If an error condition is encountered,
+//     this method will return an error type which encapsulates an
+//     appropriate error message.
 //
 // ------------------------------------------------------------------------
 //
-// Usage
+// # Usage
 //
 // t, err := TextJustify(0).XParseString("Right", true)
 //
-//     t is now equal to TextJustify(0).Right()
-//
-func (sopsTxtJustify TextJustify) XParseString(
+//	t is now equal to TextJustify(0).Right()
+func (enumTxtJustify TextJustify) XParseString(
 	valueString string,
 	caseSensitive bool) (TextJustify, error) {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
 	ePrefix := "TextJustify.XParseString() "
 
@@ -289,11 +281,11 @@ func (sopsTxtJustify TextJustify) XParseString(
 	}
 
 	var ok bool
-	var strOpsTxtJustification TextJustify
+	var enumTxtJustification TextJustify
 
 	if caseSensitive {
 
-		strOpsTxtJustification, ok = mStrOpsTextJustifyStringToCode[valueString]
+		enumTxtJustification, ok = mStrOpsTextJustifyStringToCode[valueString]
 
 		if !ok {
 			return TextJustify(0),
@@ -304,7 +296,7 @@ func (sopsTxtJustify TextJustify) XParseString(
 
 	} else {
 
-		strOpsTxtJustification, ok = mStrOpsTextJustifyLwrCaseStringToCode[strings.ToLower(valueString)]
+		enumTxtJustification, ok = mStrOpsTextJustifyLwrCaseStringToCode[strings.ToLower(valueString)]
 
 		if !ok {
 			return TextJustify(0),
@@ -314,7 +306,47 @@ func (sopsTxtJustify TextJustify) XParseString(
 		}
 	}
 
-	return strOpsTxtJustification, nil
+	return enumTxtJustification, nil
+}
+
+// XReturnNoneIfInvalid - Provides a standardized value for invalid
+// instances of enumeration TextJustify.
+//
+// If the current instance of TextJustify is invalid, this
+// method will always return a value of TextJustify(0).None().
+//
+// # Background
+//
+// Enumeration TextJustify has an underlying type of integer
+// (int). This means the type could conceivably be set to any
+// integer value. This method ensures that all invalid
+// TextJustify instances are consistently classified as 'None'
+// (TextJustify(0).None()). Remember that 'None' is considered
+// an invalid value.
+//
+// For example, assume that TextJustify was set to an integer
+// value of -848972. Calling this method on a TextJustify with
+// this invalid integer value will return an integer value of zero
+// or the equivalent of TextJustify(0).None(). This conversion is
+// useful in generating text strings for meaningful informational
+// and error messages.
+//
+// This is a standard utility method and is not part of the valid
+// enumerations for this type.
+func (enumTxtJustify TextJustify) XReturnNoneIfInvalid() TextJustify {
+
+	lockEnumTextJustify.Lock()
+
+	defer lockEnumTextJustify.Unlock()
+
+	isValid := new(textJustifyNanobot).
+		isValidTextJustify(enumTxtJustify)
+
+	if !isValid {
+		return TextJustify(0)
+	}
+
+	return enumTxtJustify
 }
 
 // XValue - This method returns the enumeration value of the current
@@ -322,15 +354,13 @@ func (sopsTxtJustify TextJustify) XParseString(
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
-//
-func (sopsTxtJustify TextJustify) XValue() TextJustify {
+func (enumTxtJustify TextJustify) XValue() TextJustify {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
-	return sopsTxtJustify
+	return enumTxtJustify
 }
 
 // XValueInt - This method returns the integer value of the current
@@ -338,14 +368,13 @@ func (sopsTxtJustify TextJustify) XValue() TextJustify {
 //
 // This is a standard utility method and is not part of the valid
 // enumerations for this type.
-//
-func (sopsTxtJustify TextJustify) XValueInt() int {
+func (enumTxtJustify TextJustify) XValueInt() int {
 
-	lockStrOpsTextJustify.Lock()
+	lockEnumTextJustify.Lock()
 
-	defer lockStrOpsTextJustify.Unlock()
+	defer lockEnumTextJustify.Unlock()
 
-	return int(sopsTxtJustify)
+	return int(enumTxtJustify)
 }
 
 // TxtJustify - public global variable of
@@ -359,5 +388,42 @@ func (sopsTxtJustify TextJustify) XValueInt() int {
 // TxtJustify.Left(),
 // TxtJustify.Right(),
 // TxtJustify.Center(),
-//
 var TxtJustify TextJustify
+
+// textJustifyNanobot - Provides helper methods for
+// enumeration TextJustify.
+type textJustifyNanobot struct {
+	lock *sync.Mutex
+}
+
+// isValidTextJustify - Receives an instance of TextJustify and
+// returns a boolean value signaling whether that TextJustify
+// instance is valid.
+//
+// If the passed instance of TextJustify is valid, this method
+// returns 'true'.
+//
+// Be advised, the enumeration value "None" is considered NOT
+// VALID. "None" represents an error condition.
+//
+// This is a standard utility method and is not part of the valid
+// TextJustify enumeration.
+func (txtJustifyNanobot *textJustifyNanobot) isValidTextJustify(
+	textJustify TextJustify) bool {
+
+	if txtJustifyNanobot.lock == nil {
+		txtJustifyNanobot.lock = new(sync.Mutex)
+	}
+
+	txtJustifyNanobot.lock.Lock()
+
+	defer txtJustifyNanobot.lock.Unlock()
+
+	if textJustify < 1 ||
+		textJustify > 3 {
+
+		return false
+	}
+
+	return true
+}
