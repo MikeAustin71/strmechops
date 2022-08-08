@@ -154,6 +154,9 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) c
 	destinationNumStrParseResults.TargetStringStartingSearchIndex =
 		sourceNumStrParseResults.TargetStringStartingSearchIndex
 
+	destinationNumStrParseResults.ReasonForSearchTermination =
+		sourceNumStrParseResults.ReasonForSearchTermination
+
 	destinationNumStrParseResults.FoundNumericDigits =
 		sourceNumStrParseResults.FoundNumericDigits
 
@@ -564,6 +567,22 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		numStrParseResults.TargetStringStartingSearchIndex,
 		ePrefix.XCpy(
 			"Build TargetStringStartingSearchIndex"))
+
+	if err != nil {
+		return err
+	}
+
+	// Build ReasonForSearchTermination
+	txtStrParam =
+		numStrParseResults.
+			ReasonForSearchTermination.
+			XReturnNoneIfInvalid().XDescription()
+
+	err = txtFormatCol.AddLine2Col(
+		"Reason For Search Termination",
+		txtStrParam,
+		ePrefix.XCpy(
+			"Build ReasonForSearchTermination"))
 
 	if err != nil {
 		return err

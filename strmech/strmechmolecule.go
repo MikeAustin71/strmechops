@@ -271,6 +271,9 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 	searchResults.TargetStringAdjustedSearchLength =
 		targetInputParms.TargetStringAdjustedSearchLength
 
+	searchResults.ReasonForSearchTermination =
+		CharSearchTermType.ProcessError()
+
 	searchResults.TargetStringStartingSearchIndex =
 		targetInputParms.TargetStringStartingSearchIndex
 
@@ -384,6 +387,8 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 					targetInputParms.TargetStringNextSearchIndex = -1
 
 				}
+
+				searchResults.ReasonForSearchTermination = CharSearchTermType.TerminationDelimiters()
 
 				searchResults.ParsingTerminatorSearchResults.SearchResultsName =
 					"Number Parsing Terminator Search Results"
@@ -585,6 +590,19 @@ func (sMechMolecule *strMechMolecule) extractNumRunes(
 		targetInputParms.TargetStringLength {
 
 		targetInputParms.TargetStringNextSearchIndex = -1
+	}
+
+	if targetInputParms.TargetStringAdjustedSearchLength <
+		targetInputParms.TargetStringLength {
+
+		searchResults.ReasonForSearchTermination =
+			CharSearchTermType.SearchLengthLimit()
+
+	} else {
+
+		searchResults.ReasonForSearchTermination =
+			CharSearchTermType.EndOfTargetString()
+
 	}
 
 computeExitStats:

@@ -104,6 +104,18 @@ type CharSearchNumStrParseResultsDto struct {
 	// The index in 'TargetString' at which the search
 	// operation begins.
 
+	ReasonForSearchTermination CharSearchTerminationType
+	// This enumeration will be set to explain why the
+	// text search operation was terminated.
+	//
+	// Possible values are listed as follows:
+	//	CharSearchTermType.None() - Invalid Value
+	//	CharSearchTermType.ProcessError()
+	//	CharSearchTermType.EndOfTargetString()
+	//	CharSearchTermType.SearchLengthLimit()
+	//	CharSearchTermType.TerminationDelimiters()
+	//	CharSearchTermType.FoundSearchTarget()
+
 	FoundNumericDigits bool
 	// Signals a successful Number String Parsing operation.
 	// When set to 'true', this means one or more numeric

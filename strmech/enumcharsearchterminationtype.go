@@ -578,7 +578,6 @@ func (charSearchTerm CharSearchTerminationType) XValueInt() int {
 //	CharSearchTermType.ProcessError()
 //	CharSearchTermType.EndOfTargetString()
 //	CharSearchTermType.SearchLengthLimit()
-//	CharSearchTermType.EndOfTargetString()
 //	CharSearchTermType.TerminationDelimiters()
 //	CharSearchTermType.FoundSearchTarget()
 const CharSearchTermType = CharSearchTerminationType(0)

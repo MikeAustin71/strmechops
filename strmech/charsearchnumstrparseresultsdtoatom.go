@@ -63,6 +63,9 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) empty(
 
 	numStrParseResults.TargetStringStartingSearchIndex = 0
 
+	numStrParseResults.ReasonForSearchTermination =
+		CharSearchTermType.None()
+
 	numStrParseResults.FoundNumericDigits = false
 
 	numStrParseResults.FoundNonZeroValue = false
@@ -175,6 +178,12 @@ func (searchNumStrParseResultsAtom *charSearchNumStrParseResultsDtoAtom) equal(
 
 	if numStrParseResults1.TargetStringStartingSearchIndex !=
 		numStrParseResults2.TargetStringStartingSearchIndex {
+
+		return false
+	}
+
+	if numStrParseResults1.ReasonForSearchTermination !=
+		numStrParseResults2.ReasonForSearchTermination {
 
 		return false
 	}
