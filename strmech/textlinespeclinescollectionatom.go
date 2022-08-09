@@ -341,7 +341,10 @@ func (txtLinesColAtom *textLineSpecLinesCollectionAtom) insertTextLine(
 	// arr := []int{1,2,3,4,5}
 	// arr[:2]         [1,2]
 	// arr[2:])        [3,4,5]
+	// Insertion
+	//  https://codezup.com/insert-delete-copy-iterate-in-arrays-slices-golang/
 	// 	orig = append(orig[:index+1], orig[index:]...)
+	//  orig[index] = value
 
 	if textLinesCol.textLines[zeroBasedIndex] != nil {
 
