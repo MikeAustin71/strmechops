@@ -17,68 +17,65 @@ type negNumSignSearchNanobot struct {
 // 'targetNegNumSearchSpec'. Both instances are of type
 // NegativeNumberSearchSpec.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // -----------------------------------------------------------------
 //
 // Be advised that the data fields in 'targetNegNumSearchSpec' will be
 // overwritten.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetNegNumSearchSpec        *NegativeNumberSearchSpec
-//     - A pointer to a NegativeNumberSearchSpec instance. All the
-//       member variable data fields in this object will be
-//       replaced by data values copied from input parameter
-//       'incomingNegNumSearchSpec'.
+//	targetNegNumSearchSpec        *NegativeNumberSearchSpec
+//	   - A pointer to a NegativeNumberSearchSpec instance. All the
+//	     member variable data fields in this object will be
+//	     replaced by data values copied from input parameter
+//	     'incomingNegNumSearchSpec'.
 //
-//       'targetNegNumSearchSpec' is the target of this copy
-//       operation.
-//
-//
-//  incomingNegNumSearchSpec      *NegativeNumberSearchSpec
-//     - A pointer to another NegativeNumberSearchSpec instance. All
-//       the member variable data values from this object will
-//       be copied to corresponding member variables in
-//       'targetNegNumSearchSpec'.
-//
-//       'incomingNegNumSearchSpec' is the source for this copy
-//       operation.
-//
-//       If 'incomingNegNumSearchSpec' is determined to be invalid,
-//       an error will be returned.
+//	     'targetNegNumSearchSpec' is the target of this copy
+//	     operation.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	incomingNegNumSearchSpec      *NegativeNumberSearchSpec
+//	   - A pointer to another NegativeNumberSearchSpec instance. All
+//	     the member variable data values from this object will
+//	     be copied to corresponding member variables in
+//	     'targetNegNumSearchSpec'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     'incomingNegNumSearchSpec' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'incomingNegNumSearchSpec' is determined to be invalid,
+//	     an error will be returned.
 //
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 	targetNegNumSearchSpec *NegativeNumberSearchSpec,
 	incomingNegNumSearchSpec *NegativeNumberSearchSpec,
@@ -279,7 +276,7 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The input parameter 'negNumSearchSpec' is determined to be
 // invalid, this method will return an error.
@@ -288,49 +285,47 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyIn(
 //
 // Input Parameters
 //
-//  negNumSearchSpec           *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec. A
-//       deep copy of the internal member variables will be created
-//       and returned in a new instance of NegativeNumberSearchSpec.
+//	negNumSearchSpec           *NegativeNumberSearchSpec
+//	   - A pointer to an instance of NegativeNumberSearchSpec. A
+//	     deep copy of the internal member variables will be created
+//	     and returned in a new instance of NegativeNumberSearchSpec.
 //
-//       If the member variable data values encapsulated by
-//       'negNumSearchSpec' are found to be invalid, this method will
-//       return an error
+//	     If the member variable data values encapsulated by
+//	     'negNumSearchSpec' are found to be invalid, this method will
+//	     return an error
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  copyOfNegNumSearchSpec     NegativeNumberSearchSpec
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'negNumSearchSpec' will be created and returned
-//       in a new instance of NegativeNumberSearchSpec.
+//	copyOfNegNumSearchSpec     NegativeNumberSearchSpec
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'negNumSearchSpec' will be created and returned
+//	     in a new instance of NegativeNumberSearchSpec.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 	negNumSearchSpec *NegativeNumberSearchSpec,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -513,68 +508,65 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) copyOut(
 // contained in the 'negNumSearchSpec' instance of
 // NegativeNumberSearchSpec.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  negNumSearchSpec       *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec.
-//       Formatted text output will be generated listing the member
-//       variable names and their corresponding values. The
-//       formatted text can then be used for screen displays, file
-//       output or printing.
+//	negNumSearchSpec       *NegativeNumberSearchSpec
+//	   - A pointer to an instance of NegativeNumberSearchSpec.
+//	     Formatted text output will be generated listing the member
+//	     variable names and their corresponding values. The
+//	     formatted text can then be used for screen displays, file
+//	     output or printing.
 //
-//       No data validation is performed on this instance of
-//       NegativeNumberSearchSpec.
-//
-//
-//  tagDescription         string
-//     - An optional string containing a tag or text description
-//       which will be included in the formatted text output
-//       returned by this method.
-//
-//       If this parameter is submitted as an empty string, no
-//       text description will be applied to the formatted text
-//       output and no error will be generated.
+//	     No data validation is performed on this instance of
+//	     NegativeNumberSearchSpec.
 //
 //
-//  errPrefDto             *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	tagDescription         string
+//	   - An optional string containing a tag or text description
+//	     which will be included in the formatted text output
+//	     returned by this method.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If this parameter is submitted as an empty string, no
+//	     text description will be applied to the formatted text
+//	     output and no error will be generated.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	errPrefDto             *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'negNumSearchSpec' . This formatted text can them be used
-//       for text displays, file output or printing.
+//	strings.Builder
+//	   - If this method completes successfully, an instance of
+//	     strings.Builder will be returned. This instance contains
+//	     the formatted text output listing the member variable
+//	     names and their corresponding values for input parameter
+//	     'negNumSearchSpec' . This formatted text can them be used
+//	     for text displays, file output or printing.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
 	negNumSearchSpec *NegativeNumberSearchSpec,
@@ -606,7 +598,17 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 		return err
 	}
 
-	strBuilder.Grow(256)
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		256 - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
 
 	if negNumSearchSpec == nil {
 
@@ -967,7 +969,6 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) getParameterTextListing(
 
 // ptr - Returns a pointer to a new instance of
 // negNumSignSearchNanobot.
-//
 func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobot {
 
 	if negNumSearchNanobot.lock == nil {
@@ -993,57 +994,54 @@ func (negNumSearchNanobot negNumSignSearchNanobot) ptr() *negNumSignSearchNanobo
 // NegativeNumberSearchSpec will be deleted before applying the
 // new configuration specifications.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  negNumSearchSpec           *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec. This
-//       instance will be configured as a Leading Negative Number
-//       Sign Specification. All previous configuration data will be
-//       deleted and replaced with a new Leading Negative Number
-//       Sign configuration.
+//	negNumSearchSpec           *NegativeNumberSearchSpec
+//	   - A pointer to an instance of NegativeNumberSearchSpec. This
+//	     instance will be configured as a Leading Negative Number
+//	     Sign Specification. All previous configuration data will be
+//	     deleted and replaced with a new Leading Negative Number
+//	     Sign configuration.
 //
 //
-//  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSearchSpec'.
+//	leadingNegNumSignSymbols   []rune
+//	   - An array of runes identifying the character or characters
+//	     which comprise the Leading Negative Number Symbol used in
+//	     configuring the NegativeNumberSearchSpec instance,
+//	     'negNumSearchSpec'.
 //
-//       If this array is empty (zero length) or includes array
-//       elements containing a zero value, an error will be
-//       returned.
+//	     If this array is empty (zero length) or includes array
+//	     elements containing a zero value, an error will be
+//	     returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 	negNumSearchSpec *NegativeNumberSearchSpec,
 	leadingNegNumSignSymbols []rune,
@@ -1156,68 +1154,65 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingNegNumSearchSpec(
 // parentheses "()" are used to indicate negative numeric
 // values. Examples: (127.45) = -127.45  (4,654.00) = -4,654.00
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  negNumSearchSpec           *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec. This
-//       instance will be configured as a Leading and Trailing
-//       Negative Number Sign Specification. All previous
-//       configuration data will be deleted and replaced with a new
-//       Leading and Trailing Negative Number Sign configuration.
+//	negNumSearchSpec           *NegativeNumberSearchSpec
+//	   - A pointer to an instance of NegativeNumberSearchSpec. This
+//	     instance will be configured as a Leading and Trailing
+//	     Negative Number Sign Specification. All previous
+//	     configuration data will be deleted and replaced with a new
+//	     Leading and Trailing Negative Number Sign configuration.
 //
 //
-//  leadingNegNumSignSymbols   []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Leading Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSearchSpec'.
+//	leadingNegNumSignSymbols   []rune
+//	   - An array of runes identifying the character or characters
+//	     which comprise the Leading Negative Number Symbol used in
+//	     configuring the NegativeNumberSearchSpec instance,
+//	     'negNumSearchSpec'.
 //
-//       If this array is empty (zero length) or includes array
-//       elements containing a zero value, an error will be
-//       returned.
-//
-//
-//  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSearchSpec'.
-//
-//       If this array is empty (zero length) or includes array
-//       elements containing a zero value, an error will be
-//       returned.
+//	     If this array is empty (zero length) or includes array
+//	     elements containing a zero value, an error will be
+//	     returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	trailingNegNumSignSymbols  []rune
+//	   - An array of runes identifying the character or characters
+//	     which comprise the Trailing Negative Number Symbol used in
+//	     configuring the NegativeNumberSearchSpec instance,
+//	     'negNumSearchSpec'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If this array is empty (zero length) or includes array
+//	     elements containing a zero value, an error will be
+//	     returned.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumSearchSpec(
 	negNumSearchSpec *NegativeNumberSearchSpec,
 	leadingNegNumSignSymbols []rune,
@@ -1368,57 +1363,54 @@ func (negNumSearchNanobot *negNumSignSearchNanobot) setLeadingAndTrailingNegNumS
 // NegativeNumberSearchSpec will be deleted before applying the
 // new configuration specifications.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  negNumSearchSpec           *NegativeNumberSearchSpec
-//     - A pointer to an instance of NegativeNumberSearchSpec. This
-//       instance will be configured as a Trailing Negative Number
-//       Sign Specification. All previous configuration data will
-//       be deleted and replaced with a new Trailing Negative Number
-//       Sign configuration.
+//	negNumSearchSpec           *NegativeNumberSearchSpec
+//	   - A pointer to an instance of NegativeNumberSearchSpec. This
+//	     instance will be configured as a Trailing Negative Number
+//	     Sign Specification. All previous configuration data will
+//	     be deleted and replaced with a new Trailing Negative Number
+//	     Sign configuration.
 //
 //
-//  trailingNegNumSignSymbols  []rune
-//     - An array of runes identifying the character or characters
-//       which comprise the Trailing Negative Number Symbol used in
-//       configuring the NegativeNumberSearchSpec instance,
-//       'negNumSearchSpec'.
+//	trailingNegNumSignSymbols  []rune
+//	   - An array of runes identifying the character or characters
+//	     which comprise the Trailing Negative Number Symbol used in
+//	     configuring the NegativeNumberSearchSpec instance,
+//	     'negNumSearchSpec'.
 //
-//       If this array is empty (zero length) or includes array
-//       elements containing a zero value, an error will be
-//       returned.
+//	     If this array is empty (zero length) or includes array
+//	     elements containing a zero value, an error will be
+//	     returned.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (negNumSearchNanobot *negNumSignSearchNanobot) setTrailingNegNumSearchSpec(
 	negNumSearchSpec *NegativeNumberSearchSpec,
 	trailingNegNumSignSymbols []rune,

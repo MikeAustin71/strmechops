@@ -21,68 +21,65 @@ type textLineSpecTimerLinesMolecule struct {
 // specifying the event start time, end time and time duration or
 // elapsed time.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  txtTimerLines              *TextLineSpecTimerLines
-//     - A pointer to an instance of TextLineSpecTimerLines. The
-//       member variables encapsulated by this instance will be
-//       used to generate formatted text describing a time event
-//       for text output display and printing.
+//	txtTimerLines              *TextLineSpecTimerLines
+//	   - A pointer to an instance of TextLineSpecTimerLines. The
+//	     member variables encapsulated by this instance will be
+//	     used to generate formatted text describing a time event
+//	     for text output display and printing.
 //
-//       If the member variable data values encapsulated by this
-//       TextLineSpecTimerLines instance are found to be invalid,
-//       this method will return an error.
+//	     If the member variable data values encapsulated by this
+//	     TextLineSpecTimerLines instance are found to be invalid,
+//	     this method will return an error.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  maxSingleLineLen           int
-//     - The maximum string length computed from analyzing all
-//       text lines returned as 'formattedText'. This length
-//       includes the trailing new line character.
+//	maxSingleLineLen           int
+//	   - The maximum string length computed from analyzing all
+//	     text lines returned as 'formattedText'. This length
+//	     includes the trailing new line character.
 //
 //
-//  totalLinesLen              int
-//     - The total length of all lines of text, including new line
-//       characters, produced as 'formattedText'. The is equivalent
-//       to the character length of the returned 'formattedText'
-//       string.
+//	totalLinesLen              int
+//	   - The total length of all lines of text, including new line
+//	     characters, produced as 'formattedText'. The is equivalent
+//	     to the character length of the returned 'formattedText'
+//	     string.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 	strBuilder *strings.Builder,
 	txtTimerLines *TextLineSpecTimerLines,
@@ -122,7 +119,17 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 		return maxSingleLineLen, totalLinesLen, err
 	}
 
-	strBuilder.Grow(512)
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		256 - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
 
 	if txtTimerLines == nil {
 		err = fmt.Errorf("%v\n"+
@@ -601,191 +608,188 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) getFormattedText(
 // Be advised that the pre-existing data fields in input parameter
 // 'txtTimerLines' will be overwritten and deleted.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  txtTimerLines              *TextLineSpecTimerLines
-//     - A pointer to an instance of TextLineSpecTimerLines. All
-//       the member variable data values for this instance will be
-//       overwritten and reset to new values extracted from the
-//       following input parameters.
+//	txtTimerLines              *TextLineSpecTimerLines
+//	   - A pointer to an instance of TextLineSpecTimerLines. All
+//	     the member variable data values for this instance will be
+//	     overwritten and reset to new values extracted from the
+//	     following input parameters.
 //
-//       Be advised that the pre-existing data fields in input
-//       parameter 'txtTimerLines' will be overwritten and deleted.
-//
-//
-//  startTimeLabel             []rune
-//     - An array of runes containing the text characters
-//       constituting the starting time text label.
-//
-//       If this array is submitted as a zero length rune array,
-//       'startTimeLabel' will be assigned a default value of
-//       "Start Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     Be advised that the pre-existing data fields in input
+//	     parameter 'txtTimerLines' will be overwritten and deleted.
 //
 //
-//  startTime                  time.Time
-//     - A time value which will be used in conjunction with
-//       'endTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTimeLabel             []rune
+//	   - An array of runes containing the text characters
+//	     constituting the starting time text label.
 //
-//       If this parameter is submitted as a zero time value,
-//       'startTime' will be defaulted to value of July 4, 1776
-//       9:30AM UTC.
+//	     If this array is submitted as a zero length rune array,
+//	     'startTimeLabel' will be assigned a default value of
+//	     "Start Time".
 //
-//
-//  endTimeLabel               []rune
-//     - An array of runes containing the text characters
-//       constituting the ending time text label.
-//
-//       If this array is submitted as a zero length rune array,
-//       'endTimeLabel' will be assigned a default value of
-//       "End Time".
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  endTime                    time.Time
-//     - A time value which will be used in conjunction with
-//       'startTime' parameter to compute the time duration or
-//       elapsed for the timer event.
+//	startTime                  time.Time
+//	   - A time value which will be used in conjunction with
+//	     'endTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If this parameter is submitted as a zero time value,
-//       'endTime' will be defaulted to value of 'startTime'.
-//
-//
-//  timeFormat                 string
-//     - This string holds the time format parameters used to
-//       format starting time and ending time values for text
-//       display and output.
-//
-//       If this parameter is submitted as an empty string,
-//       parameter 'timeFormat' will be assigned a default value
-//       of "2006-01-02 15:04:05.000000000 -0700 MST"
+//	     If this parameter is submitted as a zero time value,
+//	     'startTime' will be defaulted to value of July 4, 1776
+//	     9:30AM UTC.
 //
 //
-//  timeDurationLabel          []rune
-//     - The text label used to describe the time duration or
-//       elapsed time computed from the 'startTime' and 'endTime'
-//       parameters.
+//	endTimeLabel               []rune
+//	   - An array of runes containing the text characters
+//	     constituting the ending time text label.
 //
-//       If this array is submitted as a zero length rune array,
-//       'timeDurationLabel' will be assigned a default value of
-//       "Elapsed Time".
+//	     If this array is submitted as a zero length rune array,
+//	     'endTimeLabel' will be assigned a default value of
+//	     "End Time".
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
-//
-//
-//  textLabelFieldLen              int
-//     - A user entered value which defines the length of the text
-//       field used by all three text labels, 'startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel'.
-//
-//       The length of the text fields which will be used to
-//       position and display the three text labels provided by
-//       input parameters 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel'.
-//
-//       If 'textLabelFieldLen' is less than the length of the
-//       longest text label it will be defaulted to the length
-//       of the longest text label ('startTimeLabel',
-//       'endTimeLabel' or 'timeDurationLabel').
-//
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  textLabelJustification         TextJustify
-//     - An enumeration which specifies the justification of the
-//       three text labels 'startTimeLabel', 'endTimeLabel' and
-//       'timeDurationLabel' within the field length specified by
-//       'textLabelFieldLen'.
+//	endTime                    time.Time
+//	   - A time value which will be used in conjunction with
+//	     'startTime' parameter to compute the time duration or
+//	     elapsed for the timer event.
 //
-//       If the field length is greater than the length of the
-//       longest of the three text labels, label justification must
-//       be equal to one of these three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       The abbreviated text justification enumeration syntax can
-//       also be used:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted as a zero time value,
+//	     'endTime' will be defaulted to value of 'startTime'.
 //
 //
-//  labelRightMarginChars      []rune
-//     - This rune array contains the character or characters which
-//       will be used to separate the text labels ('startTimeLabel',
-//       'endTimeLabel' and 'timeDurationLabel') from the output or
-//       data values displayed on the same line.
+//	timeFormat                 string
+//	   - This string holds the time format parameters used to
+//	     format starting time and ending time values for text
+//	     display and output.
 //
-//       Example:
-//        Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
-//
-//       Often this parameter is set to a single white space
-//       character (' ') or a colon plus white space character,
-//       ([]rune{':', ' '}).
+//	     If this parameter is submitted as an empty string,
+//	     parameter 'timeFormat' will be assigned a default value
+//	     of "2006-01-02 15:04:05.000000000 -0700 MST"
 //
 //
-//       If this array is submitted as a zero length rune array,
-//       'labelRightMarginChars' will be assigned a default
-//       value of []rune{':', ' '}.
-//       Example Output:
-//         Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//	timeDurationLabel          []rune
+//	   - The text label used to describe the time duration or
+//	     elapsed time computed from the 'startTime' and 'endTime'
+//	     parameters.
 //
-//       If the string length of 'labelLeftMarginChars' plus
-//       'labelRightMarginChars' plus the text label field length
-//       ('textLabelFieldLen') exceeds the maximum length of
-//       55-characters, this method will return an error.
+//	     If this array is submitted as a zero length rune array,
+//	     'timeDurationLabel' will be assigned a default value of
+//	     "Elapsed Time".
+//
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	textLabelFieldLen              int
+//	   - A user entered value which defines the length of the text
+//	     field used by all three text labels, 'startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     The length of the text fields which will be used to
+//	     position and display the three text labels provided by
+//	     input parameters 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'textLabelFieldLen' is less than the length of the
+//	     longest text label it will be defaulted to the length
+//	     of the longest text label ('startTimeLabel',
+//	     'endTimeLabel' or 'timeDurationLabel').
 //
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
+//
+//
+//	textLabelJustification         TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     three text labels 'startTimeLabel', 'endTimeLabel' and
+//	     'timeDurationLabel' within the field length specified by
+//	     'textLabelFieldLen'.
+//
+//	     If the field length is greater than the length of the
+//	     longest of the three text labels, label justification must
+//	     be equal to one of these three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     The abbreviated text justification enumeration syntax can
+//	     also be used:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
+//
+//
+//	labelRightMarginChars      []rune
+//	   - This rune array contains the character or characters which
+//	     will be used to separate the text labels ('startTimeLabel',
+//	     'endTimeLabel' and 'timeDurationLabel') from the output or
+//	     data values displayed on the same line.
+//
+//	     Example:
+//	      Start Time[sep chars]2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     Often this parameter is set to a single white space
+//	     character (' ') or a colon plus white space character,
+//	     ([]rune{':', ' '}).
+//
+//
+//	     If this array is submitted as a zero length rune array,
+//	     'labelRightMarginChars' will be assigned a default
+//	     value of []rune{':', ' '}.
+//	     Example Output:
+//	       Start Time: 2010-01-02 15:04:05.000000000 -0700 MST
+//
+//	     If the string length of 'labelLeftMarginChars' plus
+//	     'labelRightMarginChars' plus the text label field length
+//	     ('textLabelFieldLen') exceeds the maximum length of
+//	     55-characters, this method will return an error.
+//
+//
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If input parameter 'txtBlankLines' is judged to be valid
-//       in all respects, this return parameter will be set to
-//       'nil'.
+//	error
+//	   - If input parameter 'txtBlankLines' is judged to be valid
+//	     in all respects, this return parameter will be set to
+//	     'nil'.
 //
-//       If input parameter, 'txtBlankLines' is found to be
-//       invalid, this return parameter will be configured with an
-//       appropriate error message.
+//	     If input parameter, 'txtBlankLines' is found to be
+//	     invalid, this return parameter will be configured with an
+//	     appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimerLines(
 	txtTimerLines *TextLineSpecTimerLines,
 	labelLeftMarginChars []rune,
@@ -1039,7 +1043,6 @@ func (txtTimerLinesMolecule *textLineSpecTimerLinesMolecule) setTxtLineSpecTimer
 
 // ptr - Returns a pointer to a new instance of
 // textLineSpecTimerLinesMolecule.
-//
 func (txtTimerLinesMolecule textLineSpecTimerLinesMolecule) ptr() *textLineSpecTimerLinesMolecule {
 
 	if txtTimerLinesMolecule.lock == nil {

@@ -10,7 +10,6 @@ import (
 
 // charSearchTestConfigDtoNanobot - Provides helper methods for type
 // CharSearchTestConfigDto.
-//
 type charSearchTestConfigDtoNanobot struct {
 	lock *sync.Mutex
 }
@@ -20,7 +19,7 @@ type charSearchTestConfigDtoNanobot struct {
 // 'destinationTestCfgDto'. Both instances are of type
 // CharSearchTestConfigDto.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // -----------------------------------------------------------------
 //
@@ -29,61 +28,58 @@ type charSearchTestConfigDtoNanobot struct {
 //
 // Also, NO validation is performed on 'sourceTestCfgDto'.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  destinationTestCfgDto     *CharSearchTestConfigDto
-//     - A pointer to a CharSearchTestConfigDto instance.
-//       All the member variable data fields in this object will be
-//       replaced by data values copied from input parameter
-//       'sourceTestCfgDto'.
+//	destinationTestCfgDto     *CharSearchTestConfigDto
+//	   - A pointer to a CharSearchTestConfigDto instance.
+//	     All the member variable data fields in this object will be
+//	     replaced by data values copied from input parameter
+//	     'sourceTestCfgDto'.
 //
-//       'destinationTestCfgDto' is the destination for this
-//       copy operation.
-//
-//
-//  sourceTestCfgDto          *CharSearchTestConfigDto
-//     - A pointer to another CharSearchTestConfigDto
-//       instance. All the member variable data values from this
-//       object will be copied to corresponding member variables in
-//       'destinationTestCfgDto'.
-//
-//       'sourceTestCfgDto' is the source for this copy
-//       operation.
-//
-//       No data validation is performed on
-//       'sourceTestCfgDto'.
+//	     'destinationTestCfgDto' is the destination for this
+//	     copy operation.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceTestCfgDto          *CharSearchTestConfigDto
+//	   - A pointer to another CharSearchTestConfigDto
+//	     instance. All the member variable data values from this
+//	     object will be copied to corresponding member variables in
+//	     'destinationTestCfgDto'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     'sourceTestCfgDto' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     No data validation is performed on
+//	     'sourceTestCfgDto'.
 //
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyIn(
 	destinationTestCfgDto *CharSearchTestConfigDto,
 	sourceTestCfgDto *CharSearchTestConfigDto,
@@ -200,8 +196,7 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
-//
+// # IMPORTANT
 //
 // NO validation is performed on 'searchTestCfgDto'.
 //
@@ -209,47 +204,45 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyIn(
 //
 // Input Parameters
 //
-//  searchTestCfgDto                *CharSearchTestConfigDto
-//     - A pointer to an instance of CharSearchTestConfigDto. A
-//       deep copy of the internal member variables will be created
-//       and returned in a new instance of CharSearchTestConfigDto.
+//	searchTestCfgDto                *CharSearchTestConfigDto
+//	   - A pointer to an instance of CharSearchTestConfigDto. A
+//	     deep copy of the internal member variables will be created
+//	     and returned in a new instance of CharSearchTestConfigDto.
 //
-//       No data validation is performed on 'searchTestCfgDto'.
+//	     No data validation is performed on 'searchTestCfgDto'.
 //
 //
-//  errPrefDto                      *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                      *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopySearchTestCfgDto        CharSearchTestConfigDto
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'searchTestCfgDto' will be created and
-//       returned in a new instance of CharSearchTestConfigDto.
+//	deepCopySearchTestCfgDto        CharSearchTestConfigDto
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'searchTestCfgDto' will be created and
+//	     returned in a new instance of CharSearchTestConfigDto.
 //
 //
-//  err                             error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                             error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 	searchTestCfgDto *CharSearchTestConfigDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -355,59 +348,56 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) copyOut(
 // detailing the member variable values contained in the
 // 'searchTestCfgDto' instance of CharSearchTestConfigDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  searchTestCfgDto           *CharSearchTestInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTestInputParametersDto instance. Formatted
-//       text output will be generated listing the member variable
-//       names and their corresponding values. The formatted text
-//       can then be used for text displays, file output or
-//       printing.
+//	searchTestCfgDto           *CharSearchTestInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTestInputParametersDto instance. Formatted
+//	     text output will be generated listing the member variable
+//	     names and their corresponding values. The formatted text
+//	     can then be used for text displays, file output or
+//	     printing.
 //
-//       No data validation is performed on this instance of
-//       CharSearchTestInputParametersDto.
+//	     No data validation is performed on this instance of
+//	     CharSearchTestInputParametersDto.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  strings.Builder
-//     - If this method completes successfully, an instance of
-//       strings.Builder will be returned. This instance contains
-//       the formatted text output listing the member variable
-//       names and their corresponding values for input parameter
-//       'searchTestCfgDto' . This formatted text can then be used
-//       for text displays, file output or printing.
+//	strings.Builder
+//	   - If this method completes successfully, an instance of
+//	     strings.Builder will be returned. This instance contains
+//	     the formatted text output listing the member variable
+//	     names and their corresponding values for input parameter
+//	     'searchTestCfgDto' . This formatted text can then be used
+//	     for text displays, file output or printing.
 //
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
 	searchTestCfgDto *CharSearchTestConfigDto,
@@ -444,7 +434,17 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 		return err
 	}
 
-	strBuilder.Grow(256)
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		256 - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
 
 	if searchTestCfgDto == nil {
 
@@ -978,7 +978,6 @@ func (searchTestConfigNanobot *charSearchTestConfigDtoNanobot) getParameterTextL
 
 // ptr - Returns a pointer to a new instance of
 // charSearchTestConfigDtoNanobot.
-//
 func (searchTestConfigNanobot charSearchTestConfigDtoNanobot) ptr() *charSearchTestConfigDtoNanobot {
 
 	if searchTestConfigNanobot.lock == nil {
