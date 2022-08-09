@@ -350,6 +350,146 @@ func (strArrayDto *StringArrayDto) CopyOut(
 	return deepCopyStrArrayDto, err
 }
 
+// DeleteAtIndex - Deletes an array member element from the
+// target string array contained within the current instance
+// of StringArrayDto.
+//
+// After completion of the deletion operation, the target string
+// array will have length one less than the length of the original
+// string array.
+//
+// # IMPORTANT
+//
+// ----------------------------------------------------------------
+//
+// This method will delete one member element from the string array
+// contained within the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	    zeroBasedIndex            int
+//	      - The index number of the array element in the target
+//			   string array which will be deleted.
+//
+//		       If the target string array has zero member elements,
+//		       this method will return an error.
+//
+//		       If 'zeroBasedIndex' has a value less than zero, this
+//		       method will return an error.
+//
+//		       If 'zeroBasedIndex' has a value greater than the last
+//		       index in the string array, this method will return an
+//		       error.
+//
+//
+//	    errorPrefix               interface{}
+//	      - This object encapsulates error prefix text which is
+//	        included in all returned error messages. Usually, it
+//	        contains the name of the calling method or methods
+//	        listed as a method or function chain of execution.
+//
+//	        If no error prefix information is needed, set this
+//	        parameter to 'nil'.
+//
+//	        This empty interface must be convertible to one of the
+//	        following types:
+//
+//
+//	        1. nil - A nil value is valid and generates an empty
+//	                 collection of error prefix and error context
+//	                 information.
+//
+//	        2. string - A string containing error prefix information.
+//
+//	        3. []string A one-dimensional slice of strings containing
+//	                    error prefix information
+//
+//	        4. [][2]string A two-dimensional slice of strings
+//	           containing error prefix and error context information.
+//
+//	        5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                          ErrorPrefixInfo from this object will be
+//	                          copied to 'errPrefDto'.
+//
+//	        6. *ErrPrefixDto - A pointer to an instance of
+//	                           ErrPrefixDto. ErrorPrefixInfo from this
+//	                           object will be copied to 'errPrefDto'.
+//
+//	        7. IBasicErrorPrefix - An interface to a method generating
+//	                               a two-dimensional slice of strings
+//	                               containing error prefix and error
+//	                               context information.
+//
+//	        If parameter 'errorPrefix' is NOT convertible to one of
+//	        the valid types listed above, it will be considered
+//	        invalid and trigger the return of an error.
+//
+//	        Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	        the 'errpref' software package,
+//	        "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil' signaling that the designated
+//	     Text Line element in the Text Lines Collection has been
+//	     deleted. If errors are encountered during processing, the
+//	     returned error Type will encapsulate an error message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (strArrayDto *StringArrayDto) DeleteAtIndex(
+	zeroBasedIndex int,
+	errorPrefix interface{}) error {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"DeleteAtIndex()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(strArrayDto.StrArray) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: The current instance of StringArrayDto\n"+
+			"has a zero length array. Deletion is invalid\n"+
+			"len(strArrayDto.StrArray) == 0\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	return new(stringArrayDtoElectron).
+		deleteStringArrayElement(
+			strArrayDto,
+			zeroBasedIndex,
+			ePrefix.XCpy(
+				fmt.Sprintf("delete strArrayDto[%v]",
+					zeroBasedIndex)))
+
+}
+
 // Empty - Resets all internal member variables for the current
 // instance of StringArrayDto to their zero or uninitialized
 // states.
@@ -618,81 +758,81 @@ func (strArrayDto *StringArrayDto) GetStringArrayLength() int {
 //
 // Input Parameters
 //
-//	   insertStr                  string
-//			 - This is the string which will be inserted into the
-//			   target string array at the index specified by input
-//			   parameter, 'zeroBasedIndex'.
+//		   insertStr                 string
+//	      - This is the string which will be inserted into the
+//	        target string array at the index specified by input
+//	        parameter, 'zeroBasedIndex'.
 //
 //
-//		  zeroBasedIndex             int
-//		     - The index number of the array element in the target
-//		       string array where 'insertStr' will be inserted.
+//	    zeroBasedIndex            int
+//	      - The index number of the array element in the target
+//			   string array where 'insertStr' will be inserted.
 //
-//	        If the target string array has zero member elements, the
-//	        new inserted string will be added as the first and only
-//	        member of the string array.
+//		       If the target string array has zero member elements, the
+//		       new inserted string will be added as the first and only
+//		       member of the string array.
 //
-//	        If 'zeroBasedIndex' has a value less than zero, the new
-//	        inserted string will become the first element in the
-//	        string array and all the old array elements will be
-//	        appended to that new first element.
+//		       If 'zeroBasedIndex' has a value less than zero, the new
+//		       inserted string will become the first element in the
+//		       string array and all the old array elements will be
+//		       appended to that new first element.
 //
-//	        If 'zeroBasedIndex' has a value greater than the last
-//	        index in the string array, the new inserted string will
-//	        be appended to the end of the target string array.
+//		       If 'zeroBasedIndex' has a value greater than the last
+//		       index in the string array, the new inserted string will
+//		       be appended to the end of the target string array.
 //
-//	        Otherwise, the new inserted string be inserted at the
-//	        array element index specified by 'zeroBasedIndex'. The
-//	        old member string element which formerly occupied index
-//	        'zeroBasedIndex' will be positioned immediately after
-//	        the inserted string in the new string array.
-//
-//
-//		  errorPrefix                interface{}
-//			 - This object encapsulates error prefix text which is
-//			   included in all returned error messages. Usually, it
-//			   contains the name of the calling method or methods
-//			   listed as a method or function chain of execution.
-//
-//			   If no error prefix information is needed, set this
-//			   parameter to 'nil'.
-//
-//			   This empty interface must be convertible to one of the
-//			   following types:
+//		       Otherwise, the new inserted string be inserted at the
+//		       array element index specified by 'zeroBasedIndex'. The
+//		       old member string element which formerly occupied index
+//		       'zeroBasedIndex' will be positioned immediately after
+//		       the inserted string in the new string array.
 //
 //
-//			   1. nil - A nil value is valid and generates an empty
-//			            collection of error prefix and error context
-//			            information.
+//	    errorPrefix              interface{}
+//	      - This object encapsulates error prefix text which is
+//	        included in all returned error messages. Usually, it
+//	        contains the name of the calling method or methods
+//	        listed as a method or function chain of execution.
 //
-//			   2. string - A string containing error prefix information.
+//	        If no error prefix information is needed, set this
+//	        parameter to 'nil'.
 //
-//			   3. []string A one-dimensional slice of strings containing
-//			               error prefix information
+//	        This empty interface must be convertible to one of the
+//	        following types:
 //
-//			   4. [][2]string A two-dimensional slice of strings
-//			      containing error prefix and error context information.
 //
-//			   5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//			                     ErrorPrefixInfo from this object will be
-//			                     copied to 'errPrefDto'.
+//	        1. nil - A nil value is valid and generates an empty
+//	                 collection of error prefix and error context
+//	                 information.
 //
-//			   6. *ErrPrefixDto - A pointer to an instance of
-//			                      ErrPrefixDto. ErrorPrefixInfo from this
-//			                      object will be copied to 'errPrefDto'.
+//	        2. string - A string containing error prefix information.
 //
-//			   7. IBasicErrorPrefix - An interface to a method generating
-//			                          a two-dimensional slice of strings
-//			                          containing error prefix and error
-//			                          context information.
+//	        3. []string A one-dimensional slice of strings containing
+//	                    error prefix information
 //
-//			   If parameter 'errorPrefix' is NOT convertible to one of
-//			   the valid types listed above, it will be considered
-//			   invalid and trigger the return of an error.
+//	        4. [][2]string A two-dimensional slice of strings
+//	           containing error prefix and error context information.
 //
-//			   Types ErrPrefixDto and IBasicErrorPrefix are included in
-//			   the 'errpref' software package,
-//			   "github.com/MikeAustin71/errpref".
+//	        5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                          ErrorPrefixInfo from this object will be
+//	                          copied to 'errPrefDto'.
+//
+//	        6. *ErrPrefixDto - A pointer to an instance of
+//	                           ErrPrefixDto. ErrorPrefixInfo from this
+//	                           object will be copied to 'errPrefDto'.
+//
+//	        7. IBasicErrorPrefix - An interface to a method generating
+//	                               a two-dimensional slice of strings
+//	                               containing error prefix and error
+//	                               context information.
+//
+//	        If parameter 'errorPrefix' is NOT convertible to one of
+//	        the valid types listed above, it will be considered
+//	        invalid and trigger the return of an error.
+//
+//	        Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	        the 'errpref' software package,
+//	        "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //

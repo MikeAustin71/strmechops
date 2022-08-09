@@ -72,7 +72,7 @@ func TestStringArrayDto_AddManyStrings_000100(t *testing.T) {
 func TestStringArrayDto_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"TestStringArrayDto_InsertAtIndex_000100()",
+		"TestStringArrayDto_Equal_000100()",
 		"")
 
 	beginningArray := []string{
@@ -122,6 +122,79 @@ func TestStringArrayDto_Equal_000100(t *testing.T) {
 			"Error: strArrayDto1 == strArrayDto2\n"+
 			"Expected strArrayDto1 to be NOT EQUAL to strArrayDto2\n"+
 			"because string array element strArrayDto2[2] was changed.\n"+
+			"HOWEVER, THEY ARE REPORTED AS EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestStringArrayDto_Equal_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_Equal_000200()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+	}
+
+	var err error
+
+	strArrayDto1 := StringArrayDto{}
+
+	strArrayDto1.SetStringArray(
+		beginningArray)
+
+	var strArrayDto2 StringArrayDto
+
+	strArrayDto2,
+		err = strArrayDto1.CopyOut(
+		ePrefix.XCpy(
+			"strArrayDto2<-strArrayDto1"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if !strArrayDto2.Equal(&strArrayDto1) {
+		t.Errorf("%v\n"+
+			"Error: strArrayDto1 != strArrayDto2\n"+
+			"Expected strArrayDto1 to be equal to strArrayDto2\n"+
+			"because strArrayDto2 is a copy of strArrayDto1.\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err = strArrayDto1.DeleteAtIndex(
+		2,
+		ePrefix.XCpy(
+			"strArrayDto1[2]"))
+
+	if err != nil {
+		t.Errorf("%v\n",
+			err.Error())
+
+		return
+	}
+
+	if strArrayDto2.Equal(&strArrayDto1) {
+		t.Errorf("%v\n"+
+			"Error: strArrayDto1 == strArrayDto2\n"+
+			"Expected strArrayDto1 to be NOT EQUAL to strArrayDto2\n"+
+			"because string array element strArrayDto2[2] was deleted.\n"+
 			"HOWEVER, THEY ARE REPORTED AS EQUAL!\n",
 			ePrefix.String())
 
