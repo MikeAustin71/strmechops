@@ -347,7 +347,17 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		return err
 	}
 
-	strBuilder.Grow(512)
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		256 - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
 
 	// Total available Length of Output Line
 	const maxLineLen = 79
@@ -743,6 +753,27 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		return err
 	}
 
+	// Build RemainderString
+
+	strLabel := "RemainderString"
+
+	txtStrParam =
+		numStrParseResults.RemainderString.GetCharacterString()
+
+	if len(txtStrParam) == 0 {
+		txtStrParam = "RemainderString is EMPTY!"
+	}
+
+	err = txtFormatCol.AddLine2Col(
+		strLabel,
+		txtStrParam,
+		ePrefix.XCpy(
+			"Build RemainderString"))
+
+	if err != nil {
+		return err
+	}
+
 	err = txtFormatCol.BuildText(
 		strBuilder,
 		ePrefix.XCpy(
@@ -756,9 +787,20 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 
 	titles.Empty()
 
-	titles.AddManyStrings(
-		"CharSearchNumStrParseResultsDto",
-		"End of Parameter Listing")
+	titles.AddString(
+		"CharSearchNumStrParseResultsDto")
+
+	txtStrParam =
+		numStrParseResults.SearchResultsName
+
+	if len(txtStrParam) > 0 {
+
+		titles.AddString(
+			txtStrParam)
+	}
+
+	titles.AddString(
+		"End Of Parameter Listing")
 
 	err = new(TextUtility).BuildOneColTrailingMarquee(
 		strBuilder,
@@ -772,27 +814,6 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 	}
 
 	if printDetail {
-
-		// Build RemainderString
-
-		strLabel := "RemainderString"
-
-		txtStrParam =
-			numStrParseResults.RemainderString.GetCharacterString()
-
-		if len(txtStrParam) == 0 {
-			txtStrParam = "RemainderString is EMPTY!"
-		}
-
-		err = txtFormatCol.AddLine2Col(
-			strLabel,
-			txtStrParam,
-			ePrefix.XCpy(
-				"Build RemainderString"))
-
-		if err != nil {
-			return err
-		}
 
 		// Build DecimalSeparatorSearchResults
 

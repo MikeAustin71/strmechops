@@ -434,11 +434,9 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 		return
 	}
 
-	strBuilder.Grow(256)
-
 	err = searchResults.GetParameterTextListing(
 		&strBuilder,
-		true,
+		false,
 		false,
 		ePrefix.XCpy("searchResults"))
 
@@ -460,6 +458,7 @@ func (mTest02 MainTest02) ExtractNumberRunes01() {
 
 	err = numStrKernel.GetParameterTextListing(
 		&strBuilder,
+		true,
 		ePrefix.XCpy(
 			"numStrKernel"))
 
@@ -627,11 +626,9 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 		return
 	}
 
-	strBuilder.Grow(256)
-
 	err = searchResults.GetParameterTextListing(
 		&strBuilder,
-		true,
+		false,
 		true,
 		ePrefix.XCpy("searchResults"))
 
@@ -653,6 +650,7 @@ func (mTest02 MainTest02) ExtractNumberRunes02() {
 
 	err = numStrKernel.GetParameterTextListing(
 		&strBuilder,
+		true,
 		ePrefix.XCpy(
 			"numStrKernel"))
 

@@ -10,7 +10,6 @@ import (
 
 // numberStrKernelNanobot - Provides helper methods for type
 // NumberStrKernel.
-//
 type numberStrKernelNanobot struct {
 	lock *sync.Mutex
 }
@@ -19,68 +18,65 @@ type numberStrKernelNanobot struct {
 // 'incomingNumStrKernel' to input parameter 'targetNumStrKernel'.
 // Both instances are of type NumberStrKernel.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // -----------------------------------------------------------------
 //
 // Be advised that the data fields in 'targetNumStrKernel' will be
 // overwritten.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetNumStrKernel        *NumberStrKernel
-//     - A pointer to a NumberStrKernel instance. All the
-//       member variable data fields in this object will be
-//       replaced by data values copied from input parameter
-//       'incomingNumStrKernel'.
+//	targetNumStrKernel        *NumberStrKernel
+//	   - A pointer to a NumberStrKernel instance. All the
+//	     member variable data fields in this object will be
+//	     replaced by data values copied from input parameter
+//	     'incomingNumStrKernel'.
 //
-//       'targetNumStrKernel' is the target of this copy
-//       operation.
-//
-//
-//  incomingNumStrKernel      *NumberStrKernel
-//     - A pointer to another NumberStrKernel instance. All
-//       the member variable data values from this object will
-//       be copied to corresponding member variables in
-//       'targetNumStrKernel'.
-//
-//       'incomingNumStrKernel' is the source for this copy
-//       operation.
-//
-//       If 'incomingNumStrKernel' is determined to be invalid,
-//       an error will be returned.
+//	     'targetNumStrKernel' is the target of this copy
+//	     operation.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	incomingNumStrKernel      *NumberStrKernel
+//	   - A pointer to another NumberStrKernel instance. All
+//	     the member variable data values from this object will
+//	     be copied to corresponding member variables in
+//	     'targetNumStrKernel'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     'incomingNumStrKernel' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'incomingNumStrKernel' is determined to be invalid,
+//	     an error will be returned.
 //
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (numStrKernelNanobot *numberStrKernelNanobot) copyIn(
 	targetNumStrKernel *NumberStrKernel,
 	incomingNumStrKernel *NumberStrKernel,
@@ -194,7 +190,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // The input parameter 'numStrKernel' is determined to be invalid,
 // this method will return an error.
@@ -203,49 +199,47 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyIn(
 //
 // Input Parameters
 //
-//  numStrKernel           *NumberStrKernel
-//     - A pointer to an instance of NumberStrKernel. A
-//       deep copy of the internal member variables will be created
-//       and returned in a new instance of NumberStrKernel.
+//	numStrKernel           *NumberStrKernel
+//	   - A pointer to an instance of NumberStrKernel. A
+//	     deep copy of the internal member variables will be created
+//	     and returned in a new instance of NumberStrKernel.
 //
-//       If the member variable data values encapsulated by
-//       'numStrKernel' are found to be invalid, this method will
-//       return an error
+//	     If the member variable data values encapsulated by
+//	     'numStrKernel' are found to be invalid, this method will
+//	     return an error
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyNumStrKernel       NumberStrKernel
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'numStrKernel' will be created and
-//       returned in a new instance of NumberStrKernel.
+//	deepCopyNumStrKernel       NumberStrKernel
+//	   - If this method completes successfully, a deep copy of
+//	     input parameter 'numStrKernel' will be created and
+//	     returned in a new instance of NumberStrKernel.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 	numStrKernel *NumberStrKernel,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -345,57 +339,61 @@ func (numStrKernelNanobot *numberStrKernelNanobot) copyOut(
 // listing the member variable names and corresponding values
 // contained in the 'numStrKernel' instance of NumberStrKernel.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	 strBuilder                 *strings.Builder
+//	    - A pointer to an instance of *strings.Builder. The
+//	      formatted text characters produced by this method will be
+//	      written to this instance of strings.Builder.
 //
 //
-//  numStrKernel               *NumberStrKernel
-//     - A pointer to an instance of NumberStrKernel instance.
-//       Formatted text output will be generated listing the member
-//       variable names and their corresponding values. The
-//       formatted text can then be used for screen displays, file
-//       output or printing.
-//
-//       No data validation is performed on this instance of
-//       CharSearchDecimalSeparatorResultsDto.
+//		displayFunctionChain       bool
+//		   - Set 'displayFunctionChain' to 'true' and a list of the
+//		     functions which led to this result will be included in
+//		     the formatted text output.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	 numStrKernel               *NumberStrKernel
+//	    - A pointer to an instance of NumberStrKernel instance.
+//	      Formatted text output will be generated listing the member
+//	      variable names and their corresponding values. The
+//	      formatted text can then be used for screen displays, file
+//	      output or printing.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	      No data validation is performed on this instance of
+//	      CharSearchDecimalSeparatorResultsDto.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
 //
+//	 errPrefDto                 *ePref.ErrPrefixDto
+//	    - This object encapsulates an error prefix string which is
+//	      included in all returned error messages. Usually, it
+//	      contains the name of the calling method or methods listed
+//	      as a function chain.
+//
+//	      If no error prefix information is needed, set this
+//	      parameter to 'nil'.
+//
+//	      Type ErrPrefixDto is included in the 'errpref' software
+//	      package, "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 	strBuilder *strings.Builder,
+	displayFunctionChain bool,
 	numStrKernel *NumberStrKernel,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -431,7 +429,17 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 		return err
 	}
 
-	strBuilder.Grow(256)
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	requiredCapacity :=
+		256 - netCapacityStrBuilder
+
+	if requiredCapacity > 0 {
+
+		strBuilder.Grow(requiredCapacity + 16)
+	}
 
 	if numStrKernel == nil {
 
@@ -539,18 +547,89 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 	colonSpace := ": "
 
+	var txtStrParam, txtStrLabel string
+
+	// Build NumStrKernelFunctionChain
+
+	if displayFunctionChain == true {
+
+		txtStrLabel := "Number String Kernel Function Chain"
+
+		txtStrParam = ePrefix.String()
+
+		if len(txtStrParam) == 0 {
+
+			txtStrParam = "Number String Kernel Function Chain is EMPTY!"
+
+			txtFormatCol.AddFieldLabel(
+				" ",
+				txtStrLabel,
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				"",
+				-1,
+				false)
+
+			txtFormatCol.AddFieldLabel(
+				"",
+				txtStrParam,
+				-1,
+				TxtJustify.Left(),
+				"",
+				"\n",
+				-1,
+				false)
+
+		} else {
+
+			txtFormatCol.AddFieldLabel(
+				" ",
+				txtStrLabel,
+				maxLabelFieldLen,
+				TxtJustify.Right(),
+				colonSpace,
+				"\n",
+				-1,
+				false)
+
+			spacer := strings.Repeat(" ", 16)
+
+			txtStrParam = strings.Replace(
+				txtStrParam,
+				"\n",
+				"\n"+spacer,
+				-1)
+
+			txtStrParam = "\n" + spacer + txtStrParam
+
+			txtFormatCol.AddFieldLabel(
+				"",
+				txtStrParam,
+				-1,
+				TxtJustify.Left(),
+				"",
+				"\n",
+				-1,
+				false)
+
+		}
+
+		txtFormatCol.AddLineBlank(1, "")
+	}
+
+	// Set up 2-Column Parameters
+
 	// Build Integer Digits
 
-	txtStrLabel := "Integer Digits"
+	txtStrLabel = "Integer Digits"
 
-	txtStrParam :=
+	txtStrParam =
 		numStrKernel.integerDigits.GetCharacterString()
 
 	if len(txtStrParam) == 0 {
 		txtStrParam = "Integer Digits is EMPTY!"
 	}
-
-	// Set up 2-Column Parameters
 
 	err = txtFormatCol.CfgLine2Col(
 		" ",
@@ -694,7 +773,6 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 
 // ptr - Returns a pointer to a new instance of
 // numberStrKernelNanobot.
-//
 func (numStrKernelNanobot numberStrKernelNanobot) ptr() *numberStrKernelNanobot {
 
 	if numStrKernelNanobot.lock == nil {
