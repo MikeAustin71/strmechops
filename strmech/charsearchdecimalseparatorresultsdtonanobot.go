@@ -5,7 +5,6 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
-	"time"
 )
 
 // charSearchDecimalSeparatorResultsDtoNanobot - Provides helper
@@ -631,100 +630,52 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 	// Leading Title Marquee
 
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
-
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Title Line 1
-	// 1-Column Setup
-	err = txtFormatCol.CfgLine1Col(
-		" ",
-		"CharSearchDecimalSeparatorResultsDto",
-		maxLineLen,
-		TxtJustify.Center(),
-		"",
-		false,
-		"",
-		-1,
-		false,
-		true,
-		ePrefix.XCpy(
-			"Column-1 Setup"))
-
-	if err != nil {
-		return err
+	txtFmtParams := TextFmtParamsLineColumnsDto{
+		FormatType: TxtFieldType.LineColumns(),
+		FieldFormatParams: []TextFieldFmtParamsDto{
+			{
+				LeftMarginStr:  " ",
+				FieldLength:    maxLineLen,
+				FieldJustify:   TxtJustify.Center(),
+				DateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+				RightMarginStr: "",
+			},
+		},
+		TurnLineTerminationOff:     false,
+		LineTerminator:             "\n",
+		MaxLineLength:              maxLineLen,
+		TurnAutoLineLengthBreaksOn: false,
 	}
+
+	titles := StringArrayDto{}
+
+	titles.AddString(
+		"CharSearchDecimalSeparatorResultsDto")
 
 	txtStrParam :=
 		decimalSeparatorResults.SearchResultsName
 
 	if len(txtStrParam) > 0 {
 
-		// Title Line 2
-		err = txtFormatCol.AddLine1Col(
-			txtStrParam,
-			ePrefix.XCpy(
-				"Top-Title Line 2"))
-
-		if err != nil {
-			return err
-		}
-
+		titles.AddString(
+			txtStrParam)
 	}
 
-	// Title Line 3
-	err = txtFormatCol.AddLine1Col(
-		"Parameter Listing",
+	titles.AddString(
+		"Parameter Listing")
+
+	err = new(TextUtility).BuildOneColLeadingMarquee(
+		strBuilder,
+		titles,
+		txtFmtParams,
 		ePrefix.XCpy(
-			"Top-Title Line 3"))
+			"strBuilder<-txtFmtParams"))
 
 	if err != nil {
+
 		return err
+
 	}
-
-	// Title Line  4 Date/Time
-
-	err = txtFormatCol.AddLine1Col(
-		TextInputParamFieldDateTimeDto{
-			FieldDateTime:       time.Now(),
-			FieldDateTimeFormat: "Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-		},
-		ePrefix.XCpy(
-			"Top-Title Line 4"))
-
-	if err != nil {
-		return err
-	}
-
-	// Filler Line '========='
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Trailing Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
 
 	// End Of Marquee
 
@@ -1497,77 +1448,41 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 
 exitMethodTrailer:
 
+	err = txtFormatCol.BuildText(
+		strBuilder,
+		ePrefix.XCpy(
+			"Final Output"))
+
 	// Trailing Title Marquee
 	// Top Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
 
-	// Filler =======
-	// Marquee Top
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
+	titles.Empty()
 
-	// Title # 1
-	err = txtFormatCol.AddLine1Col(
-		"CharSearchDecimalSeparatorResultsDto",
-		ePrefix.XCpy(
-			"Bottom-Title Line 1"))
-
-	if err != nil {
-		return err
-	}
+	titles.AddString(
+		"CharSearchNumStrParseResultsDto")
 
 	txtStrParam =
 		decimalSeparatorResults.SearchResultsName
 
 	if len(txtStrParam) > 0 {
 
-		// Title Line 2
-		err = txtFormatCol.AddLine1Col(
-			txtStrParam,
-			ePrefix.XCpy(
-				"Bottom-Title Line 2"))
-
-		if err != nil {
-			return err
-		}
-
+		titles.AddString(
+			txtStrParam)
 	}
 
-	// Title # 3
-	err = txtFormatCol.AddLine1Col(
-		"End of Parameter Listing",
+	titles.AddString(
+		"End Of Parameter Listing")
+
+	err = new(TextUtility).BuildOneColTrailingMarquee(
+		strBuilder,
+		titles,
+		txtFmtParams,
 		ePrefix.XCpy(
-			"Bottom-Title Line 3"))
+			"strBuilder<-txtFmtParams"))
 
 	if err != nil {
 		return err
 	}
-
-	// Filler =======
-	// Marquee Bottom
-	txtFormatCol.AddLineSolid(
-		" ",
-		"=",
-		maxLineLen-2,
-		" ",
-		false,
-		"",
-		-1,
-		false)
-
-	// Blank Line
-	txtFormatCol.AddLineBlank(
-		1,
-		"")
 
 	err = txtFormatCol.BuildText(
 		strBuilder,
