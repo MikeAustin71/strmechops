@@ -69,6 +69,85 @@ func TestStringArrayDto_AddManyStrings_000100(t *testing.T) {
 	return
 }
 
+func TestStringArrayDto_AddManyStrings_000200(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_AddManyStrings_000200()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+		"7-Str",
+		"8-Str",
+		"9-Str",
+		"10-Str",
+	}
+
+	lenBeginningArray := len(beginningArray)
+
+	expectedArray := make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] =
+			beginningArray[i]
+	}
+
+	for i := 0; i < 1000; i++ {
+
+		strArrayDto := StringArrayDto{}
+
+		strArrayDto.AddManyStrings(
+			beginningArray[0],
+			beginningArray[1],
+			beginningArray[2],
+			beginningArray[3],
+			beginningArray[4],
+			beginningArray[5],
+			beginningArray[6],
+			beginningArray[7],
+			beginningArray[8],
+			beginningArray[9])
+
+		actualArray := strArrayDto.GetStringArray()
+
+		if len(actualArray) != lenBeginningArray {
+			t.Errorf("\n%v\n"+
+				"Error: len(actualArray) != lenBeginningArray\n"+
+				"Actual Array Length    = '%v'\n"+
+				"Beginning Array Length = '%v'\n",
+				ePrefix.String(),
+				len(actualArray),
+				lenBeginningArray)
+
+			return
+		}
+
+		for j := 0; j < lenBeginningArray; j++ {
+			if actualArray[j] != expectedArray[j] {
+				t.Errorf("\n%v\n"+
+					"Error: Actual Array is NOT EQUAL to \n"+
+					"Expected Array!\n"+
+					"  actualArray[%v] = '%v'\n"+
+					"expectedArray[%v] = '%v'\n",
+					ePrefix.String(),
+					j,
+					actualArray[j],
+					j,
+					expectedArray[j])
+
+				return
+			}
+		}
+	}
+
+	return
+}
+
 func TestStringArrayDto_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
