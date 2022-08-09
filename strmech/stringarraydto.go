@@ -1469,6 +1469,153 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 	return lastArrayStr, newArrayLength, err
 }
 
+// ReplaceAtIndex - Replaces a string in a target string array
+// contained within the current instance of StringArrayDto.
+//
+// The string being replaced is specified by a zero based index
+// passed as input parameter, 'zeroBasedIndex'.
+//
+// If the target string has zero member elements, the new string
+// will be added as the first and only member of the string array.
+//
+// If 'zeroBasedIndex' has a value less than zero, the new string
+// will become the first element in the string array and all the
+// old array elements will be appended to that new first element.
+//
+// If 'zeroBasedIndex' has a value greater than last index in the
+// string array, the new string will be appended to the end of the
+// current string array.
+//
+// Otherwise, the string array element specified by
+// 'zeroBasedIndex' will be replaced by input parameter, 'newStr'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	 newStr                     string
+//	    - This is the replacement string which will replace the
+//	      StringArrayDto string array element at the array index
+//	      specified by input parameter, 'zeroBasedIndex'.
+//
+//
+//		zeroBasedIndex             int
+//		   - The index number of the array element in the
+//		     StringArrayDto string array which will be replaced by
+//	      input parameter, 'zeroBasedIndex'.
+//
+//	      If 'zeroBasedIndex' has a value less than zero, the new
+//	      string will become the first element in the string array
+//	      and all the old array elements will be appended to that
+//	      new first element.
+//
+//	      If 'zeroBasedIndex' has a value greater than last index
+//	      in the string array, the new string will be appended to
+//	      the end of the current string array.
+//
+//	      Otherwise, the string array element specified by
+//	      'zeroBasedIndex' will be replaced by input parameter,
+//	      'newStr'.
+//
+//
+//		errorPrefix                interface{}
+//		   - This object encapsulates error prefix text which is
+//		     included in all returned error messages. Usually, it
+//		     contains the name of the calling method or methods
+//		     listed as a method or function chain of execution.
+//
+//		     If no error prefix information is needed, set this
+//		     parameter to 'nil'.
+//
+//		     This empty interface must be convertible to one of the
+//		     following types:
+//
+//
+//		     1. nil - A nil value is valid and generates an empty
+//		              collection of error prefix and error context
+//		              information.
+//
+//		     2. string - A string containing error prefix information.
+//
+//		     3. []string A one-dimensional slice of strings containing
+//		                 error prefix information
+//
+//		     4. [][2]string A two-dimensional slice of strings
+//		        containing error prefix and error context information.
+//
+//		     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//		                       ErrorPrefixInfo from this object will be
+//		                       copied to 'errPrefDto'.
+//
+//		     6. *ErrPrefixDto - A pointer to an instance of
+//		                        ErrPrefixDto. ErrorPrefixInfo from this
+//		                        object will be copied to 'errPrefDto'.
+//
+//		     7. IBasicErrorPrefix - An interface to a method generating
+//		                            a two-dimensional slice of strings
+//		                            containing error prefix and error
+//		                            context information.
+//
+//		     If parameter 'errorPrefix' is NOT convertible to one of
+//		     the valid types listed above, it will be considered
+//		     invalid and trigger the return of an error.
+//
+//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		     the 'errpref' software package,
+//		     "github.com/MikeAustin71/errpref".
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil' signaling that the designated
+//	     Text Line element in the Text Lines Collection has been
+//	     deleted. If errors are encountered during processing, the
+//	     returned error Type will encapsulate an error message.
+//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (strArrayDto *StringArrayDto) ReplaceAtIndex(
+	newStr string,
+	zeroBasedIndex int,
+	errorPrefix interface{}) error {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(stringArrayDtoElectron).
+		replaceStrArrayAtIndex(
+			strArrayDto,
+			newStr,
+			zeroBasedIndex,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"strArrayDto[%v]=newStr",
+					zeroBasedIndex)))
+}
+
 // SetDescription1 - Receives a string and assigns that string
 // value to internal member variable 'StringArrayDto.Description1'.
 //
