@@ -148,6 +148,65 @@ func TestStringArrayDto_AddManyStrings_000200(t *testing.T) {
 	return
 }
 
+func TestStringArrayDto_CopyIn_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_CopyIn_000100()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+		"7-Str",
+		"8-Str",
+		"9-Str",
+		"10-Str",
+	}
+
+	var strArrayDto01, strArrayDto02 StringArrayDto
+
+	strArrayDto01 = StringArrayDto{}.New()
+
+	strArrayDto01.SetStringArray(
+		beginningArray)
+
+	desc1 := "strArrayDto01 Desc-1"
+	desc2 := "strArrayDto01 Desc-2"
+
+	strArrayDto01.SetDescription1(desc1)
+
+	strArrayDto01.SetDescription1(desc2)
+
+	err := strArrayDto02.CopyIn(
+		&strArrayDto01,
+		ePrefix.XCpy(
+			"strArrayDto02<-strArrayDto01"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+
+		return
+	}
+
+	if !strArrayDto02.Equal(&strArrayDto01) {
+
+		t.Errorf("\n%v\n"+
+			"Error: strArrayDto01!=strArrayDto02\n"+
+			"Expected that strArrayDto01 would equal strArrayDto02\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
 func TestStringArrayDto_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
