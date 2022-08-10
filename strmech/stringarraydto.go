@@ -779,84 +779,21 @@ func (strArrayDto *StringArrayDto) GetStringArray() []string {
 //
 // A Rune Array Collection is an array of rune arrays. Each
 // member element in the returned Rune Array Collection is created
-// from a corresponding string in the string array encapuslated by
+// from a corresponding string in the string array encapsulated by
 // the current instance of StringArrayDto.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	errorPrefix                interface{}
-//	   - This object encapsulates error prefix text which is
-//	     included in all returned error messages. Usually, it
-//	     contains the name of the calling method or methods
-//	     listed as a method or function chain of execution.
-//
-//	     If no error prefix information is needed, set this
-//	     parameter to 'nil'.
-//
-//	     This empty interface must be convertible to one of the
-//	     following types:
-//
-//
-//	     1. nil - A nil value is valid and generates an empty
-//	              collection of error prefix and error context
-//	              information.
-//
-//	     2. string - A string containing error prefix information.
-//
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
-//
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
-//
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
-//
-//	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
-//
-//	     7. IBasicErrorPrefix - An interface to a method generating
-//	                            a two-dimensional slice of strings
-//	                            containing error prefix and error
-//	                            context information.
-//
-//	     If parameter 'errorPrefix' is NOT convertible to one of
-//	     the valid types listed above, it will be considered
-//	     invalid and trigger the return of an error.
-//
-//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//	     the 'errpref' software package,
-//	     "github.com/MikeAustin71/errpref".
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//	 RuneArrayCollection
-//	    - If this method completes successfully, a fully populated
-//	      instance of RuneArrayCollection will be returned. This
-//	      Rune Array Collection will be generated from the string
-//	      array contained within the current instance of
-//	      StringArrayDto.
-//
-//
-//		error
-//		   - If the method completes successfully and no errors are
-//		     encountered this return value is set to 'nil'. Otherwise,
-//		     if errors are encountered, this return value will contain
-//		     an appropriate error message.
-//
-//		     If an error message is returned, the text value of input
-//		     parameter 'errorPrefix' will be inserted or prefixed at
-//		     the beginning of the error message.
-func (strArrayDto *StringArrayDto) GetRuneArrayCollection(
-	errorPrefix interface{}) (
-	RuneArrayCollection,
-	error) {
+//	NONE
+func (strArrayDto *StringArrayDto) GetRuneArrayCollection() RuneArrayCollection {
 
 	if strArrayDto.lock == nil {
 		strArrayDto.lock = new(sync.Mutex)
@@ -866,44 +803,28 @@ func (strArrayDto *StringArrayDto) GetRuneArrayCollection(
 
 	defer strArrayDto.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
 	runeArrayCol := RuneArrayCollection{}
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"StringArrayDto."+
-			"GetRuneArrayCollection()",
-		"")
-
-	if err != nil {
-		return runeArrayCol, err
-	}
 
 	lenStrArray := len(strArrayDto.StrArray)
 
 	if lenStrArray == 0 {
-		return runeArrayCol, err
+		return runeArrayCol
 	}
+
+	runeArrayCol.runeArrayDtoCol =
+		make([]RuneArrayDto, lenStrArray)
 
 	for i := 0; i < lenStrArray; i++ {
 
-		err = runeArrayCol.AddRuneArrayString(
-			strArrayDto.StrArray[i],
-			CharSearchType.LinearTargetStartingIndex(),
-			ePrefix.XCpy(
-				fmt.Sprintf(
-					"<-strArrayDto.StrArray[%v]",
-					i)))
+		runeArrayCol.runeArrayDtoCol[i].CharsArray =
+			[]rune(strArrayDto.StrArray[i])
 
-		if err != nil {
-			return runeArrayCol, err
-		}
+		runeArrayCol.runeArrayDtoCol[i].charSearchType =
+			CharSearchType.LinearTargetStartingIndex()
+
 	}
 
-	return runeArrayCol, err
+	return runeArrayCol
 }
 
 // GetStringArrayLength - Returns the length of the internal string

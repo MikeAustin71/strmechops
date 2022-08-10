@@ -9,7 +9,6 @@ import (
 // RuneArrayCollection - A collection of Rune Array Dto objects.
 //
 // Essentially, this is a collection, or an array, of rune arrays.
-//
 type RuneArrayCollection struct {
 	runeArrayDtoCol []RuneArrayDto
 
@@ -30,103 +29,100 @@ type RuneArrayCollection struct {
 // Valid RuneArrayDto array members must satisfy two criteria in
 // order to be classified as 'valid'.
 //
-//   (1) The RuneArrayDto internal Character Array must have a
-//       length greater than zero.
+//	(1) The RuneArrayDto internal Character Array must have a
+//	    length greater than zero.
 //
-//   (2) The Character Search Type associated with each
-//       RuneArrayDto must be valid.
-//
+//	(2) The Character Search Type associated with each
+//	    RuneArrayDto must be valid.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDtoCol            []RuneArrayDto
-//     - An array of RuneArrayDto objects which be used to replace
-//       the existing Rune Array Dto Collection maintained by the
-//       current instance of RuneArrayCollection.
+//	runeArrayDtoCol            []RuneArrayDto
+//	   - An array of RuneArrayDto objects which be used to replace
+//	     the existing Rune Array Dto Collection maintained by the
+//	     current instance of RuneArrayCollection.
 //
-//       Deep copies of each element in parameter 'runeArrayDtoCol'
-//       will be used to populate the new Rune Array Dto Collection
-//       contained in the current instance of RuneArrayCollection.
+//	     Deep copies of each element in parameter 'runeArrayDtoCol'
+//	     will be used to populate the new Rune Array Dto Collection
+//	     contained in the current instance of RuneArrayCollection.
 //
-//       If this parameter is submitted as a 'nil' or zero length
-//       array, an error will be returned.
+//	     If this parameter is submitted as a 'nil' or zero length
+//	     array, an error will be returned.
 //
-//       If any member element of this array is classified as
-//       invalid, an error will be returned.
+//	     If any member element of this array is classified as
+//	     invalid, an error will be returned.
 //
-//       Valid RuneArrayDto array members must satisfy two criteria
-//       in order to be classified as 'valid'.
+//	     Valid RuneArrayDto array members must satisfy two criteria
+//	     in order to be classified as 'valid'.
 //
-//       (1) The RuneArrayDto internal Character Array must have a
-//           length greater than zero.
+//	     (1) The RuneArrayDto internal Character Array must have a
+//	         length greater than zero.
 //
-//       (2) The Character Search Type associated with each
-//           RuneArrayDto must be valid.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     (2) The Character Search Type associated with each
+//	         RuneArrayDto must be valid.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddCollection(
 	runeArrayDtoCol []RuneArrayDto,
 	errorPrefix interface{}) (
@@ -206,70 +202,68 @@ func (runeArrayCol *RuneArrayCollection) AddCollection(
 //
 // ----------------------------------------------------------------
 //
-// Default Settings
+// # Default Settings
 //
 // The character search type for the RuneArrayDto instance is
 // automatically set to:
 //
-//    CharSearchType.SingleTargetChar()
+//	  CharSearchType.SingleTargetChar()
 //
-//  - A Single Target Character Search Type means that a single
-//    character in the Target Search String will be compared to
-//    all characters in the Test String.
+//	- A Single Target Character Search Type means that a single
+//	  character in the Target Search String will be compared to
+//	  all characters in the Test String.
 //
-//    If a single Target String character equals any character in
-//    the Test String, a 'Match' or successful search outcome will
-//    be declared.
+//	  If a single Target String character equals any character in
+//	  the Test String, a 'Match' or successful search outcome will
+//	  be declared.
 //
-//    The search operation is limited to a single designated Target
-//    Search String character. Each and every one of the Test
-//    String Characters will be compared to this single designated
-//    Target String Search Character. The search operation will
-//    terminate when a matching character is first identified in
-//    the Test String or when the end of the Test String is
-//    encountered.
+//	  The search operation is limited to a single designated Target
+//	  Search String character. Each and every one of the Test
+//	  String Characters will be compared to this single designated
+//	  Target String Search Character. The search operation will
+//	  terminate when a matching character is first identified in
+//	  the Test String or when the end of the Test String is
+//	  encountered.
 //
-//      Example #1
-//                                 1         2         3
-//                Index  0123456789012345678901234567890
-//       Target String: "Hey, Xray-4 is the call sign."
-//       Target String Starting Index: 5
-//         Test String: "ZFXyURJK"
+//	    Example #1
+//	                               1         2         3
+//	              Index  0123456789012345678901234567890
+//	     Target String: "Hey, Xray-4 is the call sign."
+//	     Target String Starting Index: 5
+//	       Test String: "ZFXyURJK"
 //
-//    In this example of a Single Target Character Search, the
-//    search will begin and end at Target Search String index
-//    number 5. Since one of the Test String Characters ('X')
-//    matches the 'X' character at index number 5 in the Target
-//    Search String, the search operation is classified as a
-//    success. A matching character was found.
+//	  In this example of a Single Target Character Search, the
+//	  search will begin and end at Target Search String index
+//	  number 5. Since one of the Test String Characters ('X')
+//	  matches the 'X' character at index number 5 in the Target
+//	  Search String, the search operation is classified as a
+//	  success. A matching character was found.
 //
-//      Example #2
-//                                 1         2         3
-//                Index  0123456789012345678901234567890
-//       Target String: "Hey, Xray-4 is the call sign."
-//       Target String Starting Index: 0
-//         Test String: "ZFXyURJK"
+//	    Example #2
+//	                               1         2         3
+//	              Index  0123456789012345678901234567890
+//	     Target String: "Hey, Xray-4 is the call sign."
+//	     Target String Starting Index: 0
+//	       Test String: "ZFXyURJK"
 //
-//    In this second example of a Single Target Character Search,
-//    the search will begin and end at Target Search String index
-//    number 0. Since NONE of the Test String Characters matches
-//    the 'H' character at index number 0 in the Target Search
-//    String, the search operation is classified as a failure. No
-//    matching character was found.
+//	  In this second example of a Single Target Character Search,
+//	  the search will begin and end at Target Search String index
+//	  number 0. Since NONE of the Test String Characters matches
+//	  the 'H' character at index number 0 in the Target Search
+//	  String, the search operation is classified as a failure. No
+//	  matching character was found.
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (runeArrayCol *RuneArrayCollection) AddLatinAlphabetEnglishDto() {
 
 	if runeArrayCol.lock == nil {
@@ -296,70 +290,68 @@ func (runeArrayCol *RuneArrayCollection) AddLatinAlphabetEnglishDto() {
 //
 // ----------------------------------------------------------------
 //
-// Default Settings
+// # Default Settings
 //
 // The character search type for the returned instance of
 // RuneArrayDto is automatically set to:
 //
-//    CharSearchType.SingleTargetChar()
+//	  CharSearchType.SingleTargetChar()
 //
-//  - A Single Target Character Search Type means that a single
-//    character in the Target Search String will be compared to
-//    all characters in the Test String.
+//	- A Single Target Character Search Type means that a single
+//	  character in the Target Search String will be compared to
+//	  all characters in the Test String.
 //
-//    If a single Target String character equals any character in
-//    the Test String, a 'Match' or successful search outcome will
-//    be declared.
+//	  If a single Target String character equals any character in
+//	  the Test String, a 'Match' or successful search outcome will
+//	  be declared.
 //
-//    The search operation is limited to a single designated Target
-//    Search String character. Each and every one of the Test
-//    String Characters will be compared to this single designated
-//    Target String Search Character. The search operation will
-//    terminate when a matching character is first identified in
-//    the Test String or when the end of the Test String is
-//    encountered.
+//	  The search operation is limited to a single designated Target
+//	  Search String character. Each and every one of the Test
+//	  String Characters will be compared to this single designated
+//	  Target String Search Character. The search operation will
+//	  terminate when a matching character is first identified in
+//	  the Test String or when the end of the Test String is
+//	  encountered.
 //
-//      Example #1
-//                                 1         2         3
-//                Index  0123456789012345678901234567890
-//       Target String: "Hey, Xray-4 is the call sign."
-//       Target String Starting Index: 5
-//         Test String: "ZFXyURJK"
+//	    Example #1
+//	                               1         2         3
+//	              Index  0123456789012345678901234567890
+//	     Target String: "Hey, Xray-4 is the call sign."
+//	     Target String Starting Index: 5
+//	       Test String: "ZFXyURJK"
 //
-//    In this example of a Single Target Character Search, the
-//    search will begin and end at Target Search String index
-//    number 5. Since one of the Test String Characters ('X')
-//    matches the 'X' character at index number 5 in the Target
-//    Search String, the search operation is classified as a
-//    success. A matching character was found.
+//	  In this example of a Single Target Character Search, the
+//	  search will begin and end at Target Search String index
+//	  number 5. Since one of the Test String Characters ('X')
+//	  matches the 'X' character at index number 5 in the Target
+//	  Search String, the search operation is classified as a
+//	  success. A matching character was found.
 //
-//      Example #2
-//                                 1         2         3
-//                Index  0123456789012345678901234567890
-//       Target String: "Hey, Xray-4 is the call sign."
-//       Target String Starting Index: 0
-//         Test String: "ZFXyURJK"
+//	    Example #2
+//	                               1         2         3
+//	              Index  0123456789012345678901234567890
+//	     Target String: "Hey, Xray-4 is the call sign."
+//	     Target String Starting Index: 0
+//	       Test String: "ZFXyURJK"
 //
-//    In this second example of a Single Target Character Search,
-//    the search will begin and end at Target Search String index
-//    number 0. Since NONE of the Test String Characters matches
-//    the 'H' character at index number 0 in the Target Search
-//    String, the search operation is classified as a failure. No
-//    matching character was found.
+//	  In this second example of a Single Target Character Search,
+//	  the search will begin and end at Target Search String index
+//	  number 0. Since NONE of the Test String Characters matches
+//	  the 'H' character at index number 0 in the Target Search
+//	  String, the search operation is classified as a failure. No
+//	  matching character was found.
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 
 	if runeArrayCol.lock == nil {
@@ -380,7 +372,8 @@ func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 // appends that instance to the RuneArrayDto Collection.
 //
 // This differs from method:
-//  RuneArrayCollection.AddRuneArrayDtoDeepCopy()
+//
+//	RuneArrayCollection.AddRuneArrayDtoDeepCopy()
 //
 // This method appends the passed RuneArrayDto instance to the
 // collection. The Deep Copy method appends a copy of the
@@ -388,87 +381,84 @@ func (runeArrayCol *RuneArrayCollection) AddNumericDigitsDto() {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // RuneArrayDto instances added to this collection MUST HAVE a
 // valid Character Search Type. Reference RuneArrayDto member
 // variable 'RuneArrayDto.charSearchType'.
 //
-//
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDto               RuneArrayDto
-//     - An instance of RuneArrayDto. This instance will be
-//       appended to the RuneArrayDto collection maintained by this
-//       instance of RuneArrayCollection.
+//	runeArrayDto               RuneArrayDto
+//	   - An instance of RuneArrayDto. This instance will be
+//	     appended to the RuneArrayDto collection maintained by this
+//	     instance of RuneArrayCollection.
 //
-//       If 'runeArrayDto' has an invalid character search type
-//       (runeArrayDto.charSearchType), an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'runeArrayDto' has an invalid character search type
+//	     (runeArrayDto.charSearchType), an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 	runeArrayDto RuneArrayDto,
 	errorPrefix interface{}) (
@@ -534,7 +524,8 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 // Collection.
 //
 // This differs from method:
-//  RuneArrayCollection.AddRuneArrayDto()
+//
+//	RuneArrayCollection.AddRuneArrayDto()
 //
 // This method appends a deep copy of the passed RuneArrayDto
 // instance to the collection. The 'AddRuneArrayDto()' method
@@ -542,87 +533,84 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDto(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // RuneArrayDto instances added to this collection MUST HAVE a
 // valid Character Search Type. Reference RuneArrayDto member
 // variable 'RuneArrayDto.charSearchType'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDto               RuneArrayDto
-//     - An instance of RuneArrayDto. A deep copy of this instance
-//       will be appended to the RuneArrayDto collection maintained
-//       by this instance of RuneArrayCollection.
+//	runeArrayDto               RuneArrayDto
+//	   - An instance of RuneArrayDto. A deep copy of this instance
+//	     will be appended to the RuneArrayDto collection maintained
+//	     by this instance of RuneArrayCollection.
 //
-//       If 'runeArrayDto' has an invalid character search type
-//       (runeArrayDto.charSearchType), an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'runeArrayDto' has an invalid character search type
+//	     (runeArrayDto.charSearchType), an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 	runeArrayDto RuneArrayDto,
 	errorPrefix interface{}) (
@@ -698,205 +686,201 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayDtoDeepCopy(
 // Rune Array Collection. The new RuneArrayDto is created from
 // a rune array input parameter.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  charArray                  []rune
-//     - A rune array used to create the new instance of
-//       RuneArrayDto which is then added to the Rune Array
-//       collection.
+//	charArray                  []rune
+//	   - A rune array used to create the new instance of
+//	     RuneArrayDto which is then added to the Rune Array
+//	     collection.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
-//
-//
-//  charSearchType             CharacterSearchType
-//     - An enumeration value used to specify the type target
-//       string search algorithm applied by the returned instance
-//       of RuneArrayDto. If 'charSearchType' is invalid, an error
-//       will be returned.
+//	     If this array is empty or has a zero length, an error will
+//	     be returned.
 //
 //
-//       The Character Search Type must be set to one of the
-//       following enumeration values:
-//
-//        CharSearchType.LinearTargetStartingIndex()
-//        CharSearchType.SingleTargetChar()
-//        CharSearchType.LinearEndOfString()
-//
-//    Character Search Type Options
-//
-//    CharSearchType.LinearTargetStartingIndex()
-//    - Designates the search type as a Linear Target Starting
-//      Index Search Type. This means that each character in the
-//      Target Search String will be compared to each corresponding
-//      character in the Test String beginning at a specified
-//      starting index in the Target Search String.
-//
-//      The search will proceed for from left to right in Test
-//      Character Sequence.
-//
-//      If the Test Characters are NOT found in the Target Search
-//      String beginning at the designated Target String Starting
-//      Index, the search outcome will be unsuccessful and NO match
-//      will be declared.
-//
-//      A 'Match', or successful search outcome, is defined as the
-//      case where each character in the Target String matches each
-//      corresponding character in the Test String beginning at the
-//      designated Target String Starting Index.
+//	charSearchType             CharacterSearchType
+//	   - An enumeration value used to specify the type target
+//	     string search algorithm applied by the returned instance
+//	     of RuneArrayDto. If 'charSearchType' is invalid, an error
+//	     will be returned.
 //
 //
-//        Example
-//                                  1         2         3
-//                 Index  0123456789012345678901234567890
-//        Target String: "Hey, Xray-4 is the call sign."
-//        Target String Starting Index: 5
-//          Test String: "Xray"
+//	     The Character Search Type must be set to one of the
+//	     following enumeration values:
 //
-//      In this example of a Linear Target Starting Index Search, a
-//      match between the Target String and Test String will be
-//      declared, if and only if, the search begins at Target
-//      String index number 5. If the search begins at an any index
-//      other than 5, no match will be declared and the search will
-//      be classified as unsuccessful.
+//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.SingleTargetChar()
+//	      CharSearchType.LinearEndOfString()
 //
-//      NOTE: Linear Target Starting Index is the default search
-//            type.
+//	  Character Search Type Options
 //
+//	  CharSearchType.LinearTargetStartingIndex()
+//	  - Designates the search type as a Linear Target Starting
+//	    Index Search Type. This means that each character in the
+//	    Target Search String will be compared to each corresponding
+//	    character in the Test String beginning at a specified
+//	    starting index in the Target Search String.
 //
-//   CharSearchType.SingleTargetChar()
-//    - Designates the search type as a Single Target Character
-//      Search Type. This means that a single character in the
-//      Target Search String will be compared to all characters in
-//      the Test String.
+//	    The search will proceed for from left to right in Test
+//	    Character Sequence.
 //
-//      If a single Target String character equals any character in
-//      the Test String, a 'Match' or successful search outcome
-//      will be declared.
+//	    If the Test Characters are NOT found in the Target Search
+//	    String beginning at the designated Target String Starting
+//	    Index, the search outcome will be unsuccessful and NO match
+//	    will be declared.
 //
-//      The search will proceed from left to right in the Target
-//      String. Each Target String Character will be compared to
-//      all characters in the Test String looking for the first
-//      matching Test String Character. The search will terminate
-//      when a matching character is first identified or when the
-//      end of the Target String is encountered.
+//	    A 'Match', or successful search outcome, is defined as the
+//	    case where each character in the Target String matches each
+//	    corresponding character in the Test String beginning at the
+//	    designated Target String Starting Index.
 //
 //
-//        Example
-//                                   1         2         3
-//                  Index  0123456789012345678901234567890
-//         Target String: "Hey, Xray-4 is the call sign."
-//         Target String Starting Index: 0
-//           Test String: "ZFXyURJK"
+//	      Example
+//	                                1         2         3
+//	               Index  0123456789012345678901234567890
+//	      Target String: "Hey, Xray-4 is the call sign."
+//	      Target String Starting Index: 5
+//	        Test String: "Xray"
 //
-//      In this example of a Single Target Character Search, the
-//      search will terminate at Target String index numbers 5
-//      because it is the first Target String index to match one
-//      of the Test String Characters ('X').
+//	    In this example of a Linear Target Starting Index Search, a
+//	    match between the Target String and Test String will be
+//	    declared, if and only if, the search begins at Target
+//	    String index number 5. If the search begins at an any index
+//	    other than 5, no match will be declared and the search will
+//	    be classified as unsuccessful.
 //
-//
-//   CharSearchType.LinearEndOfString()
-//    - Designates the search type as a Linear End Of String
-//      Search. With this type of search operation, the entire
-//      Target Search String will be searched from left to right
-//      for the first occurrence of the Test String.
-//
-//      The search will begin the Target String Starting Index and
-//      proceed left to right until (1) an instance of the entire
-//      Test String is located or (2) the end of the Target Search
-//      String is encountered.
-//
-//      This is a linear search, so a 'Match' requires that each
-//      character in Target Search String must correspond to a
-//      matching character in the Test String.
-//
-//           Example
-//                                      1         2         3
-//                     Index  0123456789012345678901234567890
-//            Target String: "Hey, Xray-4 is the call sign."
-//            Target String Starting Index: 0
-//              Test String: "Xray-4"
-//
-//      In this example of a Linear End of String Search, the
-//      search operation will begin comparing corresponding
-//      characters in the Target Search String and the Test String
-//      beginning at index zero. The comparison will fail at index
-//      zero, but the search algorithm will continue attempting to
-//      find the Test String at indexes 1,2, 3 & 4. The Test String
-//      will be found beginning at index number 5 and the search
-//      algorithm will terminate at that point with a successful
-//      outcome or 'Match' result.
+//	    NOTE: Linear Target Starting Index is the default search
+//	          type.
 //
 //
-//   For more information see the source code comments for type,
-//   CharacterSearchType.
+//	 CharSearchType.SingleTargetChar()
+//	  - Designates the search type as a Single Target Character
+//	    Search Type. This means that a single character in the
+//	    Target Search String will be compared to all characters in
+//	    the Test String.
+//
+//	    If a single Target String character equals any character in
+//	    the Test String, a 'Match' or successful search outcome
+//	    will be declared.
+//
+//	    The search will proceed from left to right in the Target
+//	    String. Each Target String Character will be compared to
+//	    all characters in the Test String looking for the first
+//	    matching Test String Character. The search will terminate
+//	    when a matching character is first identified or when the
+//	    end of the Target String is encountered.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	      Example
+//	                                 1         2         3
+//	                Index  0123456789012345678901234567890
+//	       Target String: "Hey, Xray-4 is the call sign."
+//	       Target String Starting Index: 0
+//	         Test String: "ZFXyURJK"
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	    In this example of a Single Target Character Search, the
+//	    search will terminate at Target String index numbers 5
+//	    because it is the first Target String index to match one
+//	    of the Test String Characters ('X').
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//
+//	 CharSearchType.LinearEndOfString()
+//	  - Designates the search type as a Linear End Of String
+//	    Search. With this type of search operation, the entire
+//	    Target Search String will be searched from left to right
+//	    for the first occurrence of the Test String.
+//
+//	    The search will begin the Target String Starting Index and
+//	    proceed left to right until (1) an instance of the entire
+//	    Test String is located or (2) the end of the Target Search
+//	    String is encountered.
+//
+//	    This is a linear search, so a 'Match' requires that each
+//	    character in Target Search String must correspond to a
+//	    matching character in the Test String.
+//
+//	         Example
+//	                                    1         2         3
+//	                   Index  0123456789012345678901234567890
+//	          Target String: "Hey, Xray-4 is the call sign."
+//	          Target String Starting Index: 0
+//	            Test String: "Xray-4"
+//
+//	    In this example of a Linear End of String Search, the
+//	    search operation will begin comparing corresponding
+//	    characters in the Target Search String and the Test String
+//	    beginning at index zero. The comparison will fail at index
+//	    zero, but the search algorithm will continue attempting to
+//	    find the Test String at indexes 1,2, 3 & 4. The Test String
+//	    will be found beginning at index number 5 and the search
+//	    algorithm will terminate at that point with a successful
+//	    outcome or 'Match' result.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 For more information see the source code comments for type,
+//	 CharacterSearchType.
 //
-//       2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     2. string - A string containing error prefix information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunes(
 	charArray []rune,
 	charSearchType CharacterSearchType,
@@ -948,229 +932,225 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunes(
 // a rune array input parameter. Users also have the option of
 // attaching text descriptions to the new RuneArrayDto instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  charArray                  []rune
-//     - A rune array used to create the new instance of
-//       RuneArrayDto which is then added to the Rune Array
-//       collection.
+//	charArray                  []rune
+//	   - A rune array used to create the new instance of
+//	     RuneArrayDto which is then added to the Rune Array
+//	     collection.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
-//
-//
-//  description1               string
-//
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the RuneArrayDto
-//       instance added to the Rune Array Collection. This
-//       parameter configures the first of two description
-//       strings.
-//
-//       This parameter is optional and not required. Zero length
-//       strings will NOT return an error.
+//	     If this array is empty or has a zero length, an error will
+//	     be returned.
 //
 //
-//  description2               string
+//	description1               string
 //
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the RuneArrayDto
-//       instance added to the Rune Array Collection. This
-//       parameter configures the second of two description
-//       strings.
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the RuneArrayDto
+//	     instance added to the Rune Array Collection. This
+//	     parameter configures the first of two description
+//	     strings.
 //
-//       This parameter is optional and not required. Zero length
-//       strings will NOT return an error.
-//
-//
-//  charSearchType             CharacterSearchType
-//     - An enumeration value used to specify the type target
-//       string search algorithm applied by the returned instance
-//       of RuneArrayDto. If 'charSearchType' is invalid, an error
-//       will be returned.
+//	     This parameter is optional and not required. Zero length
+//	     strings will NOT return an error.
 //
 //
-//       The Character Search Type must be set to one of the
-//       following enumeration values:
+//	description2               string
 //
-//        CharSearchType.LinearTargetStartingIndex()
-//        CharSearchType.SingleTargetChar()
-//        CharSearchType.LinearEndOfString()
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the RuneArrayDto
+//	     instance added to the Rune Array Collection. This
+//	     parameter configures the second of two description
+//	     strings.
 //
-//    Character Search Type Options
-//
-//    CharSearchType.LinearTargetStartingIndex()
-//    - Designates the search type as a Linear Target Starting
-//      Index Search Type. This means that each character in the
-//      Target Search String will be compared to each corresponding
-//      character in the Test String beginning at a specified
-//      starting index in the Target Search String.
-//
-//      The search will proceed for from left to right in Test
-//      Character Sequence.
-//
-//      If the Test Characters are NOT found in the Target Search
-//      String beginning at the designated Target String Starting
-//      Index, the search outcome will be unsuccessful and NO match
-//      will be declared.
-//
-//      A 'Match', or successful search outcome, is defined as the
-//      case where each character in the Target String matches each
-//      corresponding character in the Test String beginning at the
-//      designated Target String Starting Index.
+//	     This parameter is optional and not required. Zero length
+//	     strings will NOT return an error.
 //
 //
-//        Example
-//                                  1         2         3
-//                 Index  0123456789012345678901234567890
-//        Target String: "Hey, Xray-4 is the call sign."
-//        Target String Starting Index: 5
-//          Test String: "Xray"
-//
-//      In this example of a Linear Target Starting Index Search, a
-//      match between the Target String and Test String will be
-//      declared, if and only if, the search begins at Target
-//      String index number 5. If the search begins at an any index
-//      other than 5, no match will be declared and the search will
-//      be classified as unsuccessful.
-//
-//      NOTE: Linear Target Starting Index is the default search
-//            type.
+//	charSearchType             CharacterSearchType
+//	   - An enumeration value used to specify the type target
+//	     string search algorithm applied by the returned instance
+//	     of RuneArrayDto. If 'charSearchType' is invalid, an error
+//	     will be returned.
 //
 //
-//   CharSearchType.SingleTargetChar()
-//    - Designates the search type as a Single Target Character
-//      Search Type. This means that a single character in the
-//      Target Search String will be compared to all characters in
-//      the Test String.
+//	     The Character Search Type must be set to one of the
+//	     following enumeration values:
 //
-//      If a single Target String character equals any character in
-//      the Test String, a 'Match' or successful search outcome
-//      will be declared.
+//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.SingleTargetChar()
+//	      CharSearchType.LinearEndOfString()
 //
-//      The search will proceed from left to right in the Target
-//      String. Each Target String Character will be compared to
-//      all characters in the Test String looking for the first
-//      matching Test String Character. The search will terminate
-//      when a matching character is first identified or when the
-//      end of the Target String is encountered.
+//	  Character Search Type Options
 //
+//	  CharSearchType.LinearTargetStartingIndex()
+//	  - Designates the search type as a Linear Target Starting
+//	    Index Search Type. This means that each character in the
+//	    Target Search String will be compared to each corresponding
+//	    character in the Test String beginning at a specified
+//	    starting index in the Target Search String.
 //
-//        Example
-//                                   1         2         3
-//                  Index  0123456789012345678901234567890
-//         Target String: "Hey, Xray-4 is the call sign."
-//         Target String Starting Index: 0
-//           Test String: "ZFXyURJK"
+//	    The search will proceed for from left to right in Test
+//	    Character Sequence.
 //
-//      In this example of a Single Target Character Search, the
-//      search will terminate at Target String index numbers 5
-//      because it is the first Target String index to match one
-//      of the Test String Characters ('X').
+//	    If the Test Characters are NOT found in the Target Search
+//	    String beginning at the designated Target String Starting
+//	    Index, the search outcome will be unsuccessful and NO match
+//	    will be declared.
 //
-//
-//   CharSearchType.LinearEndOfString()
-//    - Designates the search type as a Linear End Of String
-//      Search. With this type of search operation, the entire
-//      Target Search String will be searched from left to right
-//      for the first occurrence of the Test String.
-//
-//      The search will begin the Target String Starting Index and
-//      proceed left to right until (1) an instance of the entire
-//      Test String is located or (2) the end of the Target Search
-//      String is encountered.
-//
-//      This is a linear search, so a 'Match' requires that each
-//      character in Target Search String must correspond to a
-//      matching character in the Test String.
-//
-//           Example
-//                                      1         2         3
-//                     Index  0123456789012345678901234567890
-//            Target String: "Hey, Xray-4 is the call sign."
-//            Target String Starting Index: 0
-//              Test String: "Xray-4"
-//
-//      In this example of a Linear End of String Search, the
-//      search operation will begin comparing corresponding
-//      characters in the Target Search String and the Test String
-//      beginning at index zero. The comparison will fail at index
-//      zero, but the search algorithm will continue attempting to
-//      find the Test String at indexes 1,2, 3 & 4. The Test String
-//      will be found beginning at index number 5 and the search
-//      algorithm will terminate at that point with a successful
-//      outcome or 'Match' result.
+//	    A 'Match', or successful search outcome, is defined as the
+//	    case where each character in the Target String matches each
+//	    corresponding character in the Test String beginning at the
+//	    designated Target String Starting Index.
 //
 //
-//   For more information see the source code comments for type,
-//   CharacterSearchType.
+//	      Example
+//	                                1         2         3
+//	               Index  0123456789012345678901234567890
+//	      Target String: "Hey, Xray-4 is the call sign."
+//	      Target String Starting Index: 5
+//	        Test String: "Xray"
+//
+//	    In this example of a Linear Target Starting Index Search, a
+//	    match between the Target String and Test String will be
+//	    declared, if and only if, the search begins at Target
+//	    String index number 5. If the search begins at an any index
+//	    other than 5, no match will be declared and the search will
+//	    be classified as unsuccessful.
+//
+//	    NOTE: Linear Target Starting Index is the default search
+//	          type.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 CharSearchType.SingleTargetChar()
+//	  - Designates the search type as a Single Target Character
+//	    Search Type. This means that a single character in the
+//	    Target Search String will be compared to all characters in
+//	    the Test String.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	    If a single Target String character equals any character in
+//	    the Test String, a 'Match' or successful search outcome
+//	    will be declared.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	    The search will proceed from left to right in the Target
+//	    String. Each Target String Character will be compared to
+//	    all characters in the Test String looking for the first
+//	    matching Test String Character. The search will terminate
+//	    when a matching character is first identified or when the
+//	    end of the Target String is encountered.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	      Example
+//	                                 1         2         3
+//	                Index  0123456789012345678901234567890
+//	       Target String: "Hey, Xray-4 is the call sign."
+//	       Target String Starting Index: 0
+//	         Test String: "ZFXyURJK"
 //
-//       2. string - A string containing error prefix information.
+//	    In this example of a Single Target Character Search, the
+//	    search will terminate at Target String index numbers 5
+//	    because it is the first Target String index to match one
+//	    of the Test String Characters ('X').
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	 CharSearchType.LinearEndOfString()
+//	  - Designates the search type as a Linear End Of String
+//	    Search. With this type of search operation, the entire
+//	    Target Search String will be searched from left to right
+//	    for the first occurrence of the Test String.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	    The search will begin the Target String Starting Index and
+//	    proceed left to right until (1) an instance of the entire
+//	    Test String is located or (2) the end of the Target Search
+//	    String is encountered.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	    This is a linear search, so a 'Match' requires that each
+//	    character in Target Search String must correspond to a
+//	    matching character in the Test String.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	         Example
+//	                                    1         2         3
+//	                   Index  0123456789012345678901234567890
+//	          Target String: "Hey, Xray-4 is the call sign."
+//	          Target String Starting Index: 0
+//	            Test String: "Xray-4"
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	    In this example of a Linear End of String Search, the
+//	    search operation will begin comparing corresponding
+//	    characters in the Target Search String and the Test String
+//	    beginning at index zero. The comparison will fail at index
+//	    zero, but the search algorithm will continue attempting to
+//	    find the Test String at indexes 1,2, 3 & 4. The Test String
+//	    will be found beginning at index number 5 and the search
+//	    algorithm will terminate at that point with a successful
+//	    outcome or 'Match' result.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
 //
+//	 For more information see the source code comments for type,
+//	 CharacterSearchType.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunesDesc(
 	charArray []rune,
 	description1 string,
@@ -1225,205 +1205,201 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayRunesDesc(
 // Rune Array Collection. The new RuneArrayDto is created from
 // an input parameter of type string.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  stringChars                string
-//     - A character string used to create the new instance of
-//       RuneArrayDto which is then added to the Rune Array
-//       collection.
+//	stringChars                string
+//	   - A character string used to create the new instance of
+//	     RuneArrayDto which is then added to the Rune Array
+//	     collection.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
-//
-//
-//  charSearchType             CharacterSearchType
-//     - An enumeration value used to specify the type target
-//       string search algorithm applied by the returned instance
-//       of RuneArrayDto. If 'charSearchType' is invalid, an error
-//       will be returned.
+//	     If this array is empty or has a zero length, an error will
+//	     be returned.
 //
 //
-//       The Character Search Type must be set to one of the
-//       following enumeration values:
-//
-//        CharSearchType.LinearTargetStartingIndex()
-//        CharSearchType.SingleTargetChar()
-//        CharSearchType.LinearEndOfString()
-//
-//    Character Search Type Options
-//
-//    CharSearchType.LinearTargetStartingIndex()
-//    - Designates the search type as a Linear Target Starting
-//      Index Search Type. This means that each character in the
-//      Target Search String will be compared to each corresponding
-//      character in the Test String beginning at a specified
-//      starting index in the Target Search String.
-//
-//      The search will proceed for from left to right in Test
-//      Character Sequence.
-//
-//      If the Test Characters are NOT found in the Target Search
-//      String beginning at the designated Target String Starting
-//      Index, the search outcome will be unsuccessful and NO match
-//      will be declared.
-//
-//      A 'Match', or successful search outcome, is defined as the
-//      case where each character in the Target String matches each
-//      corresponding character in the Test String beginning at the
-//      designated Target String Starting Index.
+//	charSearchType             CharacterSearchType
+//	   - An enumeration value used to specify the type target
+//	     string search algorithm applied by the returned instance
+//	     of RuneArrayDto. If 'charSearchType' is invalid, an error
+//	     will be returned.
 //
 //
-//        Example
-//                                  1         2         3
-//                 Index  0123456789012345678901234567890
-//        Target String: "Hey, Xray-4 is the call sign."
-//        Target String Starting Index: 5
-//          Test String: "Xray"
+//	     The Character Search Type must be set to one of the
+//	     following enumeration values:
 //
-//      In this example of a Linear Target Starting Index Search, a
-//      match between the Target String and Test String will be
-//      declared, if and only if, the search begins at Target
-//      String index number 5. If the search begins at an any index
-//      other than 5, no match will be declared and the search will
-//      be classified as unsuccessful.
+//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.SingleTargetChar()
+//	      CharSearchType.LinearEndOfString()
 //
-//      NOTE: Linear Target Starting Index is the default search
-//            type.
+//	  Character Search Type Options
 //
+//	  CharSearchType.LinearTargetStartingIndex()
+//	  - Designates the search type as a Linear Target Starting
+//	    Index Search Type. This means that each character in the
+//	    Target Search String will be compared to each corresponding
+//	    character in the Test String beginning at a specified
+//	    starting index in the Target Search String.
 //
-//   CharSearchType.SingleTargetChar()
-//    - Designates the search type as a Single Target Character
-//      Search Type. This means that a single character in the
-//      Target Search String will be compared to all characters in
-//      the Test String.
+//	    The search will proceed for from left to right in Test
+//	    Character Sequence.
 //
-//      If a single Target String character equals any character in
-//      the Test String, a 'Match' or successful search outcome
-//      will be declared.
+//	    If the Test Characters are NOT found in the Target Search
+//	    String beginning at the designated Target String Starting
+//	    Index, the search outcome will be unsuccessful and NO match
+//	    will be declared.
 //
-//      The search will proceed from left to right in the Target
-//      String. Each Target String Character will be compared to
-//      all characters in the Test String looking for the first
-//      matching Test String Character. The search will terminate
-//      when a matching character is first identified or when the
-//      end of the Target String is encountered.
+//	    A 'Match', or successful search outcome, is defined as the
+//	    case where each character in the Target String matches each
+//	    corresponding character in the Test String beginning at the
+//	    designated Target String Starting Index.
 //
 //
-//        Example
-//                                   1         2         3
-//                  Index  0123456789012345678901234567890
-//         Target String: "Hey, Xray-4 is the call sign."
-//         Target String Starting Index: 0
-//           Test String: "ZFXyURJK"
+//	      Example
+//	                                1         2         3
+//	               Index  0123456789012345678901234567890
+//	      Target String: "Hey, Xray-4 is the call sign."
+//	      Target String Starting Index: 5
+//	        Test String: "Xray"
 //
-//      In this example of a Single Target Character Search, the
-//      search will terminate at Target String index numbers 5
-//      because it is the first Target String index to match one
-//      of the Test String Characters ('X').
+//	    In this example of a Linear Target Starting Index Search, a
+//	    match between the Target String and Test String will be
+//	    declared, if and only if, the search begins at Target
+//	    String index number 5. If the search begins at an any index
+//	    other than 5, no match will be declared and the search will
+//	    be classified as unsuccessful.
 //
-//
-//   CharSearchType.LinearEndOfString()
-//    - Designates the search type as a Linear End Of String
-//      Search. With this type of search operation, the entire
-//      Target Search String will be searched from left to right
-//      for the first occurrence of the Test String.
-//
-//      The search will begin the Target String Starting Index and
-//      proceed left to right until (1) an instance of the entire
-//      Test String is located or (2) the end of the Target Search
-//      String is encountered.
-//
-//      This is a linear search, so a 'Match' requires that each
-//      character in Target Search String must correspond to a
-//      matching character in the Test String.
-//
-//           Example
-//                                      1         2         3
-//                     Index  0123456789012345678901234567890
-//            Target String: "Hey, Xray-4 is the call sign."
-//            Target String Starting Index: 0
-//              Test String: "Xray-4"
-//
-//      In this example of a Linear End of String Search, the
-//      search operation will begin comparing corresponding
-//      characters in the Target Search String and the Test String
-//      beginning at index zero. The comparison will fail at index
-//      zero, but the search algorithm will continue attempting to
-//      find the Test String at indexes 1,2, 3 & 4. The Test String
-//      will be found beginning at index number 5 and the search
-//      algorithm will terminate at that point with a successful
-//      outcome or 'Match' result.
+//	    NOTE: Linear Target Starting Index is the default search
+//	          type.
 //
 //
-//   For more information see the source code comments for type,
-//   CharacterSearchType.
+//	 CharSearchType.SingleTargetChar()
+//	  - Designates the search type as a Single Target Character
+//	    Search Type. This means that a single character in the
+//	    Target Search String will be compared to all characters in
+//	    the Test String.
+//
+//	    If a single Target String character equals any character in
+//	    the Test String, a 'Match' or successful search outcome
+//	    will be declared.
+//
+//	    The search will proceed from left to right in the Target
+//	    String. Each Target String Character will be compared to
+//	    all characters in the Test String looking for the first
+//	    matching Test String Character. The search will terminate
+//	    when a matching character is first identified or when the
+//	    end of the Target String is encountered.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	      Example
+//	                                 1         2         3
+//	                Index  0123456789012345678901234567890
+//	       Target String: "Hey, Xray-4 is the call sign."
+//	       Target String Starting Index: 0
+//	         Test String: "ZFXyURJK"
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	    In this example of a Single Target Character Search, the
+//	    search will terminate at Target String index numbers 5
+//	    because it is the first Target String index to match one
+//	    of the Test String Characters ('X').
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//
+//	 CharSearchType.LinearEndOfString()
+//	  - Designates the search type as a Linear End Of String
+//	    Search. With this type of search operation, the entire
+//	    Target Search String will be searched from left to right
+//	    for the first occurrence of the Test String.
+//
+//	    The search will begin the Target String Starting Index and
+//	    proceed left to right until (1) an instance of the entire
+//	    Test String is located or (2) the end of the Target Search
+//	    String is encountered.
+//
+//	    This is a linear search, so a 'Match' requires that each
+//	    character in Target Search String must correspond to a
+//	    matching character in the Test String.
+//
+//	         Example
+//	                                    1         2         3
+//	                   Index  0123456789012345678901234567890
+//	          Target String: "Hey, Xray-4 is the call sign."
+//	          Target String Starting Index: 0
+//	            Test String: "Xray-4"
+//
+//	    In this example of a Linear End of String Search, the
+//	    search operation will begin comparing corresponding
+//	    characters in the Target Search String and the Test String
+//	    beginning at index zero. The comparison will fail at index
+//	    zero, but the search algorithm will continue attempting to
+//	    find the Test String at indexes 1,2, 3 & 4. The Test String
+//	    will be found beginning at index number 5 and the search
+//	    algorithm will terminate at that point with a successful
+//	    outcome or 'Match' result.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	 For more information see the source code comments for type,
+//	 CharacterSearchType.
 //
-//       2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     2. string - A string containing error prefix information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 	stringChars string,
 	charSearchType CharacterSearchType,
@@ -1475,229 +1451,225 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayString(
 // input parameter of type string. Users also have the option of
 // attaching text descriptions to the new RuneArrayDto instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  stringChars                string
-//     - A character string used to create the new instance of
-//       RuneArrayDto which is then added to the Rune Array
-//       collection.
+//	stringChars                string
+//	   - A character string used to create the new instance of
+//	     RuneArrayDto which is then added to the Rune Array
+//	     collection.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
-//
-//
-//  description1               string
-//
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the RuneArrayDto
-//       instance added to the Rune Array Collection. This
-//       parameter configures the first of two description
-//       strings.
-//
-//       If this descriptive text is not required, set this
-//       parameter to an empty string.
+//	     If this array is empty or has a zero length, an error will
+//	     be returned.
 //
 //
-//  description2               string
+//	description1               string
 //
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the RuneArrayDto
-//       instance added to the Rune Array Collection. This
-//       parameter configures the second of two description
-//       strings.
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the RuneArrayDto
+//	     instance added to the Rune Array Collection. This
+//	     parameter configures the first of two description
+//	     strings.
 //
-//       If this descriptive text is not required, set this
-//       parameter to an empty string.
-//
-//
-//  charSearchType             CharacterSearchType
-//     - An enumeration value used to specify the type target
-//       string search algorithm applied by the returned instance
-//       of RuneArrayDto. If 'charSearchType' is invalid, an error
-//       will be returned.
+//	     If this descriptive text is not required, set this
+//	     parameter to an empty string.
 //
 //
-//       The Character Search Type must be set to one of the
-//       following enumeration values:
+//	description2               string
 //
-//        CharSearchType.LinearTargetStartingIndex()
-//        CharSearchType.SingleTargetChar()
-//        CharSearchType.LinearEndOfString()
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the RuneArrayDto
+//	     instance added to the Rune Array Collection. This
+//	     parameter configures the second of two description
+//	     strings.
 //
-//    Character Search Type Options
-//
-//    CharSearchType.LinearTargetStartingIndex()
-//    - Designates the search type as a Linear Target Starting
-//      Index Search Type. This means that each character in the
-//      Target Search String will be compared to each corresponding
-//      character in the Test String beginning at a specified
-//      starting index in the Target Search String.
-//
-//      The search will proceed for from left to right in Test
-//      Character Sequence.
-//
-//      If the Test Characters are NOT found in the Target Search
-//      String beginning at the designated Target String Starting
-//      Index, the search outcome will be unsuccessful and NO match
-//      will be declared.
-//
-//      A 'Match', or successful search outcome, is defined as the
-//      case where each character in the Target String matches each
-//      corresponding character in the Test String beginning at the
-//      designated Target String Starting Index.
+//	     If this descriptive text is not required, set this
+//	     parameter to an empty string.
 //
 //
-//        Example
-//                                  1         2         3
-//                 Index  0123456789012345678901234567890
-//        Target String: "Hey, Xray-4 is the call sign."
-//        Target String Starting Index: 5
-//          Test String: "Xray"
-//
-//      In this example of a Linear Target Starting Index Search, a
-//      match between the Target String and Test String will be
-//      declared, if and only if, the search begins at Target
-//      String index number 5. If the search begins at an any index
-//      other than 5, no match will be declared and the search will
-//      be classified as unsuccessful.
-//
-//      NOTE: Linear Target Starting Index is the default search
-//            type.
+//	charSearchType             CharacterSearchType
+//	   - An enumeration value used to specify the type target
+//	     string search algorithm applied by the returned instance
+//	     of RuneArrayDto. If 'charSearchType' is invalid, an error
+//	     will be returned.
 //
 //
-//   CharSearchType.SingleTargetChar()
-//    - Designates the search type as a Single Target Character
-//      Search Type. This means that a single character in the
-//      Target Search String will be compared to all characters in
-//      the Test String.
+//	     The Character Search Type must be set to one of the
+//	     following enumeration values:
 //
-//      If a single Target String character equals any character in
-//      the Test String, a 'Match' or successful search outcome
-//      will be declared.
+//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.SingleTargetChar()
+//	      CharSearchType.LinearEndOfString()
 //
-//      The search will proceed from left to right in the Target
-//      String. Each Target String Character will be compared to
-//      all characters in the Test String looking for the first
-//      matching Test String Character. The search will terminate
-//      when a matching character is first identified or when the
-//      end of the Target String is encountered.
+//	  Character Search Type Options
 //
+//	  CharSearchType.LinearTargetStartingIndex()
+//	  - Designates the search type as a Linear Target Starting
+//	    Index Search Type. This means that each character in the
+//	    Target Search String will be compared to each corresponding
+//	    character in the Test String beginning at a specified
+//	    starting index in the Target Search String.
 //
-//        Example
-//                                   1         2         3
-//                  Index  0123456789012345678901234567890
-//         Target String: "Hey, Xray-4 is the call sign."
-//         Target String Starting Index: 0
-//           Test String: "ZFXyURJK"
+//	    The search will proceed for from left to right in Test
+//	    Character Sequence.
 //
-//      In this example of a Single Target Character Search, the
-//      search will terminate at Target String index numbers 5
-//      because it is the first Target String index to match one
-//      of the Test String Characters ('X').
+//	    If the Test Characters are NOT found in the Target Search
+//	    String beginning at the designated Target String Starting
+//	    Index, the search outcome will be unsuccessful and NO match
+//	    will be declared.
 //
-//
-//   CharSearchType.LinearEndOfString()
-//    - Designates the search type as a Linear End Of String
-//      Search. With this type of search operation, the entire
-//      Target Search String will be searched from left to right
-//      for the first occurrence of the Test String.
-//
-//      The search will begin the Target String Starting Index and
-//      proceed left to right until (1) an instance of the entire
-//      Test String is located or (2) the end of the Target Search
-//      String is encountered.
-//
-//      This is a linear search, so a 'Match' requires that each
-//      character in Target Search String must correspond to a
-//      matching character in the Test String.
-//
-//           Example
-//                                      1         2         3
-//                     Index  0123456789012345678901234567890
-//            Target String: "Hey, Xray-4 is the call sign."
-//            Target String Starting Index: 0
-//              Test String: "Xray-4"
-//
-//      In this example of a Linear End of String Search, the
-//      search operation will begin comparing corresponding
-//      characters in the Target Search String and the Test String
-//      beginning at index zero. The comparison will fail at index
-//      zero, but the search algorithm will continue attempting to
-//      find the Test String at indexes 1,2, 3 & 4. The Test String
-//      will be found beginning at index number 5 and the search
-//      algorithm will terminate at that point with a successful
-//      outcome or 'Match' result.
+//	    A 'Match', or successful search outcome, is defined as the
+//	    case where each character in the Target String matches each
+//	    corresponding character in the Test String beginning at the
+//	    designated Target String Starting Index.
 //
 //
-//   For more information see the source code comments for type,
-//   CharacterSearchType.
+//	      Example
+//	                                1         2         3
+//	               Index  0123456789012345678901234567890
+//	      Target String: "Hey, Xray-4 is the call sign."
+//	      Target String Starting Index: 5
+//	        Test String: "Xray"
+//
+//	    In this example of a Linear Target Starting Index Search, a
+//	    match between the Target String and Test String will be
+//	    declared, if and only if, the search begins at Target
+//	    String index number 5. If the search begins at an any index
+//	    other than 5, no match will be declared and the search will
+//	    be classified as unsuccessful.
+//
+//	    NOTE: Linear Target Starting Index is the default search
+//	          type.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 CharSearchType.SingleTargetChar()
+//	  - Designates the search type as a Single Target Character
+//	    Search Type. This means that a single character in the
+//	    Target Search String will be compared to all characters in
+//	    the Test String.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	    If a single Target String character equals any character in
+//	    the Test String, a 'Match' or successful search outcome
+//	    will be declared.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	    The search will proceed from left to right in the Target
+//	    String. Each Target String Character will be compared to
+//	    all characters in the Test String looking for the first
+//	    matching Test String Character. The search will terminate
+//	    when a matching character is first identified or when the
+//	    end of the Target String is encountered.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	      Example
+//	                                 1         2         3
+//	                Index  0123456789012345678901234567890
+//	       Target String: "Hey, Xray-4 is the call sign."
+//	       Target String Starting Index: 0
+//	         Test String: "ZFXyURJK"
 //
-//       2. string - A string containing error prefix information.
+//	    In this example of a Single Target Character Search, the
+//	    search will terminate at Target String index numbers 5
+//	    because it is the first Target String index to match one
+//	    of the Test String Characters ('X').
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	 CharSearchType.LinearEndOfString()
+//	  - Designates the search type as a Linear End Of String
+//	    Search. With this type of search operation, the entire
+//	    Target Search String will be searched from left to right
+//	    for the first occurrence of the Test String.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	    The search will begin the Target String Starting Index and
+//	    proceed left to right until (1) an instance of the entire
+//	    Test String is located or (2) the end of the Target Search
+//	    String is encountered.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	    This is a linear search, so a 'Match' requires that each
+//	    character in Target Search String must correspond to a
+//	    matching character in the Test String.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	         Example
+//	                                    1         2         3
+//	                   Index  0123456789012345678901234567890
+//	          Target String: "Hey, Xray-4 is the call sign."
+//	          Target String Starting Index: 0
+//	            Test String: "Xray-4"
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	    In this example of a Linear End of String Search, the
+//	    search operation will begin comparing corresponding
+//	    characters in the Target Search String and the Test String
+//	    beginning at index zero. The comparison will fail at index
+//	    zero, but the search algorithm will continue attempting to
+//	    find the Test String at indexes 1,2, 3 & 4. The Test String
+//	    will be found beginning at index number 5 and the search
+//	    algorithm will terminate at that point with a successful
+//	    outcome or 'Match' result.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
 //
+//	 For more information see the source code comments for type,
+//	 CharacterSearchType.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) AddRuneArrayStringDesc(
 	stringChars string,
 	description1 string,
@@ -1754,90 +1726,87 @@ func (runeArrayCol *RuneArrayCollection) AddRuneArrayStringDesc(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current RuneArrayCollection instance
 // ('runeArrayCol') will be deleted and overwritten.
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingRuneArrayCol       *RuneArrayCollection
-//     - A pointer to an instance of RuneArrayCollection. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//	incomingRuneArrayCol       *RuneArrayCollection
+//	   - A pointer to an instance of RuneArrayCollection. This
+//	     method will NOT change the values of internal member
+//	     variables contained in this instance.
 //
-//       All data values in this RuneArrayCollection instance
-//       will be copied to current RuneArrayCollection
-//       instance ('runeArrayCol').
+//	     All data values in this RuneArrayCollection instance
+//	     will be copied to current RuneArrayCollection
+//	     instance ('runeArrayCol').
 //
-//       If parameter 'incomingRuneArrayCol' is determined to be
-//       invalid, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If parameter 'incomingRuneArrayCol' is determined to be
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) CopyIn(
 	incomingRuneArrayCol *RuneArrayCollection,
 	errorPrefix interface{}) error {
@@ -1878,78 +1847,75 @@ func (runeArrayCol *RuneArrayCollection) CopyIn(
 // If the current RuneArrayCollection instance contains invalid
 // member variables, this method will return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  RuneArrayCollection
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current RuneArrayCollection instance.
+//	RuneArrayCollection
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current RuneArrayCollection instance.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) CopyOut(
 	errorPrefix interface{}) (
 	RuneArrayCollection,
@@ -1995,84 +1961,81 @@ func (runeArrayCol *RuneArrayCollection) CopyOut(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // Be advised, this method WILL DELETE DATA!
 //
 // The Rune Arrays Collection member element specified by input
 // parameter 'zeroBasedIndex' WILL BE DELETED.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  zeroBasedIndex             int
-//     - Specifies the index of the member element in the Rune
-//       Arrays Collection which will be deleted.
+//	zeroBasedIndex             int
+//	   - Specifies the index of the member element in the Rune
+//	     Arrays Collection which will be deleted.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) DeleteCollectionElement(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
@@ -2114,29 +2077,25 @@ func (runeArrayCol *RuneArrayCollection) DeleteCollectionElement(
 // instance of RuneArrayCollection in an invalid state and
 // unavailable for immediate reuse.
 //
-//
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will members of the internal RuneArrayDto
 // collection. After completion, the internal RuneArrayDto
 // collection will have a value of 'nil'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (runeArrayCol *RuneArrayCollection) Empty() {
 
 	if runeArrayCol.lock == nil {
@@ -2166,33 +2125,30 @@ func (runeArrayCol *RuneArrayCollection) Empty() {
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingRuneArrayCol       *RuneArrayCollection
-//     - A pointer to an instance of RuneArrayCollection. The
-//       internal member variable data values in this instance will
-//       be compared to those in the current instance of
-//       RuneArrayCollection. The results of this comparison
-//       will be returned to the calling functions as a boolean
-//       value.
-//
+//	incomingRuneArrayCol       *RuneArrayCollection
+//	   - A pointer to an instance of RuneArrayCollection. The
+//	     internal member variable data values in this instance will
+//	     be compared to those in the current instance of
+//	     RuneArrayCollection. The results of this comparison
+//	     will be returned to the calling functions as a boolean
+//	     value.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the internal member variable data values contained in
-//       input parameter 'incomingRuneArrayCol' are equivalent
-//       in all respects to those contained in the current instance
-//       of RuneArrayCollection, this return value will be set
-//       to 'true'.
+//	bool
+//	   - If the internal member variable data values contained in
+//	     input parameter 'incomingRuneArrayCol' are equivalent
+//	     in all respects to those contained in the current instance
+//	     of RuneArrayCollection, this return value will be set
+//	     to 'true'.
 //
-//       Otherwise, this method will return 'false'.
-//
+//	     Otherwise, this method will return 'false'.
 func (runeArrayCol *RuneArrayCollection) Equal(
 	incomingRuneArrayCol *RuneArrayCollection) bool {
 
@@ -2221,83 +2177,79 @@ func (runeArrayCol *RuneArrayCollection) Equal(
 // RuneArrayCollection is unchanged by this method. No data will be
 // deleted.
 //
-//
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyRuneArrayCol       []RuneArray
-//     - This method will return an array of RuneArrayDto objects
-//       representing a deep copy of the Rune Array Collection
-//       maintained by the current instance of RuneArrayCollection.
+//	deepCopyRuneArrayCol       []RuneArray
+//	   - This method will return an array of RuneArrayDto objects
+//	     representing a deep copy of the Rune Array Collection
+//	     maintained by the current instance of RuneArrayCollection.
 //
-//       If the current Rune Array Collection is empty, this
-//       return parameter will be set to 'nil' and an error will
-//       be returned.
+//	     If the current Rune Array Collection is empty, this
+//	     return parameter will be set to 'nil' and an error will
+//	     be returned.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) GetCollection(
 	errorPrefix interface{}) (
 	deepCopyRuneArrayCol []RuneArrayDto,
@@ -2363,7 +2315,6 @@ func (runeArrayCol *RuneArrayCollection) GetCollection(
 // RuneArrayDto collection. The returned integer value is therefore
 // equal to the length of the internal array of RuneArrayDto
 // objects.
-//
 func (runeArrayCol *RuneArrayCollection) GetNumberOfRuneArrayDtos() int {
 
 	if runeArrayCol.lock == nil {
@@ -2375,6 +2326,49 @@ func (runeArrayCol *RuneArrayCollection) GetNumberOfRuneArrayDtos() int {
 	defer runeArrayCol.lock.Unlock()
 
 	return len(runeArrayCol.runeArrayDtoCol)
+}
+
+// GetStringArrayDto - Returns an instance of StringArrayDto
+// created from the current instance of RuneArrayCollection.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (runeArrayCol *RuneArrayCollection) GetStringArrayDto() StringArrayDto {
+
+	if runeArrayCol.lock == nil {
+		runeArrayCol.lock = new(sync.Mutex)
+	}
+
+	runeArrayCol.lock.Lock()
+
+	defer runeArrayCol.lock.Unlock()
+
+	newStrArray := StringArrayDto{}
+
+	lenRuneArrayCol := len(runeArrayCol.runeArrayDtoCol)
+
+	if lenRuneArrayCol == 0 {
+		return newStrArray
+	}
+
+	newStrArray.StrArray =
+		make([]string, lenRuneArrayCol)
+
+	for i := 0; i < lenRuneArrayCol; i++ {
+		newStrArray.StrArray[i] =
+			runeArrayCol.runeArrayDtoCol[i].GetCharacterString()
+	}
+
+	return newStrArray
 }
 
 // IsNOP - Stands for 'Is No Operation'.
@@ -2390,7 +2384,6 @@ func (runeArrayCol *RuneArrayCollection) GetNumberOfRuneArrayDtos() int {
 // Otherwise, this method returns 'false' signaling that the
 // current instance of RuneArrayCollection if fully populated,
 // functional and ready to perform assigned tasks.
-//
 func (runeArrayCol *RuneArrayCollection) IsNOP() bool {
 
 	if runeArrayCol.lock == nil {
@@ -2428,11 +2421,11 @@ func (runeArrayCol *RuneArrayCollection) IsNOP() bool {
 // method will return 'false'.
 //
 // This method is identical in function to method:
-//   RuneArrayCollection.IsValidInstanceError
+//
+//	RuneArrayCollection.IsValidInstanceError
 //
 // The only difference is that this method returns a boolean value,
 // while 'IsValidInstanceError()' returns an error.
-//
 func (runeArrayCol *RuneArrayCollection) IsValidInstance() bool {
 
 	if runeArrayCol.lock == nil {
@@ -2470,11 +2463,11 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstance() bool {
 // message.
 //
 // This method is identical in function to method:
-//   RuneArrayCollection.IsValidInstance
+//
+//	RuneArrayCollection.IsValidInstance
 //
 // The only difference is that this method returns an error, while
 // 'IsValidInstance()' returns a boolean value.
-//
 func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 	errorPrefix interface{}) (
 	err error) {
@@ -2524,18 +2517,16 @@ func (runeArrayCol *RuneArrayCollection) IsValidInstanceError(
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  RuneArrayCollection
-//     - This method returns an empty an uninitialized instance of
-//       RuneArrayCollection. The internal RuneArrayDto Collection
-//       is empty.
-//
+//	RuneArrayCollection
+//	   - This method returns an empty an uninitialized instance of
+//	     RuneArrayCollection. The internal RuneArrayDto Collection
+//	     is empty.
 func (runeArrayCol RuneArrayCollection) New() RuneArrayCollection {
 
 	if runeArrayCol.lock == nil {
@@ -2563,228 +2554,224 @@ func (runeArrayCol RuneArrayCollection) New() RuneArrayCollection {
 // have the option of creating tags or descriptive text for the new
 // RuneArrayDto object.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  stringChars                string
-//     - A character string used to create the new instance of
-//       RuneArrayDto which is then added to the Rune Array Dto
-//       Collection.
+//	stringChars                string
+//	   - A character string used to create the new instance of
+//	     RuneArrayDto which is then added to the Rune Array Dto
+//	     Collection.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
-//
-//
-//  description1               string
-//
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the text characters
-//       configured for the returned instance of RuneArrayDto. This
-//       parameter configures the first of two description strings.
-//
-//       If this descriptive text is not required, set this
-//       parameter to an empty string.
+//	     If this array is empty or has a zero length, an error will
+//	     be returned.
 //
 //
-//  description2               string
+//	description1               string
 //
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the text characters
-//       configured for the returned instance of RuneArrayDto. This
-//       parameter configures the second of two description strings.
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the text characters
+//	     configured for the returned instance of RuneArrayDto. This
+//	     parameter configures the first of two description strings.
 //
-//       If this descriptive text is not required, set this
-//       parameter to an empty string.
-//
-//
-//  charSearchType             CharacterSearchType
-//     - An enumeration value used to specify the type target
-//       string search algorithm applied by the RuneArrayDto
-//       instance added to the Rune Array Collection.
-//
-//       If 'charSearchType' is invalid, an error will be returned.
+//	     If this descriptive text is not required, set this
+//	     parameter to an empty string.
 //
 //
-//       The Character Search Type must be set to one of the
-//       following enumeration values:
+//	description2               string
 //
-//        CharSearchType.LinearTargetStartingIndex()
-//        CharSearchType.SingleTargetChar()
-//        CharSearchType.LinearEndOfString()
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the text characters
+//	     configured for the returned instance of RuneArrayDto. This
+//	     parameter configures the second of two description strings.
 //
-//    Character Search Type Options
-//
-//    CharSearchType.LinearTargetStartingIndex()
-//    - Designates the search type as a Linear Target Starting
-//      Index Search Type. This means that each character in the
-//      Target Search String will be compared to each corresponding
-//      character in the Test String beginning at a specified
-//      starting index in the Target Search String.
-//
-//      The search will proceed for from left to right in Test
-//      Character Sequence.
-//
-//      If the Test Characters are NOT found in the Target Search
-//      String beginning at the designated Target String Starting
-//      Index, the search outcome will be unsuccessful and NO match
-//      will be declared.
-//
-//      A 'Match', or successful search outcome, is defined as the
-//      case where each character in the Target String matches each
-//      corresponding character in the Test String beginning at the
-//      designated Target String Starting Index.
+//	     If this descriptive text is not required, set this
+//	     parameter to an empty string.
 //
 //
-//        Example
-//                                  1         2         3
-//                 Index  0123456789012345678901234567890
-//        Target String: "Hey, Xray-4 is the call sign."
-//        Target String Starting Index: 5
-//          Test String: "Xray"
+//	charSearchType             CharacterSearchType
+//	   - An enumeration value used to specify the type target
+//	     string search algorithm applied by the RuneArrayDto
+//	     instance added to the Rune Array Collection.
 //
-//      In this example of a Linear Target Starting Index Search, a
-//      match between the Target String and Test String will be
-//      declared, if and only if, the search begins at Target
-//      String index number 5. If the search begins at an any index
-//      other than 5, no match will be declared and the search will
-//      be classified as unsuccessful.
-//
-//      NOTE: Linear Target Starting Index is the default search
-//            type.
+//	     If 'charSearchType' is invalid, an error will be returned.
 //
 //
-//   CharSearchType.SingleTargetChar()
-//    - Designates the search type as a Single Target Character
-//      Search Type. This means that a single character in the
-//      Target Search String will be compared to all characters in
-//      the Test String.
+//	     The Character Search Type must be set to one of the
+//	     following enumeration values:
 //
-//      If a single Target String character equals any character in
-//      the Test String, a 'Match' or successful search outcome
-//      will be declared.
+//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.SingleTargetChar()
+//	      CharSearchType.LinearEndOfString()
 //
-//      The search will proceed from left to right in the Target
-//      String. Each Target String Character will be compared to
-//      all characters in the Test String looking for the first
-//      matching Test String Character. The search will terminate
-//      when a matching character is first identified or when the
-//      end of the Target String is encountered.
+//	  Character Search Type Options
 //
+//	  CharSearchType.LinearTargetStartingIndex()
+//	  - Designates the search type as a Linear Target Starting
+//	    Index Search Type. This means that each character in the
+//	    Target Search String will be compared to each corresponding
+//	    character in the Test String beginning at a specified
+//	    starting index in the Target Search String.
 //
-//        Example
-//                                   1         2         3
-//                  Index  0123456789012345678901234567890
-//         Target String: "Hey, Xray-4 is the call sign."
-//         Target String Starting Index: 0
-//           Test String: "ZFXyURJK"
+//	    The search will proceed for from left to right in Test
+//	    Character Sequence.
 //
-//      In this example of a Single Target Character Search, the
-//      search will terminate at Target String index numbers 5
-//      because it is the first Target String index to match one
-//      of the Test String Characters ('X').
+//	    If the Test Characters are NOT found in the Target Search
+//	    String beginning at the designated Target String Starting
+//	    Index, the search outcome will be unsuccessful and NO match
+//	    will be declared.
 //
-//
-//   CharSearchType.LinearEndOfString()
-//    - Designates the search type as a Linear End Of String
-//      Search. With this type of search operation, the entire
-//      Target Search String will be searched from left to right
-//      for the first occurrence of the Test String.
-//
-//      The search will begin the Target String Starting Index and
-//      proceed left to right until (1) an instance of the entire
-//      Test String is located or (2) the end of the Target Search
-//      String is encountered.
-//
-//      This is a linear search, so a 'Match' requires that each
-//      character in Target Search String must correspond to a
-//      matching character in the Test String.
-//
-//           Example
-//                                      1         2         3
-//                     Index  0123456789012345678901234567890
-//            Target String: "Hey, Xray-4 is the call sign."
-//            Target String Starting Index: 0
-//              Test String: "Xray-4"
-//
-//      In this example of a Linear End of String Search, the
-//      search operation will begin comparing corresponding
-//      characters in the Target Search String and the Test String
-//      beginning at index zero. The comparison will fail at index
-//      zero, but the search algorithm will continue attempting to
-//      find the Test String at indexes 1,2, 3 & 4. The Test String
-//      will be found beginning at index number 5 and the search
-//      algorithm will terminate at that point with a successful
-//      outcome or 'Match' result.
+//	    A 'Match', or successful search outcome, is defined as the
+//	    case where each character in the Target String matches each
+//	    corresponding character in the Test String beginning at the
+//	    designated Target String Starting Index.
 //
 //
-//   For more information see the source code comments for type,
-//   CharacterSearchType.
+//	      Example
+//	                                1         2         3
+//	               Index  0123456789012345678901234567890
+//	      Target String: "Hey, Xray-4 is the call sign."
+//	      Target String Starting Index: 5
+//	        Test String: "Xray"
+//
+//	    In this example of a Linear Target Starting Index Search, a
+//	    match between the Target String and Test String will be
+//	    declared, if and only if, the search begins at Target
+//	    String index number 5. If the search begins at an any index
+//	    other than 5, no match will be declared and the search will
+//	    be classified as unsuccessful.
+//
+//	    NOTE: Linear Target Starting Index is the default search
+//	          type.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 CharSearchType.SingleTargetChar()
+//	  - Designates the search type as a Single Target Character
+//	    Search Type. This means that a single character in the
+//	    Target Search String will be compared to all characters in
+//	    the Test String.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	    If a single Target String character equals any character in
+//	    the Test String, a 'Match' or successful search outcome
+//	    will be declared.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	    The search will proceed from left to right in the Target
+//	    String. Each Target String Character will be compared to
+//	    all characters in the Test String looking for the first
+//	    matching Test String Character. The search will terminate
+//	    when a matching character is first identified or when the
+//	    end of the Target String is encountered.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	      Example
+//	                                 1         2         3
+//	                Index  0123456789012345678901234567890
+//	       Target String: "Hey, Xray-4 is the call sign."
+//	       Target String Starting Index: 0
+//	         Test String: "ZFXyURJK"
 //
-//       2. string - A string containing error prefix information.
+//	    In this example of a Single Target Character Search, the
+//	    search will terminate at Target String index numbers 5
+//	    because it is the first Target String index to match one
+//	    of the Test String Characters ('X').
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	 CharSearchType.LinearEndOfString()
+//	  - Designates the search type as a Linear End Of String
+//	    Search. With this type of search operation, the entire
+//	    Target Search String will be searched from left to right
+//	    for the first occurrence of the Test String.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	    The search will begin the Target String Starting Index and
+//	    proceed left to right until (1) an instance of the entire
+//	    Test String is located or (2) the end of the Target Search
+//	    String is encountered.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	    This is a linear search, so a 'Match' requires that each
+//	    character in Target Search String must correspond to a
+//	    matching character in the Test String.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	         Example
+//	                                    1         2         3
+//	                   Index  0123456789012345678901234567890
+//	          Target String: "Hey, Xray-4 is the call sign."
+//	          Target String Starting Index: 0
+//	            Test String: "Xray-4"
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	    In this example of a Linear End of String Search, the
+//	    search operation will begin comparing corresponding
+//	    characters in the Target Search String and the Test String
+//	    beginning at index zero. The comparison will fail at index
+//	    zero, but the search algorithm will continue attempting to
+//	    find the Test String at indexes 1,2, 3 & 4. The Test String
+//	    will be found beginning at index number 5 and the search
+//	    algorithm will terminate at that point with a successful
+//	    outcome or 'Match' result.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
 //
+//	 For more information see the source code comments for type,
+//	 CharacterSearchType.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol RuneArrayCollection) NewColMemberString(
 	stringChars string,
 	description1 string,
@@ -2845,228 +2832,224 @@ func (runeArrayCol RuneArrayCollection) NewColMemberString(
 // Users also have the option of creating tags or descriptive text
 // for the new RuneArrayDto object.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  charArray                  []rune
-//     - An array of runes used to populate a new instance of
-//       RuneArrayDto  which is then added to the Rune Array Dto
-//       Collection.
+//	charArray                  []rune
+//	   - An array of runes used to populate a new instance of
+//	     RuneArrayDto  which is then added to the Rune Array Dto
+//	     Collection.
 //
-//       If this array is empty or has a zero length, an error will
-//       be returned.
-//
-//
-//  description1               string
-//
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the text characters
-//       configured for the returned instance of RuneArrayDto. This
-//       parameter configures the first of two description strings.
-//
-//       If this descriptive text is not required, set this
-//       parameter to an empty string.
+//	     If this array is empty or has a zero length, an error will
+//	     be returned.
 //
 //
-//  description2               string
+//	description1               string
 //
-//     - Users have the option of configuring a text string to
-//       describe the function or purpose of the text characters
-//       configured for the returned instance of RuneArrayDto. This
-//       parameter configures the second of two description strings.
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the text characters
+//	     configured for the returned instance of RuneArrayDto. This
+//	     parameter configures the first of two description strings.
 //
-//       If this descriptive text is not required, set this
-//       parameter to an empty string.
-//
-//
-//  charSearchType             CharacterSearchType
-//     - An enumeration value used to specify the type target
-//       string search algorithm applied by the RuneArrayDto
-//       instance added to the Rune Array Collection.
-//
-//       If 'charSearchType' is invalid, an error will be returned.
+//	     If this descriptive text is not required, set this
+//	     parameter to an empty string.
 //
 //
-//       The Character Search Type must be set to one of the
-//       following enumeration values:
+//	description2               string
 //
-//        CharSearchType.LinearTargetStartingIndex()
-//        CharSearchType.SingleTargetChar()
-//        CharSearchType.LinearEndOfString()
+//	   - Users have the option of configuring a text string to
+//	     describe the function or purpose of the text characters
+//	     configured for the returned instance of RuneArrayDto. This
+//	     parameter configures the second of two description strings.
 //
-//    Character Search Type Options
-//
-//    CharSearchType.LinearTargetStartingIndex()
-//    - Designates the search type as a Linear Target Starting
-//      Index Search Type. This means that each character in the
-//      Target Search String will be compared to each corresponding
-//      character in the Test String beginning at a specified
-//      starting index in the Target Search String.
-//
-//      The search will proceed for from left to right in Test
-//      Character Sequence.
-//
-//      If the Test Characters are NOT found in the Target Search
-//      String beginning at the designated Target String Starting
-//      Index, the search outcome will be unsuccessful and NO match
-//      will be declared.
-//
-//      A 'Match', or successful search outcome, is defined as the
-//      case where each character in the Target String matches each
-//      corresponding character in the Test String beginning at the
-//      designated Target String Starting Index.
+//	     If this descriptive text is not required, set this
+//	     parameter to an empty string.
 //
 //
-//        Example
-//                                  1         2         3
-//                 Index  0123456789012345678901234567890
-//        Target String: "Hey, Xray-4 is the call sign."
-//        Target String Starting Index: 5
-//          Test String: "Xray"
+//	charSearchType             CharacterSearchType
+//	   - An enumeration value used to specify the type target
+//	     string search algorithm applied by the RuneArrayDto
+//	     instance added to the Rune Array Collection.
 //
-//      In this example of a Linear Target Starting Index Search, a
-//      match between the Target String and Test String will be
-//      declared, if and only if, the search begins at Target
-//      String index number 5. If the search begins at an any index
-//      other than 5, no match will be declared and the search will
-//      be classified as unsuccessful.
-//
-//      NOTE: Linear Target Starting Index is the default search
-//            type.
+//	     If 'charSearchType' is invalid, an error will be returned.
 //
 //
-//   CharSearchType.SingleTargetChar()
-//    - Designates the search type as a Single Target Character
-//      Search Type. This means that a single character in the
-//      Target Search String will be compared to all characters in
-//      the Test String.
+//	     The Character Search Type must be set to one of the
+//	     following enumeration values:
 //
-//      If a single Target String character equals any character in
-//      the Test String, a 'Match' or successful search outcome
-//      will be declared.
+//	      CharSearchType.LinearTargetStartingIndex()
+//	      CharSearchType.SingleTargetChar()
+//	      CharSearchType.LinearEndOfString()
 //
-//      The search will proceed from left to right in the Target
-//      String. Each Target String Character will be compared to
-//      all characters in the Test String looking for the first
-//      matching Test String Character. The search will terminate
-//      when a matching character is first identified or when the
-//      end of the Target String is encountered.
+//	  Character Search Type Options
 //
+//	  CharSearchType.LinearTargetStartingIndex()
+//	  - Designates the search type as a Linear Target Starting
+//	    Index Search Type. This means that each character in the
+//	    Target Search String will be compared to each corresponding
+//	    character in the Test String beginning at a specified
+//	    starting index in the Target Search String.
 //
-//        Example
-//                                   1         2         3
-//                  Index  0123456789012345678901234567890
-//         Target String: "Hey, Xray-4 is the call sign."
-//         Target String Starting Index: 0
-//           Test String: "ZFXyURJK"
+//	    The search will proceed for from left to right in Test
+//	    Character Sequence.
 //
-//      In this example of a Single Target Character Search, the
-//      search will terminate at Target String index numbers 5
-//      because it is the first Target String index to match one
-//      of the Test String Characters ('X').
+//	    If the Test Characters are NOT found in the Target Search
+//	    String beginning at the designated Target String Starting
+//	    Index, the search outcome will be unsuccessful and NO match
+//	    will be declared.
 //
-//
-//   CharSearchType.LinearEndOfString()
-//    - Designates the search type as a Linear End Of String
-//      Search. With this type of search operation, the entire
-//      Target Search String will be searched from left to right
-//      for the first occurrence of the Test String.
-//
-//      The search will begin the Target String Starting Index and
-//      proceed left to right until (1) an instance of the entire
-//      Test String is located or (2) the end of the Target Search
-//      String is encountered.
-//
-//      This is a linear search, so a 'Match' requires that each
-//      character in Target Search String must correspond to a
-//      matching character in the Test String.
-//
-//           Example
-//                                      1         2         3
-//                     Index  0123456789012345678901234567890
-//            Target String: "Hey, Xray-4 is the call sign."
-//            Target String Starting Index: 0
-//              Test String: "Xray-4"
-//
-//      In this example of a Linear End of String Search, the
-//      search operation will begin comparing corresponding
-//      characters in the Target Search String and the Test String
-//      beginning at index zero. The comparison will fail at index
-//      zero, but the search algorithm will continue attempting to
-//      find the Test String at indexes 1,2, 3 & 4. The Test String
-//      will be found beginning at index number 5 and the search
-//      algorithm will terminate at that point with a successful
-//      outcome or 'Match' result.
+//	    A 'Match', or successful search outcome, is defined as the
+//	    case where each character in the Target String matches each
+//	    corresponding character in the Test String beginning at the
+//	    designated Target String Starting Index.
 //
 //
-//   For more information see the source code comments for type,
-//   CharacterSearchType.
+//	      Example
+//	                                1         2         3
+//	               Index  0123456789012345678901234567890
+//	      Target String: "Hey, Xray-4 is the call sign."
+//	      Target String Starting Index: 5
+//	        Test String: "Xray"
+//
+//	    In this example of a Linear Target Starting Index Search, a
+//	    match between the Target String and Test String will be
+//	    declared, if and only if, the search begins at Target
+//	    String index number 5. If the search begins at an any index
+//	    other than 5, no match will be declared and the search will
+//	    be classified as unsuccessful.
+//
+//	    NOTE: Linear Target Starting Index is the default search
+//	          type.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	 CharSearchType.SingleTargetChar()
+//	  - Designates the search type as a Single Target Character
+//	    Search Type. This means that a single character in the
+//	    Target Search String will be compared to all characters in
+//	    the Test String.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	    If a single Target String character equals any character in
+//	    the Test String, a 'Match' or successful search outcome
+//	    will be declared.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	    The search will proceed from left to right in the Target
+//	    String. Each Target String Character will be compared to
+//	    all characters in the Test String looking for the first
+//	    matching Test String Character. The search will terminate
+//	    when a matching character is first identified or when the
+//	    end of the Target String is encountered.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	      Example
+//	                                 1         2         3
+//	                Index  0123456789012345678901234567890
+//	       Target String: "Hey, Xray-4 is the call sign."
+//	       Target String Starting Index: 0
+//	         Test String: "ZFXyURJK"
 //
-//       2. string - A string containing error prefix information.
+//	    In this example of a Single Target Character Search, the
+//	    search will terminate at Target String index numbers 5
+//	    because it is the first Target String index to match one
+//	    of the Test String Characters ('X').
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	 CharSearchType.LinearEndOfString()
+//	  - Designates the search type as a Linear End Of String
+//	    Search. With this type of search operation, the entire
+//	    Target Search String will be searched from left to right
+//	    for the first occurrence of the Test String.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	    The search will begin the Target String Starting Index and
+//	    proceed left to right until (1) an instance of the entire
+//	    Test String is located or (2) the end of the Target Search
+//	    String is encountered.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	    This is a linear search, so a 'Match' requires that each
+//	    character in Target Search String must correspond to a
+//	    matching character in the Test String.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	         Example
+//	                                    1         2         3
+//	                   Index  0123456789012345678901234567890
+//	          Target String: "Hey, Xray-4 is the call sign."
+//	          Target String Starting Index: 0
+//	            Test String: "Xray-4"
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	    In this example of a Linear End of String Search, the
+//	    search operation will begin comparing corresponding
+//	    characters in the Target Search String and the Test String
+//	    beginning at index zero. The comparison will fail at index
+//	    zero, but the search algorithm will continue attempting to
+//	    find the Test String at indexes 1,2, 3 & 4. The Test String
+//	    will be found beginning at index number 5 and the search
+//	    algorithm will terminate at that point with a successful
+//	    outcome or 'Match' result.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
 //
+//	 For more information see the source code comments for type,
+//	 CharacterSearchType.
+//
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol RuneArrayCollection) NewColMemberRunes(
 	charArray []rune,
 	description1 string,
@@ -3130,80 +3113,77 @@ func (runeArrayCol RuneArrayCollection) NewColMemberRunes(
 // If the current Rune Array Collection is empty and has zero
 // elements, an error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  firstRuneArrayDto          RuneArrayDto
-//     - If this method completes successfully, a deep copy of the
-//       first Rune Array Data Transfer Object 'RuneArrayDto' in
-//       the Rune Array Collection maintained by the current
-//       RuneArrayCollection instance will be returned to the
-//       calling function.
+//	firstRuneArrayDto          RuneArrayDto
+//	   - If this method completes successfully, a deep copy of the
+//	     first Rune Array Data Transfer Object 'RuneArrayDto' in
+//	     the Rune Array Collection maintained by the current
+//	     RuneArrayCollection instance will be returned to the
+//	     calling function.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) PeekAtFirstElement(
 	errorPrefix interface{}) (
 	firstRuneArrayDto RuneArrayDto,
@@ -3263,88 +3243,85 @@ func (runeArrayCol *RuneArrayCollection) PeekAtFirstElement(
 // than the index of the last member element in the collection, an
 // error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  zeroBasedIndex             int
-//     - Specifies the index of the member element in the Rune
-//       Arrays Collection which will be returned as a deep copy
-//       of the original. If this input parameter is found to be
-//       invalid or if the Rune Arrays Collection is empty, an
-//       error will be returned.
+//	zeroBasedIndex             int
+//	   - Specifies the index of the member element in the Rune
+//	     Arrays Collection which will be returned as a deep copy
+//	     of the original. If this input parameter is found to be
+//	     invalid or if the Rune Arrays Collection is empty, an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  targetRuneArrayDto         RuneArrayDto
-//     - If this method completes successfully, a deep copy of the
-//       Rune Array Data Transfer Object 'RuneArrayDto' specified
-//       by index parameter 'zeroBasedIndex' in the Rune Array
-//       Collection maintained by the current RuneArrayCollection
-//       instance will be returned to the calling function.
+//	targetRuneArrayDto         RuneArrayDto
+//	   - If this method completes successfully, a deep copy of the
+//	     Rune Array Data Transfer Object 'RuneArrayDto' specified
+//	     by index parameter 'zeroBasedIndex' in the Rune Array
+//	     Collection maintained by the current RuneArrayCollection
+//	     instance will be returned to the calling function.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) PeekAtIndexElement(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
@@ -3398,80 +3375,77 @@ func (runeArrayCol *RuneArrayCollection) PeekAtIndexElement(
 // If the current Rune Array Collection is empty and has zero
 // elements, an error will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  lastRuneArrayDto           RuneArrayDto
-//     - If this method completes successfully, a deep copy of the
-//       last Rune Array Data Transfer Object 'RuneArrayDto' in
-//       the Rune Array Collection maintained by the current
-//       RuneArrayCollection instance will be returned to the
-//       calling function.
+//	lastRuneArrayDto           RuneArrayDto
+//	   - If this method completes successfully, a deep copy of the
+//	     last Rune Array Data Transfer Object 'RuneArrayDto' in
+//	     the Rune Array Collection maintained by the current
+//	     RuneArrayCollection instance will be returned to the
+//	     calling function.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) PeekAtLastElement(
 	errorPrefix interface{}) (
 	lastRuneArrayDto RuneArrayDto,
@@ -3531,7 +3505,7 @@ func (runeArrayCol *RuneArrayCollection) PeekAtLastElement(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This 'pop' operation is destructive meaning that after returning
 // a deep copy of the first element in the Rune Array Collection,
@@ -3541,80 +3515,77 @@ func (runeArrayCol *RuneArrayCollection) PeekAtLastElement(
 //
 // Be advised, this method WILL DELETE DATA!
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  firstRuneArrayDto          RuneArrayDto
-//     - If this method completes successfully, a deep copy of the
-//       first Rune Array Data Transfer Object 'RuneArrayDto' in
-//       the Rune Array Collection maintained by the current
-//       RuneArrayCollection instance will be returned to the
-//       calling function.
+//	firstRuneArrayDto          RuneArrayDto
+//	   - If this method completes successfully, a deep copy of the
+//	     first Rune Array Data Transfer Object 'RuneArrayDto' in
+//	     the Rune Array Collection maintained by the current
+//	     RuneArrayCollection instance will be returned to the
+//	     calling function.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) PopFirstElement(
 	errorPrefix interface{}) (
 	firstRuneArrayDto RuneArrayDto,
@@ -3672,7 +3643,7 @@ func (runeArrayCol *RuneArrayCollection) PopFirstElement(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This 'pop' operation is destructive meaning that after returning
 // a deep copy of the first element in the Rune Array Collection,
@@ -3681,92 +3652,89 @@ func (runeArrayCol *RuneArrayCollection) PopFirstElement(
 //
 // Be advised, this method WILL DELETE DATA!
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  zeroBasedIndex             int
-//     - Specifies the index of the member element in the Rune
-//       Arrays Collection which will be returned as a deep copy
-//       of the original. If this input parameter is found to be
-//       invalid or if the Rune Arrays Collection is empty, an
-//       error will be returned.
+//	zeroBasedIndex             int
+//	   - Specifies the index of the member element in the Rune
+//	     Arrays Collection which will be returned as a deep copy
+//	     of the original. If this input parameter is found to be
+//	     invalid or if the Rune Arrays Collection is empty, an
+//	     error will be returned.
 //
-//       Afterwards, this method will proceed to DELETE the array
-//       element in the Rune Arrays Collection specified by this
-//       input parameter.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     Afterwards, this method will proceed to DELETE the array
+//	     element in the Rune Arrays Collection specified by this
+//	     input parameter.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  targetRuneArrayDto         RuneArrayDto
-//     - If this method completes successfully, a deep copy of the
-//       Rune Array Data Transfer Object 'RuneArrayDto' specified
-//       by index parameter 'zeroBasedIndex' in the Rune Array
-//       Collection maintained by the current RuneArrayCollection
-//       instance will be returned to the calling function.
+//	targetRuneArrayDto         RuneArrayDto
+//	   - If this method completes successfully, a deep copy of the
+//	     Rune Array Data Transfer Object 'RuneArrayDto' specified
+//	     by index parameter 'zeroBasedIndex' in the Rune Array
+//	     Collection maintained by the current RuneArrayCollection
+//	     instance will be returned to the calling function.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) PopIndexElement(
 	zeroBasedIndex int,
 	errorPrefix interface{}) (
@@ -3817,7 +3785,7 @@ func (runeArrayCol *RuneArrayCollection) PopIndexElement(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This 'pop' operation is destructive meaning that after returning
 // a deep copy of the last element in the Rune Array Collection,
@@ -3827,80 +3795,77 @@ func (runeArrayCol *RuneArrayCollection) PopIndexElement(
 //
 // Be advised, this method WILL DELETE DATA!
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  lastRuneArrayDto           RuneArrayDto
-//     - If this method completes successfully, a deep copy of the
-//       last Rune Array Data Transfer Object 'RuneArrayDto' in
-//       the Rune Array Collection maintained by the current
-//       RuneArrayCollection instance will be returned to the
-//       calling function.
+//	lastRuneArrayDto           RuneArrayDto
+//	   - If this method completes successfully, a deep copy of the
+//	     last Rune Array Data Transfer Object 'RuneArrayDto' in
+//	     the Rune Array Collection maintained by the current
+//	     RuneArrayCollection instance will be returned to the
+//	     calling function.
 //
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) PopLastElement(
 	errorPrefix interface{}) (
 	lastRuneArrayDto RuneArrayDto,
@@ -3963,93 +3928,90 @@ func (runeArrayCol *RuneArrayCollection) PopLastElement(
 // When the operation is completed the old member element at index
 // 'replaceAtIndex' will be deleted
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDto               RuneArrayDto
-//     - A deep copy of this RuneArrayDto instance will be created
-//       and added to the Rune Array Collection for the current
-//       instance of RuneArrayCollection.
+//	runeArrayDto               RuneArrayDto
+//	   - A deep copy of this RuneArrayDto instance will be created
+//	     and added to the Rune Array Collection for the current
+//	     instance of RuneArrayCollection.
 //
-//       If 'runeArrayDto' contains a zero length character array,
-//       an error will be returned. Likewise, if 'runeArrayDto'
-//       contains an invalid Character Search Type
-//       'charSearchType', an error will be returned.
-//
-//
-//  replaceAtIndex             int
-//     - The index of an element within the  Rune Array Collection
-//       maintained by the current RuneArrayDto instance. The
-//       array element at this index will be deleted and replaced
-//       by a deep copy of input parameter, 'runeArrayDto'.
-//
-//       If 'replaceAtIndex' proves to be an invalid index, an error
-//       will be returned.
+//	     If 'runeArrayDto' contains a zero length character array,
+//	     an error will be returned. Likewise, if 'runeArrayDto'
+//	     contains an invalid Character Search Type
+//	     'charSearchType', an error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	replaceAtIndex             int
+//	   - The index of an element within the  Rune Array Collection
+//	     maintained by the current RuneArrayDto instance. The
+//	     array element at this index will be deleted and replaced
+//	     by a deep copy of input parameter, 'runeArrayDto'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'replaceAtIndex' proves to be an invalid index, an error
+//	     will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) ReplaceAtIndex(
 	runeArrayDto RuneArrayDto,
 	replaceAtIndex int,
@@ -4242,111 +4204,108 @@ func (runeArrayCol *RuneArrayCollection) SearchForTextCharacters(
 // Valid RuneArrayDto array members must satisfy two criteria in
 // order to be classified as 'valid'.
 //
-//   (1) The RuneArrayDto internal Character Array must have a
-//       length greater than zero.
+//	(1) The RuneArrayDto internal Character Array must have a
+//	    length greater than zero.
 //
-//   (2) The Character Search Type associated with each
-//       RuneArrayDto must be valid.
+//	(2) The Character Search Type associated with each
+//	    RuneArrayDto must be valid.
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will DELETE all member elements in the existing
 // collection of RuneArrayDto objects contained in the current
 // instance of RuneArrayCollection.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  runeArrayDtoCol            []RuneArrayDto
-//     - An array of RuneArrayDto objects which be used to replace
-//       the existing Rune Array Dto Collection maintained by the
-//       current instance of RuneArrayCollection.
+//	runeArrayDtoCol            []RuneArrayDto
+//	   - An array of RuneArrayDto objects which be used to replace
+//	     the existing Rune Array Dto Collection maintained by the
+//	     current instance of RuneArrayCollection.
 //
-//       Deep copies of each element in parameter 'runeArrayDtoCol'
-//       will be used to populate the new Rune Array Dto Collection
-//       contained in the current instance of RuneArrayCollection.
+//	     Deep copies of each element in parameter 'runeArrayDtoCol'
+//	     will be used to populate the new Rune Array Dto Collection
+//	     contained in the current instance of RuneArrayCollection.
 //
-//       If this parameter is submitted as a 'nil' or zero length
-//       array, an error will be returned.
+//	     If this parameter is submitted as a 'nil' or zero length
+//	     array, an error will be returned.
 //
-//       If any member element of this array is classified as
-//       invalid, an error will be returned.
+//	     If any member element of this array is classified as
+//	     invalid, an error will be returned.
 //
-//       Valid RuneArrayDto array members must satisfy two criteria
-//       in order to be classified as 'valid'.
+//	     Valid RuneArrayDto array members must satisfy two criteria
+//	     in order to be classified as 'valid'.
 //
-//       (1) The RuneArrayDto internal Character Array must have a
-//           length greater than zero.
+//	     (1) The RuneArrayDto internal Character Array must have a
+//	         length greater than zero.
 //
-//       (2) The Character Search Type associated with each
-//           RuneArrayDto must be valid.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     (2) The Character Search Type associated with each
+//	         RuneArrayDto must be valid.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) SetCollection(
 	runeArrayDtoCol []RuneArrayDto,
 	errorPrefix interface{}) (
