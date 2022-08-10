@@ -120,6 +120,77 @@ func (strArrayDto *StringArrayDto) AddManyStrings(
 	return
 }
 
+// AddStringArray - Appends a string array to the end of the
+// string array contained in the current instance of
+// StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	strArray                     []string
+//	   - This string array will be appended to the end of
+//	     the string array contained in the current instance of
+//	     StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) AddStringArray(
+	strArray []string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	strArrayDto.StrArray = append(
+		strArrayDto.StrArray, strArray...)
+
+	return
+}
+
+// AddStringArrayDto - Receives an instance of StringArrayDto and
+// appends that contents of its string array to the end of the
+// string array contained in the current instance of
+// StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	incomingStrArrayDto          StringArrayDto
+//	   - This string array contained in this instance of
+//	     StringArrayDto will be appended to the end of the string
+//	     array contained in the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) AddStringArrayDto(
+	incomingStrArrayDto StringArrayDto) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	strArrayDto.StrArray = append(
+		strArrayDto.StrArray, incomingStrArrayDto.StrArray...)
+
+	return
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // StringArrayDto ('incomingStrArray') to the data fields of the
 // current StringArrayDto instance ('strArrayDto').
@@ -700,6 +771,139 @@ func (strArrayDto *StringArrayDto) GetStringArray() []string {
 	}
 
 	return strArray
+}
+
+// GetRuneArrayCollection - Returns an instance of
+// RuneArrayCollection generated from the string array contained
+// within the current instance of StringArrayDto.
+//
+// A Rune Array Collection is an array of rune arrays. Each
+// member element in the returned Rune Array Collection is created
+// from a corresponding string in the string array encapuslated by
+// the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
+//
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	 RuneArrayCollection
+//	    - If this method completes successfully, a fully populated
+//	      instance of RuneArrayCollection will be returned. This
+//	      Rune Array Collection will be generated from the string
+//	      array contained within the current instance of
+//	      StringArrayDto.
+//
+//
+//		error
+//		   - If the method completes successfully and no errors are
+//		     encountered this return value is set to 'nil'. Otherwise,
+//		     if errors are encountered, this return value will contain
+//		     an appropriate error message.
+//
+//		     If an error message is returned, the text value of input
+//		     parameter 'errorPrefix' will be inserted or prefixed at
+//		     the beginning of the error message.
+func (strArrayDto *StringArrayDto) GetRuneArrayCollection(
+	errorPrefix interface{}) (
+	RuneArrayCollection,
+	error) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	runeArrayCol := RuneArrayCollection{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"GetRuneArrayCollection()",
+		"")
+
+	if err != nil {
+		return runeArrayCol, err
+	}
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+		return runeArrayCol, err
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		err = runeArrayCol.AddRuneArrayString(
+			strArrayDto.StrArray[i],
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"<-strArrayDto.StrArray[%v]",
+					i)))
+
+		if err != nil {
+			return runeArrayCol, err
+		}
+	}
+
+	return runeArrayCol, err
 }
 
 // GetStringArrayLength - Returns the length of the internal string
@@ -2001,68 +2205,6 @@ func (strArrayDto *StringArrayDto) SetDescription2(
 	strArrayDto.Description2 = desc2
 }
 
-// SetStringArray - Resets the value of the internal string array
-// maintained by the current instance of StringArrayDto to that
-// of input parameter 'strArray'.
-//
-// A copy of 'strArray' is used to populated internal member
-// variable 'StringArrayDto.StrArray'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-// The internal string array contained within current
-// StringArrayDto instance ('strArrayDto') will be deleted and
-// overwritten.
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//			strArray                   []string
-//		    - This string array will be used to populate the string
-//		      array for the new returned instance of StringArrayDto.
-//
-//	       If parameter 'strArray' is submitted as an empty array,
-//	       internal member variable 'StringArrayDto.StrArray' will
-//	       be set to 'nil'.
-//
-// ----------------------------------------------------------------
-//
-// Return Values
-//
-//	NONE
-func (strArrayDto *StringArrayDto) SetStringArray(
-	strArray []string) {
-
-	if strArrayDto.lock == nil {
-		strArrayDto.lock = new(sync.Mutex)
-	}
-
-	strArrayDto.lock.Lock()
-
-	defer strArrayDto.lock.Unlock()
-
-	lenStrArray := len(strArray)
-
-	if lenStrArray == 0 {
-		strArrayDto.StrArray = nil
-
-		return
-	}
-
-	strArrayDto.StrArray =
-		make([]string, lenStrArray)
-
-	for i := 0; i < lenStrArray; i++ {
-		strArrayDto.StrArray[i] =
-			strArray[i]
-	}
-
-	return
-}
-
 // SetManyStrings - Resets the value of the internal string array
 // maintained by the current instance of StringArrayDto based on
 // one or more strings passed through the variadic input
@@ -2120,6 +2262,68 @@ func (strArrayDto *StringArrayDto) SetManyStrings(
 		strArrayDto.StrArray =
 			append(strArrayDto.StrArray, val)
 
+	}
+
+	return
+}
+
+// SetStringArray - Resets the value of the internal string array
+// maintained by the current instance of StringArrayDto to that
+// of input parameter 'strArray'.
+//
+// A copy of 'strArray' is used to populated internal member
+// variable 'StringArrayDto.StrArray'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// The internal string array contained within current
+// StringArrayDto instance ('strArrayDto') will be deleted and
+// overwritten.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//			strArray                   []string
+//		    - This string array will be used to populate the string
+//		      array for the new returned instance of StringArrayDto.
+//
+//	       If parameter 'strArray' is submitted as an empty array,
+//	       internal member variable 'StringArrayDto.StrArray' will
+//	       be set to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) SetStringArray(
+	strArray []string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArray)
+
+	if lenStrArray == 0 {
+		strArrayDto.StrArray = nil
+
+		return
+	}
+
+	strArrayDto.StrArray =
+		make([]string, lenStrArray)
+
+	for i := 0; i < lenStrArray; i++ {
+		strArrayDto.StrArray[i] =
+			strArray[i]
 	}
 
 	return
