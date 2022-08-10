@@ -530,15 +530,19 @@ func TestStringArrayDto_InsertAtIndex_000400(t *testing.T) {
 
 	insertStr := "Inserted String"
 
-	expectedArray := []string{
-		"1-Str",
-		"2-Str",
-		"3-Str",
-		"4-Str",
-		"5-Str",
-		"6-Str",
-		"Inserted String",
+	lenBeginningArray := len(beginningArray)
+
+	expectedArray := make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] = beginningArray[i]
 	}
+
+	expectedArray = append(
+		expectedArray,
+		insertStr)
+
+	zeroBasedIndex := lenBeginningArray + 5
 
 	expectedStrArrayDto := StringArrayDto{}.NewStringArray(
 		expectedArray,
@@ -550,14 +554,12 @@ func TestStringArrayDto_InsertAtIndex_000400(t *testing.T) {
 		"",
 		"")
 
-	lastIdx := len(beginningArray)
-
 	err := strArrayDto.InsertAtIndex(
 		insertStr,
-		lastIdx,
+		zeroBasedIndex,
 		ePrefix.XCpy(
 			fmt.Sprintf("strArrayDto[%v]<-insertStr",
-				lastIdx)))
+				lenBeginningArray)))
 
 	if err != nil {
 		t.Errorf("%v",
@@ -575,6 +577,452 @@ func TestStringArrayDto_InsertAtIndex_000400(t *testing.T) {
 			ePrefix.String(),
 			expectedStrArrayDto.GetStringArray(),
 			strArrayDto.GetStringArray())
+
+		return
+	}
+
+	expectedArray = make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] = beginningArray[i]
+	}
+
+	expectedArray = append(
+		[]string{insertStr},
+		expectedArray...)
+
+	zeroBasedIndex = -5
+
+	expectedStrArrayDto = StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	strArrayDto2 := StringArrayDto{}.NewStringArray(
+		beginningArray,
+		"",
+		"")
+
+	err = strArrayDto2.InsertAtIndex(
+		insertStr,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf("strArrayDto[%v]<-insertStr",
+				zeroBasedIndex)))
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+		return
+	}
+
+	if !strArrayDto2.Equal(
+		&expectedStrArrayDto) {
+
+		t.Errorf("%v\n"+
+			"Error: strArrayDto2!=expectedStrArrayDto\n"+
+			"expectedStrArrayDto = \n%v\n"+
+			"Actual strArrayDto2 = \n%v\n",
+			ePrefix.String(),
+			expectedStrArrayDto.GetStringArray(),
+			strArrayDto2.GetStringArray())
+
+		return
+	}
+
+	err = strArrayDto2.InsertAtIndex(
+		insertStr,
+		zeroBasedIndex,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from strArrayDto05.ReplaceAtIndex()\n"+
+			"because Error Prefix is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	return
+}
+
+func TestStringArrayDto_InsertAtIndex_000500(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_InsertAtIndex_000500()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+	}
+
+	insertStr := "Inserted String"
+
+	expectedArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"Inserted String",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+	}
+
+	expectedStrArrayDto := StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	strArrayDto := StringArrayDto{}.NewStringArray(
+		beginningArray,
+		"",
+		"")
+
+	err := strArrayDto.InsertAtIndex(
+		insertStr,
+		3,
+		ePrefix.XCpy(
+			"strArrayDto<-insertStr"))
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+		return
+	}
+
+	if !strArrayDto.Equal(
+		&expectedStrArrayDto) {
+
+		t.Errorf("%v\n"+
+			"Error: strArrayDto!=expectedStrArrayDto\n"+
+			"expectedStrArrayDto = \n%v\n"+
+			"Actual strArrayDto = \n%v\n",
+			ePrefix.String(),
+			expectedStrArrayDto.GetStringArray(),
+			strArrayDto.GetStringArray())
+
+		return
+	}
+
+}
+
+func TestStringArrayDto_ReplaceAtIndex_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_InsertAtIndex_000300()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+		"7-Str",
+		"8-Str",
+		"9-Str",
+		"10-Str",
+	}
+
+	replacementStr := "newReplaceStr"
+
+	lenBeginningArray := len(beginningArray)
+
+	expectedArray := make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] =
+			beginningArray[i]
+	}
+
+	var expectedArrayDto, strArrayDto01, strArrayDto02,
+		strArrayDto03, strArrayDto04, strArrayDto05 StringArrayDto
+
+	strArrayDto01 = StringArrayDto{}.New()
+
+	strArrayDto01.SetStringArray(
+		beginningArray)
+
+	zeroBasedIndex := 6
+
+	expectedArray[zeroBasedIndex] = replacementStr
+
+	err := strArrayDto01.ReplaceAtIndex(
+		replacementStr,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"strArrayDto01[%v]=replacementStr",
+				zeroBasedIndex)))
+
+	if err != nil {
+
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	expectedArrayDto = StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	if !expectedArrayDto.Equal(&strArrayDto01) {
+		t.Errorf("\n%v\n"+
+			"Error: expectedArrayDto!=strArrayDto01\n"+
+			"Replace strArrayDto01[%v] FAILED!\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return
+	}
+
+	expectedArray = make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] =
+			beginningArray[i]
+	}
+
+	zeroBasedIndex = 0
+
+	expectedArray[zeroBasedIndex] = replacementStr
+
+	strArrayDto02 = StringArrayDto{}.New()
+
+	strArrayDto02.SetStringArray(
+		beginningArray)
+
+	err = strArrayDto02.ReplaceAtIndex(
+		replacementStr,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"strArrayDto02[%v]=replacementStr",
+				zeroBasedIndex)))
+
+	if err != nil {
+
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	expectedArrayDto = StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	if !expectedArrayDto.Equal(&strArrayDto02) {
+		t.Errorf("\n%v\n"+
+			"Error: expectedArrayDto!=strArrayDto02\n"+
+			"Replace strArrayDto02[%v] FAILED!\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return
+	}
+
+	expectedArray = make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] =
+			beginningArray[i]
+	}
+
+	zeroBasedIndex = lenBeginningArray - 1
+
+	expectedArray[zeroBasedIndex] = replacementStr
+
+	strArrayDto03 = StringArrayDto{}.New()
+
+	strArrayDto03.SetStringArray(
+		beginningArray)
+
+	err = strArrayDto03.ReplaceAtIndex(
+		replacementStr,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"strArrayDto03[%v]=replacementStr",
+				zeroBasedIndex)))
+
+	if err != nil {
+
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	expectedArrayDto = StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	if !expectedArrayDto.Equal(&strArrayDto03) {
+		t.Errorf("\n%v\n"+
+			"Error: expectedArrayDto!=strArrayDto03\n"+
+			"Replace strArrayDto03[%v] FAILED!\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return
+	}
+
+	expectedArray = make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] =
+			beginningArray[i]
+	}
+
+	zeroBasedIndex = 99
+
+	expectedArray = append(expectedArray,
+		replacementStr)
+
+	strArrayDto04 = StringArrayDto{}.New()
+
+	strArrayDto04.SetStringArray(
+		beginningArray)
+
+	err = strArrayDto04.ReplaceAtIndex(
+		replacementStr,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"strArrayDto04[%v]=replacementStr",
+				zeroBasedIndex)))
+
+	if err != nil {
+
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	expectedArrayDto = StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	if !expectedArrayDto.Equal(&strArrayDto04) {
+		t.Errorf("\n%v\n"+
+			"Error: expectedArrayDto!=strArrayDto04\n"+
+			"Replace strArrayDto04[%v] FAILED!\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return
+	}
+
+	if strArrayDto04.StrArray[lenBeginningArray] !=
+		replacementStr {
+		t.Errorf("\n%v\n"+
+			"Error: Expected strArrayDto04.StrArray[%v]\n"+
+			"would be equal to '%v'\n"+
+			"Instead, strArrayDto04.StrArray[%v]= '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex,
+			replacementStr,
+			zeroBasedIndex,
+			strArrayDto04.StrArray[lenBeginningArray])
+
+		return
+
+	}
+
+	expectedArray = make([]string, lenBeginningArray)
+
+	for i := 0; i < lenBeginningArray; i++ {
+		expectedArray[i] =
+			beginningArray[i]
+	}
+
+	zeroBasedIndex = -1
+
+	expectedArray = append(
+		[]string{replacementStr},
+		expectedArray...)
+
+	strArrayDto05 = StringArrayDto{}.New()
+
+	strArrayDto05.SetStringArray(
+		beginningArray)
+
+	err = strArrayDto05.ReplaceAtIndex(
+		replacementStr,
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"strArrayDto05[%v]=replacementStr",
+				zeroBasedIndex)))
+
+	if err != nil {
+
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	expectedArrayDto = StringArrayDto{}.NewStringArray(
+		expectedArray,
+		"",
+		"")
+
+	if !expectedArrayDto.Equal(&strArrayDto05) {
+		t.Errorf("\n%v\n"+
+			"Error: expectedArrayDto!=strArrayDto05\n"+
+			"Replace strArrayDto05[%v] FAILED!\n",
+			ePrefix.String(),
+			zeroBasedIndex)
+
+		return
+	}
+
+	if strArrayDto05.StrArray[0] !=
+		replacementStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: Expected strArrayDto05.StrArray[%v]\n"+
+			"would be equal to '%v'\n"+
+			"Instead, strArrayDto05.StrArray[%v]= '%v'\n",
+			ePrefix.String(),
+			0,
+			replacementStr,
+			0,
+			strArrayDto05.StrArray[0])
+
+		return
+
+	}
+
+	err = strArrayDto05.ReplaceAtIndex(
+		replacementStr,
+		3,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from strArrayDto05.ReplaceAtIndex()\n"+
+			"because Error Prefix is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
 
 		return
 	}
