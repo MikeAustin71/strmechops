@@ -204,6 +204,21 @@ func TestStringArrayDto_CopyIn_000100(t *testing.T) {
 		return
 	}
 
+	err = strArrayDto02.CopyIn(
+		&strArrayDto01,
+		StrMech{})
+
+	if err == nil {
+
+		t.Errorf("\n%v\n"+
+			"Expected an error return from strArrayDto02.CopyIn()\n"+
+			"because Error Prefix is invalid.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
 	return
 }
 
