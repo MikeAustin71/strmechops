@@ -222,6 +222,83 @@ func TestStringArrayDto_CopyIn_000100(t *testing.T) {
 	return
 }
 
+func TestStringArrayDto_GetRuneArrayCollection_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_GetRuneArrayCollection_000100()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+		"7-Str",
+		"8-Str",
+		"9-Str",
+		"10-Str",
+	}
+
+	expectedRuneArrays := RuneArrayCollection{}
+
+	lenBeginningArray := len(beginningArray)
+	var err error
+
+	for i := 0; i < lenBeginningArray; i++ {
+
+		err = expectedRuneArrays.AddRuneArrayString(
+			beginningArray[i],
+			CharSearchType.LinearTargetStartingIndex(),
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"expectedRuneArrays<-beginningArray[%v]",
+					i)))
+
+		if err != nil {
+			t.Errorf("%v",
+				err.Error())
+
+			return
+		}
+	}
+
+	var strArrayDto1 StringArrayDto
+
+	strArrayDto1 = StringArrayDto{}.NewStringArray(
+		beginningArray,
+		"",
+		"")
+
+	actualRuneArrays := strArrayDto1.GetRuneArrayCollection()
+
+	if !expectedRuneArrays.Equal(&actualRuneArrays) {
+
+		t.Errorf("\n%v\n"+
+			"Error: Expected expectedRuneArrays===actualRuneArrays\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	var expectedArrayDto StringArrayDto
+
+	expectedArrayDto = expectedRuneArrays.GetStringArrayDto()
+
+	if !expectedArrayDto.Equal(&strArrayDto1) {
+
+		t.Errorf("\n%v\n"+
+			"Error: Expected expectedArrayDto===strArrayDto1\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n",
+			ePrefix.String())
+
+		return
+	}
+
+}
+
 func TestStringArrayDto_Equal_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
