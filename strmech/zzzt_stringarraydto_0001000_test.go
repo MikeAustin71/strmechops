@@ -865,6 +865,133 @@ func TestStringArrayDto_InsertAtIndex_000500(t *testing.T) {
 
 }
 
+func TestStringArrayDto_PopAtIndex_000100(t *testing.T) {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"TestStringArrayDto_InsertAtIndex_000300()",
+		"")
+
+	beginningArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"4-Str",
+		"5-Str",
+		"6-Str",
+		"7-Str",
+		"8-Str",
+		"9-Str",
+		"10-Str",
+	}
+
+	expectedArray := []string{
+		"1-Str",
+		"2-Str",
+		"3-Str",
+		"5-Str",
+		"6-Str",
+		"7-Str",
+		"8-Str",
+		"9-Str",
+		"10-Str",
+	}
+
+	lenExpectedArray := len(expectedArray)
+
+	var strArrayDto1 StringArrayDto
+
+	desc1 := "Hello1"
+	desc2 := "Goodbye2"
+
+	strArrayDto1 = StringArrayDto{}.NewStringArray(
+		beginningArray,
+		"",
+		"")
+
+	strArrayDto1.SetDescription1(desc1)
+
+	strArrayDto1.SetDescription2(desc2)
+
+	actualDesc1 := strArrayDto1.GetDescription1()
+
+	if actualDesc1 != desc1 {
+		t.Errorf("\n%v\n"+
+			"Error: Expected Description1 is NOT EQUAL\n"+
+			"to Actual Description1\n"+
+			"Expected Description1 = '%v'\n"+
+			"  Actual Description1 = '%v'\n",
+			ePrefix.String(),
+			desc1,
+			actualDesc1)
+
+		return
+	}
+
+	actualDesc2 := strArrayDto1.GetDescription2()
+
+	if actualDesc2 != desc2 {
+		t.Errorf("\n%v\n"+
+			"Error: Expected Description2 is NOT EQUAL\n"+
+			"to Actual Description2\n"+
+			"Expected Description2 = '%v'\n"+
+			"  Actual Description2 = '%v'\n",
+			ePrefix.String(),
+			desc2,
+			actualDesc2)
+
+		return
+	}
+
+	var poppedStr4 string
+	var err error
+
+	zeroBasedIndex := 3
+
+	poppedStr4,
+		_,
+		err = strArrayDto1.PopAtIndex(
+		zeroBasedIndex,
+		ePrefix.XCpy(
+			fmt.Sprintf(
+				"strArrayDto1[%v]",
+				zeroBasedIndex)))
+
+	if err != nil {
+		t.Errorf("%v",
+			err.Error())
+
+		return
+	}
+
+	if poppedStr4 != beginningArray[zeroBasedIndex] {
+		t.Errorf("\n%v\n"+
+			"Popped String is NOT EQUAL to target string!\n"+
+			"Target String = '%v'\n"+
+			"Popped String = '%v'\n",
+			ePrefix.String(),
+			beginningArray[zeroBasedIndex],
+			poppedStr4)
+
+		return
+	}
+
+	finalArrayLen := strArrayDto1.GetStringArrayLength()
+
+	if finalArrayLen != lenExpectedArray {
+		t.Errorf("\n%v\n"+
+			"Error: After popping index %v, the string\n"+
+			"array should have a length of '%v'.\n"+
+			"Instead, the actual final array length is '%v'\n",
+			ePrefix.String(),
+			zeroBasedIndex,
+			lenExpectedArray,
+			finalArrayLen)
+
+		return
+	}
+
+	return
+}
 func TestStringArrayDto_ReplaceAtIndex_000100(t *testing.T) {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
