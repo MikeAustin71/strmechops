@@ -23,6 +23,50 @@ type StringArrayDto struct {
 	lock *sync.Mutex
 }
 
+// AddRuneArray - Receives an array of runes, converts those runes
+// to a string and appends that string to the end of the string
+// array contained within the current instance of strArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//		runes                         []rune
+//	  - A array of runes. This array will be converted to a string
+//	    and that string will be appended to the end of the string
+//	    array contained encapsulated by the current instance of
+//	    strArrayDto.
+//
+//	    If this rune array is submitted as an empty array with a
+//	    zero array length, it will be ignored and no change will
+//	    be made to the strArrayDto string array.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) AddRuneArray(
+	runes []rune) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	if len(runes) == 0 {
+		return
+	}
+
+	strArrayDto.StrArray =
+		append(strArrayDto.StrArray, string(runes))
+
+	return
+}
+
 // AddString - Adds a single string to the internal array of
 // strings maintained by this instance of StringArrayDto.
 //
