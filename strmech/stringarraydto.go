@@ -38,8 +38,8 @@ type StringArrayDto struct {
 //	    strArrayDto.
 //
 //	    If this rune array is submitted as an empty array with a
-//	    zero array length, it will be ignored and no change will
-//	    be made to the strArrayDto string array.
+//	    zero array length, an empty string will be appended to
+//	    the target string array.
 //
 // ----------------------------------------------------------------
 //
@@ -59,6 +59,11 @@ func (strArrayDto *StringArrayDto) AddRuneArray(
 
 	if len(runes) == 0 {
 		return
+	}
+
+	if len(runes) == 0 {
+		strArrayDto.StrArray =
+			append(strArrayDto.StrArray, "")
 	}
 
 	strArrayDto.StrArray =
@@ -1932,6 +1937,49 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 	newArrayLength = len(strArrayDto.StrArray)
 
 	return lastArrayStr, newArrayLength, err
+}
+
+// PushStr - Appends a single string to the end of the internal
+// string array maintained by the current instance of
+// StringArrayDto.
+//
+// Note that no data validation is performed on input parameter
+// 'str'. If 'str' is an empty string, an empty string will be
+// appended to the internal string array.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	str                        string
+//	   - A string which will be appended to the end of the string
+//	     array maintained by the current instance of
+//	     StringArrayDto.
+//
+//	     No data validation is performed on input parameter,
+//	     'str'. If 'str' is an empty string, an empty string will
+//	     be appended to the internal string array.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) PushStr(
+	str string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	strArrayDto.StrArray =
+		append(strArrayDto.StrArray, str)
+
+	return
 }
 
 // ReplaceAtIndex - Replaces a string in a target string array
