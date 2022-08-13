@@ -661,14 +661,6 @@ func (charSearchType CharacterSearchType) XParseString(
 
 	ePrefix := "CharacterSearchType.XParseString() "
 
-	if len(valueString) < 4 {
-		return CharacterSearchType(-1),
-			fmt.Errorf(ePrefix+
-				"\nInput parameter 'valueString' is INVALID!\n"+
-				"String length is less than '4'.\n"+
-				"valueString='%v'\n", valueString)
-	}
-
 	var ok bool
 	var characterSearchType CharacterSearchType
 
