@@ -149,6 +149,16 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 		return err
 	}
 
+	err = new(integerSeparatorDtoQuark).
+		empty(
+			intSep,
+			ePrefix.XCpy(
+				"intSep"))
+
+	if err != nil {
+		return err
+	}
+
 	err =
 		new(integerSeparatorDtoMechanics).
 			setWithComponents(
@@ -156,7 +166,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setChineseNumberingRunes(
 				intSeparatorChars,
 				[]uint{4},
 				false,
-				ePrefix)
+				ePrefix.XCpy(
+					"intSep []uint{4}"))
 
 	return err
 }
@@ -300,6 +311,16 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 		return err
 	}
 
+	err = new(integerSeparatorDtoQuark).
+		empty(
+			intSep,
+			ePrefix.XCpy(
+				"intSep"))
+
+	if err != nil {
+		return err
+	}
+
 	err =
 		new(integerSeparatorDtoMechanics).
 			setWithComponents(
@@ -307,7 +328,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setIndiaNumberingRunes(
 				intSeparatorChars,
 				[]uint{3, 2},
 				false,
-				ePrefix)
+				ePrefix.XCpy(
+					"intSep []uint{3, 2}"))
 
 	return err
 }
@@ -454,6 +476,16 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 		return err
 	}
 
+	err = new(integerSeparatorDtoQuark).
+		empty(
+			intSep,
+			ePrefix.XCpy(
+				"intSep"))
+
+	if err != nil {
+		return err
+	}
+
 	err =
 		new(integerSeparatorDtoMechanics).
 			setWithComponents(
@@ -461,7 +493,8 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setThousandsRunes(
 				intSeparatorChars,
 				[]uint{3},
 				false,
-				ePrefix)
+				ePrefix.XCpy(
+					"intSep []uint{3}"))
 
 	return err
 }
@@ -567,6 +600,16 @@ func (intSeparatorUtil *integerSeparatorDtoUtility) setToUSADefaultsIfEmpty(
 				ePrefix)
 
 	if err == nil {
+		return err
+	}
+
+	err = new(integerSeparatorDtoQuark).
+		empty(
+			intSep,
+			ePrefix.XCpy(
+				"intSep"))
+
+	if err != nil {
 		return err
 	}
 
