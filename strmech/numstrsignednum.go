@@ -194,36 +194,15 @@ func (nStrSignedNumNanobot numStrSignedNumNanobot) formatSignedNumStr(
 		return numStr, err
 	}
 
-	if signedNumFormatSpec.RoundingSpec.RoundFractionalDigits {
+	// Performing fractional digit rounding
+	err = new(numStrMathNanobot).roundNumStrKernel(
+		&newNumStrKernel,
+		signedNumFormatSpec.RoundingSpec,
+		ePrefix.XCpy(
+			"newNumStrKernel Rounding"))
 
-		switch signedNumFormatSpec.RoundingSpec.RoundingType {
-
-		case NumRoundType.HalfAwayFromZero():
-
-			err = new(numStrMathMolecule).
-				roundHalfAwayFromZero(
-					&newNumStrKernel,
-					signedNumFormatSpec.RoundingSpec.
-						RoundToFractionalDigits,
-					ePrefix.XCpy(
-						fmt.Sprintf("newNumStrKernel<-"+
-							"RoundTo %v-digits",
-							signedNumFormatSpec.RoundingSpec.
-								RoundToFractionalDigits)))
-
-			if err != nil {
-				return numStr, err
-			}
-
-		default:
-			err = fmt.Errorf("%v\n"+
-				"Error: This rounding algorith is not supported!\n"+
-				"Rounding Type = '%v'\n",
-				ePrefix.String(),
-				signedNumFormatSpec.RoundingSpec.RoundingType.String())
-
-			return numStr, err
-		}
+	if err != nil {
+		return numStr, err
 	}
 
 	numFracDigits = newNumStrKernel.GetNumberOfFractionalDigits()

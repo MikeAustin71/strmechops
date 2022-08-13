@@ -35,6 +35,14 @@ type numStrMathMolecule struct {
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+// No data validation is performed on 'numStrKernel' or
+// 'roundToFractionalDigits'. Both are assumed to have been
+// validated by upstream methods.
+//
+// ----------------------------------------------------------------
+//
 // Input Parameters
 //
 //		numStrKernel                    *NumberStrKernel
@@ -110,40 +118,6 @@ func (nStrMathMolecule *numStrMathMolecule) roundHalfAwayFromZero(
 			"Error: Input parameter 'numStrKernel' is "+
 			"a nil pointer!\n",
 			ePrefix.String())
-
-		return err
-	}
-
-	if roundToFractionalDigits < 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'roundToFractionalDigits' is invalid!\n"+
-			"'roundToFractionalDigits' has a value which is less than zero (0).\n"+
-			"roundToFractionalDigits = '%v'\n",
-			ePrefix.String(),
-			roundToFractionalDigits)
-
-		return err
-
-	}
-
-	existingNumOfFracDigits := numStrKernel.GetNumberOfFractionalDigits()
-
-	if roundToFractionalDigits >
-		existingNumOfFracDigits {
-
-		return new(numStrMathAtom).extendFractionalDigits(
-			numStrKernel,
-			roundToFractionalDigits,
-			ePrefix.XCpy(
-				fmt.Sprintf("roundToFractionalDigits= %v",
-					roundToFractionalDigits)))
-
-	}
-
-	if roundToFractionalDigits ==
-		existingNumOfFracDigits {
-		// Nothing to do. Already rounded
 
 		return err
 	}
