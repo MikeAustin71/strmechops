@@ -17,15 +17,17 @@ import (
 // text characters.
 //
 // Text Label Justification Examples:
-//   'Hello World  ' - Left Justified, Field Length= 13
-//   '  Hello World' - Right Justified, Field Length= 13
-//   ' Hello World ' - Centered, Field Length= 13
+//
+//	'Hello World  ' - Left Justified, Field Length= 13
+//	'  Hello World' - Right Justified, Field Length= 13
+//	' Hello World ' - Centered, Field Length= 13
 //
 // Text Label Usage Example:
-//   textLabel = "Hello"  // Length = 5 characters
-//   fieldLen = 7
-//   textJustification = TxtJustify.Center()
-//   Final Text Label string = " Hello "
+//
+//	textLabel = "Hello"  // Length = 5 characters
+//	fieldLen = 7
+//	textJustification = TxtJustify.Center()
+//	Final Text Label string = " Hello "
 //
 // Text Field Specifications are designed to be configured within a
 // line of text. Those lines of text can then be formatted for
@@ -36,46 +38,45 @@ import (
 // used as the components or building blocks for single lines of
 // text.
 //
-// Member Variables
+// # Member Variables
 //
 // ----------------------------------------------------------------
 //
-//  textLabel                  []rune
-//     - An array of runes or text characters which is used to
-//       generate string content for display as a text label.
+//	textLabel                  []rune
+//	   - An array of runes or text characters which is used to
+//	     generate string content for display as a text label.
 //
 //
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabel'
-//       characters will be displayed. If 'fieldLen' is less than the length
-//       of the 'textLabel' array, 'fieldLen' will be automatically
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabel'
+//	     characters will be displayed. If 'fieldLen' is less than the length
+//	     of the 'textLabel' array, 'fieldLen' will be automatically
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabelChars' within the field specified by 'fieldLen'.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabelChars' within the field specified by 'fieldLen'.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
 //
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
-//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 type TextFieldSpecLabel struct {
 	textLabel []rune // The text content of the label.
 	fieldLen  int    // The length of the text field in which
@@ -96,85 +97,82 @@ type TextFieldSpecLabel struct {
 // All the data fields in current TextFieldSpecLabel instance
 // ('txtFieldLabel') will be modified and overwritten.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTxtFieldLabel     *TextFieldSpecLabel
-//     - A pointer to an instance of TextFieldSpecLabel. This
-//       method will NOT change the values of internal member
-//       variables contained in this instance.
+//	incomingTxtFieldLabel     *TextFieldSpecLabel
+//	   - A pointer to an instance of TextFieldSpecLabel. This
+//	     method will NOT change the values of internal member
+//	     variables contained in this instance.
 //
-//       All data values in this TextFieldSpecLabel instance
-//       will be copied to current TextFieldSpecLabel
-//       instance ('txtFieldLabel').
+//	     All data values in this TextFieldSpecLabel instance
+//	     will be copied to current TextFieldSpecLabel
+//	     instance ('txtFieldLabel').
 //
-//       If parameter 'incomingTxtFieldLabel' is determined to be
-//       invalid, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If parameter 'incomingTxtFieldLabel' is determined to be
+//	     invalid, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 	incomingTxtFieldLabel *TextFieldSpecLabel,
 	errorPrefix interface{}) error {
@@ -200,8 +198,8 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 		return err
 	}
 
-	return textFieldSpecLabelMolecule{}.ptr().
-		copyIn(
+	return new(textFieldSpecLabelMolecule).
+		copyTextFieldLabel(
 			txtFieldLabel,
 			incomingTxtFieldLabel,
 			ePrefix)
@@ -213,78 +211,75 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 // If the current TextFieldSpecLabel instance is invalid, an error
 // will be returned.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecLabel
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current TextFieldSpecLabel instance.
+//	TextFieldSpecLabel
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of the
+//	     current TextFieldSpecLabel instance.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
@@ -311,9 +306,15 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 		return TextFieldSpecLabel{}, err
 	}
 
-	return textFieldSpecLabelMolecule{}.ptr().
-		copyOut(txtFieldLabel,
+	newTxtFieldLabel := TextFieldSpecLabel{}
+
+	err = new(textFieldSpecLabelMolecule).
+		copyTextFieldLabel(
+			&newTxtFieldLabel,
+			txtFieldLabel,
 			ePrefix)
+
+	return newTxtFieldLabel, err
 }
 
 // CopyOutITextField - Returns a deep copy of the current
@@ -326,79 +327,76 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 // This method is required by the ITextFieldSpecification
 // interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  ITextFieldSpecification
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of
-//       the current TextFieldSpecLabel instance cast as an
-//       ITextFieldSpecification object.
+//	ITextFieldSpecification
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a deep copy of
+//	     the current TextFieldSpecLabel instance cast as an
+//	     ITextFieldSpecification object.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 	errorPrefix interface{}) (
 	ITextFieldSpecification,
@@ -429,9 +427,10 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 
 	var newTxtFieldLabel TextFieldSpecLabel
 
-	newTxtFieldLabel,
-		err = textFieldSpecLabelMolecule{}.ptr().
-		copyOut(txtFieldLabel,
+	err = new(textFieldSpecLabelMolecule).
+		copyTextFieldLabel(
+			&newTxtFieldLabel,
+			txtFieldLabel,
 			ePrefix)
 
 	if err != nil {
@@ -446,78 +445,75 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 // CopyOutPtr - Returns a pointer to a deep copy of the current
 // TextFieldSpecLabel instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecLabel
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a pointer to a
-//       deep copy of the current TextFieldSpecLabel instance.
+//	*TextFieldSpecLabel
+//	   - If this method completes successfully and no errors are
+//	     encountered, this parameter will return a pointer to a
+//	     deep copy of the current TextFieldSpecLabel instance.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextFieldSpecLabel,
@@ -546,9 +542,10 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr(
 
 	var newTxtFieldLabel TextFieldSpecLabel
 
-	newTxtFieldLabel,
-		err = textFieldSpecLabelMolecule{}.ptr().
-		copyOut(txtFieldLabel,
+	err = new(textFieldSpecLabelMolecule).
+		copyTextFieldLabel(
+			&newTxtFieldLabel,
+			txtFieldLabel,
 			ePrefix)
 
 	return &newTxtFieldLabel, err
@@ -559,26 +556,23 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in the
 // current instance of TextFieldSpecLabel. All member variable data
 // values will be reset to their zero or uninitialized states.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 
 	if txtFieldLabel.lock == nil {
@@ -587,7 +581,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 
 	txtFieldLabel.lock.Lock()
 
-	textFieldSpecLabelMolecule{}.ptr().
+	new(textFieldSpecLabelMolecule).
 		empty(txtFieldLabel)
 
 	txtFieldLabel.lock.Unlock()
@@ -605,7 +599,6 @@ func (txtFieldLabel *TextFieldSpecLabel) Empty() {
 // returned. If the member variables are equal in all respects,
 // this flag is set to 'true'. Otherwise, this method returns
 // 'false'.
-//
 func (txtFieldLabel *TextFieldSpecLabel) Equal(
 	incomingTextFieldLabel *TextFieldSpecLabel) bool {
 
@@ -617,7 +610,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Equal(
 
 	defer txtFieldLabel.lock.Unlock()
 
-	return textFieldSpecLabelMolecule{}.ptr().
+	return new(textFieldSpecLabelMolecule).
 		equal(
 			txtFieldLabel,
 			incomingTextFieldLabel)
@@ -632,7 +625,6 @@ func (txtFieldLabel *TextFieldSpecLabel) Equal(
 // returned. If the member variables from both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
-//
 func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
 	iTextField ITextFieldSpecification) bool {
 
@@ -654,7 +646,7 @@ func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
 		return false
 	}
 
-	return textFieldSpecLabelMolecule{}.ptr().
+	return new(textFieldSpecLabelMolecule).
 		equal(
 			txtFieldLabel,
 			txtLabel)
@@ -665,7 +657,7 @@ func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
 //
 // ------------------------------------------------------------------------
 //
-// Background
+// # Background
 //
 // Field Length specifies the length of the text field in which the
 // formatted text label will be displayed.
@@ -680,7 +672,6 @@ func (txtFieldLabel *TextFieldSpecLabel) EqualITextField(
 // Length. In this case, the position of the text label string
 // within the text field will be controlled by the text
 // justification specification.
-//
 func (txtFieldLabel *TextFieldSpecLabel) GetFieldLength() int {
 
 	if txtFieldLabel.lock == nil {
@@ -698,12 +689,12 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFieldLength() int {
 // formatted text generated by the current instance of
 // TextFieldSpecDateTime. Effectively, this is the length of the
 // strings returned by methods:
-//   TextFieldSpecLabel.GetFormattedText()
-//   TextFieldSpecLabel.String()
+//
+//	TextFieldSpecLabel.GetFormattedText()
+//	TextFieldSpecLabel.String()
 //
 // If an error is encountered, this method returns a value of minus
 // one (-1).
-//
 func (txtFieldLabel *TextFieldSpecLabel) GetFormattedStrLength() int {
 
 	if txtFieldLabel.lock == nil {
@@ -752,111 +743,108 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedStrLength() int {
 // ITextFieldSpecification interface.
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecLabel.String()
-//  TextFieldSpecLabel.GetFormattedText()
-//  TextFieldSpecLabel.TextBuilder()
 //
+//	TextFieldSpecLabel.String()
+//	TextFieldSpecLabel.GetFormattedText()
+//	TextFieldSpecLabel.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//                      containing error prefix and error context
-//                      information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	                    containing error prefix and error context
+//	                    information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                          ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//	                        ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - The formatted text string generated by the current
-//       instance of TextFieldSpecLabel.
+//	string
+//	   - The formatted text string generated by the current
+//	     instance of TextFieldSpecLabel.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText(
 	errorPrefix interface{}) (
 	string,
@@ -898,24 +886,24 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText(
 //
 // ------------------------------------------------------------------------
 //
-// Background
+// # Background
 //
 // The text justification enumeration specification should be set
 // to one of three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//
+//	TextJustify(0).Left()
+//	TextJustify(0).Right()
+//	TextJustify(0).Center()
 //
 // You can also use the abbreviated text justification enumeration
 // syntax as follows:
 //
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	TxtJustify.Left()
+//	TxtJustify.Right()
+//	TxtJustify.Center()
 //
 // Text justification is only applied when the text field length is
 // greater than the length of the formatted text label string.
-//
 func (txtFieldLabel *TextFieldSpecLabel) GetTextJustification() TextJustify {
 
 	if txtFieldLabel.lock == nil {
@@ -934,7 +922,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextJustification() TextJustify {
 //
 // ------------------------------------------------------------------------
 //
-// Background
+// # Background
 //
 // The Text Field Specification is used to generate a text label
 // string. The text label is positioned inside a text field with a
@@ -944,10 +932,10 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextJustification() TextJustify {
 // contains a string of text characters.
 //
 // Text Label Examples:
-//   'Hello World  ' - Left Justified, Field Length= 13
-//   '  Hello World' - Right Justified, Field Length= 13
-//   ' Hello World ' - Centered, Field Length= 13
 //
+//	'Hello World  ' - Left Justified, Field Length= 13
+//	'  Hello World' - Right Justified, Field Length= 13
+//	' Hello World ' - Centered, Field Length= 13
 func (txtFieldLabel *TextFieldSpecLabel) GetTextLabel() string {
 
 	if txtFieldLabel.lock == nil {
@@ -963,7 +951,6 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextLabel() string {
 
 // GetTextLabelRunes - Returns an array of rune characters representing
 // the un-formatted text label associated with the current instance of TextFieldSpecLabel.
-//
 func (txtFieldLabel *TextFieldSpecLabel) GetTextLabelRunes() []rune {
 
 	if txtFieldLabel.lock == nil {
@@ -998,24 +985,21 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextLabelRunes() []rune {
 // 'true'. If any data element is invalid, this method returns
 // 'false'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - If all data elements encapsulated by the current instance
-//       of TextFieldSpecLabel are valid, this returned boolean
-//       value is set to 'true'. If any data values are invalid,
-//       this return parameter is set to 'false'.
-//
+//	isValid             bool
+//	   - If all data elements encapsulated by the current instance
+//	     of TextFieldSpecLabel are valid, this returned boolean
+//	     value is set to 'true'. If any data values are invalid,
+//	     this return parameter is set to 'false'.
 func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 	isValid bool) {
 
@@ -1043,73 +1027,70 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 // If any data element evaluates as invalid, this method will
 // return an error.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of TextFieldSpecLabel are found to be
-//       invalid, this method will return an error. If the member
-//       data variables are determined to be valid, this error
-//       return parameter will be set to 'nil'.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of TextFieldSpecLabel are found to be
+//	     invalid, this method will return an error. If the member
+//	     data variables are determined to be valid, this error
+//	     return parameter will be set to 'nil'.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -1154,23 +1135,20 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 // users must later call the setter methods on this type in order
 // to configure valid and meaningful member variable data values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecLabel
-//     - This parameter returns a new and empty concrete instance
-//       of TextFieldSpecLabel. Member variable data values are
-//       set to their initial or zero values.
-//
+//	TextFieldSpecLabel
+//	   - This parameter returns a new and empty concrete instance
+//	     of TextFieldSpecLabel. Member variable data values are
+//	     set to their initial or zero values.
 func (txtFieldLabel TextFieldSpecLabel) New() TextFieldSpecLabel {
 
 	if txtFieldLabel.lock == nil {
@@ -1202,23 +1180,20 @@ func (txtFieldLabel TextFieldSpecLabel) New() TextFieldSpecLabel {
 // users must later call the setter methods on this type in order
 // to configure valid and meaningful member variable data values.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecLabel
-//     - This parameter returns a pointer to a new, empty instance
-//       of TextFieldSpecLabel. Member variable data values are
-//       set to their initial or zero values.
-//
+//	*TextFieldSpecLabel
+//	   - This parameter returns a pointer to a new, empty instance
+//	     of TextFieldSpecLabel. Member variable data values are
+//	     set to their initial or zero values.
 func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
 
 	if txtFieldLabel.lock == nil {
@@ -1254,155 +1229,151 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtr() *TextFieldSpecLabel {
 // TextFieldSpecLabel.NewTextLabel() returns a concrete instance of
 // TextFieldSpecLabel.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabel                  string
-//     - String content to be displayed within the text label.
+//	textLabel                  string
+//	   - String content to be displayed within the text label.
 //
-//       If this parameter is submitted as a zero length string,
-//       an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabel' will
-//       be displayed. If 'fieldLen' is less than the length of the
-//       'textLabel' string, it will be automatically set equal to
-//       the 'textLabel' string length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabel', set this parameter to a value of minus one
-//       (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted as a zero length string,
+//	     an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabel' within the field specified by 'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabel' will
+//	     be displayed. If 'fieldLen' is less than the length of the
+//	     'textLabel' string, it will be automatically set equal to
+//	     the 'textLabel' string length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabel', set this parameter to a value of minus one
+//	     (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabel' within the field specified by 'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecLabel
-//     - This method will return a pointer to a new instance of
-//       TextFieldSpecLabel constructed from information provided
-//       by the input parameters.
+//	*TextFieldSpecLabel
+//	   - This method will return a pointer to a new instance of
+//	     TextFieldSpecLabel constructed from information provided
+//	     by the input parameters.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 	textLabel string,
 	fieldLen int,
@@ -1459,161 +1430,157 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 // TextFieldSpecLabel while TextFieldSpecLabel.NewTextLabelRunes()
 // returns a concrete instance of TextFieldSpecLabel.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabelChars             []rune
-//     - An array of runes or text characters which is used to
-//       generate string content for display as a text label.
+//	textLabelChars             []rune
+//	   - An array of runes or text characters which is used to
+//	     generate string content for display as a text label.
 //
-//       If this parameter is submitted as a zero length array,
-//       an error will be returned.
+//	     If this parameter is submitted as a zero length array,
+//	     an error will be returned.
 //
-//       If this parameter is submitted with invalid zero character
-//       values, an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabelChars'
-//       characters will be displayed. If 'fieldLen' is less than
-//       the length of the 'textLabelChars' array, it will be
-//       automatically set equal to the 'textLabelChars' array
-//       length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabelChars', set this parameter to a value of
-//       minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted with invalid zero character
+//	     values, an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabelChars' within the text field specified by
-//       'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabelChars'
+//	     characters will be displayed. If 'fieldLen' is less than
+//	     the length of the 'textLabelChars' array, it will be
+//	     automatically set equal to the 'textLabelChars' array
+//	     length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabelChars', set this parameter to a value of
+//	     minus one (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabelChars' within the text field specified by
+//	     'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  *TextFieldSpecLabel
-//     - This method will return a pointer to a new instance of
-//       TextFieldSpecLabel constructed from information provided
-//       by the input parameters.
+//	*TextFieldSpecLabel
+//	   - This method will return a pointer to a new instance of
+//	     TextFieldSpecLabel constructed from information provided
+//	     by the input parameters.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 	textLabelChars []rune,
 	fieldLen int,
@@ -1670,156 +1637,152 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 // TextFieldSpecLabel.NewPtrTextLabel() returns a pointer to a
 // TextFieldSpecLabel instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabel                  string
-//     - The string content to be displayed within the label.
+//	textLabel                  string
+//	   - The string content to be displayed within the label.
 //
-//       If this parameter is submitted as a zero length string,
-//       an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabel' will
-//       be displayed. If 'fieldLen' is less than the length of the
-//       'textLabel' string, it will be automatically set equal to
-//       the 'textLabel' string length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabel', set this parameter to a value of minus one
-//       (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted as a zero length string,
+//	     an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabel' string within the text field specified by
-//       'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabel' will
+//	     be displayed. If 'fieldLen' is less than the length of the
+//	     'textLabel' string, it will be automatically set equal to
+//	     the 'textLabel' string length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a Text Justification object
-//       of type TextJustify. This is because text labels with a
-//       field length equal to or less than the length of the text
-//       label never use text justification. In these cases, text
-//       justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabel', set this parameter to a value of minus one
+//	     (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabel' string within the text field specified by
+//	     'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a Text Justification object
+//	     of type TextJustify. This is because text labels with a
+//	     field length equal to or less than the length of the text
+//	     label never use text justification. In these cases, text
+//	     justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecLabel
-//     - This method will return a new, populated concrete instance
-//       of TextFieldSpecLabel constructed from the information
-//       provided by the input parameters.
+//	TextFieldSpecLabel
+//	   - This method will return a new, populated concrete instance
+//	     of TextFieldSpecLabel constructed from the information
+//	     provided by the input parameters.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 	textLabel string,
 	fieldLen int,
@@ -1876,161 +1839,157 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 // TextFieldSpecLabel and TextFieldSpecLabel.NewPtrTextLabelRunes()
 // returns a pointer to a TextFieldSpecLabel instance.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabelChars             []rune
-//     - An array of runes or text characters which is used to
-//       generate string content for display as a text label.
+//	textLabelChars             []rune
+//	   - An array of runes or text characters which is used to
+//	     generate string content for display as a text label.
 //
-//       If this parameter is submitted as a zero length array,
-//       an error will be returned.
+//	     If this parameter is submitted as a zero length array,
+//	     an error will be returned.
 //
-//       If this parameter is submitted with invalid zero character
-//       values, an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabelChars'
-//       characters will be displayed. If 'fieldLen' is less than
-//       the length of the 'textLabelChars' array, it will be
-//       automatically set equal to the 'textLabelChars' array
-//       length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabelChars', set this parameter to a value of
-//       minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted with invalid zero character
+//	     values, an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabelChars' within the text field specified by
-//       'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabelChars'
+//	     characters will be displayed. If 'fieldLen' is less than
+//	     the length of the 'textLabelChars' array, it will be
+//	     automatically set equal to the 'textLabelChars' array
+//	     length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabelChars', set this parameter to a value of
+//	     minus one (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabelChars' within the text field specified by
+//	     'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  TextFieldSpecLabel
-//     - This method will return a new concrete instance of
-//       TextFieldSpecLabel constructed from information provided
-//       by the input parameters.
+//	TextFieldSpecLabel
+//	   - This method will return a new concrete instance of
+//	     TextFieldSpecLabel constructed from information provided
+//	     by the input parameters.
 //
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 	textLabelChars []rune,
 	fieldLen int,
@@ -2113,121 +2072,117 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  p                          []byte
-//     - The byte buffer into which the formatted text string
-//       generated by the current txtFillerField instance will be
-//       written.
-//
+//	p                          []byte
+//	   - The byte buffer into which the formatted text string
+//	     generated by the current txtFillerField instance will be
+//	     written.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  n                          int
-//     - The number of bytes written to byte buffer 'p'.
+//	n                          int
+//	   - The number of bytes written to byte buffer 'p'.
 //
-//       Read() reads up to len(p) bytes into p. It returns
-//       the number of bytes read (0 <= n <= len(p)) and any error
-//       encountered. Even if Read() returns n < len(p), it may use
-//       all of 'p' as scratch space during the call. If some
-//       data is available but not len(p) bytes, Read()
-//       conventionally returns what is available instead of
-//       waiting for more.
+//	     Read() reads up to len(p) bytes into p. It returns
+//	     the number of bytes read (0 <= n <= len(p)) and any error
+//	     encountered. Even if Read() returns n < len(p), it may use
+//	     all of 'p' as scratch space during the call. If some
+//	     data is available but not len(p) bytes, Read()
+//	     conventionally returns what is available instead of
+//	     waiting for more.
 //
 //
-//  err                        error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message.
+//	err                        error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered
+//	     during processing, the returned error Type will
+//	     encapsulate an error message.
 //
-//       When Read() encounters an error or end-of-file condition
-//       after successfully reading n > 0 bytes, it returns the
-//       number of bytes read. It may return the (non-nil) error
-//       from the same call or return the error (and n == 0) from
-//       a subsequent call. An instance of this general case is
-//       that a Reader returning a non-zero number of bytes at the
-//       end of the input stream may return either err == EOF or
-//       err == nil. The next read operation should return 0, EOF.
-//
+//	     When Read() encounters an error or end-of-file condition
+//	     after successfully reading n > 0 bytes, it returns the
+//	     number of bytes read. It may return the (non-nil) error
+//	     from the same call or return the error (and n == 0) from
+//	     a subsequent call. An instance of this general case is
+//	     that a Reader returning a non-zero number of bytes at the
+//	     end of the input stream may return either err == EOF or
+//	     err == nil. The next read operation should return 0, EOF.
 //
 // ------------------------------------------------------------------------
 //
 // Usage Examples:
 //
-//  Example # 1
+//	Example # 1
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  sb := strings.Builder{}
+//	var n, readBytesCnt int
+//	sb := strings.Builder{}
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtFieldLabel01.Read(p)
+//	  n,
+//	  err = txtFieldLabel01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    sb.Write(p[:n])
-//    readBytesCnt += n
-//  }
+//	  sb.Write(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtFieldLabel01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtFieldLabel01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %s\n",
-//                sb.String())
+//	fmt.Printf("Text Line String: %s\n",
+//	              sb.String())
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 //
-//  Example # 2
+//	Example # 2
 //
-//  p := make([]byte, 50)
+//	p := make([]byte, 50)
 //
-//  var n, readBytesCnt int
-//  var actualStr string
+//	var n, readBytesCnt int
+//	var actualStr string
 //
-//  for {
+//	for {
 //
-//    n,
-//    err = txtFieldLabel01.Read(p)
+//	  n,
+//	  err = txtFieldLabel01.Read(p)
 //
-//    if n == 0 {
-//      break
-//    }
+//	  if n == 0 {
+//	    break
+//	  }
 //
-//    actualStr += string(p[:n])
-//    readBytesCnt += n
-//  }
+//	  actualStr += string(p[:n])
+//	  readBytesCnt += n
+//	}
 //
-//  if err != nil &&
-//    err != io.EOF {
-//     return fmt.Errorf(
-//      "Error Returned From txtFieldLabel01.Read(p)\n"+
-//      "Error = \n%v\n",
-//       err.Error())
-//  }
+//	if err != nil &&
+//	  err != io.EOF {
+//	   return fmt.Errorf(
+//	    "Error Returned From txtFieldLabel01.Read(p)\n"+
+//	    "Error = \n%v\n",
+//	     err.Error())
+//	}
 //
-//  fmt.Printf("Text Line String: %v\n",
-//                actualStr)
+//	fmt.Printf("Text Line String: %v\n",
+//	              actualStr)
 //
-//  fmt.Printf("Number of bytes Read: %v\n",
-//                readBytesCnt)
-//
+//	fmt.Printf("Number of bytes Read: %v\n",
+//	              readBytesCnt)
 func (txtFieldLabel *TextFieldSpecLabel) Read(
 	p []byte) (
 	n int,
@@ -2314,7 +2269,6 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
-//
 func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
 
 	if txtFieldLabel.lock == nil {
@@ -2339,116 +2293,114 @@ func (txtFieldLabel *TextFieldSpecLabel) ReaderInitialize() {
 // text justification specifications as shown in the following
 // examples.
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//   fieldLen = 12
-//   textJustification = TextJustify(0).Center()
-//   result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	 fieldLen = 12
+//	 textJustification = TextJustify(0).Center()
+//	 result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//   fieldLen = 12
-//   textJustification = TextJustify(0).Left()
-//   result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	 fieldLen = 12
+//	 textJustification = TextJustify(0).Left()
+//	 result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//   fieldLen = 12
-//   textJustification = TextJustify(0).Right()
-//   result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	 fieldLen = 12
+//	 textJustification = TextJustify(0).Right()
+//	 result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//   fieldLen = -1
-//   textJustification = TextJustify(0).Right()
-//   result = "Hi There"
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	 fieldLen = -1
+//	 textJustification = TextJustify(0).Right()
+//	 result = "Hi There"
 //
 // For more information on Text Justification, see method:
-//   TextFieldSpecLabel.SetTextJustification()
 //
+//	TextFieldSpecLabel.SetTextJustification()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabelChars'
-//       will be displayed. If 'fieldLen' is less than the length
-//       of the 'textLabelChars' array, it will be automatically
-//       set equal to the 'textLabelChars' array length.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabelChars'
+//	     will be displayed. If 'fieldLen' is less than the length
+//	     of the 'textLabelChars' array, it will be automatically
+//	     set equal to the 'textLabelChars' array length.
 //
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabelChars', set this parameter to a value of
-//       minus one (-1).
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabelChars', set this parameter to a value of
+//	     minus one (-1).
 //
-//       If this parameter is submitted with a value less than
-//       minus one (-1), an error will be returned.
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1), an error will be returned.
 //
-//       If 'fieldLen' is submitted with a value greater than
-//       1-million (1,000,000), an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If 'fieldLen' is submitted with a value greater than
+//	     1-million (1,000,000), an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 	fieldLen int,
 	errorPrefix interface{}) error {
@@ -2503,79 +2455,76 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 // with the sole difference being that this method receives a
 // string as an input parameter.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabel                  string
-//     - String content to be displayed within the text label.
+//	textLabel                  string
+//	   - String content to be displayed within the text label.
 //
-//       If this parameter is submitted as a zero length string,
-//       an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted as a zero length string,
+//	     an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) SetText(
 	textLabel string,
 	errorPrefix interface{}) (
@@ -2645,133 +2594,131 @@ func (txtFieldLabel *TextFieldSpecLabel) SetText(
 // appropriate TextJustify value.
 //
 // For more information on the text label, see methods:
-//  TextFieldSpecLabel.SetText()
-//  TextFieldSpecLabel.SetTextRunes()
+//
+//	TextFieldSpecLabel.SetText()
+//	TextFieldSpecLabel.SetTextRunes()
 //
 // For more information on text field length, see method:
-//  TextFieldSpecLabel.SetFieldLength()
 //
+//	TextFieldSpecLabel.SetFieldLength()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       Text label string within the text field specified by
-//       field length.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     Text label string within the text field specified by
+//	     field length.
 //
-//       Text justification can only be evaluated in the context of
-//       a Text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     Text justification can only be evaluated in the context of
+//	     a Text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This method requires that text justification be set to one
-//       of the following three values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
+//	     This method requires that text justification be set to one
+//	     of the following three values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
 //
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
 //
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 	textJustification TextJustify,
 	errorPrefix interface{}) error {
@@ -2820,154 +2767,150 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextJustification(
 // SetTextLabel - Sets the text label component values for the
 // current instance of TextFieldSpecLabel.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing data values
 // for the current TextFieldSpecLabel instance (txtFieldLabel).
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabel                  string
-//     - String content to be displayed within the text label.
+//	textLabel                  string
+//	   - String content to be displayed within the text label.
 //
-//       If this parameter is submitted as a zero length string,
-//       an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabel' will
-//       be displayed. If 'fieldLen' is less than the length of the
-//       'textLabel' string, it will be automatically set equal to
-//       the 'textLabel' string length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabel', set this parameter to a value of minus one
-//       (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted as a zero length string,
+//	     an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabel' within the field specified by 'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabel' will
+//	     be displayed. If 'fieldLen' is less than the length of the
+//	     'textLabel' string, it will be automatically set equal to
+//	     the 'textLabel' string length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabel', set this parameter to a value of minus one
+//	     (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabel' within the field specified by 'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ----------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 	textLabel string,
 	fieldLen int,
@@ -3009,155 +2952,151 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 // required to set the text label characters is submitted as an
 // array of runes.
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will overwrite and delete the existing data values
 // for the current TextFieldSpecLabel instance (txtFieldLabel).
-//
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabelChars             []rune
-//     - An array of runes or text characters which is used to
-//       generate string content for display as a text label.
+//	textLabelChars             []rune
+//	   - An array of runes or text characters which is used to
+//	     generate string content for display as a text label.
 //
-//       If this parameter is submitted as a zero length array,
-//       an error will be returned.
-//
-//
-//  fieldLen                   int
-//     - The length of the text field in which the 'textLabelChars'
-//       will be displayed. If 'fieldLen' is less than the length
-//       of the 'textLabelChars' array, it will be automatically
-//       set equal to the 'textLabelChars' array length.
-//
-//       To automatically set the value of 'fieldLen' to the length
-//       of 'textLabelChars', set this parameter to a value of
-//       minus one (-1).
-//
-//       If this parameter is submitted with a value less than
-//       minus one (-1) or greater than 1-million (1,000,000), an
-//       error will be returned.
+//	     If this parameter is submitted as a zero length array,
+//	     an error will be returned.
 //
 //
-//  textJustification          TextJustify
-//     - An enumeration which specifies the justification of the
-//       'textLabelChars' within the field specified by 'fieldLen'.
+//	fieldLen                   int
+//	   - The length of the text field in which the 'textLabelChars'
+//	     will be displayed. If 'fieldLen' is less than the length
+//	     of the 'textLabelChars' array, it will be automatically
+//	     set equal to the 'textLabelChars' array length.
 //
-//       Text justification can only be evaluated in the context of
-//       a text label, field length and a 'textJustification'
-//       object of type TextJustify. This is because text labels
-//       with a field length equal to or less than the length of
-//       the text label never use text justification. In these
-//       cases, text justification is completely ignored.
+//	     To automatically set the value of 'fieldLen' to the length
+//	     of 'textLabelChars', set this parameter to a value of
+//	     minus one (-1).
 //
-//       If the field length is greater than the length of the text
-//       label, text justification must be equal to one of these
-//       three valid values:
-//           TextJustify(0).Left()
-//           TextJustify(0).Right()
-//           TextJustify(0).Center()
-//
-//       You can also use the abbreviated text justification
-//       enumeration syntax as follows:
-//
-//           TxtJustify.Left()
-//           TxtJustify.Right()
-//           TxtJustify.Center()
+//	     If this parameter is submitted with a value less than
+//	     minus one (-1) or greater than 1-million (1,000,000), an
+//	     error will be returned.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	textJustification          TextJustify
+//	   - An enumeration which specifies the justification of the
+//	     'textLabelChars' within the field specified by 'fieldLen'.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     Text justification can only be evaluated in the context of
+//	     a text label, field length and a 'textJustification'
+//	     object of type TextJustify. This is because text labels
+//	     with a field length equal to or less than the length of
+//	     the text label never use text justification. In these
+//	     cases, text justification is completely ignored.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If the field length is greater than the length of the text
+//	     label, text justification must be equal to one of these
+//	     three valid values:
+//	         TextJustify(0).Left()
+//	         TextJustify(0).Right()
+//	         TextJustify(0).Center()
+//
+//	     You can also use the abbreviated text justification
+//	     enumeration syntax as follows:
+//
+//	         TxtJustify.Left()
+//	         TxtJustify.Right()
+//	         TxtJustify.Center()
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 	textLabelChars []rune,
 	fieldLen int,
@@ -3204,83 +3143,80 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 // with the sole difference being that this method receives an
 // array of runes as an input parameter.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  textLabelChars             []rune
-//     - An array of runes or text characters which is used to
-//       generate string content for display as a text label.
+//	textLabelChars             []rune
+//	   - An array of runes or text characters which is used to
+//	     generate string content for display as a text label.
 //
-//       If this parameter is submitted as a zero length array,
-//       an error will be returned.
+//	     If this parameter is submitted as a zero length array,
+//	     an error will be returned.
 //
-//       If this parameter is submitted with invalid zero character
-//       values, an error will be returned.
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     If this parameter is submitted with invalid zero character
+//	     values, an error will be returned.
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  err                        error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 	textLabelChars []rune,
 	errorPrefix interface{}) (
@@ -3345,42 +3281,42 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextRunes(
 //
 // This method also fulfills the requirements of the 'Stringer'
 // interface defined in the Golang package 'fmt'. Reference:
-//   https://pkg.go.dev/fmt#Stringer
+//
+//	https://pkg.go.dev/fmt#Stringer
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecLabel.String()
-//  TextFieldSpecLabel.GetFormattedText()
-//  TextFieldSpecLabel.TextBuilder()
 //
+//	TextFieldSpecLabel.String()
+//	TextFieldSpecLabel.GetFormattedText()
+//	TextFieldSpecLabel.TextBuilder()
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  Example 1:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Center()
-//      result = "  Hi There  "
+//	Example 1:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Center()
+//	    result = "  Hi There  "
 //
-//  Example 2:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Left()
-//      result = "Hi There    "
+//	Example 2:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Left()
+//	    result = "Hi There    "
 //
-//  Example 3:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = 12
-//    textJustification = TextJustify(0).Right()
-//      result = "    Hi There"
+//	Example 3:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = 12
+//	  textJustification = TextJustify(0).Right()
+//	    result = "    Hi There"
 //
-//  Example 4:
-//   textLabel = "Hi There" (Length = 8)
-//    fieldLen = -1
-//    textJustification = TextJustify(0).Right()
-//      result = "Hi There"
-//
+//	Example 4:
+//	 textLabel = "Hi There" (Length = 8)
+//	  fieldLen = -1
+//	  textJustification = TextJustify(0).Right()
+//	    result = "Hi There"
 func (txtFieldLabel TextFieldSpecLabel) String() string {
 
 	if txtFieldLabel.lock == nil {
@@ -3419,88 +3355,86 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 // ITextFieldSpecification interface.
 //
 // Methods which return formatted text are listed as follows:
-//  TextFieldSpecLabel.String()
-//  TextFieldSpecLabel.GetFormattedText()
-//  TextFieldSpecLabel.TextBuilder()
 //
+//	TextFieldSpecLabel.String()
+//	TextFieldSpecLabel.GetFormattedText()
+//	TextFieldSpecLabel.TextBuilder()
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  sBuilder                   *strings.Builder
-//    - A pointer to an instance of strings.Builder. The line of
-//      text produced by the current instance of TextFieldSpecLabel
-//      is written to 'sBuilder'.
+//	sBuilder                   *strings.Builder
+//	  - A pointer to an instance of strings.Builder. The line of
+//	    text produced by the current instance of TextFieldSpecLabel
+//	    is written to 'sBuilder'.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -3586,7 +3520,6 @@ func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
 //
 // This method fulfills the requirements of the
 // ITextFieldSpecification interface.
-//
 func (txtFieldLabel *TextFieldSpecLabel) TextFieldName() string {
 
 	if txtFieldLabel.lock == nil {
@@ -3605,7 +3538,6 @@ func (txtFieldLabel *TextFieldSpecLabel) TextFieldName() string {
 //
 // This method fulfills the requirements of the ITextSpecification
 // interface.
-//
 func (txtFieldLabel *TextFieldSpecLabel) TextTypeName() string {
 
 	if txtFieldLabel.lock == nil {

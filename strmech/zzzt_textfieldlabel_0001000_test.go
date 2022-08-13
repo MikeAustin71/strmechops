@@ -194,7 +194,7 @@ func TestTextFieldSpecLabel_copyIn_000100(t *testing.T) {
 	}
 
 	err =
-		txtFieldLabelMolecule.copyIn(
+		txtFieldLabelMolecule.copyTextFieldLabel(
 			txtFieldLabelOne,
 			nil,
 			&ePrefix)
@@ -210,7 +210,7 @@ func TestTextFieldSpecLabel_copyIn_000100(t *testing.T) {
 	}
 
 	err =
-		txtFieldLabelMolecule.copyIn(
+		txtFieldLabelMolecule.copyTextFieldLabel(
 			nil,
 			txtFieldLabelOne,
 			&ePrefix)
@@ -230,7 +230,7 @@ func TestTextFieldSpecLabel_copyIn_000100(t *testing.T) {
 	txtFieldLabelTwo := TextFieldSpecLabel{}
 
 	err =
-		txtFieldLabelMolecule.copyIn(
+		txtFieldLabelMolecule.copyTextFieldLabel(
 			&txtFieldLabelTwo,
 			txtFieldLabelOne,
 			&ePrefix)
@@ -489,7 +489,7 @@ func TestTextFieldSpecLabel_copyOut_000100(t *testing.T) {
 	fieldLen := 14
 	txtJustify := TxtJustify.Left()
 
-	_,
+	txtFieldLabel1,
 		err := TextFieldSpecLabel{}.NewPtrTextLabelRunes(
 		labelRunes,
 		fieldLen,
@@ -504,16 +504,32 @@ func TestTextFieldSpecLabel_copyOut_000100(t *testing.T) {
 
 	txtFieldLabelMolecule := textFieldSpecLabelMolecule{}
 
-	_,
-		err =
-		txtFieldLabelMolecule.copyOut(
+	err =
+		txtFieldLabelMolecule.copyTextFieldLabel(
+			nil,
+			txtFieldLabel1,
+			&ePrefix)
+
+	if err == nil {
+		t.Errorf("%v\n"+
+			"Expected error return from txtFieldLabelMolecule.copyIn()\n"+
+			"because 'destinationTxtFieldLabel' is a 'nil' pointer.\n"+
+			"HOWEVER, NO ERROR WAS RETURNED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err =
+		txtFieldLabelMolecule.copyTextFieldLabel(
+			txtFieldLabel1,
 			nil,
 			&ePrefix)
 
 	if err == nil {
 		t.Errorf("%v\n"+
 			"Expected error return from txtFieldLabelMolecule.copyIn()\n"+
-			"because 'txtFieldLabel' is a 'nil' pointer.\n"+
+			"because 'sourceTxtFieldLabel' is a 'nil' pointer.\n"+
 			"HOWEVER, NO ERROR WAS RETURNED!\n",
 			ePrefix.String())
 

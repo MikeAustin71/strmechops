@@ -11,73 +11,70 @@ type textFieldSpecLabelMolecule struct {
 }
 
 // copyIn - Copies all data from input parameter
-// 'incomingTxtFieldLabel' to input parameter
-// 'targetTxtFieldLabel'. Both instances are of type
+// 'sourceTxtFieldLabel' to input parameter
+// 'destinationTxtFieldLabel'. Both instances are of type
 // TextFieldSpecLabel.
 //
 // IMPORTANT
 // -----------------------------------------------------------------
-// Be advised that the data fields in 'targetTxtFieldLabel' will be
-// overwritten.
-//
+// Be advised that the data fields in 'destinationTxtFieldLabel'
+// will be deleted and overwritten.
 //
 // -----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetTxtFieldLabel        *TextFieldSpecLabel
-//     - A pointer to a TextFieldSpecLabel instance. All the
-//       member variable data fields in this object will be
-//       replaced by data values extracted from input parameter
-//       'incomingTxtFieldLabel'.
+//	destinationTxtFieldLabel   *TextFieldSpecLabel
+//	   - A pointer to a TextFieldSpecLabel instance. All the
+//	     member variable data fields in this object will be
+//	     replaced by data values extracted from input parameter
+//	     'sourceTxtFieldLabel'.
 //
-//       'targetTxtFieldLabel' is the target of this copy
-//       operation.
-//
-//
-//  incomingTxtFieldLabel      *TextFieldSpecLabel
-//     - A pointer to another TextFieldSpecLabel instance. All
-//       the member variable data values from this object will
-//       be copied to corresponding member variables in
-//       'targetTxtFieldLabel'.
-//
-//       'incomingTxtFieldLabel' is the source for this copy
-//       operation.
-//
-//       If 'incomingTxtFieldLabel' is determined to be invalid,
-//       an error will be returned.
+//	     'destinationTxtFieldLabel' is the target of this copy
+//	     operation.
 //
 //
-//  errPrefDto          *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	sourceTxtFieldLabel        *TextFieldSpecLabel
+//	   - A pointer to another TextFieldSpecLabel instance. All
+//	     the member variable data values from this object will
+//	     be copied to corresponding member variables in
+//	     'destinationTxtFieldLabel'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     'sourceTxtFieldLabel' is the source for this copy
+//	     operation.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	     If 'sourceTxtFieldLabel' is determined to be invalid,
+//	     an error will be returned.
 //
+//
+//	errPrefDto          *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
+//
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	error
+//	   - If this method completes successfully, this returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
-func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
-	targetTxtFieldLabel *TextFieldSpecLabel,
-	incomingTxtFieldLabel *TextFieldSpecLabel,
+//	     If an error message is returned, the text value for input
+//	     parameter 'errPrefDto' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message.
+func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyTextFieldLabel(
+	destinationTxtFieldLabel *TextFieldSpecLabel,
+	sourceTxtFieldLabel *TextFieldSpecLabel,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if txtFieldLabelMolecule.lock == nil {
@@ -94,25 +91,26 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textFieldSpecLabelMolecule.copyIn()",
+		"textFieldSpecLabelMolecule."+
+			"copyTextFieldLabel()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if targetTxtFieldLabel == nil {
+	if destinationTxtFieldLabel == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'targetTxtFieldLabel' is "+
+			"Error: Input parameter 'destinationTxtFieldLabel' is "+
 			"a nil pointer!\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	if incomingTxtFieldLabel == nil {
+	if sourceTxtFieldLabel == nil {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'incomingTxtFieldLabel' is "+
+			"Error: Input parameter 'sourceTxtFieldLabel' is "+
 			"a nil pointer!\n",
 			ePrefix.String())
 
@@ -122,155 +120,34 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyIn(
 	_,
 		err = textFieldSpecLabelAtom{}.ptr().
 		isValidTextFieldLabel(
-			incomingTxtFieldLabel,
-			ePrefix.XCpy("incomingTxtFieldLabel"))
+			sourceTxtFieldLabel,
+			ePrefix.XCpy("sourceTxtFieldLabel"))
 
 	if err != nil {
 		return err
 	}
 
-	targetTxtFieldLabel.textLineReader = nil
+	destinationTxtFieldLabel.textLineReader = nil
 
 	// Set zero length arrays to nil == true
 	err = strMechPreon{}.ptr().copyRuneArrays(
-		&targetTxtFieldLabel.textLabel,
-		&incomingTxtFieldLabel.textLabel,
+		&destinationTxtFieldLabel.textLabel,
+		&sourceTxtFieldLabel.textLabel,
 		true,
-		ePrefix.XCpy("targetTxtFieldLabel.textLabel=Target "+
-			"<-incomingTxtFieldLabel.textLabel=Source"))
+		ePrefix.XCpy("destinationTxtFieldLabel.textLabel=Target "+
+			"<-sourceTxtFieldLabel.textLabel=Source"))
 
 	if err != nil {
 		return err
 	}
 
-	targetTxtFieldLabel.fieldLen =
-		incomingTxtFieldLabel.fieldLen
+	destinationTxtFieldLabel.fieldLen =
+		sourceTxtFieldLabel.fieldLen
 
-	targetTxtFieldLabel.textJustification =
-		incomingTxtFieldLabel.textJustification
+	destinationTxtFieldLabel.textJustification =
+		sourceTxtFieldLabel.textJustification
 
 	return nil
-}
-
-// copyOut - Returns a deep copy of the input parameter
-// 'txtFieldLabel'
-//
-//
-// ------------------------------------------------------------------------
-//
-// Input Parameters
-//
-//  txtFieldLabel              *TextFieldSpecLabel
-//     - A pointer to an instance of TextFieldSpecLabel. A deep
-//       copy of the internal member variables will be created
-//       and returned in a new instance of TextFieldSpecLabel.
-//
-//       If the member variable data values encapsulated by this
-//       'txtFieldLabel' are found to be invalid, this method will
-//       return an error
-//
-//
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  TextFieldSpecLabel
-//     - If this method completes successfully, a deep copy of
-//       input parameter 'txtFieldLabel' will be created and
-//       returned in a new instance of TextFieldSpecLabel.
-//
-//
-//  error
-//     - If this method completes successfully, this returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
-//
-//       If an error message is returned, the text value for input
-//       parameter 'errPrefDto' (error prefix) will be prefixed or
-//       attached at the beginning of the error message.
-//
-func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
-	txtFieldLabel *TextFieldSpecLabel,
-	errPrefDto *ePref.ErrPrefixDto) (
-	TextFieldSpecLabel, error) {
-
-	if txtFieldLabelMolecule.lock == nil {
-		txtFieldLabelMolecule.lock = new(sync.Mutex)
-	}
-
-	txtFieldLabelMolecule.lock.Lock()
-
-	defer txtFieldLabelMolecule.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"textFieldSpecLabelMolecule.copyOut()",
-		"")
-
-	if err != nil {
-		return TextFieldSpecLabel{}, err
-	}
-
-	if txtFieldLabel == nil {
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'txtFieldLabel' is a nil pointer!\n",
-			ePrefix.String())
-
-		return TextFieldSpecLabel{}, err
-	}
-
-	_,
-		err = textFieldSpecLabelAtom{}.ptr().
-		isValidTextFieldLabel(
-			txtFieldLabel,
-			ePrefix.XCpy("txtFieldLabel"))
-
-	if err != nil {
-		return TextFieldSpecLabel{}, err
-	}
-
-	newTxtFieldLabel := TextFieldSpecLabel{}
-
-	lenTxtRunes := len(txtFieldLabel.textLabel)
-
-	if lenTxtRunes > 0 {
-
-		newTxtFieldLabel.textLabel =
-			make([]rune, lenTxtRunes)
-
-		copy(newTxtFieldLabel.textLabel,
-			txtFieldLabel.textLabel)
-	}
-
-	newTxtFieldLabel.fieldLen =
-		txtFieldLabel.fieldLen
-
-	newTxtFieldLabel.textJustification =
-		txtFieldLabel.textJustification
-
-	newTxtFieldLabel.textLineReader = nil
-
-	newTxtFieldLabel.lock = new(sync.Mutex)
-
-	return newTxtFieldLabel, nil
 }
 
 // empty - Receives a pointer to an instance of TextFieldSpecLabel
@@ -281,7 +158,6 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) copyOut(
 // ----------------------------------------------------------------
 // The values of all member variables contained in input parameter
 // 'txtFieldLabel' will be overwritten and replaced.
-//
 func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 	txtFieldLabel *TextFieldSpecLabel) {
 
@@ -316,7 +192,6 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) empty(
 // returned. If the member variables for both instances are equal
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
-//
 func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
 	txtLabelOne *TextFieldSpecLabel,
 	txtLabelTwo *TextFieldSpecLabel) bool {
@@ -353,22 +228,4 @@ func (txtFieldLabelMolecule *textFieldSpecLabelMolecule) equal(
 	}
 
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldSpecLabelMolecule.
-//
-func (txtFieldLabelMolecule textFieldSpecLabelMolecule) ptr() *textFieldSpecLabelMolecule {
-
-	if txtFieldLabelMolecule.lock == nil {
-		txtFieldLabelMolecule.lock = new(sync.Mutex)
-	}
-
-	txtFieldLabelMolecule.lock.Lock()
-
-	defer txtFieldLabelMolecule.lock.Unlock()
-
-	return &textFieldSpecLabelMolecule{
-		lock: new(sync.Mutex),
-	}
 }

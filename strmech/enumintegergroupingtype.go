@@ -445,10 +445,10 @@ func (intGroupingType IntegerGroupingType) XValueInt() int {
 //
 // Usage:
 //
-//	IntGroupingType.None(),
-//	IntGroupingType.Thousands(),
-//	IntGroupingType.IndiaNumbering(),
-//	IntGroupingType.ChineseNumbering(),
+//	IntGroupingType.None()
+//	IntGroupingType.Thousands()
+//	IntGroupingType.IndiaNumbering()
+//	IntGroupingType.ChineseNumbering()
 const IntGroupingType = IntegerGroupingType(0)
 
 // integerGroupingTypeNanobot - Provides helper methods for
