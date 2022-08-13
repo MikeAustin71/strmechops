@@ -156,13 +156,14 @@ type IntegerSeparatorDto struct {
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -251,19 +252,20 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //
 //	     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	     3. []string - A one-dimensional slice of strings containing
+//	                   error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings containing
-//	                    error prefix and error context information.
+//	     4. [][2]string - A two-dimensional slice of strings containing
+//	                      error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -288,7 +290,7 @@ func (nStrIntSep *IntegerSeparatorDto) CopyIn(
 //	     IntegerSeparatorDto.
 //
 //
-//	err                 error
+//	error
 //	   - If this method completes successfully, the returned error
 //	     Type is set equal to 'nil'.
 //
@@ -393,13 +395,14 @@ func (nStrIntSep *IntegerSeparatorDto) Empty() {
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -510,13 +513,14 @@ func (nStrIntSep *IntegerSeparatorDto) Equal(
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -743,13 +747,14 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstance() (
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -816,12 +821,107 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 	return err
 }
 
+// NewFromIntGroupEnum - Creates a new instance of
+// IntegerSeparatorDto based on an enumeration value passed
+// through input parameter 'intGroupingType'.
+//
+// 'intGroupingType' is a type of IntegerGroupingType and
+// must be set to one of the following valid values:
+//	IntGroupingType.Thousands()
+//	IntGroupingType.IndiaNumbering()
+//	IntGroupingType.ChineseNumbering()
+//
+// The character or characters separating the integer
+// groups is supplied by input parameter
+// 'intSeparatorChars'.
+
+func (nStrIntSep IntegerSeparatorDto) NewFromIntGroupEnum(
+	intGroupingType IntegerGroupingType,
+	intSeparatorChars string,
+	errorPrefix interface{}) (
+	IntegerSeparatorDto,
+	error) {
+
+	if nStrIntSep.lock == nil {
+		nStrIntSep.lock = new(sync.Mutex)
+	}
+
+	nStrIntSep.lock.Lock()
+
+	defer nStrIntSep.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	newIntSepDto := IntegerSeparatorDto{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"IntegerSeparatorDto."+
+			"NewFromIntGroupEnum()",
+		"")
+
+	if err != nil {
+		return newIntSepDto, err
+	}
+
+	if intGroupingType.XReturnNoneIfInvalid() ==
+		IntGroupingType.None() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input Paramter 'intGroupingType' is invalid!\n"+
+			"'intGroupingType' is equal to IntGroupingType.None()\n",
+			ePrefix.String())
+
+		return newIntSepDto, err
+	}
+
+	intSeparatorUtil := integerSeparatorDtoUtility{}
+
+	switch intGroupingType {
+	case IntGroupingType.Thousands():
+
+		err = intSeparatorUtil.setThousandsRunes(
+			&newIntSepDto,
+			[]rune(intSeparatorChars),
+			ePrefix.XCpy(
+				"newIntSepDto<-"))
+
+	case intGroupingType.ChineseNumbering():
+		err = intSeparatorUtil.setChineseNumberingRunes(
+			&newIntSepDto,
+			[]rune(intSeparatorChars),
+			ePrefix.XCpy(
+				"newIntSepDto<-"))
+
+	case intGroupingType.IndiaNumbering():
+		err = intSeparatorUtil.setIndiaNumberingRunes(
+			&newIntSepDto,
+			[]rune(intSeparatorChars),
+			ePrefix.XCpy(
+				"newIntSepDto<-"))
+
+	default:
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'intGroupingType' is invalid!\n"+
+			"'intGroupingType' contains an unknown value.\n"+
+			"'intGroupingType' string  value = '%v'\n"+
+			"'intGroupingType' integer value = '%v'\n",
+			ePrefix.String(),
+			intGroupingType.String(),
+			intGroupingType.XValueInt())
+	}
+
+	return newIntSepDto, err
+}
+
 // NewThousands - Creates and returns a new instance of
 // IntegerSeparatorDto. The returned IntegerSeparatorDto instance
 // represents a basic or simple integer separator object using
 // default values and a minimum number of input parameters.
 //
-// The input parameter 'integerDigitsSeparators' is string
+// The input parameter 'intSeparatorChars' is string
 // containing the integer separator characters. The integer digit
 // grouping is defaulted to a value of three (3). The 'separator
 // repetitions' value is defaulted to zero (0) signaling unlimited
@@ -831,13 +931,13 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 // with each group containing three digits each (Example:
 // 1,000,000,000). Users have the option of specifying integer
 // separator characters through input parameter
-// 'integerDigitsSeparators'.
+// 'intSeparatorChars'.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	integerDigitsSeparators    string
+//	intSeparatorChars          string
 //	   - One or more characters used to separate groups of
 //	     integers. This separator is also known as the 'thousands'
 //	     separator. It is used to separate groups of integer digits
@@ -876,19 +976,21 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //
 //	     2. string - A string containing error prefix information.
 //
-//	     3. []string A one-dimensional slice of strings containing
-//	                 error prefix information
+//	     3. []string - A one-dimensional slice of strings containing
+//	                   error prefix information
 //
-//	     4. [][2]string A two-dimensional slice of strings
-//	        containing error prefix and error context information.
+//	     4. [][2]string - A two-dimensional slice of strings
+//	                      containing error prefix and error context
+//	                      information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -924,7 +1026,7 @@ func (nStrIntSep *IntegerSeparatorDto) IsValidInstanceError(
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
 func (nStrIntSep IntegerSeparatorDto) NewThousands(
-	integerDigitsSeparators string,
+	intSeparatorChars string,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
 	error) {
@@ -959,7 +1061,7 @@ func (nStrIntSep IntegerSeparatorDto) NewThousands(
 		new(integerSeparatorDtoUtility).
 			setThousandsRunes(
 				&newIntSep,
-				[]rune(integerDigitsSeparators),
+				[]rune(intSeparatorChars),
 				ePrefix.XCpy(
 					"newIntSep"))
 
@@ -976,7 +1078,7 @@ func (nStrIntSep IntegerSeparatorDto) NewThousands(
 // integer separator characters as an array of runes instead
 // of a string.
 //
-// The input parameter 'integerDigitsSeparators' is an array of
+// The input parameter 'intSeparatorChars' is an array of
 // runes containing the integer separator characters. The integer
 // digit grouping is defaulted to a value of three (3). The
 // 'separator repetitions' value is defaulted to zero (0) signaling
@@ -987,13 +1089,13 @@ func (nStrIntSep IntegerSeparatorDto) NewThousands(
 // with each group containing three digits each (Example:
 // 1,000,000,000). Users have the option of specifying integer
 // separator characters through input parameter
-// 'integerDigitsSeparators'.
+// 'intSeparatorChars'.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//	integerDigitsSeparators    []rune
+//	intSeparatorChars          []rune
 //	   - One or more characters used to separate groups of
 //	     integers. This separator is also known as the 'thousands'
 //	     separator. It is used to separate groups of integer digits
@@ -1038,13 +1140,14 @@ func (nStrIntSep IntegerSeparatorDto) NewThousands(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1080,7 +1183,7 @@ func (nStrIntSep IntegerSeparatorDto) NewThousands(
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
 func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
-	integerDigitsSeparators []rune,
+	intSeparatorChars []rune,
 	errorPrefix interface{}) (
 	IntegerSeparatorDto,
 	error) {
@@ -1112,7 +1215,7 @@ func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
 		new(integerSeparatorDtoUtility).
 			setThousandsRunes(
 				&newIntSep,
-				integerDigitsSeparators,
+				intSeparatorChars,
 				ePrefix.XCpy(
 					"newIntSep"))
 
@@ -1225,13 +1328,14 @@ func (nStrIntSep IntegerSeparatorDto) NewThousandsRunes(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1420,13 +1524,14 @@ func (nStrIntSep IntegerSeparatorDto) NewDetail(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1548,13 +1653,14 @@ func (nStrIntSep IntegerSeparatorDto) NewDetailRunes(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1728,13 +1834,14 @@ func (nStrIntSep IntegerSeparatorDto) NewUnitedStatesDefaults(
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1813,7 +1920,7 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 // configure a basic or simple integer separator object using
 // default values and a minimum number of input parameters
 //
-// Input parameter 'integerDigitsSeparators' specifies  the integer
+// Input parameter 'intSeparatorChars' specifies  the integer
 // separator character or characters. The integer digit grouping is
 // defaulted to a value of three (3). The 'separator repetitions'
 // value is defaulted to zero (0), signaling unlimited repetitions.
@@ -1824,7 +1931,7 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 // with each group containing three digits each (Example:
 // 1,000,000,000). Users have the option of specifying integer
 // separator characters through input parameter
-// 'integerDigitsSeparators'.
+// 'intSeparatorChars'.
 //
 // # IMPORTANT
 //
@@ -1835,7 +1942,7 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 //
 // Input Parameters
 //
-//	integerDigitsSeparators    string
+//	intSeparatorChars    string
 //	   - One or more characters used to separate groups of
 //	     integers. This separator is also known as the 'thousands'
 //	     separator. It is used to separate groups of integer digits
@@ -1880,13 +1987,14 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -1922,7 +2030,7 @@ func (nStrIntSep IntegerSeparatorDto) NewWithComponents(
 //	     'errorPrefix' text will be attached to the beginning of
 //	     the error message.
 func (nStrIntSep *IntegerSeparatorDto) SetThousands(
-	integerDigitsSeparators string,
+	intSeparatorChars string,
 	errorPrefix interface{}) error {
 
 	if nStrIntSep.lock == nil {
@@ -1950,7 +2058,7 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 	return new(integerSeparatorDtoUtility).
 		setThousandsRunes(
 			nStrIntSep,
-			[]rune(integerDigitsSeparators),
+			[]rune(intSeparatorChars),
 			ePrefix.XCpy(
 				"nStrIntSep"))
 }
@@ -2032,13 +2140,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousands(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2212,13 +2321,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetThousandsRunes(
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2401,13 +2511,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetail(
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2505,6 +2616,8 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 //
 // # Reference:
 //
+//	https://en.wikipedia.org/wiki/Chinese_numerals
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -2529,30 +2642,66 @@ func (nStrIntSep *IntegerSeparatorDto) SetDetailRunes(
 //	     error will be returned.
 //
 //
-//	errPrefDto                 *ErrPrefixDto
-//	   - This object encapsulates an error prefix string which is
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
 //	     included in all returned error messages. Usually, it
-//	     contains the names of the calling method or methods.
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	     Type ErrPrefixDto is included in the 'errpref' software
-//	     package, "github.com/MikeAustin71/errpref".
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string - A one-dimensional slice of strings containing
+//	                   error prefix information
+//
+//	     4. [][2]string - A two-dimensional slice of strings containing
+//	                      error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied used in
+//	                       error and informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied used in error and
+//	                        informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
-//	err                        error
+//	error
 //	   - If this method completes successfully, the returned error
 //	     Type is set equal to 'nil'.
 //
 //	     If errors are encountered during processing, the returned
 //	     error Type will encapsulate an error message. This
 //	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errPrefDto'. The
-//	     'errPrefDto' text will be attached to the beginning of the
-//	     error message.
-//
-// [Wikipedia Chinese Numbering System]: https://en.wikipedia.org/wiki/Chinese_numerals
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
 func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) error {
@@ -2638,27 +2787,66 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumbering(
 //	     error will be returned.
 //
 //
-//	errPrefDto                 *ErrPrefixDto
-//	   - This object encapsulates an error prefix string which is
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
 //	     included in all returned error messages. Usually, it
-//	     contains the names of the calling method or methods.
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//	     Type ErrPrefixDto is included in the 'errpref' software
-//	     package, "github.com/MikeAustin71/errpref".
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
+//
+//	     This empty interface must be convertible to one of the
+//	     following types:
+//
+//
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
+//
+//	     2. string - A string containing error prefix information.
+//
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
+//
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
+//
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied used in
+//	                       error and informational messages.
+//
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied used in error and
+//	                        informational messages.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // # Return Values
 //
-//	err                        error
+//	error
 //	   - If this method completes successfully, the returned error
 //	     Type is set equal to 'nil'.
 //
 //	     If errors are encountered during processing, the returned
 //	     error Type will encapsulate an error message. This
 //	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errPrefDto'. The
-//	     'errPrefDto' text will be attached to the beginning of the
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of the
 //	     error message.
 //
 // [Wikipedia Chinese Numbering System]: https://en.wikipedia.org/wiki/Chinese_numerals
@@ -2723,6 +2911,8 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 //
 // # Reference:
 //
+//	https://en.wikipedia.org/wiki/Indian_numbering_system
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -2772,13 +2962,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied used in
+//	                       error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied used in error and
+//	                        informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2804,11 +2995,9 @@ func (nStrIntSep *IntegerSeparatorDto) SetChineseNumberingRunes(
 //	     If errors are encountered during processing, the returned
 //	     error Type will encapsulate an error message. This
 //	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errPrefDto'. The
-//	     'errPrefDto' text will be attached to the beginning of the
-//	     error message.
-//
-// [Wikipedia India Numbering System]: https://en.wikipedia.org/wiki/Indian_numbering_system
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
 func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 	intSeparatorChars string,
 	errorPrefix interface{}) error {
@@ -2870,6 +3059,8 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 //
 // # Reference:
 //
+//	https://en.wikipedia.org/wiki/Indian_numbering_system
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -2919,13 +3110,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied used in
+//	                       error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied used in error and
+//	                        informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -2944,18 +3136,16 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumbering(
 //
 // # Return Values
 //
-//	err                        error
+//	error
 //	   - If this method completes successfully, the returned error
 //	     Type is set equal to 'nil'.
 //
 //	     If errors are encountered during processing, the returned
 //	     error Type will encapsulate an error message. This
 //	     returned error message will incorporate the method chain
-//	     and text passed by input parameter, 'errPrefDto'. The
-//	     'errPrefDto' text will be attached to the beginning of the
-//	     error message.
-//
-// [Wikipedia India Numbering System]: https://en.wikipedia.org/wiki/Indian_numbering_system
+//	     and text passed by input parameter, 'errorPrefix'. The
+//	     'errorPrefix' text will be attached to the beginning of
+//	     the error message.
 func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
 	intSeparatorChars []rune,
 	errorPrefix interface{}) error {
@@ -3043,13 +3233,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetIndiaNumberingRunes(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3198,13 +3389,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetIntSeparatorChars(
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3417,13 +3609,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetRestartIntGroupingSequence(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3530,13 +3723,14 @@ func (nStrIntSep *IntegerSeparatorDto) SetUnitedStatesDefaults(
 //	     4. [][2]string A two-dimensional slice of strings
 //	        containing error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
 //	     6. *ErrPrefixDto - A pointer to an instance of
-//	                        ErrPrefixDto. ErrorPrefixInfo from this
-//	                        object will be copied to 'errPrefDto'.
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
@@ -3738,13 +3932,14 @@ func (nStrIntSep *IntegerSeparatorDto) String() string {
 //	     4. [][2]string A two-dimensional slice of strings containing
 //	                    error prefix and error context information.
 //
-//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//	                       ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//	                       from this object will be copied for use
+//	                       int error and informational messages.
 //
-//	     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//	                        ErrorPrefixInfo from this object will be
-//	                       copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. Information from this
+//	                        object will be copied for use in error
+//	                        and informational messages.
 //
 //	     7. IBasicErrorPrefix - An interface to a method generating
 //	                            a two-dimensional slice of strings
